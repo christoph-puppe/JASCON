@@ -52,11 +52,10 @@
    requirement is no longer "not satisfied" is removed again while it is
    still open. A Finding somebody already moved on is kept and said so.
 
-   An attestation is verified in two modes, as in the reader: Full Match (the
-   manifest is byte for byte the one that was signed), Semantic Match (the
-   meaning of every subject is intact, the package was repackaged), Tamper (a
-   subject's meaning changed). Signatures are not verified in this app.
-   Derives from the assess stage of the bundle reader.
+   An Attestation is held to what it binds by the rule the Validate page
+   runs (attestation-binds of Appendix B.1.7, jscSetBinds in
+   jascon-rules.js): Full Match, Semantic Match, or it does not bind. The
+   signature is checked on the Validate page, where trusted keys are given.
 
    Who decided (D26): a Finding the page writes or moves names the author
    the form shows, from the setting "Who am I", with today's date; without
@@ -74,12 +73,10 @@ jscI18n.add("de", {
   "by {who}": "von {who}", "{n} subjects": "{n} Gegenstände", "against": "gegen", "Deviation": "Deviation", "due": "fällig",
   "move to {state}": "nach {state} verschieben", "names risks": "nennt Risiken",
   "signer {who}": "Unterzeichner {who}", "Verify": "Prüfen",
-  "Full Match: bytes and meaning as signed": "Full Match: Bytes und Bedeutung wie signiert",
-  "Semantic Match: the meaning is intact, the package was repackaged": "Semantic Match: Die Bedeutung ist intakt, das Paket wurde umgepackt",
-  "Semantic Match of the subjects; the manifest digest cannot be compared here": "Semantic Match der Gegenstände; der Manifest-Digest lässt sich hier nicht vergleichen",
-  "Tamper: the meaning of a subject changed after signing": "Tamper: Die Bedeutung eines Gegenstands hat sich nach dem Signieren geändert",
-  "Unknown: the subjects are not in this set": "Unbekannt: Die Gegenstände sind nicht in diesem Set",
-  "subjects: {ok} intact, {bad} changed, {unknown} not in this set; signatures are not verified": "Gegenstände: {ok} intakt, {bad} geändert, {unknown} nicht in diesem Set; Signaturen werden nicht geprüft",
+  "This object does not have the shape of an Attestation, so it is not held to what it binds. The Validate page says what is wrong with it.":
+    "Dieses Objekt hat nicht die Form einer Attestation und wird deshalb nicht an dem gemessen, was es bindet. Die Seite Validieren sagt, was daran falsch ist.",
+  "Whether the signature is valid is the envelope's matter; the Validate page checks it.": "Ob die Signatur gültig ist, ist Sache des Umschlags; die Seite Validieren prüft sie.",
+  "Take it out of this set": "Aus diesem Set nehmen", "Set it to withdrawn": "Auf withdrawn setzen",
   "Label of the check": "Bezeichnung der Prüfung", "Scope": "Umfang", "Performer": "Prüfer", "filter": "Filter",
   "every requirement with an implementation ({n})": "jede Anforderung mit einer Implementation ({n})",
   "Tailoring {name} ({n} selected)": "Tailoring {name} ({n} ausgewählt)", "Set {name}": "Set {name}", "all {n} requirements": "alle {n} Anforderungen",
@@ -141,7 +138,7 @@ function renderBoard() {
       ${(f.obj.deviations || []).map((d, i) => V.deviationHtml(d, f.obj.id + "|" + i)).join("")}
       ${(f.obj["risk-refs"] || []).length ? `<div class="hint">△ ${esc(T("names risks"))}: ${f.obj["risk-refs"].map(r => V.refLink(r, name(r))).join(", ")}</div>` : ""}
       <div style="margin-top:6px">${JSC_NEXT.finding[f.obj.state].map(to => `<button type="button" class="small" data-move="${esc(f.obj.id)}" data-to="${to}">${esc(T("move to {state}", { state: to }))}</button>`).join(" ")}</div></div>`).join("")}</div>`).join("")}</div>`;
-  const attCards = atts.map(a => `<div class="stmt">${V.typeBadge("attestation")} <b>${V.refLink(a.obj.id, V.titleOf(a))}</b>
+  const attCards = atts.map(a => `<div class="stmt" data-att-card="${esc(a.obj.id)}">${V.typeBadge("attestation")}${V.badge(a.obj.lifecycle || "?")} <b>${V.refLink(a.obj.id, V.titleOf(a))}</b>
     <span class="hint">${esc(T("signer {who}", { who: V.last(a.obj.signer || "") }))} · ${esc(a.obj.timestamp || "")}</span>
     <div style="margin-top:6px" data-att-out="${esc(a.obj.id)}"><button type="button" class="primary" data-att="${esc(a.obj.id)}">${esc(T("Verify"))}</button></div></div>`).join("");
   const who = `<div class="wbrow">${V.authorLabel("b-author")}${V.authorInput("b-author")}</div>
@@ -168,24 +165,35 @@ function renderBoard() {
   }));
   $("board").querySelectorAll("[data-att]").forEach(b => b.addEventListener("click", () => verifyAttestation(b.dataset.att)));
 }
+/* What one Attestation binds: the rule of the Validate page (jscSetBinds), shown through the same function
+   (jscView.bindsHtml), so that the two pages cannot differ. Until build 0.9.11 this page had a judgement of its
+   own, which called an Attestation a Full Match when a subject was not in the set at all (ERRATA.md).
+
+   Where an active Attestation does not bind, two things can be done here. It can be taken out of the set, with
+   the envelope it names. And an unsigned one can be set to withdrawn, after which it is reported and fails
+   nothing. A signed one cannot: its canonical form is the payload of its envelope, so a change of its lifecycle
+   would break the signature, and withdrawing it is the signer's act. The third way, having it issued again, is
+   not this app's: it cannot sign. */
 async function verifyAttestation(id) {
-  const a = G.objects.get(id).obj, out = $("board").querySelector(`[data-att-out="${CSS.escape(id)}"]`);
-  let ok = 0, bad = 0, unknown = 0;
-  for (const s of a["subject-semantic-digests"] || []) {
-    const target = s && typeof s === "object" ? G.objects.get(s.id) : null;
-    if (!target) { unknown++; continue; }
-    (await jscSemanticDigest(target.obj)) === s["semantic-digest"] ? ok++ : bad++;
-  }
-  // the manifest digest binds the bytes of the manifest the bundle came with
-  const manifest = a["content-manifest-digest"] && G.manifestText ? (await jscPackageDigest(G.manifestText)) === a["content-manifest-digest"] : null;
-  const [verdict, cls] = bad ? [N("Tamper: the meaning of a subject changed after signing"), "verdict-bad"]
-    : unknown && !ok ? [N("Unknown: the subjects are not in this set"), "hint"]
-    : manifest === true ? [N("Full Match: bytes and meaning as signed"), "verdict-ok"]
-    : manifest === false ? [N("Semantic Match: the meaning is intact, the package was repackaged"), "verdict-warn"]
-    : [N("Semantic Match of the subjects; the manifest digest cannot be compared here"), "verdict-warn"];
-  out.innerHTML = `<span class="${cls}" style="font-weight:600">${esc(T(verdict))}</span>
-    <div class="hint">${esc(T("subjects: {ok} intact, {bad} changed, {unknown} not in this set; signatures are not verified", { ok, bad, unknown }))}</div>`;
-  jscLog[bad ? "err" : "ok"](`${id}: ${T(verdict)}`);
+  const out = $("board").querySelector(`[data-att-out="${CSS.escape(id)}"]`);
+  const binds = await jscSetBinds(G, jscTypedObjects([...G.objects.values()].map(r => r.obj)));
+  const l = binds.lines.find(x => x.id === id);
+  if (!l) { out.innerHTML = `<span class="verdict-bad">${esc(T("This object does not have the shape of an Attestation, so it is not held to what it binds. The Validate page says what is wrong with it."))}</span>`; return; }
+  out.innerHTML = V.bindsHtml(binds, id) + `<div class="hint">${esc(T("Whether the signature is valid is the envelope's matter; the Validate page checks it."))}</div>` +
+    (l.fails ? `<div style="margin-top:6px"><button type="button" class="small" data-att-remove>${esc(T("Take it out of this set"))}</button>
+      ${l.signed ? "" : `<button type="button" class="small" data-att-withdraw>${esc(T("Set it to withdrawn"))}</button>`}</div>` : "");
+  jscLog[l.kind === "failure" ? "err" : "ok"](l.text);
+  const a = G.objects.get(id).obj, on = (sel, fn) => { const b = out.querySelector(sel); if (b) b.addEventListener("click", fn); };
+  on("[data-att-remove]", async () => {
+    const ref = a["envelope-ref"], shared = ofType("attestation").some(x => x.obj.id !== id && x.obj["envelope-ref"] === ref);
+    await jscSet.removeObjects([id]);
+    if (ref && !shared && G.aux.some(x => x.path === ref)) await jscSet.saveAux(ref, "");   // the envelope signs this Attestation and nothing else
+    await jscPage.refresh();
+  });
+  on("[data-att-withdraw]", async () => {
+    await jscSet.saveObjects([{ ...a, lifecycle: "withdrawn" }]);
+    await jscPage.refresh();
+  });
 }
 
 /* ---------- check ---------- */

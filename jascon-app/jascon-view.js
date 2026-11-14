@@ -84,6 +84,20 @@ jscI18n.add("de", {
   "Deviation": "Deviation", "decided on {date}": "entschieden am {date}", "decided on": "entschieden am", "move to": "verschieben nach",
   "(leave as it is)": "(so lassen)", "no date": "kein Termin", "on a date": "an einem Datum", "every": "alle", "Calendar (URI)": "Kalender (URI)",
   "Record the decision": "Entscheidung festhalten", "who decided": "wer entschieden hat",
+  "Compared with the bundle as it was loaded: the manifest this set came with ({digest}) and the objects it lists.":
+    "Verglichen mit dem Bundle, wie es geladen wurde: dem Manifest, mit dem dieses Set kam ({digest}), und den Objekten, die es listet.",
+  "This set was changed in this app after it was loaded, so the manifest it came with ({loaded}) no longer describes it. Compared with the bundle an export would write now: its manifest ({digest}) and the objects it lists. An Attestation that bound the manifest the set came with binds another manifest then: a Semantic Match while its subjects are unchanged, and no failure.":
+    "Dieses Set wurde in dieser App geändert, nachdem es geladen wurde; das Manifest, mit dem es kam ({loaded}), beschreibt es deshalb nicht mehr. Verglichen mit dem Bundle, das ein Export jetzt schriebe: seinem Manifest ({digest}) und den Objekten, die es listet. Eine Attestation, die das Manifest band, mit dem das Set kam, bindet dann ein anderes Manifest: ein Semantic Match, solange ihre Subjekte unverändert sind, und kein Fehler.",
+  "This set has no manifest yet. Compared with the bundle an export would write now: its manifest ({digest}) and the objects it lists.":
+    "Dieses Set hat noch kein Manifest. Verglichen mit dem Bundle, das ein Export jetzt schriebe: seinem Manifest ({digest}) und den Objekten, die es listet.",
+  "What can be done: the signer issues the Attestation again for the content as it is now, or the Attestation is taken out of the set (Assess page). It names an envelope, so it is signed: changing it here, its lifecycle included, would break the signature, and withdrawing it is the signer's act.":
+    "Was sich tun lässt: Der Signierer stellt die Attestation für den Inhalt, wie er jetzt ist, neu aus, oder die Attestation wird aus dem Set genommen (Seite Prüfen). Sie nennt einen Umschlag, ist also signiert: Sie hier zu ändern, auch ihren Lifecycle, bräche die Signatur, und sie zurückzuziehen ist Sache des Signierers.",
+  "What can be done: the Attestation is issued again for the content as it is now, or it is taken out of the set, or, because it names no envelope and is unsigned, it is set to withdrawn (both on the Assess page). A withdrawn Attestation that does not bind is reported and fails nothing.":
+    "Was sich tun lässt: Die Attestation wird für den Inhalt, wie er jetzt ist, neu ausgestellt, oder sie wird aus dem Set genommen, oder sie wird, weil sie keinen Umschlag nennt und unsigniert ist, auf withdrawn gesetzt (beides auf der Seite Prüfen). Eine zurückgezogene Attestation, die nicht bindet, wird gemeldet und lässt nichts durchfallen.",
+  "Reported and no failure: the Attestation is not active, so nothing is claimed with it.":
+    "Gemeldet und kein Fehler: Die Attestation ist nicht aktiv, mit ihr wird also nichts behauptet.",
+  "No failure: every subject is as it was signed. Only the manifest is another than the one the Attestation names.":
+    "Kein Fehler: Jedes Subjekt ist so, wie es signiert wurde. Nur das Manifest ist ein anderes als das, das die Attestation nennt.",
   "empty: the kernel requires an author here, so nothing can be saved without one. The setting “Who am I” prefills this field.":
     "leer: Der Kernel verlangt hier einen Autor; ohne ihn lässt sich nichts speichern. Die Einstellung „Wer bin ich“ belegt dieses Feld vor.",
   "Name a party: a URI, or a short name, which becomes a party under your namespace.":
@@ -611,7 +625,45 @@ function wireDeviations(root, devOf, again, onSave) {
   });
 }
 
+/* ---------- what an Attestation binds (backlog #46) ----------
+   The Validate page shows every Attestation of the set, the Assess page one
+   at a time; both show the result of jscSetBinds (jascon-rules.js) through
+   this function, so that they cannot say two things. Three parts:
+   - what the comparison was made against. The reference validator sees a
+     bundle on disk; a set may have been written to since it was loaded,
+     and then the bundle to compare with is the one an export would write
+     (see jscSetBinds). The sentence says which, with the manifest's digest.
+   - the line of the reference, word for word, or its failure ("error: ").
+   - where an Attestation does not bind, what can be done about it. Which
+     of the ways are open depends on whether it is signed: an Attestation
+     that names an envelope cannot be changed here, its lifecycle included,
+     without breaking the signature, so withdrawing it is not offered. */
+const BINDS_BASIS = {
+  loaded: N("Compared with the bundle as it was loaded: the manifest this set came with ({digest}) and the objects it lists."),
+  changed: N("This set was changed in this app after it was loaded, so the manifest it came with ({loaded}) no longer describes it. Compared with the bundle an export would write now: its manifest ({digest}) and the objects it lists. An Attestation that bound the manifest the set came with binds another manifest then: a Semantic Match while its subjects are unchanged, and no failure."),
+  none: N("This set has no manifest yet. Compared with the bundle an export would write now: its manifest ({digest}) and the objects it lists."),
+};
+const BINDS_ADVICE = {
+  signed: N("What can be done: the signer issues the Attestation again for the content as it is now, or the Attestation is taken out of the set (Assess page). It names an envelope, so it is signed: changing it here, its lifecycle included, would break the signature, and withdrawing it is the signer's act."),
+  unsigned: N("What can be done: the Attestation is issued again for the content as it is now, or it is taken out of the set, or, because it names no envelope and is unsigned, it is set to withdrawn (both on the Assess page). A withdrawn Attestation that does not bind is reported and fails nothing."),
+  reported: N("Reported and no failure: the Attestation is not active, so nothing is claimed with it."),
+  semantic: N("No failure: every subject is as it was signed. Only the manifest is another than the one the Attestation names."),
+};
+const bindsBasisKey = b => (b.basis === "loaded" ? "loaded" : b["loaded-manifest-digest"] ? "changed" : "none");
+const shortDigest = d => (typeof d === "string" && d.length > 24 ? d.slice(0, 19) + "…" : String(d || ""));
+const bindsBasis = b => T(BINDS_BASIS[bindsBasisKey(b)], { digest: shortDigest(b["manifest-digest"]), loaded: shortDigest(b["loaded-manifest-digest"]) });
+const bindsAdvice = l => (l.verdict === "fail" ? T(BINDS_ADVICE[l.fails ? (l.signed ? "signed" : "unsigned") : "reported"]) : l.verdict === "semantic-match" ? T(BINDS_ADVICE.semantic) : "");
+/* binds: the result of jscSetBinds; only: one Attestation's id, or nothing for all */
+function bindsHtml(binds, only) {
+  const lines = binds.lines.filter(l => !only || l.id === only);
+  return `<div class="hint" data-binds-basis="${bindsBasisKey(binds)}" title="${esc(binds["manifest-digest"] || "")}">${esc(bindsBasis(binds))}</div>` +
+    lines.map(l => `<div data-binds="${l.kind}" data-verdict="${l.verdict}" data-binds-id="${esc(l.id)}">
+      <div class="mono ${l.kind === "failure" ? "verdict-bad" : l.verdict === "full-match" ? "verdict-ok" : "verdict-warn"}" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere" data-binds-text>${esc((l.kind === "failure" ? "error: " : "") + l.text)}</div>
+      ${bindsAdvice(l) ? `<div class="hint" data-binds-advice>${esc(bindsAdvice(l))}</div>` : ""}</div>`).join("");
+}
+
 window.jscView = {
+  bindsHtml,
   TYPE_VIEW, MODALITY_COLOR, VERDICT_CLASS, onOpen: null,
   open(id) { (this.onOpen || openDrawer)(id); },
   last, labelOf, titleOf, typeGlyph, typeBadge, badge, modBadge, refLink, wireRefs, prose, langBlocks, kv, prettyVal, section,

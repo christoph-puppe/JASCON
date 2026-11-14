@@ -555,6 +555,134 @@ test("attestation: the bi-modal verdict of every vector", async () => {
   }
 });
 
+/* attestation-binds applied to a bundle (Appendix B.1.7; backlog #46). The reference runner holds an
+   implementation to four things per case: the verdict, which manifest is bound, the status of every subject in
+   the Attestation's order, and whether the bundle fails. So does this test, and it holds the count: a list
+   that grew in the reference and not here would otherwise pass. Every object of a case must type, as in the
+   runner (`len(objs) == len(case["objects"])`). */
+test("attestation-binds on a bundle: all 19 vectors, by verdict, manifest bound, every subject and failure", async () => {
+  const v = vectors("attestation")["binds-vectors"];
+  assert.equal(v.length, 19);
+  const seen = { verdicts: new Set(), manifests: new Set(), statuses: new Set(), lifecycles: new Set() };
+  for (const c of v) {
+    const objs = rules.jscTypedObjects(c.objects);
+    assert.equal(objs.size, c.objects.length, c.name + ": every object of the case types");
+    const r = rules.jscAttestationBinds(c.attestation, c["manifest-digest"], await rules.jscSemanticDigests(objs), c["kept-packs"] || []);
+    assert.deepEqual([r.verdict, r.manifest, r.subjects.map(s => s.status), r.fails],
+      [c.expected, c["expected-manifest"], c["expected-subjects"], c["expected-failure"]], c.name);
+    seen.verdicts.add(r.verdict); seen.manifests.add(r.manifest); r.subjects.forEach(s => seen.statuses.add(s.status)); seen.lifecycles.add(c.attestation.lifecycle);
+  }
+  /* the vectors reach every value an answer can take; a list that lost a kind of case would be noticed here */
+  assert.deepEqual([[...seen.verdicts].sort(), [...seen.manifests].sort(), [...seen.statuses].sort(), [...seen.lifecycles].sort()],
+    [["fail", "full-match", "semantic-match"], ["kept-pack", "other", "this"], ["absent", "differs", "match"], ["active", "deprecated", "draft", "withdrawn"]]);
+});
+
+/* The lines of the reference (binds_report of validate_core.py), word for word. The expected texts are written
+   out here; tests/pages.test.mjs compares the page with what the reference prints for three folders. */
+test("attestation-binds: one line per Attestation in the order of the ids, in the reference's words; a failure only while the Attestation is active", async () => {
+  const A = "https://a.example", D = n => "sha256:" + String(n).repeat(64);
+  const req = n => ({ id: `${A}/req/${n}`, version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [A + "/p"], prose: { en: `Do ${n}.` } }] });
+  const objs = rules.jscTypedObjects([req(1), req(2)]), delivered = await rules.jscSemanticDigests(objs);
+  const d1 = delivered.get(A + "/req/1"), d2 = delivered.get(A + "/req/2");
+  const att = (name, subjects, bound, lifecycle = "active") => [`${A}/attestation/${name}`, { id: `${A}/attestation/${name}`, version: "1", lifecycle,
+    "subject-semantic-digests": subjects, "content-manifest-digest": bound, signer: A + "/p", timestamp: "2026-11-14T09:00:00Z" }];
+  const named = (n, digest) => ({ id: `${A}/req/${n}`, "semantic-digest": digest });
+  const atts = new Map([
+    att("z-full", [named(1, d1), d2], D("a")),
+    att("b-kept", [named(2, d2)], D("c")),
+    att("c-other", [named(1, d1)], D("e")),
+    att("d-changed", [named(1, D(9)), named(2, d2), named(3, D(8)), D(7)], D("a")),
+    att("e-withdrawn", [named(1, D(9))], D("e"), "withdrawn"),
+    att("f-empty", [], D("a")),
+    att("g-draft", [D(7)], D("a"), "draft"),
+  ]);
+  const lines = rules.jscBindsReport(atts, D("a"), delivered, [D("c")]);
+  const B17 = "(B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)";
+  assert.deepEqual(lines.map(l => [l.kind, l.text]), [
+    ["line", `binds: ${A}/attestation/b-kept = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]`],
+    ["line", `binds: ${A}/attestation/c-other = SEMANTIC MATCH [1 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`],
+    ["failure", `[attestation-binds] ${A}/attestation/d-changed: subject ${A}/req/1: recomputed semantic digest ${d1}, signed ${D(9)}; subject ${A}/req/3: not an object of this bundle; subject ${D(7)}: no object of this bundle carries it - this manifest ${B17}`],
+    ["line", `binds: ${A}/attestation/e-withdrawn = DOES NOT BIND [lifecycle withdrawn: reported, not a failure] subject ${A}/req/1: recomputed semantic digest ${d1}, signed ${D(9)} - another manifest`],
+    ["failure", `[attestation-binds] ${A}/attestation/f-empty: it names no subject - this manifest ${B17}`],
+    ["line", `binds: ${A}/attestation/g-draft = DOES NOT BIND [lifecycle draft: reported, not a failure] subject ${D(7)}: no object of this bundle carries it - this manifest`],
+    ["line", `binds: ${A}/attestation/z-full = FULL MATCH [2 subject(s) of this bundle; this manifest]`],
+  ]);
+  assert.deepEqual(lines.filter(l => l.fails).map(l => l.id.split("/").pop()), ["d-changed", "f-empty"]);
+});
+
+/* The reference sees a bundle on disk. A set is a bundle that was loaded and may have been written to since, so
+   jscSetBinds first decides which bundle the comparison is made against (its `basis`). Held here on the IFA
+   bundle with files added the way the store holds them: `origin` says whether a file arrived or was written. */
+test("attestation-binds on a set: as loaded it is held to the manifest it came with, written to since to the bundle an export would write; what is only an artefact of the app is no failure", async () => {
+  const AID = "https://ifa.gov/goodread/attestation/ifa-ato", NS = "https://org.example";
+  const arrived = () => core.jscClassifyFiles(folderTree(IFA)).records.map(r => ({ ...r, origin: "imported" }));
+  const file = (path, obj, origin) => ({ path, text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin });
+  const binds = async records => { const g = core.jscGraphFrom(records); return { g, ...(await rules.jscSetBinds(g, rules.jscTypedObjects([...g.objects.values()].map(r => r.obj)))) }; };
+  const said = (b, id) => { const l = b.lines.find(x => x.id === id); return [l.kind, l.text.replace(/^(binds: \S+ = |\[attestation-binds\] \S+ )/, "").replace(/sha256:[0-9a-f]{64}/g, "sha256:…").replace(/ \(B\.1\.7.*$/, "")]; };
+  const req = { id: NS + "/req/door", version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [NS + "/party/staff"], prose: { en: "Lock the door." } }] };
+  const att = (name, subjects, bound) => ({ id: `${NS}/attestation/${name}`, version: "1", lifecycle: "active", "subject-semantic-digests": subjects,
+    "content-manifest-digest": bound, signer: NS + "/party/ao", timestamp: "2026-11-14T09:00:00Z" });
+  const named = async o => ({ id: o.id, "semantic-digest": await core.jscSemanticDigest(o) });
+
+  /* as it was loaded: the manifest it came with, and the objects that manifest lists */
+  const loaded = await binds(arrived()), delivered = await core.jscPackageDigest(loaded.g.manifestText);
+  assert.deepEqual([loaded.basis, loaded["manifest-digest"], loaded["loaded-manifest-digest"]], ["loaded", delivered, delivered]);
+  assert.deepEqual(said(loaded, AID), ["line", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+
+  /* as loaded, and damaged: a file that arrived with the bundle and that its manifest does not list is no object of the
+     bundle, for the reference too. An Attestation that names it fails, and one that names an Attestation beside the
+     manifest by its digest does as well: what is not listed is no subject of anything */
+  const ifaAtt = loaded.g.objects.get(AID).obj;
+  const damaged = await binds([...arrived(), file("objects/req/door.json", req, "imported"),
+    file("attestation-door.json", att("door", [await named(req)], delivered), "imported"),
+    file("attestation-of-an-attestation.json", att("meta", [await core.jscSemanticDigest(ifaAtt)], delivered), "imported")]);
+  assert.equal(damaged.basis, "loaded", "nothing was written here: the folder is judged against its own manifest");
+  assert.deepEqual(said(damaged, NS + "/attestation/door"), ["failure", `subject ${req.id}: not an object of this bundle - this manifest`]);
+  assert.deepEqual(said(damaged, NS + "/attestation/meta"), ["failure", "subject sha256:…: no object of this bundle carries it - this manifest"]);
+  assert.deepEqual(said(damaged, AID), ["line", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+
+  /* the same Requirement written here: the manifest the set came with does not list it and never will. Held to that
+     manifest, an Attestation that names it would fail for no reason but that this app has written no manifest yet.
+     It is held to the bundle an export would write: the Requirement is listed there */
+  const withReq = [...arrived(), file("objects/req/door.json", req, "authored")];
+  const next = await core.jscPackageDigest((await core.jscBuildBundle(core.jscGraphFrom(withReq))).files[0].text);
+  assert.notEqual(next, delivered);
+  const door = att("door", [await named(req)], next);
+  const written = await binds([...withReq, file("attestation-door.json", door, "authored"),
+    file("attestation-of-an-attestation.json", att("meta", [await core.jscSemanticDigest(door)], next), "authored")]);
+  assert.deepEqual([written.basis, written["manifest-digest"], written["loaded-manifest-digest"]], ["export", next, delivered]);
+  assert.deepEqual(said(written, NS + "/attestation/door"), ["line", "FULL MATCH [1 subject(s) of this bundle; this manifest]"]);
+  assert.deepEqual(said(written, NS + "/attestation/meta"), ["failure", "subject sha256:…: no object of this bundle carries it - this manifest"],
+    "an Attestation beside the manifest is not listed by an export either, so it is no subject");
+  assert.deepEqual(said(written, AID), ["line", "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"],
+    "the Attestation that bound the manifest that was loaded is no failure: its subjects are as signed");
+  assert.deepEqual(written.lines.filter(l => l.fails).map(l => l.id), [NS + "/attestation/meta"]);
+
+  /* a subject that was changed here is a failure on either basis */
+  const impl = loaded.g.objects.get("https://ifa.gov/goodread/impl/system1234-ac-6.1");
+  const edited = await binds(arrived().map(r => (r.path === impl.path ? { ...r, text: core.jscSerialize({ ...impl.obj, status: "planned" }), origin: "authored" } : r)));
+  assert.equal(edited.basis, "export");
+  assert.deepEqual(said(edited, AID), ["failure", `subject ${impl.obj.id}: recomputed semantic digest sha256:…, signed sha256:… - another manifest`]);
+  /* saved here without a change: the manifest the set came with still describes it */
+  const untouched = await binds(arrived().map(r => (r.path === impl.path ? { ...r, origin: "authored" } : r)));
+  assert.deepEqual([untouched.basis, said(untouched, AID)[1]], ["loaded", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+  /* an Attestation written here, and nothing else: it is no object of the manifest, so the manifest still describes the set */
+  const withdrawn = await binds(arrived().map(r => (r.id === AID ? { ...r, text: core.jscSerialize({ ...ifaAtt, lifecycle: "withdrawn" }), origin: "authored" } : r)));
+  assert.deepEqual([withdrawn.basis, said(withdrawn, AID)[1]], ["loaded", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+  /* and that holds for a damaged folder too: an Attestation written here does not make the folder one that was changed here */
+  const both = await binds([...arrived().map(r => (r.id === AID ? { ...r, text: core.jscSerialize({ ...ifaAtt, lifecycle: "withdrawn" }), origin: "authored" } : r)), file("objects/req/door.json", req, "imported")]);
+  assert.deepEqual([both.basis, said(both, AID)[1]], ["loaded", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+
+  /* a scale written here changes the manifest an export writes, as an object does */
+  const scaleText = fs.readFileSync(path.join(EXAMPLES, "scale-bsi-200-3-schadenshoehe.json"), "utf8");
+  const scaled = await binds([...arrived(), { path: "scales/schadenshoehe.json", text: scaleText, kind: "scale", type: null, id: JSON.parse(scaleText).id, origin: "authored" }]);
+  assert.deepEqual([scaled.basis, said(scaled, AID)[1]], ["export", "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"]);
+
+  /* a set without a manifest: there is nothing it was loaded with, and the comparison is with what an export would write */
+  const loose = await binds(arrived().filter(r => r.kind !== "manifest"));
+  assert.deepEqual([loose.basis, loose["loaded-manifest-digest"], said(loose, AID)[1]], ["export", null, "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"]);
+});
+
 test("one object: prose-params-resolve, duplicate statement ids, a by-statement key that names nothing, an empty optional list", () => {
   const base = { id: "https://a.example/req/1", version: "1", lifecycle: "active" };
   const st = (id, text, params) => ({ id, modality: "must", "obligated-parties": ["https://a.example/p"], prose: { en: text }, ...(params ? { parameters: params } : {}) });
@@ -686,11 +814,13 @@ test("a whole set: a signed attestation is verified with a trusted key, unverifi
   assert.equal(wrong.status, "error");
   assert.equal(wrong.tier, "consumer", "a signature that does not verify proves nothing");
   assert.match(wrong.errors[0], /no signature verifies under the trusted key/);
-  /* without the envelope file: the attestation is not listed in a manifest here, so the reference would not look and this is a note */
+  /* without the envelope file: an error, for an attestation beside the manifest as for a listed one. Until the reference
+     read the Attestations beside a manifest (backlog #46, 2026-11-14) it did not look, and this was a note here */
   const g2 = core.jscGraphFrom(core.jscClassifyFiles(files.slice(0, -1)).records), r2 = await rules.jscCheckGraph(g2, null, { trusted: c["trusted-keys"] });
   assert.equal(r2.signatures[att.id], "missing");
   assert.equal(r2.tiers[tid], "consumer");
-  assert.deepEqual(r2.findings.filter(f => f.kind === "error" && f.area === "signature"), []);
+  assert.deepEqual(r2.findings.filter(f => f.kind === "error" && f.area === "signature").map(f => [f.object, f.message]),
+    [[att.id, `envelope-ref '${att["envelope-ref"]}' does not resolve beside the manifest`]]);
 });
 
 /* CP-CHECK-1. The bundle vectors name the exact set of CHECK rules a
