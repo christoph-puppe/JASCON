@@ -1299,6 +1299,9 @@ test("Assess: an empty performer refuses the check and writes nothing; the perfo
     await p.locator("#a-write").click();
     await p.locator("#board .kanban").waitFor();
     assert.equal((await asmt())["performer-ref"], NS + "/party/jane-roe");
+    /* backlog #55: the method is the standard facet for a check a person did, and the tool is named nowhere in the object */
+    assert.deepEqual((await asmt()).method, { "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": { method: "manual" } });
+    assert.doesNotMatch(JSON.stringify(await asmt()), /JASCON-App|manual-check|"tool"|"kind"/);
     const finding = async () => (await stored(s, "finding")).find(f => f["assessment-ref"].endsWith("/asmt/audit-70"));
     assert.equal("provenance" in await finding(), false, "an empty author writes none, and stopped nothing");
 
@@ -1622,3 +1625,67 @@ test("Import: a preset's party is shown as its default before anything is writte
     assert.deepEqual(s.errors, []);
   } finally { await s.close(); }
 });
+
+/* ====================================================================
+   An Assessment's method is held to its facet (backlog #55)
+   ====================================================================
+   Until build 0.9.13 the Assess page wrote `method: {kind, tool}`, which
+   names no facet. Such an Assessment may lie in a set a browser stored, or
+   in a bundle an earlier build exported. The reference fails it now, and
+   so does the Validate page. Nothing rewrites it when a set is loaded: the
+   user is told, and the Assess page writes the method as the standard
+   facet when asked. */
+test("an Assessment with the method this app wrote before build 0.9.13: the Validate page fails it as the reference does and leaves it as it came; the Assess page rewrites it when asked, and only its own", { skip: needs }, async t => {
+  const tmp = [], OLD = "https://example.org/my/asmt/audit-old", FOREIGN = "https://example.org/my/asmt/audit-foreign";
+  t.after(() => { for (const d of tmp) fs.rmSync(d, { recursive: true, force: true }); });
+  const asmt = (id, method, facets) => ({ id, version: "1", lifecycle: "draft", title: { en: "A check of an earlier build" }, "subject-refs": [KONF_REQ], method,
+    "performer-ref": "https://example.org/my/party/jane-roe", time: "2026-11-12T10:00:00.000Z", result: "satisfied", ...(facets ? { facets } : {}) });
+  /* the second Assessment fails twice: its method names a facet nobody registered, and so does one of its facets */
+  const NO_SUCH_FACET = `${FOREIGN}: unregistered facet 'https://example.org/facet/notes@1' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`;
+  const NO_FACET = (id, key) => `${id}: method '${key}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`;
+  const methodErrors = async s => (await s.page.evaluate(() => last.findings.filter(f => f.kind === "error").map(f => `${f.object}: ${f.message}`))).sort();
+  const textOf = (s, id) => s.page.evaluate(async id => (await jscStore.files(jscStore.activeSet())).find(r => r.id === id).text, id);
+
+  /* a set as a browser holds it after an earlier build: the example folder and two Assessments, one with the app's old method, one with a method of another making */
+  let s = await session(), p = s.page, old;
+  try {
+    await load(s, zipOf(EX, "examples"));
+    await open(s, "validate.html");
+    await p.evaluate(async list => { await jscSet.load(); await jscSet.saveObjects(list); }, [asmt(OLD, { kind: "manual-check", tool: "JASCON-App 0.9.12" }), asmt(FOREIGN, { "https://example.org/facet/our-method@1": { depth: "sampled" } }, { "https://example.org/facet/notes@1": { text: "x" } })]);
+    old = await exported(s); tmp.push(old.out);
+    const ref = referenceRun(old.dir, ["--as-of", AS_OF_46]);
+    assert.equal(ref.green, false, "the reference fails a bundle that an earlier build exported");
+    assert.deepEqual([...ref.failures].sort(), [NO_FACET(FOREIGN, "https://example.org/facet/our-method@1"), NO_SUCH_FACET, NO_FACET(OLD, "kind"), NO_FACET(OLD, "tool")].sort());
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+
+  /* that bundle, loaded into another browser */
+  s = await session(); p = s.page;
+  try {
+    await load(s, zipOf(old.dir, "old"));
+    const before = await textOf(s, OLD), ref = referenceRun(old.dir, ["--as-of", AS_OF_46]);
+    await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+    assert.deepEqual(await methodErrors(s), [...ref.failures].sort(), "the page's errors are the reference's failures");
+    assert.deepEqual(await p.evaluate(id => last.findings.filter(f => f.kind === "note" && f.area === "facet" && f.object === id).map(f => f.message), OLD),
+      ["this Assessment was written by this app before build 0.9.13, with a method that names no facet (kind, tool). It is kept as it came. " +
+        "The Assess page can write its method as the standard facet for a manual check; that changes the object, so an Attestation that names it no longer binds"], "and the page says what can be done");
+    assert.equal(await p.evaluate(id => last.findings.filter(f => f.kind === "note" && f.area === "facet" && f.object === id).length, FOREIGN), 0, "nothing is offered for a method of another making");
+    /* the Assess page shows the same, and offers the rewrite for the app's own method only */
+    await open(s, "assess.html", "board");
+    assert.deepEqual(await p.locator(`[data-method-errors="${OLD}"] .verdict-bad`).allInnerTexts(), ["error: " + NO_FACET(OLD, "kind"), "error: " + NO_FACET(OLD, "tool")]);
+    assert.deepEqual([await p.locator(`[data-method-rewrite="${OLD}"]`).count(), await p.locator(`[data-method-rewrite="${FOREIGN}"]`).count(), await p.locator(`[data-method-errors="${FOREIGN}"] .verdict-bad`).count()], [1, 0, 1]);
+    assert.deepEqual(await p.locator(`[data-method-errors="${FOREIGN}"] .verdict-bad`).allInnerTexts(), ["error: " + NO_FACET(FOREIGN, "https://example.org/facet/our-method@1")], "under the method stands what is wrong with the method, not with a facet");
+    assert.equal(await p.locator("[data-method-errors]").count(), 2, "the Assessments of the example folder, whose methods are facets, show nothing");
+    assert.equal(await textOf(s, OLD), before, "loading the set, checking it and looking at it rewrote nothing");
+    /* asked for: the method becomes the standard facet, nothing else changes, and the Assessment fails no more */
+    await p.locator(`[data-method-rewrite="${OLD}"]`).click();
+    await p.waitForFunction(id => !document.querySelector(`[data-method-errors="${id}"]`), OLD);
+    assert.deepEqual(JSON.parse(await textOf(s, OLD)), asmt(OLD, { "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": { method: "manual" } }));
+    await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+    assert.deepEqual(await methodErrors(s), [NO_FACET(FOREIGN, "https://example.org/facet/our-method@1"), NO_SUCH_FACET].sort(), "the other one still fails: it is not the app's to rewrite");
+    const next = await exported(s); tmp.push(next.out);
+    assert.deepEqual([...referenceRun(next.dir, ["--as-of", AS_OF_46]).failures].sort(), [NO_FACET(FOREIGN, "https://example.org/facet/our-method@1"), NO_SUCH_FACET].sort(), "and the reference says the same about the exported folder");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+});
+
