@@ -59,8 +59,16 @@
       from a URL (a listing, names in the link, or neither, which the page
       says); they are counted apart from the objects the manifest lists; an
       export never lists one.
+  12. MANIFEST-1 (backlog #75; specification D3.11): no content manifest
+      lists an Attestation. In node: the eight listed vectors, with the
+      reference's sentence, and the reference's own function on the same
+      objects. In Chromium: copies of the IFA bundle, the worked pack and the
+      example folder whose manifests list an Attestation fail on the page
+      with the reference's sentence, and the Attestation is still held to
+      what it binds; what the page says can be done is done on the copy and
+      holds in the reference.
 
-   Needs Playwright with Chromium for 4 to 11 and python3 with jsonschema for
+   Needs Playwright with Chromium for 4 to 12 and python3 with jsonschema for
    the runs of the reference; where one is missing, that part is skipped and
    says so. Needs no network: the one thing the page asks the web for, its
    font stylesheet, is answered here with an empty one. */
@@ -92,7 +100,7 @@ const P = (() => {
   const a = HTML.indexOf("/* ==READER-PURE-START== */"), b = HTML.indexOf("/* ==READER-PURE-END== */");
   assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
   return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty,
-    canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState };`)();
+    canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState, listedAttestationErrors };`)();
 })();
 
 /* ---------- 1. the pin vectors ---------- */
@@ -327,6 +335,7 @@ async function open() {
       subjects: [...x.querySelectorAll("[data-subject]")].map(tr => ({ status: tr.dataset.subject, id: tr.querySelector(".reflink")?.textContent ?? null,
         signed: tr.querySelector("[data-signed]").textContent, delivered: tr.querySelector("[data-delivered]").textContent })),
       envelope: x.querySelector("[data-envelope]").dataset.envelope, envelopeText: x.querySelector("[data-envelope]").textContent,
+      listed: x.dataset.listed ?? null, listedError: x.querySelector("[data-listed-error]")?.textContent ?? null,
       todo: x.querySelector("[data-binds-todo]")?.textContent ?? null })));
   };
   const view = async v => { await page.click(`.navitem[data-view="${v}"]`); };
@@ -1186,9 +1195,10 @@ test("the digest: the page's own SHA-256, used where the browser offers none, gi
 });
 
 /* What the reference says about the Attestations it reads with one bundle folder.
-   -> { ok, binds: [[id, line]], envelopes: [[id, state, detail]] }, each in the order of the ids */
+   -> { ok, binds: [[id, line]], envelopes: [[id, state, detail]] }, each in the order of the ids;
+      listed: the MANIFEST-1 failures, in the order the reference records them; others: its other failures */
 function referenceAttested(dir) {
-  const ref = reference(dir, "--as-of", "2026-11-14"), binds = [], envelopes = [];
+  const ref = reference(dir, "--as-of", "2026-11-14"), binds = [], envelopes = [], listed = [], others = [];
   for (const l of ref.notes.map(x => x.trim())) {
     let m;
     if ((m = /^binds: (\S+) = /.exec(l))) binds.push([m[1], l]);
@@ -1201,17 +1211,26 @@ function referenceAttested(dir) {
     let m;
     if (at >= 0 && (m = /^\[attestation-binds\] (\S+): /.exec(l.slice(at)))) binds.push([m[1], l.slice(at)]);
     else if ((m = /\] (\S+): (envelope-ref '.*' does not resolve beside the manifest)$/.exec(l))) envelopes.push([m[1], "missing", m[2]]);
+    else if ((m = /^  - \[[^\]]*\] (.*\(MANIFEST-1: .*)$/.exec(l))) listed.push(m[1]);
+    else if ((m = /^  - \[[^\]]*\] (.*)$/.exec(l)) && !/: dsse: /.test(l)) others.push(m[1]);
   }
   const order = (a, b) => byId(a[0], b[0]);
-  return { ok: ref.ok, line: ref.line, binds: binds.sort(order), envelopes: envelopes.sort(order) };
+  return { ok: ref.ok, line: ref.line, out: ref.out, binds: binds.sort(order), envelopes: envelopes.sort(order), listed, others };
 }
 const WORD = { "full-match": "FULL MATCH", "semantic-match": "SEMANTIC MATCH", fail: "DOES NOT BIND" };
+/* MANIFEST-1 as the reference words it, after the id of the Attestation */
+const MANIFEST_1 = ": an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, " +
+  "D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)";
 /* What the page says about the Attestations of one bundle folder, held to itself and to the reference: the word
    and its colour follow the verdict; a failure is shown exactly where the line is the reference's failure; every
-   line and every envelope is read as the reference reads it; the page shows a failure exactly when the reference
-   fails the bundle. `shown`: what R.attested() gave for the folder. */
-function asTheReference(shown, dir, what) {
+   line and every envelope is read as the reference reads it; an Attestation the manifest lists carries the
+   reference's MANIFEST-1 sentence, and no other does; the page shows a failure exactly when the reference fails
+   the bundle. `shown`: what R.attested() gave for the folder. `also`: failures of the reference that the page
+   is known not to state (a rule it does not hold a bundle to), each a pattern. */
+function asTheReference(shown, dir, what, also = []) {
   for (const a of shown) {
+    assert.equal(a.listed, String(a.listedError !== null), `${what}: ${a.id} is marked as listed exactly where the sentence stands`);
+    if (a.listedError !== null) assert.equal(a.listedError, a.id + MANIFEST_1, `${what}: ${a.id}`);
     assert.equal(a.word, WORD[a.verdict], `${what}: ${a.id}`);
     assert.equal(a.fails, String(a.line.startsWith("[attestation-binds] ")), `${what}: ${a.id} is shown as a failure exactly where the line is one`);
     assert.equal(a.shownAs, a.verdict === "full-match" ? "verdict-ok" : a.fails === "true" ? "verdict-bad" : "verdict-warn", `${what}: ${a.id}`);
@@ -1222,7 +1241,11 @@ function asTheReference(shown, dir, what) {
   const ref = referenceAttested(dir);
   assert.deepEqual(shown.map(a => [a.id, a.line]), ref.binds, `${what}: the line of every Attestation is the reference's`);
   assert.deepEqual(shown.map(a => [a.id, a.envelope, a.envelope === "unverified" ? "signature UNVERIFIED" : a.envelopeText.replace(/^FAIL - /, "")]), ref.envelopes, `${what}: every envelope is read as the reference reads it`);
-  assert.equal(shown.some(a => a.fails === "true" || a.envelope === "fail" || a.envelope === "missing"), !ref.ok, `${what}: the page shows a failure exactly when the reference fails the bundle — ${ref.line}`);
+  assert.deepEqual(shown.filter(a => a.listed === "true").map(a => a.listedError), ref.listed, `${what}: an Attestation the manifest lists fails with the reference's sentence, each in the reference's order`);
+  assert.equal(shown.some(a => a.fails === "true" || a.envelope === "fail" || a.envelope === "missing" || a.listed === "true"), !ref.ok, `${what}: the page shows a failure exactly when the reference fails the bundle — ${ref.line}`);
+  /* and the reference fails the bundle for nothing else, but for what a test names */
+  assert.deepEqual(ref.others.filter(e => !also.some(re => re.test(e))), [], `${what}: no other failure in the reference`);
+  for (const re of also) assert.ok(ref.others.some(e => re.test(e)), `${what}: the reference states ${re}`);
 }
 /* the Attestations beside a manifest by the reference's rule: a .json of the manifest's folder that the manifest does not list and that types as one */
 function besideOf(dir) {
@@ -1516,9 +1539,10 @@ test("an export never lists an Attestation: it is written beside the manifest, a
     asTheReference(shown, x.dir, "the export, loaded again");
     assert.ok((await page.locator("#pill-bundle").getAttribute("title")).startsWith("3 objects · 1 attestation beside the manifest · "));
 
-    /* A manifest that lists its Attestation, as reader 1.12.0 wrote it: D3.1 excludes that, and the reference reads
-       the Attestation all the same. So does the page: it is held to its subjects like any other, counted among the
-       objects the manifest lists, and the page says where it lies. */
+    /* A manifest that lists its Attestation, as reader 1.12.0 wrote it. D3.1 excludes that, and since 2026-11-14
+       the reference refuses it in every bundle (MANIFEST-1; until then it passed: 5 pass, 0 fail). So does the
+       page, in the reference's words; the Attestation is still held to its subjects like any other and counted
+       among the objects the manifest lists, as the reference counts it, and the page says where it lies. */
     const moved = "objects/att/attestation-ato.json", unsigned = x;
     const listedBy = async (name, listedAtt) => {
       const dir = path.join(R.tmp, name, "bundle"), bytes = Buffer.from(JSON.stringify(listedAtt, null, 1) + "\n");
@@ -1534,17 +1558,17 @@ test("an export never lists an Attestation: it is written beside the manifest, a
     const changed = await listedBy("listed-changed", { ...att, "subject-semantic-digests": att["subject-semantic-digests"].map((sj, i) => i ? sj : { ...sj, "semantic-digest": "sha256:" + "0".repeat(64) }) });
     await R.load(changed);
     shown = await R.attested();
-    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.subjects.map(sj => sj.status).join()]), [["fail", "true", "differs,match,match"]]);
+    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.listed, a.subjects.map(sj => sj.status).join()]), [["fail", "true", "true", "differs,match,match"]]);
     asTheReference(shown, changed, "a manifest that lists an Attestation that does not bind");
     const listing = await listedBy("listed", att);
     await R.load(listing);
     shown = await R.attested();
-    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest]), [["semantic-match", "false", "other"]]);
+    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest, a.listed, a.listedError]), [["semantic-match", "false", "other", "true", att.id + MANIFEST_1]]);
     asTheReference(shown, listing, "a manifest that lists its Attestation");
-    assert.match(await R.text(page.locator("#view-stagefn [data-attestation]")), /where it lies listed by the manifest, as objects\/att\/attestation-ato\.json — D3\.1 puts an Attestation beside the manifest; it is held to what it binds all the same/);
+    assert.match(await R.text(page.locator("#view-stagefn [data-attestation]")), /where it lies listed by the manifest, as objects\/att\/attestation-ato\.json — D3\.1 excludes that: an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest \(MANIFEST-1\)\. It is held to what it binds all the same/);
     await R.view("overview");
     assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside"))], ["4", "0"]);
-    assert.match(await R.text(page.locator("[data-ov-binds]")), /^SEMANTIC MATCH \(another manifest\) · \S+ \(listed by the manifest\)$/);
+    assert.match(await R.text(page.locator("[data-ov-binds]")), /^SEMANTIC MATCH \(another manifest\) · \S+ ✗ listed by the manifest \(MANIFEST-1\)$/);
 
     /* a signed Attestation in a workspace: the workspace holds objects and no envelope files, so it leaves without
        its envelope - not listed either, and the page says that a validator fails the export for it */
@@ -1590,4 +1614,198 @@ test("an export never lists an Attestation: it is written beside the manifest, a
     await R.view("overview");
     assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside")), await R.text(page.locator("#ov-other"))], ["24", "2", "1"]);
     assert.equal(await page.locator("[data-ov-binds]").count(), 2, "the overview lists the two that came with the bundle");
+  }));
+
+/* ---------- 12. MANIFEST-1: no content manifest lists an Attestation (backlog #75; specification D3.11) ---------- */
+const LISTED = json("jascon/conformance/attestation-vectors.json")["listed-vectors"];
+
+test("MANIFEST-1: each of the 8 listed vectors gets one failure per listed Attestation from the page's own function, in the reference's words and in the order of the ids", () => {
+  assert.equal(LISTED.length, 8);   // a vector added to the family is looked at here before this number moves
+  const seen = new Set();
+  for (const c of LISTED) {
+    for (const o of c.objects) assert.ok(![null, "manifest"].includes(P.inferType(o)), `${c.name}: ${o.id} is typed`);
+    const errs = P.listedAttestationErrors(c.objects);
+    assert.equal(errs.length, c["expected-fails"], c.name);
+    assert.deepEqual(errs, c["expected-ids"].map(id => id + MANIFEST_1), c.name);
+    const atts = c.objects.filter(o => P.inferType(o) === "attestation");
+    seen.add(errs.length + " listed");
+    for (const a of atts) { seen.add("lifecycle " + a.lifecycle); seen.add("envelope-ref" in a ? "signed" : "unsigned"); }
+    if (atts.length > 1 && atts.map(a => a.id).join() !== c["expected-ids"].join()) seen.add("listed in another order than that of the ids");
+    if (c.objects.some(o => /\/attestation\//.test(o.id) && P.inferType(o) !== "attestation")) seen.add("an id that says attestation on another type");
+    if (atts.length === c.objects.length) seen.add("nothing but an Attestation");
+  }
+  /* what the deliberate defects need a vector for */
+  for (const x of ["0 listed", "1 listed", "2 listed", "lifecycle active", "lifecycle draft", "lifecycle withdrawn", "signed", "unsigned",
+    "listed in another order than that of the ids", "an id that says attestation on another type", "nothing but an Attestation"]) assert.ok(seen.has(x), `a vector holds a case of '${x}'`);
+  /* No vector holds an id beyond the Basic Multilingual Plane. The order is that of the UTF-16 code units, as for every
+     list of ids (D2): U+1F600 is written D83D DE00 and comes before U+E000, which it follows by code point. */
+  const att = LISTED.flatMap(c => c.objects).find(o => P.inferType(o) === "attestation"), home = "https://agency-x.example/attestation/";
+  assert.deepEqual(P.listedAttestationErrors(["", "\u{1F600}"].map(tail => ({ ...att, id: home + tail }))), ["\u{1F600}", ""].map(tail => home + tail + MANIFEST_1));
+});
+
+/* listed_attestation_errors of the reference, run by Python on objects typed by the page. -> per case [message] */
+function referenceListed(cases) {
+  const py = `
+import ast, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+ns = {}
+for node in ast.parse(src).body:
+    if isinstance(node, ast.FunctionDef) and node.name in ("by_code_unit", "listed_attestation_errors"):
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+cases = json.loads(sys.stdin.buffer.read().decode("utf-8"))
+print(json.dumps([ns["listed_attestation_errors"]({i: (t, o) for i, t, o in c}) for c in cases]))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+
+test("MANIFEST-1: the reference's own listed_attestation_errors gives the page's messages, for every vector and for ids whose order by code unit is not their order by code point",
+  { skip: !PYTHON && "python3 is not installed" }, () => {
+    const att = LISTED.flatMap(c => c.objects).find(o => P.inferType(o) === "attestation"), named = tail => ({ ...att, id: "https://agency-x.example/attestation/" + tail });
+    /* U+1F600 is written with the code units D83D DE00, which come before U+E000; by code point it comes after */
+    const cases = [...LISTED, { name: "beyond the Basic Multilingual Plane", objects: [named(""), named("\u{1F600}"), named("z"), named("Z")] }];
+    const ref = referenceListed(cases.map(c => typed(c.objects)));
+    cases.forEach((c, i) => assert.deepEqual(P.listedAttestationErrors(c.objects), ref[i], c.name));
+    assert.deepEqual(ref.at(-1).map(e => e.slice("https://agency-x.example/attestation/".length, e.indexOf(": an Attestation"))), ["Z", "z", "\u{1F600}", ""]);
+  });
+
+test("MANIFEST-1 on the page: a manifest that lists an Attestation fails in the reference's words wherever the Attestation is shown; the Attestation is still held to what it binds; what the page says can be done holds in the reference",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    let n = 0;
+    /* A copy of `src` whose manifest lists the Attestation files `names`: each is moved under objects/attestation/ and
+       entered with both digests right, as the IFA bundle had its own until 2026-11-13. `change` edits each first. */
+    const listing = async (src, names, change = () => {}) => {
+      const dir = path.join(R.tmp, "listed-" + ++n, "bundle"), mp = path.join(dir, "content-manifest.json");
+      fs.cpSync(src, dir, { recursive: true });
+      const original = fs.readFileSync(mp), manifest = JSON.parse(original);
+      fs.mkdirSync(path.join(dir, "objects/attestation"), { recursive: true });
+      for (const name of names) {
+        const att = JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"));
+        change(att);
+        const bytes = Buffer.from(JSON.stringify(att, null, 1) + "\n"), rel = "objects/attestation/" + name;
+        fs.rmSync(path.join(dir, name));
+        fs.writeFileSync(path.join(dir, rel), bytes);
+        manifest.objects.push({ id: att.id, version: att.version, path: rel, "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(att) });
+      }
+      fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+      return { dir, mp, original, manifest, names };
+    };
+    /* What the page says can be done about a listing, done: the entries taken out of the manifest and the files put
+       beside it. The manifest is written anew (other bytes than the bundle came with), or its own bytes are put back. */
+    const besideAgain = (x, ownBytes) => {
+      for (const name of x.names) fs.renameSync(path.join(x.dir, "objects/attestation", name), path.join(x.dir, name));
+      fs.rmdirSync(path.join(x.dir, "objects/attestation"));
+      const anew = Buffer.from(JSON.stringify({ ...x.manifest, objects: x.manifest.objects.filter(e => !e.path.startsWith("objects/attestation/")) }, null, 2) + "\n");
+      assert.equal(anew.equals(x.original), false, "written anew, the manifest has other bytes than it came with");
+      fs.writeFileSync(x.mp, ownBytes ? x.original : anew);
+    };
+    const held = async (x, what, also) => { await R.load(x.dir); const shown = await R.attested(); asTheReference(shown, x.dir, what, also); return shown; };
+    const A = "attestation-ifa-ato.json", AID = "https://ifa.gov/goodread/attestation/ifa-ato", ZERO = "sha256:" + "0".repeat(64);
+    const MOVE = "What can be done: take its entry out of the manifest and put the file beside the manifest.";
+    const THEN = " The manifest is then another file: where its bytes are exactly those the Attestation binds, the Attestation is a Full Match; otherwise it is a Semantic Match, which fails nothing, until the signer issues it again.";
+    const ISSUE_AGAIN = "the signer issues the Attestation again (a new version, signed again), or it is taken out of the bundle. This one names no envelope, so setting its lifecycle to withdrawn is a way out as well: it is then reported and fails nothing.";
+    const said = shown => shown.map(a => [a.id.split("/").pop(), a.verdict, a.manifest, a.fails, a.listed]);
+
+    /* 1. the IFA bundle, its Attestation listed and nothing else wrong: the listing fails the bundle, the binding does not */
+    let x = await listing(IFA, [A]);
+    let shown = await held(x, "the IFA bundle, its Attestation listed");
+    assert.deepEqual(said(shown), [["ifa-ato", "semantic-match", "other", "false", "true"]]);
+    assert.equal(shown[0].listedError, AID + MANIFEST_1);
+    assert.equal(shown[0].todo, MOVE + THEN);
+    const card = page.locator("#view-stagefn [data-attestation]");
+    assert.deepEqual(await card.locator("[data-binds-listed]").evaluateAll(l => l.map(e => [e.className, e.textContent])), [["verdict-bad", "· ✗ and the manifest lists it: the bundle fails (MANIFEST-1)"]]);
+    assert.match(await R.text(card), /SEMANTIC MATCH · ✗ and the manifest lists it: the bundle fails \(MANIFEST-1\) — every subject matches and the Attestation binds another manifest: .* The manifest that lists it is never the one it binds; the failure here is the listing /);
+    assert.match(await R.text(card), /where it lies listed by the manifest, as objects\/attestation\/attestation-ifa-ato\.json — D3\.1 excludes that: an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest \(MANIFEST-1\)\. It is held to what it binds all the same/);
+    assert.equal(await card.locator("[data-where-listed]").getAttribute("class"), "verdict-bad");
+    /* the console says it as an error, in the reference's words */
+    assert.deepEqual(await page.locator("#log > div.l-err").evaluateAll(l => l.map(e => e.textContent.replace(/^[\d:.]+/, ""))), [AID + MANIFEST_1]);
+    /* the overview: the Attestation is one of the objects the manifest lists, as a validator counts it, and that is the failure */
+    await R.view("overview");
+    const entries = x.manifest.objects.length;
+    assert.equal(await R.text(page.locator("#ov-kv .v", { has: page.locator("#ov-listed") })), `${entries} of ${entries} manifest entries ✗ ${AID}${MANIFEST_1}`);
+    assert.deepEqual(await page.locator("#ov-kv [data-listed-error]").evaluateAll(l => l.map(e => [e.className, e.textContent])), [["verdict-bad", "✗ " + AID + MANIFEST_1]]);
+    assert.equal(await R.text(page.locator("#ov-beside")), "0");
+    assert.equal(await R.text(page.locator("[data-ov-binds]")), `SEMANTIC MATCH (another manifest) · ${AID} ✗ listed by the manifest (MANIFEST-1)`);
+    assert.equal(await page.locator("[data-ov-listed]").getAttribute("class"), "verdict-bad");
+    assert.ok((await page.locator("#pill-bundle").getAttribute("title")).startsWith(`${entries} objects · no attestation beside the manifest · ✗ 1 attestation listed (MANIFEST-1) · `), await page.locator("#pill-bundle").getAttribute("title"));
+    /* the object browser: in the list and in the detail */
+    await R.view("browser");
+    assert.deepEqual(await page.locator(`.objrow[data-id="${AID}"] [data-list-listed]`).evaluateAll(l => l.map(e => [e.className, e.textContent])), [["verdict-bad", "· ✗ listed by the manifest (MANIFEST-1)"]]);
+    assert.equal(await R.text(page.locator(`.objrow[data-id="${AID}"] [data-list-binds]`)), "SEMANTIC MATCH · ✗ listed by the manifest (MANIFEST-1)");
+    const d = await R.detail(AID);
+    assert.equal(await d.locator("[data-listed-error]").evaluate(e => e.textContent), AID + MANIFEST_1);
+    assert.equal(await d.locator("[data-attestation]").getAttribute("data-listed"), "true");
+    if (REFERENCE) assert.match(referenceAttested(x.dir).line, / pass, 1 fail /, "the listing is the one failure of the bundle");
+
+    /* ... and what the page says can be done, done. Written anew, the manifest is another file: a Semantic Match, and the bundle passes */
+    besideAgain(x);
+    shown = await held(x, "the Attestation beside the manifest again, the manifest written anew");
+    assert.deepEqual([said(shown), shown[0].todo], [[["ifa-ato", "semantic-match", "other", "false", "false"]], null]);
+    await R.view("overview");
+    assert.deepEqual([await page.locator("[data-listed-error]").count(), await page.locator("[data-ov-listed]").count(), await R.text(page.locator("#ov-beside"))], [0, 0, "1"], "nothing of the listing stays on the page");
+    assert.doesNotMatch(await page.locator("#pill-bundle").getAttribute("title"), /listed|MANIFEST-1/);
+    assert.match(await R.text(page.locator("#detail")), /^Select an object on the left /, "the detail that was up belonged to the bundle before, and went with it");
+    /* with the bytes it binds, the manifest is that manifest again: a Full Match */
+    fs.writeFileSync(x.mp, x.original);
+    shown = await held(x, "the Attestation beside the manifest again, the manifest's own bytes");
+    assert.deepEqual(said(shown), [["ifa-ato", "full-match", "this", "false", "false"]]);
+
+    /* 2. listed, and it does not bind either: two failures, and moving the file cures one of them */
+    x = await listing(IFA, [A], a => { a["subject-semantic-digests"][0]["semantic-digest"] = ZERO; });
+    shown = await held(x, "listed, and a subject's digest changed");
+    assert.deepEqual([said(shown), shown[0].subjects[0].status], [[["ifa-ato", "fail", "other", "true", "true"]], "differs"]);
+    assert.equal(shown[0].todo, "What can be done: about the listing, take its entry out of the manifest and put the file beside the manifest. That does not make it bind: " + ISSUE_AGAIN + " The listing fails the bundle whatever the lifecycle is.");
+    if (REFERENCE) assert.match(referenceAttested(x.dir).line, / pass, 2 fail /);
+    besideAgain(x);
+    shown = await held(x, "... beside the manifest again: it still does not bind");
+    assert.deepEqual([said(shown), shown[0].todo], [[["ifa-ato", "fail", "other", "true", "false"]], "What can be done: " + ISSUE_AGAIN]);
+
+    /* 3. the lifecycle changes nothing about where an Attestation lies: withdrawn and not binding, the listing is the one failure */
+    x = await listing(IFA, [A], a => { a["subject-semantic-digests"][0]["semantic-digest"] = ZERO; a.lifecycle = "withdrawn"; });
+    shown = await held(x, "listed, withdrawn, and a subject's digest changed");
+    assert.deepEqual(said(shown), [["ifa-ato", "fail", "other", "false", "true"]]);
+    assert.equal(shown[0].todo, MOVE + " That it does not bind is then reported and fails nothing: its lifecycle is withdrawn.");
+    besideAgain(x);
+    shown = await held(x, "... beside the manifest again: reported, and the bundle passes");
+    assert.deepEqual([said(shown), shown[0].todo], [[["ifa-ato", "fail", "other", "false", "false"]], null]);
+    x = await listing(IFA, [A], a => { a.lifecycle = "draft"; });
+    assert.deepEqual(said(await held(x, "listed, a draft")), [["ifa-ato", "semantic-match", "other", "false", "true"]]);
+
+    /* 4. In a pack the reference states two rules: MANIFEST-1, and ADVICE-1 (a pack holds Components only). The page
+       states MANIFEST-1. It holds no pack to ADVICE-1 to ADVICE-3 and says nothing of them, here as before. */
+    const PA = "attestation-dbvendor-server-7-advice.json";
+    x = await listing(PACK, [PA]);
+    shown = await held(x, "the worked pack, its Attestation listed", [/ is a attestation - an advice pack holds components only \(an attestation travels beside the manifest, D3\.1\) \(ADVICE-1: /]);
+    assert.deepEqual([said(shown), shown[0].envelope], [[["server-7-hardening-3", "semantic-match", "other", "false", "true"]], "unverified"]);
+    assert.doesNotMatch(await R.log(), /ADVICE-1/);
+    if (REFERENCE) assert.match(referenceAttested(x.dir).line, / pass, 2 fail /);
+
+    /* 5. The example folder with both of its Attestations listed: one sentence each, in the order of the ids. The one
+       that binds a pack manifest the bundle keeps is a Full Match all the same - the manifest it binds is not the one
+       that lists it - and stays one when it is moved. */
+    x = await listing(EXAMPLES, [PA, "attestation-acme-2026.json"]);
+    shown = await held(x, "the example folder, both Attestations listed");
+    assert.deepEqual(said(shown), [["acme-2026", "semantic-match", "other", "false", "true"], ["server-7-hardening-3", "full-match", "kept-pack", "false", "true"]]);
+    assert.deepEqual(shown.map(a => a.todo), [MOVE + THEN, MOVE + " It binds a pack manifest this bundle keeps, which that does not change: it stays a Full Match."]);
+    await R.view("overview");
+    assert.deepEqual(await page.locator("#ov-kv [data-listed-error]").evaluateAll(l => l.map(e => e.textContent)), shown.map(a => "✗ " + a.id + MANIFEST_1));
+    assert.match(await page.locator("#pill-bundle").getAttribute("title"), /^26 objects · no attestation beside the manifest · ✗ 2 attestations listed \(MANIFEST-1\) · /);
+    besideAgain(x);
+    assert.deepEqual(said(await held(x, "... both beside the manifest again, the manifest written anew")),
+      [["acme-2026", "semantic-match", "other", "false", "false"], ["server-7-hardening-3", "full-match", "kept-pack", "false", "false"]]);
+
+    /* 6. Where the page and the reference differ, measured and not hidden (as for a file beside the manifest, above):
+       the page reads an object by its fields, the reference by the kernel schema. A listed file with the fields of
+       an Attestation and no subject is no Attestation to the kernel. Both fail the bundle, in other words: the page
+       with MANIFEST-1 and what the primitive makes of it, the reference with the file matching no type. */
+    x = await listing(IFA, [A], a => { a["subject-semantic-digests"] = []; });
+    await R.load(x.dir);
+    shown = await R.attested();
+    assert.deepEqual([said(shown), shown[0].listedError, shown[0].subjects.length], [[["ifa-ato", "fail", "other", "true", "true"]], AID + MANIFEST_1, 0]);
+    if (REFERENCE) {
+      const ref = referenceAttested(x.dir);
+      assert.deepEqual([ref.ok, ref.listed, ref.binds], [false, [], []]);
+      assert.deepEqual(ref.others.map(e => e.replace(/ \(closest .*$/, "")), ["objects/attestation/attestation-ifa-ato.json: matches NO type"]);
+    }
   }));
