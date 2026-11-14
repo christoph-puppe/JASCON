@@ -776,6 +776,73 @@ class ChangedSource(unittest.TestCase):
         def change_theme(src): next(iter(src["KSI"].values()))["status"] = "retired"
         self.stops(change_theme, "retired")
 
+    # ---- the SP 800-53 bundle the 14 carried Requirements are read from, changed in one place ----
+    def run_on_changed_sp800_53(self, change):
+        """-> (exit code, stdout, stderr, the --out directory) of a run on the unchanged source after change(folder)
+        has changed this class's copy of the SP 800-53 bundle. The copy is put back afterwards."""
+        nist = os.path.join(self.root, "converted_examples", "US.SP800-53", "sp800-53-core-bundle")
+        type(self).n += 1
+        kept = os.path.join(TMP, f"sp800-53-kept-{self.n}")
+        shutil.copytree(nist, kept)
+        try:
+            change(nist)
+            return self.run_on(lambda src: None)
+        finally:
+            shutil.rmtree(nist); shutil.copytree(kept, nist)
+
+    @staticmethod
+    def rewrite(path, change):
+        with open(path, encoding="utf-8") as f: doc = json.load(f)
+        change(doc)
+        with open(path, "w", encoding="utf-8") as f: json.dump(doc, f, ensure_ascii=False, indent=1)
+
+    CARRIED = "AC-6.1"         # one of the Rev 5 controls the overlay assigns a parameter of
+    CARRIED_FILE = ("objects", "req", "ac-6-1.json")
+
+    def test_a_member_the_sp800_53_bundle_adds_to_a_facet_comes_with_its_pin(self):
+        # the converter wrote the pins of the carried facets from its own text until 2026-11-14; a facet that gained a
+        # member in the SP 800-53 conversion would have been refused by the pin this bundle carried
+        fid = NIST.rsplit("/", 1)[0] + "/facet/narrative"
+        def change(nist):
+            manifest = read_json(os.path.join(nist, "content-manifest.json"))
+            pin = next(x for x in manifest["facet-schemas"] if x["id"] == fid)
+            self.rewrite(os.path.join(nist, *pin["path"].split("/")),
+                         lambda desc: desc["schema"]["properties"].update({"a-later-member": {"type": "string"}}))
+            self.rewrite(os.path.join(nist, *self.CARRIED_FILE), lambda o: o["facets"][fid + "@1"].update({"a-later-member": "x"}))
+        code, out, err, d = self.run_on_changed_sp800_53(change)
+        self.assertEqual(code, 0, err)
+        bundle = os.path.join(d, "cr26-core-bundle")
+        self.assertEqual(objects(bundle)[f"{NIST}/{self.CARRIED}"]["facets"][fid + "@1"]["a-later-member"], "x")
+        pin = next(x for x in read_json(os.path.join(bundle, "content-manifest.json"))["facet-schemas"] if x["id"] == fid)
+        self.assertIn("a-later-member", read_json(os.path.join(bundle, *pin["path"].split("/")))["schema"]["properties"])
+
+    def test_a_facet_this_converter_writes_too_gets_one_schema_that_knows_both_shapes(self):
+        def change(nist):
+            with open(os.path.join(nist, "schemas", "compat-of-a-later-conversion.json"), "w", encoding="utf-8") as f:
+                json.dump({"id": COMPAT.rsplit("@", 1)[0], "version": "1.0.0", "modifies-semantics": [],
+                           "schema": {"type": "object", "properties": {"labels": {"type": "object"}}, "additionalProperties": False}}, f)
+            self.rewrite(os.path.join(nist, "content-manifest.json"), lambda m: m["facet-schemas"].append(
+                {"id": COMPAT.rsplit("@", 1)[0], "exact-version": "1.0.0", "digest": "sha256:" + "0" * 64,
+                 "path": "schemas/compat-of-a-later-conversion.json"}))
+            self.rewrite(os.path.join(nist, *self.CARRIED_FILE), lambda o: o["facets"].update({COMPAT: {"labels": {"formal": "x"}}}))
+        code, out, err, d = self.run_on_changed_sp800_53(change)
+        self.assertEqual(code, 0, err)
+        bundle = os.path.join(d, "cr26-core-bundle")
+        pins = [x for x in read_json(os.path.join(bundle, "content-manifest.json"))["facet-schemas"] if x["id"] == COMPAT.rsplit("@", 1)[0]]
+        self.assertEqual(len(pins), 1, "one facet, one pin")
+        known = read_json(os.path.join(bundle, *pins[0]["path"].split("/")))["schema"]["properties"]
+        self.assertLessEqual({"class-variants", "ctl", "labels"}, set(known))
+        self.assertEqual(objects(bundle)[f"{NIST}/{self.CARRIED}"]["facets"][COMPAT], {"labels": {"formal": "x"}})
+
+    def test_a_carried_requirement_with_a_facet_nobody_pins_stops_the_run(self):
+        def change(nist):
+            self.rewrite(os.path.join(nist, *self.CARRIED_FILE),
+                         lambda o: o["facets"].update({NIST.rsplit("/", 1)[0] + "/facet/of-a-later-conversion@1": {"x": "y"}}))
+        code, out, err, d = self.run_on_changed_sp800_53(change)
+        self.assertNotEqual(code, 0, out)
+        self.assertIn("pins no schema for it", err)
+        self.assertFalse(os.path.exists(d), "the run stopped and had written already")
+
     def test_a_claim_of_the_ledger_that_does_not_hold_is_a_failed_run(self):
         # The ledger reads every file back. Here the converter is made to write another modality into the files
         # than the one it holds: the rule "modality from the force word" then gives `must` and the file says `should`.
