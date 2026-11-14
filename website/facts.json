@@ -1,11 +1,11 @@
 {
  "measured": {
-  "date": "2026-11-13",
-  "commit": "a03183f5",
+  "date": "2026-11-14",
+  "commit": "f4c32fb8",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
-  "total": 643,
+  "total": 665,
   "families": [
    {
     "name": "jcs",
@@ -17,7 +17,7 @@
    },
    {
     "name": "parameter",
-    "vectors": 21
+    "vectors": 22
    },
    {
     "name": "tailoring",
@@ -49,7 +49,7 @@
    },
    {
     "name": "composition",
-    "vectors": 7
+    "vectors": 9
    },
    {
     "name": "conditional",
@@ -61,7 +61,7 @@
    },
    {
     "name": "kernel",
-    "vectors": 54
+    "vectors": 71
    },
    {
     "name": "scale",
@@ -69,7 +69,7 @@
    },
    {
     "name": "check",
-    "vectors": 203
+    "vectors": 205
    },
    {
     "name": "advice",
@@ -112,10 +112,9 @@
   {
    "corpus": "US.IFA-GoodRead",
    "path": "converted_examples/US.IFA-GoodRead/ifa-core-bundle",
-   "objects": 17,
+   "objects": 16,
    "types": {
     "assessment": 1,
-    "attestation": 1,
     "component": 6,
     "finding": 2,
     "implementation": 3,
@@ -156,7 +155,7 @@
   }
  ],
  "validators": {
-  "python_lines": 2958,
-  "powershell_lines": 3984
+  "python_lines": 2977,
+  "powershell_lines": 4016
  }
 }

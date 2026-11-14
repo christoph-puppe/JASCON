@@ -38,13 +38,17 @@ something you can click.
 > under `https://ns.jascon.net/`, the attestation media type
 > `application/vnd.jascon.attestation+json`, and the schema filenames.
 
-![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — Risk, Assessment, Finding and Attestation objects, with the check workbench that mints real Assessment and Finding objects.](docs/img/reader-assess.png)
+![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — the check workbench that mints real Assessment and Finding objects, with its optional author field, above the Assessment the bundle holds.](docs/img/reader-assess.png)
 
 *Above: the reader on the IFA GoodRead lifecycle corpus — an OSCAL SSP,
 assessment plan, assessment results and POA&M converted to typed objects.
-Stage 5 shows the Risk objects beside the Assessment, its Findings and the
-Attestation; the workbench above them runs a check against the bundle's
-requirements and mints real objects.*
+Stage 5 shows the Assessment and its two Findings; the workbench above
+them runs a check against the bundle's requirements and mints real
+objects. (Reader 1.11.0, 2026-11-14. The bundle lists 16 objects: the
+Attestation of the ATO lies beside the manifest, where D3.1 puts it, and
+the reader does not read it there yet. The stage names Risk in its
+heading and lists none; the two Risk objects are in the object browser —
+backlog #71.)*
 
 ## Unreleased: JASCON 2.0.0 — Risk, Check and advice packs
 
