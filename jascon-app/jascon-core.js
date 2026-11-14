@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.8";
+const JSC_BUILD = "0.9.9";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -72,6 +72,8 @@ const JSC_CFG = [
     label: N("Namespace for new objects"), help: N("The URI under which this app mints ids, for example https://your.example. Use a name you control.") },
   { key: "org:owner", def: "", choices: null,
     label: N("Default risk owner"), help: N("A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created.") },
+  { key: "org:me", def: "", choices: null,
+    label: N("Who am I"), help: N("Your own party URI, for example https://your.example/party/jane-doe. Prefilled as the author of what you write: a Tailoring, a Risk, an Implementation, a Finding, a Mapping, a Check. Each form shows it and lets you change it. Empty: a page names no author unless you type one, and saves all the same.") },
   /* Model access (jascon-ai.js). The key of a service is not a setting: it
      is typed on the page that calls the model and held in memory only. */
   { key: "ai:backend", def: "gemini", choices: ["gemini", "openrouter", "openai"],
@@ -582,6 +584,12 @@ const jscCfg = {
   remove(key) { localStorage.removeItem(PREFIX + key); },
 };
 window.jscCfg = jscCfg;
+/* Who am I: the party URI the user set as their own, or "". The pages offer
+   it as the author of what they write (`provenance.author-ref`, D26); none
+   of them writes an author the user has not seen. Never a default party:
+   an unset setting means nobody is known. */
+const jscWhoAmI = () => jscCfg.get("org:me").trim();
+window.jscWhoAmI = jscWhoAmI;
 
 /* ---------- languages ----------
    The English text is the key: T called with an English text returns the

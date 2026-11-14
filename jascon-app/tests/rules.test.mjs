@@ -386,14 +386,9 @@ test("author and review on the example folder and the IFA bundle, as of 2026-11-
 const pythonWithJsonschema = spawnSync("python3", ["-c", "import jsonschema"], { encoding: "utf8" }).status === 0;
 test("author and review: the reference validator prints the same lines for the two folders", { skip: !pythonWithJsonschema && "python3 with jsonschema is not installed" }, async () => {
   const AS_OF = "2026-11-13";
-  /* the lines of report_authors_and_reviews, from the app's two reports */
-  const lines = async objs => {
-    const r = rules.jscReviewReport(objs, AS_OF);
-    return [...(await rules.jscAuthorReport(objs)).map(e => `note: ${e.message}`),
-      ...(r.dated ? [`review: ${r.dated} review date(s) asked as of ${AS_OF}: ${r.overdue.length} overdue, ${r["not-evaluable"].length} not evaluable (REVIEW-1)`] : []),
-      ...r.overdue.map(e => `note: ${e.id}: ${e.where} was due on ${e.day} (REVIEW-1: overdue; it still holds until someone acts)`),
-      ...r["not-evaluable"].map(e => `note: ${e.id}: ${e.where} is not evaluated: ${e.why} (REVIEW-1)`)];
-  };
+  /* the lines of report_authors_and_reviews, from the app's two reports: jscAuthorReviewLines is what the Validate page shows */
+  const lines = async objs => rules.jscAuthorReviewLines(await rules.jscAuthorReport(objs), rules.jscReviewReport(objs, AS_OF), AS_OF, false)
+    .map(l => (l.kind === "summary" ? l.text : `note: ${l.text}`));
   /* one run: the bundle named on the command line, then the example folder, each above its summary line */
   const run = spawnSync("python3", [path.resolve(CONF, "../scripts/validate_core.py"), "--as-of", AS_OF, IFA], { encoding: "utf8" });
   assert.equal(run.status, 0, run.stdout.slice(-2000) + run.stderr.slice(-2000));
@@ -402,6 +397,45 @@ test("author and review: the reference validator prints the same lines for the t
   const said = part => part.map(l => l.trim()).filter(l => /\((AUTHOR-[1-4]|REVIEW-1)[):]/.test(l));
   assert.deepEqual(await lines(folderObjects(IFA)), said(out.slice(from, ifaEnd)), "the IFA bundle");
   assert.deepEqual(await lines(folderObjects(EXAMPLES)), said(out.slice(ifaEnd, exEnd)), "the example folder");
+});
+
+/* The two reports as part of the check of a whole set (what the Validate page
+   runs). The day is an argument: the rules read no clock. */
+const folderGraph = dir => core.jscGraphFrom(core.jscClassifyFiles(folderTree(dir)).records);
+test("a whole set: the two reports are part of the check; AUTHOR lines fail only when the caller requires authors, REVIEW-1 never", async () => {
+  const g = folderGraph(IFA), verified = await core.jscVerify(g);
+  const of = (res, area, kind) => res.findings.filter(f => f.area === area && f.kind === kind);
+  const plain = await rules.jscCheckGraph(g, verified, { asOf: "2026-11-13" });
+  assert.equal(plain.report["as-of"], "2026-11-13");
+  assert.equal(plain.report["require-authors"], false);
+  assert.equal(plain.report.authors.length, 10);
+  assert.deepEqual(plain.report.review, rules.jscReviewReport(g.objects, "2026-11-13"));
+  assert.deepEqual(plain.report.lines, rules.jscAuthorReviewLines(await rules.jscAuthorReport(g.objects), rules.jscReviewReport(g.objects, "2026-11-13"), "2026-11-13", false));
+  assert.deepEqual([of(plain, "author", "note").length, of(plain, "author", "error").length], [10, 0], "a missing author is a line of the report");
+  assert.deepEqual([of(plain, "review", "note").length, of(plain, "review", "error").length], [3, 0], "the summary and the two overdue reviews");
+  const errorsBefore = plain.findings.filter(f => f.kind === "error").length;
+  const strict = await rules.jscCheckGraph(g, verified, { asOf: "2026-11-13", requireAuthors: true });
+  assert.equal(strict.report["require-authors"], true);
+  assert.deepEqual([of(strict, "author", "note").length, of(strict, "author", "error").length], [0, 10], "required: every AUTHOR line is a failure");
+  assert.deepEqual([of(strict, "review", "note").length, of(strict, "review", "error").length], [3, 0], "REVIEW-1 fails nothing, with any switch");
+  assert.equal(strict.findings.filter(f => f.kind === "error").length, errorsBefore + 10, "nothing else changes");
+  assert.ok(strict.report.lines.filter(l => l.rule !== "REVIEW-1").every(l => l.kind === "error") && strict.report.lines.filter(l => l.rule === "REVIEW-1").every(l => l.kind !== "error"));
+  /* the day asked about decides what is overdue: due on that day is not overdue, the day after it is */
+  const overdueOn = async day => (await rules.jscCheckGraph(g, verified, { asOf: day })).report.review.overdue.map(e => e.day);
+  assert.deepEqual(await overdueOn("2023-06-23"), []);
+  assert.deepEqual(await overdueOn("2023-06-24"), ["2023-06-23"]);
+  assert.deepEqual(await overdueOn("2024-01-02"), ["2024-01-01", "2023-06-23"]);
+  /* no day given: who is missing is still reported, a review is not asked, and nothing is read from a clock */
+  const undated = await rules.jscCheckGraph(g, verified);
+  assert.equal(undated.report.review, null);
+  assert.equal(undated.report["as-of"], null);
+  assert.equal(undated.report.authors.length, 10);
+  assert.equal(of(undated, "review", "note").length, 0);
+  await assert.rejects(rules.jscCheckGraph(g, verified, { asOf: "13.11.2026" }), /REVIEW-1 is asked about a day/);
+  /* the example folder names its authors: required or not, nothing fails */
+  const ex = folderGraph(EXAMPLES), exStrict = await rules.jscCheckGraph(ex, await core.jscVerify(ex), { asOf: "2026-11-13", requireAuthors: true });
+  assert.deepEqual(exStrict.findings.filter(f => f.kind === "error"), []);
+  assert.deepEqual(exStrict.report.lines.map(l => l.kind), ["summary", "note"]);
 });
 
 test("scale: every vector (definition, matrix, levels, residual, SCALE-4)", () => {

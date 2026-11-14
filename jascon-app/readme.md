@@ -7,12 +7,14 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.8. This build has the frame (the hub, the settings page and
+State: build 0.9.9. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
 the app does, and nothing needs one. Since 0.9.3 the app reads advice packs:
 a vendor's recommendations as one published bundle (see "Advice packs").
+Since 0.9.9 the pages write who decided and when, and the Validate page
+shows where that is missing (see "Who decided, and when").
 
 ## Start
 
@@ -68,13 +70,13 @@ is saved to the set at once; the other open tools reload.
 | Import | An OSCAL catalog or profile and the report of its import | Requirements and Sets from a catalog, as a set of its own; a Set and a Tailoring from a profile |
 | Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics | A Requirement (every `{param:}` token is declared as a parameter), a Set |
 | Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
-| Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the resolved requirements as a package of their own |
+| Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the decision on a Deviation it carries; the resolved requirements as a package of their own |
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
 | Implement | Components and Implementation edges; whether the authorization an inherited edge names is found; the advice packs of the set and the recommendations of each product | Components with the capabilities their edges cite, a system Component that lists them, Implementations; a product as a member of one of your components, and an Implementation that adopts a recommendation |
 | Checks | The rules that carry assessment criteria (audit text, automated or manual) and their machine checks; a tester that computes the verdict for an observation you paste | A Check, written in the form or drafted by a model, one at a time or for many rules |
-| Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding |
+| Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding; the decision on a Deviation of a Finding |
 
-| Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about; signatures against keys you trust; what composing the set with another set would report | A report as JSON, on request |
+| Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about; who is not named as an author and which review date has passed; signatures against keys you trust; what composing the set with another set would report | A report as JSON, on request |
 
 Clicking a reference opens the object in a drawer on the right; Escape closes
 it.
@@ -87,6 +89,98 @@ kind is refused; a second operation on one target is refused.
 Running the same check again in Assess overwrites its Assessment and removes
 a Finding that no longer applies while it is still open. A Finding that was
 moved on is kept.
+
+## Who decided, and when
+
+Since release candidate 4 the kernel has one optional place for who decided
+and when: `provenance` with an `author-ref` (a party URI) and a `date`
+(specification D26, `drafts/CP-AUTHOR-1.md`). A Tailoring and each of its
+selects, excludes and operations may carry it, a Risk and its two ratings,
+an Implementation and a Finding. A Deviation may say when it was decided
+(`decided`) and when it is due for review (`review-due`). A Mapping and a
+Check had `provenance` before, and must have it.
+
+**Who am I.** One setting, *Who am I* (`org:me`), holds your own party URI.
+It is empty until you set it. Every form that writes one of these objects
+shows the author it will write, taken from the setting, and you can change
+it there for the page you are on. The date written is today's, in UTC.
+
+**A missing author is never a refusal.** With the field empty a page writes
+no `provenance` and saves all the same. No page makes up an author. What is
+missing shows as a line on the Validate page (below). Two types are the
+exception, by the kernel and not by the app: a Mapping and a Check are not
+valid without `provenance`. Where the setting is empty the Map and Checks
+pages fall back to a party under your namespace (`…/party/author`,
+`…/party/check-author`), as they did before this build; the field shows it
+before anything is saved.
+
+**What each page writes.**
+
+| Page | Writes |
+|---|---|
+| Tailor | `provenance` on the Tailoring. A Deviation the page wrote as pending is decided in the first view; the day is written as `decided`, and an approved one may get a `review-due` |
+| Risk | `provenance` on the Risk, and on `rating` or `residual-rating` when that rating is set or changed |
+| Implement | `provenance` on every Implementation of the workbench and on an edge that adopts a recommendation |
+| Assess | `provenance` on a Finding it raises or moves; `decided` and `review-due` on a Deviation of a Finding |
+| Map, Checks | `provenance` on the Mapping or Check, as before, starting from the setting |
+
+**Nobody's decision changes hands.** `provenance` on a record names who
+wrote this version. An entry of a Tailoring that has none of its own has
+its Tailoring's, and a rating its Risk's. When you save a Tailoring that
+somebody else saved before, or that you saved on another day, the entries
+you did not change keep the author they had: the page writes the earlier
+author onto each of them before it writes you on the Tailoring. An entry
+that carries an author of its own keeps it. New and changed entries are
+yours. The Risk page does the same for a rating you leave as it is. The
+Implement workbench writes every edge of its system on each save, and a
+check that is run again writes its open Findings again; an edge or a
+Finding that comes out as it is stored keeps the author it names. A
+version you save without an author names none; it does not keep the name of
+whoever wrote the version before. A decision recorded on a Deviation is
+not undone by a save from the Tailor form, which may still hold the
+Deviation as it was written. One case cannot be kept apart: entries of
+a Tailoring that never named anybody become yours with the first save that
+names you, because the kernel cannot say "unknown" on an entry of a
+Tailoring that names its author.
+
+**A Deviation.** Where the kernel's state machine allows a next state, the
+Tailor and Assess pages offer it. When a Deviation becomes approved or
+withdrawn the form offers today as the day it was decided; you can change
+or empty it. An approved Deviation may get a review date, on a date or
+every so many units of a named calendar. A Deviation that is decided and
+states no day can be given one; no day is suggested for it. Approved and
+withdrawn are final. The app does not edit the authorizations of a
+Component, so it has no field for the date of an authorization.
+
+**Imports pre-fill, and you may overwrite.** An import reads who and when
+from its source and shows both in two fields before anything is written.
+What you type over a field replaces the source's, each field on its own;
+an emptied field says "nobody" or "no day". A record gets `provenance` only
+when both are known, and the report says how many records got theirs from
+the source, from you, or not at all. See "Importing OSCAL" and "Risk
+analysis" for what each source states.
+
+**The two reports** are on the Validate page, each line in the words of the
+reference validator:
+
+- *Authors* (AUTHOR-1 to AUTHOR-4): a Tailoring at consumer tier with
+  entries nobody signed, a Risk, Finding or Implementation without
+  `provenance`, an approved or withdrawn Deviation without `decided`, an
+  authorization without a date. Whether that is a failure is your
+  programme's policy. The switch *Require authors* turns each line into an
+  error, as `--require-authors` does for the reference; without it a line
+  is a note.
+- *Review dates* (REVIEW-1): every `review-due` of an approved Deviation or
+  a managed Risk that has passed on the day asked about, and those that
+  cannot be evaluated (a calendar period: the app has no calendar). The day
+  is the field *Review dates as of*, today in UTC when you leave it alone;
+  it is the reference's `--as-of`. An overdue review is never an error.
+
+Measured for this build: on the example folder and on the IFA bundle the
+page shows the lines `validate_core.py` prints, for 2026-11-13 and for
+2023-06-24, with the switch off and on (the example folder: no AUTHOR line,
+and one review date that cannot be evaluated; the IFA bundle: 10 AUTHOR
+lines, 2 overdue reviews on the first day and 1 on the second).
 
 ## Advice packs
 
@@ -261,6 +355,32 @@ the control's id, without regard to case.
 | `set-parameters` | one `set-parameter` operation per clause that declares the parameter, if the value lies in its declared space |
 | a value outside the declared space | listed in the report, not written: it needs a Deviation |
 | `alters`, `merge`, pattern matching, child controls | counted in the report, not carried |
+| `metadata`: parties, their roles, `last-modified` | `provenance` on the Tailoring: who wrote the profile and when |
+
+**Who wrote an OSCAL document, and when.** The page shows both before the
+import, in two fields you can type over. The author is one party of the
+document's `metadata`, found by this rule:
+
+1. the one party named as `creator`, else the one named as `prepared-by`
+   (the `party-uuids` of all `responsible-parties` entries of that role
+   together, without those `parties` does not define);
+2. else the one party that holds any role at all;
+3. else the one party the document defines;
+4. else its one party of type `organization`;
+5. else nobody.
+
+A party without a name cannot be named by a URI; where the rule lands on
+one, the answer is nobody. The party becomes `<namespace>/party/<name>`,
+under the namespace of the import, with the converters' slug. The day is
+the first ten characters of `last-modified`, as the document writes them,
+if they are a date. The Python converters of this repository are written
+to the same rule.
+
+A CIS Benchmark's cross-references keep the author they had: CIS
+(`<namespace>/party/cis`), on the day the catalog was last changed. You can
+type over either; a Mapping cannot be written without both, because the
+kernel requires its `provenance`. The Requirements and Sets of a catalog
+carry no `provenance`: their publisher is the origin of their ids.
 
 ## Risk analysis
 
@@ -317,7 +437,16 @@ failures; without it they are a line of the report.
 industrial plant. Importing an entry copies it into a risk of your own with
 state identified and lifecycle draft, keeps the suggested requirements the
 selection contains and names the entry it came from. A risk that exists is
-never overwritten by an import. An entry that does not apply is recorded in
+never overwritten by an import. An imported risk says who wrote it and
+when: the catalogue's publisher and the day the catalogue says this version
+was released (2026-11-10 for both shipped catalogues). The two fields
+*Author of the imported risks* and *Day* show them; what you type over a
+field replaces it, and with one of them empty the risk is imported without
+an author. The log says how many imported risks got theirs from the
+catalogue, from you, or not at all. Once you assess an imported risk and
+save it, that version and its rating are yours.
+
+An entry that does not apply is recorded in
 `risk-catalogs/not-applicable.json` beside the manifest: the entry and its
 version, the reason, and who decided on which day. The party in the Owner
 field of the view is written as the one who decided. A file from before
@@ -490,6 +619,7 @@ of a model service is not a setting.
 | `ui:style` | Style | (empty), `classic`, `ledger`, `engraving`, `still-life` | (empty) | Empty follows the style picked on jascon.net in this browser. Classic is the original look; the other three take the palette and type of the website's styles. |
 | `org:ns` | Namespace for new objects | text | `https://example.org/my` | The URI under which this app mints ids, for example https://your.example. Use a name you control. |
 | `org:owner` | Default risk owner | text | (empty) | A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created. |
+| `org:me` | Who am I | text | (empty) | Your own party URI, for example https://your.example/party/jane-doe. Prefilled as the author of what you write: a Tailoring, a Risk, an Implementation, a Finding, a Mapping, a Check. Each form shows it and lets you change it. Empty: a page names no author unless you type one, and saves all the same. |
 | `ai:backend` | Model service | `gemini`, `openrouter`, `openai` | `gemini` | gemini is Google's API, openrouter is OpenRouter, openai is an endpoint of your own that speaks the OpenAI chat-completions protocol. No model is called until you type a key on a page that offers suggestions. |
 | `ai:model:gemini` | Model at Google Gemini | text | `gemini-3.8-flash` | A model id of the Gemini API, for example gemini-3.8-flash, gemini-3.5-flash-lite or gemini-4-argon (no free tier). Check the id against Google's model list; ids are retired. |
 | `ai:model:openrouter` | Model at OpenRouter | text | (empty) | A model slug in the form vendor/model. The model must support structured outputs. |
@@ -524,17 +654,24 @@ text in that language, the English text is shown, then whatever is there.
   advice packs of `drafts/CP-ADVICE-1.md` (ADVICE-1 to ADVICE-11 with
   the publisher verdict and the import plan), and who decided and when of
   `drafts/CP-AUTHOR-1.md` (AUTHOR-1 to AUTHOR-4, what is missing, and
-  REVIEW-1, which review date has passed on a given day; two reports that
-  fail nothing). What the page does not judge:
+  REVIEW-1, which review date has passed on a given day; two reports, shown
+  on the page since build 0.9.9). What the page does not judge:
   conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line
-  ends, files the manifest does not list). What it does not show yet: the two
-  reports of CP-AUTHOR-1. The rules compute them (`jscAuthorReport`,
-  `jscReviewReport` in `jascon-rules.js`) and agree with the reference on the
-  example folder and the IFA bundle; no page asks for them in this build. In
+  ends, files the manifest does not list). In
   a case of doubt run the Python validator on the export; where the two
   disagree, the app is wrong.
+- Who decided: the app knows who you are only from the setting *Who am I*;
+  it does not log anybody in, and an author is a claim inside the object,
+  not a proof. The pages do not raise an object's `version` when they save
+  it, so "this version" is the stored object. A Tailoring is written from
+  the form of the second view, which does not load a stored Tailoring; a
+  save under the same label replaces it, and the entries that are the same
+  keep their authors. The authorizations of a Component, and a Deviation on
+  anything but a Tailoring's operation or a Finding, are shown and not
+  edited. A review date is offered on a date or as a calendar period, not as
+  an elapsed duration.
 - Signatures: Ed25519 over a DSSE envelope, verification only. A key is
   trusted because you say so on the Validate page, never because a bundle
   carries it. The app cannot sign. The reference validator looks at the
@@ -611,7 +748,11 @@ answer, the key in no storage), the Checks tool goes from a CIS import to
 saved checks against a simulated model and the exported bundle passes the
 reference validator, an advice pack goes from its preview through import and
 adoption to an export the reference validator accepts (in node on the files,
-and in a browser through the pages), every page starts in a browser without a script error, every
+and in a browser through the pages), the pages that write who decided are
+driven in a browser and each exported set is handed to the reference
+validator with `--require-authors`, the Validate page shows the reference's
+AUTHOR and REVIEW lines for the example folder and the IFA bundle, the
+author of an OSCAL document follows the table of its rule, every page starts in a browser without a script error, every
 interface string has a German text, and what is generated (the settings table
 above, `jascon-schema.js`, `jascon-presets.js`) matches its source. The second lists
 strings without a German text. The third rewrites the settings table from
