@@ -2390,7 +2390,9 @@ test("the keys of facets on the page: each key says where its facet is registere
     if (REFERENCE) { const ref = referenceFailures(copy); assert.deepEqual([ref.ok, ref.failures], [false, [e]], ref.line); }
     /* an export: a requirement of the workspace under that key */
     const NS = "https://example.org/my", REQ = { id: `${NS}/req/x`, version: "1", lifecycle: "active",
-      statements: [{ id: "s1", modality: "must", "obligated-parties": [`${NS}/party/ops`], prose: { en: "X." } }], facets: { [BAD]: obj.facets[BAD] } };
+      statements: [{ id: "s1", modality: "must", "obligated-parties": [`${NS}/party/ops`], prose: { en: "X." } }],
+      /* the payload of the example's requirement for the one statement this one has: a by-statement key that names no statement is another failure (D10) */
+      facets: { [BAD]: { "by-statement": { s1: obj.facets[BAD]["by-statement"].s1 } } } };
     await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), { v: 2, ns: NS, tailor: { label: "t", selects: [], excludes: [], operations: [] },
       system: { title: "S", components: [], implementations: [] }, assess: { scopeKey: "", performer: "", results: {} }, created: [REQ] });
     await page.reload();

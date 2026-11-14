@@ -96,3 +96,17 @@ The website's pages name neither rule; they print the numbers of
 
 Left: the example folder's `gspp-taxonomy` schema (#94), with a
 proposal, and #89, both for the author.
+
+## Grundschutz++ on the catalogue of 2026-10-29, one taxonomy schema, the place check (2026-11-14, last round: backlog #89 and #94)
+
+| Where | What | State |
+|---|---|---|
+| Specification | IV.6 (one row), IV.9; the counts in I (251,681 leaf values), IV.2 (214,455), IV.5b and IV.7 (4,467 exported objects, 1,289) | done |
+| Handbook | 7.3 rewritten around the pinned descriptor and the payload by statement, with what the hand-written one had wrong; 11 and 13 (the pin's version and path); 14 (the ledger sum); appendix D (the sample) | done |
+| README | the Grundschutz++ row (v2026-10-29; 1,000 Requirements, 224 parameters, 289 Sets, 49,521 values); the ledger sums; the leaf-value total | done |
+| `jascon/SKILL.md`, `jascon/examples/README_1.md` | the schema file's name | done |
+| App `readme.md`, `PROGRESS.md` | build 0.9.21 (the agent's commit) | done |
+| Website | the first page's code sample and the evidence page's leaf-value total, five languages, stamped; `facts.json` measured after the commits | done, the facts with the last commit |
+| Register, backlog, plan, decisions | the author's five answers; #89 and #94 closed; #95 filed; what was built otherwise | done |
+
+Left: #95, two findings that are filed and not changed.

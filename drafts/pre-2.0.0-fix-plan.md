@@ -683,15 +683,18 @@ facets and released the seven work items. The record is the register,
 | #86 | DRAFT-1, a report in three validators | built |
 | #87 | withdrawn objects left out until asked for, reader and app | built |
 | #88 | one id and version is one schema: a record and its check in the workflow | built |
-| #89 | the library's check of a path map against the ledger's places | not built |
+| #89 | the library's check of a path map against the ledger's places | built in the last round of the day (the author: "5 ja"): `path_map_check`, used by all six converters |
 | #90 | the workflow runs the OSCAL export | built |
 | #91 | converter residue | three of six built |
 | #92 | reader and app residue | built; the app's part measured and not changed |
 | #93 | WITHDRAWN-1: an object in force does not lean on one the bundle holds as withdrawn; an error in three validators and the reader | built later that day (the author: "Regel bauen") |
-| #94 | one facet id and version, two schemas (example folder, Grundschutz++ converter) | measured against the publisher's repository: the converter's values are the publisher's; a proposal is with the author |
+| #94 | one facet id and version, two schemas (example folder, Grundschutz++ converter) | closed (the author: "2 ja, 3 ja, 4 jetzt"): one typed schema 1.1.0 for both; the bundle lifted to the catalogue of 2026-10-29 |
+| #95 | CR26's own list of contradictions does not end a run; a row of the IFA path map no path reaches | filed, not changed |
 
 Measured at the end of the round: 753 vectors in 18 families in the
 reference, the twin and the app; with FRAGMENT-1 and WITHDRAWN-1 later
-that day, 783. Six ledgers, 214,365 values, 71,212 copied, 51,605 made
+that day, 783. (After the last round of the day the six ledgers read
+214,455 values, 71,259 copied, 51,632 by a rule, 91,564 no content, and
+the four exports round-trip 4,467 objects.) Six ledgers, 214,365 values, 71,212 copied, 51,605 made
 by a rule, 91,548 no content, 0 dropped, 0 unaccounted; four OSCAL exports
 round-trip 4,465 objects.

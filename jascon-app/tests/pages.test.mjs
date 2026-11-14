@@ -616,7 +616,9 @@ test("Attestations of a set that was changed: the page compares with the bundle 
     await change(s, LNX, { title: { en: "SSH hardening for Linux hosts (reworded)" } });
     const reworded = await checked(s);
     assert.equal(reworded.basis, "changed");
-    assert.match(reworded.said, /^This set was changed in this app after it was loaded, so the manifest it came with \(sha256:10ff89bd3c32…\) no longer describes it\. Compared with the bundle an export would write now: its manifest \(sha256:[0-9a-f]{12}…\) and the objects it lists\./);
+    /* the digest of the manifest the folder came with, read from the folder: written out here it went stale with every change of the example */
+    const CAME = nodeSha256(fs.readFileSync(path.join(EX, "content-manifest.json"))).slice(0, 12);
+    assert.match(reworded.said, new RegExp(String.raw`^This set was changed in this app after it was loaded, so the manifest it came with \(sha256:${CAME}…\) no longer describes it\. Compared with the bundle an export would write now: its manifest \(sha256:[0-9a-f]{12}…\) and the objects it lists\.`));
     assert.deepEqual(reworded.lines.map(l => [l.kind, l.verdict, l.text]), [
       ["line", "semantic-match", `binds: ${ACME_ATT} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`],
       ["line", "full-match", `binds: ${VENDOR_ATT} = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]`]]);

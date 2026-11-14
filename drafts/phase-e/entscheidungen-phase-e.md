@@ -570,3 +570,58 @@ alle sechs sie haben. Kein Bundle ändert sich dadurch.
    auch DRAFT-1-Zeilen und zählte sie als Autorenzeilen. Seit 0.9.20
    stehen dort nur AUTHOR-Zeilen; DRAFT-1 und FRAGMENT-1 stehen als
    Hinweise ihres Bereichs in der Liste darunter.
+
+## Fünf Antworten des Autors, letzte Runde des Tages (2026-11-14)
+
+Vorgelegt waren fünf Fragen. Die Antwort des Autors, wörtlich:
+
+> 1 ja, 2 ja, 3 ja, 4 jetzt, 5 ja
+
+1. **WITHDRAWN-1: die Kanten bleiben, wie gebaut.** Nichts zu ändern.
+2. **#94 wie vorgeschlagen.** Der Beispielordner übernimmt Schema und
+   Payload-Form des Konverters; seine Attestation ist neu ausgestellt. Der
+   Konverter bricht bei einer Stufe ab, die die Liste des BSI nicht führt.
+3. **Das Taxonomie-Schema ist echt typisiert**, Version 1.1.0: je
+   Statement `class`, `sec-level` (`normal-SdT`, `erhöht`), `effort` (0
+   bis 5), `tags`, sonst nichts.
+4. **Grundschutz++ steht auf dem Katalog des BSI vom 2026-10-29**:
+   1.000 Anforderungen, 289 Sets. Die Quelle ist am Commit `10f3c22` des
+   BSI festgehalten.
+5. **#89 ist gebaut**: Die Bibliothek prüft, ob jeder Wert dort steht, wo
+   die Pfadkarte es sagt. Alle sechs Konverter mit Ledger nutzen sie.
+
+### Was beim Bauen anders kam als vorgelegt
+
+1. **Das BSI hat die Namensräume seiner Eigenschaften umbenannt**
+   (`Dokumentation/namespaces/` zu `documentation/namespaces/`). Der
+   Konverter in der alten Fassung lief auf dem neuen Katalog mit Exit 0,
+   las keine einzige Eigenschaft und schrieb 1.000 Statements mit
+   Modalität „unspecified“. Jeder Wert stand unverändert im compat-Facet,
+   also meldete der Ledger nichts. Der Konverter liest jetzt den neuen
+   Namensraum und bricht ab, wenn alle Eigenschaften eines Namens in
+   einem fremden Namensraum stehen. Das App-Preset tut dasselbe.
+2. **Version 1.1.0 statt 1.0.0.** Das Verzeichnis der gepinnten Schemas
+   führt 1.0.0 als veröffentlicht; ein geändertes Schema bekommt eine
+   neue Version. Die Zeile für 1.0.0 bleibt stehen.
+3. **„Byte für Byte dieselbe Datei“ gilt nicht.** Die konvertierten
+   Bundles liegen mit CRLF im Repository, der Beispielordner mit LF. Es
+   sind zwei Dateien mit zwei Prüfsummen und ein Schema. Mein erster Push
+   hatte die Prüfsumme der CRLF-Fassung gepinnt und war in allen vier
+   CI-Jobs rot; lokal war er grün, weil die Arbeitskopie noch CRLF hatte.
+4. **Die Prüfung „eine id und Version, ein Schema“ liest jetzt auch den
+   Beispielordner.** Auf dem alten Stand schlägt sie an und nennt dessen
+   Datei. Vorher sah sie dort nicht hin, deshalb gab es #94.
+5. **#89, woher die Einträge kommen.** Je Zeile der Pfadkarte stehen die
+   Orte, die der Ledger der festgehaltenen Quelle gemessen hat. Für ISM
+   und CSF habe ich jeden Eintrag gegen den Satz der Zeile gelesen; vier
+   Sätze nannten einen Ort nicht und nennen ihn jetzt. Für SP 800-53,
+   CR26 und IFA sind es die gemessenen Orte, nicht Satz für Satz
+   gegengelesen. Einige Orte stammen aus dem Code, weil nur erfundene
+   Testkataloge sie erreichen.
+6. **#89, was es nicht fängt.** Eine Regel, die den falschen Wert an den
+   richtigen Ort schreibt, besteht auch diese Prüfung. Der Fall aus
+   Punkt 1 ebenso: Die Eigenschaften standen an einem Ort, den die Zeile
+   nennt. Dafür gibt es jetzt die eigene Sperre im Konverter.
+7. **Zwei Nebenbefunde, nicht geändert (#95):** Der CR26-Konverter
+   meldet Widersprüche zwischen Pfadkarte und Ledger, bricht aber nicht
+   daran ab. Die IFA-Pfadkarte hat eine Zeile, die kein Pfad erreicht.

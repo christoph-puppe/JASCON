@@ -4722,3 +4722,120 @@ lines.
   headed "Authors" and counted them there since build 0.9.17, my work of
   the same day. A test failed on it only now, when a second report
   joined the first. The block holds AUTHOR lines only since 0.9.20.
+
+## The last round of the day — Grundschutz++ on the publisher's current catalogue; one typed taxonomy schema; the path map is held against the record in every converter *(2026-11-14; closes #89 and #94; files #95; no new candidate)*
+
+### What the author decided
+
+Five questions were put, each with a recommendation. The answer: "1 ja,
+2 ja, 3 ja, 4 jetzt, 5 ja". The edges of WITHDRAWN-1 stay as built; the
+example folder takes the converter's taxonomy schema and the converter
+ends a run on a level its publisher does not list; that schema is typed;
+the Grundschutz++ bundle is lifted to the catalogue of 2026-10-29 now;
+#89 is built.
+
+### The catalogue of 2026-10-29, and what it showed about the ledger
+
+The source is pinned at commit 10f3c22 of the publisher's repository,
+which was rearranged since the last pin: the catalogue a user works with
+is the resolved catalogue of the control layer. 1,000 controls, one more
+than in July.
+
+The first run on it ended with exit code 0 and was wrong in every
+Requirement. The publisher had moved its lists of values from
+`Dokumentation/namespaces/` to `documentation/namespaces/`, and the
+converter reads a prop only in the namespace it is written for; a prop of
+the same name elsewhere is another prop and is carried as the source
+holds it. So all 12,400 props were carried, unread, in the compat facet:
+1,000 statements of modality `unspecified`, no level, no objective. The
+ledger reported 0 unaccounted and 0 failed checks, and it was right:
+every value was in the bundle, each by a rule that held. *This is the
+case the author's question about #89 was after, met by accident on the
+same day*: a ledger holds a rule to what it wrote, not to what the
+conversion is for. The line that showed it was a count the converter
+prints, `modality: {'unspecified': 1000}`, and I read it because I was
+looking.
+
+What is built against it: the converter reads the new address, and a
+wiring check ends a run in which every prop of a name the mapping reads
+stands in another namespace while none stands in the one it reads. One
+stray prop among props that are read is still another prop and no
+failure. The app's preset refuses such an import with the same sentence.
+
+### One schema, typed, version 1.1.0 (#94)
+
+The publisher's repository holds one list per property. Two security
+levels, an effort of 0 to 5. The schema lists those, per statement, with
+`class` and `tags`, and is closed. It is version 1.1.0 because the record
+of #88 holds 1.0.0 as published: a schema that changes gets a new
+version, and the line of 1.0.0 stays. A level outside the lists ends the
+converter's run before it writes; without that check the run would end
+with 0 and the pinned schema would refuse the bundle, which a test shows.
+
+*Measured* on a copy of the bundle with three payloads the schema does
+not allow, both digests written anew: the reference and the twin each
+fail three times, on those payloads. Until this schema, neither
+validator held a taxonomy payload to anything: the old one was an open
+object beside an enum on a member no payload has.
+
+The example folder pins the same descriptor and writes KONF.14.1's
+payload by statement. Its file has LF line ends and the bundle's CRLF,
+so they are two files with two digests and one schema; the check of #88
+reads the example folder now and fails on the folder as it was.
+
+### The path map held against the record (#89)
+
+`oscal_conv_lib.path_map_check` takes the record by path and, for each
+row of a converter's path map, the outcomes the row allows and the places
+its values stand at. A value with another outcome, or at another place,
+is a sentence for the converter's wiring checks. Each of the six
+converters carries a table beside its map (`HELD`), row for row, and a
+row put into the map without its entry ends the run too. The
+Grundschutz++ converter had this as its own code. No bundle and no
+ledger record changed.
+
+What the entries are, said plainly. They are the places the record of
+each pinned source measured. For the ISM and the CSF I read every entry
+against the sentence of its row; four sentences named fewer places than
+their values stand at, and say them now. For SP 800-53, CR26 and IFA the
+entries are the measured ones and I did not read each against its
+sentence. Three converters failed their tests on invented catalogues at
+first, because the tests reach places no pinned source does (a prop the
+mapping has no member for, a nested control's parent, an element without
+a label or a sort-id): those places are written from the code.
+
+So the check pins where values go; it does not judge whether that is
+where they should go, except where a person read the entry against the
+sentence. And it does not see a wrong value at the right place, nor the
+case above, where 12,400 values stood at a place their row names.
+
+### What it is measured by
+
+The steps of the workflow's Python job, run here in its order after the
+last change: all pass. Each converter reproduces its bundle and its
+record byte for byte. In each of the six, a deliberate defect (a place
+the table names otherwise; an outcome; a row taken out) ends the run
+with 1 while the ledger reads 0 unaccounted. Six ledgers: 214,455 source
+values, 71,259 copied, 51,632 by a rule, 91,564 no content, 0 dropped, 0
+unaccounted. Four OSCAL exports round-trip 4,467 objects. The app's
+preset gives 1,289 of 1,289 objects of the Grundschutz++ bundle by
+semantic digest and by bytes.
+
+### Errors of mine
+
+- I pushed the example folder with a pin over CRLF bytes; all four jobs
+  of the workflow were red on one line. The working copy had passed.
+  A check that only runs on what git checks out would have said so
+  before the push.
+- I told the author that the example folder would hold the converter's
+  file "byte for byte". It cannot: the two folders keep different line
+  ends, and I had not looked.
+- My question to the author counted "three converters" that check
+  places themselves from the backlog's sentence. One did (Grundschutz++);
+  SP 800-53 and CR26 checked outcomes, not places.
+
+### Found and not changed (#95)
+
+The CR26 converter's own list of contradictions between its path map
+and its ledger is printed and reported and does not end a run. The IFA
+path map has a row no path reaches.
