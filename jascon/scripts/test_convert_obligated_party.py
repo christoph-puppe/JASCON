@@ -177,9 +177,14 @@ class Backlog74TheNineConverters(unittest.TestCase):
 
     def test_backlog_74_out_is_the_only_place_a_run_writes_to(self):
         for conv, (_, _, stem) in CONVERTERS.items():
+            # a converter wired to the conversion ledger (backlog #41) writes its record beside the two reports,
+            # as convert_ifa.py does; it is the one file a run may write besides the three
+            ledger = f"{stem}-conversion-ledger.json"
+            wrote = {name: sorted(os.listdir(self.ran[conv, name][1])) for name in ("default", "caller")}
+            self.assertEqual(ledger in wrote["default"], ledger in wrote["caller"], f"{conv}: the ledger is written with one party and not the other")
             for name in ("default", "caller"):
                 out = self.ran[conv, name][1]
-                self.assertEqual(sorted(os.listdir(out)),
+                self.assertEqual([x for x in wrote[name] if x != ledger],
                                  [f"{stem}-core-bundle", f"{stem}-coverage-report.json", f"{stem}-coverage-report.md"], conv)
                 self.assertTrue(os.path.isfile(os.path.join(out, f"{stem}-core-bundle", "content-manifest.json")), conv)
         self.assertEqual(sorted(os.listdir(self.tmp)), ["jascon", "out", "sources"],
