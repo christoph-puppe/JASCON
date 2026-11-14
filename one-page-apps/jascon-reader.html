@@ -849,7 +849,12 @@ function indexBundle() {
     return;
   }
   let parsed = 0, failed = 0, unknown = 0;
-  for (const [p, f] of state.files) {
+  /* Objects are indexed in the order of their paths, not in the order the files arrived. A folder's files arrive
+     in the order the operating system lists them, which differs between machines: until 2026-11-14 the page
+     showed another Tailoring first on another machine, and a test that had passed here failed on the workflow's
+     runner. Paths are compared by code unit, as ids are (D2). */
+  const byPath = [...state.files].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
+  for (const [p, f] of byPath) {
     if (p.endsWith("content-manifest.json")) continue;
     if (/(^|\/)schemas\//.test(p)) continue;
     if (PACK_RE.test(p)) continue;   // a kept pack manifest is no object of the bundle, whatever it is called

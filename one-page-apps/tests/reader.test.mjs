@@ -383,6 +383,16 @@ test("the example folder names its authors: every record and entry shows who dec
   assert.deepEqual(await R.sweep(), { named: 14, nobody: 0, undecided: 0, undated: 0 });
   if (REFERENCE) assert.deepEqual(reference(EXAMPLES).notes.filter(l => /\(AUTHOR-/.test(l)), []);
 
+  /* What the page shows first does not depend on the order in which the files of a folder arrive. That order is
+     the operating system's: the workflow's runner listed the folder otherwise than the machine this test was
+     written on, the page showed the other Tailoring first, and the assertion below failed there (2026-11-14).
+     The same files, handed over in reverse, give the same order on the page. */
+  const pills = async () => { await R.view("stage:tailor"); return page.locator(".fpill[data-tsel]").evaluateAll(l => l.map(x => x.dataset.tsel)); };
+  const asLoaded = await pills();
+  assert.deepEqual(asLoaded, ["https://cso.example/tailoring/linux-prod", "https://ns.bsi.bund.de/gspp/tailoring/erhoeht"], "Tailorings in the order of their paths");
+  await page.evaluate(async () => { await loadFileList([...document.getElementById("folderpick").files].reverse()); });
+  assert.deepEqual(await pills(), asLoaded, "the same files in reverse order: the same order on the page");
+
   /* the stage views say the same, in short */
   const stage = page.locator("#view-stagefn");
   await R.view("stage:tailor");
