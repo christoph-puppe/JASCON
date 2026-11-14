@@ -263,6 +263,25 @@ included, so whoever edits the lifecycle of a signed Attestation breaks
 its envelope, and the run says that instead (measured). The signer
 issues a new version, or the Attestation leaves the bundle.
 
+Where the Attestation lies is a rule of its own. It lies beside the
+manifest, and the manifest does not list it: an object a content
+manifest lists is not an Attestation, in any bundle (**MANIFEST-1**,
+specification D3, item 11). The reason is arithmetic. An Attestation
+binds the digest of the manifest's bytes, and a manifest that lists the
+Attestation carries the Attestation's digests, so the two can never
+agree: a listed Attestation is a Semantic Match at best. What it binds,
+whether it is signed and whether it is still claimed change nothing
+about the rule.
+
+> **Don't** enter an Attestation in the manifest because it is a file
+> of the bundle like the others. Until 2026-11-14 only a pack's manifest
+> was held to this. A converted corpus listed its Attestation from its
+> first conversion on, and so did every bundle one of this repository's
+> tools exported with one; both validators passed them, and the only
+> trace was a verdict nobody read as a defect. The sentence in the
+> specification said "by definition", and nothing held a bundle to it
+> until somebody porting the check asked what happens when one does.
+
 > **Don't** ship an Attestation that nothing checks. The example folder
 > of this handbook carried one from before 1.0.0 until 2026-11-14 whose
 > three subject digests matched no object, whose manifest digest matched

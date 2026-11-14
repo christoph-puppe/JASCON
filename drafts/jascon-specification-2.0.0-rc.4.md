@@ -2157,6 +2157,10 @@ of Check and of advice packs:
    defects in the reference each turn a vector or the end-to-end test
    `test_attestation_binds.py` red; the last was caught by nothing until
    a test was added for it.)*
+   *(2026-11-14, later: 8 vectors for MANIFEST-1 (D3.11) — `attestation`
+   24 → 32: **692 vectors**. Written before the rule. Ten deliberate
+   defects in the reference each turn a vector or the end-to-end test
+   red.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2286,6 +2290,7 @@ history. The compact line:
 | The tools write who decided | 2026-11-13 | Author: "all converters should pre-fill that data from the source corpus but import tool should be able to overwrite it." One rule for the author of an OSCAL document, in the converter library and in the app's importer; the day of `last-modified` as the date; an overwrite, field by field. The IFA conversion is regenerated: one of seven records gets an author from its source, the two authorizations their date, and the Attestation of the ATO lies beside the manifest and binds its digest (the IFA half of backlog #46). The app's pages write `provenance`, its Validate page shows the two reports, the reader shows the fields. No kernel shape and no rule changes (backlog #69) | same section |
 | An Attestation is held to what it binds | 2026-11-14 | Backlog #46, phase D. `attestation-binds` (B.1.7) was defined and applied by no tool to a bundle; the example folder's Attestation bound nothing from before 1.0.0. D7 amended: every Attestation read with a bundle is judged subject by subject and against the manifest it binds, and a failing one fails the bundle while it is `active`. Attestations beside a manifest (D3.1) are read with every bundle, not only with a pack. `attestation` 5 → 24 vectors, 684 in all. Applied by `validate_core.py`, by `validate_core.ps1` (run on Windows PowerShell 5.1), by the app (0.9.11) and by the reader (1.13.0), each held to those vectors. The example Attestation is real and signed with the public fixture key. No shape changes; a bundle with an active Attestation that does not bind fails where it passed | "Phase D — an Attestation is held to what it binds; no tool invents a party" |
 | No tool invents a party | 2026-11-14 | Backlog #70, decided by the author: "refuse if no party is named". Where the kernel requires a party (a Mapping's and a Check's author, an Assessment's performer, a Deviation's approver, the obligated party of a statement) and the user named none, the app and the reader wrote one made from a word. They refuse the save now and say which field is missing. No kernel shape and no rule changes | same section |
+| No manifest lists an Attestation | 2026-11-14 | Backlog #75, decided by the author: "refusal in all". D3.1 excluded Attestations from the content manifest "by definition", and a tool refused a listed one in a pack only (ADVICE-1); an ordinary bundle that listed its own passed in both validators. D3 item 11: **MANIFEST-1**, one failure per Attestation among the objects a manifest lists, in every bundle, whatever it binds and whatever its lifecycle. `attestation` 24 → 32 vectors, 692 in all. No shape changes; a bundle whose manifest lists an Attestation fails where it passed | "After phase D — a listed Attestation is refused; the party a converter writes is an argument" |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2307,14 +2312,14 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
-  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203; and with the vectors of D3.10 after rc.4, **665**: `kernel` 71, `parameter` 22, `check` 205, `composition` 9; and with the vectors of D7 as amended on 2026-11-14, **684**: `attestation` 24). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
+  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203; and with the vectors of D3.10 after rc.4, **665**: `kernel` 71, `parameter` 22, `check` 205, `composition` 9; and with the vectors of D7 as amended on 2026-11-14, **684**: `attestation` 24; and with those of D3.11 the same day, **692**: `attestation` 32). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
   in `check-vectors.json` and `advice-vectors.json`, the outcome and the
   named rules.
 - **A worked advice pack** under `jascon/example-packs/`, and the example
   folder after importing it.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-14 on all 684 vectors of this candidate, on Windows
+  — green on 2026-11-14 on all 692 vectors of this candidate, on Windows
   PowerShell 5.1 (IV.5b item 3). A workflow runs both, and the app's
   port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
@@ -2439,6 +2444,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    no validator, although D3.1 excludes it "by definition" (#75). The
    second, if it becomes a rule, fails bundles that pass today, which is
    cheaper before the tag than after it.)*
+   *(The same day, decided by the author: #75, "refusal in all" —
+   MANIFEST-1, D3.11; #74, the obligated party a converter writes where
+   its source names none is an argument with a named default.)*
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
    compared with the published text of RFC 9485 on 2026-11-12 (#61,
    closed); ☐ a ledger of source occurrences per converter, and the
