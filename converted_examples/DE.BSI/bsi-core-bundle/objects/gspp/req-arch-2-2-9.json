@@ -1,0 +1,86 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.9",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.2.2.9",
+ "lifecycle": "active",
+ "title": {
+  "de": "Segmentierung von IPv4 und IPv6"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Netze SOLLTE Verbindungen zwischen IPv4 und IPv6 einschränken."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "einschränken",
+     "result": "Verbindungen zwischen IPv4 und IPv6",
+     "target-object-categories": [
+      "Netze"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Netzplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lateral Movement",
+      "Separation of Concerns"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "IPv4 und IPv6 sind grundlegende Netzprotokolle, die unterschiedliche Protokollstacks und Sicherheitseigenschaften haben. Eine Trennung von IT-Systemen mit IPv4 und IPv6 erschwert es Angreifern, Schwachstellen der Protokolle auszunutzen oder zu kombinieren und verringert die Wahrscheinlichkeit von Fehlern durch Wechselwirkungen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "dabbb234-5678-456b-8db4-4c7ac9ed1e12"
+  }
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.3.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.3.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Gesetzliche Verpflichtungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS gesetzliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen, analysieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "analysieren",
+     "result": "gesetzliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen,"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Compliance-Verpflichtungen"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0,
+     "tags": [
+      "Compliance Management",
+      "Inventories"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Gesetzliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen, sind dokumentiert. Gesetzliche Verpflichtungen meint alle Pflichten, die sich unmittelbar aus dem Recht ergeben, inklusive des Verfassungsrechts, Europarechts und Verordnungen. Relevante gesetzliche Verpflichtungen können sich je nach Institution z. B. aus Grundrechten, Cyber Resilience Act, Data Act, Data Markets Act, NIS, DSGVO, BDSG, TKG, TDDDG oder GeschGehG ergeben. Hierbei werden Verpflichtungen, die sich mittelbar auswirken wie die Arbeitsstättenverordnung oder allgemeine Regelungen zur Fürsorgepflicht, auch beachtet."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "02747a0f-cd38-4815-9eec-351ae89dbdfe"
+  }
+ ]
+}

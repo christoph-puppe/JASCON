@@ -7,24 +7,24 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.1",
-   "sequence": 7200
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-10-1",
+   "sequence": 11540
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.2",
-   "sequence": 7210
+   "sequence": 11550
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.3",
-   "sequence": 7220
+   "sequence": 11560
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.4",
-   "sequence": 7230
+   "sequence": 11570
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.5",
-   "sequence": 7240
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-10-5",
+   "sequence": 11600
   }
  ],
  "label": "10",

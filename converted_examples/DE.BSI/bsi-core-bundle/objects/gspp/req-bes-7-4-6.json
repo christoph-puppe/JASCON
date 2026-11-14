@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.6",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.7.4.6",
+ "lifecycle": "active",
+ "title": {
+  "de": "Shared Responsibility"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Dienstleistungen SOLLTE die Verteilung der Zuständigkeiten und deren Abgrenzung dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "die Verteilung der Zuständigkeiten und deren Abgrenzung",
+     "target-object-categories": [
+      "Dienstleistungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Auslagerungsregister"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Beim Outsourcing gibt es verteilte Zuständigkeiten zwischen Dienstleister und Institution (sog. Shared Responsibility). Hierbei ist z.B. relevant, welche Verarbeitungen in der Zuständigkeit des Dienstleisters liegen und welche weiterhin bei der Institution vorgenommen werden, z.B. Infrastructure-as-a-Service vs. Software-as-a-Service."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "e7afc3eb-feac-4cad-8ad4-a46a867f45d8"
+  }
+ ]
+}

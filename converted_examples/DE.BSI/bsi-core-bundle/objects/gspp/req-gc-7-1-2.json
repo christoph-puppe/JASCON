@@ -1,0 +1,71 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.7.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.7.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Festlegung des Schutzbedarfs"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS eine Einstufung des Schutzbedarfs der relevanten Geschäftsprozesse oder Informationen unter Berücksichtigung der Geschäftsziele und in Absprache mit der Institutionsleitung festlegen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "festlegen",
+     "result": "eine Einstufung des Schutzbedarfs der relevanten Geschäftsprozesse oder Informationen",
+     "result-specification": "unter Berücksichtigung der Geschäftsziele und in Absprache mit der Institutionsleitung"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Schutzbedarfsfeststellung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Das Ergebnis der Schutzbedarfsfeststellung ist eine Übersicht des Schutzbedarfs der zu verarbeitenden Informationen, sowie der Relevanz der Geschäftsprozesse. Die Einstufung erfolgt dabei in den Stufen „normal“ oder „hoch“. Die Einstufung richtet sich nach der Bedeutung des Geschäftsprozess für die Geschäftsziele oder den gesetzlichen Auftrag der Institution. Priorität für die weitere Abarbeitung hat zunächst der wichtigste Geschäftsprozess, d.h. derjenige Geschäftsprozess, dessen Informationsschutz für den Fortbestand der Institution von essentieller Bedeutung ist. Die Entscheidung darüber, welcher Geschäftsprozess am wichtigsten ist, obliegt der Institutionsleitung. Droht bei einer Verletzung der Vertraulichkeit, Integrität oder Verfügbarkeit von Informationen in diesem Geschäftsprozess ein existenzbedrohender finanzieller oder existenzbedrohender Reputationsschaden oder sind folgenschwere Auswirkungen einer Verletzung der Sicherheitsziele auf die Geschäftsziele oder bestehende Verpflichtungen zu befürchten, so ist der Schutzbedarf des Prozesses als hoch einzustufen. Das gleiche gilt, wenn innerhalb eines Geschäftsprozesses Informationen verarbeitet werden, die als besonders vertraulich eingestuft werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "7a951196-bf44-463f-91b6-8cf140c97e4c"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1.1"
+  }
+ ]
+}

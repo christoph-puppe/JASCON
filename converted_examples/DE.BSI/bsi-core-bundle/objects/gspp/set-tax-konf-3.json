@@ -8,35 +8,35 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.1",
-   "sequence": 6610
+   "sequence": 10720
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.2",
-   "sequence": 6620
+   "sequence": 10730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.3",
-   "sequence": 6630
+   "sequence": 10740
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.4",
-   "sequence": 6640
+   "sequence": 10750
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.5",
-   "sequence": 6650
+   "sequence": 10760
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.6",
-   "sequence": 6660
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-3-6",
+   "sequence": 10790
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.7",
-   "sequence": 6670
+   "sequence": 10800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.8",
-   "sequence": 6680
+   "sequence": 10810
   }
  ],
  "label": "3",

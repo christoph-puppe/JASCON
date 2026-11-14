@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/gc-10-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Festlegung eines Verfahrens zum Kommunikationsmanagement"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.10.1",
+   "sequence": 460
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.10.1.1",
+   "sequence": 470
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.10.1.2",
+   "sequence": 480
+  }
+ ]
+}

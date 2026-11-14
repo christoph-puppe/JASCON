@@ -7,7 +7,31 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
+   "metadata": {
+    "type": "object"
+   },
+   "back-matter": {
+    "type": "object"
+   },
+   "catalog": {
+    "type": "object"
+   },
    "param-extras": {
+    "type": "object"
+   },
+   "props": {
+    "type": "array"
+   },
+   "parts": {
+    "type": "array"
+   },
+   "links": {
+    "type": "array"
+   },
+   "control": {
+    "type": "object"
+   },
+   "group": {
     "type": "object"
    }
   },

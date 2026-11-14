@@ -23,23 +23,6 @@
      "label": "regelmäßig"
     }
    ]
-  },
-  {
-   "id": "BER.4.4.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE dokumentierte und tatsächlich vergebene Berechtigungen {param:ber.4.4.1-prm1} auf Übereinstimmung überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "ber.4.4.1-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
   }
  ],
  "facets": {
@@ -49,11 +32,6 @@
      "action": "überprüfen",
      "result": "vergebene Berechtigungen",
      "result-specification": "{{regelmäßig}} auf Erforderlichkeit"
-    },
-    "BER.4.4.1": {
-     "action": "überprüfen",
-     "result": "dokumentierte und tatsächlich vergebene Berechtigungen",
-     "result-specification": "{{regelmäßig}} auf Übereinstimmung"
     }
    }
   },
@@ -63,28 +41,12 @@
      "required-documentation": [
       "Prüfplan"
      ]
-    },
-    "BER.4.4.1": {
-     "required-documentation": [
-      "Inventar Berechtigungen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
-     ]
-    },
-    "BER.4.4.1": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -103,13 +65,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "BER.4.4.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Überprüfung tatsächlicher Berechtigungen",
-     "alt-identifier": "4e815b01-7a59-4e8c-bbcc-e4998f342e68"
     }
    }
   },
@@ -119,11 +74,6 @@
      "guidance": {
       "de": "Erforderlichkeit bedeutet in diesem Kontext, dass eine vergebene Berechtigung nur dann als gerechtfertigt gilt, wenn sie für die aktuelle Aufgabenwahrnehmung, Rolle oder Funktion einer Person tatsächlich benötigt wird. Dabei kann zwischen fachlicher Notwendigkeit (z. B. Zugriff auf eine bestimmte Anwendung, um Kernaufgaben erfüllen zu können) und zeitlicher Relevanz (z. B. Projektzugriff, der nur für die Dauer des Projekts sinnvoll ist) unterschieden werden. Als mögliche Werte für den Parameter regelmäßig bieten sich an: (1) quartalsweise, (2) halbjährlich, (3) jährlich – je nach Kritikalität der Systeme und Sensibilität der Daten. Die regelmäßige Überprüfung der Erforderlichkeit kann verhindern, dass sich unbemerkt überhöhte Rechte („Privilege Creep“) ansammeln, die Angreifern im Falle einer Kompromittierung zusätzlichen Spielraum eröffnen könnten. Ohne solche Kontrollen könnte ein ehemaliger Projektmitarbeiter weiterhin Zugang zu sensiblen Daten haben oder ein interner Angreifer auf nicht benötigte Administrationsrechte stoßen. Umgekehrt kann die Überprüfung sicherstellen, dass Berechtigungen stets am aktuellen Aufgabenprofil ausgerichtet bleiben und so Schaden durch Missbrauch oder Fehlhandlungen eingedämmt werden kann. Zur Umsetzung kann eine Institution rollenbasierte Zugriffskonzepte einsetzen, die regelmäßig mit den Ist-Berechtigungen der Nutzer abgeglichen werden („Access Reviews“). Dies kann durch automatisierte Reports aus Verzeichnisdiensten, Datenbanken oder Fachanwendungen erfolgen, die Verantwortlichen zur Bestätigung oder Korrektur vorgelegt werden. Hilfreich kann auch ein Vier-Augen-Prinzip sein, bei dem Vorgesetzte die Notwendigkeit von Berechtigungen bestätigen. Darüber hinaus kann es nützlich sein, temporäre Projekt- oder Sonderrechte mit Ablaufdatum zu vergeben, sodass diese automatisch entzogen werden, wenn sie nicht mehr bestätigt werden."
      }
-    },
-    "BER.4.4.1": {
-     "guidance": {
-      "de": "Der Sinn und Zweck der Vorgabe liegt darin, eine unbemerkte Abweichung zwischen Dokumentation und Realität frühzeitig zu erkennen. Ohne diesen Abgleich könnte es vorkommen, dass ehemalige Mitarbeitende weiterhin Zugriff auf interne Systeme behalten oder dass sich im Laufe der Zeit unautorisierte Rechteanhäufungen einschleichen. Durch eine wirksame Überprüfung kann hingegen sichergestellt werden, dass nur aktuelle, geprüfte und erforderliche Zugriffsrechte bestehen bleiben und so die Angriffsfläche der Institution reduziert werden kann. Zur Umsetzung kann die Institution Berechtigungsübersichten automatisiert aus IT-Systemen exportieren und diese mit den in Verzeichnissen oder Rollenmodellen hinterlegten Daten vergleichen, z.B. anhand eines automatisierten Abgleiches mit Personalstammdaten einmal pro Quartal. Diese Anforderung ist auch dann erfüllt, wenn Dokumentation der Berechtigungen und tatsächliche Berechtigung (z.B. ein Verzeichnisdienst) dasselbe sind. Bitte beachten Sie dabei, dass die generelle Anforderung zur Überprüfung vergebener Berechtigungen weiter gefasst ist und z.B. auch den Abgleich zwischen tatsächlich vergebenen Berechtigungen und nicht dokumentieren Erfordernissen (beispielsweise durch die Vorlage bei Vorgesetzten) umfassen kann."
-     }
     }
    }
   },
@@ -131,9 +81,6 @@
    "param-extras": {
     "ber.4.4-prm1": {
      "alt-identifier": "4123f246-95b2-4785-9714-17a5e68462c5"
-    },
-    "ber.4.4.1-prm1": {
-     "alt-identifier": "4e815b01-7a59-4e8c-bbcc-e4998f342e68"
     }
    }
   }

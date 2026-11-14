@@ -1,0 +1,77 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.2.2.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.2.2.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Anpassung der Dokumentation"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests SOLLTE die geplanten Änderungen dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "die geplanten Änderungen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Ergebnisprotokoll"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 2
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Je nach Inhalt der Änderung können hierzu Konfigurationsdateien, Sicherheitsrichtlinien, oder begleitende Dokumente wie ein IT-Betriebshandbuch oder für Nutzende gedachte Anwenderhandbücher oder Wikis gehören."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "474497ca-0e99-4f0a-8f84-abdea042aa80"
+  }
+ ]
+}

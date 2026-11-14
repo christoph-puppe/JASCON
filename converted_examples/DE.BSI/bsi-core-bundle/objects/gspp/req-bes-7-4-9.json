@@ -1,0 +1,85 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.9",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.7.4.9",
+ "lifecycle": "active",
+ "title": {
+  "de": "Auslagerungsregister"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Outsourcing SOLLTE Informationen über den Dienstleister, die Kritikalität des Prozesses, abgeschlossene Verträge und Vereinbarungen sowie Zeitpunkt und Inhalt von Änderungen an den Vereinbarungen nach Vertragsschluss dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "Informationen über den Dienstleister, die Kritikalität des Prozesses, abgeschlossene Verträge und Vereinbarungen sowie Zeitpunkt und Inhalt von Änderungen an den Vereinbarungen",
+     "result-specification": "nach Vertragsschluss",
+     "target-object-categories": [
+      "Outsourcing"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Auslagerungsregister"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Hierzu genügt ein zentrales Auslagerungsregister, welches zu allen ausgelagerten Prozessen die geforderten Informationen enthält. Als Angaben zum Dienstleister gehören dessen Unternehmensbezeichnung und Erreichbarkeiten."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "ca2e05d8-da09-45f2-b9e7-48e3ef4b032c"
+  }
+ ]
+}

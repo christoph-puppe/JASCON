@@ -1,0 +1,98 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.2.3.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.2.3.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Autorisierung von Anwendungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für IT-Systeme SOLLTE die Nutzung von Anwendungen auf diesen durch {param:asst.2.3.1-prm1} autorisieren."
+   },
+   "parameters": [
+    {
+     "name": "asst.2.3.1-prm1",
+     "type": "string",
+     "label": "eine zuständige Person oder Rolle"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "autorisieren",
+     "result": "die Nutzung von Anwendungen auf diesen",
+     "result-specification": "durch {{eine zuständige Person oder Rolle}}",
+     "target-object-categories": [
+      "IT-Systeme"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Inventar Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.17",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Der Sinn dieser Regelung liegt in der Minimierung von Risiken, die durch unkontrollierte Nutzung entstehen. Durch nicht autorisierte Anwendungen könnte beispielsweise Schadsoftware in die Systeme der Institution eingeschleust, könnten durch Sicherheitslücken in veralteter Software Angriffsvektoren geöffnet oder könnten durch den Einsatz nicht konformer Tools sensible Informationen unkontrolliert abfließen. Ein strukturierter Autorisierungsprozess kann somit die Integrität der IT-Systeme wahren und sicherstellen, dass nur geprüfte, für den Geschäftszweck erforderliche und aus rechtlicher Sicht unbedenkliche Anwendungen zum Einsatz kommen, was die gesamte Angriffsfläche der Institution signifikant reduziert. Relevant sind dabei sowohl lokal installierte Anwendungen, als auch solche, die auf Cloud-Servern oder in verteilten Diensten betrieben werden. Je nach Geschäftsprozessen oder Risikoprofil kann die Autorisierung einzeln für jedes System und jede Anwendung, oder für bestimmte Kategorien von Systemen oder Anwendungen vorgenommen werden (z.B. \"Alle Office-Produkte eines bestimmten Herstellers auf Notebooks mit einem bestimmten Betriebssystem). Hierbei ist es sinnvoll, Standard-Anwendungen zu bestimmen, die für alle Nutzenden freigegeben sind und die Verwendung darüber hinausgehender Anwendungen pro Nutzer oder Organisationseinheit zu autorisieren."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "asst.2.3.1-prm1": {
+     "alt-identifier": "3d12c2e5-94bd-48d2-bf9c-a5797e4f0378"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "3d12c2e5-94bd-48d2-bf9c-a5797e4f0378"
+  }
+ ]
+}

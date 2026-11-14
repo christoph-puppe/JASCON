@@ -1,0 +1,81 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.10.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.10.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Versionierung der Anwendungskonfiguration"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für Anwendungen SOLLTE eine Versionierung vorheriger Konfigurationen verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "eine Versionierung vorheriger Konfigurationen",
+     "target-object-categories": [
+      "Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Versionierung bezeichnet hier die strukturierte Nachvollziehbarkeit von Änderungen an Konfigurationen, also das Speichern, Dokumentieren und bei Bedarf Wiederherstellen älterer Zustände einer Anwendung. Sie unterscheidet sich von einem einfachen Backup dadurch, dass nicht nur eine Kopie vorliegt, sondern explizit eine fortlaufende Historie mit Vergleichen, Rücksetzpunkten (rollback points) und optional Kommentaren geführt wird. Der Zweck liegt darin, dass eine ungewollte oder fehlerhafte Anpassung an einer Anwendungskonfiguration im Betrieb schnell erkannt und – wenn erforderlich – präzise auf einen definierten, funktionsfähigen Zustand zurückgesetzt werden kann. Ohne diese Rückgriffsmöglichkeit könnte ein Konfigurationsfehler den gesamten Dienst außer Betrieb setzen, während eine Versionierung die Verfügbarkeit und Nachvollziehbarkeit stärken kann. Zur Umsetzung kann eine Institution technische Verfahren einsetzen, die eine automatische Ablage und Historisierung von Konfigurationsdateien unterstützen, beispielsweise durch (1) den Einsatz verteilter Versionskontrollsysteme wie Git oder Subversion (SVN) für textbasierte Konfigurationsdateien, (2) integrierte Konfigurationsarchivierung in gängigen Deployment- oder Container-Tools, oder (3) systemseitige Snapshot-Mechanismen, die gezielt für Konfigurationsverzeichnisse genutzt werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "cb46badf-b942-4007-ab50-e941711b3c58"
+  }
+ ]
+}

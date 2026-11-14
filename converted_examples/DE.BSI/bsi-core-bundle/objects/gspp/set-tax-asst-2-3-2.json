@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/asst-2-3-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Software Bill of Materials (SBOM)"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3.2",
+   "sequence": 1700
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3.2.1",
+   "sequence": 1710
+  }
+ ]
+}

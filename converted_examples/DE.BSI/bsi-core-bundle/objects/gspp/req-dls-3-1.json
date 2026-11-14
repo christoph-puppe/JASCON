@@ -23,28 +23,6 @@
      "label": "regelmäßig"
     }
    ]
-  },
-  {
-   "id": "DLS.3.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Dienstleistersteuerung für Outsourcing SOLLTE die Einhaltung der Sicherheitsvorgaben anhand eines {param:dls.3.1.1-prm1} {param:dls.3.1.1-prm2} überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "dls.3.1.1-prm1",
-     "type": "string",
-     "label": "Audits, Zertifikates oder vergleichbaren Sicherheitsnachweises"
-    },
-    {
-     "name": "dls.3.1.1-prm2",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
   }
  ],
  "facets": {
@@ -57,14 +35,6 @@
      "target-object-categories": [
       "Dienstleistungen"
      ]
-    },
-    "DLS.3.1.1": {
-     "action": "überprüfen",
-     "result": "die Einhaltung der Sicherheitsvorgaben anhand eines {{Audits, Zertifikates oder vergleichbaren Sicherheitsnachweises}}",
-     "result-specification": "{{regelmäßig}}",
-     "target-object-categories": [
-      "Outsourcing"
-     ]
     }
    }
   },
@@ -73,11 +43,6 @@
     "smt": {
      "required-documentation": [
       "Liste der Hersteller und Dienstleister"
-     ]
-    },
-    "DLS.3.1.1": {
-     "required-documentation": [
-      "Auslagerungsregister"
      ]
     }
    }
@@ -94,18 +59,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.29",
       "https://ns.bsi.bund.de/gspp/threat/G-0.20"
      ]
-    },
-    "DLS.3.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.29",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.11",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -118,16 +71,6 @@
      "tags": [
       "Lieferketten"
      ]
-    },
-    "DLS.3.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Audit oder Zertifikat",
-     "alt-identifier": "12c2c250-86b8-46a0-bccd-d0b2f59b6bae"
     }
    }
   },
@@ -137,11 +80,6 @@
      "guidance": {
       "de": "Hierzu ist zu prüfen, ob Anzeichen vorliegen, dass der Dienstleister die im Vertrag geforderten Vorgaben nicht einhält und falls erforderlich Gegenmaßnahmen einzuleiten. Die Prüfung kann z.B. Zertifikate, regelmäßige Stichproben oder das Monitoring von Datenleaks vorsehen."
      }
-    },
-    "DLS.3.1.1": {
-     "guidance": {
-      "de": "„Audit“ bezeichnet in diesem Zusammenhang eine systematische, unabhängige Überprüfung der vereinbarten Sicherheitsmaßnahmen durch fachkundige Dritte, beispielsweise in Form interner oder externer Prüfungen mit dokumentierten Ergebnissen. Ein „Zertifikat“ ist ein formaler Nachweis einer akkreditierten Prüfstelle, dass ein Dienstleister ein anerkanntes Sicherheitsframework eingehalten hat, wie etwa IT-Grundschutz oder ISO/IEC 27001. Ein „vergleichbarer Sicherheitsnachweis“ kann auch ein Prüfbericht, ein BSI C5-Testat oder eine Bestätigung unabhängiger Gutachter sein, sofern er inhaltlich nachvollziehbar darlegt, dass definierte Sicherheitsanforderungen wirksam umgesetzt wurden. Ohne Nachweise könnte ein Dienstleister vereinbarte Sicherheitsmaßnahmen vernachlässigen, was zu unbemerkten Datenabflüssen, unzureichendem Patch-Management oder Ausfällen durch mangelhafte Notfallvorsorge führen könnte. Durch nachvollziehbare Prüfungen kann dagegen erreicht werden, dass Sicherheitsstandards eingehalten werden, Schwachstellen frühzeitig sichtbar werden und ein belastbares Vertrauen in die Dienstleisterbeziehung entsteht."
-     }
     }
    }
   },
@@ -149,12 +87,6 @@
    "param-extras": {
     "dls.3.1-prm1": {
      "alt-identifier": "5b17bd9b-ff38-46eb-a1ef-7b38429f128b"
-    },
-    "dls.3.1.1-prm1": {
-     "alt-identifier": "12c2c250-86b8-46a0-bccd-d0b2f59b6bae"
-    },
-    "dls.3.1.1-prm2": {
-     "alt-identifier": "12c2c250-86b8-46a0-bccd-d0b2f59b6bae"
     }
    }
   }

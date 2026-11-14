@@ -7,28 +7,28 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.1",
-   "sequence": 2480
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls-3-1",
+   "sequence": 4220
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.2",
-   "sequence": 2490
+   "sequence": 4230
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.3",
-   "sequence": 2500
+   "sequence": 4240
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.4",
-   "sequence": 2510
+   "sequence": 4250
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.5",
-   "sequence": 2520
+   "sequence": 4260
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.6",
-   "sequence": 2530
+   "sequence": 4270
   }
  ],
  "label": "3",

@@ -16,26 +16,6 @@
    "prose": {
     "de": "Monitoring-Evaluation MUSS ein Verfahren zur Erstellung aussagekräftiger Auditberichte verankern."
    }
-  },
-  {
-   "id": "PERF.3.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Monitoring-Evaluation SOLLTE für Feststellungen in Audits ein einheitliches Bewertungsschema festlegen."
-   }
-  },
-  {
-   "id": "PERF.3.2.2",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Monitoring-Evaluation MUSS alle relevanten Stakeholder über die Auditergebnisse informieren."
-   }
   }
  ],
  "facets": {
@@ -44,30 +24,12 @@
     "smt": {
      "action": "verankern",
      "result": "ein Verfahren zur Erstellung aussagekräftiger Auditberichte"
-    },
-    "PERF.3.2.1": {
-     "action": "festlegen",
-     "result": "für Feststellungen in Audits ein einheitliches Bewertungsschema"
-    },
-    "PERF.3.2.2": {
-     "action": "informieren",
-     "result": "alle relevanten Stakeholder über die Auditergebnisse"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Auditbericht"
-     ]
-    },
-    "PERF.3.2.1": {
-     "required-documentation": [
-      "Auditbericht"
-     ]
-    },
-    "PERF.3.2.2": {
      "required-documentation": [
       "Auditbericht"
      ]
@@ -80,20 +42,6 @@
      "class": "BSI-Methodik-Grundschutz-plus-plus",
      "sec-level": "normal-SdT",
      "effort": 0
-    },
-    "PERF.3.2.1": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Einheitliches Bewertungsschema",
-     "alt-identifier": "cbd3ce59-8979-4ae0-a6ee-f0779d9a2598"
-    },
-    "PERF.3.2.2": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Kommunikation an Stakeholder",
-     "alt-identifier": "3f9935bd-65fa-4212-a7e7-726f39933c7d"
     }
    }
   },
@@ -102,16 +50,6 @@
     "smt": {
      "guidance": {
       "de": "Ein Auditbericht muss nachvollziehbar, vollständig und strukturiert dokumentieren, wie das Audit durchgeführt wurde und welche Ergebnisse erzielt wurden. Er enthält Angaben zum Auditziel, Auditumfang, Auditteam, Auditmethoden, den bewerteten Bereichen sowie eine übersichtliche Darstellung der Feststellungen inklusive Abweichungen, Verbesserungspotenzialen und der Bewertung der Wirksamkeit der umgesetzten Sicherheitsmaßnahmen. Die Auditberichte sollten neben den identifizierten Schwachstellen auch positive  Feststellungen enthalten, um ein ausgewogenes Bild zu vermitteln und Best Practices zu fördern."
-     }
-    },
-    "PERF.3.2.1": {
-     "guidance": {
-      "de": "Das Bewertungsschema soll die einheitliche Bewertung, die Wirksamkeit der Auditprozesse und die Vergleichbarkeit von Auditergebnissen sicherstellen."
-     }
-    },
-    "PERF.3.2.2": {
-     "guidance": {
-      "de": "Eine angemessene Kommunikation der Auditergebnisse an alle relevanten Stakeholder muss sichergestellt werden, um das Bewusstsein für identifizierte Risiken zu schärfen und die Umsetzung von Verbesserungsmaßnahmen zu fördern. Die Auswertung von Auditergebnissen dient dazu, systematische Abweichungen, Schwachstellen und Verbesserungspotenziale im Informationssicherheitsmanagement zu identifizieren. Diese Maßnahmen werden anschließend in den Umsetzungsplan eingefügt und ihre Umsetzung nachverfolgt."
      }
     }
    }

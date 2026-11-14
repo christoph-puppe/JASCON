@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-4-6",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Security by Default"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6",
+   "sequence": 3220
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6.1",
+   "sequence": 3230
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6.2",
+   "sequence": 3240
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6.3",
+   "sequence": 3250
+  }
+ ]
+}

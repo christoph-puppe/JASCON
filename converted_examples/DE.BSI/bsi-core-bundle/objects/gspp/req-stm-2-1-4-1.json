@@ -1,0 +1,79 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "STM.2.1.4.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vererbung von Zielobjektkategorien"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Strukturmodellierung MUSS die in der Hierarchie übergeordneten Zielobjektkategorien ebenfalls dem jeweiligen Asset die in der Zielobjekthierarchie übergeordnet sind zuweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "die in der Hierarchie übergeordneten Zielobjektkategorien ebenfalls dem jeweiligen Asset",
+     "result-specification": "die in der Zielobjekthierarchie übergeordnet sind"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Anforderungspaket"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Hier werden die zuvor zugeordneten Zielobjektkategorien um diejenigen Kategorien erweitert, die in der Zielobjekthierarchie übergeordnet sind. Anforderungen werden einmalig für die passende Zielobjektkategorie definiert und dann auf alle nachgeordneten Kategorien vererbt. Eine automatisierte Verarbeitung der Vererbungshierarchie kann den Umsetzungsaufwand erheblich reduzieren, ohne dass Themen außen vor bleiben. Die Vererbung erfolgt entlang der Zielobjekthierarchie, indem für jede zugeordnete Zielobjektkategorie alle Elternknoten bis zur Wurzel einbezogen werden. Die Vererbung ist deterministisch, da die Zielobjekthierarchie fest definiert ist. Eine Automatisierung der Vererbung ist möglich und wird empfohlen, wenn die Hierarchie maschinenlesbar vorliegt."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "3e96574e-7742-42c4-8ccb-4578bcc2f7b0"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.2"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.5"
+  }
+ ]
+}

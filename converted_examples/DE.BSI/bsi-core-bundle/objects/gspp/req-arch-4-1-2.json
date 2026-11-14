@@ -1,0 +1,85 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.4.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.4.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Quarantäne"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Interne Netzsegmente KANN ein Quarantänenetz für nicht authentifizierte IT-Systeme installieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "ein Quarantänenetz",
+     "result-specification": "für nicht authentifizierte IT-Systeme",
+     "target-object-categories": [
+      "Interne Netzsegmente"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Network Access Control",
+      "Rogue Access Point"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Wenn Systeme aufgrund bestimmter Voraussetzungen sich nicht authentifizieren (z.B. installierte Sicherheitsupdates oder weil sie keine 802.1X-Anmeldung unterstützen), kann ein vollständiges blockieren aller Netzverbindungen die Verfügbarkeit erforderlicher Geschäftsprozesse unmöglich machen. Um IT-Systemen einen eingeschränkten Zugang zu Netzressourcen zu ermöglichen – etwa damit diese die Voraussetzungen durch den Download von Updates erfüllen können – kann ein Quarantänenetz eingerichtet werden, das z.B. Zugang zu bestimmten Downloadservern oder eine Meldung des Problems ermöglicht."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "5f97efff-4db1-4b26-8ab9-4521108e5c0c"
+  }
+ ]
+}

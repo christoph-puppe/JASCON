@@ -1,0 +1,87 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "SENS.4.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Untersagung von Passwort Recycling"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sensibilisierung für Nutzende SOLLTE die Wiederverwendung von Passwörtern untersagen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "untersagen",
+     "result": "die Wiederverwendung von Passwörtern",
+     "target-object-categories": [
+      "Nutzende"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Arbeitsanweisung"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Credential Stuffing",
+      "Privilege Escalation",
+      "Password Policy"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Wiederverwendung von Passwörtern bezeichnet  die Nutzung identischer Zugangsdaten für verschiedene Systeme, Dienste oder Anwendungen. Werden identische Passwörter auf unterschiedlichen Systemen eingesetzt, steigt die Wahrscheinlichkeit, dass ein Angreifer mit einem einzigen erlangten Passwort Zugriff auf weitere Konten erhält („Credential Stuffing“). Ein Vorfall könnte beispielsweise darin bestehen, dass ein externer Angreifer durch ein Datenleck bei einem Drittanbieter an ein altes Passwort gelangt und damit Zugang zu internen Diensten erhält, wenn die betroffene Person dieses Passwort mehrfach genutzt hat. Auch im internen Umfeld kann die Wiederverwendung von Passwörtern dazu führen, dass unbefugte Dritte über abgefangene oder mitgehörte Anmeldedaten Zugang zu sensiblen Bereichen erhalten. Die Anforderung zielt also auf eine Reduzierung der Angriffsfläche durch Verhinderung von Kettenreaktionen, die aus nur einem kompromittierten Passwort entstehen können. Mit „Wiederverwendung“ ist sowohl die Verwendung desselben Passworts an verschiedenen Zugangskonten oder IT-Systemen, also auch eine zeitlich wiederholte Nutzung früherer Passwörter gemeint."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "0573247f-65f3-4768-9d27-6c9c0f42c6cd"
+  }
+ ]
+}

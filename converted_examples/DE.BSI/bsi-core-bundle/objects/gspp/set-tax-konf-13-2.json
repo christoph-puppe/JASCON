@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-13-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Authentizität von Nachrichten"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.2",
+   "sequence": 12100
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.2.1",
+   "sequence": 12110
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.2.2",
+   "sequence": 12120
+  }
+ ]
+}

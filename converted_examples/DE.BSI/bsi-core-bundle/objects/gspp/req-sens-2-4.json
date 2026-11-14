@@ -16,16 +16,6 @@
    "prose": {
     "de": "Sensibilisierung für Nutzende SOLLTE die Nutzung unautorisierter Assets untersagen."
    }
-  },
-  {
-   "id": "SENS.2.4.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sensibilisierung für Nutzende SOLLTE die Verbindung unautorisierter IT-Systeme mit internen Netzen oder Schnittstellen untersagen."
-   }
   }
  ],
  "facets": {
@@ -34,13 +24,6 @@
     "smt": {
      "action": "untersagen",
      "result": "die Nutzung unautorisierter Assets",
-     "target-object-categories": [
-      "Nutzende"
-     ]
-    },
-    "SENS.2.4.1": {
-     "action": "untersagen",
-     "result": "die Verbindung unautorisierter IT-Systeme mit internen Netzen oder Schnittstellen",
      "target-object-categories": [
       "Nutzende"
      ]
@@ -53,27 +36,12 @@
      "required-documentation": [
       "Arbeitsanweisung"
      ]
-    },
-    "SENS.2.4.1": {
-     "required-documentation": [
-      "Arbeitsanweisung"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
-     ]
-    },
-    "SENS.2.4.1": {
      "confidentiality": "2",
      "integrity": "1",
      "availability": "1",
@@ -95,17 +63,6 @@
       "Bring Your Own Device",
       "Insider Threat"
      ]
-    },
-    "SENS.2.4.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Bring Your Own Device",
-      "Insider Threat"
-     ],
-     "title": "Verbindung unautorisierter IT-Systeme",
-     "alt-identifier": "06cf0eba-817a-4dfb-8e8b-b51044cb5a90"
     }
    }
   },
@@ -114,11 +71,6 @@
     "smt": {
      "guidance": {
       "de": "Die Nutzung unautorisierter Assets bezeichnet hier den Einsatz von IT-Systemen, Datenträgern, Anwendungen oder Cloud-Diensten, die nicht durch die Institution freigegeben und inventarisiert sind. Hierzu gehört auch der Anschluss privater Peripheriegeräte wie Tastaturen oder das Telefonieren mit nicht autorisierten Telefonen. Der Sinn und Zweck der Anforderung liegt darin, unkontrollierte Schatten-IT und damit verbundene Risiken zu reduzieren. So könnte etwa ein unautorisiertes USB-Gerät Schadsoftware einschleusen, oder eine nicht genehmigte Cloud-Anwendung könnte zu unbemerkten Datenabflüssen führen. Besteht ein Bedarf an Assets, dann können die festgelegten Meldewege genutzt werden. Bei der Beschaffung von Assets sind die Verfahren und Regelungen des Assetmanagements zu beachten."
-     }
-    },
-    "SENS.2.4.1": {
-     "guidance": {
-      "de": "Unautorisierte IT-Systeme sind solche, die von der Institution nicht für den Einsatz in den Netzen der Institution vorgesehen sind. Werden solche Geräte mit internen Netzen verbunden, so besteht das Risiko, dass sich hierüber Schadcode verbreitet oder unerwünschte Netzverbindungen aufgebaut werden. Das betrifft sowohl kabelgebundene Verbindungen als auch Funkverbindungen wie WLAN oder Bluetooth."
      }
     }
    }

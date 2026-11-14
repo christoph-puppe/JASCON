@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-3-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Auswahlkriterien"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.2",
+   "sequence": 3080
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.2.1",
+   "sequence": 3090
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.2.2",
+   "sequence": 3100
+  }
+ ]
+}

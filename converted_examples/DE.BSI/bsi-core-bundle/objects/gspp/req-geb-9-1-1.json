@@ -1,0 +1,95 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.9.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.9.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vorausschauende Lastanalyse"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Standorte KANN die bedarfsgerechte Stromversorgung {param:geb.9.1.1-prm1} vorausschauend überprüfen."
+   },
+   "parameters": [
+    {
+     "name": "geb.9.1.1-prm1",
+     "type": "string",
+     "label": "regelmäßig"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überprüfen",
+     "result": "die bedarfsgerechte Stromversorgung",
+     "result-specification": "{{regelmäßig}} vorausschauend",
+     "target-object-categories": [
+      "Standorte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Übungs- und Prüfplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "0",
+     "integrity": "0",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die prädiktive Lastanalyse in Stromversorgungssystemen bezieht sich auf die ausgefeilte Analyse von elektrischen Lastmustern, einschließlich Oberschwingungen der Stromqualität, um den zukünftigen Stromverbrauch und Qualitätsprobleme vorherzusagen, bevor sie auftreten. Sie kann in Bereichen, in denen die Stromversorgung von höchster Bedeutung ist, helfen, die kontinuierliche Verfügbarkeit der IT-Infrastruktur durch Überwachung und Vorhersage potenzieller Stromanomalien sicherzustellen, die die Systemintegrität gefährden könnten. Im Gegensatz zu reaktiven Ansätzen, die Probleme erst nach ihrem Auftreten angehen, werden bei der vorausschauenden Lastanalyse fortschrittliche Algorithmen zur Analyse historischer Stromverbrauchsdaten, harmonischer Verzerrungen und Spannungsschwankungen eingesetzt, um Muster zu erkennen, die auf bevorstehende Stromversorgungsprobleme hinweisen.  Die Implementierung kann mit Netzqualitätsanalysatoren an kritischen Infrastrukturpunkten, Integration mit SCADA-Systemen und durch Analyse mit Algorithmen des maschinellen Lernens, die Netzanomalien mit bestimmten Betriebsbedingungen korrelieren, geschehen. Eine regelmäßige Validierung der Vorhersagemodelle anhand tatsächlicher Vorfälle hilft die Analyse zu verbessern, während die Integration mit automatisierten Energieverwaltungssystemen einen dynamischen Lastausgleich während vorhergesagter Stressperioden ermöglichen kann, wodurch sowohl die Stromqualität, als auch die Systemverfügbarkeit ohne menschliches Eingreifen aufrechterhalten werden."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "geb.9.1.1-prm1": {
+     "alt-identifier": "a73bc9c8-bd58-4816-9e18-d41e94c20341"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "a73bc9c8-bd58-4816-9e18-d41e94c20341"
+  }
+ ]
+}

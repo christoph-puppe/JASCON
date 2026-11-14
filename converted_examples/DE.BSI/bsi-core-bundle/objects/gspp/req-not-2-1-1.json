@@ -1,0 +1,92 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/NOT.2.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "NOT.2.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Rollen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Notfallplanung SOLLTE Aufgaben für die BAO einschließlich BAO-Stab und Notfallteams {param:not.2.1.1-prm1} zuweisen."
+   },
+   "parameters": [
+    {
+     "name": "not.2.1.1-prm1",
+     "type": "string",
+     "label": "zuständigen Personen oder Rollen"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "Aufgaben für die BAO",
+     "result-specification": "einschließlich BAO-Stab und Notfallteams {{zuständigen Personen oder Rollen}}"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Notfallhandbuch"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die BAO besteht in der Regel aus einem Stab, der die Koordination und Entscheidungsfindung in einem Schadensereignis übernimmt. Der Stab koordiniert ferner die Tätigkeiten der Notfallteams, die die ausgefallenen Ressourcen wieder anlaufen lassen (= in einen Notbetrieb bereitstellen) und die zeitkritischen Geschäftsprozesse in einem Notbetrieb durchführen und bearbeiten. Nähere Informationen können dem BSI-Standard 200-4 in Kapitel 5.1 Aufbau der BAO (R+AS) entnommen werden."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "not.2.1.1-prm1": {
+     "alt-identifier": "d7b3f904-e7a2-4c80-a739-b41b28e86d7d"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "d7b3f904-e7a2-4c80-a739-b41b28e86d7d"
+  }
+ ]
+}

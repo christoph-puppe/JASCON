@@ -1,0 +1,92 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.6.2.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.6.2.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Löschverfahren"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Dienstleistungen KANN ein Verfahren zur nicht wiederherstellbaren Löschung für den Fall einer Kündigung vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "ein Verfahren zur nicht wiederherstellbaren Löschung",
+     "result-specification": "für den Fall einer Kündigung",
+     "target-object-categories": [
+      "Dienstleistungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten",
+      "Exit-Strategie"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ein Verfahren zur nicht wiederherstellbaren Löschung bedeutet in diesem Kontext, dass Daten nach Beendigung einer Dienstleistungsbeziehung so entfernt werden, dass auch mit spezialisierten forensischen Methoden keine Rekonstruktion mehr möglich ist. Typische Verfahren reichen von mehrfachen Überschreibungen mit Zufallswerten über kryptographisches Löschen (Zerstörung der Schlüssel, die zur Entschlüsselung notwendig wären) bis hin zur physikalischen Zerstörung der Speichermedien. Die Regelung zielt darauf ab, das Risiko zu mindern, dass vertrauliche Daten nach einer Vertragskündigung bei einem Dienstleister verbleiben und unbefugt genutzt oder versehentlich offengelegt werden könnten. Ein Datenleck nach einem Providerwechsel könnte beispielsweise zu Identitätsdiebstahl, Industriespionage oder Reputationsschäden führen. Die Vereinbarung einer sicheren, nicht wiederherstellbaren Löschung kann sicherstellen, dass Informationen tatsächlich entfernt sind und keine Restkopien unkontrolliert in Umlauf geraten."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "d0ba4d21-940d-4b06-b446-aeccfdb2b53a"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.2"
+  }
+ ]
+}

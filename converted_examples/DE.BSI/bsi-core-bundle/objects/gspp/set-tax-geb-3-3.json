@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/geb-3-3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Authentifizierung vor Zutritt"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.3",
+   "sequence": 5030
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.3.1",
+   "sequence": 5040
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.3.2",
+   "sequence": 5050
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.3.3",
+   "sequence": 5060
+  }
+ ]
+}

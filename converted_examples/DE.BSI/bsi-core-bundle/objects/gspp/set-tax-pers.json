@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-1",
-   "sequence": 1540
+   "sequence": 2360
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-2",
-   "sequence": 1590
+   "sequence": 2460
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-3",
-   "sequence": 1670
+   "sequence": 2560
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-4",
-   "sequence": 1700
+   "sequence": 2610
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-5",
-   "sequence": 1740
+   "sequence": 2650
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-6",
-   "sequence": 1760
+   "sequence": 2700
   }
  ],
  "label": "PERS",

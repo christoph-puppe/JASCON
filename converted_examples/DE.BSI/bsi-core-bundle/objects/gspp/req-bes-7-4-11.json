@@ -1,0 +1,92 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.11",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.7.4.11",
+ "lifecycle": "active",
+ "title": {
+  "de": "Dokumentierte Mandantentrennung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Outsourcing KANN die beim Dienstleister implementierten Maßnahmen zur Mandantentrennung nach Vertragsschluss dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "die beim Dienstleister implementierten Maßnahmen zur Mandantentrennung",
+     "result-specification": "nach Vertragsschluss",
+     "target-object-categories": [
+      "Outsourcing"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Betriebshandbuch"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Dokumentation der beim Dienstleister implementierten Maßnahmen zur Mandantentrennung trägt dazu bei, die Risiken unzureichender Abgrenzung zwischen verschiedenen Kundeninstanzen transparent zu bewerten und im Bedarfsfall nachzuweisen. Ohne eine solche Transparenz könnte es zu Datenabflüssen oder unbefugtem Zugriff durch andere Mandanten kommen, etwa wenn virtuelle Maschinen auf derselben Hardware betrieben werden und Schwachstellen in der Virtualisierung ausgenutzt werden könnten. Eine dokumentierte Trennungskontrolle kann nachweisen, dass Speicher, Rechenleistung oder Netzwerksegmente isoliert sind und dadurch die Vertraulichkeit und Integrität der eigenen Daten erhalten bleibt. Im Kontext bedeutet Mandantentrennung die technische und/oder organisatorische Gewährleistung, dass Daten, Prozesse und Ressourcen verschiedener Kunden innerhalb einer geteilten Infrastruktur so voneinander abgegrenzt sind, dass unbeabsichtigte oder absichtliche Zugriffe ausgeschlossen werden können. Damit ist nicht nur die physische, sondern auch die logische Separation gemeint. Die Umsetzung kann sinnvoll erfolgen, indem eine Institution nach Vertragsschluss gezielt vom Dienstleister beschriebene Schutzmechanismen abfragt und dokumentiert, beispielsweise Isolierungsverfahren auf Hypervisor-Ebene, Verschlüsselung pro Mandant oder die Vergabe getrennter Schlüsselmaterialien. Praktisch kann es hilfreich sein, in Service-Reports nachvollziehbare Testnachweise zu verlangen, etwa Ergebnisse von Penetrationstests, die speziell auf Mandantengrenzen zielen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "d59ad53c-00d4-4bfd-8af9-bf09722731c5"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.5.2"
+  }
+ ]
+}

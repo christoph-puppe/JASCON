@@ -1,0 +1,64 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.9.1.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Sicherstellung der Qualifikation"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS für jeden Rollen- und Verantwortungsträger die erforderlichen Anforderungen und Fähigkeiten festlegen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "festlegen",
+     "result": "für jeden Rollen- und Verantwortungsträger die erforderlichen Anforderungen und Fähigkeiten"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Tätigkeits- & Rollenbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Für jeden Rollen- und Verantwortungsträger werden die Anforderungen und Fähigkeiten festgelegt."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "09da6b52-1efc-4c44-98b3-4d9b094fd107"
+  }
+ ]
+}

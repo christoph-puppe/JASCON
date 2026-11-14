@@ -16,26 +16,6 @@
    "prose": {
     "de": "Dienstleistersteuerung für Dienstleistungen SOLLTE eine Vorgehensweise zur Dekommissionierung vor Vertragsende verankern."
    }
-  },
-  {
-   "id": "DLS.4.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Dienstleistersteuerung für Outsourcing SOLLTE die Unabhängigkeit der Verarbeitung schützenswerter Informationen vor der Außerbetriebnahme testen."
-   }
-  },
-  {
-   "id": "DLS.4.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Dienstleistersteuerung für Dienstleistungen SOLLTE für den Vertrag benötigte Berechtigungen bei Vertragsende unverzüglich deaktivieren."
-   }
   }
  ],
  "facets": {
@@ -48,38 +28,12 @@
      "target-object-categories": [
       "Dienstleistungen"
      ]
-    },
-    "DLS.4.1.1": {
-     "action": "testen",
-     "result": "die Unabhängigkeit der Verarbeitung schützenswerter Informationen",
-     "result-specification": "vor der Außerbetriebnahme",
-     "target-object-categories": [
-      "Outsourcing"
-     ]
-    },
-    "DLS.4.1.2": {
-     "action": "deaktivieren",
-     "result": "für den Vertrag benötigte Berechtigungen",
-     "result-specification": "bei Vertragsende unverzüglich",
-     "target-object-categories": [
-      "Dienstleistungen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Betriebshandbuch"
-     ]
-    },
-    "DLS.4.1.1": {
-     "required-documentation": [
-      "Ergebnisprotokoll"
-     ]
-    },
-    "DLS.4.1.2": {
      "required-documentation": [
       "Betriebshandbuch"
      ]
@@ -96,25 +50,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "DLS.4.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "DLS.4.1.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.29"
-     ]
     }
    }
   },
@@ -128,28 +63,6 @@
       "Lieferketten",
       "Exit-Strategie"
      ]
-    },
-    "DLS.4.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Lieferketten",
-      "Exit-Strategie"
-     ],
-     "title": "Unabhängigkeit",
-     "alt-identifier": "d37125e2-68cd-4e75-9da9-d4af0b4dd051"
-    },
-    "DLS.4.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Lieferketten",
-      "Exit-Strategie"
-     ],
-     "title": "Berechtigungen deaktivieren",
-     "alt-identifier": "3449b68e-a78f-4090-9092-6e1a65dd7c2a"
     }
    }
   },
@@ -158,16 +71,6 @@
     "smt": {
      "guidance": {
       "de": "Der Begriff Dekommissionierung bezeichnet hier das strukturierte und nachweisbare Vorgehen, wie eine Institution die Nutzung eines Dienstes oder die Zusammenarbeit mit einem Dienstleister kontrolliert beendet, ohne dass Informationssicherheit, Verfügbarkeit oder Nachvollziehbarkeit beeinträchtigt werden. Der Sinn dieser Vorgabe liegt darin, Risiken wie den unkontrollierten Verbleib sensibler Daten bei einem Dienstleister oder unerkannte Abhängigkeiten von dessen Infrastruktur zu vermeiden. Ohne ein definiertes Vorgehen könnte etwa ein Anbieter weiterhin Zugriff auf produktive Systeme behalten oder Kopien vertraulicher Daten in seiner Umgebung zurückhalten, was ein erhebliches Risiko darstellen könnte. Die praktische Umsetzung kann in mehreren abgestuften Maßnahmen bestehen: (1) Ein geplanter Abschalttermin kann genutzt werden, um Systeme, Schnittstellen und Berechtigungen kontrolliert zurückzubauen und anschließend durch ein Freigabeprotokoll zu bestätigen. (2) Ein Prozessleitfaden kann die frühzeitige Identifikation von zu dekommissionierenden Schnittstellen, Zugangsdaten und Subdienstleistern vorsehen, damit deren Abschaltung rechtzeitig koordiniert werden kann. (3) Eine Checkliste kann sicherstellen, dass auch weniger offensichtliche Abhängigkeiten – etwa hinterlegte API-Tokens, Support-Zugänge oder im Monitoring integrierte Endpunkte – im Abschlussprozess berücksichtigt werden. (4) Technisch kann die Nutzung von zentral verwalteten Zugriffskonten und Logging-Systemen die Überprüfung erleichtern, ob ein Dienstleister nach der Deaktivierung tatsächlich keinen Zugriff mehr hat. Auf diese Weise kann die Institution die Dienstleistersteuerung auch vorzeitig geordnet beenden, ohne dass Informationssicherheitsrisiken unkontrolliert fortbestehen."
-     }
-    },
-    "DLS.4.1.1": {
-     "guidance": {
-      "de": "„Unabhängigkeit der Verarbeitung“ meint hier die Fähigkeit, dass die Nutzung von Informationen in Geschäftsprozessen der Institution nicht von den Systemen, Verfahren oder Interessen des externen Dienstleisters abhängig ist, sodass ihre Integrität, Verfügbarkeit und Vertraulichkeit auch nach einer Außerbetriebnahme des Outsourcings gewährleistet bleibt. Die Vorschrift dient dem Zweck, die Risiken zu minimieren, die entstehen können, wenn ein Dienstleister seine Leistung einstellt, Verträge beendet werden oder ein abruptes Ende der Zusammenarbeit erfolgt. Ohne Vorkehrungen könnte dies dazu führen, dass kritische Daten unzugänglich bleiben, unkontrolliert gelöscht werden oder in Abhängigkeit von proprietären Formaten verloren gehen. Zur Umsetzung kann die Institution verschiedene Maßnahmen prüfen: (1) Ein systematischer Test, ob Daten in standardisierten, portablen Formaten exportierbar sind und in eigenen oder alternativen Systemen fehlerfrei weiterverarbeitet werden können. (2) Ein Probelauf, bei dem die Verbindung zum Dienstleister gezielt getrennt wird, um zu überprüfen, ob die Institution ihre Geschäftsprozesse auch ohne aktive Anbindung fortführen kann. (3) Ein kontrolliertes Abschalten einzelner vom Dienstleister erbrachter Dienste, um zu verifizieren, ob vorbereitete Ersatzprozesse oder interne Systeme die Funktion übernehmen. (4) Eine Teststellung für die Rückgabe von Datenbeständen am Ende der Vertragslaufzeit, bei der die Vollständigkeit, Konsistenz und Nutzbarkeit der gelieferten Daten geprüft wird. Mit solchen Maßnahmen kann die Institution sicherstellen, dass die Verarbeitung schützenswerter Informationen eigenständig aufrechterhalten werden kann."
-     }
-    },
-    "DLS.4.1.2": {
-     "guidance": {
-      "de": "Berechtigungen sind hier alle Zugangs-, Zutritts- und Zugriffsrechte, die von der Institution für Mitarbeitende, Organisationseinheiten oder Subunternehmer des Dienstleisters eingerichtet oder geändert wurden. Hierzu können diese Rechte gelöscht, deaktiviert oder reduziert werden, soweit sie nicht mehr (z.B. für andere Verträge) benötigt werden."
      }
     }
    }

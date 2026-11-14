@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.1",
-   "sequence": 4370
+   "sequence": 7110
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.2",
-   "sequence": 4380
+   "sequence": 7120
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.3",
-   "sequence": 4390
+   "sequence": 7130
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.4",
-   "sequence": 4400
+   "sequence": 7140
   }
  ],
  "label": "3",

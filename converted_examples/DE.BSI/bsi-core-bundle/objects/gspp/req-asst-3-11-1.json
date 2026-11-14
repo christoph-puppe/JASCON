@@ -1,0 +1,91 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.3.11.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.3.11.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Autorisierung von Peripheriegeräten"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für Daten SOLLTE auch Peripheriegeräte autorisieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "autorisieren",
+     "result": "auch Peripheriegeräte",
+     "target-object-categories": [
+      "Daten"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Arbeitsanweisung"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Data Leak",
+      "Shadow IT"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Peripheriegeräte sind externe Hardware-Komponenten sowie virtuelle Geräte, die an IT-Systeme angeschlossen oder eingebunden werden, darunter USB-Sticks, externe Festplatten, Drucker, Kameras, Smartphones, Tablets, virtuelle Laufwerke, softwaredefinierte Netzwerkadapter und emulierte Hardware. Die Autorisierung solcher Geräte schützt vor Sicherheitsrisiken, da unkontrollierte Peripherie Malware einschleusen, Daten exfiltrieren oder als Einfallstor für Angriffe dienen kann; so kann ein privater USB-Datenträger Schadsoftware enthalten, die sich beim Anschluss ausbreitet, oder ein nicht autorisierter Drucker vertrauliche Dokumente in ungeschützten Bereichen ausgeben. Die Umsetzung erfolgt zweckmäßig über eine zentrale Geräteregistrierung, in der alle zulässigen Geräte mit eindeutigen Kennungen erfasst werden; abhängig vom Risikoprofil kann die Autorisierung gerätespezifisch oder für ganze Gerätegruppen erfolgen (etwa für alle beschafften Tastaturen und Mäuse). Administrative Prozesse umfassen ein Antragsverfahren für neue Peripheriegeräte mit Sicherheitsbewertung, die regelmäßige Überprüfung und Aktualisierung der Gerätelisten sowie die Definition von Gerätekategorien mit abgestuften Autorisierungsebenen, beispielsweise vollständig gesperrte USB-Ports für externe Nutzer, eingeschränkte Freigaben für Standardarbeitsplätze und erweiterte Berechtigungen für Administratoren. Technisch wird dies durch Device-Control-Lösungen unterstützt, die nur autorisierte Geräte anhand von Hardware-IDs, Herstellerzertifikaten oder digitalen Signaturen erkennen und freischalten; ergänzend erhöhen Logging-Mechanismen zur Nachverfolgung sämtlicher Peripheriegeräte-Aktivitäten die Transparenz und Auditierbarkeit der Prozesse. Die Autorisierung selbst erfolgt durch die Personen oder Rollen, die in der Organisation für die Freigabe der betreffenden Systeme verantwortlich sind."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "75a9c947-c417-4dc7-a942-c27340f20ade"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.7"
+  }
+ ]
+}

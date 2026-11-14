@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.1",
-   "sequence": 1930
+   "sequence": 3070
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.2",
-   "sequence": 1940
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-3-2",
+   "sequence": 3110
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.3",
-   "sequence": 1950
+   "sequence": 3120
   }
  ],
  "label": "3",

@@ -1,0 +1,67 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.3.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.3.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Anhörung zuständiger Stellen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance SOLLTE für die Einhaltung gesetzlicher Verpflichtungen in der Informationsverarbeitung zuständige Stellen in der Institution anhören."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "anhören",
+     "result": "für die Einhaltung gesetzlicher Verpflichtungen in der Informationsverarbeitung zuständige Stellen in der Institution"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Compliance-Verpflichtungen"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Compliance Management"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Für die Einhaltung gesetzlicher Verpflichtungen in der Informationsverarbeitung zuständige Stellen in der Institution wurden bei der Dokumentation der Compliance-Verpflichtungen angehört. Hierunter können z. B. Rechtsabteilung, Datenschutzbeauftragte, Brandschutzbeauftragte oder Fachverantwortliche bei branchenspezifischen Vorschriften fallen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "3d677306-5748-405a-b5f3-cdc2939e7d14"
+  }
+ ]
+}

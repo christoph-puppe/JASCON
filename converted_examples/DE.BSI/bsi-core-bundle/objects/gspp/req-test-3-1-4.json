@@ -1,0 +1,78 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.3.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Testdaten"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests SOLLTE die Testfälle abdeckende, aber unkritische Testdaten verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "die Testfälle abdeckende, aber unkritische Testdaten"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Testdaten (engl. test data) sind synthetisch erstellte oder abstrahierte Daten, die zur Durchführung von Testfällen genutzt werden. „Unkritisch“ bedeutet hier, dass die Daten keinen schützenswerten Daten wie Geschäftsgeheimnisse oder sicherheitsrelevanten Konfigurationsdetails enthalten. Testfälle (engl. test cases) sind vorab definierte Szenarien oder Abläufe, die das Verhalten einer Anwendung oder eines Systems gezielt prüfen sollen. Der Zweck der Anforderung liegt darin, sicherzustellen, dass Testaktivitäten einerseits realistische Bedingungen nachbilden, andererseits aber keine Risiken durch unbeabsichtigte Preisgabe oder Manipulation produktiver Daten entstehen. Ein Vorfall könnte beispielsweise darin bestehen, dass versehentlich echte Kundendaten in einer Testumgebung landen und durch unzureichende Sicherung Dritten zugänglich werden; durch den Einsatz unkritischer Testdaten kann dieses Risiko vermieden und dennoch die Qualität der Tests gewährleistet werden. Eine Institution kann die Anforderung praktisch umsetzen, indem sie Testdatensätze automatisiert generieren lässt, etwa durch Anonymisierung oder Pseudonymisierung produktiver Daten oder durch die Nutzung von Zufallswerten, die für Testlogik realistisch wirken. Zusätzlich kann es hilfreich sein, Regeln für Entwickler und Tester festzulegen, die dokumentieren, welche Arten von Daten zulässig sind. Auch Tools zur data masking oder synthetic data generation können verwendet werden, um komplexe Datenstrukturen ohne reale Inhalte nachzubilden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "8a88300f-98ee-41e3-9622-be00c705f252"
+  }
+ ]
+}

@@ -1,0 +1,64 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/STM.2.1.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "STM.2.1.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Mapping der Assets auf Zielobjektkategorien"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Strukturmodellierung MUSS allen relevanten Assets eine oder mehrere Zielobjektkategorien zuweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "allen relevanten Assets eine oder mehrere Zielobjektkategorien"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Anforderungspaket"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Zielobjektkategorien sind standardisierte Klassen für die im GS++ beschriebenen Anforderungen. Durch das Mapping werden Assets damit in die Systematik des GS++ überführt. Für jedes Asset wird geprüft, welche Kategorie(n) seine Funktion und seinen Einsatz im Geschäftsprozess am besten abbilden. Die Zuordnung erfolgt funktionsorientiert, nicht nur nach technischen Merkmalen. Entscheidend ist, wie das Asset im Geschäftsprozess wirkt. Schwer zuordenbare Assets werden im Rahmen der Risikobetrachtung analysiert, um sicherzustellen, dass auch hierfür Anforderungen bzw. Maßnahmen abgeleitet werden können."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "1bd2c7b2-badf-4705-9731-aa8888531708"
+  }
+ ]
+}

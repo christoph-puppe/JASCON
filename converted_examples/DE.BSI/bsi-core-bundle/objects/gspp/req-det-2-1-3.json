@@ -1,0 +1,80 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.2.1.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.2.1.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Rückmeldungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion SOLLTE ein Verfahren für Rückmeldungen verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "ein Verfahren für Rückmeldungen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Detektions-Konzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.29",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.33",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Rückmeldungen an Personen, die potenzielle Vorfälle gemeldet haben, sind hilfreich, da sie zum besseren Verständnis beitragen, worauf bei künftigen Meldungen zu achten ist und wie die Meldenden zur Bearbeitung des Vorfalls beitragen können. Ohne Rückmeldung könnte Unsicherheit entstehen, ob ein Vorfall überhaupt aufgenommen oder ernst genommen wurde, was zu Frustration oder einer sinkenden Bereitschaft zur Meldung künftiger Ereignisse führen könnte. Eine zeitnahe und angemessene Rückmeldung kann dagegen die Nutzenden in ihrem sicherheitsbewussten Verhalten bestärken, die Relevanz ihrer Meldung verdeutlichen und Missverständnisse vermeiden. So kann beispielsweise eine Rückmeldung nach einem gemeldeten Phishing-Versuch klarstellen, ob es sich um einen bekannten Angriff handelte oder ob zusätzliche Maßnahmen wie das Zurücksetzen eines Passworts empfohlen werden. Ebenso kann eine Rückmeldung nach einem gemeldeten Systemausfall erläutern, ob dieser sicherheitsrelevant war oder eine rein technische Störung vorlag. Ein Rückmeldeverfahren kann in diesem Kontext als ein strukturierter Ablauf definiert werden, über den die meldende Person nach Eingang ihrer Meldung eine Information über den Status, die Relevanz und – falls sinnvoll – empfohlene Folgeschritte erhält. Ein automatisiertes Ticketsystem kann beispielsweise sofortige Eingangsbestätigungen generieren und Statusänderungen kommunizieren. Ebenso kann eine abgestufte Rückmeldepflicht sinnvoll sein, bei der kritische Vorfälle eine priorisierte persönliche Rückmeldung durch Fachpersonal erhalten, während unkritische Meldungen standardisierte Mitteilungen bekommen. Technische Hilfsmittel wie Mail-Vorlagen, interne Chatbots oder Self-Service-Portale können die Effizienz erhöhen"
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "c961b1c8-2f6a-4e6d-9126-e2005c44f728"
+  }
+ ]
+}

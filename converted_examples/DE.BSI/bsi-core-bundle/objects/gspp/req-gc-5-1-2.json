@@ -1,0 +1,67 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.5.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.5.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Verpflichtung der Institutionsleitung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS die Verpflichtung der Institutionsleitung zuweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "die Verpflichtung der Institutionsleitung"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Leitungsentscheidung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0,
+     "tags": [
+      "Führungsverantwortung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Verpflichtung der Institutionsleitung beinhaltet die Übernahme der Gesamtverantwortung, die Bestätigung und Überwachung der Informationssicherheitsziele bezüglich der Organisationsziele und die Förderung des ISMS. Die Förderung des ISMS erfolgt durch Beteiligung (z. B. Führungsentscheidungen), Bestätigung der Informationssicherheitsorganisation, Unterstützung der Integration des ISMS, Bereitstellung von Ressourcen (z. B. finanzielle, personelle, technische, infrastrukturelle) und die Unterstützung der kontinuierlichen Verbesserung."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "8b3ae6fa-4bd0-4d81-babe-7792c63b9989"
+  }
+ ]
+}

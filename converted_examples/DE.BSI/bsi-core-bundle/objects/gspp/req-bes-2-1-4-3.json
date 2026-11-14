@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.2.1.4.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kompatibilität des Administrationsmodells"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe SOLLTE den Bedarf für die Kompatibilität im Hinblick auf das Administrationsmodell dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "den Bedarf für die Kompatibilität",
+     "result-specification": "im Hinblick auf das Administrationsmodell",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "0",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Unter „Kompatibilität im Hinblick auf das Administrationsmodell“ ist hier die technische und organisatorische Anschlussfähigkeit einer zu beschaffenden Lösung an das bestehende Berechtigungs- und Rollenmodell der Institution zu verstehen, also an die Struktur von Benutzerkonten, Rollen, Gruppen, Verantwortlichkeiten und administrativen Zuständigkeiten (z.B. Role-Based Access Control – RBAC, Attribute-Based Access Control – ABAC, Privileged Access Management – PAM). Das Administrationsmodell beschreibt dabei, wie Identitäten angelegt, geändert und gelöscht werden (Identity Lifecycle), wie Rechte vergeben und überprüft werden (Access Governance) und wie administrative Tätigkeiten nachvollziehbar protokolliert werden (Logging, Audit Trail). Die Dokumentation des Bedarfs für diese Kompatibilität bedeutet, dass im Beschaffungsprozess transparent festgehalten wird, welche Integrationsanforderungen bestehen, etwa hinsichtlich zentraler Verzeichnisdienste (z.B. LDAP, Active Directory), Single Sign-On (SSO), Multi-Faktor-Authentisierung (MFA), Mandantenfähigkeit oder der Trennung von administrativen und fachlichen Rollen. Der Zweck dieser Vorgabe liegt darin, Inkonsistenzen und Medienbrüche im Identitäts- und Berechtigungsmanagement zu vermeiden, da eine nicht kompatible Lösung zu Schattenadministration, doppelten Benutzerkonten oder unzureichender Trennung von Aufgaben führen könnte und dadurch unautorisierte Zugriffe oder fehlende Nachvollziehbarkeit begünstigt werden könnten. Eine frühzeitige und strukturierte Festlegung der Kompatibilitätsanforderungen kann hingegen eine einheitliche Durchsetzung von Sicherheitsrichtlinien, eine zentrale Steuerung privilegierter Konten und eine revisionssichere Protokollierung administrativer Handlungen unterstützen. die Unterstützung  sowie (3) die technische Möglichkeit zur rollenbasierten Delegation administrativer Rechte innerhalb der Anwendung umfassen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "962e52b2-54ab-4c5d-842d-fb3c3132e986"
+  }
+ ]
+}

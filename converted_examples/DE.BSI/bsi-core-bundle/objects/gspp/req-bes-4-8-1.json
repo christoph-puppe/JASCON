@@ -1,0 +1,98 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.4.8.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.4.8.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Zertifizierung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe KANN ein Zertifikat oder Testat nach {param:bes.4.8.1-prm1} vereinbaren."
+   },
+   "parameters": [
+    {
+     "name": "bes.4.8.1-prm1",
+     "type": "string",
+     "label": "einem passenden Sicherheitsstandard"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "ein Zertifikat oder Testat",
+     "result-specification": "nach {{einem passenden Sicherheitsstandard}}",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ein Zertifikat ist eine unabhängige Bestätigung der Konformität, die von einer akkreditierten Konformitätsbewertungsstelle (wie z.B. einer Zertifizierungsstelle) ausgestellt wird, nachdem diese die Konformität eines Produkts, einer Dienstleistung, eines Prozesses oder eines Managementsystems mit bestimmten Normen oder Anforderungen bestätigt hat. Die Art des Zertifikates richtet sich dabei nach der Art der geplanten Beschaffung. IT-Produkte können z.B. nach Common Criteria zertifiziert werden. Bei Dienstleistungen kann ein zertifiziertes Managementsystem für Informationssicherheit (nach IT-Grundschutz oder ISO/IEC 27001) vereinbart werden. Ein Testat wäre z.B. C5."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "bes.4.8.1-prm1": {
+     "alt-identifier": "6cecab39-d08d-49a1-922e-b3f9ea7d5af4"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "6cecab39-d08d-49a1-922e-b3f9ea7d5af4"
+  }
+ ]
+}

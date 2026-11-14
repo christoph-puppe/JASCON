@@ -1,0 +1,86 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERS.6.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERS.6.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Neubesetzung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Personal für Mitarbeitende SOLLTE bei Weggang frei gewordene Zuständigkeiten zuweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "bei Weggang frei gewordene Zuständigkeiten",
+     "target-object-categories": [
+      "Mitarbeitende"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Prozess Personalmanagement"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 2
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Stellen Sie sicher, dass durch den Weggang von Mitarbeitenden keine Aufgaben des ISMS verwaisen – auch nicht bis zu einer geplanten Neueinstellung. Ordnen Sie stattdessen die Zuständigkeit für die Aufgaben/Rollenunverzüglich bestehendem Personal zu. Achten Sie dabei auch darauf, dass die festgelegten Rollentrennungen dabei nicht aufgehoben, bzw. durchbrochen werden. Um eine kontinuierliche Bearbeitung von Aufgaben sicherzustellen, ist eine Übergabe sinnvoll."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "8c13947a-ea68-496e-8cdb-c5b807739cc2"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1"
+  }
+ ]
+}

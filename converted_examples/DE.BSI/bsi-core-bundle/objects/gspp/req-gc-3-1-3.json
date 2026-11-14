@@ -1,0 +1,67 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.3.1.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.3.1.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vertragliche Verpflichtungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance SOLLTE vertragliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen, analysieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "analysieren",
+     "result": "vertragliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen,"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Compliance-Verpflichtungen"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Compliance Management"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Vertragliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen, sind dokumentiert. Vertragliche Verpflichtungen meint alle Pflichten, die sich aus rechtlich bindenden Vereinbarungen ergeben, unabhängig davon, ob diese als Vertrag bezeichnet werden oder nicht."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "fc2115c2-43fe-4b22-88c5-b28784174936"
+  }
+ ]
+}

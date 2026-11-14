@@ -1,0 +1,90 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.11.7.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.11.7.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Einschränkung von TK-Verbindungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für TK-Anwendungen SOLLTE unerwünschte TK-Verbindungen einschränken."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "einschränken",
+     "result": "unerwünschte TK-Verbindungen",
+     "target-object-categories": [
+      "TK-Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Produktbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Kann durch Session Border Controller (SBC) oder Filterung innerhalb von Anwendungen umgesetzt werden. SBC filtern die Signalisierung und Mediastreams auf dem Kommunikationsweg, insbesondere beim Verbindungsaufbau mittels SIP, H.323 oder MGCP."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "0467042c-2497-4f56-9514-404a36a90fd0"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1"
+  }
+ ]
+}

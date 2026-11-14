@@ -8,79 +8,79 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.1",
-   "sequence": 5960
+   "sequence": 9450
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.2",
-   "sequence": 5970
+   "sequence": 9460
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.3",
-   "sequence": 5980
+   "sequence": 9470
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.4",
-   "sequence": 5990
+   "sequence": 9480
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.5",
-   "sequence": 6000
+   "sequence": 9490
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.6",
-   "sequence": 6010
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-4-6",
+   "sequence": 9520
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.7",
-   "sequence": 6020
+   "sequence": 9530
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.8",
-   "sequence": 6030
+   "sequence": 9540
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.9",
-   "sequence": 6040
+   "sequence": 9550
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.10",
-   "sequence": 6050
+   "sequence": 9560
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.11",
-   "sequence": 6060
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-4-11",
+   "sequence": 9610
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.12",
-   "sequence": 6070
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-4-12",
+   "sequence": 9640
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.13",
-   "sequence": 6080
+   "sequence": 9650
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.14",
-   "sequence": 6090
+   "sequence": 9660
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.15",
-   "sequence": 6100
+   "sequence": 9670
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.16",
-   "sequence": 6110
+   "sequence": 9680
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.17",
-   "sequence": 6120
+   "sequence": 9690
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.18",
-   "sequence": 6130
+   "sequence": 9700
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.19",
-   "sequence": 6140
+   "sequence": 9710
   }
  ],
  "label": "4",

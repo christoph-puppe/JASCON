@@ -1,0 +1,90 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.7",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.12.1.7",
+ "lifecycle": "active",
+ "title": {
+  "de": "Filtern schädlicher Webinhalte"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für Webanwendungen SOLLTE eine Filterung schädlicher Webinhalte aktivieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "aktivieren",
+     "result": "eine Filterung schädlicher Webinhalte",
+     "target-object-categories": [
+      "Webanwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Produktbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Anfragen an Webanwendungen könnten dazu führen, dass diese sich anders verhalten als gewollt. Mögliche Folgen sind die unzulässige Preisgabe von Informationen, die Manipulation oder der Verlust von Daten sowie Betriebsstörungen. Typische Auslöser sind SQL Injection oder Cross-Site-Scripting. Solche potenziell schädlich wirkenden Inhalte können durch eine Web Application Firewall oder durch geeignete Eingabevalidierung in der Webanwendung gefiltert werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "568f6977-4f5c-44a4-92c7-1e6e09cc3631"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10"
+  }
+ ]
+}

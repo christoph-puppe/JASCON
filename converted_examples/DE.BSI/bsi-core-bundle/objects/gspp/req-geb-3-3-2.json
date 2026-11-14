@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.3.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.3.3.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Dokumentation von Zutritten"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Standorte KANN Zutritte und Austritte mit Identität und Zeitpunkt dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "Zutritte und Austritte",
+     "result-specification": "mit Identität und Zeitpunkt",
+     "target-object-categories": [
+      "Standorte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Audit Log"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.44",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.24"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Im Kontext dieser Anforderung bedeutet Identität die eindeutige Zuordnung einer Person zu einem Zutritt oder Austritt, etwa durch Namensangabe, Personalnummer oder ein elektronisches Identifikationsmerkmal wie eine Chipkarte. Der Zeitpunkt ist die präzise Erfassung von Datum und Uhrzeit, an dem ein Zutritts- oder Austrittsvorgang stattfindet. Diese beiden Informationen können so kombiniert werden, dass nachvollziehbar wird, wer zu welchem Zeitpunkt ein Gebäude oder einen bestimmten Bereich betreten oder verlassen hat. Dies gilt sowohl für Mitarbeitende als auch für Besuchende. Für die Umsetzung kann eine Institution z.B. elektronische Zutrittskontrollsysteme einsetzen, die beim Karten- oder Transpondereinsatz automatisch Identität und Zeitpunkt speichern. Auch ein biometrisches Terminal kann die Anforderung erfüllen, wenn es die Daten mit Zeitstempel dokumentiert. Als einfachere Variante kann ein digital geführtes Besucherbuch genutzt werden, in das Namen und Uhrzeit bei Ein- und Austritt eingetragen werden. Eine Institution kann ergänzend festlegen, dass Daten regelmäßig exportiert und manipulationssicher archiviert werden, sodass spätere Prüfungen möglich sind. Hilfreich kann zudem sein, bei Zutrittskarten eine Schnittstelle zur HR-Verwaltung einzurichten, damit Identitäten bei Austritt von Mitarbeitenden automatisch deaktiviert werden und die Dokumentation lückenfrei bleibt. Diese Protokolle dienen als wichtige Grundlage für forensische Analysen und können zur Aufklärung von Diebstahl, Sabotage oder unbefugtem Datenzugriff beitragen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "a0b89dd6-4aec-41bd-b4bf-01e704072ed5"
+  }
+ ]
+}

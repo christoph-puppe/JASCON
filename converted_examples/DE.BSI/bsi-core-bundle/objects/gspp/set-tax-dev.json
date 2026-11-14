@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-1",
-   "sequence": 7760
+   "sequence": 12470
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-2",
-   "sequence": 7830
+   "sequence": 12570
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-3",
-   "sequence": 7880
+   "sequence": 12620
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-4",
-   "sequence": 8000
+   "sequence": 12740
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-5",
-   "sequence": 8040
+   "sequence": 12780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-6",
-   "sequence": 8060
+   "sequence": 12800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-7",
-   "sequence": 8090
+   "sequence": 12830
   }
  ],
  "label": "DEV",

@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-1-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Verfahren und Regelungen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1",
+   "sequence": 2720
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1.1",
+   "sequence": 2730
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1.2",
+   "sequence": 2740
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1.3",
+   "sequence": 2750
+  }
+ ]
+}

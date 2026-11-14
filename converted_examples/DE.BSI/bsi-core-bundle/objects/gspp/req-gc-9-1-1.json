@@ -1,0 +1,79 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.9.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Festlegung von Rollen und Zuständigkeiten"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS die {param:gc.9.1.1-prm1} im Rahmen des ISMS inklusive ihrer Kompetenzen bzw. Befugnisse zuweisen."
+   },
+   "parameters": [
+    {
+     "name": "gc.9.1.1-prm1",
+     "type": "string",
+     "label": "Rollen und Zuständigkeiten"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "die {{Rollen und Zuständigkeiten}} im Rahmen des ISMS",
+     "result-specification": "inklusive ihrer Kompetenzen bzw. Befugnisse"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Tätigkeits- & Rollenbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Im Rahmen des ISMS werden die Rollen hinsichtlich der Aufgaben, der dafür notwendigen Qualifikation und der notwendigen Befugnisse festgelegt. Eine zentrale Rolle wäre beispielsweise der \"Informationssicherheitsbeauftragte\" (ISB)."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "gc.9.1.1-prm1": {
+     "alt-identifier": "5cc59bb1-af0d-457f-a548-03373447fec7"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "5cc59bb1-af0d-457f-a548-03373447fec7"
+  }
+ ]
+}

@@ -7,64 +7,64 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.1",
-   "sequence": 1080
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-3-1",
+   "sequence": 1780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.2",
-   "sequence": 1090
+   "sequence": 1790
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.3",
-   "sequence": 1100
+   "sequence": 1800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.4",
-   "sequence": 1110
+   "sequence": 1810
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.5",
-   "sequence": 1120
+   "sequence": 1820
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.6",
-   "sequence": 1130
+   "sequence": 1830
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.7",
-   "sequence": 1140
+   "sequence": 1840
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.8",
-   "sequence": 1150
+   "sequence": 1850
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.9",
-   "sequence": 1160
+   "sequence": 1860
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.10",
-   "sequence": 1170
+   "sequence": 1870
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.11",
-   "sequence": 1180
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-3-11",
+   "sequence": 1900
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.12",
-   "sequence": 1190
+   "sequence": 1910
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.13",
-   "sequence": 1200
+   "sequence": 1920
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.14",
-   "sequence": 1210
+   "sequence": 1930
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.15",
-   "sequence": 1220
+   "sequence": 1940
   }
  ],
  "label": "3",

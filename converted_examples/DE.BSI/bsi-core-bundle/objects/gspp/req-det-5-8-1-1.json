@@ -1,0 +1,80 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.5.8.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.5.8.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Unautorisierte Publikation"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion KANN öffentliche Quellen automatisiert auf Hinweise zur unautorisierten Veröffentlichung vertraulicher Daten überwachen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überwachen",
+     "result": "öffentliche Quellen automatisiert auf Hinweise zur unautorisierten Veröffentlichung vertraulicher Daten"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Detektions-Konzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.29"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Data Leak"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Unautorisierte Veröffentlichungen liegen vor, wenn vertrauliche Daten ohne Autorisierung der Institution öffentlich gemacht wurden, z.B. personenbezogene Kundendaten oder Geschäftsgeheimnisse. Typische Quellen sind Soziale Netzwerke und Code-Sharing-Plattformen. Kann z.B. durch die automatisierte Suche nach unkritischen, aber in den Quelldaten vorhandenen Begriffen umgesetzt werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "c179bae3-7990-4308-b42b-53297a581402"
+  }
+ ]
+}

@@ -23,23 +23,6 @@
      "label": "regelmäßig"
     }
    ]
-  },
-  {
-   "id": "KONF.2.5.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für IT-Systeme KANN die Überprüfung der Konfiguration durch {param:konf.2.5.1-prm1} aktivieren."
-   },
-   "parameters": [
-    {
-     "name": "konf.2.5.1-prm1",
-     "type": "string",
-     "label": "einen automatisierten Mechanismus"
-    }
-   ]
   }
  ],
  "facets": {
@@ -52,24 +35,12 @@
      "target-object-categories": [
       "IT-Systeme"
      ]
-    },
-    "KONF.2.5.1": {
-     "action": "aktivieren",
-     "result": "die Überprüfung der Konfiguration durch {{einen automatisierten Mechanismus}}",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.2.5.1": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -89,18 +60,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.46",
       "https://ns.bsi.bund.de/gspp/threat/G-0.31"
      ]
-    },
-    "KONF.2.5.1": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.21",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.22"
-     ]
     }
    }
   },
@@ -110,13 +69,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 4
-    },
-    "KONF.2.5.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Automatische Konfigurationsverwaltung",
-     "alt-identifier": "fceb6b0b-2cf9-4644-9f48-c6b307b2d0ad"
     }
    }
   },
@@ -126,11 +78,6 @@
      "guidance": {
       "de": "Referenzzustand („baseline configuration“) bezeichnet hier die dokumentierte und freigegebene Konfiguration eines IT-Systems, also die gewünschte und autorisierte Einstellung von Parametern, Diensten und Komponenten. Die tatsächliche Konfiguration ist die aktuelle technische Umsetzung dieser Einstellungen auf dem System selbst. Der Abgleich beider Zustände dient vor allem der Vermeidung von Configuration Drift – d.h. dass Systeme schleichend von der definierten Soll-Konfiguration abweichen. Dies könnte auftreten, wenn Änderungen nicht zentral dokumentiert oder automatisierte Installationen nicht einheitlich umgesetzt werden. Ohne diese Kontrolle könnte es zu unbemerkten Fehlkonfigurationen kommen, die Sicherheitslücken öffnen oder Betriebsstörungen verursachen. Durch regelmäßige Vergleiche kann eine Institution sicherstellen, dass Systeme konsistent, vertrauenswürdig und wartbar bleiben. Eine praktische Umsetzung kann auf verschiedenen Ebenen erfolgen. Technisch kann eine Institution (1) Konfigurations-Management-Werkzeuge einsetzen, die Referenzzustand-Definitionen mit Systemzuständen automatisch abgleichen, (2) Skripte oder Policies nutzen, die regelmäßig Konfigurationsdateien oder Systemeinstellungen auslesen und protokollieren, oder (3) Hash- oder Signaturverfahren anwenden, um Veränderungen an Konfigurationsdateien nachzuweisen. Prozessual kann es hilfreich sein, Änderungen zentral zu dokumentieren und automatische Reports über Abweichungen an Verantwortliche weiterzuleiten, damit diese reagieren können. Zusätzlich kann eine Institution Pilotprüfungen an Stichproben-Systemen durchführen, um die Wirksamkeit automatischer Abgleiche zu validieren. Durch diese Maßnahmen kann eine Institution eine belastbare Routine etablieren, die Configuration Drift reduziert und nicht nur technische Abweichungen sichtbar macht, sondern auch menschliche Fehler oder unautorisierte Eingriffe frühzeitig erkennen kann."
      }
-    },
-    "KONF.2.5.1": {
-     "guidance": {
-      "de": "Eine automatische Konfigurationsverwaltung ermöglicht eine einheitliche Konfiguration, z.B. für Passwortvorgaben, Verschlüsselung oder automatische Updates. Insbesondere bei der Verwaltung zahlreicher Endgeräte oder einer Bring Your Own Device Strategie (BYOD) bietet eine solche Verwaltung den einzig praktikablen Ansatz die Sicherheitsparameter der Geräte zu kontrollieren. Dies kann über selbst betriebenes zentrales Managementsystem (UEM oder MDM), Cloud-Dienste wie Intune oder Konfigurationsmanagement-Werkzeuge wie Ansible umgesetzt werden. Bei Abweichungen kann entweder ein automatisierter Mechanismus die erforderliche Konfiguration vornehmen, oder eine manuelle Entscheidung über die passende Behandlung erfolgen."
-     }
     }
    }
   },
@@ -138,9 +85,6 @@
    "param-extras": {
     "konf.2.5-prm1": {
      "alt-identifier": "a37d5c17-d296-4810-ac13-4a15e7b40e97"
-    },
-    "konf.2.5.1-prm1": {
-     "alt-identifier": "fceb6b0b-2cf9-4644-9f48-c6b307b2d0ad"
     }
    }
   }

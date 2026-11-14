@@ -1,0 +1,62 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/arch-2-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Einschränkung von Verbindungen zwischen Segmenten"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2",
+   "sequence": 6920
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.1",
+   "sequence": 6930
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.2",
+   "sequence": 6940
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.3",
+   "sequence": 6950
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.4",
+   "sequence": 6960
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.5",
+   "sequence": 6970
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.6",
+   "sequence": 6980
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.7",
+   "sequence": 6990
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.8",
+   "sequence": 7000
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.9",
+   "sequence": 7010
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.10",
+   "sequence": 7020
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.11",
+   "sequence": 7030
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.12",
+   "sequence": 7040
+  }
+ ]
+}

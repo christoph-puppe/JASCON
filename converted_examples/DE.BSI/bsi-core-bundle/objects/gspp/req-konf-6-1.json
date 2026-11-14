@@ -16,43 +16,6 @@
    "prose": {
     "de": "Konfiguration für IT-Systeme SOLLTE erforderliche Berechtigungen für Anwendungen einschränken."
    }
-  },
-  {
-   "id": "KONF.6.1.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für IT-Systeme KANN Datenkapselung aktivieren."
-   }
-  },
-  {
-   "id": "KONF.6.1.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für IT-Systeme KANN die Isolierung von {param:konf.6.1.2-prm1} aktivieren."
-   },
-   "parameters": [
-    {
-     "name": "konf.6.1.2-prm1",
-     "type": "string",
-     "label": "bestimmten Anwendungen"
-    }
-   ]
-  },
-  {
-   "id": "KONF.6.1.3",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für Endgeräte KANN die Isolation verschiedener Arbeitsumgebungen für verschiedene Verwendungen aktivieren."
-   }
   }
  ],
  "facets": {
@@ -64,49 +27,12 @@
      "target-object-categories": [
       "IT-Systeme"
      ]
-    },
-    "KONF.6.1.1": {
-     "action": "aktivieren",
-     "result": "Datenkapselung",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
-    },
-    "KONF.6.1.2": {
-     "action": "aktivieren",
-     "result": "die Isolierung",
-     "result-specification": "von {{bestimmten Anwendungen}}",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
-    },
-    "KONF.6.1.3": {
-     "action": "aktivieren",
-     "result": "die Isolation verschiedener Arbeitsumgebungen für verschiedene Verwendungen",
-     "target-object-categories": [
-      "Endgeräte"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.6.1.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.6.1.2": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.6.1.3": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -124,36 +50,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.32",
       "https://ns.bsi.bund.de/gspp/threat/G-0.30"
      ]
-    },
-    "KONF.6.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "0",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.22"
-     ]
-    },
-    "KONF.6.1.2": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "KONF.6.1.3": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.31"
-     ]
     }
    }
   },
@@ -166,36 +62,6 @@
      "tags": [
       "Produktbeschreibung"
      ]
-    },
-    "KONF.6.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Datenkapselung",
-     "alt-identifier": "6bb18861-0616-4cde-afed-7929b71ba16c"
-    },
-    "KONF.6.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Isolierung von Anwendungen",
-     "alt-identifier": "d380c6d8-1ab0-4e4b-bcca-2e620b40d934"
-    },
-    "KONF.6.1.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Isolierte Arbeitsumgebungen",
-     "alt-identifier": "cfe748d3-22ff-4f2c-8bb0-d22338c67f45"
     }
    }
   },
@@ -205,28 +71,6 @@
      "guidance": {
       "de": "Ziel ist es, Angriffsflächen zu minimieren und unerwünschte Seiteneffekte zu vermeiden. Durch restriktive Rechtevergabe pro App lässt sich das Risiko für Zugriffe auf sensible Bereiche stark senken. Gleichzeitig trägt dieses Prinzip dazu bei, eine klare Trennung zwischen den einzelnen Systemkomponenten zu bewahren und unkontrollierte Wechselwirkungen zu verhindern. Beispiele sind Lese- und Schreibrechte für Verzeichnisse, insbesondere für Systemverzeichnisse, Berechtigungen zum Zugriff auf Sensoren oder Peripheriegeräte, sowie der Netzzugriff. Um die Umsetzung zu erleichtern können Berechtigungsprofile erstellt werden, die je nach Anwendungsklasse (z. B. Office, Multimedia, Tools) eine Basislinie an Privilegien definieren. Diese Profile können in einer zentralen Verwaltungssoftware (z. B. über Gruppenrichtlinien oder ein Mobile‑Device‑Management) hinterlegt und automatisch auf neue Installationen angewendet werden. Vor der Freigabe einer Softwareinstallation kann ein Reviewprozess etabliert werden, bei dem anhand von Funktionsdokumentationen geprüft wird, welche minimalen Rechte erforderlich sind. Darüber hinaus kann der Einsatz von Sandboxing- oder Virtualisierungstechnologien unterstützen, indem Anwendungen in einer isolierten Umgebung mit genau festgelegten Schnittstellen betrieben werden können. Tools zur Rechteanalyse (etwa zur Ermittlung der tatsächlich genutzten APIs und Dateizugriffe) können helfen, überflüssige Freigaben im Nachgang weiter einzuschränken."
      }
-    },
-    "KONF.6.1.1": {
-     "guidance": {
-      "de": "Bei der Datenkapselung, im Englischen als data encapsulation bekannt, handelt es sich um einen Schutzmechanismus, bei dem Daten logisch vor dem Zugriff des restlichen Systems verborgen werden. Hierdurch wird der direkte Zugriff unterbunden und ausschließlich über definierte, sichere Schnittstellen bereitgestellt. Zweck ist es, die Angriffsfläche auf sensible Daten zu verringern und deren Integrität sowie Vertraulichkeit zu wahren. Ohne eine solche Kapselung könnte beispielsweise eine Schadsoftware auf einem Server direkt auf Konfigurationsdateien oder im Arbeitsspeicher gehaltene Anmeldeinformationen anderer Anwendungen zugreifen und diese manipulieren oder ausleiten. Durch eine wirksame Datenkapselung kann die Institution sicherstellen, dass Zugriffe nur über vorab genehmigte und protokollierte Wege erfolgen, was eine unautorisierte Modifikation oder einen unbemerkten Abfluss von Daten erschwert. Technisch erfolgt dies zum Beispiel durch einen abgeschlossenen Speicherbereich auf einem mobilen Gerät für persönliche Informationen wie Kontakte oder Kalender (PIM-Container). Die Kapselung erfordert eine separate Authentisierung vor dem Zugriff auf die gekapstelten Daten und eine vom Betriebssystem unabhängige Daten- & Transportverschlüsselung innerhalb der Kapselung."
-     }
-    },
-    "KONF.6.1.2": {
-     "guidance": {
-      "de": "Die Isolation von Anwendungen (auch Kapselung oder Application Sandboxing genannt) dient dazu, die Angriffsfläche eines Systems zu reduzieren und die Vertraulichkeit, Integrität sowie Verfügbarkeit kritischer Komponenten besser zu schützen. Durch eine klare Trennung der Anwendungs- und Systemprozesse und von deren Ressourcenzugriffen (Netzwerk, Datei‑ oder Geräte‑I/O) kann eine kompromittierte Applikation nicht unbegrenzt auf weitere Systemressourcen zugreifen, sondern ist auf genau definierte Schnittstellen beschränkt. Bestimmte Anwendungen meint hier, dass konkret festgelegt wird, welche Anwendungen konkret isoliert ausgeführt werden. Dies ermöglicht es, Fehlfunktionen oder Angriffe einzudämmen, Schadsoftware leichter zu erkennen und Verantwortlichkeiten einzelner Module transparent zu halten. Dies kann z.B. durch Containerisierung oder eine Microservice-Architektur, in der jede Komponente nur über REST- oder Message-Queue-Schnittstellen kommuniziert umgesetzt werden. Auch klassische Virtualisierung (Gastsysteme mit Hypervisor) oder Betriebssystemfunktionen wie SELinux/AppArmor‑Profile und chroot‑Jails zählen dazu, weil sie Applikationen auf genau festgelegte Ressourcen beschränken. Im Kontext der Containerisierung empfiehlt es sich ebenfalls eine feste Zuordnung von Containern zu Container-Hosts vorzunehmen."
-     }
-    },
-    "KONF.6.1.3": {
-     "guidance": {
-      "de": "Verschiedene Verwendungen sind z.B. die berufliche und private Nutzung, oder die Nutzung als IT-System mit erhöhtem Schutzbedarf und das Surfen im Internet. Arbeitsumgebungen sind getrennt, wenn die zu schützenden Daten ausschließlich in der geschützten Umgebung verbleiben. Beispielimplementierungen sind Apple® Configuration Profile oder Android™ Work Profile. Je nach Aufbau des Systems können hierzu z.B. Trennung auf Betriebssystemebene, netzbasierte Trennung, Virtualisierung oder Container eingesetzt werden."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "konf.6.1.2-prm1": {
-     "alt-identifier": "d380c6d8-1ab0-4e4b-bcca-2e620b40d934"
     }
    }
   }

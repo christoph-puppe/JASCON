@@ -16,73 +16,6 @@
    "prose": {
     "de": "Beschaffungsmanagement für Einkäufe SOLLTE Regelungen für die Behandlung von Vorfällen vereinbaren."
    }
-  },
-  {
-   "id": "BES.5.10.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe SOLLTE die Erreichbarkeit des Lieferanten über bestimmte Meldewege vereinbaren."
-   }
-  },
-  {
-   "id": "BES.5.10.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe SOLLTE eine Verpflichtung zur unverzüglichen Information des Auftraggebers über ihn betreffende Vorfälle vereinbaren."
-   }
-  },
-  {
-   "id": "BES.5.10.3",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe SOLLTE eine Verpflichtung für Lieferanten, die den Auftraggeber betreffende Schwachstelle zeitnah zu beheben, vereinbaren."
-   }
-  },
-  {
-   "id": "BES.5.10.3.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für IT-Produkte KANN einen Schwachstellenmeldeprozess nach {param:bes.5.10.3.1-prm1} vereinbaren."
-   },
-   "parameters": [
-    {
-     "name": "bes.5.10.3.1-prm1",
-     "type": "string",
-     "label": "einem anerkannten Standard"
-    }
-   ]
-  },
-  {
-   "id": "BES.5.10.4",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe KANN Prozesse zur Lösung von Konflikten zwischen den Vertragsparteien vereinbaren."
-   }
-  },
-  {
-   "id": "BES.5.10.5",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Einkäufe KANN Abhilfemaßnahmen für den Fall von Verstößen durch den Lieferanten vereinbaren."
-   }
   }
  ],
  "facets": {
@@ -94,86 +27,12 @@
      "target-object-categories": [
       "Einkäufe"
      ]
-    },
-    "BES.5.10.1": {
-     "action": "vereinbaren",
-     "result": "die Erreichbarkeit des Lieferanten über bestimmte Meldewege",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
-    },
-    "BES.5.10.2": {
-     "action": "vereinbaren",
-     "result": "eine Verpflichtung zur unverzüglichen Information des Auftraggebers über ihn betreffende Vorfälle",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
-    },
-    "BES.5.10.3": {
-     "action": "vereinbaren",
-     "result": "eine Verpflichtung für Lieferanten, die den Auftraggeber betreffende Schwachstelle zeitnah zu beheben,",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
-    },
-    "BES.5.10.3.1": {
-     "action": "vereinbaren",
-     "result": "einen Schwachstellenmeldeprozess",
-     "result-specification": "nach {{einem anerkannten Standard}}",
-     "target-object-categories": [
-      "IT-Produkte"
-     ]
-    },
-    "BES.5.10.4": {
-     "action": "vereinbaren",
-     "result": "Prozesse zur Lösung von Konflikten zwischen den Vertragsparteien",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
-    },
-    "BES.5.10.5": {
-     "action": "vereinbaren",
-     "result": "Abhilfemaßnahmen",
-     "result-specification": "für den Fall von Verstößen durch den Lieferanten",
-     "target-object-categories": [
-      "Einkäufe"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.10.1": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.10.2": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.10.3": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.10.3.1": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.10.4": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.10.5": {
      "required-documentation": [
       "Beschaffungskriterien"
      ]
@@ -191,60 +50,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.20",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "BES.5.10.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.10.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.10.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.10.3.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.10.4": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
-    },
-    "BES.5.10.5": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
-     ]
     }
    }
   },
@@ -257,68 +62,6 @@
      "tags": [
       "Lieferketten"
      ]
-    },
-    "BES.5.10.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Erreichbarkeit über Meldewege",
-     "alt-identifier": "f2e723f5-6a1a-4358-bce2-458523049346"
-    },
-    "BES.5.10.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Melden von Vorfällen",
-     "alt-identifier": "d359fe31-8bf1-47ae-bbcc-e572b1998d52"
-    },
-    "BES.5.10.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Schwachstellenbehebung",
-     "alt-identifier": "d7946adc-4cf2-4fc9-aad7-9d43c6855384"
-    },
-    "BES.5.10.3.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Schwachstellenmeldeprozess",
-     "alt-identifier": "ebc08e41-e728-4447-93fa-233fbad7f2fa"
-    },
-    "BES.5.10.4": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten",
-      "Exit-Strategie"
-     ],
-     "title": "Konfliktlösungsprozesse",
-     "alt-identifier": "3535784d-dd78-4fd2-be25-4a2e183087b2"
-    },
-    "BES.5.10.5": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten",
-      "Exit-Strategie"
-     ],
-     "title": "Konsequenzen bei Verstößen",
-     "alt-identifier": "119a13e9-ea12-41a3-a974-2d1cba295fb8"
     }
    }
   },
@@ -328,43 +71,6 @@
      "guidance": {
       "de": "Ein Vorfall bezeichnet in diesem Zusammenhang jedes sicherheitsrelevante Ereignis, das zu einer Beeinträchtigung der Vertraulichkeit, Integrität oder Verfügbarkeit von Informationen oder IT-Diensten führen kann, etwa Datenabflüsse, unbefugte Zugriffe oder längerfristige Systemausfälle. Der Sinn und Zweck der Regelung liegt darin, mit Vertragspartnern abgestimmte Verfahren zu haben, um im Ernstfall schnell und koordiniert reagieren zu können. Ohne klare Vereinbarungen könnte wertvolle Zeit verloren gehen, es könnten unklare Zuständigkeiten entstehen oder Meldungen verzögert erfolgen. Mit abgestimmten Prozessen kann dagegen die Schadensbegrenzung beschleunigt, Transparenz über den Vorfall geschaffen und eine wirksame Ursachenanalyse ermöglicht werden. Hierzu gehört insbesondere die Benachrichtigung des Vertragspartners und die Zusammenarbeit zur Behebung von Vorfällen."
      }
-    },
-    "BES.5.10.1": {
-     "guidance": {
-      "de": "Die Meldewege bezeichnen in diesem Zusammenhang klar definierte Kommunikationskanäle, über die ein Lieferant zuverlässig erreichbar ist. Das kann beispielsweise eine dedizierte E-Mail-Adresse für Sicherheitsvorfälle, ein 24/7-Telefonkontakt, ein Ticket-System oder ein abgesicherter Webzugang sein. Der Sinn dieser Vereinbarung liegt darin, dass kritische Ereignisse, wie etwa ein entdeckter Datenabfluss oder technische Störungen in ausgelagerten Systemen, nicht ins Leere laufen. Ohne abgestimmte Erreichbarkeit könnte eine Meldung verzögert oder gar nicht ankommen, wodurch Schaden an vertraulichen Informationen unbemerkt bleiben könnte. Mit verbindlich vereinbarten Kanälen kann die Institution hingegen sicherstellen, dass relevante Informationen zeitnah und nachweisbar beim Lieferanten ankommen und bearbeitet werden. Die Umsetzung dieser Anforderung kann durch mehrere Maßnahmen unterstützt werden: (1) Eine Institution kann im Vertrag mit dem Lieferanten eine feste Ansprechstelle und Eskalationsstufen für bestimmte Ereignisse benennen lassen. (2) Es kann ein technischer Meldeweg wie ein verschlüsseltes E-Mail-Postfach oder ein Ticketportal vorgesehen werden, das eindeutig den Zweck \"Sicherheitsvorfälle\" trägt und regelmäßig überwacht wird."
-     }
-    },
-    "BES.5.10.2": {
-     "guidance": {
-      "de": "Der Sinn dieser Regelung liegt darin, dass der Auftraggeber seine Handlungsfähigkeit behält und Risiken frühzeitig einschätzen kann. Ein verzögerter Informationsfluss könnte dazu führen, dass Schäden sich unbemerkt ausweiten oder notwendige Reaktionen, wie etwa die Unterbindung von Angriffspfaden, verspätet erfolgen. Eine rechtzeitige Mitteilung kann hingegen Transparenz schaffen und es ermöglichen, dass Gegenmaßnahmen in Koordination mit dem Auftraggeber wirksam eingeleitet werden. Die praktische Umsetzung kann durch klare vertragliche Regelungen erfolgen, in denen Eskalationswege und Fristen für Meldungen definiert werden. Dazu kann ein gemeinsames Kontakt- und Kommunikationsverfahren etabliert werden, etwa ein 24/7 erreichbarer Ansprechpartner oder eine dedizierte Notfalladresse für sicherheitsrelevante Meldungen. Technisch kann eine Schnittstelle (z. B. ein abgesicherter Meldekanal oder Ticket-System) eingerichtet werden, über die Vorfälle dokumentiert und weitergeleitet werden können."
-     }
-    },
-    "BES.5.10.3": {
-     "guidance": {
-      "de": "Die Verpflichtung bezieht sich hierbei auf die gesamte Lebensdauer der Dienstleistungen oder Produkte. Je nach Vertrag kann die Behebung von Schwachstellen z.B. durch Sicherheitsupdates oder den Austausch von Komponenten gewährleistet werden."
-     }
-    },
-    "BES.5.10.3.1": {
-     "guidance": {
-      "de": "Die Anforderung ist erfüllt, wenn der Prozess zur Meldung und Behandlung von Schwachstellen für das zu beschaffende Produkt vertraglich zugesichert ist, unabhängig von der Frage durch wen die Klausel in den Vertrag eingebracht wurde. Der Schwachstellenmeldeprozess kann direkt durch den Lieferanten oder durch Weitergabe der Verpflichtung an den Hersteller gewährleistet sein. Für Details siehe BSI TR-03183-3."
-     }
-    },
-    "BES.5.10.4": {
-     "guidance": {
-      "de": "Ein „Konflikt zwischen den Vertragsparteien“ bedeutet hier jede Form von Uneinigkeit, die im Zuge eines Vertragsverhältnisses auftreten kann – etwa über die Auslegung von Leistungszusagen, den Umgang mit Verzögerungen, Qualitätsabweichungen oder Verantwortlichkeiten bei Sicherheitsvorfällen. Solche Konfliktlösungsprozesse können helfen, Missverständnisse strukturiert zu klären und Rechtsstreitigkeiten vorzubeugen. Das Ziel der Anforderung ist es, Risiken durch unklare Verantwortlichkeiten und eskalierende Streitigkeiten zu verringern: Ein ungelöster Konflikt könnte dazu führen, dass sicherheitsrelevante Leistungen nicht rechtzeitig erbracht werden, Vertragsinhalte unterschiedlich interpretiert werden oder sensible Daten im Streitfall unkontrolliert preisgegeben werden. Umgekehrt kann eine klar geregelte Konfliktlösungsroutine Transparenz schaffen, die Handlungsfähigkeit der Institution sichern und einen fairen Interessenausgleich fördern. Praktisch umgesetzt werden kann dies durch verschiedene Maßnahmen: (1) In Verträgen kann eine Schlichtungsklausel vorgesehen werden, die definiert, dass bei Meinungsverschiedenheiten zunächst ein moderiertes Gespräch oder ein Mediationsverfahren durchgeführt werden kann. (2) Es kann hilfreich sein, feste Eskalationspfade zu vereinbaren, zum Beispiel mit einer dreistufigen Struktur aus Projektleitung, Management-Ebene und unabhängiger Stelle. (3) Die Institution kann Checklisten nutzen, um im Konfliktfall die relevanten Dokumentationen – etwa Leistungsnachweise oder Kommunikationsprotokolle – geordnet vorzulegen. (4) Technische Hilfen wie gemeinsame Ticket- oder Kollaborationssysteme können Transparenz schaffen und verhindern, dass Konflikte durch unklare Informationslagen eskalieren."
-     }
-    },
-    "BES.5.10.5": {
-     "guidance": {
-      "de": "Hierzu können Abhilfemaßnahmen wie die Abschaltung angreifbarer Systeme, die Information betroffener Personen sowie Entschädigungen für die betroffene Institution oder betroffene Dritte in einer festgelegten Höhe gehören."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "bes.5.10.3.1-prm1": {
-     "alt-identifier": "ebc08e41-e728-4447-93fa-233fbad7f2fa"
     }
    }
   }

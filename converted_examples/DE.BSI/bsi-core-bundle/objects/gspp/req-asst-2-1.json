@@ -16,23 +16,6 @@
    "prose": {
     "de": "Informationen und Assets SOLLTE ein Inventar der Informationen und damit verbundener Assets dokumentieren."
    }
-  },
-  {
-   "id": "ASST.2.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Informationen und Assets für Daten SOLLTE die Zuständigkeit für deren Verarbeitung {param:asst.2.1.1-prm1} zuweisen."
-   },
-   "parameters": [
-    {
-     "name": "asst.2.1.1-prm1",
-     "type": "string",
-     "label": "einer zuständigen Person oder Rolle"
-    }
-   ]
   }
  ],
  "facets": {
@@ -41,25 +24,12 @@
     "smt": {
      "action": "dokumentieren",
      "result": "ein Inventar der Informationen und damit verbundener Assets"
-    },
-    "ASST.2.1.1": {
-     "action": "zuweisen",
-     "result": "die Zuständigkeit für deren Verarbeitung",
-     "result-specification": "{{einer zuständigen Person oder Rolle}}",
-     "target-object-categories": [
-      "Daten"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Inventar Informationen"
-     ]
-    },
-    "ASST.2.1.1": {
      "required-documentation": [
       "Inventar Informationen"
      ]
@@ -79,18 +49,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.17",
       "https://ns.bsi.bund.de/gspp/threat/G-0.45"
      ]
-    },
-    "ASST.2.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.17",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45"
-     ]
     }
    }
   },
@@ -103,13 +61,6 @@
      "tags": [
       "Inventories"
      ]
-    },
-    "ASST.2.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Informationsverantwortung",
-     "alt-identifier": "eae7145a-228e-47ca-9a09-7a4a3b74ac55"
     }
    }
   },
@@ -119,18 +70,6 @@
      "guidance": {
       "de": "Um die Informationssicherheit zu schützen ist es erforderlich, die zu schützenden Werte systematisch zu erfassen und ihre Verwendung über den gesamten Lebenszyklus nachzuhalten. Sinnvoll ist es hierbei, den Detaillierungsgrad des Inventars angepasst an Schutzbedarf und Risikoprofil des Informationsverbundes zu wählen. Das Inventar kann eine Übersicht der für Geschäftsprozesse relevanten Kategorien von schützenswerten Informationen, z.B. für Kunden Vor- und Nachname, Adresse, IBAN, Telefonnummer, Kundenkennwort als Grundlage haben. Es muss sich allerdings nicht um eine einzige Liste von Informationen und Assets handeln. Um eine leichtere, automatische Pflege des Inventars zu ermöglichen ist es vielmehr sinnvoll, eine Reihe dynamischer Inventare oder Datenbestände möglichst nahe an der Quelle der Informationen zu verwenden, z.B. eine Verzeichnisdatenbank für Zugangskonten und Systeme, eine Anwendung zum Assetmanagement für physische Assets, sowie Dateisysteme oder Datenbanken für einzelne Dateien und Daten. Falls ein datenschutzrechtliches Verarbeitungsverzeichnis für die Erfassung von personenbezogenen Daten besteht, kann es ebenfalls in das Inventar einbezogen werden. Für physische Dokumente kann ein Aktenbestandsverzeichnis eingesetzt werden. Zur Erfassung von Netzen siehe Praktik Architektur. Zur Erfassung von Identitäten, Zugangskonten und Berechtigungen siehe Praktik Berechtigung. Für kurzlebige Informationen, z.B. virtuelle Maschinen, nur on-demand automatisch eingerichtet und wieder gelöscht werden oder händische Notizen, die nicht systematisch verarbeitet werden, ist keine Inventur erforderlich. Für Details zum IT-Assetmanagement siehe ISO/IEC 19770-1."
      }
-    },
-    "ASST.2.1.1": {
-     "guidance": {
-      "de": "Hiermit ist das Eigentum oder die institutionsinterne Zuständigkeit für die Nutzung und den damit einhergehenden Schutz der jeweiligen Informationen und Assets (Asset Ownership) gemeint. Klare Zuweisungen stellen sicher, dass den Beteiligten nicht nur ihre prozessualen Aufgaben, sondern auch ihre Zuständigkeit für die konkreten Informationen bewusst und die damit verbundenen Pflichten bewusst sind. Dies kann durch dezentrales Nachhalten der Verantwortung nachgehalten werden. Alternativ kann auch eine Gruppierung der Informationen nach Assets wie Anwendungen oder Diensten umgesetzt werden, so dass die Zuständigen für das Asset dadurch auch die Zuständigkeit für die Informationen enthalten, die dort verarbeitet werden."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "asst.2.1.1-prm1": {
-     "alt-identifier": "eae7145a-228e-47ca-9a09-7a4a3b74ac55"
     }
    }
   }

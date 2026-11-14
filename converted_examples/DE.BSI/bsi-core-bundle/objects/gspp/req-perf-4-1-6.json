@@ -1,0 +1,65 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.6",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.4.1.6",
+ "lifecycle": "active",
+ "title": {
+  "de": "Rückmeldung von Stakeholdern"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation SOLLTE die Bewertung von Rückmeldungen von Kunden, Geschäftspartnern, Mitarbeitern oder der Öffentlichkeit zu Sicherheitsaspekten als Ergebnis der Überprüfung in einem Managementbericht dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "die Bewertung von Rückmeldungen von Kunden, Geschäftspartnern, Mitarbeitern oder der Öffentlichkeit zu Sicherheitsaspekten",
+     "result-specification": "als Ergebnis der Überprüfung in einem Managementbericht"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Managementbericht"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 1
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Betroffene Personen wie z. B. Kunden, Geschäftspartner und die Öffentlichkeit sollen aktiv zu Sicherheitsaspekten befragt oder deren Feedback systematisch erfasst werden, z. B. über Umfragen, Beschwerden, Supportanfragen oder öffentliche Bewertungen. Dieses Feedback ist auf Relevanz und Auswirkungen für das ISMS zu prüfen, zu dokumentieren und bei Bedarf in Risikobetrachtungen und Verbesserungsmaßnahmen einzubeziehen. Verantwortliche müssen sicherstellen, dass Rückmeldungen zeitnah ausgewertet und bei der Weiterentwicklung der Sicherheitsmaßnahmen berücksichtigt werden. Die Ergebnisse dieser Überprüfungen basieren auf den vorab erstellten Auditberichten sowie der geforderten Eignungsprüfung."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "65fd515e-d390-49f5-87b4-68aaaf392e9f"
+  }
+ ]
+}

@@ -23,26 +23,6 @@
      "label": "einem anerkannten Standard"
     }
    ]
-  },
-  {
-   "id": "KONF.14.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für Anwendungen SOLLTE unverschlüsselte und anfällige Verbindungen über Netze deaktivieren."
-   }
-  },
-  {
-   "id": "KONF.14.1.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für Anwendungen KANN die Kommunikation Ende-zu-Ende über Netze verschlüsseln."
-   }
   }
  ],
  "facets": {
@@ -55,38 +35,12 @@
      "target-object-categories": [
       "Anwendungen"
      ]
-    },
-    "KONF.14.1.1": {
-     "action": "deaktivieren",
-     "result": "unverschlüsselte und anfällige Verbindungen",
-     "result-specification": "über Netze",
-     "target-object-categories": [
-      "Anwendungen"
-     ]
-    },
-    "KONF.14.1.2": {
-     "action": "verschlüsseln",
-     "result": "die Kommunikation Ende-zu-Ende",
-     "result-specification": "über Netze",
-     "target-object-categories": [
-      "Anwendungen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.14.1.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.14.1.2": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -104,26 +58,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.43",
       "https://ns.bsi.bund.de/gspp/threat/G-0.15"
      ]
-    },
-    "KONF.14.1.1": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "0",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.43",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.15"
-     ]
-    },
-    "KONF.14.1.2": {
-     "confidentiality": "2",
-     "integrity": "0",
-     "availability": "0",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.15"
-     ]
     }
    }
   },
@@ -137,27 +71,6 @@
       "Produktbeschreibung",
       "Cryptography"
      ]
-    },
-    "KONF.14.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Obligatorische Verschlüsselung",
-     "alt-identifier": "b73c400e-b4f8-494c-ac02-619258f77a2d"
-    },
-    "KONF.14.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Produktbeschreibung",
-      "Cryptography"
-     ],
-     "title": "Ende-zu-Ende-Verschlüsselung",
-     "alt-identifier": "3e17d0bd-cdec-4d89-b6a6-b2e018009e8f"
     }
    }
   },
@@ -166,16 +79,6 @@
     "smt": {
      "guidance": {
       "de": "Werden Daten unverschlüsselt übertragen, so könnten sie abgehört oder unbemerkt manipuliert werden. Relevant sind hierbei alle von der Anwendung übertragenen Daten, inklusive Authentifizierung an der Benutzerschnittstelle oder API, Abruf von Daten, Server-Server-Replikation oder zur Datensicherung. Das betrifft sowohl Inhalts- als auch Metadaten. Die Umsetzung kann mit Algorithmen zur Transportverschlüsselung wie Transport Layer Security (TLS) oder Ende-zu-Ende-Verschlüsselung erfolgen. Für aktuelle Verschlüsselungsverfahren siehe BSI TR-02102. Die Konfiguration der Verschlüsselung kann sich daran orientieren, wie lange die transportieren Daten, z.B. Transaktionen, vertraulich zu behandeln sind. Eine Herausforderung hierbei sind Anwendungen, die über allgemeine Anbindungen mit anderen Institutionen kommunizieren, z.B. E-Mails oder Anrufe ins öffentliche Telefonnetz. Diese Anwendungen können nur ihren Teil der Verbindungsstrecke verschlüsseln, so dass der Rest der Strecke und damit die Verbindung an sich dennoch unverschlüsselt sein könnte. Überträgt die Anwendung keine schützenswerten Daten über das Netz, so ist die Anforderung entbehrlich."
-     }
-    },
-    "KONF.14.1.1": {
-     "guidance": {
-      "de": "Obligatorische Verschlüsselung bedeutet, dass die Anwendung ausschließlich nach dem Stand der Technik verschlüsselt kommuniziert. Unverschlüsselte oder mit bekannten Methoden angreifbare Verbindungsanfragen werden dagegen abgelehnt. Die Verwendung obligatorischer Verschlüsselung im Internet ist aktuell sehr uneinheitlich: Viele E-Mail-Server z.B. verschlüsseln im Auslieferungszustand nur opportunistisch - also nur wenn der Verbindungsaufbau so funktioniert. Das macht Verbindungen anfällig für Downgrade-Angriffe. Diese lassen sich verhindern, indem unverschlüsselte Verbindungen vollständig deaktiviert werden. Andererseits kann es dadurch auch zu Verbindungsproblemen mit Servern kommen, die überhaupt keine Verschlüsselung mit aktuellen Protokollen unterstützen. Für aktuelle Verschlüsselungsverfahren siehe BSI TR-02102."
-     }
-    },
-    "KONF.14.1.2": {
-     "guidance": {
-      "de": "Eine Ende-zu-Ende-Verschlüsselung stellt sicher, dass auch Server auf dem Weg zwischen den Endpunkten die Kommunikation nicht auslesen können. Die Unterstützung von Ende-zu-Ende-Verschlüsselung unterscheidet sich zwischen verschiedenen Kommunikationsanwendungen noch immer erheblich: Viele E-Mail-Server verschlüsseln gar nicht oder nur bei Verwendung spezieller Erweiterungen so, während viele Messenger-Apps die Ende-zu-Ende-Verschlüsselung ohne Nutzerinteraktion automatisch erzwingen. Dies kann je nach Anwendung z.B. mittels OpenPGP, S/MIME oder Signal Protocol geschehen. Für aktuelle Verschlüsselungsverfahren siehe BSI TR-02102. Für weitere Details zur Telekommunikation siehe \"Kompendium für organisationsinterne Telekommunikationssysteme mit erhöhtem Schutzbedarf\"."
      }
     }
    }

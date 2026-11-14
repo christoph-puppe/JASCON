@@ -1,0 +1,86 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.2.2.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "OT-Systeme"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Netze SOLLTE Verbindungen zwischen OT-Systemen und anderen IT-Systemen einschränken."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "einschränken",
+     "result": "Verbindungen zwischen OT-Systemen und anderen IT-Systemen",
+     "target-object-categories": [
+      "Netze"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Netzplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.9",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.40"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lateral Movement",
+      "Separation of Concerns"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "IT- und OT-Systeme haben typischerweise sehr unterschiedliche Risikoprofile (IT: Schnelllebig, viele Cybersicherheitsmechanismen, OT: Stabilität, weniger Cybersicherheitsmechanismen, beispielsweise industrielle Steuerungssysteme und Gebäudeautomationstechnik). Insbesondere der Zugriff auf OT-Funktionen (z. B. Öffnung zentraler Schließanlage) ist mit erhöhtem Risiko verbunden und könnte auch versehentlich z.B. durch Portscanner ausgelöst werden. Stattdessen ist es empfehlenswert, den Zugriff zu solchen Netzen nur über dafür vorgesehene Quellen zu ermöglichen (z. B. Sprungserver, bestimmte auslösende OT-Systeme)."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "43badc07-0172-4666-9a72-0c0289b7f540"
+  }
+ ]
+}

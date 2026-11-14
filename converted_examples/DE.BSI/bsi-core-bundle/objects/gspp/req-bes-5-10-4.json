@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.5.10.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.5.10.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Konfliktlösungsprozesse"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe KANN Prozesse zur Lösung von Konflikten zwischen den Vertragsparteien vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "Prozesse zur Lösung von Konflikten zwischen den Vertragsparteien",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lieferketten",
+      "Exit-Strategie"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ein „Konflikt zwischen den Vertragsparteien“ bedeutet hier jede Form von Uneinigkeit, die im Zuge eines Vertragsverhältnisses auftreten kann – etwa über die Auslegung von Leistungszusagen, den Umgang mit Verzögerungen, Qualitätsabweichungen oder Verantwortlichkeiten bei Sicherheitsvorfällen. Solche Konfliktlösungsprozesse können helfen, Missverständnisse strukturiert zu klären und Rechtsstreitigkeiten vorzubeugen. Das Ziel der Anforderung ist es, Risiken durch unklare Verantwortlichkeiten und eskalierende Streitigkeiten zu verringern: Ein ungelöster Konflikt könnte dazu führen, dass sicherheitsrelevante Leistungen nicht rechtzeitig erbracht werden, Vertragsinhalte unterschiedlich interpretiert werden oder sensible Daten im Streitfall unkontrolliert preisgegeben werden. Umgekehrt kann eine klar geregelte Konfliktlösungsroutine Transparenz schaffen, die Handlungsfähigkeit der Institution sichern und einen fairen Interessenausgleich fördern. Praktisch umgesetzt werden kann dies durch verschiedene Maßnahmen: (1) In Verträgen kann eine Schlichtungsklausel vorgesehen werden, die definiert, dass bei Meinungsverschiedenheiten zunächst ein moderiertes Gespräch oder ein Mediationsverfahren durchgeführt werden kann. (2) Es kann hilfreich sein, feste Eskalationspfade zu vereinbaren, zum Beispiel mit einer dreistufigen Struktur aus Projektleitung, Management-Ebene und unabhängiger Stelle. (3) Die Institution kann Checklisten nutzen, um im Konfliktfall die relevanten Dokumentationen – etwa Leistungsnachweise oder Kommunikationsprotokolle – geordnet vorzulegen. (4) Technische Hilfen wie gemeinsame Ticket- oder Kollaborationssysteme können Transparenz schaffen und verhindern, dass Konflikte durch unklare Informationslagen eskalieren."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "3535784d-dd78-4fd2-be25-4a2e183087b2"
+  }
+ ]
+}

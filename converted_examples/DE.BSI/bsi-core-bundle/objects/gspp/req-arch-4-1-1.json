@@ -1,0 +1,100 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.4.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.4.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Dynamische Netzzugangskontrolle"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Interne Netzsegmente SOLLTE den Zugriff von IT-Systemen auf das Netzsegment anhand {param:arch.4.1.1-prm1} im Einklang mit den zugehörigen Anforderungen des Identitäts- und Berechtigungsmanagements authentifizieren."
+   },
+   "parameters": [
+    {
+     "name": "arch.4.1.1-prm1",
+     "type": "string",
+     "label": "dynamischer Kriterien"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "authentifizieren",
+     "result": "den Zugriff von IT-Systemen auf das Netzsegment",
+     "result-specification": "anhand {{dynamischer Kriterien}} im Einklang mit den zugehörigen Anforderungen des Identitäts- und Berechtigungsmanagements",
+     "target-object-categories": [
+      "Interne Netzsegmente"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Network Access Control",
+      "Rogue Access Point"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Bei der dynamischen Netzzugangskontrolle (Posturing oder Dynamic NAC) wird vor dem Netzzugang auch der Zustand des IT-Systems geprüft, z.B. der aktuelle Patchlevel des Systems oder von Erkennungssignaturen. Hierzu gehört auch die softwaredefinierte Netzzugangskontrolle, die dynamisch auf Aktivitäten des Systems oder aktuelle Threat Intelligence reagieren kann. Empfehlenswert ist es hierbei, die Konfiguration der Systeme automatisiert vorzunehmen, z.B. über eine automatische Supplicant-Konfiguration beim Rollout und die Zuweisung von Zertifikaten über Enrollment-Dienste. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "arch.4.1.1-prm1": {
+     "alt-identifier": "fec4fcdf-13e7-4a32-a3e1-52dce90ea1d7"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "fec4fcdf-13e7-4a32-a3e1-52dce90ea1d7"
+  }
+ ]
+}

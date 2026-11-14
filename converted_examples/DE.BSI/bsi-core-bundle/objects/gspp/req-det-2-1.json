@@ -16,36 +16,6 @@
    "prose": {
     "de": "Detektion SOLLTE ein Meldeverfahren verankern."
    }
-  },
-  {
-   "id": "DET.2.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion SOLLTE Regelungen für Sofortmaßnahmen durch Nutzende verankern."
-   }
-  },
-  {
-   "id": "DET.2.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion SOLLTE Meldeformulare für Vorfallsmeldungen installieren."
-   }
-  },
-  {
-   "id": "DET.2.1.3",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion SOLLTE ein Verfahren für Rückmeldungen verankern."
-   }
   }
  ],
  "facets": {
@@ -54,19 +24,6 @@
     "smt": {
      "action": "verankern",
      "result": "ein Meldeverfahren"
-    },
-    "DET.2.1.1": {
-     "action": "verankern",
-     "result": "Regelungen für Sofortmaßnahmen durch Nutzende"
-    },
-    "DET.2.1.2": {
-     "action": "installieren",
-     "result": "Meldeformulare",
-     "result-specification": "für Vorfallsmeldungen"
-    },
-    "DET.2.1.3": {
-     "action": "verankern",
-     "result": "ein Verfahren für Rückmeldungen"
     }
    }
   },
@@ -75,21 +32,6 @@
     "smt": {
      "required-documentation": [
       "Arbeitsanweisung"
-     ]
-    },
-    "DET.2.1.1": {
-     "required-documentation": [
-      "Arbeitsanweisung"
-     ]
-    },
-    "DET.2.1.2": {
-     "required-documentation": [
-      "Detektions-Konzept"
-     ]
-    },
-    "DET.2.1.3": {
-     "required-documentation": [
-      "Detektions-Konzept"
      ]
     }
    }
@@ -107,41 +49,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.20",
       "https://ns.bsi.bund.de/gspp/threat/G-0.47"
      ]
-    },
-    "DET.2.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.41",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
-     ]
-    },
-    "DET.2.1.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.41",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
-     ]
-    },
-    "DET.2.1.3": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.29",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.33",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
-     ]
     }
    }
   },
@@ -151,30 +58,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "DET.2.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "tags": [
-      "Kompetenzmanagement"
-     ],
-     "title": "Sofortmaßnahmen Nutzender",
-     "alt-identifier": "89191db5-45b5-4e35-91b6-eb277d2427ac"
-    },
-    "DET.2.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Meldeformulare",
-     "alt-identifier": "d6a025c2-5cca-49d0-ab04-54cd419e147e"
-    },
-    "DET.2.1.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "title": "Rückmeldungen",
-     "alt-identifier": "c961b1c8-2f6a-4e6d-9126-e2005c44f728"
     }
    }
   },
@@ -183,21 +66,6 @@
     "smt": {
      "guidance": {
       "de": "Ein Meldeverfahren bezeichnet in diesem Kontext einen nachvollziehbaren und definierten Ablauf zur Erfassung, Weiterleitung und Bearbeitung erkannter sicherheitsrelevanter Ereignisse oder Auffälligkeiten („Incident Reporting“ oder „Security Event Reporting“). Dazu gehört, welche Ereignisse als meldepflichtig gelten, über welche Kommunikationswege Meldungen erfolgen können, welche Stellen dabei informiert werden und innerhalb welcher Zeiträume eine Bearbeitung stattfindet. Die Anforderung zielt darauf ab, dass erkannte Sicherheitsereignisse nicht unbeachtet bleiben oder nur informell kommuniziert werden. Ohne ein geregeltes Vorgehen könnte ein Vorfall verspätet bearbeitet werden, wichtige Informationen könnten verloren gehen oder Warnhinweise könnten nicht die zuständigen Stellen erreichen. Ein etabliertes Meldeverfahren kann hingegen eine schnelle Reaktion, eine konsistente Bewertung von Ereignissen und eine koordinierte Behandlung erkannter Auffälligkeiten unterstützen. Die konkrete Ausgestaltung kann sich dabei an Größe, Struktur und Schutzbedarf der Institution orientieren. Geeignet sind etwa zentrale Meldestellen, Ticketsysteme, standardisierte Meldeformulare und abgestufte Eskalationsprozesse."
-     }
-    },
-    "DET.2.1.1": {
-     "guidance": {
-      "de": "Beispiele für Sofortmaßnahmen sind der sofortige Stopp weiterer Tätigkeiten an betroffenen Systemen, die Dokumentation von Beobachtungen oder zu meldende Informationen (W-Fragen). Hierfür kann die IT-Notfallkarte „Verhalten bei IT-Notfällen“ des BSI genutzt werden."
-     }
-    },
-    "DET.2.1.2": {
-     "guidance": {
-      "de": "Die Angabe des Meldezeitpunktes oder der Name des Meldenden, kann auch durch ein Formular automatisch ausgefüllt werden."
-     }
-    },
-    "DET.2.1.3": {
-     "guidance": {
-      "de": "Rückmeldungen an Personen, die potenzielle Vorfälle gemeldet haben, sind hilfreich, da sie zum besseren Verständnis beitragen, worauf bei künftigen Meldungen zu achten ist und wie die Meldenden zur Bearbeitung des Vorfalls beitragen können. Ohne Rückmeldung könnte Unsicherheit entstehen, ob ein Vorfall überhaupt aufgenommen oder ernst genommen wurde, was zu Frustration oder einer sinkenden Bereitschaft zur Meldung künftiger Ereignisse führen könnte. Eine zeitnahe und angemessene Rückmeldung kann dagegen die Nutzenden in ihrem sicherheitsbewussten Verhalten bestärken, die Relevanz ihrer Meldung verdeutlichen und Missverständnisse vermeiden. So kann beispielsweise eine Rückmeldung nach einem gemeldeten Phishing-Versuch klarstellen, ob es sich um einen bekannten Angriff handelte oder ob zusätzliche Maßnahmen wie das Zurücksetzen eines Passworts empfohlen werden. Ebenso kann eine Rückmeldung nach einem gemeldeten Systemausfall erläutern, ob dieser sicherheitsrelevant war oder eine rein technische Störung vorlag. Ein Rückmeldeverfahren kann in diesem Kontext als ein strukturierter Ablauf definiert werden, über den die meldende Person nach Eingang ihrer Meldung eine Information über den Status, die Relevanz und – falls sinnvoll – empfohlene Folgeschritte erhält. Ein automatisiertes Ticketsystem kann beispielsweise sofortige Eingangsbestätigungen generieren und Statusänderungen kommunizieren. Ebenso kann eine abgestufte Rückmeldepflicht sinnvoll sein, bei der kritische Vorfälle eine priorisierte persönliche Rückmeldung durch Fachpersonal erhalten, während unkritische Meldungen standardisierte Mitteilungen bekommen. Technische Hilfsmittel wie Mail-Vorlagen, interne Chatbots oder Self-Service-Portale können die Effizienz erhöhen"
      }
     }
    }

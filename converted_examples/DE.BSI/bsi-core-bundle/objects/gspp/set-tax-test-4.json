@@ -7,20 +7,20 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.1",
-   "sequence": 2680
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/test-4-1",
+   "sequence": 4690
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.2",
-   "sequence": 2690
+   "sequence": 4700
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.3",
-   "sequence": 2700
+   "sequence": 4710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.4",
-   "sequence": 2710
+   "sequence": 4720
   }
  ],
  "label": "4",

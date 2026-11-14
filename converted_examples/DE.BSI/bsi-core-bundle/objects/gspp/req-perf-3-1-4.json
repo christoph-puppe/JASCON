@@ -1,0 +1,55 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.3.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Umfang von Audits"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation MUSS in angemessenem Umfang Audits ausführen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "ausführen",
+     "result": "in angemessenem Umfang Audits"
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Der Umfang eines Audits beschreibt, was, wie und in welchem Rahmen geprüft wird. Dazu gehören der organisatorische und technische Geltungsbereich (z. B. Standorte, Abteilungen, IT-Systeme), der Prüfzeitraum,  sowie die eingesetzten Prüfmethoden wie Interviews, Dokumentensichtung oder Systemtests. Der Auditumfang wird vor Beginn des Audits klar definiert, um den Ablauf gezielt zu planen und die Ergebnisse nachvollziehbar zu dokumentieren."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "dd98f0ad-e27d-44dd-8a44-1fee1657b714"
+  }
+ ]
+}

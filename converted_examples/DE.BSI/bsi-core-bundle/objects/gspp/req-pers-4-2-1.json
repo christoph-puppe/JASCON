@@ -1,0 +1,87 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERS.4.2.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERS.4.2.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Produktspezifische Schulungen und Sensibilisierungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Personal für Administrierende SOLLTE produktspezifische Schulungen zum Umgang mit administrativen Werkzeugen bei Neuzugang und dem Einsatz neuer IT-Produkte ausführen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "ausführen",
+     "result": "produktspezifische Schulungen zum Umgang mit administrativen Werkzeugen",
+     "result-specification": "bei Neuzugang und dem Einsatz neuer IT-Produkte",
+     "target-object-categories": [
+      "Administrierende"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Schulungsplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 2
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ziel ist es, den sicheren Umgang mit den in der Institution genutzten administrativen Werkzeugen zu erlernen (z.B. dem genutzten Verzeichnisdienst, Kommandozeilenbefehlen der genutzten Betriebssysteme, Wireshark oder Netzmanagement-Software). Hierzu gehört die Bedienung der jeweiligen Werkzeuge, Aspekte der sicheren Nutzung wie Verschlüsselung und Authentifizierung, die Vermeidung typischer Fehler, sowie der Umgang mit typischen Problemstellungen (Bugfixing). Verfügt die jeweilige Person bereits nachweislich über die Kenntnisse (z.B. passendes Zertifikat) so ist die Schulung für diese Person entbehrlich."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "5fa63606-a580-4995-a17e-41f05197ee2c"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.2"
+  }
+ ]
+}

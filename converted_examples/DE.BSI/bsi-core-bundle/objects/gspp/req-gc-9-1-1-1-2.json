@@ -1,0 +1,64 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.9.1.1.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vorspracherecht"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS das direkte Vorspracherecht des Informationssicherheitsbeauftragten bei der Institutionsleitung verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "das direkte Vorspracherecht des Informationssicherheitsbeauftragten bei der Institutionsleitung"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Tätigkeits- & Rollenbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Das Vorspracherecht trägt dazu bei, dass die Institutionsleitung ein vollständiges und unverfälschtes Bild über den Stand der Informationssicherheit erhält. Ohne dieses direkte Vorsprachrecht kann es passieren, dass andere Organisationseinheiten sicherheitsrelevante Informationen in der Weitergabe beeinflussen. Zum Beispiel könnte ein ISB dem Leitungsstab zugeordnet sein."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "2daf1f95-862a-4b5e-9d63-90723384a0df"
+  }
+ ]
+}

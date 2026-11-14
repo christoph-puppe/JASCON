@@ -16,50 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für Standorte SOLLTE Zutritte im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements authentifizieren."
    }
-  },
-  {
-   "id": "GEB.3.3.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN Zutritte durch {param:geb.3.3.1-prm1} im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements authentifizieren."
-   },
-   "parameters": [
-    {
-     "name": "geb.3.3.1-prm1",
-     "type": "string",
-     "label": "einen automatiserten Mechanismus"
-    }
-   ]
-  },
-  {
-   "id": "GEB.3.3.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN Zutritte und Austritte mit Identität und Zeitpunkt dokumentieren."
-   }
-  },
-  {
-   "id": "GEB.3.3.3",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte SOLLTE Besuche durch {param:geb.3.3.3-prm1} autorisieren."
-   },
-   "parameters": [
-    {
-     "name": "geb.3.3.3-prm1",
-     "type": "string",
-     "label": "eine zuständige Person oder Rolle"
-    }
-   ]
   }
  ],
  "facets": {
@@ -72,51 +28,12 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.3.3.1": {
-     "action": "authentifizieren",
-     "result": "Zutritte durch {{einen automatiserten Mechanismus}}",
-     "result-specification": "im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements",
-     "target-object-categories": [
-      "Standorte"
-     ]
-    },
-    "GEB.3.3.2": {
-     "action": "dokumentieren",
-     "result": "Zutritte und Austritte",
-     "result-specification": "mit Identität und Zeitpunkt",
-     "target-object-categories": [
-      "Standorte"
-     ]
-    },
-    "GEB.3.3.3": {
-     "action": "autorisieren",
-     "result": "Besuche",
-     "result-specification": "durch {{eine zuständige Person oder Rolle}}",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Prozess Gebäudemanagement"
-     ]
-    },
-    "GEB.3.3.1": {
-     "required-documentation": [
-      "Prozess Gebäudemanagement"
-     ]
-    },
-    "GEB.3.3.2": {
-     "required-documentation": [
-      "Audit Log"
-     ]
-    },
-    "GEB.3.3.3": {
      "required-documentation": [
       "Prozess Gebäudemanagement"
      ]
@@ -136,42 +53,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.24",
       "https://ns.bsi.bund.de/gspp/threat/G-0.19"
      ]
-    },
-    "GEB.3.3.1": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.44",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.24",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
-     ]
-    },
-    "GEB.3.3.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.44",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.24"
-     ]
-    },
-    "GEB.3.3.3": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.44",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.24",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
-     ]
     }
    }
   },
@@ -181,27 +62,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "GEB.3.3.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Zugangskontrollanlage",
-     "alt-identifier": "5bc938de-7123-4793-8ba4-3183c2264acf"
-    },
-    "GEB.3.3.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Dokumentation von Zutritten",
-     "alt-identifier": "a0b89dd6-4aec-41bd-b4bf-01e704072ed5"
-    },
-    "GEB.3.3.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Besucheranmeldung",
-     "alt-identifier": "ce537201-8949-41a6-855b-c7671d226853"
     }
    }
   },
@@ -211,31 +71,6 @@
      "guidance": {
       "de": "Der Zweck der Authentifizierung von Zutritten liegt in der grundlegenden Absicherung physischer Zugänge gegen unbefugte Nutzung. Dies kann verhindern, dass Unbefugte Zugang zu sensiblen Bereichen oder Informationen erhalten. Ohne angemessene Zutrittskontrolle könnte beispielsweise ein nicht autorisierter Besucher in einen Serverraum gelangen und dort Hardware manipulieren, Datenträger entwenden oder Netzwerkkabel umstecken. Ebenso könnte ein ehemaliger Mitarbeiter ohne wirksame Authentifizierung weiterhin auf Systeme zugreifen und vertrauliche Daten entwenden oder geschäftskritische Informationen kompromittieren.  Bei der Umsetzung kann ein mehrstufiger Ansatz verfolgt werden, der verschiedene Authentifizierungsfaktoren kombiniert: Wissen (z.B. PIN-Codes, Passwörter), Besitz (z.B. Chipkarten, Tokens, Schlüssel) und biometrische Merkmale (z.B. Fingerabdruck, Gesichtserkennung). Die Stärke der Authentifizierung kann dabei an die Schutzbedürftigkeit des zu schützenden Bereichs angepasst werden – für hochsensible Bereiche können Zwei- oder Mehr-Faktor-Authentifizierungen implementiert werden. Als ergänzende Maßnahme kann ein Monitoring der Zutrittsereignisse eingerichtet werden, das ungewöhnliche Zugriffsversuche erkennt und meldet. Zudem kann die regelmäßige Überprüfung und Aktualisierung der Zutrittsberechtigungen dazu beitragen, dass nur aktuell berechtigte Personen Zugang erhalten. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
      }
-    },
-    "GEB.3.3.1": {
-     "guidance": {
-      "de": "Der Einsatz einer automatischen Zugangskontrollanlage zur Authentifizierung von Personen dient primär dem Schutz von sensiblen Bereichen, vertraulichen Informationen und kritischer Infrastruktur. Durch diese Maßnahme kann sichergestellt werden, dass nur autorisierte Personen Zutritt zu geschützten Bereichen erhalten, wodurch das Risiko von Industriespionage, Datendiebstahl oder Sabotage erheblich reduziert werden kann. Ohne eine solche Kontrolle könnte es beispielsweise zu unbefugtem Zutritt durch Fremde kommen, die sich als Mitarbeiter ausgeben, oder zu einem \"Tailgating\"-Vorfall, bei dem Unbefugte autorisierten Personen unbemerkt folgen und sich so Zugang verschaffen.  Bei der Implementierung einer automatischen Zugangskontrollanlage kann eine mehrfaktorielle Authentifizierung in Betracht gezogen werden, die auf einer Kombination aus Besitz (z.B. Chipkarte, Token), Wissen (PIN-Code, Passwort) und/oder biometrischen Merkmalen (Fingerabdruck, Gesichtserkennung) basiert. Die Zugangsrechte können granular nach Personengruppen, Zeitfenstern und Bereichen differenziert werden, was die Sicherheit weiter erhöht. Für eine effektive Umsetzung kann die regelmäßige Überprüfung der Protokolle der Zugangskontrollanlage auf ungewöhnliche Aktivitäten hilfreich sein, ebenso wie regelmäßige Sensibilisierungsmaßnahmen für Mitarbeiter bezüglich der korrekten Nutzung der Anlage und der Vermeidung von Sicherheitslücken wie dem gemeinsamen Nutzen von Zugangsmitteln. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
-     }
-    },
-    "GEB.3.3.2": {
-     "guidance": {
-      "de": "Im Kontext dieser Anforderung bedeutet Identität die eindeutige Zuordnung einer Person zu einem Zutritt oder Austritt, etwa durch Namensangabe, Personalnummer oder ein elektronisches Identifikationsmerkmal wie eine Chipkarte. Der Zeitpunkt ist die präzise Erfassung von Datum und Uhrzeit, an dem ein Zutritts- oder Austrittsvorgang stattfindet. Diese beiden Informationen können so kombiniert werden, dass nachvollziehbar wird, wer zu welchem Zeitpunkt ein Gebäude oder einen bestimmten Bereich betreten oder verlassen hat. Dies gilt sowohl für Mitarbeitende als auch für Besuchende. Für die Umsetzung kann eine Institution z.B. elektronische Zutrittskontrollsysteme einsetzen, die beim Karten- oder Transpondereinsatz automatisch Identität und Zeitpunkt speichern. Auch ein biometrisches Terminal kann die Anforderung erfüllen, wenn es die Daten mit Zeitstempel dokumentiert. Als einfachere Variante kann ein digital geführtes Besucherbuch genutzt werden, in das Namen und Uhrzeit bei Ein- und Austritt eingetragen werden. Eine Institution kann ergänzend festlegen, dass Daten regelmäßig exportiert und manipulationssicher archiviert werden, sodass spätere Prüfungen möglich sind. Hilfreich kann zudem sein, bei Zutrittskarten eine Schnittstelle zur HR-Verwaltung einzurichten, damit Identitäten bei Austritt von Mitarbeitenden automatisch deaktiviert werden und die Dokumentation lückenfrei bleibt. Diese Protokolle dienen als wichtige Grundlage für forensische Analysen und können zur Aufklärung von Diebstahl, Sabotage oder unbefugtem Datenzugriff beitragen."
-     }
-    },
-    "GEB.3.3.3": {
-     "guidance": {
-      "de": "Der Begriff „Besuche“ bezeichnet in diesem Kontext physische Zutritte externer Personen wie Dienstleister, Lieferanten oder Gäste, die sich nicht dauerhaft im Gebäude aufhalten und daher besondere Anforderungen an die Zutrittsregelung stellen. Die Autorisierung von Besuchen meint hier, dass ein Besuch vor Betreten der Räumlichkeiten durch eine verantwortliche Stelle vorab geprüft, freigegeben und dokumentiert wird – dies kann formell (z. B. digitaler Antrag) oder informell (z. B. Genehmigung per E-Mail) erfolgen. Der Zweck dieser Vorschrift liegt darin, unkontrollierten Zutritt und damit verbundene Risiken zu verhindern: Unangemeldete Besucher könnten beispielsweise unbefugt vertrauliche Informationen einsehen oder technische Anlagen manipulieren. Eine klare Autorisierung kann dagegen sicherstellen, dass nur berechtigte Personen Zutritt erhalten und gleichzeitig nachvollziehbar bleibt, wer sich wann und aus welchem Grund im Gebäude aufgehalten hat. Für die Umsetzung kann eine Institution etwa ein digitales Besuchermanagementsystem einsetzen, das Einladungen erstellt, Genehmigungen einholt und Einlasscodes zeitlich begrenzt vergibt. Alternativ kann ein analoges Verfahren genutzt werden, bei dem Besucherausweise am Empfang ausgegeben und gegen Vorlage eines Ausweisdokuments registriert werden. Um Warteschlangen am Empfang zu verringern, kann die Autorisierung des Besuchs auch im Voraus abgewickelt werden, z.B. über eine mobile QR-Vorregistrierung mit Verifizierung der Identität über den digitalen Ausweis. Eine einfache, aber wirksame Maßnahme kann auch die Vorabstimmung über Besuchslisten sein, die tagesaktuell an Empfang oder Sicherheitspersonal übermittelt werden."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "geb.3.3.1-prm1": {
-     "alt-identifier": "5bc938de-7123-4793-8ba4-3183c2264acf"
-    },
-    "geb.3.3.3-prm1": {
-     "alt-identifier": "ce537201-8949-41a6-855b-c7671d226853"
     }
    }
   }

@@ -8,59 +8,59 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.1",
-   "sequence": 2070
+   "sequence": 3360
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.2",
-   "sequence": 2080
+   "sequence": 3370
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.3",
-   "sequence": 2090
+   "sequence": 3380
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.4",
-   "sequence": 2100
+   "sequence": 3390
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.5",
-   "sequence": 2110
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-5",
+   "sequence": 3430
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.6",
-   "sequence": 2120
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-6",
+   "sequence": 3480
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.7",
-   "sequence": 2130
+   "sequence": 3490
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.8",
-   "sequence": 2140
+   "sequence": 3500
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.9",
-   "sequence": 2150
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-9",
+   "sequence": 3530
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10",
-   "sequence": 2160
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-10",
+   "sequence": 3620
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.11",
-   "sequence": 2170
+   "sequence": 3630
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.12",
-   "sequence": 2180
+   "sequence": 3640
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.13",
-   "sequence": 2190
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-13",
+   "sequence": 3670
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.14",
-   "sequence": 2200
+   "sequence": 3680
   }
  ],
  "label": "5",

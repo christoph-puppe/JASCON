@@ -1,0 +1,97 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.7.3.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Zugelassene Löschanwendungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets für Daten KANN die Daten durch {param:asst.7.3.3-prm1} löschen."
+   },
+   "parameters": [
+    {
+     "name": "asst.7.3.3-prm1",
+     "type": "string",
+     "label": "eine vom BSI zugelassene Löschanwendung"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "löschen",
+     "result": "die Daten durch {{eine vom BSI zugelassene Löschanwendung}}",
+     "target-object-categories": [
+      "Daten"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "0",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.38"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Für eine aktuelle Liste der zugelassenen Löschanwendungen siehe BSI-Schrift 7164: Liste der zugelassenen IT-Sicherheitsprodukte und -systeme. Sicheres Löschen bedeutet, Daten so zu entfernen, dass sie mit vertretbarem Aufwand (auch forensisch) nicht mehr rekonstruierbar sind. Je nach Medium geschieht das z. B. durch verifizierbares Überschreiben, kryptografisches Löschen (Schlüsselvernichtung) oder physische Zerstörung (inklusive zugehöriger Metadaten, Caches und Datensicherungen)."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "asst.7.3.3-prm1": {
+     "alt-identifier": "2fe24be6-1c6b-4a72-8f40-263e1cffc815"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "2fe24be6-1c6b-4a72-8f40-263e1cffc815"
+  }
+ ]
+}

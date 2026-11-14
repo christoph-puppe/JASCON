@@ -1,0 +1,78 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "STM.2.1.4.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Konsolidierung und Redundanzprüfung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Strukturmodellierung MUSS eine Konsolidierung und Redundanzprüfung des Anforderungspakets ausführen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "ausführen",
+     "result": "eine Konsolidierung und Redundanzprüfung des Anforderungspakets"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Anforderungspaket"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Wenn Anforderungen durch mehrere vererbte Zielobjekte identisch auf ein Asset wirken, werden sie nur einmal geführt. So bleibt das Anforderungspaket schlank und umsetzbar. Ergebnis ist pro Asset ein vollständiger Satz an Anforderungen, der alle organisatorischen, technischen, personellen und infrastrukturellen Vorgaben enthält, die zur Erreichung des Sicherheitsniveaus erforderlich sind. Diese Anforderungen ergänzen das Anforderungspaket."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "2bb937c6-f260-4742-a0d3-0fbc87dc37f0"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.1"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.5"
+  }
+ ]
+}

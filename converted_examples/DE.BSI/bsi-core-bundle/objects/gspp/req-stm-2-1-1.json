@@ -1,0 +1,65 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/STM.2.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "STM.2.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "ISMS-Anforderungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Strukturmodellierung MUSS alle Anforderungen der ISMS-Praktiken auf den vorliegenden Informationsverbund modellieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "modellieren",
+     "result": "alle Anforderungen der ISMS-Praktiken",
+     "result-specification": "auf den vorliegenden Informationsverbund"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Anforderungspaket"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Neben den zielobjektkategoriegebundenen Anforderungen enthält der GS++ auch Anforderungen ohne explizite Zuordnung zu Zielobjektkategorien. Diese werden im Anforderungspaket ergänzend berücksichtigt. Für die Anforderungen der ISMS-Praktiken (GC, STM, PERF, VRB, UMS) gilt dabei Folgendes: Die Anforderungen der ISMS-Praktiken sind übergreifend und keiner einzelnen Zielobjektkategorie zugewiesen. Sie bauen den PDCA-Zyklus des Managementsystems auf und gelten deshalb einmalig für den gesamten Informationsverbund. Alle Anforderungen der ISMS-Praktiken werden ohne weitere Selektion auf den Informationsverbund modelliert. Sie werden als „verbundweite Anforderungen“ im Anforderungspaket geführt, da sie Governance-, Steuerungs-, Kontroll- und Verbesserungsprozesse definieren."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "92bc2497-1440-4718-b35b-9648b3efc4fd"
+  }
+ ]
+}

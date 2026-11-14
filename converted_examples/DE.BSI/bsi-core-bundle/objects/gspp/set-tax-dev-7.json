@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.7.1",
-   "sequence": 8070
+   "sequence": 12810
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.7.2",
-   "sequence": 8080
+   "sequence": 12820
   }
  ],
  "label": "7",

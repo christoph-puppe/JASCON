@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-1",
-   "sequence": 6340
+   "sequence": 10200
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-2",
-   "sequence": 6410
+   "sequence": 10390
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-3",
-   "sequence": 6430
+   "sequence": 10430
   }
  ],
  "label": "REA",

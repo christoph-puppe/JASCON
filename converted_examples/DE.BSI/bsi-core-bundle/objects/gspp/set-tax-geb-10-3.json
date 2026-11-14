@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/geb-10-3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Wasserschutz"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.3",
+   "sequence": 5690
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.3.1",
+   "sequence": 5700
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.3.2",
+   "sequence": 5710
+  }
+ ]
+}

@@ -16,16 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für Standorte SOLLTE eine norm- und bedarfsgerechte Datenverkabelung installieren."
    }
-  },
-  {
-   "id": "GEB.9.5.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte SOLLTE eine geschützte Kabelverlegung installieren."
-   }
   }
  ],
  "facets": {
@@ -37,24 +27,12 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.9.5.1": {
-     "action": "installieren",
-     "result": "eine geschützte Kabelverlegung",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.9.5.1": {
      "required-documentation": [
       "Gebäudedokumentation"
      ]
@@ -71,15 +49,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "GEB.9.5.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -89,13 +58,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "GEB.9.5.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Physisch geschützte Verlegung",
-     "alt-identifier": "71c569f6-99e4-4fd4-8648-84b9c8a0539e"
     }
    }
   },
@@ -104,11 +66,6 @@
     "smt": {
      "guidance": {
       "de": "Normgerecht ist eine Datenverkabelung, wenn Normen für Verkabelungssysteme wie DIN EN 50173 und DIN EN 50174, sowie bei Glasfaser DIN EN 60794 eingehalten werden. Sie ist auch bedarfsgerecht, wenn die verwendete Verkabelung ausreicht, um festgelegte Bandbreite und Antwortzeit zu erreichen. Das betrifft sowohl zentrale Netzanschlüsse, als auch Unterverteiler und die Zuleitung in die einzelnen Räume.  Zur Umsetzung ist es sinnvoll ein Kabelverlegungsdiagramm und eine standortspezifische Inspektionscheckliste zu erstellen oder erstellen zu lassen."
-     }
-    },
-    "GEB.9.5.1": {
-     "guidance": {
-      "de": "Freigelegte Glasfaser- oder Kupferleitungen könnten angezapft oder durchtrennt werden.  Die Implementierung kann z.B. Erfolgen durch: Das Verlegen von Backbone-Kabeln in Metallrohren oder verschlossenen Kabelschränken; manipulationssichere Siegel an Stellen, an denen die Kabel die Sicherheitsbereiche verlassen."
      }
     }
    }

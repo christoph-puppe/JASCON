@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.2.1.4.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kompatibilität des Datenmanagementmodells"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe SOLLTE den Bedarf für die Kompatibilität im Hinblick auf das Datenmanagementmodell dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "den Bedarf für die Kompatibilität",
+     "result-specification": "im Hinblick auf das Datenmanagementmodell",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Unter „Kompatibilität im Hinblick auf das Datenmanagementmodell“ ist im Kontext dieser Anforderung die fachliche und technische Übereinstimmung beschaffter Produkte oder Dienstleistungen mit den in der Institution etablierten Regeln zur Strukturierung, Klassifizierung, Speicherung und Verarbeitung von Daten zu verstehen. Das Datenmanagementmodell beschreibt dabei unter anderem Datenkategorien (z.B. „confidentiality level“), Metadatenstrukturen, Datenformate, Lebenszyklusregeln („data lifecycle management“) sowie Integrationsvorgaben für Schnittstellen und Austauschformate. Kompatibilität meint hier insbesondere, dass neue IT-Systeme oder Anwendungen die definierten Datenformate, Klassifizierungsmerkmale, Aufbewahrungs- und Löschregeln sowie Anforderungen an Datenlokation („data residency“) technisch unterstützen oder abbilden können, ohne dass Medienbrüche, manuelle Nacharbeiten oder unkontrollierte Parallelstrukturen entstehen. Die Dokumentation dieses Bedarfs kann dazu beitragen, dass bei Beschaffungen von Anfang an Transparenz über notwendige Integrations- und Datenanforderungen entsteht und spätere kostenintensive Anpassungen vermieden werden. Ohne eine solche Berücksichtigung könnte es zu inkonsistenten Datenbeständen, fehlender Durchgängigkeit von Klassifizierungen oder zu unzulässigen Datenübertragungen in nicht vorgesehene Speicherorte kommen, was Integritäts- und Verfügbarkeitsrisiken erhöht. Eine frühzeitige Festlegung kann hingegen eine konsistente Datenarchitektur und nachvollziehbare Datenflüsse unterstützen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "f285248f-ba16-4748-80ac-a613dc09e448"
+  }
+ ]
+}

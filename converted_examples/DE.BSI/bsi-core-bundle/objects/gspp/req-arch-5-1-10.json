@@ -1,0 +1,104 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.5.1.10",
+ "lifecycle": "active",
+ "title": {
+  "de": "Webfilterung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Externe Netzanschlüsse SOLLTE den Zugriff auf Webinhalte anhand von {param:arch.5.1.10-prm1} einschränken."
+   },
+   "parameters": [
+    {
+     "name": "arch.5.1.10-prm1",
+     "type": "string",
+     "label": "Kriterien"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "einschränken",
+     "result": "den Zugriff auf Webinhalte",
+     "result-specification": "anhand von {{Kriterien}}",
+     "target-object-categories": [
+      "Externe Netzanschlüsse"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Firewallregeln"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.14",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 2
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Das World Wide Web ist für zahlreiche Geschäftsprozesse essenziell. Andererseits wird das Web von Angreifern auch für die Verbreitung von illegalen Inhalten, Schadprogrammen oder Phishing verwendet. Durch unkontrollierten Webzugriff könnten etwa Schadcode, Phishing oder Datenabfluss in die Institution gelangen. Kriterien meint hier die festgelegten Maßstäbe, nach denen externe Verbindungen zu Webinhalten gefiltert oder eingeschränkt werden. Im Fachjargon spricht man von filtering criteria oder access control policies. Solche Kriterien können beispielsweise Inhaltskategorien (z. B. Glücksspiel, soziale Netzwerke, Streaming), Reputationsbewertungen von Domains (z. B. „malicious“ oder „suspicious“ laut Threat-Intelligence-Feeds), oder technische Eigenschaften (z. B. bekannte IP-Ranges, Länderzugehörigkeit, verwendete Protokolle/Ports, Signaturen) sein. Sinnvoll ist eine Kombination verschiedener Kriterien. Die Anforderung kann über Filterung im Browser, auf Systemen oder an Netzgrenzen umgesetzt werden (z.B. durch Firewalls, Sicherheitsproxies oder VPN-Gateways)."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "arch.5.1.10-prm1": {
+     "alt-identifier": "327ca27d-e60f-47d1-8840-5bcb09340030"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "327ca27d-e60f-47d1-8840-5bcb09340030"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.7"
+  }
+ ]
+}

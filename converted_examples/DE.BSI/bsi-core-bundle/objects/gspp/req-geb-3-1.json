@@ -16,26 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für Standorte SOLLTE Zutrittspunkte auf unbefugte Zutritte überwachen."
    }
-  },
-  {
-   "id": "GEB.3.1.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN Zutritte per Video überwachen."
-   }
-  },
-  {
-   "id": "GEB.3.1.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN das Mitführen von Gegenständen überwachen."
-   }
   }
  ],
  "facets": {
@@ -47,37 +27,12 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.3.1.1": {
-     "action": "überwachen",
-     "result": "Zutritte",
-     "result-specification": "per Video",
-     "target-object-categories": [
-      "Standorte"
-     ]
-    },
-    "GEB.3.1.2": {
-     "action": "überwachen",
-     "result": "das Mitführen von Gegenständen",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Prozess Gebäudemanagement"
-     ]
-    },
-    "GEB.3.1.1": {
-     "required-documentation": [
-      "Prozess Gebäudemanagement"
-     ]
-    },
-    "GEB.3.1.2": {
      "required-documentation": [
       "Prozess Gebäudemanagement"
      ]
@@ -97,29 +52,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.24",
       "https://ns.bsi.bund.de/gspp/threat/G-0.19"
      ]
-    },
-    "GEB.3.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.44",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.24"
-     ]
-    },
-    "GEB.3.1.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.44",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.24",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
-     ]
     }
    }
   },
@@ -129,20 +61,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 3
-    },
-    "GEB.3.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 4,
-     "title": "Videoüberwachung",
-     "alt-identifier": "842a359b-f8fe-4c81-82e3-50d949dc4bbd"
-    },
-    "GEB.3.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Überprüfung mitgeführter Gegenstände",
-     "alt-identifier": "012da5ef-7ee9-4bf2-bb39-eebd2ae7b17b"
     }
    }
   },
@@ -151,16 +69,6 @@
     "smt": {
      "guidance": {
       "de": "Eine kontinuierliche Überwachung der Zugangsmöglichkeiten, z.B. verschlossener Türen und Fenster an der Gebäudeaußenseite, verhindert, dass sich Unbefugte Zutritt verschaffen. Der hierzu erforderliche Personalbedarf hängt von Gebäudegröße und Schutzbedarf ab. Um den für eine kontinuierliche Überwachung erforderlichen Personalbedarf wirtschaftlich zu decken ist es zweckmäßig, Unterstützungssysteme wie Videokameras oder Einbruchsalarme einzusetzen. Die Umsetzung kann z.B. erfolgen durch Umzäunung, Kameraüberwachung, Bewegungsmelder und einen Wachdienst."
-     }
-    },
-    "GEB.3.1.1": {
-     "guidance": {
-      "de": "Die Auswertung der Videoaufzeichnungen kann je nach Risikoprofil und Geschäftsprozessen anlassbezogen und stichpunktartig, kontinuierlich durch Wachpersonal oder durch Verwendung von KI-Videoanalyse, z.B. zur Erkennung von „tail-gating“ oder zurückgelassenen Gegenständen, erfolgen. Hier besteht ein enger Zusammenhang zu Compliance-Verpflichtungen zum Datenschutz (z.B. Informationspflichten), insbesondere im öffentlichen Raum."
-     }
-    },
-    "GEB.3.1.2": {
-     "guidance": {
-      "de": "Die Überwachung des Mitführens von Gegenständen (z.B. am Empfang) kann an Standorten mit besonderen Sicherheitsrisiken dazu beitragen, unerlaubtes Einschleusen von Diebstahlwerkzeugen, schädlichen Datenträgern oder gefährlichen Gegenständen zu verhindern. Durch eine stichprobenartige Kontrolle von Taschen, Rucksäcken oder Paketlieferungen kann erkannt werden, ob unbeaufsichtigt Materialien wie USB‑Sticks, externe Festplatten oder andere Speichermedien ins Gebäude gelangen, die vertrauliche Informationen unbemerkt abziehen könnten. Ebenso kann das Verfahren auf Metallgegenstände oder Flüssigkeiten ausgeweitet werden, um das Risiko von Diebstahl, Sabotage oder physischen Angriffen zu reduzieren. Beispielsweise könnte ein nicht registrierter Besucher eine Videokamera einschleusen und damit sensible Produktionsprozesse filmen, oder ein unbeaufsichtigter Paketbote könnte Malware‑belastete Hardware mitliefern – durch die Kontrolle am Empfang kann solchen Szenarien vorgebeugt werden.  Die Umsetzung kann stichprobenartig oder durchgehend erfolgen: Einmal täglich kann eine Auswahl von Taschen stichprobenartig geöffnet und mit einer Liste erlaubter Gegenstände abgeglichen werden; hierbei kann ein einfaches Check‑in‑Formular eingesetzt werden, in das Besucherinnen und Besucher freiwillig ihre mitgeführten Gegenstände eintragen können. Ergänzend kann ein abschließender Scan mit einem Metalldetektor oder ein kurzer Blick in unverschlossene Fächer erfolgen, was den Aufwand gering hält und den Durchfluss am Empfang weniger beeinträchtigt. Hier besteht ein enger Bezug zu den Persönlichkeitsrechten der Betroffenen. Eine klar kommunizierte Hausordnung oder ein Informationsblatt kann helfen die Maßnahmen zu erläutern, sodass Besucher erkennen, dass die Kontrollen dem Schutz aller Beteiligten dienen. Gegenstände, die vorübergehend nicht mitgeführt werden dürfen, können gegen Quittung sicher deponiert werden. Auf diese Weise entsteht eine nachvollziehbare Historie, die im Fall eines Vorfalls als Nachweis dienen kann."
      }
     }
    }

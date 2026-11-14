@@ -1,0 +1,92 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.4.5.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.4.5.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Mandantentrennung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Outsourcing KANN eine festgelegte Mandantentrennung vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "eine festgelegte Mandantentrennung",
+     "target-object-categories": [
+      "Outsourcing"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.14",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.29"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine Mandantentrennung bezeichnet die Trennung schützenswerter Daten und Verarbeitungskontexte zwischen verschiedenen Mandanten, also den Kunden des Anbieters. Eine festgelegte Mandatentrennung meint hier, dass der Anbieter Informationen über die konkret von ihm zur Mandantentrennung getroffenen Maßnahmen bereitstellt. Hierzu gehören insbesondere Informationen darüber, welche Daten oder Funktionen als mandantenabhängige oder mandantenübergreifende Daten behandelt werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "ffafe5ae-04e1-4aef-ae3f-2a3eeb193743"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.11"
+  }
+ ]
+}

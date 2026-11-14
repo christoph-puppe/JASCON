@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.1",
-   "sequence": 7840
+   "sequence": 12580
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.2",
-   "sequence": 7850
+   "sequence": 12590
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.3",
-   "sequence": 7860
+   "sequence": 12600
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.4",
-   "sequence": 7870
+   "sequence": 12610
   }
  ],
  "label": "3",

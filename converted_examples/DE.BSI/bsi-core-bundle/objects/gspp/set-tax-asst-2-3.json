@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/asst-2-3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Inventar der Anwendungen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3",
+   "sequence": 1680
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3.1",
+   "sequence": 1690
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-2-3-2",
+   "sequence": 1720
+  }
+ ]
+}

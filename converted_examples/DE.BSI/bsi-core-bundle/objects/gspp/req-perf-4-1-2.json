@@ -1,0 +1,65 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.4.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Geänderte Rahmenbedingungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation SOLLTE veränderte Rahmenbedingungen mit Auswirkungen auf das Informationssicherheitsmanagement als Ergebnis der Überprüfung in einem Managementbericht dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "veränderte Rahmenbedingungen mit Auswirkungen auf das Informationssicherheitsmanagement",
+     "result-specification": "als Ergebnis der Überprüfung in einem Managementbericht"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Managementbericht"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 1
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Ergebnisse der Überprüfung der Rahmenbedingungen – wie rechtliche, organisatorische, technische oder wirtschaftliche Veränderungen – müssen systematisch erfasst und auf ihre Auswirkungen auf das ISMS bewertet werden. Relevante Änderungen sind in der Managementbewertung einzubeziehen, da sie Einfluss auf die Risikobetrachtung und erforderliche Anforderungen bzw. Sicherheitsmaßnahmen haben können. Die Ergebnisse dieser Überprüfungen basieren auf den vorab erstellten Auditberichten sowie der geforderten Eignungsprüfung."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "a45c5319-e786-4c30-868e-84416d2f0fe4"
+  }
+ ]
+}

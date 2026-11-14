@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.4.1",
-   "sequence": 2990
+   "sequence": 5130
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.4.2",
-   "sequence": 3000
+   "sequence": 5140
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.4.3",
-   "sequence": 3010
+   "sequence": 5150
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.4.4",
-   "sequence": 3020
+   "sequence": 5160
   }
  ],
  "label": "4",

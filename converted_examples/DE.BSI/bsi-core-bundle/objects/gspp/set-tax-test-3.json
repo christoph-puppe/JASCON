@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1",
-   "sequence": 2650
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/test-3-1",
+   "sequence": 4620
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.2",
-   "sequence": 2660
+   "sequence": 4630
   }
  ],
  "label": "3",

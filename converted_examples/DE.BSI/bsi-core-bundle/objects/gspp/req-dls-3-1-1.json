@@ -1,0 +1,109 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DLS.3.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DLS.3.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Audit oder Zertifikat"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Dienstleistersteuerung für Outsourcing SOLLTE die Einhaltung der Sicherheitsvorgaben anhand eines {param:dls.3.1.1-prm1} {param:dls.3.1.1-prm2} überprüfen."
+   },
+   "parameters": [
+    {
+     "name": "dls.3.1.1-prm1",
+     "type": "string",
+     "label": "Audits, Zertifikates oder vergleichbaren Sicherheitsnachweises"
+    },
+    {
+     "name": "dls.3.1.1-prm2",
+     "type": "string",
+     "label": "regelmäßig"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überprüfen",
+     "result": "die Einhaltung der Sicherheitsvorgaben anhand eines {{Audits, Zertifikates oder vergleichbaren Sicherheitsnachweises}}",
+     "result-specification": "{{regelmäßig}}",
+     "target-object-categories": [
+      "Outsourcing"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Auslagerungsregister"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.29",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.11",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "„Audit“ bezeichnet in diesem Zusammenhang eine systematische, unabhängige Überprüfung der vereinbarten Sicherheitsmaßnahmen durch fachkundige Dritte, beispielsweise in Form interner oder externer Prüfungen mit dokumentierten Ergebnissen. Ein „Zertifikat“ ist ein formaler Nachweis einer akkreditierten Prüfstelle, dass ein Dienstleister ein anerkanntes Sicherheitsframework eingehalten hat, wie etwa IT-Grundschutz oder ISO/IEC 27001. Ein „vergleichbarer Sicherheitsnachweis“ kann auch ein Prüfbericht, ein BSI C5-Testat oder eine Bestätigung unabhängiger Gutachter sein, sofern er inhaltlich nachvollziehbar darlegt, dass definierte Sicherheitsanforderungen wirksam umgesetzt wurden. Ohne Nachweise könnte ein Dienstleister vereinbarte Sicherheitsmaßnahmen vernachlässigen, was zu unbemerkten Datenabflüssen, unzureichendem Patch-Management oder Ausfällen durch mangelhafte Notfallvorsorge führen könnte. Durch nachvollziehbare Prüfungen kann dagegen erreicht werden, dass Sicherheitsstandards eingehalten werden, Schwachstellen frühzeitig sichtbar werden und ein belastbares Vertrauen in die Dienstleisterbeziehung entsteht."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "dls.3.1.1-prm1": {
+     "alt-identifier": "12c2c250-86b8-46a0-bccd-d0b2f59b6bae"
+    },
+    "dls.3.1.1-prm2": {
+     "alt-identifier": "12c2c250-86b8-46a0-bccd-d0b2f59b6bae"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "12c2c250-86b8-46a0-bccd-d0b2f59b6bae"
+  }
+ ]
+}

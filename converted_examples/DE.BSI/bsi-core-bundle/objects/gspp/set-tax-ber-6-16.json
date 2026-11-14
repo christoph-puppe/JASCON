@@ -1,0 +1,38 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/ber-6-16",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vorgaben für die Schlüsselbeglaubigung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16",
+   "sequence": 8540
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.1",
+   "sequence": 8550
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.2",
+   "sequence": 8560
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.3",
+   "sequence": 8570
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.4",
+   "sequence": 8580
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.5",
+   "sequence": 8590
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.6",
+   "sequence": 8600
+  }
+ ]
+}

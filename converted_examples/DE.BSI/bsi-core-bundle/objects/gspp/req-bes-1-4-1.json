@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.1.4.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.1.4.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Freigabe der Strategie"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Outsourcing SOLLTE die Strategie durch die Institutionsleitung autorisieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "autorisieren",
+     "result": "die Strategie",
+     "result-specification": "durch die Institutionsleitung",
+     "target-object-categories": [
+      "Outsourcing"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Outsourcing Strategie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ziel ist es sicherzustellen, dass Auslagerungen dem Risikoverständnis, den gesetzlichen Rahmenbedingungen und den geschäftlichen Zielen entsprechen und Verantwortlichkeiten eindeutig verankert sind. Fehlende oder uneinheitliche Leitentscheidungen könnten zu Schattenbeschaffungen, regulatorischen Beanstandungen, Konzentrationsrisiken oder unkontrollierten Datenabflüssen führen; etwa könnte ein Fachbereich ohne strategischen Rahmen einen Dienst in einer problematischen Jurisdiktion beauftragen oder mehrere kritische Leistungen bei einem einzigen Anbieter bündeln, was bei dessen Ausfall zu erheblichen Betriebsunterbrechungen führen könnte."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "235c1c4a-c202-4d06-8391-254cac868ec2"
+  }
+ ]
+}

@@ -1,0 +1,97 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.10.5.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.10.5.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Automatisierte Überprüfung der Konfiguration"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für Anwendungen KANN die Überprüfung der Konfiguration durch {param:konf.10.5.1-prm1} aktivieren."
+   },
+   "parameters": [
+    {
+     "name": "konf.10.5.1-prm1",
+     "type": "string",
+     "label": "einen automatisierten Mechanismus"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "aktivieren",
+     "result": "die Überprüfung der Konfiguration durch {{einen automatisierten Mechanismus}}",
+     "target-object-categories": [
+      "Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Detektions-Konzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.31",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.21",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.22"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die automatische Auditierung der Systemkonfiguration ermöglicht eine kontinuierliche und effiziente Überprüfung, ob IT-Systeme sicher und regelkonform konfiguriert sind. Dabei wird die aktuelle Konfiguration automatisiert mit vordefinierten Soll-Vorgaben (etwa unternehmensinternen Richtlinien oder externen Benchmarks wie denen des Center for Internet Security (CIS)) abgeglichen. Dies ist besonders sinnvoll, da manuelle Prüfungen fehleranfällig, zeitaufwändig und in großen Infrastrukturen kaum durchführbar sind. Automatisierte Audits erhöhen die Transparenz, erkennen Abweichungen frühzeitig und erleichtern die Einhaltung von Compliance-Vorgaben. So wird die Angriffsfläche durch fehlerhafte oder unsichere Einstellungen erheblich reduziert."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "konf.10.5.1-prm1": {
+     "alt-identifier": "9e53c0f8-53e0-439b-a4ce-ee321f55ac52"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "9e53c0f8-53e0-439b-a4ce-ee321f55ac52"
+  }
+ ]
+}

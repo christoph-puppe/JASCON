@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/arch-5-1-10",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Webfilterung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10",
+   "sequence": 7330
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10.1",
+   "sequence": 7340
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10.2",
+   "sequence": 7350
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10.3",
+   "sequence": 7360
+  }
+ ]
+}

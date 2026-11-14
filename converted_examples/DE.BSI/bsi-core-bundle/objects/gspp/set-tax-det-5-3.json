@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/det-5-3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Schwachstellenscans"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.3",
+   "sequence": 9770
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.3.1",
+   "sequence": 9780
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.3.2",
+   "sequence": 9790
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.3.3",
+   "sequence": 9800
+  }
+ ]
+}

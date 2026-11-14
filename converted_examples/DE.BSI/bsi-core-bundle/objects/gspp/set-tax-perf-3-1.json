@@ -1,0 +1,30 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/perf-3-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Aufbau und Pflege eines Auditprogramms"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1",
+   "sequence": 1220
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.1",
+   "sequence": 1230
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.2",
+   "sequence": 1240
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.3",
+   "sequence": 1250
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.4",
+   "sequence": 1260
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.13.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.13.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "SPAM-Filter"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für Interpersonelle Kommunikation SOLLTE die Zustellung unerwünschter Nachrichten blockieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "blockieren",
+     "result": "die Zustellung unerwünschter Nachrichten",
+     "target-object-categories": [
+      "Interpersonelle Kommunikation"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Produktbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Unter Zustellung unerwünschter Nachrichten ist das Blockieren oder Filtern von Spam, Phishing-Versuchen, Social-Engineering-Nachrichten oder belästigender Kommunikation zu verstehen. Diese Anforderung zielt darauf ab, die Integrität der Kommunikationskanäle zu wahren und das Risiko von Sicherheits- oder Vertrauensbrüchen zu reduzieren. Ohne geeignete Filtermechanismen könnte Schadsoftware per Anhang eingeschleust werden, sensible Informationen könnten durch täuschend echte Phishing-Nachrichten abgegriffen werden oder Mitarbeitende könnten durch gezielte Belästigungen in ihrer Arbeitsfähigkeit eingeschränkt werden. Zur Umsetzung kann eine Institution verschiedene Ansätze kombinieren: (1) Der Einsatz serverseitiger Filtermechanismen auf Mail-Gateways oder Collaboration-Plattformen kann zentral die meisten unerwünschten Nachrichten aussortieren. (2) Ergänzend können clientseitige Filterregeln aktiviert werden, die Benutzern zusätzliche Möglichkeiten zur Sortierung bieten, etwa über Whitelists und Blacklists. Praktisch kann es auch hilfreich sein, Quarantäneordner einzurichten, damit Anwender verdächtige Nachrichten selbständig einsehen und fälschlich blockierte Nachrichten zurückholen können."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "ee57e250-bed1-484e-9ff7-8b7750562877"
+  }
+ ]
+}

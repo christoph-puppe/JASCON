@@ -16,16 +16,6 @@
    "prose": {
     "de": "Beschaffungsmanagement für Dienstleistungen SOLLTE eine Verpflichtung des Lieferanten, Sicherungskopien regelmäßig bereitzustellen, vereinbaren."
    }
-  },
-  {
-   "id": "BES.5.13.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Outsourcing KANN die Bereitstellung der beim Dienstleister verarbeiteten Daten in einem standardisierten Format vereinbaren."
-   }
   }
  ],
  "facets": {
@@ -37,24 +27,12 @@
      "target-object-categories": [
       "Dienstleistungen"
      ]
-    },
-    "BES.5.13.1": {
-     "action": "vereinbaren",
-     "result": "die Bereitstellung der beim Dienstleister verarbeiteten Daten in einem standardisierten Format",
-     "target-object-categories": [
-      "Outsourcing"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Beschaffungskriterien"
-     ]
-    },
-    "BES.5.13.1": {
      "required-documentation": [
       "Beschaffungskriterien"
      ]
@@ -71,16 +49,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.20"
      ]
-    },
-    "BES.5.13.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.20",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
-     ]
     }
    }
   },
@@ -93,16 +61,6 @@
      "tags": [
       "Lieferketten"
      ]
-    },
-    "BES.5.13.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Datenbereitstellung",
-     "alt-identifier": "8efd929d-ccc8-422f-b5ae-915fbfc41ddc"
     }
    }
   },
@@ -111,11 +69,6 @@
     "smt": {
      "guidance": {
       "de": "Der Zweck dieser Anforderung liegt in der Absicherung gegen Datenverlust durch technische Defekte, menschliche Fehler oder Schadsoftware. Ein fehlendes Backup könnte dazu führen, dass wichtige Kundendaten, Vertragsunterlagen oder Konfigurationsstände dauerhaft verloren gehen. Durch die vertragliche Verpflichtung zur Bereitstellung von Sicherungskopien kann die Institution ihre Datenhoheit behalten und Ausfälle oder Manipulationen deutlich schneller abfangen. Die Umsetzung kann beispielsweise so erfolgen, dass der Lieferant verpflichtet wird, Backups auf einem separaten, verschlüsselten Speichermedium bereitzustellen, welches der Institution in vereinbarten Intervallen übergeben wird. Zur Umsetzung kann ein Lieferant beispielsweise quartalsweise Berichte zu durchgeführten Penetrationstests, Schwachstellen-Scans oder Notfallübungen bereitstellen. Ebenso kann er standardisierte Dashboards mit Kennzahlen zu Sicherheitsvorfällen, Patchständen oder Awareness-Maßnahmen freigeben. Hilfreich kann auch sein, dass der Lieferant auf Anfrage gezielt Audit-Reports oder Zertifikate (z. B. SOC-2-Berichte, ISO 27001-Auditberichte) zur Verfügung stellt."
-     }
-    },
-    "BES.5.13.1": {
-     "guidance": {
-      "de": "Kann das Risiko verringern, dass im Falle eines Anbieterwechsels, einer Vertragsbeendigung oder einer Notfallwiederherstellung Daten nur in proprietären oder unvollständig dokumentierten Formaten vorliegen. Ohne ein solches Format könnte eine Institution vor dem Problem stehen, dass bei einem unerwarteten Ausfall des Dienstleisters die Daten erst zeitaufwendig konvertiert werden müssen, was den Geschäftsbetrieb verzögert oder kritische Prozesse unterbricht."
      }
     }
    }

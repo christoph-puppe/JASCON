@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm-1",
-   "sequence": 320
+   "sequence": 580
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm-2",
-   "sequence": 340
+   "sequence": 710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm-3",
-   "sequence": 360
+   "sequence": 730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm-4",
-   "sequence": 380
+   "sequence": 750
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm-5",
-   "sequence": 400
+   "sequence": 770
   }
  ],
  "label": "STM",

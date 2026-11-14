@@ -1,0 +1,81 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.3.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Dokumentation von Testergebnissen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests SOLLTE Tests einschließlich Prüfschritte, Ergebnissen und ggf. vorgenommenen Korrekturen dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "Tests",
+     "result-specification": "einschließlich Prüfschritte, Ergebnissen und ggf. vorgenommenen Korrekturen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Freigabeplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.37",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Dokumentation von Tests zielt primär darauf ab, Transparenz und Nachvollziehbarkeit bei Änderungen zu gewährleisten, was das Risiko unbeabsichtigter Sicherheitslücken, Systemausfälle oder Datenverluste erheblich reduzieren kann. Ohne strukturierte Testdokumentation könnten beispielsweise fehlerhafte Konfigurationsänderungen unbemerkt in Produktivsysteme gelangen, was potenziell zu Verfügbarkeitsstörungen, verfälschten Daten oder kompromittierten Anwendungen führen könnte. Ein dokumentierter Testprozess ermöglicht zudem eine effektive Ursachenanalyse bei auftretenden Störungen, da alle durchgeführten Änderungen mit ihren beabsichtigten Wirkungen transparent nachvollzogen werden können. Eine nachvollziehbare und digital strukturierte Verknüpfung von Anforderung zu Prüfschritt und Prüfergebnissen kann durch OSCAL-Dokumente als strukturierte Daten erstellt werden. Gezielte Tests vor wesentlichen Änderungen tragen dazu bei, unbeabsichtigte Schwachstellen zu vermeiden, die zu unbefugtem Datenzugriff, Verlust von Geschäftsinformationen oder Ausfällen kritischer Systeme führen könnten. Je nach Art und Umfang der Änderungen lassen sich beispielsweise physische Zustände oder die Ausführung von Systemfunktionen verifizieren. Dabei werden sowohl die gewünschten Sicherheitsfunktionen als auch unerwünschte Zustände getestet, zum Beispiel, dass keine unautorisierten Funktionen aktiviert sind oder Apps ungewollt mit unbekannten Internetservern kommunizieren. Anwendbare Testarten umfassen statische und dynamische Tests, Unit- und Integrationstests sowie Regressionstests. Relevant ist dabei sowohl das Testen von manuellen Eingaben über die Benutzerschnittstelle als auch der Zugriffe über das Netzwerk, etwa über eine API. Die Tests können automatisiert (z. B. Unit-Tests, CI/CD-Tests, Schwachstellenscanner) oder manuell unterstützt (z. B. Click-Tests oder die Auswertung von LLM-Zusammenfassungen) durchgeführt werden. Sinnvoll ist es, automatische Tests für alle Funktionen und Codepfade einzusetzen, ergänzt durch manuelle Tests der wichtigsten Funktionen, wie Authentifizierung und Verschlüsselung, sowie durch Stichproben der übrigen Funktionen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "b7a747d3-cb11-46ce-8d0c-c57cc31d5ad5"
+  }
+ ]
+}

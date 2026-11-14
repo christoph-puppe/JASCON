@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.1",
-   "sequence": 6760
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-5-1",
+   "sequence": 10960
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.2",
-   "sequence": 6770
+   "sequence": 10970
   }
  ],
  "label": "5",

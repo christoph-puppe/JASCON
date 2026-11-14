@@ -8,39 +8,39 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.1",
-   "sequence": 1970
+   "sequence": 3140
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.2",
-   "sequence": 1980
+   "sequence": 3150
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.3",
-   "sequence": 1990
+   "sequence": 3160
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.4",
-   "sequence": 2000
+   "sequence": 3170
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.5",
-   "sequence": 2010
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-4-5",
+   "sequence": 3210
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6",
-   "sequence": 2020
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-4-6",
+   "sequence": 3260
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.7",
-   "sequence": 2030
+   "sequence": 3270
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8",
-   "sequence": 2040
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-4-8",
+   "sequence": 3330
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.9",
-   "sequence": 2050
+   "sequence": 3340
   }
  ],
  "label": "4",

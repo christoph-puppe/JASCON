@@ -1,0 +1,98 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/NOT.2.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "NOT.2.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Stabsübung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Notfallplanung KANN die Funktionsfähigkeit der BAO {param:not.2.1.4-prm1}  durch Stabsübungen überprüfen."
+   },
+   "parameters": [
+    {
+     "name": "not.2.1.4-prm1",
+     "type": "string",
+     "label": "regelmäßig"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überprüfen",
+     "result": "die Funktionsfähigkeit der BAO",
+     "result-specification": "{{regelmäßig}}  durch Stabsübungen"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Notfallhandbuch"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "0",
+     "integrity": "0",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.1"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Da Notfälle nur selten vorkommen, die tatsächliche Funktionstüchtigkeit der BAO dann aber von großer Bedeutung für die Informationssicherheit ist, sind regelmäßige Übungen der BAO sinnvoll. Insbesondere die festgelegte Stabsstruktur (Aufgaben und Rollen), sowie das Funktionieren der Ausstattung sind im Ernstfall von großer Bedeutung. Zur Erprobung ist es zweckmäßig bei jeder Übung typische Szenarien im vollständig besetzten Stab durchzuführen und Notfallteams nur je nach passendem Szenario in die Übung einzubeziehen. Ist eine BAO erst aufgebaut worden, genügen für die Stabsübung in der Regel relativ simple Übungsszenarien wie ein Brand im Rechenzentrum oder ein Ransomware-Vorfall. Mit wachsendem Reifegrad der BAO kann anschließend die Komplexität und Realitätsnähe der Übung steigen. Nähere Informationen können dem BSI-Standard 200-4 Kapitel 13.6 Stabsübung (R+AS) entnommen werden."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "not.2.1.4-prm1": {
+     "alt-identifier": "c733baed-3cf9-4752-8121-354766e49ab0"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "c733baed-3cf9-4752-8121-354766e49ab0"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.4"
+  }
+ ]
+}

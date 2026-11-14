@@ -1,0 +1,62 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-7-4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Vollständigkeit der Unterlagen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4",
+   "sequence": 3850
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.1",
+   "sequence": 3860
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.2",
+   "sequence": 3870
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.3",
+   "sequence": 3880
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-7-4-4",
+   "sequence": 3910
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.5",
+   "sequence": 3920
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.6",
+   "sequence": 3930
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.7",
+   "sequence": 3940
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.8",
+   "sequence": 3950
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.9",
+   "sequence": 3960
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.10",
+   "sequence": 3970
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.11",
+   "sequence": 3980
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.12",
+   "sequence": 3990
+  }
+ ]
+}

@@ -1,0 +1,38 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-4-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Personengebundene Authentisierungsmittel"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1",
+   "sequence": 6030
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.1",
+   "sequence": 6040
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.2",
+   "sequence": 6050
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.3",
+   "sequence": 6060
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.4",
+   "sequence": 6070
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.5",
+   "sequence": 6080
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.6",
+   "sequence": 6090
+  }
+ ]
+}

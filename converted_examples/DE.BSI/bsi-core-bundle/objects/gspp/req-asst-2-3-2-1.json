@@ -1,0 +1,95 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ASST.2.3.2.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ASST.2.3.2.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Software Discovery"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Informationen und Assets KANN die Aktualität des Inventars der Anwendungen durch ein automatisiertes Verfahren {param:asst.2.3.2.1-prm1} überprüfen."
+   },
+   "parameters": [
+    {
+     "name": "asst.2.3.2.1-prm1",
+     "type": "string",
+     "label": "regelmäßig oder bei Änderungen"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überprüfen",
+     "result": "die Aktualität des Inventars der Anwendungen durch ein automatisiertes Verfahren",
+     "result-specification": "{{regelmäßig oder bei Änderungen}}"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.17",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.45"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die automatische Aktualisierung des Anwendungsinventars (etwa bei Installationen, Konfigurationsänderungen und Deinstallationen) dient in erster Linie der vollständigen Transparenz über die IT-Landschaft. Ein aktuelles Anwendungsinventar kann als Grundlage für Compliance-Nachweise, Lizenzmanagement und Schwachstellenanalysen dienen. Die Automatisierung dieses Prozesses verringert dabei den manuellen Verwaltungsaufwand und erhöht die Datenqualität, da menschliche Fehler oder Versäumnisse bei der Dokumentation vermieden werden können. Konkrete Anwendungsfälle können die automatische Erfassung einer neu installierten ERP-Software im Inventar, die Dokumentation einer Konfigurationsänderung an einer Firewall-Anwendung oder die Entfernung einer nicht mehr genutzten Datenbanksoftware aus dem Inventar sein. Auch Updates von Anwendungen, Änderungen an Zugriffsberechtigungen oder Konfigurationsanpassungen aufgrund neuer Sicherheitsanforderungen können als relevante Ereignisse für eine Inventaraktualisierung betrachtet werden. Für die Umsetzung können Software Asset Management (SAM) Tools eingesetzt werden, die über Agenten oder regelmäßige Netzwerk-Scans Änderungen erkennen. Eine Alternative kann die Integration von Deployment- und Konfigurationsmanagement-Systemen mit der CMDB (Configuration Management Database) sein, wodurch jede Änderung automatisch im zentralen Inventar gespiegelt wird. Die Implementierung von Event-Triggern in der IT-Infrastruktur kann ebenfalls dazu beitragen, dass bei definierten Ereignissen eine sofortige Inventaraktualisierung ausgelöst wird. Einen hohen Mehrwert für alle Sicherheitsbereiche kann es haben, Inventardaten aus verschiedenen Quellen automatisiert miteinander abzugleichen, z.B. aus Verzeichnisdiensten, AMDB, EDR und CMDB. Eine regelmäßige Validierung der Prozesse durch Stichprobenkontrollen kann dabei helfen, die Vollständigkeit und Genauigkeit der automatisierten Inventarisierung zu gewährleisten."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "asst.2.3.2.1-prm1": {
+     "alt-identifier": "be8d7b56-9709-4d1b-aeaa-cb5fa1b0cca1"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "be8d7b56-9709-4d1b-aeaa-cb5fa1b0cca1"
+  }
+ ]
+}

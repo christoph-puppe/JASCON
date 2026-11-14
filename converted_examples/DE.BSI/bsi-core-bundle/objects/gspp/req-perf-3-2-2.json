@@ -1,0 +1,70 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.3.2.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.3.2.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kommunikation an Stakeholder"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation MUSS alle relevanten Stakeholder über die Auditergebnisse informieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "informieren",
+     "result": "alle relevanten Stakeholder über die Auditergebnisse"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Auditbericht"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine angemessene Kommunikation der Auditergebnisse an alle relevanten Stakeholder muss sichergestellt werden, um das Bewusstsein für identifizierte Risiken zu schärfen und die Umsetzung von Verbesserungsmaßnahmen zu fördern. Die Auswertung von Auditergebnissen dient dazu, systematische Abweichungen, Schwachstellen und Verbesserungspotenziale im Informationssicherheitsmanagement zu identifizieren. Diese Maßnahmen werden anschließend in den Umsetzungsplan eingefügt und ihre Umsetzung nachverfolgt."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "3f9935bd-65fa-4212-a7e7-726f39933c7d"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1"
+  }
+ ]
+}

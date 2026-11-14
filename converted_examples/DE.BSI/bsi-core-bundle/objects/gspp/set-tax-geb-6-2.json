@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/geb-6-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Geschützte Aufstellung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.2",
+   "sequence": 5230
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.2.1",
+   "sequence": 5240
+  }
+ ]
+}

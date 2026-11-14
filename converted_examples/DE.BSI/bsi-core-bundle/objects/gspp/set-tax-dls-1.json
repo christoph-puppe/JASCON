@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.1",
-   "sequence": 2410
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls-1-1",
+   "sequence": 4130
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.2",
-   "sequence": 2420
+   "sequence": 4140
   }
  ],
  "label": "1",

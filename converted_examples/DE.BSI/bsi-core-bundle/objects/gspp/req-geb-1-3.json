@@ -16,23 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für Standorte SOLLTE Standorte für die Stationierung von Assets autorisieren."
    }
-  },
-  {
-   "id": "GEB.1.3.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte SOLLTE Standorte vor Autorisierung anhand von {param:geb.1.3.1-prm1} testen."
-   },
-   "parameters": [
-    {
-     "name": "geb.1.3.1-prm1",
-     "type": "string",
-     "label": "Kriterien"
-    }
-   ]
   }
  ],
  "facets": {
@@ -44,25 +27,12 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.1.3.1": {
-     "action": "testen",
-     "result": "Standorte",
-     "result-specification": "vor Autorisierung anhand von {{Kriterien}}",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Prozess Gebäudemanagement"
-     ]
-    },
-    "GEB.1.3.1": {
      "required-documentation": [
       "Prozess Gebäudemanagement"
      ]
@@ -80,16 +50,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.18",
       "https://ns.bsi.bund.de/gspp/threat/G-0.29"
      ]
-    },
-    "GEB.1.3.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.26"
-     ]
     }
    }
   },
@@ -99,13 +59,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "GEB.1.3.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Abnahme von Standorten",
-     "alt-identifier": "127de8f4-d265-4b66-83a1-a9d2c5113a17"
     }
    }
   },
@@ -115,18 +68,6 @@
      "guidance": {
       "de": "Die gezielte Autorisierung von Standorten für die Stationierung von Assets kann dazu beitragen, dass Informationen und Systeme nur an physischen Orten verarbeitet oder aufbewahrt werden, die zuvor auf ihre Sicherheitsanforderungen hin geprüft wurden. So kann beispielsweise verhindert werden, dass sensible Server in unkontrollierten Räumen ohne Zutrittskontrolle oder redundante Stromversorgung betrieben werden – ein Fehlen dieser Maßnahmen könnte im Ernstfall zu Datenverlust bei einem Kurzschluss oder unbefugtem Zugriff durch Dritte führen. Ebenso kann die Prüfung und Freigabe durch eine zuständige Rolle dafür sorgen, dass neue Außenstellen erst dann in den Betrieb gehen, wenn etwa Brandmelde‑, Videoüberwachungs‑ oder Netzwerksicherheitsanforderungen erfüllt sind; andernfalls könnte eine unerkannte technische Schwachstelle in einem Zweigstellenrechner dazu führen, dass Schadcode sich ins gesamte Unternehmensnetz ausbreitet. Auch bei der Nutzung von Cloud‑ oder Colocation‑Rechenzentren kann eine formale Freigabe sicherstellen, dass vorab vertraglich vereinbarte Sicherheits- und Compliance‑Anforderungen – wie beispielsweise ISO‑27001‑Zertifizierung oder Verschlüsselung im Ruhezustand – tatsächlich gegeben sind, andernfalls könnte es zu Datenschutzverletzungen oder Regulierungsstrafen kommen.  Zur praktischen Umsetzung kann ein Standort‑Freigabeprozess definiert werden, der folgende Elemente enthält: eine Checkliste für physische Sicherheitskriterien (Zutrittskontrolle, Umwelt‑ und Brandschutz), eine technische Abnahmematrix (Netzwerksegmentierung, Monitoring, Backup‑Anbindung) sowie die Benennung einer verantwortlichen Person oder Rolle, die das Go‑No‑Go‑Entscheidungsrecht hält. Bei Änderungen am Standort oder an den Assets kann diese Rolle regelmäßige Reviews anstoßen, wodurch nachträgliche Kontrollen möglich werden. Automatisierte Workflow‑Tools können dabei unterstützen, Prüf‑ und Genehmigungsschritte nachvollziehbar zu dokumentieren und Eskalationspfade abzubilden."
      }
-    },
-    "GEB.1.3.1": {
-     "guidance": {
-      "de": "Eine Abnahme anhand von Sicherheitskriterien stellt sicher, dass Sicherheitsaspekte bereits in der Planungsphase vor der ersten Nutzung eines Standortes berücksichtigt werden. Die Kriterien ergeben sich aus den weiteren Anforderungen dieser Praktik, sowie aus Compliance-Verpflichtungen. Denken Sie hierbei an den Schutz vor Elementarschäden, den Zutrittsschutz, den voraussichtlichen Versorgungsbedarf mit Strom, Netzanbindung, eine strukturierte Verkabelung und Wasserleitungen, sowie die Gebäudeautomatisierung. Kann z.B. mit Building Information Modeling (BIM) umgesetzt werden.  Wurde ein Standort bereits bezogen, so gilt die Anforderung als umgesetzt, wenn die Erfüllung der Kriterien nachträglich (z.B. durch eine Begehung) sichergestellt wurde."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "geb.1.3.1-prm1": {
-     "alt-identifier": "127de8f4-d265-4b66-83a1-a9d2c5113a17"
     }
    }
   }

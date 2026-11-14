@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/rea-2-5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "IT-Forensik"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.5",
+   "sequence": 10250
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.5.1",
+   "sequence": 10260
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.5.2",
+   "sequence": 10270
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.5.3",
+   "sequence": 10280
+  }
+ ]
+}

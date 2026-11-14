@@ -1,0 +1,98 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.9.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.9.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Langanhaltende Sekundärversorgung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Standorte KANN eine redundante Stromversorgung für {param:geb.9.1.4-prm1} installieren."
+   },
+   "parameters": [
+    {
+     "name": "geb.9.1.4-prm1",
+     "type": "string",
+     "label": "eine längere Stützzeit"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "eine redundante Stromversorgung",
+     "result-specification": "für {{eine längere Stützzeit}}",
+     "target-object-categories": [
+      "Standorte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "0",
+     "integrity": "0",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.25"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Hochverfügbarkeit"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine längere Stützzeit bezeichnet im Kontext der Stromversorgung die Fähigkeit, elektrische Energie über einen Zeitraum von mehreren Stunden oder sogar Tagen aufrechtzuerhalten, typischerweise durch den Einsatz einer Netzersatzanlage (NEA) oder vergleichbarer Infrastruktur. Während eine kurzzeitige Überbrückung durch unterbrechungsfreie Stromversorgungen (USV) lediglich Sekunden bis Minuten abdeckt, kann eine NEA längere Stromausfälle abfangen und die Betriebsfähigkeit kritischer Systeme dauerhaft sicherstellen. Risiken bestehen darin, dass ein Standort bei einem längerfristigen Netzausfall ohne redundante Stromversorgung seine sicherheitskritischen Prozesse nicht mehr betreiben könnte, was etwa zu Datenverlusten, Produktionsstillständen oder Ausfällen der Zutrittskontrolle führen könnte. Eine redundante Stromversorgung kann dem entgegenwirken, indem sie kritische Infrastrukturen wie Rechenzentren, Kommunikationssysteme oder Zutrittssysteme auch bei großflächigen Netzstörungen handlungsfähig hält. Zur Betriebsfähigkeit gehört auch die regelmäßige Wartung und Überprüfung des Betriebsmittelvorrats. Eine Institution kann die Anforderung umsetzen, indem sie geeignete technische Maßnahmen einplant: (1) Installation einer Netzersatzanlage mit automatischer Umschaltung auf Diesel- oder Gasgeneratoren, (2) Bereitstellung von Kraftstoffvorräten für eine definierte Stützzeit von beispielsweise 24, 48 oder 72 Stunden, (3) regelmäßige Lasttests, um sicherzustellen, dass die Anlage die notwendige Kapazität unter Realbedingungen liefern kann. Ergänzend kann eine Institution durch redundante Einspeisungen vom Energieversorger oder die Kombination mehrerer NEA-Module eine Ausfallsicherheit erhöhen. Prozessual kann sie Wartungspläne etablieren, die auch die Prüfung von Kraftstoffqualität, Starterbatterien und Umschalteinrichtungen umfassen. Praktische Umsetzungstipps sind etwa, NEA-Anlagen in geschützten Gebäudebereichen mit ausreichender Belüftung und Brandschutz vorzusehen, die Abgasführung nach außen zu gewährleisten und einen sicheren, vor Manipulation geschützten Tankstandort zu wählen."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "geb.9.1.4-prm1": {
+     "alt-identifier": "9de758ff-88f1-4350-b937-354a5e4e5fc5"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "9de758ff-88f1-4350-b937-354a5e4e5fc5"
+  }
+ ]
+}

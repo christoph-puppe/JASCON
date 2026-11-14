@@ -1,0 +1,91 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.11.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.11.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Authentifizierung von geplanten Konversationen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für TK-Anwendungen SOLLTE den Zugriff auf geplante Konversationen im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement authentifizieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "authentifizieren",
+     "result": "den Zugriff auf geplante Konversationen",
+     "result-specification": "im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement",
+     "target-object-categories": [
+      "TK-Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 1,
+     "tags": [
+      "Produktbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Viele TK-Anwendungen bieten geplante Konversationen, z.B. in virtuellen Meeting-Räumen oder über Telefonkonferenzen, die über eine Rufnummer erreichbar sind. Wird der Zugriff hierauf nicht authentifiziert, so könnten unbemerkt Unberechtigte teilnehmen und Informationen abhören oder auf Meta-Informationen wie Teilnehmer oder Uhrzeiten zugreifen. Der Schutz kann z.B. durch Passwörter/PINs oder über die Anmeldung per Zertifikat oder Single-Sign-On geschehen. Die Formulierung \"im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik Berechtigung (BER) festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "07493cf7-5071-4749-b58a-586016679f1e"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.1"
+  }
+ ]
+}

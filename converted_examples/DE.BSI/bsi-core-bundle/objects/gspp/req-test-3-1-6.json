@@ -1,0 +1,79 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.6",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "TEST.3.1.6",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kontinuierliche Tests"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Änderungen und Tests KANN die Auswirkungen bei jeder Änderung automatisch testen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "testen",
+     "result": "die Auswirkungen",
+     "result-specification": "bei jeder Änderung automatisch"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Freigabeplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "„Automatisch testen“ meint den Einsatz technischer Verfahren oder Werkzeuge („continuous testing“), um bei Änderungen an Systemen oder Anwendungen unmittelbar und ohne manuelles Eingreifen Prüfungen auszuführen. Gemeint sind hier vordefinierte Testszenarien, die mit jedem Update, Patch oder Konfigurationswechsel ablaufen und systematisch überprüfen, ob die vorgesehenen Funktionen erhalten bleiben und ob unerwünschte Nebenwirkungen auftreten. Der Zweck liegt darin, dass Änderungen zwar notwendig sind, diese aber unbeabsichtigte Sicherheitslücken oder Funktionsstörungen mit sich bringen könnten – ein fehlerhaftes Update könnte beispielsweise Authentifizierungsprozesse umgehen lassen oder kritische Daten unzugänglich machen. Durch automatisierte Tests kann die Institution dagegen frühzeitig erkennen, ob eine Änderung die Vertraulichkeit, Integrität oder Verfügbarkeit gefährden könnte, und die Fehlerquote im Betrieb insgesamt senken. Umsetzungsmöglichkeiten können unterschiedlich gestaltet werden: Eine Institution kann (1) Continuous-Integration/Continuous-Delivery-Pipelines (CI/CD) einrichten, in die automatisierte Unit- und Integrationstests integriert sind, (2) produktionsnahe Szenarien in Testumgebungen abbilden und in denen Sicherheitstests automatisch mitlaufen, oder (3) Skripte einsetzen, die nach Konfigurationsänderungen direkt auf bekannte Schwachstellen oder das Vorhandensein von Sicherheitsfunktionen prüfen. Auch die Verwendung von Regressionstests, die kritische Kernfunktionen gezielt wiederholt prüfen, kann ein bewährtes Mittel sein, um sicherzustellen, dass durch eine Änderung keine unbeabsichtigten Seiteneffekte ausgelöst werden. Automatische Test ermöglichen es auch die Dokumentation der Testergebnisse automatisiert zu erstellen, sodass Verantwortliche sofort eine Übersicht über den Status erhalten."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "73fab6c7-c60f-4ee5-bd97-e842915cf98d"
+  }
+ ]
+}

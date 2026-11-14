@@ -27,2052 +27,3072 @@
    "sequence": 50
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.3.1.1",
    "sequence": 60
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.3.1.2",
    "sequence": 70
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.3.1.3",
    "sequence": 80
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.3.1.4",
    "sequence": 90
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.4.1",
    "sequence": 100
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.4.2",
    "sequence": 110
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.8.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1",
    "sequence": 120
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.1",
    "sequence": 130
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.10.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.2",
    "sequence": 140
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.11.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.3",
    "sequence": 150
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GC.12.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.4",
    "sequence": 160
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/STM.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.6.1",
    "sequence": 170
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/STM.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1",
    "sequence": 180
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1.1",
    "sequence": 190
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/STM.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.1.2",
    "sequence": 200
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/STM.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.7.2",
    "sequence": 210
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/STM.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.8.1",
    "sequence": 220
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1",
    "sequence": 230
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1",
    "sequence": 240
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.1",
    "sequence": 250
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.1.1",
    "sequence": 260
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.1.2",
    "sequence": 270
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.2",
    "sequence": 280
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.3",
    "sequence": 290
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.4",
    "sequence": 300
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.10.1",
    "sequence": 310
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.10.1.1",
    "sequence": 320
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.10.1.2",
    "sequence": 330
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.11.1",
    "sequence": 340
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.12.1",
    "sequence": 350
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.1.1",
    "sequence": 360
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.1.2",
    "sequence": 370
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1",
    "sequence": 380
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.1",
    "sequence": 390
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.2",
    "sequence": 400
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.3",
    "sequence": 410
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4",
    "sequence": 420
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.1",
    "sequence": 430
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.4.2",
    "sequence": 440
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.5",
    "sequence": 450
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.1.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.6",
    "sequence": 460
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1.7",
    "sequence": 470
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.3.1",
    "sequence": 480
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.4.1",
    "sequence": 490
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/STM.5.1",
    "sequence": 500
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.1.1",
    "sequence": 510
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.1.2",
    "sequence": 520
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/RISK.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.2.1",
    "sequence": 530
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/RISK.1.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.2.2",
    "sequence": 540
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/RISK.1.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.3.1",
    "sequence": 550
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/RISK.1.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.4.1",
    "sequence": 560
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.5.1",
    "sequence": 570
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.5.2",
    "sequence": 580
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.6.1",
    "sequence": 590
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.6.2",
    "sequence": 600
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/UMS.7.1",
    "sequence": 610
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.1.1",
    "sequence": 620
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.2.1",
    "sequence": 630
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.2.2",
    "sequence": 640
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.3.1",
    "sequence": 650
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.4.1",
    "sequence": 660
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.4.2",
    "sequence": 670
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.5.1",
    "sequence": 680
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.6.1",
    "sequence": 690
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.6.2",
    "sequence": 700
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/VRB.7.1",
    "sequence": 710
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.1.1",
    "sequence": 720
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.1.2",
    "sequence": 730
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.1.3",
    "sequence": 740
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.2.1",
    "sequence": 750
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1",
    "sequence": 760
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.1",
    "sequence": 770
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.2",
    "sequence": 780
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.3",
    "sequence": 790
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.4",
    "sequence": 800
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.2",
    "sequence": 810
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.2.1",
    "sequence": 820
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.3.2.2",
    "sequence": 830
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1",
    "sequence": 840
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.1",
    "sequence": 850
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.2",
    "sequence": 860
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.3",
    "sequence": 870
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.4",
    "sequence": 880
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.5",
    "sequence": 890
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.6",
    "sequence": 900
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.7",
    "sequence": 910
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.8",
    "sequence": 920
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.9",
    "sequence": 930
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.2",
    "sequence": 940
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.5.1",
    "sequence": 950
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/RISK.1.1",
    "sequence": 960
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/RISK.1.3",
    "sequence": 970
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/RISK.1.5",
    "sequence": 980
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/RISK.1.10",
    "sequence": 990
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1",
    "sequence": 1000
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1.1",
    "sequence": 1010
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1.2",
    "sequence": 1020
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.1.3",
    "sequence": 1030
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.1.2",
    "sequence": 1040
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.5.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.1",
    "sequence": 1050
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.1.1",
    "sequence": 1060
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.2",
    "sequence": 1070
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.2.1",
    "sequence": 1080
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3",
    "sequence": 1090
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3.1",
    "sequence": 1100
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3.2",
    "sequence": 1110
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.4",
    "sequence": 1120
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.1",
    "sequence": 1130
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.1.1",
    "sequence": 1140
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.2",
    "sequence": 1150
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.3",
    "sequence": 1160
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.4",
    "sequence": 1170
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.10",
    "sequence": 1180
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.11",
    "sequence": 1190
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.11.1",
    "sequence": 1200
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.12",
    "sequence": 1210
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.13",
    "sequence": 1220
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.3.14",
    "sequence": 1230
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.2",
    "sequence": 1240
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.3",
    "sequence": 1250
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.5",
    "sequence": 1260
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.1",
    "sequence": 1270
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.2",
    "sequence": 1280
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.4",
    "sequence": 1290
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.5",
    "sequence": 1300
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.7",
    "sequence": 1310
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.1",
    "sequence": 1320
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.2",
    "sequence": 1330
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.4",
    "sequence": 1340
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.1",
    "sequence": 1350
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.2",
    "sequence": 1360
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3",
    "sequence": 1370
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.1",
    "sequence": 1380
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.2",
    "sequence": 1390
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.6",
    "sequence": 1400
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.7",
    "sequence": 1410
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1",
    "sequence": 1420
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1.1",
    "sequence": 1430
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1.2",
    "sequence": 1440
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1.3",
    "sequence": 1450
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.2",
    "sequence": 1460
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.1",
    "sequence": 1470
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.2",
    "sequence": 1480
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3",
    "sequence": 1490
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.1",
    "sequence": 1500
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.2",
    "sequence": 1510
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.3",
    "sequence": 1520
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.3.4",
    "sequence": 1530
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.4",
    "sequence": 1540
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.1",
    "sequence": 1550
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.2",
    "sequence": 1560
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.3",
    "sequence": 1570
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.4",
    "sequence": 1580
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.5",
    "sequence": 1590
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.6",
    "sequence": 1600
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.3.7",
    "sequence": 1610
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.1",
    "sequence": 1620
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.2",
    "sequence": 1630
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.2.1",
    "sequence": 1640
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.5.1",
    "sequence": 1650
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.5.2",
    "sequence": 1660
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.5.3",
    "sequence": 1670
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1",
    "sequence": 1680
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1.1",
    "sequence": 1690
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.5.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1.2",
    "sequence": 1700
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.5.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1",
    "sequence": 1710
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1.1",
    "sequence": 1720
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1.2",
    "sequence": 1730
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.1.3",
    "sequence": 1740
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.2",
    "sequence": 1750
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.3",
    "sequence": 1760
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.4.1",
    "sequence": 1770
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.5",
    "sequence": 1780
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.2.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.6",
    "sequence": 1790
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.1.7",
    "sequence": 1800
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1",
    "sequence": 1810
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.1",
    "sequence": 1820
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.2",
    "sequence": 1830
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.3",
    "sequence": 1840
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4",
    "sequence": 1850
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.1",
    "sequence": 1860
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.2",
    "sequence": 1870
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.3",
    "sequence": 1880
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.4",
    "sequence": 1890
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.5",
    "sequence": 1900
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.8.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.6",
    "sequence": 1910
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.2",
    "sequence": 1920
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.4",
    "sequence": 1930
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.5",
    "sequence": 1940
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.1",
    "sequence": 1950
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.2",
    "sequence": 1960
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.3.3",
    "sequence": 1970
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.1",
    "sequence": 1980
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.2",
    "sequence": 1990
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.3",
    "sequence": 2000
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.4",
    "sequence": 2010
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.5",
    "sequence": 2020
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6",
    "sequence": 2030
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6.1",
    "sequence": 2040
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.6.2",
    "sequence": 2050
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.7",
    "sequence": 2060
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8",
    "sequence": 2070
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.4.8.2",
    "sequence": 2080
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.1",
    "sequence": 2090
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.2",
    "sequence": 2100
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.3",
    "sequence": 2110
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.4",
    "sequence": 2120
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.5",
    "sequence": 2130
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.5.2",
    "sequence": 2140
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.6",
    "sequence": 2150
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.6.1",
    "sequence": 2160
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.8",
    "sequence": 2170
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.9",
    "sequence": 2180
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10",
    "sequence": 2190
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.1",
    "sequence": 2200
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.2",
    "sequence": 2210
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.3",
    "sequence": 2220
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.11",
    "sequence": 2230
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.12",
    "sequence": 2240
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.13",
    "sequence": 2250
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.14",
    "sequence": 2260
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.1",
    "sequence": 2270
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.2",
    "sequence": 2280
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.3",
    "sequence": 2290
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.5",
    "sequence": 2300
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.6.6",
    "sequence": 2310
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.1",
    "sequence": 2320
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.1.1",
    "sequence": 2330
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.15",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.1.2",
    "sequence": 2340
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.16",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.2",
    "sequence": 2350
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.17",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.3",
    "sequence": 2360
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.20",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4",
    "sequence": 2370
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.21",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.1",
    "sequence": 2380
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.22",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.2",
    "sequence": 2390
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.23",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.3",
    "sequence": 2400
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.24",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.4",
    "sequence": 2410
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.25",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.5",
    "sequence": 2420
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.6",
    "sequence": 2430
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.7",
    "sequence": 2440
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.8",
    "sequence": 2450
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.9",
    "sequence": 2460
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.4.10",
    "sequence": 2470
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.1",
    "sequence": 2480
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.1.1",
    "sequence": 2490
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.1.2",
    "sequence": 2500
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.1.3",
    "sequence": 2510
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.1.2",
    "sequence": 2520
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.2.1",
    "sequence": 2530
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.2.2",
    "sequence": 2540
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.1",
    "sequence": 2550
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.1.1",
    "sequence": 2560
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.4",
    "sequence": 2570
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.5",
    "sequence": 2580
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.4.1",
    "sequence": 2590
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.4.1.1",
    "sequence": 2600
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.4.1.2",
    "sequence": 2610
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.1",
    "sequence": 2620
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.1.1",
    "sequence": 2630
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.1.2",
    "sequence": 2640
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.1.3",
    "sequence": 2650
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.2",
    "sequence": 2660
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.1.3",
    "sequence": 2670
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.1",
    "sequence": 2680
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2",
    "sequence": 2690
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2.1",
    "sequence": 2700
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2.2",
    "sequence": 2710
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2.3",
    "sequence": 2720
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1",
    "sequence": 2730
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.1",
    "sequence": 2740
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.2",
    "sequence": 2750
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.3",
    "sequence": 2760
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.4",
    "sequence": 2770
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.5",
    "sequence": 2780
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.3.2",
    "sequence": 2790
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.1",
    "sequence": 2800
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.1.2",
    "sequence": 2810
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.1.3",
    "sequence": 2820
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.7.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.3",
    "sequence": 2830
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.8.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.4.4",
    "sequence": 2840
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.5.1",
    "sequence": 2850
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.5.2",
    "sequence": 2860
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.5.4",
    "sequence": 2870
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.5.5",
    "sequence": 2880
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.1",
    "sequence": 2890
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.1.1",
    "sequence": 2900
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.1.2",
    "sequence": 2910
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.1.3",
    "sequence": 2920
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.2",
    "sequence": 2930
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.3",
    "sequence": 2940
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.3.1",
    "sequence": 2950
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.4",
    "sequence": 2960
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.1.5",
    "sequence": 2970
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.2.1",
    "sequence": 2980
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.2.2",
    "sequence": 2990
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.2.3",
    "sequence": 3000
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.1",
    "sequence": 3010
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.2",
    "sequence": 3020
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.3",
    "sequence": 3030
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.3.3",
    "sequence": 3040
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.3.7",
    "sequence": 3050
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.5.1",
    "sequence": 3060
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.1",
    "sequence": 3070
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.2",
    "sequence": 3080
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.2.1",
    "sequence": 3090
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.15",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.6.3",
    "sequence": 3100
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.16",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.1",
    "sequence": 3110
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.17",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.2",
    "sequence": 3120
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.18",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.3",
    "sequence": 3130
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.19",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.8.1",
    "sequence": 3140
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.20",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.1",
    "sequence": 3150
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.22",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.5",
    "sequence": 3160
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.23",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.5.1",
    "sequence": 3170
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.24",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.6",
    "sequence": 3180
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.25",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.9.7",
    "sequence": 3190
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.26",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.1",
    "sequence": 3200
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.27",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.1.2",
    "sequence": 3210
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.29",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2",
    "sequence": 3220
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.32",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.1",
    "sequence": 3230
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.2",
    "sequence": 3240
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.5",
    "sequence": 3250
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.7",
    "sequence": 3260
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.3",
    "sequence": 3270
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.10.4",
    "sequence": 3280
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.1",
    "sequence": 3290
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.1.1",
    "sequence": 3300
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.1.2",
    "sequence": 3310
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.1.3",
    "sequence": 3320
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.2",
    "sequence": 3330
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.1",
    "sequence": 3340
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.2",
    "sequence": 3350
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.3",
    "sequence": 3360
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.4",
    "sequence": 3370
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.4.1",
    "sequence": 3380
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.5",
    "sequence": 3390
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.6",
    "sequence": 3400
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.7",
    "sequence": 3410
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.8",
    "sequence": 3420
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.2.8.1",
    "sequence": 3430
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.3.1",
    "sequence": 3440
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1",
    "sequence": 3450
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.1",
    "sequence": 3460
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.2",
    "sequence": 3470
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.3",
    "sequence": 3480
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.4",
    "sequence": 3490
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.5",
    "sequence": 3500
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.6",
    "sequence": 3510
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.2",
    "sequence": 3520
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.3",
    "sequence": 3530
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.1",
    "sequence": 3540
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.15",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.2",
    "sequence": 3550
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.4",
    "sequence": 3560
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.5",
    "sequence": 3570
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.5.6",
    "sequence": 3580
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.6.1",
    "sequence": 3590
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.6.2",
    "sequence": 3600
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.1",
    "sequence": 3610
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.2",
    "sequence": 3620
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.3",
    "sequence": 3630
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.4",
    "sequence": 3640
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.5",
    "sequence": 3650
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.6",
    "sequence": 3660
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.7",
    "sequence": 3670
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.8",
    "sequence": 3680
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.9",
    "sequence": 3690
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.10",
    "sequence": 3700
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.11",
    "sequence": 3710
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.12",
    "sequence": 3720
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.13",
    "sequence": 3730
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.15",
    "sequence": 3740
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.16",
    "sequence": 3750
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.17",
    "sequence": 3760
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.15",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.20",
    "sequence": 3770
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.16",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.21",
    "sequence": 3780
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.22",
    "sequence": 3790
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.23",
    "sequence": 3800
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.24",
    "sequence": 3810
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.25",
    "sequence": 3820
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.1",
    "sequence": 3830
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.2",
    "sequence": 3840
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.3",
    "sequence": 3850
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.4",
    "sequence": 3860
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.7",
    "sequence": 3870
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.8",
    "sequence": 3880
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.9",
    "sequence": 3890
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.10",
    "sequence": 3900
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.8.11",
    "sequence": 3910
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.1",
    "sequence": 3920
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.15",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.2",
    "sequence": 3930
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.3",
    "sequence": 3940
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.4",
    "sequence": 3950
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.5",
    "sequence": 3960
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.9.7",
    "sequence": 3970
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.1",
    "sequence": 3980
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.2",
    "sequence": 3990
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.3",
    "sequence": 4000
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.4",
    "sequence": 4010
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.5",
    "sequence": 4020
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.1",
    "sequence": 4030
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.2",
    "sequence": 4040
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.3",
    "sequence": 4050
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.1.1",
    "sequence": 4060
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.1.1.1",
    "sequence": 4070
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.1.1.2",
    "sequence": 4080
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.1.1.3",
    "sequence": 4090
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.1.2",
    "sequence": 4100
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.1",
    "sequence": 4110
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2",
    "sequence": 4120
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.1",
    "sequence": 4130
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.2",
    "sequence": 4140
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.3",
    "sequence": 4150
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.5",
    "sequence": 4160
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.6",
    "sequence": 4170
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.7",
    "sequence": 4180
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.8",
    "sequence": 4190
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.9",
    "sequence": 4200
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.10",
    "sequence": 4210
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.4",
    "sequence": 4220
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.5",
    "sequence": 4230
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.6",
    "sequence": 4240
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.1",
    "sequence": 4250
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.3",
    "sequence": 4260
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.3.4",
    "sequence": 4270
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.1",
    "sequence": 4280
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.1.1",
    "sequence": 4290
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.2",
    "sequence": 4300
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.3",
    "sequence": 4310
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1",
    "sequence": 4320
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.1",
    "sequence": 4330
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.2",
    "sequence": 4340
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.3",
    "sequence": 4350
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.4",
    "sequence": 4360
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.5",
    "sequence": 4370
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.6",
    "sequence": 4380
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.7",
    "sequence": 4390
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.8",
    "sequence": 4400
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.9",
    "sequence": 4410
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10",
    "sequence": 4420
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10.1",
    "sequence": 4430
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10.2",
    "sequence": 4440
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.10.3",
    "sequence": 4450
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.11",
    "sequence": 4460
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.5.2",
    "sequence": 4470
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.6.2",
    "sequence": 4480
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.7.1",
    "sequence": 4490
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.15",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.7.3",
    "sequence": 4500
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.16",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.8.1",
    "sequence": 4510
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.8.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.1",
    "sequence": 4520
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.8.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.1",
    "sequence": 4530
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.9.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.1.1",
    "sequence": 4540
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.1.2",
    "sequence": 4550
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.1.3",
    "sequence": 4560
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.2",
    "sequence": 4570
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.3",
    "sequence": 4580
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.1.4",
    "sequence": 4590
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.1",
    "sequence": 4600
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.2",
    "sequence": 4610
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.3",
    "sequence": 4620
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.4",
    "sequence": 4630
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.5",
    "sequence": 4640
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.6",
    "sequence": 4650
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.1",
    "sequence": 4660
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.1.1",
    "sequence": 4670
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.2",
    "sequence": 4680
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.3",
    "sequence": 4690
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.4",
    "sequence": 4700
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.5",
    "sequence": 4710
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.6",
    "sequence": 4720
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.7",
    "sequence": 4730
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.8",
    "sequence": 4740
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.9",
    "sequence": 4750
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.10",
    "sequence": 4760
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.11",
    "sequence": 4770
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.12",
    "sequence": 4780
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.13",
    "sequence": 4790
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.14",
    "sequence": 4800
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.15",
    "sequence": 4810
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.16",
    "sequence": 4820
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.17",
    "sequence": 4830
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.18",
    "sequence": 4840
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.19",
    "sequence": 4850
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.20",
    "sequence": 4860
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.22",
    "sequence": 4870
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.23",
    "sequence": 4880
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.24",
    "sequence": 4890
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.25",
    "sequence": 4900
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.26",
    "sequence": 4910
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.27",
    "sequence": 4920
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.29",
    "sequence": 4930
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.32",
    "sequence": 4940
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1",
    "sequence": 4950
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1.1",
    "sequence": 4960
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.2",
    "sequence": 4970
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.3",
    "sequence": 4980
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.4",
    "sequence": 4990
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.4.1",
    "sequence": 5000
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.5",
    "sequence": 5010
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.6",
    "sequence": 5020
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.7",
    "sequence": 5030
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.9",
    "sequence": 5040
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.1",
    "sequence": 5050
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.2",
    "sequence": 5060
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.3",
    "sequence": 5070
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.4",
    "sequence": 5080
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.5",
    "sequence": 5090
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.6",
    "sequence": 5100
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.7",
    "sequence": 5110
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.5.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.8",
    "sequence": 5120
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.5.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.9",
    "sequence": 5130
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.5.3",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.10",
    "sequence": 5140
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.6.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.1",
    "sequence": 5150
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.7.1",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.2",
    "sequence": 5160
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.7.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.3",
    "sequence": 5170
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.4",
+   "sequence": 5180
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.5",
+   "sequence": 5190
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.6",
+   "sequence": 5200
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.8",
+   "sequence": 5210
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.9",
+   "sequence": 5220
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.10",
+   "sequence": 5230
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.11",
+   "sequence": 5240
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.12",
+   "sequence": 5250
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.13",
+   "sequence": 5260
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.14",
+   "sequence": 5270
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.15",
+   "sequence": 5280
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16",
+   "sequence": 5290
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.1",
+   "sequence": 5300
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.2",
+   "sequence": 5310
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.3",
+   "sequence": 5320
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.4",
+   "sequence": 5330
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.5",
+   "sequence": 5340
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.16.6",
+   "sequence": 5350
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.1",
+   "sequence": 5360
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.1.1",
+   "sequence": 5370
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.1.2",
+   "sequence": 5380
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.1.3",
+   "sequence": 5390
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.2",
+   "sequence": 5400
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.2.1",
+   "sequence": 5410
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.2.1.1",
+   "sequence": 5420
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.2.1.2",
+   "sequence": 5430
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.1",
+   "sequence": 5440
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.3",
+   "sequence": 5450
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.5",
+   "sequence": 5460
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.6",
+   "sequence": 5470
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.1",
+   "sequence": 5480
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.2",
+   "sequence": 5490
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.3",
+   "sequence": 5500
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.4",
+   "sequence": 5510
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.5",
+   "sequence": 5520
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.5.1",
+   "sequence": 5530
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.5.2",
+   "sequence": 5540
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.6",
+   "sequence": 5550
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.7",
+   "sequence": 5560
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.8",
+   "sequence": 5570
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.9",
+   "sequence": 5580
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.10",
+   "sequence": 5590
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.11",
+   "sequence": 5600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.13",
+   "sequence": 5610
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.14",
+   "sequence": 5620
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.15",
+   "sequence": 5630
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.16",
+   "sequence": 5640
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.4.16.1",
+   "sequence": 5650
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.1.1",
+   "sequence": 5660
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.1.1.1",
+   "sequence": 5670
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.1.1.2",
+   "sequence": 5680
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.1.1.3",
+   "sequence": 5690
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.1.2",
+   "sequence": 5700
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1",
+   "sequence": 5710
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1.1",
+   "sequence": 5720
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1.2",
+   "sequence": 5730
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1.3",
+   "sequence": 5740
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1",
+   "sequence": 5750
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1.1",
+   "sequence": 5760
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1.2",
+   "sequence": 5770
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1.3",
+   "sequence": 5780
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1.4",
+   "sequence": 5790
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1.7",
+   "sequence": 5800
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1.8",
+   "sequence": 5810
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.1.9",
+   "sequence": 5820
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.4",
+   "sequence": 5830
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.3.5",
+   "sequence": 5840
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.1",
+   "sequence": 5850
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.2",
+   "sequence": 5860
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.3",
+   "sequence": 5870
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.4",
+   "sequence": 5880
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.11",
+   "sequence": 5890
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.12",
+   "sequence": 5900
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.13",
+   "sequence": 5910
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.14",
+   "sequence": 5920
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.15",
+   "sequence": 5930
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.1",
+   "sequence": 5940
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.2",
+   "sequence": 5950
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.3",
+   "sequence": 5960
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.3.1",
+   "sequence": 5970
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.8",
+   "sequence": 5980
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.9",
+   "sequence": 5990
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.10",
+   "sequence": 6000
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.10.1",
+   "sequence": 6010
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.10.2",
+   "sequence": 6020
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.5.10.4",
+   "sequence": 6030
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.1",
+   "sequence": 6040
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.1.1",
+   "sequence": 6050
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.1.2",
+   "sequence": 6060
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.2",
+   "sequence": 6070
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.1",
+   "sequence": 6080
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.1.1",
+   "sequence": 6090
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.1.2",
+   "sequence": 6100
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.1.3",
+   "sequence": 6110
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.1.2",
+   "sequence": 6120
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.1",
+   "sequence": 6130
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.3",
+   "sequence": 6140
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.4",
+   "sequence": 6150
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.5.1",
+   "sequence": 6160
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6",
+   "sequence": 6170
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.1",
+   "sequence": 6180
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.2",
+   "sequence": 6190
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.2.1",
+   "sequence": 6200
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.3",
+   "sequence": 6210
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.6.5",
+   "sequence": 6220
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.3.1",
+   "sequence": 6230
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.3.1.1",
+   "sequence": 6240
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.1",
+   "sequence": 6250
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.1.1",
+   "sequence": 6260
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.1.2",
+   "sequence": 6270
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.1.3",
+   "sequence": 6280
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.2",
+   "sequence": 6290
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.3",
+   "sequence": 6300
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.4",
+   "sequence": 6310
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.1.5",
+   "sequence": 6320
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.1",
+   "sequence": 6330
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.1.1",
+   "sequence": 6340
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.2",
+   "sequence": 6350
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.3",
+   "sequence": 6360
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.4",
+   "sequence": 6370
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.4.1",
+   "sequence": 6380
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.4.2",
+   "sequence": 6390
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.5",
+   "sequence": 6400
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.6",
+   "sequence": 6410
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.1",
+   "sequence": 6420
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.2",
+   "sequence": 6430
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.3",
+   "sequence": 6440
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.7",
+   "sequence": 6450
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.8",
+   "sequence": 6460
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.1",
+   "sequence": 6470
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.1.1",
+   "sequence": 6480
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.2",
+   "sequence": 6490
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.2.1",
+   "sequence": 6500
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.3",
+   "sequence": 6510
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.4",
+   "sequence": 6520
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.5",
+   "sequence": 6530
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.1",
+   "sequence": 6540
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.1.1",
+   "sequence": 6550
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.2",
+   "sequence": 6560
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.1",
+   "sequence": 6570
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.2",
+   "sequence": 6580
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.4",
+   "sequence": 6590
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.6",
+   "sequence": 6600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.6.1",
+   "sequence": 6610
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.7",
+   "sequence": 6620
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.8",
+   "sequence": 6630
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.9",
+   "sequence": 6640
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.10",
+   "sequence": 6650
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.11",
+   "sequence": 6660
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.12",
+   "sequence": 6670
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.14",
+   "sequence": 6680
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.1",
+   "sequence": 6690
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.2",
+   "sequence": 6700
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.5",
+   "sequence": 6710
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.6",
+   "sequence": 6720
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.9",
+   "sequence": 6730
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.10",
+   "sequence": 6740
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.14",
+   "sequence": 6750
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.15",
+   "sequence": 6760
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.16",
+   "sequence": 6770
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.16.1",
+   "sequence": 6780
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.8.1",
+   "sequence": 6790
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.8.1.1",
+   "sequence": 6800
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.8.2",
+   "sequence": 6810
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.9.1",
+   "sequence": 6820
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.1",
+   "sequence": 6830
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.1.1",
+   "sequence": 6840
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.2",
+   "sequence": 6850
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.3",
+   "sequence": 6860
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.4",
+   "sequence": 6870
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.5",
+   "sequence": 6880
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.1",
+   "sequence": 6890
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.1.1",
+   "sequence": 6900
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.1.2",
+   "sequence": 6910
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.2",
+   "sequence": 6920
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.3",
+   "sequence": 6930
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.4",
+   "sequence": 6940
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.5",
+   "sequence": 6950
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.7",
+   "sequence": 6960
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.7.1",
+   "sequence": 6970
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.7.2",
+   "sequence": 6980
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.7.2.1",
+   "sequence": 6990
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1",
+   "sequence": 7000
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.1",
+   "sequence": 7010
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.2",
+   "sequence": 7020
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.3",
+   "sequence": 7030
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.4",
+   "sequence": 7040
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.5",
+   "sequence": 7050
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.7",
+   "sequence": 7060
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.8",
+   "sequence": 7070
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.9",
+   "sequence": 7080
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.10",
+   "sequence": 7090
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.11",
+   "sequence": 7100
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.2",
+   "sequence": 7110
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.3",
+   "sequence": 7120
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.4",
+   "sequence": 7130
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.5",
+   "sequence": 7140
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.7",
+   "sequence": 7150
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.8",
+   "sequence": 7160
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.9",
+   "sequence": 7170
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.10",
+   "sequence": 7180
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.12",
+   "sequence": 7190
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.13",
+   "sequence": 7200
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.14",
+   "sequence": 7210
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.1",
+   "sequence": 7220
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.1.1",
+   "sequence": 7230
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.1.2",
+   "sequence": 7240
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.2",
+   "sequence": 7250
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.2.1",
+   "sequence": 7260
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.2.2",
+   "sequence": 7270
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.3",
+   "sequence": 7280
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.5",
+   "sequence": 7290
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.5.1",
+   "sequence": 7300
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.6",
+   "sequence": 7310
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.9",
+   "sequence": 7320
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.10",
+   "sequence": 7330
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.11",
+   "sequence": 7340
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
+   "sequence": 7350
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1.1",
+   "sequence": 7360
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.2",
+   "sequence": 7370
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.3",
+   "sequence": 7380
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.5",
+   "sequence": 7390
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.1",
+   "sequence": 7400
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.1.1",
+   "sequence": 7410
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.1.2",
+   "sequence": 7420
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.1.3",
+   "sequence": 7430
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.2",
+   "sequence": 7440
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.1",
+   "sequence": 7450
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.2",
+   "sequence": 7460
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.3",
+   "sequence": 7470
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.4",
+   "sequence": 7480
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.5",
+   "sequence": 7490
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.6",
+   "sequence": 7500
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.6.1",
+   "sequence": 7510
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.6.2",
+   "sequence": 7520
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.1",
+   "sequence": 7530
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.2",
+   "sequence": 7540
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.3",
+   "sequence": 7550
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.3.4",
+   "sequence": 7560
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.1",
+   "sequence": 7570
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.2",
+   "sequence": 7580
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.3",
+   "sequence": 7590
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.4",
+   "sequence": 7600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.5",
+   "sequence": 7610
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.6",
+   "sequence": 7620
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.8",
+   "sequence": 7630
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.9",
+   "sequence": 7640
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.10",
+   "sequence": 7650
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.11",
+   "sequence": 7660
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.5.1",
+   "sequence": 7670
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.5.2",
+   "sequence": 7680
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.5.3",
+   "sequence": 7690
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.6.1",
+   "sequence": 7700
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.7.1",
+   "sequence": 7710
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.7.2",
+   "sequence": 7720
   }
  ]
 }

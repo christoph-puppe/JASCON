@@ -1,0 +1,93 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/REA.2.5.3",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "REA.2.5.3",
+ "lifecycle": "active",
+ "title": {
+  "de": "Forensik-Dienstleister"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sicherheitsvorfallsbehandlung KANN die Bereitschaft eines Forensik-Dienstleisters binnen {param:rea.2.5.3-prm1} vereinbaren."
+   },
+   "parameters": [
+    {
+     "name": "rea.2.5.3-prm1",
+     "type": "string",
+     "label": "einer Frist"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "die Bereitschaft eines Forensik-Dienstleisters",
+     "result-specification": "binnen {{einer Frist}}"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Liste der Hersteller und Dienstleister"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Um im Ernstfall eine schnelle Untersuchung von Sicherheitsvorfällen zu ermöglichen, kann die Institution bereits unabhängig von einem Vorfall einen Vertrag mit einem qualifizierten Forensik-Dienstleister abschließen. Die Anforderung ist erst umgesetzt, wenn der Dienstleister für den Ernstfall eine Erstreaktion innerhalb einer bestimmten Frist garantiert. Die Untersuchung aller Ergebnisse kann die Frist überschreiten."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "rea.2.5.3-prm1": {
+     "alt-identifier": "ef31b4b8-5e5d-46fc-9baa-237808678a6d"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "ef31b4b8-5e5d-46fc-9baa-237808678a6d"
+  }
+ ]
+}

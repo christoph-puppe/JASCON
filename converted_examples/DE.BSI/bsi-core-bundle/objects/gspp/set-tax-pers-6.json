@@ -7,8 +7,8 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1",
-   "sequence": 1750
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-6-1",
+   "sequence": 2690
   }
  ],
  "label": "6",

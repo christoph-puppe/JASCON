@@ -16,26 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für Standorte SOLLTE zwischen Assets und Witterungs- sowie Wassergefahrenstellen mindestens eine physische Schutzmaßnahme vor Wasser nach den entsprechenden Normen installieren."
    }
-  },
-  {
-   "id": "GEB.10.3.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN zwischen Wassergefahrenstellen und Assets mindestens zwei bauliche Schutzmaßnahmen vor Wasser nach den entsprechenden Normen installieren."
-   }
-  },
-  {
-   "id": "GEB.10.3.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN Wassereinbrüche überwachen."
-   }
   }
  ],
  "facets": {
@@ -48,37 +28,12 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.10.3.1": {
-     "action": "installieren",
-     "result": "zwischen Wassergefahrenstellen und Assets mindestens zwei bauliche Schutzmaßnahmen vor Wasser",
-     "result-specification": "nach den entsprechenden Normen",
-     "target-object-categories": [
-      "Standorte"
-     ]
-    },
-    "GEB.10.3.2": {
-     "action": "überwachen",
-     "result": "Wassereinbrüche",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.3.1": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.10.3.2": {
      "required-documentation": [
       "Gebäudedokumentation"
      ]
@@ -95,24 +50,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.3"
      ]
-    },
-    "GEB.10.3.1": {
-     "confidentiality": "0",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.3"
-     ]
-    },
-    "GEB.10.3.2": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -122,20 +59,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "GEB.10.3.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Doppelter baulicher Wasserschutz",
-     "alt-identifier": "6b169c24-0f22-4ef3-bfe5-3a95e49e4131"
-    },
-    "GEB.10.3.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "title": "Leckagesensor",
-     "alt-identifier": "a7d0e63e-e589-4587-bf0b-043e36515dac"
     }
    }
   },
@@ -144,16 +67,6 @@
     "smt": {
      "guidance": {
       "de": "Relevant ist hierbei sowohl Wasser von oben (Regen und Schnee), als auch von unten (Überflutungen, gesammeltes Regenwasser).  Maßnahmen können z.B. witterungsbeständige Baumaterialien, Abdichtungen, Überdachungen, Entwässerungssysteme oder eine erhöhte Positionierung, die eher nicht in überfluteten Bereichen liegen wird, sein. Schränke und Gehäuse können auch mit einer geeigneten IP-Schutzklasse (z.B. IP65) gegen Wasser geschützt werden."
-     }
-    },
-    "GEB.10.3.1": {
-     "guidance": {
-      "de": "Relevant ist hierbei sowohl Wasser von oben (Regen und Schnee), als auch von unten (Überflutungen, gesammeltes Regenwasser).   Maßnahmen können z.B. witterungsbeständige Baumaterialien, Abdichtungen, Abkofferungen, Überdachungen, oder Entwässerungssysteme sein. Schränke und Gehäuse können auch mit einer geeigneten IP-Schutzklasse (z.B. IP65) gegen Wasser geschützt werden."
-     }
-    },
-    "GEB.10.3.2": {
-     "guidance": {
-      "de": "Maßnahmen können z.B. Wassersensorstreifen unter Doppelböden sein, die SNMP-Traps an ein Building Management System (BMS) senden."
      }
     }
    }

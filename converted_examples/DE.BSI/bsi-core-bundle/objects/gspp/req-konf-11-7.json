@@ -16,36 +16,6 @@
    "prose": {
     "de": "Konfiguration für Anwendungen SOLLTE aktivierte Schnittstellen einschließlich denen zu anderen Anwendungen, Cloud-Funktionen oder Erweiterungen einschränken."
    }
-  },
-  {
-   "id": "KONF.11.7.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für DNS-Server SOLLTE Zonentransfers einschränken."
-   }
-  },
-  {
-   "id": "KONF.11.7.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für TK-Anwendungen SOLLTE unerwünschte TK-Verbindungen einschränken."
-   }
-  },
-  {
-   "id": "KONF.11.7.2.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für TK-Anwendungen SOLLTE Verbindungen mit externen Gegenstellen einschränken."
-   }
   }
  ],
  "facets": {
@@ -58,48 +28,12 @@
      "target-object-categories": [
       "Anwendungen"
      ]
-    },
-    "KONF.11.7.1": {
-     "action": "einschränken",
-     "result": "Zonentransfers",
-     "target-object-categories": [
-      "DNS-Server"
-     ]
-    },
-    "KONF.11.7.2": {
-     "action": "einschränken",
-     "result": "unerwünschte TK-Verbindungen",
-     "target-object-categories": [
-      "TK-Anwendungen"
-     ]
-    },
-    "KONF.11.7.2.1": {
-     "action": "einschränken",
-     "result": "Verbindungen mit externen Gegenstellen",
-     "target-object-categories": [
-      "TK-Anwendungen"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.11.7.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.11.7.2": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.11.7.2.1": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -117,36 +51,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.23",
       "https://ns.bsi.bund.de/gspp/threat/G-0.19"
      ]
-    },
-    "KONF.11.7.1": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
-     ]
-    },
-    "KONF.11.7.2": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
-     ]
-    },
-    "KONF.11.7.2.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
-     ]
     }
    }
   },
@@ -159,37 +63,6 @@
      "tags": [
       "Produktbeschreibung"
      ]
-    },
-    "KONF.11.7.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Einschränkung von Zonentransfers",
-     "alt-identifier": "cf0655b0-3c6a-48a5-8f29-4445c26c3659"
-    },
-    "KONF.11.7.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Einschränkung von TK-Verbindungen",
-     "alt-identifier": "0467042c-2497-4f56-9514-404a36a90fd0"
-    },
-    "KONF.11.7.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Produktbeschreibung",
-      "PSTN"
-     ],
-     "title": "Einschränkung der TK-Gegenstellen",
-     "alt-identifier": "756c0796-be3d-492d-a64e-3314f6d83805"
     }
    }
   },
@@ -198,21 +71,6 @@
     "smt": {
      "guidance": {
       "de": "Die Einschränkung von Schnittstellen hilft, ungewollte oder böswillige Zugriffe auf Anwendungen und Daten zu verhindern. Durch das Festlegen klarer Regeln welche Systeme oder Anwendungen über welche Schnittstellen auf welche Daten zugreifen können wir das \"Need to know\" Prinzip in der Kommunikation umgesetzt. Ferner kann ein solcher Ansatz dazu beitragen, die Integrität und Vertraulichkeit von Informationen zu wahren, indem nur autorisierte Kommunikationspartner berechtigt werden, Daten zu lesen, zu schreiben oder Funktionalitäten aufzurufen. Beispiele sind die Synchronisierung von Lesezeichen und Historie im Browser, die Anbindung von Cloud-Funktionen, etwa eine serverless Image-Processing-API, für die ein entsprechendes Rollenkonzept noch nicht hinterlegt und von der Sicherheitsverantwortlichen geprüft wurde, oder die Installation einer Browsererweiterungen. Erweiterungen (Plugins, AddOns), die nicht von der Institution für die Verwendung autorisiert wurden, können zu ungewollten Datenabflüssen führen und Schadcode enthalten. Zur Umsetzung kann es hilfreich sein, standardisierte Formulare oder digitale Workflows zu etablieren, in denen die Notwendigkeit, der Umfang und die Verantwortlichen für jede neue Schnittstelle dokumentiert werden. Die Einschränkung kann auch durch Komponenten außerhalb der Anwendung erfolgen, zum Beispiel durch API-Gateways, die nur auf Whitelists registrierter Endpunkte reagieren, oder durch Einsatz von Zertifikaten und OAuth-Scopes. Um unautorisierte Erweiterungen technisch zu unterbinden kann die Deinstallation oder Deaktivierung der Erweiterungen, sowie das Setzen von Berechtigungen zur Installation nur für Administrierende umgesetzt werden."
-     }
-    },
-    "KONF.11.7.1": {
-     "guidance": {
-      "de": "Zum Schutz vor DNS-Reconnaissance und DNS-Spoofing, da Zonendaten alle DNS-Einträger einer Domäne enthalten. Kann durch Einschränkung auf autorisierte IP-Adressen und TSIG umgesetzt werden."
-     }
-    },
-    "KONF.11.7.2": {
-     "guidance": {
-      "de": "Kann durch Session Border Controller (SBC) oder Filterung innerhalb von Anwendungen umgesetzt werden. SBC filtern die Signalisierung und Mediastreams auf dem Kommunikationsweg, insbesondere beim Verbindungsaufbau mittels SIP, H.323 oder MGCP."
-     }
-    },
-    "KONF.11.7.2.1": {
-     "guidance": {
-      "de": "Telekommunikation mit externen Stellen ist essenziell für viele Geschäftsprozesse, aber auch beliebtes Ziel für Social Engineering und technische Angriffe. Kann z.B. durch eine Beschränkung auf europäische Rufnummernkreise oder den Ausschluss unerwünschter IP-Adressbereiche umgesetzt werden."
      }
     }
    }

@@ -16,66 +16,6 @@
    "prose": {
     "de": "Sensibilisierung für Nutzende SOLLTE zum Umgang mit Authentisierungsmitteln im Einklang mit den zugehörigen Anforderungen des Identitäts- und Berechtigungsmanagements sensibilisieren."
    }
-  },
-  {
-   "id": "SENS.4.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sensibilisierung für Nutzende SOLLTE zur verdeckten Eingabe von Zugangsdaten sensibilisieren."
-   }
-  },
-  {
-   "id": "SENS.4.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sensibilisierung für Nutzende SOLLTE die Wiederverwendung von Passwörtern untersagen."
-   }
-  },
-  {
-   "id": "SENS.4.1.3",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sensibilisierung für Nutzende SOLLTE zur Wahl ausreichend komplexer Passwörter sensibilisieren."
-   }
-  },
-  {
-   "id": "SENS.4.1.4",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sensibilisierung für Nutzende SOLLTE das Speichern oder Aufschreiben von Passwörtern außerhalb von Passwort-Managern untersagen."
-   }
-  },
-  {
-   "id": "SENS.4.1.5",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sensibilisierung für Nutzende SOLLTE gegen die Fälschbarkeit von biometrischen Authentifizierungsmerkmalen sensibilisieren."
-   }
-  },
-  {
-   "id": "SENS.4.1.6",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Sensibilisierung für Nutzende SOLLTE die Weitergabe von personengebundenen Authentisierungsmitteln untersagen."
-   }
   }
  ],
  "facets": {
@@ -88,48 +28,6 @@
      "target-object-categories": [
       "Nutzende"
      ]
-    },
-    "SENS.4.1.1": {
-     "action": "sensibilisieren",
-     "result": "zur verdeckten Eingabe von Zugangsdaten",
-     "target-object-categories": [
-      "Nutzende"
-     ]
-    },
-    "SENS.4.1.2": {
-     "action": "untersagen",
-     "result": "die Wiederverwendung von Passwörtern",
-     "target-object-categories": [
-      "Nutzende"
-     ]
-    },
-    "SENS.4.1.3": {
-     "action": "sensibilisieren",
-     "result": "zur Wahl ausreichend komplexer Passwörter",
-     "target-object-categories": [
-      "Nutzende"
-     ]
-    },
-    "SENS.4.1.4": {
-     "action": "untersagen",
-     "result": "das Speichern oder Aufschreiben von Passwörtern außerhalb von Passwort-Managern",
-     "target-object-categories": [
-      "Nutzende"
-     ]
-    },
-    "SENS.4.1.5": {
-     "action": "sensibilisieren",
-     "result": "gegen die Fälschbarkeit von biometrischen Authentifizierungsmerkmalen",
-     "target-object-categories": [
-      "Nutzende"
-     ]
-    },
-    "SENS.4.1.6": {
-     "action": "untersagen",
-     "result": "die Weitergabe von personengebundenen Authentisierungsmitteln",
-     "target-object-categories": [
-      "Nutzende"
-     ]
     }
    }
   },
@@ -139,108 +37,12 @@
      "required-documentation": [
       "Schulungsplan"
      ]
-    },
-    "SENS.4.1.1": {
-     "required-documentation": [
-      "Schulungsplan"
-     ]
-    },
-    "SENS.4.1.2": {
-     "required-documentation": [
-      "Arbeitsanweisung"
-     ]
-    },
-    "SENS.4.1.3": {
-     "required-documentation": [
-      "Schulungsplan"
-     ]
-    },
-    "SENS.4.1.4": {
-     "required-documentation": [
-      "Arbeitsanweisung"
-     ]
-    },
-    "SENS.4.1.5": {
-     "required-documentation": [
-      "Schulungsplan"
-     ]
-    },
-    "SENS.4.1.6": {
-     "required-documentation": [
-      "Arbeitsanweisung"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "SENS.4.1.1": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "SENS.4.1.2": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "SENS.4.1.3": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "SENS.4.1.4": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "SENS.4.1.5": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
-    },
-    "SENS.4.1.6": {
      "confidentiality": "2",
      "integrity": "1",
      "availability": "1",
@@ -263,67 +65,6 @@
       "Authentication and Authorization",
       "Advanced Persistent Threats (APT)"
      ]
-    },
-    "SENS.4.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Shoulder Surfing"
-     ],
-     "title": "Verdeckte Eingabe",
-     "alt-identifier": "78719bfb-2d5c-492f-ba02-fc10a0bdf361"
-    },
-    "SENS.4.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Credential Stuffing",
-      "Privilege Escalation",
-      "Password Policy"
-     ],
-     "title": "Untersagung von Passwort Recycling",
-     "alt-identifier": "0573247f-65f3-4768-9d27-6c9c0f42c6cd"
-    },
-    "SENS.4.1.3": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Authentication and Authorization",
-      "Password Policy"
-     ],
-     "title": "Wahl von Passwörtern",
-     "alt-identifier": "48c3a712-943d-403e-8e04-cfc11d92a387"
-    },
-    "SENS.4.1.4": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Password Policy"
-     ],
-     "title": "Passwörter nur im Passwortmanager",
-     "alt-identifier": "7734048a-d797-49f0-87e6-f9c08ce5f5e7"
-    },
-    "SENS.4.1.5": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Biometrische Authentifikation",
-     "alt-identifier": "9065b5b9-cf47-40c1-9238-0f3e2f912fb9"
-    },
-    "SENS.4.1.6": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Authentication and Authorization",
-      "Password Policy"
-     ],
-     "title": "Keine Weitergabe personengebundener Authentisierungsmittel",
-     "alt-identifier": "b25f3f5e-0738-4794-b130-cc9a1e29084f"
     }
    }
   },
@@ -332,36 +73,6 @@
     "smt": {
      "guidance": {
       "de": "Authentisierungsmittel sind alle Methoden oder Technologien, die zur Überprüfung der Identität verwendet werden, z.B. Passwörter, Zugangschipkarte, Ausweis. Um Missbrauch zu vermeiden ist es wichtig, diese (1) geschützt aufzubewahren und niemals weiterzugeben, (2) den Verdacht, dass ein Passwort oder Token kompromittiert sein könnte, sofort zu melden und (3) aufmerksam gegenüber ungewöhnlichen Login-Masken oder Aufforderungen zu sein, die Zugangsdaten außerhalb der gewohnten Systeme einzugeben."
-     }
-    },
-    "SENS.4.1.1": {
-     "guidance": {
-      "de": "Werden Zugangsdaten unverdeckt eingegeben, so könnten diese durch Shoulder Surfing kompromittiert werden, etwa in überfüllten Bereichen, Aufzügen oder während Videokonferenzen. Die verdeckte Eingabe umfasst dabei alle Tätigkeiten, die verhindern, dass Unbefugte die Eingabe von Passwörtern, PINs oder anderen Authentifizierungsdaten visuell erfassen können, sei es durch direkte Sichtbarkeit oder durch das Verfolgen von Handbewegungen und Tastaturanschlägen. Beispiele sind die bewusste Positionierung des Körpers oder der Hand als natürlicher Sichtschutz bei der Eingabe, sowie die Nutzung von Sichtschutzfolien auf Bildschirmen in öffentlichen Bereichen oder beim mobilen Arbeiten."
-     }
-    },
-    "SENS.4.1.2": {
-     "guidance": {
-      "de": "Wiederverwendung von Passwörtern bezeichnet  die Nutzung identischer Zugangsdaten für verschiedene Systeme, Dienste oder Anwendungen. Werden identische Passwörter auf unterschiedlichen Systemen eingesetzt, steigt die Wahrscheinlichkeit, dass ein Angreifer mit einem einzigen erlangten Passwort Zugriff auf weitere Konten erhält („Credential Stuffing“). Ein Vorfall könnte beispielsweise darin bestehen, dass ein externer Angreifer durch ein Datenleck bei einem Drittanbieter an ein altes Passwort gelangt und damit Zugang zu internen Diensten erhält, wenn die betroffene Person dieses Passwort mehrfach genutzt hat. Auch im internen Umfeld kann die Wiederverwendung von Passwörtern dazu führen, dass unbefugte Dritte über abgefangene oder mitgehörte Anmeldedaten Zugang zu sensiblen Bereichen erhalten. Die Anforderung zielt also auf eine Reduzierung der Angriffsfläche durch Verhinderung von Kettenreaktionen, die aus nur einem kompromittierten Passwort entstehen können. Mit „Wiederverwendung“ ist sowohl die Verwendung desselben Passworts an verschiedenen Zugangskonten oder IT-Systemen, also auch eine zeitlich wiederholte Nutzung früherer Passwörter gemeint."
-     }
-    },
-    "SENS.4.1.3": {
-     "guidance": {
-      "de": "Ein Passwort ist ein geheimes Zeichenfolgenkürzel, das als Authentisierungsmerkmal dient und typischerweise aus Buchstaben, Ziffern und Sonderzeichen bestehen kann. Komplexität bedeutet hierbei, dass die Passwortstruktur hinreichend schwer zu Erraten oder durch automatisierte Verfahren zu berechnen ist, etwa durch eine gewisse Länge und die Verwendung unterschiedlicher Zeichenarten. Die Komplexität ist ausreichend, wenn sie den festgelegten Qualitätskriterien für Passwörter entspricht. Einfache oder mehrfach genutzte Passwörter könnten durch erraten, Wörterbuchangriffe oder Datenleaks kompromittiert werden und so zu unautorisierten Zugriffen, Datenverlusten oder Identitätsdiebstahl führen. Die bewusste Wahl starker und einzigartiger Passwörter kann hingegen die Widerstandsfähigkeit gegen Angriffe deutlich erhöhen und so einen wesentlichen Beitrag zum Schutz von Daten und IT-Systemen leisten. Zur Umsetzung kann eine Institution verschiedene Maßnahmen einsetzen: (1) praxisnahe Schulungen und E-Learnings, die anschaulich erläutern, warum Passwörter wie „Sommer2023“ leicht angreifbar sein könnten und wie kreative Passphrasen gebildet werden können, (2) begleitende Tipps in Anmeldemasken, die Hinweise zur Passwortgestaltung geben, ohne konkrete Vorgaben zu erzwingen, (3) die Empfehlung von Passwortmanagern, die den Umgang mit langen und individuellen Kennwörtern erleichtern, (4) prozessuale Begleitung durch Erinnerungen oder kurze Awareness-Kampagnen, etwa durch Plakate, Newsletter oder interaktive Quizformate. Für mehr Details siehe auch Thema Passwortgebrauch in der Praktik Berechtigung."
-     }
-    },
-    "SENS.4.1.4": {
-     "guidance": {
-      "de": "Weil Passwörter komplex sind und an vielen Stellen verwendet werden kommt es immer wieder dazu, dass sie unbedacht auf Zetteln oder in unverschlüsselten Tabellen notiert werden. Werden Passwörter etwa in Office-Listen, im Browser oder auf programmierbaren Tastaturen und Mäusen gespeichert, so könnten Angreifer diese auslesen und zur Ausbreitung auf Systemen und im Netz verwenden. In einem verschlüsselten Passwort-Manager, der nur mit einem Master-Passwort oder Hardwaretoken entsperrt werden kann, können Zugangsdaten dagegen sicher gespeichert werden. Ein Passwortmanager erleichtert es zudem Passwörter zu erzeugen und den richtigen Webseiten und Anwendungen zuzuordnen."
-     }
-    },
-    "SENS.4.1.5": {
-     "guidance": {
-      "de": "Ein Angreifer könnte z.B. einen Fingerabdruck von einer glatten Oberfläche abnehmen und damit ein Gerät missbräuchlich entsperren."
-     }
-    },
-    "SENS.4.1.6": {
-     "guidance": {
-      "de": "Personengebundene Authentisierungsmittel sind z.B. Passwörter, Private PKI-Schlüssel oder Mehr-Faktor-Authentifizierungstoken wie Smartcards."
      }
     }
    }

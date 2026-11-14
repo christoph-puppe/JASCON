@@ -7,12 +7,12 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.1",
-   "sequence": 7740
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-1-1",
+   "sequence": 12450
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.1.2",
-   "sequence": 7750
+   "sequence": 12460
   }
  ],
  "label": "1",

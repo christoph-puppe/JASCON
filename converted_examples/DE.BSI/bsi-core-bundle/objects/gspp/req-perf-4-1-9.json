@@ -1,0 +1,65 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.9",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.4.1.9",
+ "lifecycle": "active",
+ "title": {
+  "de": "Maßnahmenvorschläge"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation MUSS priorisierte Maßnahmenvorschläge mit realistischen Abschätzungen zum erwarteten Umsetzungsaufwand als Ergebnis der Überprüfung in einem Managementbericht dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "priorisierte Maßnahmenvorschläge mit realistischen Abschätzungen zum erwarteten Umsetzungsaufwand",
+     "result-specification": "als Ergebnis der Überprüfung in einem Managementbericht"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Managementbericht"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Maßnahmenvorschläge müssen daraufhin überprüft werden, ob sie wirksam zur Risikoreduktion beitragen und mit vertretbarem Aufwand umsetzbar sind. Dabei sind Nutzen, Kosten, technischer und organisatorischer Aufwand realistisch abzuschätzen und in Relation zueinander zu bewerten, um fundierte Entscheidungen zur Umsetzung und Priorisierung treffen zu können. Die Ergebnisse dieser Überprüfungen basieren auf den vorab erstellten Auditberichten sowie der geforderten Eignungsprüfung."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "c6ecb13d-2c6a-495d-89fd-8d9e699b3ff9"
+  }
+ ]
+}

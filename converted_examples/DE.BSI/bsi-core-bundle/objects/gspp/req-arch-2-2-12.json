@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.12",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.2.2.12",
+ "lifecycle": "active",
+ "title": {
+  "de": "Sprungserver"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur KANN Sprungserver installieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "Sprungserver"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Netzplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.15"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Lateral Movement",
+      "Separation of Concerns"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ein Sprungserver (englisch „jump server“ oder „jump host“) ist ein speziell abgesicherter Server, der als einzig vorgesehener Einstiegspunkt in ein Verwaltungsnetz oder zu administrierten Systemen dient. Alle administrativen Sitzungen laufen über diesen zentralen Knotenpunkt, wodurch die Angriffsfläche reduziert und die Nachvollziehbarkeit erhöht wird. Ohne Sprungserver könnte ein Angreifer beispielsweise über kompromittierte Administrator-Notebooks unbemerkt direkt auf zentrale Systeme zugreifen und dort Manipulationen durchführen. Ein Sprungserver kann hingegen alle Management-Zugriffe zentral kanalisieren, sodass verdächtige Aktivitäten leichter erkannt und im Nachhinein nachvollzogen werden können. Praktische Umsetzungen können sein: (1) der Einsatz eines dedizierten, gehärteten Servers mit restriktiven Firewall-Regeln, (2) die Nutzung von Mehrfaktor-Authentisierung und zentralem Benutzer-Management auf dem Sprungserver, (3) eine verpflichtende Session-Aufzeichnung oder Protokollierung sämtlicher Administrationsvorgänge."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "c907e5e0-bccc-4467-9962-7f4972b0ad8f"
+  }
+ ]
+}

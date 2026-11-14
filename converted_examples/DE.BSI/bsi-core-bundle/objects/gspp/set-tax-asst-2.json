@@ -7,20 +7,20 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.1",
-   "sequence": 1030
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-2-1",
+   "sequence": 1640
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.2",
-   "sequence": 1040
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-2-2",
+   "sequence": 1670
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.3",
-   "sequence": 1050
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-2-3",
+   "sequence": 1730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.2.4",
-   "sequence": 1060
+   "sequence": 1740
   }
  ],
  "label": "2",

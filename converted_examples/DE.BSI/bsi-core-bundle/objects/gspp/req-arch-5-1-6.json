@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.5.1.6",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.5.1.6",
+ "lifecycle": "active",
+ "title": {
+  "de": "Blockieren direkter Management-Verbindungen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Externe Netzanschlüsse SOLLTE Verbindungen zu Management-Schnittstellen blockieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "blockieren",
+     "result": "Verbindungen zu Management-Schnittstellen",
+     "target-object-categories": [
+      "Externe Netzanschlüsse"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Firewallregeln"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.40"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Internet Exposure"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Zum Internet offene Management-Schnittstellen werden von Angreifern durch Scans leicht gefunden und sind häufig Ziel von Angriffen. Deshalb ist es sinnvoll, alle eingehenden Verbindungen zu Management-Schnittstellen aus externen Netzen zu blockieren, einschließlich der Verwaltung von VPN- und Firewallsystemen selbst. Wenn eine Administration dieser Systeme aus der Ferne erforderlich ist, so kann dieser Zugriff stattdessen über ein VPN in das interne Netz hergestellt werden, wobei auch hiermit ein erhöhten Risiko für Angriffe einhergeht."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "9e1420ba-9cc0-4d0d-a127-36881c1b90e5"
+  }
+ ]
+}

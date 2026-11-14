@@ -16,26 +16,6 @@
    "prose": {
     "de": "Konfiguration für IT-Systeme SOLLTE nicht benötigte Systemfunktionen deaktivieren."
    }
-  },
-  {
-   "id": "KONF.2.4.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für IT-Systeme SOLLTE nicht benötigte Zertifikate deaktivieren."
-   }
-  },
-  {
-   "id": "KONF.2.4.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für IT-Systeme SOLLTE nicht benötigte Cloud-Anbindungen deaktivieren."
-   }
   }
  ],
  "facets": {
@@ -47,36 +27,12 @@
      "target-object-categories": [
       "IT-Systeme"
      ]
-    },
-    "KONF.2.4.1": {
-     "action": "deaktivieren",
-     "result": "nicht benötigte Zertifikate",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
-    },
-    "KONF.2.4.2": {
-     "action": "deaktivieren",
-     "result": "nicht benötigte Cloud-Anbindungen",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.2.4.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.2.4.2": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -94,26 +50,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.23",
       "https://ns.bsi.bund.de/gspp/threat/G-0.28"
      ]
-    },
-    "KONF.2.4.1": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "0",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.14"
-     ]
-    },
-    "KONF.2.4.2": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "0",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
-     ]
     }
    }
   },
@@ -123,23 +59,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "KONF.2.4.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "title": "Nicht benötigte Zertifikate",
-     "alt-identifier": "4a22520b-123c-422a-a871-0bc5b20b9ec3"
-    },
-    "KONF.2.4.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 4,
-     "tags": [
-      "Data Leak"
-     ],
-     "title": "Externe Cloud-Anbindungen",
-     "alt-identifier": "35875b35-0c23-473e-b1d6-1741c315dc88"
     }
    }
   },
@@ -148,16 +67,6 @@
     "smt": {
      "guidance": {
       "de": "Die Deaktivierung von Funktionen, die für Betrieb oder aus Sicherheitssicht nicht benötigt werden, hilft, die Angriffsfläche und Fehlerkomplexität zu verringern, z.B. unnötige Identitäten, ggf. nicht benötigte Schnittstellen wie Bluetooth, nicht verwendete Netzprotokolle wie NTLMv1 Authentifizierung, schwache Verschlüsselungsalgorithmen wie TLS1.1, die Anzeige von Nachrichteninhalten auf dem Sperrbildschirm oder nicht benötigte System- oder Telemetriedienste. Relevant sind dabei sowohl Betriebssystem- als auch Firmwarefunktionen."
-     }
-    },
-    "KONF.2.4.1": {
-     "guidance": {
-      "de": "Hierbei ist insbesondere an die vom Betriebssystem als vertrauenswürdig eingestuften Zertifizierungsstellen zu denken, wenn sie nicht länger benötigt werden. Verfügt das IT-System über keine Zertifikate, so ist die Anforderung entbehrlich."
-     }
-    },
-    "KONF.2.4.2": {
-     "guidance": {
-      "de": "Eine Cloud-Anbindung ist eine technische Schnittstelle, über die ein IT-System Daten oder Dienste mit einer externen Cloud-Plattform austauscht. Dazu können sowohl direkte API-Integrationen wie die Anmeldung an Cloud-Verzeichnisdienste, aber auch automatische Synchronisationsmechanismen, Hintergrund-Updates über Cloud-Server oder agentenbasierte Remote-Management-Funktionen zählen. Nicht benötigte Anbindungen können dadurch identifiziert werden, dass sie weder für den produktiven Betrieb noch für Wartung, Support oder Sicherheitsfunktionen erforderlich sind. Der Sinn und Zweck dieser Regelung liegt darin, die Angriffsfläche zu reduzieren und unkontrollierte Datenflüsse zu vermeiden. Ein nicht genutzter, aber weiterhin aktiver Cloud-Connector könnte etwa unbemerkt sensible Metadaten an Drittdienste übertragen oder als Einfallstor für Schadsoftware missbraucht werden; die gezielte Deaktivierung kann dagegen unnötige Risiken eliminieren und die Übersichtlichkeit der Systemarchitektur erhöhen."
      }
     }
    }

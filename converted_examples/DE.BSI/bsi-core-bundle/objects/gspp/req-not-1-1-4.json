@@ -1,0 +1,100 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/NOT.1.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "NOT.1.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Business Continuity Management System"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Notfallplanung KANN ein {param:not.1.1.4-prm1}BCMS nach {param:not.1.1.4-prm2} verankern."
+   },
+   "parameters": [
+    {
+     "name": "not.1.1.4-prm1",
+     "type": "string",
+     "label": "BSI-Standard 200-4",
+     "default": "BSI-Standard 200-4"
+    },
+    {
+     "name": "not.1.1.4-prm2",
+     "type": "string",
+     "label": "einem anerkannten BCM-Standard"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "ein {{Reaktiv-, Aufbau- oder Standard-}}BCMS nach {{einem anerkannten BCM-Standard}}"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "BC-Leitlinie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "BCMS steht für Business Continuity Management System, ein Management-System, das Institutionen dabei hilft, die Kontinuität ihrer Geschäftsprozesse bei Störungen oder Krisen sicherzustellen. Es umfasst die Planung, Umsetzung und kontinuierliche Verbesserung von Strategien und Verfahren, um die Resilienz der Institution zu erhöhen und Ausfallzeiten zu minimieren. Beispiele sind der BSI-Standard 200-4 oder die DIN ISO/IEC 22301. Idealerweise werden die Anforderungen der Praktik Notfallplanung durch ein BCMS erbracht. Wenn ein BCMS aufgebaut wird, können die Anforderungen dieser Praktik in das BCMS integriert erfüllt werden. Das BSI empfiehlt dazu in einem ersten Schritt ein Reaktiv-BCMS aufzubauen und mit steigendem Reifegrad ein Standard-BCMS über die Zwischenstufe Aufbau-BCMS anzustreben. Nähere Informationen können dem BSI-Standard 200-4 Kapitel 2.6 BCMS-Stufenmodell (Reaktiv-, Aufbau- und Standard-BCMS) entnommen werden."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "not.1.1.4-prm1": {
+     "alt-identifier": "9cfedbf2-6dc8-4ca5-8d93-26610884e3b7"
+    },
+    "not.1.1.4-prm2": {
+     "alt-identifier": "9cfedbf2-6dc8-4ca5-8d93-26610884e3b7"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "9cfedbf2-6dc8-4ca5-8d93-26610884e3b7"
+  }
+ ]
+}

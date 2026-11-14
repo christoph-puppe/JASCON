@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.1",
-   "sequence": 1300
+   "sequence": 2020
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.2",
-   "sequence": 1310
+   "sequence": 2030
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.3",
-   "sequence": 1320
+   "sequence": 2040
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.4",
-   "sequence": 1330
+   "sequence": 2050
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.5",
-   "sequence": 1340
+   "sequence": 2060
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.6",
-   "sequence": 1350
+   "sequence": 2070
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.5.7",
-   "sequence": 1360
+   "sequence": 2080
   }
  ],
  "label": "5",

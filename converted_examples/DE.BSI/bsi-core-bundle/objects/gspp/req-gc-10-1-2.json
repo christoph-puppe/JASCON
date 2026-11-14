@@ -1,0 +1,70 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.10.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.10.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kommunikation im Projektmanagement"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS bei sicherheitsrelevanten Projekten die Beteiligung {param:gc.10.1.2-prm1} zu festgelegten Zeitpunkten im Projektverlauf verankern."
+   },
+   "parameters": [
+    {
+     "name": "gc.10.1.2-prm1",
+     "type": "string",
+     "label": "der relevanten Sicherheitsorgane"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "bei sicherheitsrelevanten Projekten die Beteiligung {{der relevanten Sicherheitsorgane}}",
+     "result-specification": "zu festgelegten Zeitpunkten im Projektverlauf"
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Bei allen Projekten, die Auswirkungen auf die Informationsverarbeitung haben erfolgt eine frühzeitige Beteiligung des ISB und ggfs. weiterer sicherheitsrelevanter Organe. Beispiele für sicherheitsrelevante Projekte sind die Einführung eines neuen IT-Systems oder einer neuen Software. Beispiele für geeignete Zeitpunkte der Beteiligung sind etwa während der Beschaffung und/ oder vor der Produktivsetzung."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "gc.10.1.2-prm1": {
+     "alt-identifier": "6ccbc3f1-0984-4b12-86f2-708d40e9b635"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "6ccbc3f1-0984-4b12-86f2-708d40e9b635"
+  }
+ ]
+}

@@ -23,26 +23,6 @@
      "label": "Kriterien zur Akzeptanz"
     }
    ]
-  },
-  {
-   "id": "BES.7.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Outsourcing SOLLTE die Kompatibilität des Dienstes mit dem Informationsverbund im Hinblick auf die Schnittstellen, die Netzanbindung, das Administrationsmodell und das Datenmanagementmodell testen."
-   }
-  },
-  {
-   "id": "BES.7.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Beschaffungsmanagement für Outsourcing SOLLTE die Umsetzung der geforderten Beschaffungskriterien für die Netzanbindung vor der Netzanbindung testen."
-   }
   }
  ],
  "facets": {
@@ -55,22 +35,6 @@
      "target-object-categories": [
       "Einkäufe"
      ]
-    },
-    "BES.7.1.1": {
-     "action": "testen",
-     "result": "die Kompatibilität des Dienstes mit dem Informationsverbund",
-     "result-specification": "im Hinblick auf die Schnittstellen, die Netzanbindung, das Administrationsmodell und das Datenmanagementmodell",
-     "target-object-categories": [
-      "Outsourcing"
-     ]
-    },
-    "BES.7.1.2": {
-     "action": "testen",
-     "result": "die Umsetzung der geforderten Beschaffungskriterien für die Netzanbindung",
-     "result-specification": "vor der Netzanbindung",
-     "target-object-categories": [
-      "Outsourcing"
-     ]
     }
    }
   },
@@ -80,43 +44,12 @@
      "required-documentation": [
       "Abnahmeprotokoll"
      ]
-    },
-    "BES.7.1.1": {
-     "required-documentation": [
-      "Abnahmeprotokoll"
-     ]
-    },
-    "BES.7.1.2": {
-     "required-documentation": [
-      "Abnahmeprotokoll"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "BES.7.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
-     ]
-    },
-    "BES.7.1.2": {
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
@@ -137,26 +70,6 @@
      "tags": [
       "Lieferketten"
      ]
-    },
-    "BES.7.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Test der Kompatibilität",
-     "alt-identifier": "a2157baa-d3d7-4527-a9e9-7325a2b7b9ff"
-    },
-    "BES.7.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Lieferketten"
-     ],
-     "title": "Netzcheck",
-     "alt-identifier": "2e2346ed-c3fd-4c96-89f7-7ed920eb8d1a"
     }
    }
   },
@@ -165,16 +78,6 @@
     "smt": {
      "guidance": {
       "de": "Durch eine Prüfung anhand von Akzeptanzkriterien wird sichergestellt, dass die erbrachten Dienstleistungen oder IT-Produkte den geforderten Beschaffungskriterien entsprechen. Die Akzeptanzkriterien können also den Beschaffungskriterien entsprechen oder deren Prüfung konkretisieren. Hierzu können verschiedene Methoden eingesetzt werden, etwa Stichproben, Sicherheitstests oder die Nachverfolgung der Lieferkette anhand von Seriennummern.  Dabei besteht ein enger Zusammenhang zu den Praktiken Dienstleistersteuerung, sowie Änderungen und Tests."
-     }
-    },
-    "BES.7.1.1": {
-     "guidance": {
-      "de": "Die Regelung dient dazu, ungewollte Brüche oder Inkompatibilitäten zu vermeiden, die im Betrieb zu Sicherheits- oder Funktionsproblemen führen können. Ohne eine solche Überprüfung könnte z. B. eine unklare Rechtevergabe dazu führen, dass ein Dienstleister umfassendere Zugriffe erhält als notwendig, oder eine fehlerhafte Schnittstellenintegration könnte den Ausfall wichtiger Anwendungen nach sich ziehen. Umgekehrt kann eine saubere Prüfung sicherstellen, dass Outsourcing-Dienste nahtlos integriert, technisch handhabbar und im Betrieb kontrollierbar bleiben. Für die Bewertung der Kompatibilität sind dabei vier Aspekte besonders kritisch: Schnittstellen sind die technischen Übergabepunkte, an denen Systeme Daten austauschen oder Funktionen ansprechen; Netzanbindung bezeichnet die physische oder logische Verbindung zwischen dem Dienstleister und dem Informationsverbund der Institution; das Administrationsmodell beschreibt, wer welche Rechte zur Einrichtung, Änderung und Überwachung von Systemkomponenten hat; und das Datenmanagementmodell legt fest, wie Daten gespeichert, strukturiert, repliziert und gelöscht werden."
-     }
-    },
-    "BES.7.1.2": {
-     "guidance": {
-      "de": "Netzanbindung meint hier jede Form der logischen oder physischen Kopplung von Netzwerken – etwa über VPN, MPLS, dedizierte Leitungen oder Cloud-Interconnects. Der Sinn dieser Vorschrift liegt darin, Risiken aus unsicheren oder ungetesteten Dienstleisterverbindungen zu minimieren. So könnte ein ungeprüfter Zugang über eine unsauber konfigurierte VPN-Schnittstelle Schadsoftware einschleusen oder interne Systeme unautorisiert zugänglich machen. Umgekehrt kann die vorgelagerte Prüfung sicherstellen, dass Verschlüsselung, Bandbreite, Trennung sensibler Netze oder auch Logging-Vorgaben wie vorgesehen funktionieren und dadurch ein sicherer, nachvollziehbarer Betrieb gewährleistet wird. Die Umsetzung kann durch mehrere Maßnahmen erfolgen: (1) Vor der Inbetriebnahme kann ein technischer Funktionstest durchgeführt werden, bei dem Firewalls, Routing und VPN-Tunnel anhand von Testaccounts überprüft werden. (2) Ein Abnahmetest durch die Institution kann beinhalten, dass simulierte Angriffe oder Fehlkonfigurationen (z. B. offene Ports) nachgestellt werden, um die Widerstandsfähigkeit des Dienstleisters zu prüfen. (3) Prozessual kann eine Checkliste genutzt werden, die verbindlich vorgibt, dass Sicherheitsanforderungen wie Verschlüsselungsstandards, Protokollierung, Redundanz oder die Einhaltung von Latenzgrenzen dokumentiert und validiert sind, bevor der „Go-Live“ erfolgt. Zusätzlich kann es hilfreich sein, die Ergebnisse der Tests nachvollziehbar in einem Freigabeprotokoll festzuhalten, das sowohl die Institution als auch der Dienstleister unterzeichnen. Auf diese Weise kann die Institution sicherstellen, dass die Netzanbindung nicht nur formell, sondern auch praktisch den definierten Kriterien entspricht."
      }
     }
    }

@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.1",
-   "sequence": 1380
+   "sequence": 2100
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.2",
-   "sequence": 1390
+   "sequence": 2110
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.3",
-   "sequence": 1400
+   "sequence": 2120
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.6.4",
-   "sequence": 1410
+   "sequence": 2130
   }
  ],
  "label": "6",

@@ -1,0 +1,34 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-10",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Behandlung von Vorfällen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10",
+   "sequence": 3540
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.1",
+   "sequence": 3550
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.2",
+   "sequence": 3560
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-5-10-3",
+   "sequence": 3590
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.4",
+   "sequence": 3600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.5.10.5",
+   "sequence": 3610
+  }
+ ]
+}

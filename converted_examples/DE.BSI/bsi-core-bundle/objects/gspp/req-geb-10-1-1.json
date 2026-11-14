@@ -1,0 +1,95 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.10.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Luftstrom-Analyse"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Serverräume KANN den Klimatisierungsbedarf anhand einer Luftstrom-Analyse {param:geb.10.1.1-prm1} überprüfen."
+   },
+   "parameters": [
+    {
+     "name": "geb.10.1.1-prm1",
+     "type": "string",
+     "label": "regelmäßig"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überprüfen",
+     "result": "den Klimatisierungsbedarf anhand einer Luftstrom-Analyse",
+     "result-specification": "{{regelmäßig}}",
+     "target-object-categories": [
+      "Serverräume"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Übungs- und Prüfplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Luftstromanalyse ist die systematische Bewertung von Luftbewegungsmustern zur Optimierung der Kühleffizienz und zur Vermeidung von Geräteausfällen. Dabei wird untersucht, wie die kalte Luft in der Einrichtung verteilt wird, es werden potenzielle Hotspots oder Bereiche mit Stagnation identifiziert, und es wird ein ordnungsgemäßer Wärmeaustausch durch die Überwachung der Einlass- und Auslasstemperaturen in den Serverracks sichergestellt. Zu den möglichen Methoden gehören CFD-Modelle (Computational Fluid Dynamics) zur Simulation von Luftströmungsmustern vor der Implementierung, der Einsatz von Temperatur- und Luftströmungssensoren an strategischen Stellen, Rauchtests zur visuellen Verfolgung der Luftbewegungspfade und Druckdifferenzmessungen zur Überprüfung der Integrität des Containments. Ein gut ausgeführtes Luftstrommanagement steht außerdem in direktem Zusammenhang mit geringeren Kühlkosten (oft 20-30 % Einsparungen), einer längeren Lebensdauer der Geräte und einer höheren Rechendichte pro Quadratmeter. Zu den bewährten Lösungen zur besseren Zirkulation gehören die Eingrenzung von Warm- und Kaltgängen, um eine Vermischung der Luftströme zu verhindern, die Aufrechterhaltung optimaler Rack-Einlasstemperaturen, die Sicherstellung einer angemessenen Perforation der Bodenfliesen in Doppelbodenumgebungen, die Optimierung der Serverplatzierung, um einen Bypass-Luftstrom zu vermeiden, und die Durchführung regelmäßiger Wärmebilduntersuchungen, um sich entwickelnde Probleme zu erkennen. Besonderer Aufmerksamkeit bedarf das Kabelmanagement, da eine ungeordnete Verkabelung den Luftstrom um bis zu 60 % behindern kann; ebenso ist es sinnvoll Abdeckplatten aller ungenutzten Rack-Räume abzudichten, um eine innere Zirkulation heißer Luft zu verhindern."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "geb.10.1.1-prm1": {
+     "alt-identifier": "0abf44e0-ee1c-46fc-a106-fa58b1f5f245"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "0abf44e0-ee1c-46fc-a106-fa58b1f5f245"
+  }
+ ]
+}

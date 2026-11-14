@@ -1,0 +1,85 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.7.4.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Beschreibung der Sicherheitsarchitektur"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für IT-Produkte SOLLTE eine Beschreibung der Sicherheitsarchitektur dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "eine Beschreibung der Sicherheitsarchitektur",
+     "target-object-categories": [
+      "IT-Produkte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Betriebshandbuch"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.28"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die technische Sicherheitsarchitektur bezeichnet in diesem Kontext die strukturierte Darstellung der sicherheitsrelevanten Komponenten und Mechanismen eines IT-Produkts. Dazu gehören z. B. die eingesetzten kryptografischen Verfahren, die Segmentierung von Netzwerken, Schnittstellen zu anderen Systemen, Rollen- und Berechtigungskonzepte sowie Schutzmechanismen gegen Schadsoftware oder Manipulation. Sie bildet somit eine nachvollziehbare Übersicht, wie die Sicherheit im Produkt technisch verankert ist und wie diese in die bestehende IT-Landschaft integriert werden kann. Die Dokumentation kann verhindern, dass eine Institution Systeme übernimmt, deren Schutzmechanismen unklar oder unzureichend sind. Ohne eine solche Transparenz könnte es passieren, dass kritische Schwachstellen verborgen bleiben oder Sicherheitsmechanismen aufgrund mangelnden Verständnisses nicht korrekt konfiguriert werden. Eine sinnvolle Umsetzung kann beispielsweise so erfolgen: (1) Ein Anbieter kann verpflichtet werden, vor Abnahme ein Architekturdiagramm mit hervorgehobenen Sicherheitskomponenten bereitzustellen. (2) Die Institution kann bei Pilotinstallationen Checklisten verwenden, um die dokumentierten Sicherheitsmaßnahmen mit der realisierten Konfiguration abzugleichen. (3) Ergänzend kann ein standardisiertes Template genutzt werden, das Mindestangaben wie eingesetzte Protokolle, Verschlüsselungsmechanismen, Rollenmodelle und Logging-Kapazitäten abfragt, sodass einheitliche und vergleichbare Unterlagen entstehen. Auch ein Abgleich mit bewährten Referenzarchitekturen kann helfen, die Vollständigkeit und Plausibilität der Angaben zu prüfen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "fca365f8-601e-4e9f-8b8a-1cc54c2936fb"
+  }
+ ]
+}

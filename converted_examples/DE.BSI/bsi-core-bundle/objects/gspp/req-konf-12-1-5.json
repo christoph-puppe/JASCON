@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.12.1.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "HTTP Strict Transport Security (HSTS)"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für Webbrowser SOLLTE aufgerufene Inhalte anhand der von der Webseite bereitgestellten  HTTP Strict Transport Security (HSTS) Richtlinie einschränken."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "einschränken",
+     "result": "aufgerufene Inhalte anhand der von der Webseite bereitgestellten  HTTP Strict Transport Security (HSTS) Richtlinie",
+     "target-object-categories": [
+      "Webbrowser"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "0",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.15",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.43"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 1,
+     "tags": [
+      "Produktbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die HTTP Strict Transport Security (HSTS) ist ein Web-Sicherheitsmechanismus – definiert in IETF RFC 6797 – der Webbrowser zwingt, eine ausschließlich verschlüsselte Verbindung (HTTPS) mit einem Webserver zu nutzen, selbst wenn der Nutzer oder eine Anwendung versucht, über das unsichere HTTP zuzugreifen. Konkret beinhaltet die HSTS-Richtlinie (oder Policy) einen speziellen HTTP-Antwort-Header, den der Webserver an den Browser sendet, der die Dauer (max-age) festlegt, für die der Browser die Verbindung nur über HTTPS herstellen soll. Die restriktive Konfiguration von Webbrowsern in Bezug auf diese Richtlinie kann die Schutzwirkung erhöhen, da so das Risiko eines Man-in-the-Middle (MITM)-Angriffs, bei dem ein Angreifer eine unverschlüsselte Verbindung abfangen oder den Nutzer auf eine unsichere Seite umleiten könnte, deutlich reduziert wird. Eine solche Konfiguration kann die Institution vor dem ungewollten Downgrade-Angriff (Downgrade Attack) schützen, bei dem die Verbindung von HTTPS auf das unsichere HTTP erzwungen wird."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "275e3b2d-5008-48ba-8d4f-72830bc8c730"
+  }
+ ]
+}

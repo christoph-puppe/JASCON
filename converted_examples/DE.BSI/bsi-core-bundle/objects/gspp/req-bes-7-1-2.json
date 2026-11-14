@@ -1,0 +1,85 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.7.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.7.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Netzcheck"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Outsourcing SOLLTE die Umsetzung der geforderten Beschaffungskriterien für die Netzanbindung vor der Netzanbindung testen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "testen",
+     "result": "die Umsetzung der geforderten Beschaffungskriterien für die Netzanbindung",
+     "result-specification": "vor der Netzanbindung",
+     "target-object-categories": [
+      "Outsourcing"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Abnahmeprotokoll"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.26",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Netzanbindung meint hier jede Form der logischen oder physischen Kopplung von Netzwerken – etwa über VPN, MPLS, dedizierte Leitungen oder Cloud-Interconnects. Der Sinn dieser Vorschrift liegt darin, Risiken aus unsicheren oder ungetesteten Dienstleisterverbindungen zu minimieren. So könnte ein ungeprüfter Zugang über eine unsauber konfigurierte VPN-Schnittstelle Schadsoftware einschleusen oder interne Systeme unautorisiert zugänglich machen. Umgekehrt kann die vorgelagerte Prüfung sicherstellen, dass Verschlüsselung, Bandbreite, Trennung sensibler Netze oder auch Logging-Vorgaben wie vorgesehen funktionieren und dadurch ein sicherer, nachvollziehbarer Betrieb gewährleistet wird. Die Umsetzung kann durch mehrere Maßnahmen erfolgen: (1) Vor der Inbetriebnahme kann ein technischer Funktionstest durchgeführt werden, bei dem Firewalls, Routing und VPN-Tunnel anhand von Testaccounts überprüft werden. (2) Ein Abnahmetest durch die Institution kann beinhalten, dass simulierte Angriffe oder Fehlkonfigurationen (z. B. offene Ports) nachgestellt werden, um die Widerstandsfähigkeit des Dienstleisters zu prüfen. (3) Prozessual kann eine Checkliste genutzt werden, die verbindlich vorgibt, dass Sicherheitsanforderungen wie Verschlüsselungsstandards, Protokollierung, Redundanz oder die Einhaltung von Latenzgrenzen dokumentiert und validiert sind, bevor der „Go-Live“ erfolgt. Zusätzlich kann es hilfreich sein, die Ergebnisse der Tests nachvollziehbar in einem Freigabeprotokoll festzuhalten, das sowohl die Institution als auch der Dienstleister unterzeichnen. Auf diese Weise kann die Institution sicherstellen, dass die Netzanbindung nicht nur formell, sondern auch praktisch den definierten Kriterien entspricht."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "2e2346ed-c3fd-4c96-89f7-7ed920eb8d1a"
+  }
+ ]
+}

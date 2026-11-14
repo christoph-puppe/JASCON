@@ -1,0 +1,95 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.10.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Klimamessung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Serverräume SOLLTE Lufttemperatur und Luftfeuchtigkeit anhand von {param:geb.10.1.2-prm1} überwachen."
+   },
+   "parameters": [
+    {
+     "name": "geb.10.1.2-prm1",
+     "type": "string",
+     "label": "Schwellwerten"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überwachen",
+     "result": "Lufttemperatur und Luftfeuchtigkeit",
+     "result-specification": "anhand von {{Schwellwerten}}",
+     "target-object-categories": [
+      "Serverräume"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "0",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.2"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "IT-Infrastruktur benötigt typischerweise eine Umwelttemperatur von nicht viel mehr als 25°C und eine Luftfeuchtigkeit von nicht über 60%. Bei höheren Werten altern Komponenten schneller und das Risiko von Ausfällen durch Abwärme oder Spannungsüberschläge steigt. Ermitteln Sie Grenzwerte anhand der Herstellerangaben der im Raum eingesetzten Komponenten. Die Überwachung kann mit klimatechnischen Sensoren in den Geräten selbst oder im Raum realisiert werden. Eine saisonale Anpassung der Lüftungsanlagen kann erforderlich sein, insbesondere in Einrichtungen, die mit Eco-Modus arbeiten."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "geb.10.1.2-prm1": {
+     "alt-identifier": "338031dd-f3c6-4245-b411-7c46852edfcb"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "338031dd-f3c6-4245-b411-7c46852edfcb"
+  }
+ ]
+}

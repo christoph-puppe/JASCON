@@ -1,0 +1,74 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GC.5.1.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GC.5.1.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Freigabe der Sicherheitsleitlinie"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "must",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Governance und Compliance MUSS die festgelegte Sicherheitsleitlinie durch die Institutionsleitung autorisieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "autorisieren",
+     "result": "die festgelegte Sicherheitsleitlinie",
+     "result-specification": "durch die Institutionsleitung"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Informationssicherheitsleitlinie"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 0,
+     "tags": [
+      "Führungsverantwortung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Diese Autorisierung muss dokumentiert werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "230dbdf5-8328-4629-8734-1b2f4288d5eb"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.5.1.3"
+  }
+ ]
+}

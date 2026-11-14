@@ -23,23 +23,6 @@
      "label": "eine bestimmte Frist"
     }
    ]
-  },
-  {
-   "id": "ASST.7.2.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Informationen und Assets für Daten KANN die langfristige Archivierung mindestens für {param:asst.7.2.1-prm1} verankern."
-   },
-   "parameters": [
-    {
-     "name": "asst.7.2.1-prm1",
-     "type": "string",
-     "label": "eine bestimmte Frist"
-    }
-   ]
   }
  ],
  "facets": {
@@ -52,25 +35,12 @@
      "target-object-categories": [
       "Daten"
      ]
-    },
-    "ASST.7.2.1": {
-     "action": "verankern",
-     "result": "die langfristige Archivierung",
-     "result-specification": "mindestens für {{eine bestimmte Frist}}",
-     "target-object-categories": [
-      "Daten"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Arbeitsanweisung"
-     ]
-    },
-    "ASST.7.2.1": {
      "required-documentation": [
       "Arbeitsanweisung"
      ]
@@ -90,18 +60,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.19",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "ASST.7.2.1": {
-     "confidentiality": "2",
-     "integrity": "0",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.45",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.38"
-     ]
     }
    }
   },
@@ -114,16 +72,6 @@
      "tags": [
       "Archivierung"
      ]
-    },
-    "ASST.7.2.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Archivierung"
-     ],
-     "title": "Langfristige Archivierung",
-     "alt-identifier": "d26539e6-62c3-469a-87f3-87ab15fd9213"
     }
    }
   },
@@ -133,11 +81,6 @@
      "guidance": {
       "de": "Klar festgelegte und in Prozessen verankerte Löschfristen helfen Sicherheits- und Compliancerisiken zu minimieren, indem Informationen entsorgt werden, wenn sie nicht mehr benötigt werden. Dies gilt sowohl für Originaldaten als auch für Kopien und archivierte Aufzeichnungen, einschließlich Protokolldateien. Hier besteht ein enger Bezug zu Compliance-Verpflichtungen, sowohl zur Aufbewahrung (z.B. für Nachweispflichten aus dem Steuerrecht) als auch zur Löschung (z.B. aus dem Datenschutzrecht). Die Auswahl der Methode zum Löschen hängt von der Vertraulichkeit der Daten, verwendeten Anwendungen oder Speichermedien und ggf. bestehenden Compliance-Verpflichtungen ab. Eine Herausforderung stellt dabei der Umgang mit Datenkopien in Datensicherungen dar. Da das nachträgliche Herausfiltern bestimmter Daten aus Datensicherungen häufig sehr aufwändig ist, ist es empfehlenswert die Versionierung der Datensicherungen so zu gestalten, dass die Daten zum Ablauf der Löschfrist ohnehin mit neueren Datensicherungen überschrieben wurden oder ältere Kopien der Datensicherung insgesamt gelöscht sind. Für kurzlebige Daten bietet es sich an diese nicht in eine einzige zentrale Datensicherung aufzunehmen, sondern je nach Schutzbedarf an Integrität und Verfügbarkeit dieser Daten gar keine oder eine Datensicherung für kurzlebige Daten, z.B. Diagnosedaten mit Personenbezug, vorzuhalten."
      }
-    },
-    "ASST.7.2.1": {
-     "guidance": {
-      "de": "Archivierung meint hier die langfristige Aufbewahrung derjenigen Daten, die über längere Zeit benötigt werden, z.B. über mehr als 10 Jahre. Hierbei kann es sich beispielsweise um Nachweise der Einhaltung rechtlicher Verpflichtungen, Daten zur Nachvollziehbarkeit von Angriffen (Audit Log), oder zur Geltendmachung von Ansprüchen handeln. Dabei kann es sich sowohl um analoge Dokumente als auch um digitale Daten handeln. Die meisten Institutionen verarbeiten Daten, die aufgrund von Compliance-Verpflichtungen langfristig gespeichert werden, z.B. handels- und steuerrechtlich relevante Dokumente oder Eigentumsurkunden."
-     }
     }
    }
   },
@@ -145,9 +88,6 @@
    "param-extras": {
     "asst.7.2-prm1": {
      "alt-identifier": "2574ffa3-fa96-4eed-8a9a-e67216d499d9"
-    },
-    "asst.7.2.1-prm1": {
-     "alt-identifier": "d26539e6-62c3-469a-87f3-87ab15fd9213"
     }
    }
   }

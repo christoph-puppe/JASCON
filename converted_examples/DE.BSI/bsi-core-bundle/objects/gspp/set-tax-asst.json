@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-1",
-   "sequence": 1020
+   "sequence": 1610
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-2",
-   "sequence": 1070
+   "sequence": 1750
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-3",
-   "sequence": 1230
+   "sequence": 1950
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-4",
-   "sequence": 1290
+   "sequence": 2010
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-5",
-   "sequence": 1370
+   "sequence": 2090
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-6",
-   "sequence": 1420
+   "sequence": 2140
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst-7",
-   "sequence": 1500
+   "sequence": 2280
   }
  ],
  "label": "ASST",

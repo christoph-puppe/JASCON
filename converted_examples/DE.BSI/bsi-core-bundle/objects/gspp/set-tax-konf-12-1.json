@@ -1,0 +1,58 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-12-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Eingabevalidierung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1",
+   "sequence": 11790
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.1",
+   "sequence": 11800
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.2",
+   "sequence": 11810
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.3",
+   "sequence": 11820
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.4",
+   "sequence": 11830
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.5",
+   "sequence": 11840
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.6",
+   "sequence": 11850
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.7",
+   "sequence": 11860
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.8",
+   "sequence": 11870
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.9",
+   "sequence": 11880
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.10",
+   "sequence": 11890
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.11",
+   "sequence": 11900
+  }
+ ]
+}

@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.6.1",
-   "sequence": 4490
+   "sequence": 7440
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.6.2",
-   "sequence": 4500
+   "sequence": 7450
   }
  ],
  "label": "6",

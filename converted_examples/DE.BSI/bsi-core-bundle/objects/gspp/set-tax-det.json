@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-1",
-   "sequence": 5840
+   "sequence": 9160
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-2",
-   "sequence": 5880
+   "sequence": 9240
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-3",
-   "sequence": 5950
+   "sequence": 9440
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-4",
-   "sequence": 6150
+   "sequence": 9720
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-5",
-   "sequence": 6260
+   "sequence": 10010
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-6",
-   "sequence": 6290
+   "sequence": 10110
   }
  ],
  "label": "DET",

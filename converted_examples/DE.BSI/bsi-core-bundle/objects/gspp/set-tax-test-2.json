@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.1",
-   "sequence": 2620
+   "sequence": 4430
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/TEST.2.2",
-   "sequence": 2630
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/test-2-2",
+   "sequence": 4480
   }
  ],
  "label": "2",

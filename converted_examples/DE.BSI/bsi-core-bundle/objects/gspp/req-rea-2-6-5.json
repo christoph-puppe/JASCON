@@ -1,0 +1,86 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/REA.2.6.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "REA.2.6.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "Eskalation"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Sicherheitsvorfallsbehandlung SOLLTE eine Eskalationsleiter verankern."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "eine Eskalationsleiter"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Behandlung von Sicherheitsvorfällen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.47",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.40"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine Eskalationsleiter (engl. escalation matrix oder escalation path) bezeichnet in diesem Kontext eine festgelegte Reihenfolge von Melde- und Entscheidungsstufen, die im Falle eines Sicherheitsvorfalls eingehalten wird, um eine zeitgerechte und angemessene Reaktion sicherzustellen. Sie definiert, welche Rollen oder Funktionen bei bestimmten Schweregraden eines Vorfalls informiert, einbezogen oder zur Entscheidung befugt sind. Der Begriff ist hier prozessual zu verstehen, also nicht als hierarchische Personalstruktur, sondern als abgestufter Kommunikations- und Entscheidungsmechanismus innerhalb des Sicherheitsvorfallsprozesses. Der Zweck einer solchen Eskalationsleiter liegt darin, dass sicherheitsrelevante Ereignisse nicht auf operativer Ebene „steckenbleiben“, sondern in ihrer Kritikalität und potenziellen Auswirkung auf höhere Entscheidungsebenen eskaliert werden können. Dadurch kann verhindert werden, dass etwa ein anhaltender Systemausfall, ein möglicher Datenabfluss oder ein Angriff auf kritische Systeme unbemerkt bleibt oder verspätet adressiert wird. Eine wirksam verankerte Eskalationsleiter kann somit sicherstellen, dass die Reaktionszeit kurz, die Zuständigkeiten eindeutig und die Kommunikation nachvollziehbar bleiben. Hier empfiehlt es sich die Anforderung im Zusammenhang mit Notfallplänen, Krisenmanagement und Business Continuity Management zu betrachten – siehe auch Praktik Notfallplanung. Beispiele für Eskalationsstufen: (1) Ereignis, (2) sicherheitsrelevantes Ereignis, (3) sicherheitskritisches Ereignis, (4) Sicherheitsvorfall, (5) Notfall (siehe Notfallplanung), (6) Krise. Die Einstufung erfolgt entsprechend der Definition, die jede Institution für sich festlegt."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "5e9084e2-adb6-417d-b4fb-59735ac5aae9"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/NOT.1.1"
+  }
+ ]
+}

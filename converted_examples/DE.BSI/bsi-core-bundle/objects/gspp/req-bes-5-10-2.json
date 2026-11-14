@@ -1,0 +1,83 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.5.10.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.5.10.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Melden von Vorfällen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Einkäufe SOLLTE eine Verpflichtung zur unverzüglichen Information des Auftraggebers über ihn betreffende Vorfälle vereinbaren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "vereinbaren",
+     "result": "eine Verpflichtung zur unverzüglichen Information des Auftraggebers über ihn betreffende Vorfälle",
+     "target-object-categories": [
+      "Einkäufe"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.20"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Der Sinn dieser Regelung liegt darin, dass der Auftraggeber seine Handlungsfähigkeit behält und Risiken frühzeitig einschätzen kann. Ein verzögerter Informationsfluss könnte dazu führen, dass Schäden sich unbemerkt ausweiten oder notwendige Reaktionen, wie etwa die Unterbindung von Angriffspfaden, verspätet erfolgen. Eine rechtzeitige Mitteilung kann hingegen Transparenz schaffen und es ermöglichen, dass Gegenmaßnahmen in Koordination mit dem Auftraggeber wirksam eingeleitet werden. Die praktische Umsetzung kann durch klare vertragliche Regelungen erfolgen, in denen Eskalationswege und Fristen für Meldungen definiert werden. Dazu kann ein gemeinsames Kontakt- und Kommunikationsverfahren etabliert werden, etwa ein 24/7 erreichbarer Ansprechpartner oder eine dedizierte Notfalladresse für sicherheitsrelevante Meldungen. Technisch kann eine Schnittstelle (z. B. ein abgesicherter Meldekanal oder Ticket-System) eingerichtet werden, über die Vorfälle dokumentiert und weitergeleitet werden können."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "d359fe31-8bf1-47ae-bbcc-e572b1998d52"
+  }
+ ]
+}

@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.1",
-   "sequence": 1240
+   "sequence": 1960
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.2",
-   "sequence": 1250
+   "sequence": 1970
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.3",
-   "sequence": 1260
+   "sequence": 1980
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.4",
-   "sequence": 1270
+   "sequence": 1990
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ASST.4.5",
-   "sequence": 1280
+   "sequence": 2000
   }
  ],
  "label": "4",

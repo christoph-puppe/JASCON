@@ -8,47 +8,47 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.1",
-   "sequence": 7890
+   "sequence": 12630
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.2",
-   "sequence": 7900
+   "sequence": 12640
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.3",
-   "sequence": 7910
+   "sequence": 12650
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.4",
-   "sequence": 7920
+   "sequence": 12660
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.5",
-   "sequence": 7930
+   "sequence": 12670
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.6",
-   "sequence": 7940
+   "sequence": 12680
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.7",
-   "sequence": 7950
+   "sequence": 12690
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.8",
-   "sequence": 7960
+   "sequence": 12700
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.9",
-   "sequence": 7970
+   "sequence": 12710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.10",
-   "sequence": 7980
+   "sequence": 12720
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.11",
-   "sequence": 7990
+   "sequence": 12730
   }
  ],
  "label": "4",

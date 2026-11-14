@@ -16,26 +16,6 @@
    "prose": {
     "de": "Konfiguration für IT-Systeme SOLLTE den Zugriff auf das System im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement authentifizieren."
    }
-  },
-  {
-   "id": "KONF.5.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für IT-Systeme SOLLTE den Zugriff auf die Firmware im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement authentifizieren."
-   }
-  },
-  {
-   "id": "KONF.5.1.2",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Konfiguration für Endgeräte KANN den Zugriff vor dem Start des Betriebssystems authentifizieren."
-   }
   }
  ],
  "facets": {
@@ -48,37 +28,12 @@
      "target-object-categories": [
       "IT-Systeme"
      ]
-    },
-    "KONF.5.1.1": {
-     "action": "authentifizieren",
-     "result": "den Zugriff auf die Firmware",
-     "result-specification": "im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
-    },
-    "KONF.5.1.2": {
-     "action": "authentifizieren",
-     "result": "den Zugriff vor dem Start des Betriebssystems",
-     "target-object-categories": [
-      "Endgeräte"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.5.1.1": {
-     "required-documentation": [
-      "Konfigurationshistorie"
-     ]
-    },
-    "KONF.5.1.2": {
      "required-documentation": [
       "Konfigurationshistorie"
      ]
@@ -95,26 +50,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "KONF.5.1.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "2",
-     "authenticity": "2",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.21"
-     ]
-    },
-    "KONF.5.1.2": {
-     "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
-     ]
     }
    }
   },
@@ -127,26 +62,6 @@
      "tags": [
       "Produktbeschreibung"
      ]
-    },
-    "KONF.5.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 1,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Authentifizierung an der Firmware",
-     "alt-identifier": "e9bd0b40-47ed-4e4d-a747-ad71884f076f"
-    },
-    "KONF.5.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Produktbeschreibung"
-     ],
-     "title": "Pre-Boot-Authentifizierung",
-     "alt-identifier": "89f6db4b-b55b-4218-aad6-6f5c33a49ee6"
     }
    }
   },
@@ -155,16 +70,6 @@
     "smt": {
      "guidance": {
       "de": "Betrifft sowohl die lokale Anmeldung über eine Benutzeroberfläche als auch den Zugriff über Fernwartungsprotokolle oder -anwendungen wie RDP, SNMP, wenn diese vorhanden sind.  Die Umsetzung erfolgt im einfachsten Fall durch einen Login, bzw. eine Bildschirmsperre für das IT-System. Biometrische Daten wie Fingerabdrücke können gefälscht werden und sind nicht so leicht zu ändern wie Passwörter. Setzen Sie Biometrie daher nicht als einzigen Authentifizierungsfaktor ein, sondern wenn, dann nur zur Ergänzung (Mehr-Faktor-Authentifizierung). Die Formulierung \"im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik Berechtigung (BER) festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist. Die Anforderung ist entbehrlich, wenn das System keinen Zugriff auf schützenswerte Daten erlaubt, z.B. bei Nutzung als Kiosk."
-     }
-    },
-    "KONF.5.1.1": {
-     "guidance": {
-      "de": "Durch unautorisierte Änderungen an Einstellungen der Firmware (UEFI oder Embedded System) könnten Fehlerzustände entstehen oder Sicherheitsfunktionen wie TPM deaktiviert werden. Dies kann je nach Firmware durch lokale Zugangspasswörter oder zentrale Berechtigung umgesetzt werden. Hierbei sind insbesondere Einstellungen von Sicherheitsfunktionen oder der Netzanbindung relevant. Die Formulierung \"im Einklang mit den zugehörigen Anforderungen zum Identitäts- und Berechtigungsmanagement\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik Berechtigung (BER) festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
-     }
-    },
-    "KONF.5.1.2": {
-     "guidance": {
-      "de": "Diese Authentifizierung vor dem Start, oft als \"Pre-Boot Authentication\" (PBA) oder \"Hardware-based Authentication\" bezeichnet, verhindert, dass ein Gerät gestartet wird, bevor sich Nutzende mit Anmeldeinformationen, wie zum Beispiel einem Passwort oder einem biometrischen Merkmal, autorisiert haben. Ohne diese Authentifizierung könnte ein Angreifer versuchen, das Gerät direkt zu booten, die Festplatte zu kopieren oder zu manipulieren, um sensitive Daten zu extrahieren. Eine gängige Methode ist die Verwendung einer Festplattenverschlüsselung (Full Disk Encryption, FDE) mit einer Pre-Boot-Authentifizierung. Eine Institution könnte auch eine Mehr-Faktor-Authentifizierung (MFA) vor dem Start des Betriebssystems einsetzen, beispielsweise indem ein Hardware-Token oder ein biometrischer Scan zusätzlich zum Passwort erforderlich ist, was die Sicherheit weiter erhöht."
      }
     }
    }

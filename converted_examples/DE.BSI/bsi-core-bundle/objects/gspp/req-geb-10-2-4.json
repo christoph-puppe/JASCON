@@ -1,0 +1,95 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.2.4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.10.2.4",
+ "lifecycle": "active",
+ "title": {
+  "de": "Brandwiderstandsklassen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Räume KANN feuerfeste Materialen für alle raumbildenden Teile , sodass sie Feuern für {param:geb.10.2.4-prm1} standhalten, installieren."
+   },
+   "parameters": [
+    {
+     "name": "geb.10.2.4-prm1",
+     "type": "string",
+     "label": "eine bestimmte Frist"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "feuerfeste Materialen für alle raumbildenden Teile",
+     "result-specification": ", sodass sie Feuern für {{eine bestimmte Frist}} standhalten,",
+     "target-object-categories": [
+      "Räume"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Gebäudedokumentation"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.1"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Der Einsatz feuerfester Materialien für raumbildende Teile – also Wände, Decken, Türen und gegebenenfalls auch Bodenaufbauten – kann das Risiko erheblich reduzieren, dass sich ein Brand innerhalb eines Gebäudes schnell ausbreitet oder sicherheitsrelevante Bereiche in kurzer Zeit unbenutzbar werden könnten. Ohne geeignete Materialien könnte ein kleiner Kabelbrand beispielsweise binnen Minuten auf benachbarte Räume mit Servern, Schaltanlagen oder Dokumenten übergreifen und kritische Infrastruktur unbrauchbar machen. Mit feuerfesten Materialien kann eine Institution die Zeitspanne verlängern, in der Personen evakuiert, Brandbekämpfungsmaßnahmen eingeleitet oder Systeme geordnet heruntergefahren werden können. Der Begriff „feuerfest“ bedeutet im baulichen Kontext nicht absolute Unzerstörbarkeit, sondern eine definierte Widerstandsfähigkeit gegen Feuer über eine bestimmte Frist (z. B. 30, 60 oder 90 Minuten), die durch Normen wie die europäische Klassifizierung REI angegeben wird. Diese Frist beschreibt, wie lange ein Bauteil seine tragende Funktion (R), Dichtheit (E) und Wärmedämmung (I) im Brandfall aufrechterhalten kann. Zur praktischen Umsetzung können im Gebäudemanagement verschiedene Maßnahmen berücksichtigt werden: Wände und Decken können aus nicht brennbaren Baustoffen wie Beton oder speziellen Gipsfaserplatten ausgeführt werden, Türen können durch Brandschutztüren mit entsprechender Klassifizierung ersetzt werden, und Kabel- sowie Rohrdurchführungen können mit geprüften Brandschutzmanschetten oder -schotts ausgestattet werden. Auch abgehängte Decken oder Zwischenwände in Leichtbauweise können mit feuerhemmenden Platten verkleidet werden, um die Widerstandsdauer zu erhöhen. Eine Institution kann bei Umbauten oder Neubauten frühzeitig auf geprüfte Baustoffe achten und im Bestand gezielt besonders gefährdete Räume wie Serverräume, Archive oder Batterieräume nachrüsten."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "geb.10.2.4-prm1": {
+     "alt-identifier": "4411c989-a51f-4aa9-8d79-e0b3fd492fb9"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "4411c989-a51f-4aa9-8d79-e0b3fd492fb9"
+  }
+ ]
+}

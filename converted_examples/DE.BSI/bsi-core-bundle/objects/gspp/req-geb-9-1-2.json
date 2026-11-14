@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/GEB.9.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "GEB.9.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Dedizierte Elektrounterverteilung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Gebäudemanagement für Standorte KANN eine ausschließlich für diesen Standort bestimmte Elektrounterverteilung die direkt von der Niederspannungshauptverteilung (NSHV) versorgt wird installieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "installieren",
+     "result": "eine ausschließlich für diesen Standort bestimmte Elektrounterverteilung",
+     "result-specification": "die direkt von der Niederspannungshauptverteilung (NSHV) versorgt wird",
+     "target-object-categories": [
+      "Standorte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Gebäudedokumentation"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "2",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Hochverfügbarkeit"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Eine eigene, direkt aus der NSHV gespeiste Unterverteilung trennt kritische Abgänge (IT/USV/Kälte), stellt Selektivität und eindeutige Kennzeichnung sicher, ermöglicht Zustandsüberwachung und hält Ausbaureserven vor."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "59df8c81-694d-4612-a439-63deaee5c4d9"
+  }
+ ]
+}

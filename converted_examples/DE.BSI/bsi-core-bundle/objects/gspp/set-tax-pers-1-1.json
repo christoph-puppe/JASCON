@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/pers-1-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Verfahren und Regelungen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1",
+   "sequence": 2300
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1.1",
+   "sequence": 2310
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1.2",
+   "sequence": 2320
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.1.1.3",
+   "sequence": 2330
+  }
+ ]
+}

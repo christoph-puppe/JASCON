@@ -7,8 +7,8 @@
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1",
-   "sequence": 330
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm-2-1",
+   "sequence": 700
   }
  ],
  "label": "2",

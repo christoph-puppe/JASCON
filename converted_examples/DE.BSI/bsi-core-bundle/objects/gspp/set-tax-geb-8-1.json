@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/geb-8-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Gesonderte Aufbewahrung"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.8.1",
+   "sequence": 5330
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.8.1.1",
+   "sequence": 5340
+  }
+ ]
+}

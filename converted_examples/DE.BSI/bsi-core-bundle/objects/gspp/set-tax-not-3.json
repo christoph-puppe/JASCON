@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.1",
-   "sequence": 5560
+   "sequence": 8790
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.2",
-   "sequence": 5570
+   "sequence": 8800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.3",
-   "sequence": 5580
+   "sequence": 8810
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.4",
-   "sequence": 5590
+   "sequence": 8820
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.5",
-   "sequence": 5600
+   "sequence": 8830
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/NOT.3.6",
-   "sequence": 5610
+   "sequence": 8840
   }
  ],
  "label": "3",

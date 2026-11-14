@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/KONF.12.1.11",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "KONF.12.1.11",
+ "lifecycle": "active",
+ "title": {
+  "de": "Aktive Dateiinhalte"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Konfiguration für Office-Anwendungen SOLLTE aktive Inhalte in Office-Dateien deaktivieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "deaktivieren",
+     "result": "aktive Inhalte in Office-Dateien",
+     "target-object-categories": [
+      "Office-Anwendungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Konfigurationshistorie"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 2,
+     "tags": [
+      "Produktbeschreibung"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Aktive Inhalte (Makros) in Office-Dokumenten können Schadcode enthalten oder zu nicht nachvollziehbaren Datenfehlern führen. Viele Nutzende verwenden solche Funktionen jedoch für ihre Arbeit, so dass eine generelle Sperrung mit Einschränkungen verbunden ist. Autorisierte Ausnahmen bilden daher einen guten Kompromiss bei normalen Schutzbedarf. Dies kann durch den geschützten Modus (Protected View) umgesetzt werden. Werden bestimmte Makros dennoch häufig benötigt, so können Makros mit digitaler Signatur einer anerkannten Zertifizierungsstelle oder von vertrauenswürdigen Speicherorten zugelassen werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "fe822942-31a1-4961-832f-3523f7622754"
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.5",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.4.1.5",
+ "lifecycle": "active",
+ "title": {
+  "de": "Eignungsprüfung bisheriger Sicherheitsmaßnahmen"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation SOLLTE eine Evaluation der Eignung umgesetzter Sicherheitsmaßnahmen zur Erreichung der Sicherheitsziele oder ob Maßnahmen geändert oder ergänzt werden müssen als Ergebnis der Überprüfung in einem Managementbericht dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "eine Evaluation der Eignung umgesetzter Sicherheitsmaßnahmen zur Erreichung der Sicherheitsziele oder ob Maßnahmen geändert oder ergänzt werden müssen",
+     "result-specification": "als Ergebnis der Überprüfung in einem Managementbericht"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Managementbericht"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 1
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Zur Bewertung, ob Sicherheitsmaßnahmen zur Erreichung der Sicherheitsziele geeignet sind, müssen die Maßnahmen systematisch den jeweiligen Zielen zugeordnet und ihre Wirksamkeit anhand konkreter Nachweise (z. B. Auditergebnisse, Vorfallanalysen, Tests) überprüft werden. Werden Defizite festgestellt, sind die Maßnahmen entsprechend anzupassen, zu ergänzen oder durch geeignetere zu ersetzen. Die Ergebnisse dieser Überprüfung sind nachvollziehbar zu dokumentieren und in den Managementbericht einzubringen und basieren auf den vorab erstellten Auditberichten sowie der geforderten Eignungsprüfung."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "85b88ff7-5d53-43cc-b824-2b55d6635386"
+  }
+ ]
+}

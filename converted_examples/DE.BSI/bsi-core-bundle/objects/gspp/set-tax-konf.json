@@ -8,63 +8,63 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-1",
-   "sequence": 6500
+   "sequence": 10540
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-2",
-   "sequence": 6600
+   "sequence": 10710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-3",
-   "sequence": 6690
+   "sequence": 10820
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-4",
-   "sequence": 6750
+   "sequence": 10920
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-5",
-   "sequence": 6780
+   "sequence": 10980
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-6",
-   "sequence": 6950
+   "sequence": 11230
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-7",
-   "sequence": 7120
+   "sequence": 11420
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-8",
-   "sequence": 7150
+   "sequence": 11470
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-9",
-   "sequence": 7190
+   "sequence": 11510
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-10",
-   "sequence": 7250
+   "sequence": 11610
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-11",
-   "sequence": 7340
+   "sequence": 11780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-12",
-   "sequence": 7490
+   "sequence": 12050
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-13",
-   "sequence": 7610
+   "sequence": 12250
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-14",
-   "sequence": 7670
+   "sequence": 12340
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-15",
-   "sequence": 7720
+   "sequence": 12390
   }
  ],
  "label": "KONF",

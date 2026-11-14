@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.2.1.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Geschäftsprozessprofile"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für Outsourcing SOLLTE Geschäftsprozessprofile für (Teil-)Prozesse, die ausgelagert werden, mit Funktion, verarbeiteten Informationen, einzuhaltenden rechtlichen und organisatorischen Rahmenbedingungen, prozessualen Schnittstellen, Abhängigkeiten zwischen Prozessen, sowie ihren Schutzbedarfen und Kritikalitäten dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "Geschäftsprozessprofile für (Teil-)Prozesse, die ausgelagert werden,",
+     "result-specification": "mit Funktion, verarbeiteten Informationen, einzuhaltenden rechtlichen und organisatorischen Rahmenbedingungen, prozessualen Schnittstellen, Abhängigkeiten zwischen Prozessen, sowie ihren Schutzbedarfen und Kritikalitäten",
+     "target-object-categories": [
+      "Outsourcing"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Geschäftsprozesse"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 4,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Ist bereits eine Business-Impact-Analyse (BIA) vorhanden, welche die Angaben enthält, so kann die Anforderung durch die BIA erfüllt werden. Kritikalität bezeichnet die Bedeutung eines Prozesses für den Geschäftsbetrieb der Institution. Die Umsetzung kann auch  durch eine Tabelle von Geschäftsprozessprofilen geschehen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "cf24172d-d505-4960-b580-ccea153e1abe"
+  }
+ ]
+}

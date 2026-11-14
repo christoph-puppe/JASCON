@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.6",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BES.2.1.6",
+ "lifecycle": "active",
+ "title": {
+  "de": "Support- und Wartungsverträge"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Beschaffungsmanagement für IT-Produkte SOLLTE den Bedarf an Support- und Wartungsverträgen basierend auf dem Schutzbedarf für Verfügbarkeit dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "den Bedarf an Support- und Wartungsverträgen",
+     "result-specification": "basierend auf dem Schutzbedarf für Verfügbarkeit",
+     "target-object-categories": [
+      "IT-Produkte"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Beschaffungskriterien"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3,
+     "tags": [
+      "Lieferketten"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Dies zielt auf den Abschluss von Support- und Wartungsverträgen für alle IT-Produkte ab, deren Verfügbarkeit nicht durch die Institution allein sichergestellt werden kann. Zur Ermittlung des Bedarfes können die Empfehlungen des jeweiligen Anbieters zu Wartungsintervallen herangezogen werden. Dabei kann es vorkommen, dass unterschiedliche Komponenten durchaus unterschiedliche Wartungsintervalle benötigen."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "0cdd35ea-188d-4731-99e3-27b5dbe8eca6"
+  }
+ ]
+}

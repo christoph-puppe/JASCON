@@ -16,16 +16,6 @@
    "prose": {
     "de": "Gebäudemanagement für Standorte SOLLTE geschäftskritische Speichermedien in verschließbaren Schutzeinrichtungen platzieren."
    }
-  },
-  {
-   "id": "GEB.8.1.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Gebäudemanagement für Standorte KANN geschäftskritische Speichermedien in Datenträgerarchiven platzieren."
-   }
   }
  ],
  "facets": {
@@ -37,24 +27,12 @@
      "target-object-categories": [
       "Standorte"
      ]
-    },
-    "GEB.8.1.1": {
-     "action": "platzieren",
-     "result": "geschäftskritische Speichermedien in Datenträgerarchiven",
-     "target-object-categories": [
-      "Standorte"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Gebäudedokumentation"
-     ]
-    },
-    "GEB.8.1.1": {
      "required-documentation": [
       "Gebäudedokumentation"
      ]
@@ -71,15 +49,6 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.16"
      ]
-    },
-    "GEB.8.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "2",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -89,16 +58,6 @@
      "class": "BSI-Stand-der-Technik-Kernel-G0",
      "sec-level": "normal-SdT",
      "effort": 2
-    },
-    "GEB.8.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 4,
-     "tags": [
-      "Langzeitarchivierung"
-     ],
-     "title": "Archiv",
-     "alt-identifier": "59be69ee-346c-4a89-b93d-558cfd50f57f"
     }
    }
   },
@@ -107,11 +66,6 @@
     "smt": {
      "guidance": {
       "de": "Vertrauliche Speichermedien, die ungesichert herumliegen (sowohl analoge Dokumente als auch digitale Datenträger) sind ein leichtes Ziel für Diebstahl und können versehentlich verloren gehen oder beschädigt werden; eine angemessene Sicherung erfolgt durch Aufbewahrung in abschließbaren Schränken, in Safes oder in dedizierten, gesicherten Räumlichkeiten, wobei die Anforderung auch dann als erfüllt gilt, wenn ein fest verbautes Behältnis genutzt wird, beispielsweise ein Safe-Raum."
-     }
-    },
-    "GEB.8.1.1": {
-     "guidance": {
-      "de": "Geschäftskritische Datenträger lagern in gesicherten, klimatisierten Archiven mit Zugriffskontrolle, Brandschutz und nachvollziehbarer Aus-/Rückgabedokumentation."
      }
     }
    }

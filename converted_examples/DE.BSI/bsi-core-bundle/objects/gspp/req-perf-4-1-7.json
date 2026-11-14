@@ -1,0 +1,65 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/PERF.4.1.7",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "PERF.4.1.7",
+ "lifecycle": "active",
+ "title": {
+  "de": "Status des Realisierungsplans"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Monitoring-Evaluation SOLLTE die erfolgreiche Umsetzung von Maßnahmen und des damit verringerten Risikos (Status des Umsetzungsplans) als Ergebnis der Überprüfung in einem Managementbericht dokumentieren."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "dokumentieren",
+     "result": "die erfolgreiche Umsetzung von Maßnahmen und des damit verringerten Risikos (Status des Umsetzungsplans)",
+     "result-specification": "als Ergebnis der Überprüfung in einem Managementbericht"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Managementbericht"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Methodik-Grundschutz-plus-plus",
+     "sec-level": "normal-SdT",
+     "effort": 1
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Die Überprüfung von Umsetzungsdefiziten und Risiken ist im ISMS ein zentraler Bestandteil des Monitorings und der Evaluierung. Monitoring sorgt für die kontinuierliche Beobachtung des Fortschritts bei Maßnahmenumsetzung, während die Evaluierung die Wirksamkeit dieser Maßnahmen bewertet und bei Bedarf Anpassungen empfiehlt. So wird sichergestellt, dass Risiken nachhaltig reduziert und Sicherheitsziele erreicht werden. D. h. der Status des Realisierungsplans muss fortlaufend überprüft werden. Die Ergebnisse dieser Überprüfungen basieren auf den vorab erstellten Auditberichten sowie der geforderten Eignungsprüfung."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "d24f550c-1502-4587-899b-5e7594363419"
+  }
+ ]
+}

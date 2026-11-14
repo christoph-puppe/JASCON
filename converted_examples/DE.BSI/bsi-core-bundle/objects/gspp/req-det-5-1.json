@@ -16,28 +16,6 @@
    "prose": {
     "de": "Detektion SOLLTE Verfahren und Regelungen zur Erkennung und Behandlung von Schwachstellen verankern."
    }
-  },
-  {
-   "id": "DET.5.1.1",
-   "modality": "may",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Detektion KANN erkannte Schwachstellen anhand von {param:det.5.1.1-prm1} innerhalb {param:det.5.1.1-prm2} überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "det.5.1.1-prm1",
-     "type": "string",
-     "label": "risikobasierten Kriterien"
-    },
-    {
-     "name": "det.5.1.1-prm2",
-     "type": "string",
-     "label": "einer Frist"
-    }
-   ]
   }
  ],
  "facets": {
@@ -46,22 +24,12 @@
     "smt": {
      "action": "verankern",
      "result": "Verfahren und Regelungen zur Erkennung und Behandlung von Schwachstellen"
-    },
-    "DET.5.1.1": {
-     "action": "überprüfen",
-     "result": "erkannte Schwachstellen",
-     "result-specification": "anhand von {{risikobasierten Kriterien}} innerhalb {{einer Frist}}"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Schwachstellenregister"
-     ]
-    },
-    "DET.5.1.1": {
      "required-documentation": [
       "Schwachstellenregister"
      ]
@@ -80,17 +48,6 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.39",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
-    },
-    "DET.5.1.1": {
-     "confidentiality": "2",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.28",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.23",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
     }
    }
   },
@@ -103,16 +60,6 @@
      "tags": [
       "Advanced Persistent Threats (APT)"
      ]
-    },
-    "DET.5.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5,
-     "tags": [
-      "Advanced Persistent Threats (APT)"
-     ],
-     "title": "Risikobasierte Priorisierung",
-     "alt-identifier": "a9af82d7-44b8-412c-b8a0-becbda9b1da9"
     }
    }
   },
@@ -122,21 +69,6 @@
      "guidance": {
       "de": "Relevant können hierbei verschiedene Arten von Schwachstellen sein (z.B. Physisch und im Netz, Orte, Adressbereiche, Anwendungen und Ports).   Zur Erkennung können Schwachstellenscans, Pentests und ein Abgleich der eigenen Infrastruktur mit öffentlichen Schwachstellendatenbanken genutzt werden.  Zur Beurteilung der Kritikalität können Scoring-Systeme wie CVSS oder Berichte der betroffenen Hersteller oder Dienstleister herangezogen werden.  Zur Behandlung können z.B. Sicherheitspatches, die Deaktivierung betroffener (Teil-)Funktionen oder Komponenten oder die Isolierung betroffenen Systeme oder Anwendungen in Frage kommen.  Für Details siehe ISO/IEC 30111."
      }
-    },
-    "DET.5.1.1": {
-     "guidance": {
-      "de": "Bei einer risikobasierten Priorisierung wird nicht nur die Ausnutzbarkeit der Schwachstelle im Allgemeinen, z.B. durch einen CVS-Score, zur Priorisierung herangezogen, sondern die Beurteilung erfolgt durch eine Kombination solcher generellen Informationen mit dem individuellen Risikoprofil der betroffenen Assets. Dies ermöglicht es, Schwachstellen deutlich passgenauer zu beurteilen und die wirklich kritischen Schwachstellen zuerst zu patchen oder mitigieren.   Hierzu können CVSS-Score, Informationen aus der Threat Intelligence und aus der Risikobewertung von Geschäftsprozessen kombiniert werden. Hierbei können  auch automatisierte Verfahren angewendet werden, z.BMultiplikation von Kennzahlen zur Risikobewertung und von CVSS in Kombination mit Schwellwerten. Ergebnisdokument kann z.B. eine Risikomatrix, oder eine eigene CVE-Bewertungsrubrik sein."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "det.5.1.1-prm1": {
-     "alt-identifier": "a9af82d7-44b8-412c-b8a0-becbda9b1da9"
-    },
-    "det.5.1.1-prm2": {
-     "alt-identifier": "a9af82d7-44b8-412c-b8a0-becbda9b1da9"
     }
    }
   }

@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.7.1",
-   "sequence": 4520
+   "sequence": 7470
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.7.2",
-   "sequence": 4530
+   "sequence": 7480
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.7.3",
-   "sequence": 4540
+   "sequence": 7490
   }
  ],
  "label": "7",

@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-4-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Anbindung an Verzeichnisdienst"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.1",
+   "sequence": 10830
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.1.1",
+   "sequence": 10840
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/det-2-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Meldeverfahren"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1",
+   "sequence": 9170
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1.1",
+   "sequence": 9180
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1.2",
+   "sequence": 9190
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1.3",
+   "sequence": 9200
+  }
+ ]
+}

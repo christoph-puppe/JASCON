@@ -1,0 +1,89 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/DET.4.6.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "DET.4.6.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Verhaltensanalyse von Zugangskonten"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "may",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Detektion für Verzeichnisdienste KANN das Verhalten von Zugangskonten überwachen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "überwachen",
+     "result": "das Verhalten von Zugangskonten",
+     "target-object-categories": [
+      "Verzeichnisdienste"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Detektions-Konzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "2",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.32",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Advanced Persistent Threats (APT)",
+      "Command & Control",
+      "Data Exfiltration",
+      "Insider Threat",
+      "Living off the land"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "User and Entity Behaviour Analytics (UEBA) nutzt moderne Verfahren einschließlich KI, um Anomalien im Verhalten von Zugangskonten oder Systemen zu erkennen, z.B. Anmeldungen zu ungewöhnlichen Zeiten, von ungewöhnlichen Orten, durch Verwendung veralteter Authentifzierungsverfahren wie NTLMv1 oder die Ausführung ungewöhnlicher Anwendungen. Ungewöhnliches Verhalten kann Anzeichen für netzbasierte Angriffe oder Innentäter sein. Allerdings gilt es hierbei auch rechtliche Vorgaben zum Datenschutz und betriebliche Mitbestimmungsrechte zu beachten. Ein sinnvoller Maßstab für die Ausgestaltung von Umfang und Detailltiefe der Überwachung können die Geschäfts- und Sicherheitsziele sein. Sinnvoll ist es hierbei begleitende Maßnahmen zur Compliance einzuführen, beispielsweise das manuelle Analysen nur unter bestimmten Voraussetzungen oder Beteiligungen vorgenommen werden."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "cd3e1fde-3095-4518-b906-ca18824839b8"
+  }
+ ]
+}

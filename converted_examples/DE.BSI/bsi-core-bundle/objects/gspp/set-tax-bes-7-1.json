@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-7-1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Eingangskontrolle"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.1",
+   "sequence": 3790
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.1.1",
+   "sequence": 3800
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.7.1.2",
+   "sequence": 3810
+  }
+ ]
+}

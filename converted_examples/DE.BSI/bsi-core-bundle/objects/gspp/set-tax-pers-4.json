@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.1",
-   "sequence": 1680
+   "sequence": 2570
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.2",
-   "sequence": 1690
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-4-2",
+   "sequence": 2600
   }
  ],
  "label": "4",

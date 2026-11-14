@@ -1,0 +1,30 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/bes-2-1-4",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Kompatibilität"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4",
+   "sequence": 2920
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.1",
+   "sequence": 2930
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.2",
+   "sequence": 2940
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.3",
+   "sequence": 2950
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.4",
+   "sequence": 2960
+  }
+ ]
+}

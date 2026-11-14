@@ -8,39 +8,39 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-1",
-   "sequence": 4290
+   "sequence": 6900
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-2",
-   "sequence": 4360
+   "sequence": 7100
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-3",
-   "sequence": 4410
+   "sequence": 7150
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-4",
-   "sequence": 4450
+   "sequence": 7220
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-5",
-   "sequence": 4480
+   "sequence": 7430
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-6",
-   "sequence": 4510
+   "sequence": 7460
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-7",
-   "sequence": 4550
+   "sequence": 7500
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-8",
-   "sequence": 4590
+   "sequence": 7540
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-9",
-   "sequence": 4650
+   "sequence": 7600
   }
  ],
  "label": "ARCH",

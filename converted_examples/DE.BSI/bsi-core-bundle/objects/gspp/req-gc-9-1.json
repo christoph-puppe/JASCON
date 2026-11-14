@@ -16,90 +16,6 @@
    "prose": {
     "de": "Governance und Compliance MUSS die Sicherheitsorganisation für das ISMS unter Einbezug von Rollen, Zuständigkeiten sowie Gremien festlegen."
    }
-  },
-  {
-   "id": "GC.9.1.1",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance MUSS die {param:gc.9.1.1-prm1} im Rahmen des ISMS inklusive ihrer Kompetenzen bzw. Befugnisse zuweisen."
-   },
-   "parameters": [
-    {
-     "name": "gc.9.1.1-prm1",
-     "type": "string",
-     "label": "Rollen und Zuständigkeiten"
-    }
-   ]
-  },
-  {
-   "id": "GC.9.1.1.1",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance MUSS die Zuständigkeit für Informationssicherheit {param:gc.9.1.1.1-prm1} , welche unmittelbar der Institutionsleitung unterstellt ist, zuweisen."
-   },
-   "parameters": [
-    {
-     "name": "gc.9.1.1.1-prm1",
-     "type": "string",
-     "label": "einer unabhängigen Person"
-    }
-   ]
-  },
-  {
-   "id": "GC.9.1.1.1.1",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance MUSS dem Informationssicherheitsbeauftragten hinreichende Ressourcen zuweisen."
-   }
-  },
-  {
-   "id": "GC.9.1.1.1.2",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance MUSS das direkte Vorspracherecht des Informationssicherheitsbeauftragten bei der Institutionsleitung verankern."
-   }
-  },
-  {
-   "id": "GC.9.1.1.2",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance MUSS Stellvertreterregelungen für alle relevanten Rollen und Zuständigkeiten im ISMS zuweisen."
-   }
-  },
-  {
-   "id": "GC.9.1.1.3",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance MUSS Maßnahmen zur Vermeidung von Interessenkonflikten bei der Festlegung von Rollen und Zuständigkeiten des ISMS festlegen."
-   }
-  },
-  {
-   "id": "GC.9.1.1.4",
-   "modality": "must",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Governance und Compliance MUSS für jeden Rollen- und Verantwortungsträger die erforderlichen Anforderungen und Fähigkeiten festlegen."
-   }
   }
  ],
  "facets": {
@@ -109,36 +25,6 @@
      "action": "festlegen",
      "result": "die Sicherheitsorganisation für das ISMS",
      "result-specification": "unter Einbezug von Rollen, Zuständigkeiten sowie Gremien"
-    },
-    "GC.9.1.1": {
-     "action": "zuweisen",
-     "result": "die {{Rollen und Zuständigkeiten}} im Rahmen des ISMS",
-     "result-specification": "inklusive ihrer Kompetenzen bzw. Befugnisse"
-    },
-    "GC.9.1.1.1": {
-     "action": "zuweisen",
-     "result": "die Zuständigkeit für Informationssicherheit {{einer unabhängigen Person}}",
-     "result-specification": ", welche unmittelbar der Institutionsleitung unterstellt ist,"
-    },
-    "GC.9.1.1.1.1": {
-     "action": "zuweisen",
-     "result": "dem Informationssicherheitsbeauftragten hinreichende Ressourcen"
-    },
-    "GC.9.1.1.1.2": {
-     "action": "verankern",
-     "result": "das direkte Vorspracherecht des Informationssicherheitsbeauftragten bei der Institutionsleitung"
-    },
-    "GC.9.1.1.2": {
-     "action": "zuweisen",
-     "result": "Stellvertreterregelungen für alle relevanten Rollen und Zuständigkeiten im ISMS"
-    },
-    "GC.9.1.1.3": {
-     "action": "festlegen",
-     "result": "Maßnahmen zur Vermeidung von Interessenkonflikten bei der Festlegung von Rollen und Zuständigkeiten des ISMS"
-    },
-    "GC.9.1.1.4": {
-     "action": "festlegen",
-     "result": "für jeden Rollen- und Verantwortungsträger die erforderlichen Anforderungen und Fähigkeiten"
     }
    }
   },
@@ -147,31 +33,6 @@
     "smt": {
      "required-documentation": [
       "Sicherheitsorganisation"
-     ]
-    },
-    "GC.9.1.1": {
-     "required-documentation": [
-      "Tätigkeits- & Rollenbeschreibung"
-     ]
-    },
-    "GC.9.1.1.1": {
-     "required-documentation": [
-      "Sicherheitsorganisation"
-     ]
-    },
-    "GC.9.1.1.1.2": {
-     "required-documentation": [
-      "Tätigkeits- & Rollenbeschreibung"
-     ]
-    },
-    "GC.9.1.1.2": {
-     "required-documentation": [
-      "Geschäftsverteilungsplan"
-     ]
-    },
-    "GC.9.1.1.4": {
-     "required-documentation": [
-      "Tätigkeits- & Rollenbeschreibung"
      ]
     }
    }
@@ -182,55 +43,6 @@
      "class": "BSI-Methodik-Grundschutz-plus-plus",
      "sec-level": "normal-SdT",
      "effort": 0
-    },
-    "GC.9.1.1": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Festlegung von Rollen und Zuständigkeiten",
-     "alt-identifier": "5cc59bb1-af0d-457f-a548-03373447fec7"
-    },
-    "GC.9.1.1.1": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Informationssicherheitsbeauftragter",
-     "alt-identifier": "96ebe8f3-2419-45d0-b981-dc973d21c17c"
-    },
-    "GC.9.1.1.1.1": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Ressourcen für den Informationssicherheitsbeauftragten",
-     "alt-identifier": "b04f2734-0b3f-400f-92cb-08a49fb2960f"
-    },
-    "GC.9.1.1.1.2": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Vorspracherecht",
-     "alt-identifier": "2daf1f95-862a-4b5e-9d63-90723384a0df"
-    },
-    "GC.9.1.1.2": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Stellvertreterregelungen",
-     "alt-identifier": "0d09d72c-92af-4749-9ce1-a523f0546e46"
-    },
-    "GC.9.1.1.3": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Vermeidung von Interessenkonflikten",
-     "alt-identifier": "e57f0e21-92f1-4ddb-8248-e74613905d7d"
-    },
-    "GC.9.1.1.4": {
-     "class": "BSI-Methodik-Grundschutz-plus-plus",
-     "sec-level": "normal-SdT",
-     "effort": 0,
-     "title": "Sicherstellung der Qualifikation",
-     "alt-identifier": "09da6b52-1efc-4c44-98b3-4d9b094fd107"
     }
    }
   },
@@ -240,51 +52,6 @@
      "guidance": {
       "de": "Ziel der Sicherheitsorganisation ist es, die relevanten Bereiche eines ISMS sowie die relevanten Schnittstellen zu anderen Bereichen (z. B. Datenschutz, physische Sicherheit, Geheimschutz oder Arbeitsschutz) vollständig und wirksam in der Institution zu verankern. Die Sicherheitsorganisation sollte in einem Organigramm oder einer ähnlichen Darstellung zu dokumentiert und abgebildet werden."
      }
-    },
-    "GC.9.1.1": {
-     "guidance": {
-      "de": "Im Rahmen des ISMS werden die Rollen hinsichtlich der Aufgaben, der dafür notwendigen Qualifikation und der notwendigen Befugnisse festgelegt. Eine zentrale Rolle wäre beispielsweise der \"Informationssicherheitsbeauftragte\" (ISB)."
-     }
-    },
-    "GC.9.1.1.1": {
-     "guidance": {
-      "de": "Informationssicherheit liegt in der Verantwortung der Institutionsleitung. Die operative Aufgabe „Informationssicherheit“ wird an einen Informationssicherheitsbeauftragten (ISB) delegiert, der diese Aufgabe innerhalb der Institution koordiniert und vorantreibt. Daher ist diese Rolle in jeder Institution (unabhängig von Art und Größe) zu besetzen. Je nach Art und Ausrichtung der Institution wird der ISB anders genannt. Häufige Titel sind neben dem Informationssicherheitsbeauftragten, Chief Information Security Officer (CISO) oder Informationssicherheitsmanager (ISM).  Die Hauptaufgabe des ISB besteht darin, die Institutionsleitung bei deren Aufgabenwahrnehmung bezüglich der Informationssicherheit zu beraten und diese bei der Umsetzung zu unterstützen. Zu den ISB-Aufgaben gehört es u.a., den Sicherheitsprozess operativ zu steuern und zu koordinieren, die Institutionsleitung bei der Erstellung der Sicherheitsleitlinie zu unterstützen, die Erstellung des Sicherheitskonzepts und zugehöriger Teilkonzepte und Richtlinien zu koordinieren, den Umsetzungsplan für Sicherheitsmaßnahmen anzufertigen, sowie ihre Umsetzung zu initiieren und zu überprüfen, der Institutionsleitung und anderen Sicherheitsverantwortlichen über den Status der Informationssicherheit zu berichten, sicherheitsrelevante Projekte zu koordinieren, sicherheitsrelevante Vorfälle zu untersuchen, sowie Sensibilisierungen und Schulungen zur Informationssicherheit zu initiieren und zu koordinieren."
-     }
-    },
-    "GC.9.1.1.1.1": {
-     "guidance": {
-      "de": "Zu den Aufgaben des ISB gehören beispielsweise die Beratung der Institutionsleitung zur Informationssicherheit, die Koordinierung der Erstellung von Richtlinien und Sicherheitskonzepten und die Untersuchung von Sicherheitsvorfällen. Ohne ausreichende Ressourcen, können diese Aufgaben nicht wirksam und nachhaltig wahrgenommen werden, was zu Sicherheitsrisiken führen kann. In kleinen Institutionen kann die Funktion des ISB auch von einem qualifizierten Mitarbeiter neben anderen Aufgaben wahrgenommen werden. Maßgeblich ist, dass dem ISB ausreichend Zeit für seine Aufgaben zugebilligt wird und er in keinem Interessenskonflikt mit anderen Aufgaben steht. In größeren Instituionen kann ein höherer Bedarf an Personal- und Sachkosten erforderlich sein."
-     }
-    },
-    "GC.9.1.1.1.2": {
-     "guidance": {
-      "de": "Das Vorspracherecht trägt dazu bei, dass die Institutionsleitung ein vollständiges und unverfälschtes Bild über den Stand der Informationssicherheit erhält. Ohne dieses direkte Vorsprachrecht kann es passieren, dass andere Organisationseinheiten sicherheitsrelevante Informationen in der Weitergabe beeinflussen. Zum Beispiel könnte ein ISB dem Leitungsstab zugeordnet sein."
-     }
-    },
-    "GC.9.1.1.2": {
-     "guidance": {
-      "de": "Eine kontinuierliche Handlungsunfähigkeit der  Sicherheitsorganisation kann nur mit Stellvertreterregelungen für alle relevanten Rollen gewährleistet werden."
-     }
-    },
-    "GC.9.1.1.3": {
-     "guidance": {
-      "de": "Für die Vermeidung von Interessenkonflikten wird insbesondere die Zuordnung konkurrierender Rollen (bspw. ausführender und prüfender oder freigebender Rollen) vermieden. Dies erfolgt beispielsweise durch eine entsprechende Etablierung von Rollen in der Aufbauorganisation (z. B. Informationssicherheitsbeauftragter als Stabtelle). Es können aber auch weitere Maßnahmen (z. B. Vier-Augen-Prinzip) genutzt werden."
-     }
-    },
-    "GC.9.1.1.4": {
-     "guidance": {
-      "de": "Für jeden Rollen- und Verantwortungsträger werden die Anforderungen und Fähigkeiten festgelegt."
-     }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "gc.9.1.1-prm1": {
-     "alt-identifier": "5cc59bb1-af0d-457f-a548-03373447fec7"
-    },
-    "gc.9.1.1.1-prm1": {
-     "alt-identifier": "96ebe8f3-2419-45d0-b981-dc973d21c17c"
     }
    }
   }

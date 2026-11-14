@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/pers-4-2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Rollenspezifische Schulungen und Sensibilisierungen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.2",
+   "sequence": 2580
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.4.2.1",
+   "sequence": 2590
+  }
+ ]
+}

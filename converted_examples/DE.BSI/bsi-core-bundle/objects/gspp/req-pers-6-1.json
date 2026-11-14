@@ -16,26 +16,6 @@
    "prose": {
     "de": "Personal für Nutzende SOLLTE eine Vorgehensweise für den Weggang verankern."
    }
-  },
-  {
-   "id": "PERS.6.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Personal für Nutzende SOLLTE bei Weggang den unverzüglichen Entzug aller Zugriffsrechte im Einklang mit den Regelungen und Verfahren zum Berechtigungs- und Identitätsmanagement verankern."
-   }
-  },
-  {
-   "id": "PERS.6.1.2",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Personal für Mitarbeitende SOLLTE bei Weggang frei gewordene Zuständigkeiten zuweisen."
-   }
   }
  ],
  "facets": {
@@ -47,37 +27,12 @@
      "target-object-categories": [
       "Nutzende"
      ]
-    },
-    "PERS.6.1.1": {
-     "action": "verankern",
-     "result": "bei Weggang den unverzüglichen Entzug aller Zugriffsrechte",
-     "result-specification": "im Einklang mit den Regelungen und Verfahren zum Berechtigungs- und Identitätsmanagement",
-     "target-object-categories": [
-      "Nutzende"
-     ]
-    },
-    "PERS.6.1.2": {
-     "action": "zuweisen",
-     "result": "bei Weggang frei gewordene Zuständigkeiten",
-     "target-object-categories": [
-      "Mitarbeitende"
-     ]
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "Prozess Personalmanagement"
-     ]
-    },
-    "PERS.6.1.1": {
-     "required-documentation": [
-      "Prozess Personalmanagement"
-     ]
-    },
-    "PERS.6.1.2": {
      "required-documentation": [
       "Prozess Personalmanagement"
      ]
@@ -88,24 +43,6 @@
    "by-statement": {
     "smt": {
      "confidentiality": "2",
-     "integrity": "1",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "PERS.6.1.1": {
-     "confidentiality": "1",
-     "integrity": "2",
-     "availability": "1",
-     "authenticity": "0",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18"
-     ]
-    },
-    "PERS.6.1.2": {
-     "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
      "authenticity": "0",
@@ -125,20 +62,6 @@
       "Insider Threat",
       "Kompetenzmanagement"
      ]
-    },
-    "PERS.6.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "title": "Entzug von Berechtigungen gemäß BER",
-     "alt-identifier": "4954a1d6-d1b5-4e95-9d74-a697e6030a14"
-    },
-    "PERS.6.1.2": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "title": "Neubesetzung",
-     "alt-identifier": "8c13947a-ea68-496e-8cdb-c5b807739cc2"
     }
    }
   },
@@ -147,16 +70,6 @@
     "smt": {
      "guidance": {
       "de": "Wenn Nutzende ohne gesteuertes Vorgehen aus dem Informationsverbund ausscheiden, könnten Zugänge oder Aufgaben unkontrolliert zurückgelassen werden, oder Informationen ungewollt an Dritte abfließen. Hierzu gehört z.B. Mitarbeitende an die Wahrung von Betriebs- und Geschäftsgeheimnissen zu erinnern. Außerdem sind von ausscheidenden Mitarbeitenden alle im Rahmen ihrer Tätigkeit erhaltenen Unterlagen, Schlüssel und Geräte sowie Ausweise und Zutrittsberechtigungen einzuziehen. Hierbei besteht ein enger Zusammenhang zum Berechtigungsmanagement."
-     }
-    },
-    "PERS.6.1.1": {
-     "guidance": {
-      "de": "Der unverzügliche Entzug bedeutet in diesem Kontext die sofortige und vollständige Deaktivierung aller Zugriffsrechte, sowohl auf physische Ressourcen (z. B. Gebäude, Serverräume, Schränke mit vertraulichen Unterlagen) als auch auf logische Systeme (z. B. Benutzerkonten in E-Mail-Diensten, ERP-Systemen, Cloud-Speichern). Physische Zugriffsrechte umfassen Schlüssel, Zugangskarten oder Codes, die eine Person nutzen kann, um in geschützte Bereiche zu gelangen. Logische Zugriffsrechte beziehen sich auf digitale Berechtigungen wie Passwörter, Tokens, VPN-Profile oder Single-Sign-On-Zugänge. Der Sinn dieser Vorgabe liegt darin, das Risiko unbefugter Zugriffe nach dem Ausscheiden von Mitarbeitenden oder externen Nutzenden zu minimieren. Ein entlassener Mitarbeitender könnte ansonsten noch Daten aus einer Cloud-Anwendung kopieren oder mit einer Zutrittskarte ein Rechenzentrum betreten. Werden die Rechte dagegen sofort entzogen, kann die Institution die Vertraulichkeit und Integrität sensibler Informationen sichern und zugleich Haftungsrisiken reduzieren. Eine Institution kann diese Anforderung durch abgestimmte technische und prozessuale Maßnahmen umsetzen. Dazu kann ein standardisierter Offboarding-Prozess etabliert werden, der mit der Personalabteilung synchronisiert ist und automatisch IT und Facility-Management informiert."
-     }
-    },
-    "PERS.6.1.2": {
-     "guidance": {
-      "de": "Stellen Sie sicher, dass durch den Weggang von Mitarbeitenden keine Aufgaben des ISMS verwaisen – auch nicht bis zu einer geplanten Neueinstellung. Ordnen Sie stattdessen die Zuständigkeit für die Aufgaben/Rollenunverzüglich bestehendem Personal zu. Achten Sie dabei auch darauf, dass die festgelegten Rollentrennungen dabei nicht aufgehoben, bzw. durchbrochen werden. Um eine kontinuierliche Bearbeitung von Aufgaben sicherzustellen, ist eine Übergabe sinnvoll."
      }
     }
    }

@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-1",
-   "sequence": 440
+   "sequence": 810
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-2",
-   "sequence": 470
+   "sequence": 840
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-3",
-   "sequence": 490
+   "sequence": 860
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-4",
-   "sequence": 510
+   "sequence": 880
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-5",
-   "sequence": 540
+   "sequence": 910
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-6",
-   "sequence": 570
+   "sequence": 940
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-7",
-   "sequence": 590
+   "sequence": 960
   }
  ],
  "label": "UMS",

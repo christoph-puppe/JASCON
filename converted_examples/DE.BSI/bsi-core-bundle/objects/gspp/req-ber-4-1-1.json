@@ -1,0 +1,85 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.4.1.1",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "BER.4.1.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Rollenbasierte Berechtigung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Berechtigung SOLLTE Berechtigungen rollenbasiert zuweisen."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "zuweisen",
+     "result": "Berechtigungen rollenbasiert"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Inventar Berechtigungen"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "1",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 3
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Aus Gründen der Nachvollziehbarkeit und des administrativen Aufwands wird die direkte Vergabe von Berechtigungen an Einzelkonten vermieden. Berechtigungen werden gemäß dem Least-Privilege-Prinzip in Rollen gebündelt, wobei die Zuweisung und der Entzug ausschließlich über diese Rollen erfolgt. Etwaige Ausnahmen, beispielsweise für temporäre Spezialrechte, werden restriktiv gehandhabt, nachvollziehbar dokumentiert und zeitlich befristet."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "a9aa521b-e610-40ae-80d0-f1dd3b4ec47f"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.2.2"
+  }
+ ]
+}

@@ -1,0 +1,84 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2.2",
+ "version": "2026-07-16T05:11:52.605669+00:00",
+ "label": "ARCH.2.2.2",
+ "lifecycle": "active",
+ "title": {
+  "de": "Gastnetz"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Architektur für Netze SOLLTE Verbindungen zwischen Gastnetz und internem Netz einschränken."
+   }
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "einschränken",
+     "result": "Verbindungen zwischen Gastnetz und internem Netz",
+     "target-object-categories": [
+      "Netze"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "Netzplan"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "1",
+     "integrity": "1",
+     "availability": "0",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.23"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "sec-level": "normal-SdT",
+     "effort": 2,
+     "tags": [
+      "Lateral Movement",
+      "Separation of Concerns"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Wenn Gäste der Institution sich mit dem internen Netz verbinden, könnten Schadprogramme in das Netz gelangen oder unbeabsichtigte Datenflüsse über die Verbindung fließen. Daher ist es sinnvoll, einen vom übrigen Netz getrennten Gastzugang einzurichten, z.B. in Besprechungs-, Veranstaltungs- und Schulungsräumen. Wenn die Einschränkungen von Gastnetzen lockerer sind als die interner Netze am gleichen Standort, so zeigt die Erfahrung, dass auch interne Mitarbeitende gerne auf Gastnetze zurückgreifen. Dadurch könnte es zur Umgehung der internen Schutzmaßnahmen kommen. Daher ist es empfehlenswert, für das Gastnetz gleiche oder strengere Einschränkungen zu wählen oder die Nutzung des Gastnetzes durch Mitarbeitende technisch oder organisatorisch zu beschränken."
+     }
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "73c9c122-d3f6-42f9-a6f1-6b454a8b1853"
+  }
+ ]
+}
