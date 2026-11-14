@@ -148,10 +148,13 @@ def listed_objects(bundle, counts):
     recomputed. Since 2026-11-14 the validator also types and counts the
     Attestations that lie beside a manifest (D3.1; backlog #46). They are no
     entry of the manifest and have no pair of digests in it, so a page that
-    says "both digests of N objects" must not count them. A listed
-    Attestation is a failure of the run, and the run is green, so every
-    Attestation the report counts lies beside the manifest. The manifest is
-    read as well, and the two counts must agree."""
+    says "both digests of N objects" must not count them. The validator's
+    report does not say where an Attestation lies, and it refuses a listed
+    one in a pack only (ADVICE-1; measured 2026-11-14 on a copy of the IFA
+    bundle that lists its own: 0 failures). So the manifest is read as
+    well: with every Attestation of the report taken as lying beside it,
+    its entries must be as many as the other objects the validator typed.
+    A bundle that lists an Attestation stops the build here."""
     beside = counts.pop("attestation", 0)
     manifest = json.loads(read(os.path.join(REPO, bundle, "content-manifest.json")))
     listed = len(manifest["objects"])
@@ -758,11 +761,15 @@ def copy_apps(out, facts):
     for name in ("LICENSE", "NOTICE"):
         shutil.copy2(os.path.join(REPO, name), os.path.join(out, name + ".txt"))
     # Folder listings for what a manifest does not name. A pack manifest a set
-    # keeps (packs/sha256/<hex>) and the attestation of a pack's publisher lie
-    # beside the manifest; the app and the reader find them by asking the server
-    # for the folder, which a static host answers only with an index.html.
+    # keeps (packs/sha256/<hex>) and an Attestation lie beside the manifest;
+    # the app and the reader find them by asking the server for the folder,
+    # which a static host answers only with an index.html. Every bundle served
+    # is listed: since 2026-11-14 the reader asks for the folder of whatever
+    # bundle it loads from a URL (backlog #46), and the IFA bundle has its
+    # Attestation there.
     listed = [os.path.join(out, "jascon", "examples"),
               os.path.join(out, "jascon", "examples", "packs", "sha256")]
+    listed += [os.path.join(out, *b["path"].split("/")) for b in facts["bundles"]]
     packs_dir = os.path.join(out, "jascon", "example-packs")
     if os.path.isdir(packs_dir):
         listed += [os.path.join(packs_dir, d) for d in sorted(os.listdir(packs_dir))
