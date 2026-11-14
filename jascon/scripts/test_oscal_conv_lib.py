@@ -457,5 +457,21 @@ class Backlog74WhomAStatementBinds(unittest.TestCase):
         self.assertEqual(obligated_party_record(mine, "caller", self.D, "in `affects` of a rule"),
                          {"value": mine, "origin": "caller", "converter-default": self.D, "source-states": "in `affects` of a rule"})
 
+class Backlog75NoManifestListsAnAttestation(unittest.TestCase):
+    """MANIFEST-1: the library's Bundle lists whatever is added to it, so it
+    takes no Attestation. A converter writes one beside the manifest."""
+    def test_backlog_75_an_attestation_is_not_added_to_a_bundle(self):
+        from oscal_conv_lib import Bundle
+        b = Bundle(tempfile.mkdtemp())
+        att = {"id": "https://a.example/attestation/x", "version": "1", "lifecycle": "active", "signer": "https://a.example/party/ao",
+               "timestamp": "2026-11-14T09:00:00Z", "content-manifest-digest": "sha256:" + "a" * 64,
+               "subject-semantic-digests": [{"id": "https://a.example/req/1", "semantic-digest": "sha256:" + "b" * 64}]}
+        with self.assertRaises(SystemExit) as c: b.add("objects/attestation/x.json", att)
+        self.assertIn("MANIFEST-1", str(c.exception))
+        self.assertEqual(b.objects, {})
+        comp = {"id": "https://a.example/attestation/not-one", "version": "1", "lifecycle": "active", "kind": "system", "title": "A component"}
+        b.add("objects/component/c.json", comp)                 # the shape decides, not the id
+        self.assertEqual(list(b.objects), ["objects/component/c.json"])
+
 if __name__ == "__main__":
     unittest.main()

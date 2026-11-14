@@ -55,6 +55,13 @@ Runs, in order:
    Attestation is still claimed (lifecycle active). The example folder is
    read the same way; conformance/fixture-trusted-keys.json holds the
    public key of the corpus fixture for a run in verification mode.
+8. MANIFEST-1 (D3.11; backlog #75, author 2026-11-14: "refusal in all"):
+   an object a content manifest lists is no Attestation. D3.1 excludes
+   Attestations from the manifest "by definition"; until that day only a
+   pack's manifest was held to it (ADVICE-1), and an ordinary bundle
+   that listed its own Attestation passed. One failure per listed
+   Attestation, in every bundle and in the example folder, whatever the
+   Attestation binds and whatever its lifecycle.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
@@ -982,6 +989,18 @@ def run_attestation():
         want = (case["expected"], case["expected-manifest"], case["expected-subjects"], case["expected-failure"])
         if got == want and len(objs) == len(case["objects"]): ok("attestation")
         else: fail("attestation", f"binds {case['name']}: expected {want}, got {got}")
+    # MANIFEST-1 (backlog #75): one failure per Attestation a manifest lists, each naming the rule and the id
+    for case in v.get("listed-vectors", []):
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        errs = listed_attestation_errors(objs)
+        okc = (len(objs) == len(case["objects"]) and len(errs) == case["expected-fails"]
+               and len(errs) == len(case["expected-ids"])
+               and all("MANIFEST-1" in e and e.startswith(i + ": ") for e, i in zip(errs, case["expected-ids"])))
+        if okc: ok("attestation")
+        else: fail("attestation", f"listed {case['name']}: expected {case['expected-fails']} {case['expected-ids']}, got {errs}")
 
 def run_facets():
     v = json.load(open(os.path.join(CONF, "facet-vectors.json"), encoding="utf-8"))
@@ -1109,6 +1128,22 @@ def kernel_needed(objs, manifest=None):
         if t == "component" and any("date" in a for a in o.get("authorizations", []) or [] if isinstance(a, dict)):
             return "2.0.0", f"{oid} dates an authorization"
     return "1.0.0", None
+
+def listed_attestation_errors(objs):
+    """MANIFEST-1 (D3.11) -> [error], one per Attestation among the objects a
+    content manifest lists. objs: those objects, id -> (type, obj).
+
+    D3.1 excludes Attestations from the content manifest by definition: an
+    Attestation binds the digest of the manifest's bytes, so a manifest
+    that lists one cannot be the manifest it binds. The rule is about where
+    an Attestation lies and asks nothing else of it: what it binds, whether
+    it names an envelope and what its lifecycle is change nothing. The
+    binding of a listed Attestation is still computed and reported
+    (attestation_binds): it is a Semantic Match at best."""
+    return [f"{oid}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded "
+            f"from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it "
+            f"binds, and a manifest that lists one cannot be that manifest)"
+            for oid in by_code_unit(objs) if objs[oid][0] == "attestation"]
 
 def kernel_pin_errors(manifest, objs):
     """-> [error] for the manifest's kernel-version pin against this tool
@@ -3284,6 +3319,7 @@ def validate_bundle(bdir):
                                    envelopes=envelopes, trusted=TRUSTED):
         fail(section, e)
     for e in kernel_pin_errors(manifest, bundle_objs): fail(section, e)
+    for e in listed_attestation_errors(bundle_objs): fail(section, e)       # MANIFEST-1
     s_errs, s_notes = scale_errors(load_scale_pins(bdir, manifest, section), bundle_objs)
     for e in s_errs: fail(section, e)
     for n in s_notes: print(f"    note: {n}")
@@ -3405,6 +3441,7 @@ def validate_examples():
     # example pass loaded the pins and never applied them
     for e in facet_errors([(oid, o) for oid, (t, o) in exobjs.items()], pinned): fail(section, e)
     for e in kernel_pin_errors(manifest, exobjs): fail(section, e)
+    for e in listed_attestation_errors(listed_objs): fail(section, e)       # MANIFEST-1
     s_errs, s_notes = scale_errors(load_scale_pins(exdir, manifest, section), exobjs)
     for e in s_errs: fail(section, e)
     for n in s_notes: print(f"    note: {n}")

@@ -183,6 +183,14 @@ the caller had spelled it (the run before, 43549065626, was red by it).
 The on-disk check takes each path from .NET's enumeration of
 `<bundle>/objects` now, and the test names one folder with a trailing
 separator.
+CHANGED 2026-11-14 (backlog #75, decided by the author: "refusal in all"):
+MANIFEST-1. An object a content manifest lists is no Attestation
+(Listed-Attestation-Errors; specification D3.11). D3.1 excludes Attestations
+from the manifest "by definition"; until that day this file refused a listed
+one in a pack only (ADVICE-1), and a copy of the IFA bundle that listed its
+own passed here as in validate_core.py, 18 pass, 0 fail. One failure per
+listed Attestation, in a bundle and in the example folder. Eight
+`listed-vectors` came with it: attestation: 32, 692 in all.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors
@@ -2041,6 +2049,24 @@ function Run-Attestation {
             }
         }
     }
+    # MANIFEST-1 (backlog #75): one failure per Attestation a manifest lists,
+    # each naming the rule and one of the expected ids, in their order.
+    if (Is-List $v['listed-vectors']) {
+        foreach ($case in $v['listed-vectors']) {
+            $objs = To-Objs $case['objects']
+            $errs = Listed-Attestation-Errors $objs
+            $ids = @($case['expected-ids'])
+            $same = ($objs.Count -eq @($case['objects']).Count) -and (@($errs).Count -eq $case['expected-fails']) -and (@($errs).Count -eq $ids.Count)
+            if ($same) {
+                for ($i = 0; $i -lt $ids.Count; $i++) {
+                    $e = [string]$errs[$i]
+                    if (-not $e.StartsWith(([string]$ids[$i]) + ': ', $ORD) -or ($e.IndexOf('MANIFEST-1', $ORD) -lt 0)) { $same = $false }
+                }
+            }
+            if ($same) { OK 'attestation' }
+            else { FAIL 'attestation' "listed $($case['name']): expected $($case['expected-fails']) [$($ids -join ', ')], got [$(@($errs) -join ' | ')]" }
+        }
+    }
 }
 function Run-Facets {
     foreach ($case in (Load-Vectors 'facet-vectors.json')['vectors']) {
@@ -2208,6 +2234,23 @@ $RISK_NEXT = Ord-Table @{identified = @('assessed', 'treated', 'retired'); asses
 # both versions.
 $KERNEL_VERSION = '2.0.0'
 $KERNEL_SUPPORTED = @('1.0.0', '2.0.0')
+function Listed-Attestation-Errors($objs) {
+    # MANIFEST-1 (D3.11; backlog #75) -> one error per Attestation among the
+    # objects a content manifest lists, in the ordinal order of the ids.
+    # objs: those objects, id -> @{t; o}. D3.1 excludes Attestations from the
+    # content manifest by definition: an Attestation binds the digest of the
+    # manifest's bytes, so a manifest that lists one cannot be the manifest
+    # it binds. What the Attestation binds, whether it names an envelope and
+    # what its lifecycle is change nothing; its binding is still computed
+    # and reported (Binds-Report), a Semantic Match at best.
+    $errs = New-Object System.Collections.ArrayList
+    foreach ($oid in (Sorted-Ordinal $objs.Keys)) {
+        if ([string]::Equals($objs[$oid].t, 'attestation', $ORD)) {
+            [void]$errs.Add("${oid}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)")
+        }
+    }
+    return ,$errs
+}
 function Kernel-Pin-Errors($manifest, $objs) {
     $errs = New-Object System.Collections.ArrayList
     $pin = $null
@@ -4590,6 +4633,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     foreach ($e in (Closure-Errors $bundleObjs)) { FAIL $section $e }
     foreach ($e in (Duty-Errors $withAtts $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
     foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e }
+    foreach ($e in (Listed-Attestation-Errors $listedObjs)) { FAIL $section $e }      # MANIFEST-1
     # pinned scale definitions: SCALE-1 on each pin, SCALE-2/3 on the Risks
     $scaleDefs = (New-Map)
     foreach ($sp in @($manifest['scales'])) {

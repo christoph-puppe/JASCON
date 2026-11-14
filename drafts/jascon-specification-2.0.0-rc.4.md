@@ -430,6 +430,29 @@ relation (v0.4 — corrected).
     hold the three implementations to it; fifteen failed in the reference
     and in the twin before the change, and a pin version in the digits of
     another script was resolved by the one and stopped the other.
+11. **No manifest lists an Attestation *(2.0.0 — backlog #75, author
+    2026-11-14: "refusal in all"; found by the reader's port of D7)*.**
+    Item 1 excludes Attestations from the content manifest "by
+    definition". Until that day a tool refused a listed Attestation only
+    where the manifest carried a pack header (ADVICE-1). An ordinary
+    bundle that listed its own passed in both validators (measured on a
+    copy of a shipped bundle: 18 pass, 0 fail). One converted corpus had
+    shipped that way from its first conversion until 2026-11-13, and one
+    tool of this repository wrote such bundles until 2026-11-14.
+    **MANIFEST-1** — an object a content manifest lists is not an
+    Attestation; each one that is, is a validation error, in every
+    bundle. The rule asks where an Attestation lies and nothing else:
+    what it binds, whether it names an envelope and what its lifecycle is
+    change nothing. A listed Attestation is still read and held to what
+    it binds (D7); it is a Semantic Match at best, because a manifest
+    that lists an Attestation cannot be the manifest that Attestation
+    binds. In a pack both rules speak, ADVICE-1 and this one. The rule
+    does not name the signature envelope, because the manifest has no
+    place where a tool would take one for an object: an envelope entered
+    under `objects` matches no kernel type and fails for that (measured),
+    and `renderings` is read by no validator (read). A bundle that passed
+    can fail: one whose manifest lists an Attestation. Eight vectors
+    (`listed-vectors`) hold the implementations to it.
 
 **Evidence.** Air-gapped estates; registry link-rot; P7's fixed-point proof;
 P6's omitted-vs-empty hash fragmentation; the two-digest necessity

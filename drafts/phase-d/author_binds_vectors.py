@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Writes the `binds-vectors` of jascon/conformance/attestation-vectors.json
-(backlog #46, phase D of drafts/pre-2.0.0-fix-plan.md). Re-running it
+"""Writes the `binds-vectors` (backlog #46, phase D of
+drafts/pre-2.0.0-fix-plan.md) and the `listed-vectors` (backlog #75,
+MANIFEST-1) of jascon/conformance/attestation-vectors.json. Re-running it
 changes nothing.
 
     python3 drafts/phase-d/author_binds_vectors.py
@@ -127,6 +128,41 @@ vec("a-draft-attestation-that-does-not-bind-yet-fails-no-bundle", [COMP, IMPL], 
 vec("a-withdrawn-attestation-that-still-binds-is-a-full-match", ALL, in_state(att([named(REQ)]), "withdrawn"),
     "full-match", "this", ["match"], "The lifecycle changes what a failing verdict does, never the verdict.")
 
+# ---- listed-vectors (backlog #75; author, 2026-11-14: "refusal in all") ----
+# D3.1: "Attestations and signature envelopes are excluded from the content
+# manifest by definition". MANIFEST-1 makes that a rule of every bundle: an
+# object the manifest lists is no Attestation. A vector gives the objects a
+# manifest lists and expects one failure per Attestation among them, each
+# naming the rule and the Attestation's id. What the Attestation binds, whether
+# it is signed and whether it is still claimed change nothing: the rule is
+# about where it lies. The expectations were written before the rule was.
+L = []
+def listed(name, objects, ids, note):
+    L.append({"name": name, "note": note, "objects": objects, "expected-fails": len(ids), "expected-ids": ids})
+ATT = att([named(REQ), named(COMP), named(IMPL)])
+ATT2 = dict(att([named(REQ)], OTHER), id=f"{P}/attestation/review-2026")
+SIGNED = dict(ATT, **{"envelope-ref": "attestation-ato.dsse"})
+NOT_ONE = dict(copy.deepcopy(COMP), id=f"{P}/attestation/not-one")       # a Component whose id says "attestation"
+for _o in (ATT, ATT2, SIGNED): assert ns["inferType_single"](_o) == "attestation", _o["id"]
+assert ns["inferType_single"](NOT_ONE) == "component"
+listed("no-attestation-listed", ALL, [],
+       "A manifest that lists a Requirement, a Component and an Implementation lists no Attestation.")
+listed("an-attestation-listed-among-its-subjects", ALL + [ATT], [ATT["id"]],
+       "The Attestation's three subjects are listed beside it and carry the signed digests. It is refused all the same: "
+       "a manifest that lists an Attestation cannot be the manifest that Attestation binds.")
+listed("two-attestations-listed", [REQ, ATT2, ATT], [ATT["id"], ATT2["id"]],
+       "One failure for each, named in the order of their ids.")
+listed("a-withdrawn-attestation-listed", ALL + [in_state(ATT, "withdrawn")], [ATT["id"]],
+       "The lifecycle decides whether an Attestation that does not bind fails a bundle (D7). It does not decide where an Attestation lies.")
+listed("a-draft-attestation-listed", ALL + [in_state(ATT, "draft")], [ATT["id"]],
+       "A draft is an Attestation too.")
+listed("a-signed-attestation-listed", ALL + [SIGNED], [ATT["id"]],
+       "With an envelope or without one.")
+listed("nothing-but-an-attestation-listed", [ATT2], [ATT2["id"]],
+       "Its subjects need not be there for the rule to speak.")
+listed("an-id-that-says-attestation-is-no-attestation", ALL + [NOT_ONE], [],
+       "The type decides, not the id and not a path: a Component under .../attestation/... is a Component.")
+
 path = os.path.join(ROOT, "jascon", "conformance", "attestation-vectors.json")
 raw = open(path, encoding="utf-8").read()
 ADD = (" binds-vectors (backlog #46, 2026-11-14): the primitive applied to a bundle, as a validator applies it to every Attestation it reads with one - "
@@ -137,7 +173,11 @@ ADD = (" binds-vectors (backlog #46, 2026-11-14): the primitive applied to a bun
        "or a kept pack's = full-match; all match and the manifest is another = semantic-match; anything else = fail. `expected-failure` says whether "
        "the bundle fails: it does when the verdict is `fail` and the Attestation's lifecycle is `active` - a draft, deprecated or withdrawn Attestation "
        "that does not bind is reported and fails nothing. An implementation is held to the verdict, to which manifest is bound, to the status of every "
-       "subject in order, and to whether the bundle fails.")
+       "subject in order, and to whether the bundle fails."
+       " listed-vectors (backlog #75, 2026-11-14; MANIFEST-1): `objects` are the objects a content manifest lists. An Attestation is excluded from "
+       "the content manifest by definition (D3.1), in every bundle and not only in a pack: `expected-fails` is the number of Attestations among the "
+       "objects, and each failure names the rule and one of `expected-ids`. What the Attestation binds, whether it names an envelope and what its "
+       "lifecycle is change nothing.")
 MARK = ',\n  "binds-vectors": '
 if MARK in raw: raw = raw[:raw.index(MARK)] + "\n}\n"            # written by an earlier run: replaced below
 old = json.loads(raw)
@@ -148,8 +188,9 @@ a = raw.index('"description": "') + len('"description": "')
 raw = raw[:a] + json.dumps(head + ADD, ensure_ascii=False)[1:-1] + raw[raw.index(end):]
 assert raw.rstrip().endswith("}")
 body = json.dumps(V, indent=1, ensure_ascii=False).replace("\n", "\n  ")
-raw = raw.rstrip()[:-1].rstrip() + MARK + body + "\n}\n"
+body2 = json.dumps(L, indent=1, ensure_ascii=False).replace("\n", "\n  ")
+raw = raw.rstrip()[:-1].rstrip() + MARK + body + ',\n  "listed-vectors": ' + body2 + "\n}\n"
 doc = json.loads(raw)
-assert doc["vectors"] == old["vectors"] and doc["binds-vectors"] == V and doc["description"].endswith(ADD)
+assert doc["vectors"] == old["vectors"] and doc["binds-vectors"] == V and doc["listed-vectors"] == L and doc["description"].endswith(ADD)
 with open(path, "w", encoding="utf-8", newline="\n") as f: f.write(raw)
-print(f"attestation-vectors.json: {len(doc['vectors'])} vectors, {len(V)} binds-vectors")
+print(f"attestation-vectors.json: {len(doc['vectors'])} vectors, {len(V)} binds-vectors, {len(L)} listed-vectors")

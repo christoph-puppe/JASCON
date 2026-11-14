@@ -1,5 +1,5 @@
 {
-  "description": "Bi-modal verification (D7/D3): FULL MATCH = content-manifest digest AND all subject package-digests verify (byte-identical delivery). SEMANTIC MATCH = package bytes differ (re-serialization, re-indentation, annotation changes) but every subject's semantic-digest (JCS minus annotations) verifies - the signature survives legitimate repackaging. TAMPER = any subject semantic-digest fails - meaning changed, nothing survives. Attestations live beside the manifest; nothing signed contains its own signature. binds-vectors (backlog #46, 2026-11-14): the primitive applied to a bundle, as a validator applies it to every Attestation it reads with one - those beside the manifest (D3.1) and any a manifest lists. `manifest-digest` is the digest of the delivered manifest, `kept-packs` the digests of the pack manifests the bundle keeps. Each subject is `match` (an object of the bundle carries the signed semantic digest: the object of that id when the subject names one, any object when it is a bare digest), `differs` (the object of that id carries another digest) or `absent` (no such object, or no object with that digest). `expected-manifest` is `this`, `kept-pack` or `other`. All subjects match and the manifest is this one or a kept pack's = full-match; all match and the manifest is another = semantic-match; anything else = fail. `expected-failure` says whether the bundle fails: it does when the verdict is `fail` and the Attestation's lifecycle is `active` - a draft, deprecated or withdrawn Attestation that does not bind is reported and fails nothing. An implementation is held to the verdict, to which manifest is bound, to the status of every subject in order, and to whether the bundle fails.",
+  "description": "Bi-modal verification (D7/D3): FULL MATCH = content-manifest digest AND all subject package-digests verify (byte-identical delivery). SEMANTIC MATCH = package bytes differ (re-serialization, re-indentation, annotation changes) but every subject's semantic-digest (JCS minus annotations) verifies - the signature survives legitimate repackaging. TAMPER = any subject semantic-digest fails - meaning changed, nothing survives. Attestations live beside the manifest; nothing signed contains its own signature. binds-vectors (backlog #46, 2026-11-14): the primitive applied to a bundle, as a validator applies it to every Attestation it reads with one - those beside the manifest (D3.1) and any a manifest lists. `manifest-digest` is the digest of the delivered manifest, `kept-packs` the digests of the pack manifests the bundle keeps. Each subject is `match` (an object of the bundle carries the signed semantic digest: the object of that id when the subject names one, any object when it is a bare digest), `differs` (the object of that id carries another digest) or `absent` (no such object, or no object with that digest). `expected-manifest` is `this`, `kept-pack` or `other`. All subjects match and the manifest is this one or a kept pack's = full-match; all match and the manifest is another = semantic-match; anything else = fail. `expected-failure` says whether the bundle fails: it does when the verdict is `fail` and the Attestation's lifecycle is `active` - a draft, deprecated or withdrawn Attestation that does not bind is reported and fails nothing. An implementation is held to the verdict, to which manifest is bound, to the status of every subject in order, and to whether the bundle fails. listed-vectors (backlog #75, 2026-11-14; MANIFEST-1): `objects` are the objects a content manifest lists. An Attestation is excluded from the content manifest by definition (D3.1), in every bundle and not only in a pack: `expected-fails` is the number of Attestations among the objects, and each failure names the rule and one of `expected-ids`. What the Attestation binds, whether it names an envelope and what its lifecycle is change nothing.",
   "vectors": [
     { "name": "full-match",
       "scenario": {
@@ -1460,6 +1460,532 @@
      "match"
     ],
     "expected-failure": false
+   }
+  ],
+  "listed-vectors": [
+   {
+    "name": "no-attestation-listed",
+    "note": "A manifest that lists a Requirement, a Component and an Implementation lists no Attestation.",
+    "objects": [
+     {
+      "id": "https://agency-x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://agency-x.example/party/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated every 90 days."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "title": {
+       "en": "The application"
+      },
+      "capabilities": [
+       {
+        "id": "cap-rotation",
+        "requirement-ref": "https://agency-x.example/req/1"
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/impl/app--req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://agency-x.example/component/app",
+      "requirement-ref": "https://agency-x.example/req/1",
+      "responsibility": "provider",
+      "satisfied-by": [
+       {
+        "capability-ref": "cap-rotation"
+       }
+      ],
+      "status": "implemented"
+     }
+    ],
+    "expected-fails": 0,
+    "expected-ids": []
+   },
+   {
+    "name": "an-attestation-listed-among-its-subjects",
+    "note": "The Attestation's three subjects are listed beside it and carry the signed digests. It is refused all the same: a manifest that lists an Attestation cannot be the manifest that Attestation binds.",
+    "objects": [
+     {
+      "id": "https://agency-x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://agency-x.example/party/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated every 90 days."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "title": {
+       "en": "The application"
+      },
+      "capabilities": [
+       {
+        "id": "cap-rotation",
+        "requirement-ref": "https://agency-x.example/req/1"
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/impl/app--req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://agency-x.example/component/app",
+      "requirement-ref": "https://agency-x.example/req/1",
+      "responsibility": "provider",
+      "satisfied-by": [
+       {
+        "capability-ref": "cap-rotation"
+       }
+      ],
+      "status": "implemented"
+     },
+     {
+      "id": "https://agency-x.example/attestation/ato",
+      "version": "1",
+      "lifecycle": "active",
+      "subject-semantic-digests": [
+       {
+        "id": "https://agency-x.example/req/1",
+        "semantic-digest": "sha256:45234846c7617b9d1e6a87218de413e3b52f4010017db163d1cc921478164afe"
+       },
+       {
+        "id": "https://agency-x.example/component/app",
+        "semantic-digest": "sha256:dc33268e420d37dd2e1bf5785b5ff2132f091c37b914805cb302ad9773eaac59"
+       },
+       {
+        "id": "https://agency-x.example/impl/app--req-1",
+        "semantic-digest": "sha256:bd42c035bea4b210966cf16276e893ced493515ff49f98de3c762474d5efc4c6"
+       }
+      ],
+      "content-manifest-digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signer": "https://agency-x.example/party/ao",
+      "timestamp": "2026-11-14T09:00:00Z"
+     }
+    ],
+    "expected-fails": 1,
+    "expected-ids": [
+     "https://agency-x.example/attestation/ato"
+    ]
+   },
+   {
+    "name": "two-attestations-listed",
+    "note": "One failure for each, named in the order of their ids.",
+    "objects": [
+     {
+      "id": "https://agency-x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://agency-x.example/party/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated every 90 days."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/attestation/review-2026",
+      "version": "1",
+      "lifecycle": "active",
+      "subject-semantic-digests": [
+       {
+        "id": "https://agency-x.example/req/1",
+        "semantic-digest": "sha256:45234846c7617b9d1e6a87218de413e3b52f4010017db163d1cc921478164afe"
+       }
+      ],
+      "content-manifest-digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "signer": "https://agency-x.example/party/ao",
+      "timestamp": "2026-11-14T09:00:00Z"
+     },
+     {
+      "id": "https://agency-x.example/attestation/ato",
+      "version": "1",
+      "lifecycle": "active",
+      "subject-semantic-digests": [
+       {
+        "id": "https://agency-x.example/req/1",
+        "semantic-digest": "sha256:45234846c7617b9d1e6a87218de413e3b52f4010017db163d1cc921478164afe"
+       },
+       {
+        "id": "https://agency-x.example/component/app",
+        "semantic-digest": "sha256:dc33268e420d37dd2e1bf5785b5ff2132f091c37b914805cb302ad9773eaac59"
+       },
+       {
+        "id": "https://agency-x.example/impl/app--req-1",
+        "semantic-digest": "sha256:bd42c035bea4b210966cf16276e893ced493515ff49f98de3c762474d5efc4c6"
+       }
+      ],
+      "content-manifest-digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signer": "https://agency-x.example/party/ao",
+      "timestamp": "2026-11-14T09:00:00Z"
+     }
+    ],
+    "expected-fails": 2,
+    "expected-ids": [
+     "https://agency-x.example/attestation/ato",
+     "https://agency-x.example/attestation/review-2026"
+    ]
+   },
+   {
+    "name": "a-withdrawn-attestation-listed",
+    "note": "The lifecycle decides whether an Attestation that does not bind fails a bundle (D7). It does not decide where an Attestation lies.",
+    "objects": [
+     {
+      "id": "https://agency-x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://agency-x.example/party/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated every 90 days."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "title": {
+       "en": "The application"
+      },
+      "capabilities": [
+       {
+        "id": "cap-rotation",
+        "requirement-ref": "https://agency-x.example/req/1"
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/impl/app--req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://agency-x.example/component/app",
+      "requirement-ref": "https://agency-x.example/req/1",
+      "responsibility": "provider",
+      "satisfied-by": [
+       {
+        "capability-ref": "cap-rotation"
+       }
+      ],
+      "status": "implemented"
+     },
+     {
+      "id": "https://agency-x.example/attestation/ato",
+      "version": "1",
+      "lifecycle": "withdrawn",
+      "subject-semantic-digests": [
+       {
+        "id": "https://agency-x.example/req/1",
+        "semantic-digest": "sha256:45234846c7617b9d1e6a87218de413e3b52f4010017db163d1cc921478164afe"
+       },
+       {
+        "id": "https://agency-x.example/component/app",
+        "semantic-digest": "sha256:dc33268e420d37dd2e1bf5785b5ff2132f091c37b914805cb302ad9773eaac59"
+       },
+       {
+        "id": "https://agency-x.example/impl/app--req-1",
+        "semantic-digest": "sha256:bd42c035bea4b210966cf16276e893ced493515ff49f98de3c762474d5efc4c6"
+       }
+      ],
+      "content-manifest-digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signer": "https://agency-x.example/party/ao",
+      "timestamp": "2026-11-14T09:00:00Z"
+     }
+    ],
+    "expected-fails": 1,
+    "expected-ids": [
+     "https://agency-x.example/attestation/ato"
+    ]
+   },
+   {
+    "name": "a-draft-attestation-listed",
+    "note": "A draft is an Attestation too.",
+    "objects": [
+     {
+      "id": "https://agency-x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://agency-x.example/party/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated every 90 days."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "title": {
+       "en": "The application"
+      },
+      "capabilities": [
+       {
+        "id": "cap-rotation",
+        "requirement-ref": "https://agency-x.example/req/1"
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/impl/app--req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://agency-x.example/component/app",
+      "requirement-ref": "https://agency-x.example/req/1",
+      "responsibility": "provider",
+      "satisfied-by": [
+       {
+        "capability-ref": "cap-rotation"
+       }
+      ],
+      "status": "implemented"
+     },
+     {
+      "id": "https://agency-x.example/attestation/ato",
+      "version": "1",
+      "lifecycle": "draft",
+      "subject-semantic-digests": [
+       {
+        "id": "https://agency-x.example/req/1",
+        "semantic-digest": "sha256:45234846c7617b9d1e6a87218de413e3b52f4010017db163d1cc921478164afe"
+       },
+       {
+        "id": "https://agency-x.example/component/app",
+        "semantic-digest": "sha256:dc33268e420d37dd2e1bf5785b5ff2132f091c37b914805cb302ad9773eaac59"
+       },
+       {
+        "id": "https://agency-x.example/impl/app--req-1",
+        "semantic-digest": "sha256:bd42c035bea4b210966cf16276e893ced493515ff49f98de3c762474d5efc4c6"
+       }
+      ],
+      "content-manifest-digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signer": "https://agency-x.example/party/ao",
+      "timestamp": "2026-11-14T09:00:00Z"
+     }
+    ],
+    "expected-fails": 1,
+    "expected-ids": [
+     "https://agency-x.example/attestation/ato"
+    ]
+   },
+   {
+    "name": "a-signed-attestation-listed",
+    "note": "With an envelope or without one.",
+    "objects": [
+     {
+      "id": "https://agency-x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://agency-x.example/party/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated every 90 days."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "title": {
+       "en": "The application"
+      },
+      "capabilities": [
+       {
+        "id": "cap-rotation",
+        "requirement-ref": "https://agency-x.example/req/1"
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/impl/app--req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://agency-x.example/component/app",
+      "requirement-ref": "https://agency-x.example/req/1",
+      "responsibility": "provider",
+      "satisfied-by": [
+       {
+        "capability-ref": "cap-rotation"
+       }
+      ],
+      "status": "implemented"
+     },
+     {
+      "id": "https://agency-x.example/attestation/ato",
+      "version": "1",
+      "lifecycle": "active",
+      "subject-semantic-digests": [
+       {
+        "id": "https://agency-x.example/req/1",
+        "semantic-digest": "sha256:45234846c7617b9d1e6a87218de413e3b52f4010017db163d1cc921478164afe"
+       },
+       {
+        "id": "https://agency-x.example/component/app",
+        "semantic-digest": "sha256:dc33268e420d37dd2e1bf5785b5ff2132f091c37b914805cb302ad9773eaac59"
+       },
+       {
+        "id": "https://agency-x.example/impl/app--req-1",
+        "semantic-digest": "sha256:bd42c035bea4b210966cf16276e893ced493515ff49f98de3c762474d5efc4c6"
+       }
+      ],
+      "content-manifest-digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "signer": "https://agency-x.example/party/ao",
+      "timestamp": "2026-11-14T09:00:00Z",
+      "envelope-ref": "attestation-ato.dsse"
+     }
+    ],
+    "expected-fails": 1,
+    "expected-ids": [
+     "https://agency-x.example/attestation/ato"
+    ]
+   },
+   {
+    "name": "nothing-but-an-attestation-listed",
+    "note": "Its subjects need not be there for the rule to speak.",
+    "objects": [
+     {
+      "id": "https://agency-x.example/attestation/review-2026",
+      "version": "1",
+      "lifecycle": "active",
+      "subject-semantic-digests": [
+       {
+        "id": "https://agency-x.example/req/1",
+        "semantic-digest": "sha256:45234846c7617b9d1e6a87218de413e3b52f4010017db163d1cc921478164afe"
+       }
+      ],
+      "content-manifest-digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "signer": "https://agency-x.example/party/ao",
+      "timestamp": "2026-11-14T09:00:00Z"
+     }
+    ],
+    "expected-fails": 1,
+    "expected-ids": [
+     "https://agency-x.example/attestation/review-2026"
+    ]
+   },
+   {
+    "name": "an-id-that-says-attestation-is-no-attestation",
+    "note": "The type decides, not the id and not a path: a Component under .../attestation/... is a Component.",
+    "objects": [
+     {
+      "id": "https://agency-x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://agency-x.example/party/operator"
+        ],
+        "prose": {
+         "en": "Keys are rotated every 90 days."
+        }
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/component/app",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "title": {
+       "en": "The application"
+      },
+      "capabilities": [
+       {
+        "id": "cap-rotation",
+        "requirement-ref": "https://agency-x.example/req/1"
+       }
+      ]
+     },
+     {
+      "id": "https://agency-x.example/impl/app--req-1",
+      "version": "1",
+      "lifecycle": "active",
+      "component-ref": "https://agency-x.example/component/app",
+      "requirement-ref": "https://agency-x.example/req/1",
+      "responsibility": "provider",
+      "satisfied-by": [
+       {
+        "capability-ref": "cap-rotation"
+       }
+      ],
+      "status": "implemented"
+     },
+     {
+      "id": "https://agency-x.example/attestation/not-one",
+      "version": "1",
+      "lifecycle": "active",
+      "kind": "system",
+      "title": {
+       "en": "The application"
+      },
+      "capabilities": [
+       {
+        "id": "cap-rotation",
+        "requirement-ref": "https://agency-x.example/req/1"
+       }
+      ]
+     }
+    ],
+    "expected-fails": 0,
+    "expected-ids": []
    }
   ]
 }

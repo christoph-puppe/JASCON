@@ -118,6 +118,14 @@ class Bundle:
         self.objects = {}          # relpath -> obj
         self.schemas = {}          # relpath -> pinned schema obj
     def add(self, relpath, obj):
+        # MANIFEST-1 (backlog #75): what is added here is listed in the manifest,
+        # and no manifest lists an Attestation (D3.1). An Attestation binds the
+        # digest of the manifest's bytes, so it is written after the manifest
+        # and beside it, as convert_ifa.py does. The IFA bundle listed its own
+        # until 2026-11-13, and no validator said so.
+        if isinstance(obj, dict) and "subject-semantic-digests" in obj and "content-manifest-digest" in obj:
+            raise SystemExit(f"{relpath}: an Attestation is not an object of a bundle's manifest (MANIFEST-1, D3.1); "
+                             f"write it beside the manifest, after the manifest is written")
         self.objects[relpath] = obj
     def stub(self, name, fid, mods, props,
              note="NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled"):

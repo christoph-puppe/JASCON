@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""attestation-binds on a bundle, end to end (backlog #46): a validator is
-run on copies of two shipped bundles whose Attestation, beside the
-manifest, was changed in one place each.
+"""attestation-binds on a bundle, end to end (backlog #46), and MANIFEST-1
+(backlog #75): a validator is run on copies of two shipped bundles whose
+Attestation, beside the manifest, was changed in one place each, or was
+entered in the manifest.
 
     python3 jascon/scripts/test_attestation_binds.py          the Python reference
     JASCON_TWIN="powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File jascon\\scripts\\validate_core.ps1" \\
@@ -62,6 +63,23 @@ def object_changed_and_repinned(att, bundle):
 def removed(att, bundle): os.remove(os.path.join(bundle, IFA_ATT)); return "removed"
 def withdrawn(att, _): att["lifecycle"] = "withdrawn"
 def withdrawn_and_unsigned(att, _): att["lifecycle"] = "withdrawn"; att.pop("envelope-ref")
+def listed_in_the_manifest(att_file):
+    # backlog #75: the Attestation is moved under objects/ and entered in the manifest with both digests, as the IFA
+    # bundle had it until 2026-11-13. Nothing else is wrong with such a bundle: every digest of the manifest is right.
+    def change(att, bundle):
+        sys.path.insert(0, HERE)
+        from oscal_conv_lib import semantic_digest
+        rel = "objects/attestation/" + att_file
+        os.makedirs(os.path.join(bundle, "objects", "attestation"), exist_ok=True)
+        os.rename(os.path.join(bundle, att_file), os.path.join(bundle, *rel.split("/")))
+        with open(os.path.join(bundle, *rel.split("/")), "rb") as f: raw = f.read()
+        mp = os.path.join(bundle, "content-manifest.json")
+        m = read_json(mp)
+        m["objects"].append({"id": att["id"], "version": att["version"], "path": rel,
+                             "package-digest": "sha256:" + hashlib.sha256(raw).hexdigest(), "semantic-digest": semantic_digest(att)})
+        write_json(mp, m)
+        return "removed"                # no longer beside the manifest: nothing to write back there
+    return change
 
 COPIES = {
     "c01-as-shipped": (IFA, IFA_ATT, None),
@@ -73,6 +91,8 @@ COPIES = {
     "c07-no-attestation": (IFA, IFA_ATT, removed),
     "c08-signed-withdrawn": (PACK, PACK_ATT, withdrawn),
     "c09-unsigned-withdrawn": (PACK, PACK_ATT, withdrawn_and_unsigned),
+    "c10-listed": (IFA, IFA_ATT, listed_in_the_manifest(IFA_ATT)),
+    "c11-pack-listed": (PACK, PACK_ATT, listed_in_the_manifest(PACK_ATT)),
 }
 
 def validator(dirs, *more):
@@ -161,9 +181,55 @@ class AttestationBesideTheManifest(unittest.TestCase):
         self.assertEqual(self.counts["c09-unsigned-withdrawn"], (3, 0))
         self.assertIn(f"dsse: {VID} = no envelope (unsigned attestation)", self.block["c09-unsigned-withdrawn"])
 
+    def test_backlog_75_an_attestation_the_manifest_lists_fails_the_bundle(self):
+        # MANIFEST-1. Until 2026-11-14 this copy passed in both validators (18 pass, 0 fail): its only trace was the
+        # verdict, a Semantic Match, because a manifest that lists an Attestation cannot be the one it binds.
+        self.assertEqual(self.counts["c10-listed"], (18, 1))
+        self.assertIn(f"{AID}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded "
+                      f"from the content manifest by definition, D3.1", self.rest)
+        # it is still read with the bundle and held to what it binds
+        self.assertIn(f"binds: {AID} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]",
+                      self.block["c10-listed"])
+        self.assertRegex(self.block["c10-listed"], r"'attestation': 1|attestation=1")
+
+    def test_backlog_75_in_a_pack_both_rules_speak(self):
+        # a pack holds Components only (ADVICE-1), and no manifest lists an Attestation (MANIFEST-1)
+        self.assertEqual(self.counts["c11-pack-listed"], (3, 2))
+        self.assertIn(f"{VID} is a attestation - an advice pack holds components only (an attestation travels beside the manifest, D3.1)", self.rest)
+        self.assertIn(f"{VID}: an Attestation is listed in the content manifest (MANIFEST-1", self.rest)
+
+    @unittest.skipIf(TWIN, "with a bundle named, the twin does not read the example folder; its default run does")
+    def test_backlog_75_the_example_folder_is_held_to_it_too(self):
+        # The reference reads jascon/examples beside its own file. A copy of the reference in a small tree of its own
+        # reads a changed copy of the folder: the folder's own Attestation entered in its manifest, both digests right.
+        sys.path.insert(0, HERE)
+        from oscal_conv_lib import semantic_digest
+        mirror = os.path.join(self.tmp, "mirror")
+        for part in ("schemas", "conformance", "examples"):
+            shutil.copytree(os.path.join(ROOT, "jascon", part), os.path.join(mirror, "jascon", part))
+        os.makedirs(os.path.join(mirror, "jascon", "scripts"))
+        shutil.copy2(os.path.join(HERE, "validate_core.py"), os.path.join(mirror, "jascon", "scripts", "validate_core.py"))
+        ex, name, aid = os.path.join(mirror, "jascon", "examples"), "attestation-acme-2026.json", "https://agency-x.example/attestation/acme-2026"
+        with open(os.path.join(ex, name), "rb") as f: raw = f.read()
+        att = json.loads(raw.decode("utf-8"))
+        self.assertEqual(att["id"], aid)
+        m = read_json(os.path.join(ex, "content-manifest.json"))
+        m["objects"].append({"id": aid, "version": att["version"], "path": name,
+                             "package-digest": "sha256:" + hashlib.sha256(raw).hexdigest(), "semantic-digest": semantic_digest(att)})
+        write_json(os.path.join(ex, "content-manifest.json"), m)
+        r = subprocess.run([sys.executable, os.path.join(mirror, "jascon", "scripts", "validate_core.py"),
+                            os.path.join(self.tmp, "c07-no-attestation"), "--as-of", AS_OF],
+                           capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=mirror)
+        out = r.stdout.replace("\r\n", "\n")
+        self.assertEqual(r.returncode, 1, out[-800:])
+        self.assertIn("skill-examples: 27 pass, 1 fail", out)
+        self.assertIn(f"[skill-examples] {aid}: an Attestation is listed in the content manifest (MANIFEST-1", out)
+        self.assertRegex(out, r"(?m)^1 FAILURES:$")          # this one and no other: the copied bundle beside it is clean
+
     def test_backlog_46_the_failures_are_these_and_no_others(self):
         failed = {name for name, (_, bad) in self.counts.items() if bad}
-        self.assertEqual(failed, {"c02-other-digest", "c04-not-delivered", "c06-object-changed", "c08-signed-withdrawn"})
+        self.assertEqual(failed, {"c02-other-digest", "c04-not-delivered", "c06-object-changed", "c08-signed-withdrawn",
+                                  "c10-listed", "c11-pack-listed"})
 
     @unittest.skipIf(TWIN, "with a bundle named, the twin does not read the example folder; its default run does")
     def test_backlog_46_the_example_folder_is_held_to_its_two_attestations(self):
