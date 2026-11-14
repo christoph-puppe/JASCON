@@ -24,6 +24,9 @@
    },
    "observations": {
     "type": "array"
+   },
+   "assessment-results-state": {
+    "type": "object"
    }
   },
   "additionalProperties": false

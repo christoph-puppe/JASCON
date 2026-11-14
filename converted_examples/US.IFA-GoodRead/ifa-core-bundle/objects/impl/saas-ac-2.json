@@ -37,23 +37,28 @@
    "statements": [
     {
      "statement": "smt.a",
+     "uuid": "22222222-0000-4000-9009-002001000000",
      "remarks": {
       "en": "a. Identifies and selects the following types of information system accounts to support organizational missions/business functions: [Assignment: privileged and non-privileged];"
      },
      "responses": [
       {
+       "uuid": "22222222-0000-4000-9009-002001001000",
        "component": "https://ifa.gov/goodread/component/saas",
        "description": {
         "en": "Response for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a.\n\nResponse for the \\\"This System\\\" component.\n\nOverall description of how \\\"This System\\\" satisfies AC-2, Part a."
        }
       },
       {
+       "uuid": "22222222-0000-4000-9009-002001002000",
        "component": "https://ifa.gov/goodread/component/csp-iaas",
        "description": {
         "en": "Describe how this internal virtual appliance satisfies AC-2, Part a."
        },
        "satisfied": [
         {
+         "unresolved-responsibility-uuid": "11111111-0000-4000-9009-002001001001",
+         "uuid": "22222222-0000-4000-9009-002001002001",
          "description": {
           "en": "Description that directly addresses how the consumer responsibility was satisfied."
          }
@@ -61,6 +66,7 @@
        ]
       },
       {
+       "uuid": "22222222-0000-4000-9009-002001003000",
        "component": "https://ifa.gov/goodread/component/access-control-appliance",
        "description": {
         "en": " *duplicated/tailored description of what was inherited, and description of what was configured.* \n\nConsumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
@@ -68,6 +74,7 @@
        "inherited": [
         {
          "capability": "https://ifa.gov/goodread/component/csp-application#cap-provided-2",
+         "uuid": "22222222-0000-4000-9009-002001002002",
          "description": {
           "en": "Optional description.\n\n *Possibly duplicated description of what was inherited.* \n\nConsumer-appropriate description of what may be inherited.\n\nIn the context of the application component in satisfaction of AC-2, part a."
          }
@@ -76,6 +83,7 @@
        "satisfied": [
         {
          "capability": "https://ifa.gov/goodread/component/csp-application#cap-provided-2",
+         "uuid": "22222222-0000-4000-9009-002001002003",
          "description": {
           "en": "Description of how the responsibility was satisfied."
          }
@@ -85,6 +93,9 @@
      ]
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "22222222-0000-4000-9009-002000000000"
   }
  }
 }

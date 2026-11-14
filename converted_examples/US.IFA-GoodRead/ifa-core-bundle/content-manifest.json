@@ -13,7 +13,151 @@
     "version": "1.1.1",
     "oscal-version": "1.1.3",
     "last-modified": "2026-05-12T10:26:16.00000-00:00",
-    "published": "2026-05-13T12:30:10.00000-00:00"
+    "published": "2026-05-13T12:30:10.00000-00:00",
+    "uuid": "cef90dc9-2745-4c59-90b6-f82f6a96dad7",
+    "metadata": {
+     "revisions": [
+      {
+       "title": "IFA SYSTEM1234 System Security Plan",
+       "published": "2023-05-19T14:46:54-04:00",
+       "last-modified": "2024-03-01T13:57:28.355446-04:00",
+       "version": "1.1.1",
+       "oscal-version": "1.1.3",
+       "links": [
+        {
+         "href": "#5e139edd-86aa-4b65-8431-1192bd276658",
+         "rel": "version-history"
+        }
+       ]
+      },
+      {
+       "title": "IFA GoodRead System Security Plan",
+       "published": "2023-05-19T14:46:54-04:00",
+       "last-modified": "2024-03-01T13:57:28.355446-04:00",
+       "version": "1.1",
+       "oscal-version": "1.1.2",
+       "links": [
+        {
+         "href": "#60077e84-e62f-4375-8c6c-b0e0d4560c5f",
+         "rel": "version-history"
+        }
+       ]
+      }
+     ],
+     "roles": [
+      {
+       "id": "owner",
+       "title": "IFA SYSTEM1234 Owner"
+      },
+      {
+       "id": "developer",
+       "title": "IFA SYSTEM1234 Developer"
+      },
+      {
+       "id": "system-engineer",
+       "title": "IFA SYSTEM1234 System Engineer"
+      },
+      {
+       "id": "public-affairs-office",
+       "title": "IFA Public Affairs Office"
+      }
+     ],
+     "parties": [
+      {
+       "uuid": "ba9c12bd-e5ef-46b6-95a2-4d8e7f864c1a",
+       "type": "person",
+       "name": "Owen Pearson",
+       "member-of-organizations": [
+        "3a675986-b4ff-4030-b178-e953c2e55d64"
+       ]
+      },
+      {
+       "uuid": "67c04291-dbf6-495a-a3ba-0011638acc94",
+       "type": "person",
+       "name": "Juno Styles",
+       "member-of-organizations": [
+        "3a675986-b4ff-4030-b178-e953c2e55d64"
+       ]
+      },
+      {
+       "uuid": "4ba3f2b7-e894-48d7-b940-91c68661df55",
+       "type": "person",
+       "name": "Xavier Jones",
+       "member-of-organizations": [
+        "3a675986-b4ff-4030-b178-e953c2e55d64"
+       ]
+      },
+      {
+       "uuid": "3a675986-b4ff-4030-b178-e953c2e55d64",
+       "type": "organization",
+       "name": "Important Federal Agency",
+       "short-name": "IFA",
+       "links": [
+        {
+         "href": "https://www.ifa.gov",
+         "rel": "website"
+        }
+       ]
+      }
+     ],
+     "responsible-parties": [
+      {
+       "role-id": "owner",
+       "party-uuids": [
+        "ba9c12bd-e5ef-46b6-95a2-4d8e7f864c1a"
+       ]
+      },
+      {
+       "role-id": "developer",
+       "party-uuids": [
+        "67c04291-dbf6-495a-a3ba-0011638acc94"
+       ]
+      },
+      {
+       "role-id": "system-engineer",
+       "party-uuids": [
+        "4ba3f2b7-e894-48d7-b940-91c68661df55"
+       ]
+      }
+     ]
+    },
+    "import-profile": {
+     "href": "#84cbf061-eb87-4ec1-8112-1f529232e907"
+    },
+    "back-matter": {
+     "resources": [
+      {
+       "uuid": "5e139edd-86aa-4b65-8431-1192bd276658",
+       "title": "IFA SYSTEM1234 System Security Plan",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.4.0.zip",
+         "media-type": "application/oscal.ssp+zip"
+        }
+       ]
+      },
+      {
+       "uuid": "60077e84-e62f-4375-8c6c-b0e0d4560c5f",
+       "title": "IFA GoodRead System Security Plan",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.3.0.zip",
+         "media-type": "application/oscal.ssp+zip"
+        }
+       ]
+      },
+      {
+       "uuid": "84cbf061-eb87-4ec1-8112-1f529232e907",
+       "description": "NIST Special Publication 800-53 Revision 5: Security and Privacy Controls for Federal Information Systems and Organizations",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.4.0.zip",
+         "media-type": "application/oscal.profile+zip"
+        }
+       ]
+      }
+     ]
+    }
    },
    {
     "file": "ifa_assessment-plan.json",
@@ -22,7 +166,103 @@
     "oscal-version": "1.2.2",
     "last-modified": "2026-05-12T02:36:09.00000-00:00",
     "published": "2026-05-13T12:30:00.00000-00:00",
-    "remarks": "In this version of the artifact, the content was updated to OSCAL v1.2.2."
+    "remarks": "In this version of the artifact, the content was updated to OSCAL v1.2.2.",
+    "uuid": "74c1f5ed-7b04-49e4-a89b-f8b0120715fd",
+    "metadata": {
+     "revisions": [
+      {
+       "title": "IFA GoodRead Assessment Plan",
+       "last-modified": "2024-02-01T13:57:28.355446-04:00",
+       "version": "1.0",
+       "oscal-version": "1.1.2",
+       "links": [
+        {
+         "href": "#60077e84-e62f-4375-8c6c-b0e0d4560c5f",
+         "rel": "version-history"
+        }
+       ],
+       "remarks": "This OSCAL version of the IFA Assessment Plan is part of the v 1.3.0 OSCAL content release."
+      },
+      {
+       "title": "IFA SYSTEM1234 Assessment Plan",
+       "last-modified": "2025-07-06T15:05:10.355446-04:00",
+       "version": "1.1.0",
+       "oscal-version": "1.1.3",
+       "links": [
+        {
+         "href": "#97f36be8-fec0-4fa6-bcdf-e3f838eba040",
+         "rel": "version-history"
+        }
+       ],
+       "remarks": "This OSCAL version of the IFA Assessment Plan is part of the v 1.4.0 OSCAL content release."
+      }
+     ],
+     "roles": [
+      {
+       "id": "assessor",
+       "title": "IFA Security Control Assessor"
+      }
+     ],
+     "parties": [
+      {
+       "uuid": "e7730080-71ce-4b20-bec4-84f33136fd58",
+       "type": "person",
+       "name": "Amy Assessor",
+       "member-of-organizations": [
+        "3a675986-b4ff-4030-b178-e953c2e55d64"
+       ]
+      },
+      {
+       "uuid": "3a675986-b4ff-4030-b178-e953c2e55d64",
+       "type": "organization",
+       "name": "Important Federal Agency",
+       "short-name": "IFA",
+       "links": [
+        {
+         "href": "https://www.ifa.gov",
+         "rel": "website"
+        }
+       ]
+      }
+     ],
+     "responsible-parties": [
+      {
+       "role-id": "assessor",
+       "party-uuids": [
+        "e7730080-71ce-4b20-bec4-84f33136fd58"
+       ]
+      }
+     ]
+    },
+    "import-ssp": {
+     "href": "../../ssp/xml/ifa_ssp.xml"
+    },
+    "back-matter": {
+     "resources": [
+      {
+       "uuid": "60077e84-e62f-4375-8c6c-b0e0d4560c5f",
+       "title": "IFA GoodRead Assessment Plan",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.3.0.zip",
+         "media-type": "application/oscal+zip"
+        }
+       ],
+       "remarks": "This OSCAL version of the IFA Assessment Plan released with the OSCAL content v1.3.0."
+      },
+      {
+       "uuid": "97f36be8-fec0-4fa6-bcdf-e3f838eba040",
+       "title": "IFA SYSTEM1234 Assessment Plan",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.4.0.zip",
+         "media-type": "application/oscal+zip"
+        }
+       ],
+       "remarks": "This OSCAL version of the IFA Assessment Plan was released with the OSCAL content v1.4.0."
+      }
+     ]
+    }
    },
    {
     "file": "ifa_assessment-results.json",
@@ -30,7 +270,101 @@
     "version": "1.0.0",
     "oscal-version": "1.2.2",
     "last-modified": "2026-05-12T02:46:09.00000-00:00",
-    "remarks": "In this version of the artifact, the content was updated to OSCAL v1.1.3 and the system name was changed. Imported Assessment Plan was corrected. Other enhancements were implemented."
+    "remarks": "In this version of the artifact, the content was updated to OSCAL v1.1.3 and the system name was changed. Imported Assessment Plan was corrected. Other enhancements were implemented.",
+    "uuid": "f90f8cd3-8b97-4f6e-a79c-86076723ac49",
+    "metadata": {
+     "revisions": [
+      {
+       "title": "IFA GoodRead Continuous Monitoring Assessment Results June 2023",
+       "last-modified": "2024-02-01T13:57:28.355446-04:00",
+       "version": "202306-002",
+       "oscal-version": "1.1.2",
+       "links": [
+        {
+         "href": "#ec0dad37-54e0-40fd-a925-6d0bdea94c0d",
+         "rel": "version-history"
+        }
+       ],
+       "remarks": "This OSCAL version of the IFA Assessment Results was importing an nonexisting Assessment Plan."
+      },
+      {
+       "title": "IFA SYSTEM1234 Continuous Monitoring Assessment Results",
+       "last-modified": "2025-07-06T15:05:10.355446-04:00",
+       "version": "202306-002",
+       "oscal-version": "1.1.3",
+       "links": [
+        {
+         "href": "#8da1dfe1-4aec-48e2-bacb-431ad61486c2",
+         "rel": "version-history"
+        }
+       ],
+       "remarks": "This OSCAL version of the IFA Assessment Results is part of OSCAL content v1.1.3 release."
+      }
+     ],
+     "roles": [
+      {
+       "id": "assessor",
+       "title": "IFA Security Controls Assessor"
+      }
+     ],
+     "parties": [
+      {
+       "uuid": "e7730080-71ce-4b20-bec4-84f33136fd58",
+       "type": "person",
+       "name": "Amy Assessor",
+       "member-of-organizations": [
+        "3a675986-b4ff-4030-b178-e953c2e55d64"
+       ]
+      },
+      {
+       "uuid": "3a675986-b4ff-4030-b178-e953c2e55d64",
+       "type": "organization",
+       "name": "Important Federal Agency",
+       "short-name": "IFA",
+       "links": [
+        {
+         "href": "https://www.ifa.gov",
+         "rel": "website"
+        }
+       ]
+      }
+     ],
+     "responsible-parties": [
+      {
+       "role-id": "assessor",
+       "party-uuids": [
+        "e7730080-71ce-4b20-bec4-84f33136fd58"
+       ]
+      }
+     ]
+    },
+    "import-ap": {
+     "href": "../../ap/xml/ifa_assessment-plan.xml"
+    },
+    "back-matter": {
+     "resources": [
+      {
+       "uuid": "ec0dad37-54e0-40fd-a925-6d0bdea94c0d",
+       "title": "IFA GoodRead Continuous Monitoring Assessment Results June 2023",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.3.0.zip",
+         "media-type": "application/oscal+zip"
+        }
+       ]
+      },
+      {
+       "uuid": "8da1dfe1-4aec-48e2-bacb-431ad61486c2",
+       "title": "IFA SYSTEM1234 Continuous Monitoring Assessment Results",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.4.0.zip",
+         "media-type": "application/oscal+zip"
+        }
+       ]
+      }
+     ]
+    }
    },
    {
     "file": "ifa_plan-of-action-and-milestones.json",
@@ -38,7 +372,64 @@
     "version": "1.2.1",
     "oscal-version": "1.2.2",
     "last-modified": "2026-05-12T02:46:09.00000-00:00",
-    "published": "2026-05-13T12:30:10.00000-00:00"
+    "published": "2026-05-13T12:30:10.00000-00:00",
+    "uuid": "4a202b62-38e0-40ac-9bf0-d595d5df7c28",
+    "metadata": {
+     "revisions": [
+      {
+       "title": "IFA GoodRead Plan of Action and Milestones",
+       "last-modified": "2024-02-01T13:57:28.355446-04:00",
+       "version": "1.1",
+       "oscal-version": "1.1.2",
+       "links": [
+        {
+         "href": "#714210d2-f8df-448c-be3e-e2213816cf79",
+         "rel": "version-history"
+        }
+       ],
+       "remarks": "This OSCAL version of the IFA Plan of Actions and Milestones was importing an nonexisting SSP."
+      },
+      {
+       "title": "IFA SYSTEM1234 Plan of Action and Milestones",
+       "last-modified": "2024-02-01T13:57:28.355446-04:00",
+       "version": "1.2",
+       "oscal-version": "1.1.3",
+       "links": [
+        {
+         "href": "#6374b585-dfeb-481d-bf08-5a97c49851fc",
+         "rel": "version-history"
+        }
+       ],
+       "remarks": "This OSCAL version of the IFA Plan of Actions and Milestones was published with OSCAL content v1.4.0."
+      }
+     ]
+    },
+    "import-ssp": {
+     "href": "../../ssp/xml/ifa_ssp.xml"
+    },
+    "back-matter": {
+     "resources": [
+      {
+       "uuid": "714210d2-f8df-448c-be3e-e2213816cf79",
+       "title": "IFA GoodRead Plan of Action and Milestones",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.3.0.zip",
+         "media-type": "application/oscal+zip"
+        }
+       ]
+      },
+      {
+       "uuid": "6374b585-dfeb-481d-bf08-5a97c49851fc",
+       "title": "IFA SYSTEM1234 Plan of Action and Milestones",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.4.0.zip"
+        }
+       ]
+      }
+     ]
+    }
    },
    {
     "file": "oscal_leveraged-example_ssp.json",
@@ -46,7 +437,52 @@
     "version": "1.0.0",
     "oscal-version": "1.2.2",
     "last-modified": "2026-05-12T10:16:01.00000-00:00",
-    "published": "2026-05-13T12:30:10.00000-00:00"
+    "published": "2026-05-13T12:30:10.00000-00:00",
+    "uuid": "c2c2f46c-3b36-4abe-84b8-139c00d8a8ec",
+    "metadata": {
+     "roles": [
+      {
+       "id": "admin",
+       "title": "Administrator"
+      },
+      {
+       "id": "customer",
+       "title": "External Customer"
+      },
+      {
+       "id": "poc-for-customers",
+       "title": "Internal POC for Customers"
+      }
+     ],
+     "parties": [
+      {
+       "uuid": "11111111-0000-4000-9000-100000000001",
+       "type": "person",
+       "remarks": "Leveraged Authorization POC"
+      },
+      {
+       "uuid": "11111111-0000-4000-9000-100000000002",
+       "type": "person"
+      }
+     ]
+    },
+    "import-profile": {
+     "href": "#6b45e2a5-b238-4752-ba12-cfd6ef2a83df"
+    },
+    "back-matter": {
+     "resources": [
+      {
+       "uuid": "6b45e2a5-b238-4752-ba12-cfd6ef2a83df",
+       "description": "NIST Special Publication 800-53 Revision 5: Low Baseline Profile",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.4.0.zip",
+         "media-type": "application/oscal.catalog+zip"
+        }
+       ]
+      }
+     ]
+    }
    },
    {
     "file": "oscal_leveraging-example_ssp.json",
@@ -54,7 +490,63 @@
     "version": "1.0.0",
     "oscal-version": "1.2.2",
     "last-modified": "2026-05-12T10:16:01.00000-00:00",
-    "published": "2026-05-13T12:30:10.00000-00:00"
+    "published": "2026-05-13T12:30:10.00000-00:00",
+    "uuid": "0e6c0e99-0dac-458d-b82f-bf85d6ccc521",
+    "metadata": {
+     "roles": [
+      {
+       "id": "admin",
+       "title": "Administrator"
+      }
+     ],
+     "parties": [
+      {
+       "uuid": "22222222-0000-4000-9000-100000000001",
+       "type": "person",
+       "remarks": "Leveraging SaaS' Admin"
+      },
+      {
+       "uuid": "11111111-0000-4000-9000-100000000001",
+       "type": "person",
+       "remarks": "Leveraged Authorization (IaaS) POC"
+      }
+     ]
+    },
+    "import-profile": {
+     "href": "#6b45e2a5-b238-4752-ba12-cfd6ef2a83df"
+    },
+    "back-matter": {
+     "resources": [
+      {
+       "uuid": "6b45e2a5-b238-4752-ba12-cfd6ef2a83df",
+       "description": "NIST Special Publication 800-53 Revision 5: Low Baseline Profile",
+       "rlinks": [
+        {
+         "href": "https://github.com/usnistgov/oscal-content/archive/refs/tags/v1.3.0.zip",
+         "media-type": "application/oscal.catalog+zip"
+        }
+       ]
+      },
+      {
+       "uuid": "c2c2f46c-3b36-4abe-84b8-139c00d8a8ec",
+       "description": "Leveraged System Security Plan in OSCAL Data Formats",
+       "rlinks": [
+        {
+         "href": "oscal_leveraged-example_ssp.xml",
+         "media-type": "application/oscal.catalog+xml"
+        },
+        {
+         "href": "../json/oscal_leveraged-example_ssp.json",
+         "media-type": "application/oscal.catalog+json"
+        },
+        {
+         "href": "../yaml/oscal_leveraged-example_ssp.yaml",
+         "media-type": "application/oscal.catalog+yaml"
+        }
+       ]
+      }
+     ]
+    }
    },
    {
     "file": "example-component-definition.json",
@@ -62,7 +554,51 @@
     "version": "20231012",
     "oscal-version": "1.1.2",
     "last-modified": "2026-05-12T09:16:10.00000-00:00",
-    "published": "2026-05-13T12:30:10.00000-00:00"
+    "published": "2026-05-13T12:30:10.00000-00:00",
+    "uuid": "bedec39a-6f8c-4d24-8b12-34458f387800",
+    "metadata": {
+     "roles": [
+      {
+       "id": "provider",
+       "title": "Provider"
+      }
+     ],
+     "parties": [
+      {
+       "uuid": "ef7c799a-c50e-49ab-83e0-515e989e6df1",
+       "type": "organization",
+       "name": "MongoDB",
+       "links": [
+        {
+         "href": "https://www.mongodb.com",
+         "rel": "website"
+        }
+       ]
+      }
+     ]
+    },
+    "back-matter": {
+     "resources": [
+      {
+       "uuid": "ba047e56-faef-430c-bafb-c54e9a87c6e8",
+       "description": "NIST Special Publication 800-53 Revision 5: Moderate Baseline Profile",
+       "rlinks": [
+        {
+         "href": "../../../nist.gov/SP800-53/rev5/xml/NIST_SP-800-53_rev5_MODERATE-baseline_profile.xml",
+         "media-type": "application/oscal.catalog+xml"
+        },
+        {
+         "href": "../../../nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json",
+         "media-type": "application/oscal.catalog+json"
+        },
+        {
+         "href": "../../../nist.gov/SP800-53/rev5/yaml/NIST_SP-800-53_rev5_MODERATE-baseline_profile.yaml",
+         "media-type": "application/oscal.catalog+yaml"
+        }
+       ]
+      }
+     ]
+    }
    }
   ],
   "converter": "convert_ifa.py v0.4 (provenance pre-filled from the source documents; the Attestation beside the manifest; conversion ledger)",
@@ -76,85 +612,85 @@
   {
    "id": "https://ifa.gov/goodread/assessment/conmon-2023-06",
    "version": "1.0.0",
-   "package-digest": "sha256:8e4449dd3552d0048e29291e19d5be38aaaeb4a4f8eb8f81b7547a814464a1c9",
-   "semantic-digest": "sha256:5d4d21f948c14b3a7e6573c462bfd59e566c7c7ba207a495be4a9119e212ac09",
+   "package-digest": "sha256:07c3fa779befb27ecf797c1b924f6f87571204b9e52388d2327af1b085cb3640",
+   "semantic-digest": "sha256:115dd0a35e3d14bc32a4669d25f862ab819d75f7e314c4c329143878653e4bb8",
    "path": "objects/assessment/conmon-2023-06.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/access-control-appliance",
    "version": "1.0.0",
-   "package-digest": "sha256:1dc9ed9442edd415f34b9fc254273bbb58f8ee66cbfea44a80a82f0b8eaae0a9",
-   "semantic-digest": "sha256:5558352a9017c9b2acebbeaa3e7d0d666569c2d8fb7c0efcefcbc4e57620793c",
+   "package-digest": "sha256:68d8bd337391321daf15d14f7f94acb6d57c85e9e4efe45a48b821c0653bc874",
+   "semantic-digest": "sha256:cdcb5ce22b1bb9caf4dd49649cb0981e11543390ce35ae75eaf401a406771688",
    "path": "objects/component/access-control-appliance.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/csp-application",
    "version": "1.0.0",
-   "package-digest": "sha256:d9cad75fae8fe993ac489e7408776bcb3bf1341de483526812634f737d550ba5",
-   "semantic-digest": "sha256:06aa897e9b691ff83fa0a5b86028722ffa3a902eae62633cc701dd0c110a9a66",
+   "package-digest": "sha256:f92c0bbce1d8edd602326a3a13da61abad222242db8dfc91123cb4acf17f1c28",
+   "semantic-digest": "sha256:219b62beb14c01f787336902a23c14ca71c6dfc3b6a115d6991c91c18ab13c0f",
    "path": "objects/component/csp-application.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/csp-iaas",
    "version": "1.0.0",
-   "package-digest": "sha256:a3a838ed44e8511e6996081b75bfbaf83558209522fc000ca9936bd59de2a220",
-   "semantic-digest": "sha256:f0b2bded888aba21080234177fc37351c5525596aeeb971e7babf0402b6e16bd",
+   "package-digest": "sha256:0281953f79ed7731bc4b3679a7e8fa0d5429eba9e49edb0e27450d411a5c4673",
+   "semantic-digest": "sha256:a174efc98f8b792c15e769d760b3e54cc4efedb224b2bbfa41f4705cfa64b4ac",
    "path": "objects/component/csp-iaas.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/mongodb",
    "version": "20231012",
-   "package-digest": "sha256:63aeeb6e037838a08160593a58a6ce4f0117b3e6307b22d96135a29c1360191b",
-   "semantic-digest": "sha256:06ede60e2b444f322a72d29390113789d5973bdabc2920fb876539f68fe93584",
+   "package-digest": "sha256:881f35377505936166aa02d31b4df6fd8d78efccc49ef946695ca61e37e10aa0",
+   "semantic-digest": "sha256:d928d406dc0c3b54baf391b0bff8fa815f0d46a92a53d51c4ac61f3667c2d6fa",
    "path": "objects/component/mongodb.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/saas",
    "version": "1.0.0",
-   "package-digest": "sha256:578c35f73c20e89451b35dfa34c1117dec7879ddc54a6787428234438dadc729",
-   "semantic-digest": "sha256:d05366e8a75c8fec51ee0e8527cc1210cbe525511e37a7bf91967c62b18f6fd2",
+   "package-digest": "sha256:a4e666f272d3c1c51fa7389e154d4b48896f07f6a520de25a46c68e74d1809d5",
+   "semantic-digest": "sha256:b635bc5a82311b77d426b98206280de9415be31b2e4b8c17feaf696146d701ae",
    "path": "objects/component/saas.json"
   },
   {
    "id": "https://ifa.gov/goodread/component/system1234",
    "version": "1.1.1",
-   "package-digest": "sha256:b23ff3e5bd7766500116d215354601a4e33c545f434968c84fc2ed468be95892",
-   "semantic-digest": "sha256:6b18825c002f6efc28bec859f0905f19436d02d79758d2dc61b884169efcf2e4",
+   "package-digest": "sha256:a9efec90fef5ed084b9a3b09a36f2b3f8b736ad4577dc9bd4616ce94b71f4cb4",
+   "semantic-digest": "sha256:262377f86d44b0ab1c2ff73e7ef9ead4f6b0e9d8fc93e3bb0679a030c221d531",
    "path": "objects/component/system1234.json"
   },
   {
    "id": "https://ifa.gov/goodread/finding/goodread-risk-1",
    "version": "1.2.1",
-   "package-digest": "sha256:22a80912dcbe2515c99f046e2a1188f69aacb03eb4938e3a322600c3c7483617",
-   "semantic-digest": "sha256:37b412d9b4cda1a6063052a5a452915bc41ee031341534d1d934ebd124adbf72",
+   "package-digest": "sha256:adf63324f142642ac1ce7ebdc6e0db9892252b717d3d3769d2de82df7768a941",
+   "semantic-digest": "sha256:2d8edc8de4eacba560cb802f613e09cad829ae14c8c6e42d5b96896f38a042c5",
    "path": "objects/finding/goodread-risk-1.json"
   },
   {
    "id": "https://ifa.gov/goodread/finding/goodread-risk-2",
    "version": "1.2.1",
-   "package-digest": "sha256:5592370fc91b4259dd7e27a86002c504656e95ce2b548d2401db5153b32cfe97",
-   "semantic-digest": "sha256:9cc8191700bbf11563177f8367bd484f1dd30dce49c832c82ba0b25c5b7c36ed",
+   "package-digest": "sha256:2f4911bfa933d82c57618aebc104acbeb18a110b4964f07e22db4f3177c29e5b",
+   "semantic-digest": "sha256:7cddf036c568470eb66376a61504a2ad9538af204f9ec00950071613c07fe098",
    "path": "objects/finding/goodread-risk-2.json"
   },
   {
    "id": "https://ifa.gov/goodread/impl/csp-iaas-ac-2",
    "version": "1.0.0",
-   "package-digest": "sha256:1c5fc59fff4e84e1625de805551412935cb9c10197c472a819a5caf58fa54e18",
-   "semantic-digest": "sha256:4a8ede4ff11dfbed4b9ee83659a0bfa87c7ede308985d0a60f8ceb7f917921ee",
+   "package-digest": "sha256:0adaff953d33cc6bebaa6e4ae7705f65869361abdc3ca1b0ab655afb63fba207",
+   "semantic-digest": "sha256:0eeba0849257b5e59382a993850c8a9e1fe09b3e565813d715ae0b6237c7cf99",
    "path": "objects/impl/csp-iaas-ac-2.json"
   },
   {
    "id": "https://ifa.gov/goodread/impl/saas-ac-2",
    "version": "1.0.0",
-   "package-digest": "sha256:c7114c791802749fa4df7e9cdaf0fca41ee55db1bb38f566e4dbd0d62ca86c56",
-   "semantic-digest": "sha256:3c60f74f6b9bdd085da04c0ee4969933d90021ef81b77bee483906ec80498185",
+   "package-digest": "sha256:28a0b400e0a38604c4d0e7167d45729c81aec7e4fc47bd1ae86b114100b39932",
+   "semantic-digest": "sha256:5c25802c8db9cc81501749fa5e8d103ba0534554e1e6a66bbb1102428bdd9064",
    "path": "objects/impl/saas-ac-2.json"
   },
   {
    "id": "https://ifa.gov/goodread/impl/system1234-ac-6.1",
    "version": "1.1.1",
-   "package-digest": "sha256:0c497c05abfebd843ad6f9a9c24b4cee1426c1c707218559040516bc667a975a",
-   "semantic-digest": "sha256:30c85d363fe959f2c18735c3a66f6fdf261a27381a489350581a9556596fa577",
+   "package-digest": "sha256:585299174bceea068223fe08a359f9c2a750fafd061b15b24ee43a72313bfcdc",
+   "semantic-digest": "sha256:4dfc6fce1029176e3dd96b03a292c9574dd764cf93b8b07752aa86135635403a",
    "path": "objects/impl/system1234-ac-6-1.json"
   },
   {
@@ -174,15 +710,15 @@
   {
    "id": "https://ifa.gov/goodread/risk/goodread-risk-1",
    "version": "1.2.1",
-   "package-digest": "sha256:f16451e438edb73ce62a6478482e9916140dacfef78ffcbedb3bafcbb9dc326b",
-   "semantic-digest": "sha256:5016991b7c1ff80f865078cfe98154686ef5a202c11d60ff6641f9b021a0cc0e",
+   "package-digest": "sha256:a7d9519268f788a8f865717be666e9aaae4118001e8cd0050ed428e3a0636824",
+   "semantic-digest": "sha256:3cb58123f19af4476ea27f73ba3925d6627d41018192cc1335d05f38615de3b2",
    "path": "objects/risk/goodread-risk-1.json"
   },
   {
    "id": "https://ifa.gov/goodread/risk/goodread-risk-2",
    "version": "1.2.1",
-   "package-digest": "sha256:3902a52bf290f4079eaeda2299f82e60b90c84657f07bf74c17d31fbd05d9d0d",
-   "semantic-digest": "sha256:f2ac08aa8069fdf33b72268c80fc44b934eec9828bee9d76720d5e27ed327951",
+   "package-digest": "sha256:cbd839416d53a8f9f4f34e532fef64bf0076d097b9d8e760c3714ad660d3543d",
+   "semantic-digest": "sha256:a9402687177c8cc564c9785d5d1b0c8199116a8b0e0716bbc251daf5d627f841",
    "path": "objects/risk/goodread-risk-2.json"
   }
  ],
@@ -190,19 +726,19 @@
   {
    "id": "https://ifa.gov/goodread/facet/assessment-plan",
    "exact-version": "1.0.0",
-   "digest": "sha256:20d7718224abd1fdcf46e8bf4fa36867ceb87f8d29e3b55a761b2f0e5c645c9f",
+   "digest": "sha256:9ce74bfd150051561ae1fe09a2d1c1a6d656083e68ac7d56bc13809ffcf69624",
    "path": "schemas/goodread-ap-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/component",
    "exact-version": "1.0.0",
-   "digest": "sha256:bd6b730d76b2765ab157b6271f44750e1200ad1929a76de2ddd0f1eb61a2bd04",
+   "digest": "sha256:fc867c8466c2fd46cd0bf4b318dbfad1eb1a99d0659b57d2632ff982e88399f7",
    "path": "schemas/goodread-component-stub.json"
   },
   {
    "id": "https://ifa.gov/goodread/facet/finding-target",
    "exact-version": "1.0.0",
-   "digest": "sha256:7f9f8f80031a366582b7861e7be30600cfccc551fd5030309c89888231c0d517",
+   "digest": "sha256:0ad73b0509452864ee35216071b904d0ef4966a202f0bd3f3ffc1db637d9a107",
    "path": "schemas/goodread-finding-target-stub.json"
   },
   {
@@ -226,7 +762,7 @@
   {
    "id": "https://ifa.gov/goodread/facet/risk-analysis",
    "exact-version": "1.0.0",
-   "digest": "sha256:48172b6108a6007e1c8bfcc573843e94cb39d40685465fad73141114a34d80c7",
+   "digest": "sha256:c961fa23ae939516d43a1cb37631ebdc1d4f4221533d1b9c26275f59f2133041",
    "path": "schemas/goodread-risk-analysis-stub.json"
   },
   {
@@ -234,6 +770,12 @@
    "exact-version": "1.0.0",
    "digest": "sha256:50eb24078476824d1810de0aa17fe477fd88739c170a8c309eb284cc236009a6",
    "path": "schemas/goodread-system-stub.json"
+  },
+  {
+   "id": "https://ns.jascon.net/compat/oscal-1x",
+   "exact-version": "1.1.0",
+   "digest": "sha256:a40334b73fd7ac9e70359d4784f94c5c03c48e9baea7a40ad37717238323f9cb",
+   "path": "schemas/oscal-1x-compat-1.1.0.json"
   },
   {
    "id": "https://ns.nist.gov/sp800-53/facet/narrative",

@@ -10,6 +10,9 @@
    "target-objective-id": {
     "type": "string"
    },
+   "target-type": {
+    "type": "string"
+   },
    "implementation-statement-uuid": {
     "type": "string"
    },

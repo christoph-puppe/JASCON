@@ -43,6 +43,7 @@ from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, se
 from oscal_conv_lib import ledger_gate
 from oscal_conv_lib import document_author, document_day, is_day, provenance, provenance_override, textify
 from oscal_conv_lib import known_arguments, out_dir
+from oscal_conv_lib import COMPAT, referred_to, lifecycle_default_record, lifecycle_default_line
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -75,12 +76,12 @@ T = make_T("en", lang_wraps)
 led = Ledger()
 D = led.derive
 
-SOURCE_FILES = []        # (file name, document) in the order loaded, for the manifest's provenance
+SOURCE_FILES = []        # (tag, file name, document) in the order loaded, for the manifest's provenance
 def load(tag, fn, key):
     doc = json.load(open(os.path.join(SRCDIR, fn), encoding="utf-8"))
-    tracked = led.source(tag, {key: doc[key]})[key]
-    SOURCE_FILES.append((fn, tracked))
-    return tracked
+    tracked = led.source(tag, {key: doc[key]})
+    SOURCE_FILES.append((tag, fn, tracked))
+    return tracked[key]
 
 SSP = load("ssp", "ifa_ssp.json", "system-security-plan")
 AP = load("ap", "ifa_assessment-plan.json", "assessment-plan")
@@ -170,8 +171,9 @@ def party_uri(doc, uuid, default_slug):
 # already the lower occurrence is linked to it (Ledger.same), else it joins
 # the list. One entry per role: {role, parties: [landmark URI, ...]}.
 # A party the source defines without a name, or does not define, cannot be
-# named by a landmark URI: the role is carried without it, the reference is
-# declared, and the gap is counted as a finding about the source.
+# named by a landmark URI: its uuid is carried beside the role, under
+# `party-uuids` (author, 2026-11-14), and the gap is counted as a finding
+# about the source.
 party_gaps = collections.Counter()
 source_gaps = collections.Counter()      # other references the source leaves dangling, counted for the report
 ROLE_LISTS = []        # (the facet or payload that will hold the list, the list): attached when every roll-up is done
@@ -183,8 +185,6 @@ def party_ref(doc, ref):
     if party is None or not party.get("name"):
         gap = "does not define" if party is None else "defines without a name"
         party_gaps[gap] += 1
-        led.drop_value(ref, f"a reference to a party the source {gap}: no landmark URI can name it, "
-                            f"so its role is carried without a party")
         return None
     return D("party reference resolved by uuid; landmark URI from the party's name",
              lambda r, pid, name: f"{NS}/party/{slug(name)}" if r == pid else None, ref, party["uuid"], party["name"])
@@ -199,7 +199,11 @@ def add_roles(roles, doc, assignments, where):
             led.same(a["role-id"], entry["role"], rule)
         for ref in a.get("party-uuids", []) or []:
             uri = party_ref(doc, ref)
-            if uri is None: continue
+            if uri is None:         # no landmark URI can name it: its uuid stands beside the role
+                kept = next((u for u in entry.get("party-uuids", []) if u == ref), None)
+                if kept is None: entry.setdefault("party-uuids", []).append(ref)
+                else: led.same(ref, kept, rule)
+                continue
             kept = next((u for u in entry.get("parties", []) if u == uri), None)
             if kept is None: entry.setdefault("parties", []).append(uri)
             else: led.same(uri, kept, rule)
@@ -255,16 +259,16 @@ def authorized_on(value):
 # example set. Each edge is now derived from the reference the source gives:
 # the uuid is looked up among the elements the script minted an id for, and
 # the rule fails unless the reference and the element's uuid are the same.
-# A reference that names nothing the document defines is declared as a defect
-# of the source (author's decision 2026-11-13) and counted for the report.
+# A reference that names nothing the document defines is a defect of the source: it is
+# carried verbatim where it stands (author, 2026-11-14) and counted for the report.
 COMPONENTS = {}     # component uuid -> (that uuid, the Component id minted for it, further inputs of the rule)
 PROVIDED = {}       # provided uuid of an exported capability -> (that uuid, "<component id>#<capability id>")
 RESPONSIBILITIES = {}   # responsibility uuid -> (that uuid, its provided-uuid reference)
 def dangling(ref, what):
     """A reference that names nothing its source defines. Nothing is invented for it: no edge
-    is derived. It is declared in the ledger with that reason and counted for the report."""
+    is derived. The caller carries the reference verbatim where it stands, under a member
+    `unresolved-...` (author, 2026-11-14), and it is counted for the report as a defect of the source."""
     source_gaps[what] += 1
-    led.drop_value(ref, f"a defect of the source: {what}; no edge can be derived from it and none is invented")
     return None
 def component_ref(ref):
     """-> the Component minted for the component a reference names."""
@@ -319,10 +323,12 @@ def implementation_facet(doc, ir):
     for st in ir.get("statements", []) or []:
         entry = {"statement": D("statement id without the control prefix, in the catalogue's spelling (stmt -> smt)",
                                 _stmt_norm, st["statement-id"], ir["control-id"])}
+        if st.get("uuid") is not None: entry["uuid"] = st["uuid"]
         if st.get("remarks") is not None: entry["remarks"] = text(st["remarks"])
         responses = []
         for b in st.get("by-components", []) or []:
             r = {}
+            if b.get("uuid") is not None: r["uuid"] = b["uuid"]
             component = component_ref(b["component-uuid"])
             if component is not None: r["component"] = component
             if b.get("description") is not None: r["description"] = text(b["description"])
@@ -334,6 +340,8 @@ def implementation_facet(doc, ir):
                     e = {}
                     capability = resolve(x[ref_key]) if x.get(ref_key) is not None else None
                     if capability is not None: e["capability"] = capability
+                    elif x.get(ref_key) is not None: e[f"unresolved-{ref_key}"] = x[ref_key]    # a defect of the source
+                    if x.get("uuid") is not None: e["uuid"] = x["uuid"]
                     if x.get("description") is not None: e["description"] = text(x["description"])
                     if e: entries.append(e)
                 if entries: r[key] = entries
@@ -374,6 +382,7 @@ def system_facet(doc):
     users = []
     for u in si.get("users", []) or []:
         user = {}
+        if u.get("uuid") is not None: user["uuid"] = u["uuid"]
         if u.get("title") is not None: user["title"] = u["title"]
         if u.get("description") is not None: user["description"] = pua_scan(u["description"])
         user["privileges"] = [{"title": a.get("title"), "functions": a.get("functions-performed", [])}
@@ -383,7 +392,8 @@ def system_facet(doc):
     # `props` and `components` mean what they meant; the class of each prop
     # and the props of each implemented component stand beside them
     # (`component-props` has one entry per entry of `components`, in order)
-    inventory = [{"description": pua_scan(i.get("description")),
+    inventory = [{**({"uuid": i["uuid"]} if i.get("uuid") is not None else {}),
+                  "description": pua_scan(i.get("description")),
                   "props": props_by_name(i.get("props"), led),       # a repeated name keeps every value
                   "prop-classes": props_by_name(i.get("props"), led, field="class"),
                   "components": [c["component-uuid"] for c in i.get("implemented-components", []) or []],
@@ -407,7 +417,7 @@ comp_sys = {"id": COMP_SYS, "version": V_SSP, "label": sc["system-name"], "lifec
                                                  lambda d, l: f"ATO {d} ({l})",
                                                  sc.get("date-authorized", "?"), sc.get("security-sensitivity-level", "?")),
                                 **authorized_on(sc.get("date-authorized"))}],
-            "facets": {F_SYS: sysf_ssp, F_COMP: compf_ssp}}
+            "facets": {F_SYS: sysf_ssp, F_COMP: compf_ssp, COMPAT: {"uuid": ssp_comp["uuid"]}}}
 
 # implemented-requirement ac-6.1 -> capability + Implementation
 ir = SSP["control-implementation"]["implemented-requirements"][0]
@@ -416,6 +426,7 @@ REQ_IR = req_of(ir["control-id"])        # the implemented requirement names its
 assert REQ_IR == REQ_AC61, f"the SSP implements {ir['control-id']}, the bundle carries {REQ_AC61}"
 comp_sys["capabilities"].append({"id": "cap-ac-6.1", "requirement-ref": REQ_IR,
                                  "description": pua_scan(bc.get("description", ""))})
+compf_ssp.setdefault("capabilities", []).append({"capability": "cap-ac-6.1", "uuid": bc["uuid"]})   # the by-component it is made from
 pbind = {sp["param-id"]: (sp["values"][0] if len(sp["values"]) == 1 else sp["values"])
          for sp in SSP["control-implementation"].get("set-parameters", [])}
 for v in pbind.values(): pua_scan(v if isinstance(v, str) else " ".join(v))
@@ -434,7 +445,7 @@ bundle.add("objects/impl/system1234-ac-6-1.json",
             "parameter-bindings": pbind,
             "status": bc.get("implementation-status", {}).get("state", "implemented"),
             "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", SSP["uuid"])],
-            "facets": {F_IMPL: implementation_facet(SSP, ir)},
+            "facets": {F_IMPL: implementation_facet(SSP, ir), COMPAT: {"uuid": ir["uuid"]}},
             **({"provenance": pv} if (pv := provenance_of(SSP, IMPL_SYS)) else {})})
 
 # ================= 2. leveraged / leveraging pair (D5) =================
@@ -478,7 +489,7 @@ for st in lev_ir.get("statements", []) or []:
             if rs["uuid"].startswith("11111111"): uuid_placeholder += 1
             RESPONSIBILITIES[rs["uuid"]] = (rs["uuid"], rs["provided-uuid"])
             capability = provided_ref(rs["provided-uuid"])
-            lev_resp.append({"description": pua_scan(rs.get("description", "")),
+            lev_resp.append({"uuid": rs["uuid"], "description": pua_scan(rs.get("description", "")),
                              **({"capability": capability} if capability is not None else {})})
 la = (LVG["system-implementation"].get("leveraged-authorizations") or [{}])[0]
 compf_iaas, roles_iaas = component_facet(LEV, lev_sys_comp, own_title=False)     # its title is the document's
@@ -503,19 +514,27 @@ for doc, fallback, lookup in ((LEV, roles_iaas, {lev_sys_comp["uuid"]: roles_iaa
                 add_roles(roles, doc, rs.get("responsible-roles"), "an exported responsibility")
             for sa in b.get("satisfied", []) or []:
                 add_roles(roles, doc, sa.get("responsible-roles"), "a satisfied responsibility")
-if la.get("party-uuid") is not None: party_ref(LVG, la["party-uuid"])     # the authorization's party: named or declared
+# The leveraged authorization: its kernel entry on the provider's Component has no member for the
+# source's uuid, its links and its party; they stand beside it in component@1, naming it by id. A
+# party the leveraging plan defines without a name is carried by its uuid, as the source writes it.
+la_party = party_ref(LVG, la["party-uuid"]) if la.get("party-uuid") is not None else None
+compf_iaas.setdefault("authorizations", []).append(
+    {"authorization": AUTH_CSP, **{k: la[k] for k in ("uuid", "links") if la.get(k) is not None},
+     **({"party": la_party} if la_party else {"party-uuid": la["party-uuid"]} if la.get("party-uuid") is not None else {})})
 # The leveraging plan lists the leveraged system and its application as components of its
 # own. The provider's Components, converted from the leveraged plan, stand for them: a value
-# that equals the provider's is linked to it, the rest is declared.
+# that equals the provider's is linked to it (Ledger.same); what differs is carried on the
+# provider's Component, in component@1 `listed-by-leveraging-plan`, in the source's shape.
 for stand_in in LVG["system-implementation"]["components"]:
     inherited = props_by_name(stand_in.get("props")).get("inherited-uuid")
     provider = next((c for c in LEV["system-implementation"]["components"] if c["uuid"] == inherited), None)
     if provider is None: continue
-    if stand_in.get("status", {}).get("state") == provider.get("status", {}).get("state"):
-        led.same(stand_in["status"]["state"], provider["status"]["state"],
-                 "the leveraging plan's entry for a leveraged component; the provider's Component stands for it")
-    led.drop_value(stand_in, "the leveraging plan's own entry for a component of the leveraged system; the provider's "
-                             "Component, converted from the leveraged plan, stands for it")
+    own = {}
+    for k, v in stand_in.items():
+        if v == provider.get(k):
+            led.same(v, provider[k], "the leveraging plan's entry for a leveraged component; the provider's Component stands for it")
+        else: own[k] = v
+    {lev_sys_comp["uuid"]: compf_iaas, app_comp["uuid"]: compf_app}[provider["uuid"]]["listed-by-leveraging-plan"] = own
 bundle.add("objects/component/csp-iaas.json",
            {"id": COMP_IAAS, "version": V_LEV, "label": LEV["system-characteristics"]["system-name"],
             "lifecycle": "active", "title": LEV["metadata"]["title"],
@@ -529,12 +548,13 @@ bundle.add("objects/component/csp-iaas.json",
                                                  la.get("title", "CSP IaaS leveraged authorization"),
                                                  la.get("date-authorized", "?")),
                                 **authorized_on(la.get("date-authorized"))}],
-            "facets": {F_SYS: {**system_facet(LEV), "customer-responsibilities": lev_resp}, F_COMP: compf_iaas}})
+            "facets": {F_SYS: {**system_facet(LEV), "customer-responsibilities": lev_resp}, F_COMP: compf_iaas,
+                       COMPAT: {"uuid": lev_sys_comp["uuid"]}}})
 bundle.add("objects/component/csp-application.json",
            {"id": COMP_APP, "version": V_LEV, "label": app_comp.get("title", "Application"),
             "lifecycle": "active", "title": app_comp.get("title", "Application"), "kind": kind_of(app_comp),
             **({"capabilities": lev_caps[COMP_APP]} if lev_caps[COMP_APP] else {}),
-            "facets": {F_COMP: compf_app}})
+            "facets": {F_COMP: compf_app, COMPAT: {"uuid": app_comp["uuid"]}}})
 kind_mapped = collections.Counter()
 kind_mapped["appliance->hardware"] += 1
 appl_title = D("title without the decoration asterisks", lambda t: t.strip(" *"), appl.get("title", ""))
@@ -549,7 +569,7 @@ bundle.add("objects/component/access-control-appliance.json",
                                   for st in LVG["control-implementation"]["implemented-requirements"][0].get("statements", [])
                                   for b in st.get("by-components", []) if b["component-uuid"] == appl["uuid"]
                                   for sa in b.get("satisfied", []) or []), ""))}],
-            "facets": {F_COMP: compf_appl}})
+            "facets": {F_COMP: compf_appl, COMPAT: {"uuid": appl["uuid"]}}})
 bundle.add("objects/component/saas.json",
            {"id": COMP_SAAS, "version": V_LVG,
             "label": LVG["system-characteristics"]["system-name"], "lifecycle": "active",
@@ -557,7 +577,7 @@ bundle.add("objects/component/saas.json",
             "kind": kind_of(lvg_sys_comp),
             "members": [{"component-ref": COMP_IAAS, "context": "leveraged system"},
                         {"component-ref": COMP_APPL, "context": "internal appliance"}],
-            "facets": {F_SYS: system_facet(LVG), F_COMP: compf_saas}})
+            "facets": {F_SYS: system_facet(LVG), F_COMP: compf_saas, COMPAT: {"uuid": lvg_sys_comp["uuid"]}}})
 lvg_ir = LVG["control-implementation"]["implemented-requirements"][0]
 # what the leveraging plan inherits: the reference names an exported capability, and the
 # edge names the leveraged system that holds the authorization
@@ -582,7 +602,7 @@ bundle.add("objects/impl/saas-ac-2.json",
             "parameter-bindings": lvg_bind,
             "status": "implemented",
             "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LVG["uuid"])],
-            "facets": {F_IMPL: implementation_facet(LVG, lvg_ir)},
+            "facets": {F_IMPL: implementation_facet(LVG, lvg_ir), COMPAT: {"uuid": lvg_ir["uuid"]}},
             **({"provenance": pv} if (pv := provenance_of(LVG, f"{NS}/impl/saas-ac-2")) else {})})
 lev_sids = sorted({stmt_norm(st.get("statement-id"), lev_ir["control-id"])
                    for st in lev_ir.get("statements", []) or [] if st.get("statement-id")})
@@ -598,7 +618,7 @@ bundle.add("objects/impl/csp-iaas-ac-2.json",
             "parameter-bindings": lev_bind,
             "status": "implemented",
             "evidence-refs": [D("document reference from the SSP's uuid", lambda u: f"{NS}/doc/ssp-{u}", LEV["uuid"])],
-            "facets": {F_IMPL: implementation_facet(LEV, lev_ir)},
+            "facets": {F_IMPL: implementation_facet(LEV, lev_ir), COMPAT: {"uuid": lev_ir["uuid"]}},
             **({"provenance": pv} if (pv := provenance_of(LEV, f"{NS}/impl/csp-iaas-ac-2")) else {})})
 
 # ================= 3. component-definition example =================
@@ -648,9 +668,9 @@ V_CDEF = CDEF["metadata"]["version"]
 cdef_resources = {r["uuid"]: r for r in CDEF.get("back-matter", {}).get("resources", []) or []}
 cdef_stats = collections.Counter()
 for c in CDEF.get("components", []) or []:
-    caps, control_impls = [], []
+    caps, control_impls, cap_uuids = [], [], []
     for ci in c.get("control-implementations", []) or []:
-        entry = {"description": T(pua_scan(ci.get("description", "")), "component")}
+        entry = {"uuid": ci["uuid"], "description": T(pua_scan(ci.get("description", "")), "component")}
         # `source` is a link into the back-matter; what it names is carried, by its JSON link
         res = cdef_resources.get(ci.get("source", "")[1:]) if ci.get("source", "").startswith("#") else None
         if res and res.get("rlinks"):
@@ -699,6 +719,12 @@ for c in CDEF.get("components", []) or []:
             cap["description"] = pua_scan(description)
             if bindings: cap["parameter-bindings"] = bindings
             caps.append(cap)
+            # the uuids of the implemented requirement and its statements, beside the capability made from them
+            cap_uuids.append({"capability": cap["id"], "uuid": cir["uuid"],
+                              **({"statements": [{"statement": D("statement id without the control prefix, in the "
+                                                                 "catalogue's spelling (stmt -> smt)",
+                                                                 _stmt_norm, st["statement-id"], cid), "uuid": st["uuid"]}
+                                                 for st in statements]} if statements else {})})
             cdef_stats["clauses"] += len(sids)
     kind = D("component kind from the OSCAL component type (KIND_MAP)", lambda t: KIND_MAP.get(t, "software"),
              c.get("type", "software"))
@@ -706,7 +732,7 @@ for c in CDEF.get("components", []) or []:
            "version": V_CDEF, "label": c.get("title", ""), "lifecycle": "active",
            "title": c.get("title", ""), "kind": kind}
     if caps: obj["capabilities"] = caps
-    protos = [{"name": p.get("name"), "title": p.get("title"),
+    protos = [{"uuid": p.get("uuid"), "name": p.get("name"), "title": p.get("title"),
                "port-ranges": p.get("port-ranges", [])} for p in c.get("protocols", []) or []]
     if protos: obj.setdefault("facets", {})[F_PROTO] = {"protocols": protos}
     compf, roles = component_facet(CDEF, c)
@@ -715,7 +741,9 @@ for c in CDEF.get("components", []) or []:
             for st in cir.get("statements", []) or []:
                 add_roles(roles, CDEF, st.get("responsible-roles"), "a statement")
     if control_impls: compf["control-implementations"] = control_impls
+    if cap_uuids: compf["capabilities"] = cap_uuids
     obj.setdefault("facets", {})[F_COMP] = compf
+    obj["facets"][COMPAT] = {"uuid": c["uuid"]}
     bundle.add(f"objects/component/{slug(c.get('title', 'component'))}.json", obj)
 
 # ================= 4. Assessment (AR result; AP as method) =================
@@ -731,6 +759,11 @@ observations = []
 for src, tag in ((res.get("observations", []), "ar"), (POAM.get("observations", []), "poam")):
     for o in src:
         subjects = [x for x in (subject_ref(sj["subject-uuid"]) for sj in o.get("subjects", []) or []) if x is not None]
+        for sj in o.get("subjects", []) or []:
+            if sj.get("type") is not None and sj["subject-uuid"] == ssp_comp["uuid"]:
+                led.rebuilt(sj["type"], "the type of an observation's subject: `component`, the kind of the object its "
+                                        "subject-uuid resolves to (the SSP component, carried as a Component)",
+                            lambda r, cu: "component" if r == cu else None, sj["subject-uuid"], ssp_comp["uuid"])
         observations.append({"id": D("evidence URI from the first eight characters of the observation uuid",
                                      lambda u: f"{NS}/evidence/obs-{u[:8]}", o["uuid"]),
                              "title": o.get("title"), "description": T(pua_scan(o.get("description", "")), "observation"),
@@ -767,9 +800,9 @@ for o in observations:
 # saying which. Until 2026-11-13 only the plan's were written, while the path
 # map said the results' activities were "duplicated from AP; carried once".
 def activity_entry(a, tag):
-    return {"title": a.get("title"),
+    return {"uuid": a["uuid"], "title": a.get("title"),
             "description": T(pua_scan(a.get("description", "")), "ap"),
-            "steps": [{"title": st.get("title"),
+            "steps": [{"uuid": st["uuid"], "title": st.get("title"),
                        "description": T(pua_scan(st.get("description", "")), "ap"),
                        **({"remarks": T(pua_scan(st["remarks"]), "ap")} if st.get("remarks") else {})}
                       for st in a.get("steps", []) or []],
@@ -779,17 +812,21 @@ def activity_entry(a, tag):
             "source-doc": tag}
 def task_entry(t, activities, tag):
     """A task names its activity by uuid; the payload names it by its title."""
-    e = {"title": t.get("title"), "type": t.get("type")}
+    e = {"uuid": t["uuid"], "title": t.get("title"), "type": t.get("type")}
     if t.get("description") is not None: e["description"] = T(pua_scan(t["description"]), "ap")
-    named = []
+    named, unresolved, subjects = [], [], []
     for aa in t.get("associated-activities", []) or []:
+        subjects += aa.get("subjects", []) or []         # with their type tags, as the source writes them
         act = next((a for a in activities if a["uuid"] == aa["activity-uuid"]), None)
         if act is None:
             dangling(aa["activity-uuid"], "a task names an activity its document does not define")
+            unresolved.append(aa["activity-uuid"])
             continue
         named.append(D("task activity: the title of the activity it names by uuid",
                        lambda r, au, title: title if r == au else None, aa["activity-uuid"], act["uuid"], act["title"]))
     if named: e["activities"] = named
+    if unresolved: e["unresolved-activity-uuids"] = unresolved      # a defect of the source, carried verbatim
+    if subjects: e["subjects"] = subjects
     if t.get("remarks") is not None: e["remarks"] = T(pua_scan(t["remarks"]), "ap")
     e["source-doc"] = tag
     return e
@@ -798,7 +835,8 @@ ar_acts = AR.get("local-definitions", {}).get("activities", []) or []
 ap_payload = {"activities": [activity_entry(a, "ap") for a in ap_acts] + [activity_entry(a, "ar") for a in ar_acts],
               "tasks": [task_entry(t, ap_acts, "ap") for t in AP.get("tasks", []) or []] +
                        [task_entry(t, ar_acts, "ar") for t in res.get("local-definitions", {}).get("tasks", []) or []],
-              "subjects": [{"description": T(pua_scan(sj["description"]), "ap")}
+              "subjects": [{**({"type": sj["type"]} if sj.get("type") is not None else {}),
+                            "description": T(pua_scan(sj["description"]), "ap")}
                            for sj in AP.get("assessment-subjects", []) or [] if sj.get("description") is not None],
               "reviewed-controls": [ic["control-id"] for cs in AP["reviewed-controls"]["control-selections"]
                                     for ic in cs["include-controls"]]}
@@ -831,7 +869,8 @@ bundle.add("objects/assessment/conmon-2023-06.json",
             "evidence-refs": [o["id"] for o in obs_dedup],
             "facets": {F_OBS: {**({"description": T(pua_scan(res["description"]), "observation")} if res.get("description") else {}),
                                **({"end": res["end"]} if res.get("end") else {}),
-                               "observations": obs_dedup}}})
+                               "observations": obs_dedup},
+                       COMPAT: {"uuid": res["uuid"]}}})
 
 # ================= 5. Risks + Findings (POA&M risks, AR finding) =================
 V_POAM = POAM["metadata"]["version"]
@@ -850,6 +889,13 @@ _owner = next((rp["party-uuids"][0] for rp in SSP["metadata"].get("responsible-p
 RISK_OWNER = party_uri(SSP, _owner, "system-owner")
 _poam_sys = (POAM.get("system-id") or {}).get("id")
 _ssp_sys = {x.get("id") for x in sc.get("system-ids", []) or []}
+# the POA&M's system-id names the SSP's system by an id the SSP lists with its identifier-type (carried in
+# system@1 `system-ids`): the POA&M's identifier-type is rebuilt from that entry
+_ssp_sid = next((x for x in sc.get("system-ids", []) or [] if x.get("id") == _poam_sys), None)
+if _ssp_sid is not None and (POAM.get("system-id") or {}).get("identifier-type") is not None:
+    led.rebuilt(POAM["system-id"]["identifier-type"],
+                "the identifier-type of the POA&M's system-id: that of the SSP system-id with the same id",
+                lambda pid, sid, stype: stype if pid == sid else None, _poam_sys, _ssp_sid["id"], _ssp_sid["identifier-type"])
 
 def risk_analysis(rk):
     """Everything App. F Q14 keeps out of the kernel: how the level would be
@@ -866,19 +912,22 @@ def risk_analysis(rk):
          "description": T(pua_scan(rk.get("description", "")), "risk"),
          "characterizations": [{"facets": [{"name": x["name"], "value": x["value"], "system": x["system"]}
                                            for x in ch.get("facets", [])],
-                                "origin-actors": [a.get("actor-uuid") for a in ch.get("origin", {}).get("actors", [])]}
+                                # each actor as the source writes it: its uuid with its type tag beside it
+                                "origin-actors": list(ch.get("origin", {}).get("actors", []))}
                                for ch in rk.get("characterizations", []) or []],
-         "responses": [{"type": next((p.get("value") for p in rm.get("props", []) or [] if p.get("name") == "type"), None),
+         "responses": [{"uuid": rm["uuid"],
+                        "type": next((p.get("value") for p in rm.get("props", []) or [] if p.get("name") == "type"), None),
                         "lifecycle": rm.get("lifecycle"), "title": rm.get("title"),
                         "description": T(pua_scan(rm.get("description", "")), "risk"),
                         # Finding.actions[] is {description, due, status}; the task's type,
                         # narrative and START have no kernel field and ride here verbatim
-                        "tasks": [{"type": t.get("type"), "title": t.get("title"),
+                        "tasks": [{"uuid": t["uuid"], "type": t.get("type"), "title": t.get("title"),
                                    "description": T(pua_scan(t.get("description", "")), "risk"),
                                    **{k: v for k, v in (t.get("timing", {}).get("within-date-range", {}) or {}).items()}}
                                   for t in rm.get("tasks", []) or []]}
                        for rm in rk.get("remediations", []) or []]}
-    mit = [T(pua_scan(m.get("description", "")), "risk") for m in rk.get("mitigating-factors", []) or []]
+    mit = [{"uuid": m["uuid"], "description": T(pua_scan(m.get("description", "")), "risk")}
+           for m in rk.get("mitigating-factors", []) or []]
     if mit: f["mitigating-factors"] = mit
     seen_in = [x for x in (evidence_ref(ro["observation-uuid"], POAM.get("observations"))
                            for ro in rk.get("related-observations", []) or []) if x is not None]
@@ -927,7 +976,7 @@ def risk_object(rk, name, treats):
         risk_gaps["response `mitigate` with no control linked in source: `modify` unreachable (RISK-4)"] += 1
     if rk.get("deadline"):
         o["review-due"] = {"type": "datetime", "value": rk["deadline"]}   # OSCAL deadline: date-time-with-timezone
-    o["facets"] = {F_RISKA: risk_analysis(rk)}
+    o["facets"] = {F_RISKA: risk_analysis(rk), COMPAT: {"uuid": rk["uuid"]}}
     pv = provenance_of(POAM, o["id"])
     if pv: o["provenance"] = pv
     return o
@@ -950,15 +999,20 @@ rk1 = next(r for r in risks.values() if r is not rk2)
 # The assessment results carry the same risk in its earlier state (the path
 # map: "consolidated with the POA&M risks"). Where its text equals the POA&M
 # risk's, the ledger links it to what is kept; where it differs (the title
-# gained a prefix, the status moved on), a drop below says why.
+# gained a prefix, the status moved on), it is carried on the Risk, in
+# risk-analysis@1 `assessment-results-state` (author, 2026-11-14).
+ar_earlier = {}
 for ar_risk in res.get("risks", []) or []:
-    for field in ("title", "statement", "description"):
-        if field in ar_risk and ar_risk[field] == rk2.get(field):
+    for field in ("title", "statement", "status", "description"):
+        if field not in ar_risk: continue
+        if ar_risk[field] == rk2.get(field):
             led.same(ar_risk[field], rk2[field], "the same risk in the assessment results and in the POA&M, kept once")
+        else: ar_earlier[field] = ar_risk[field]
 sca = rk1["characterizations"][0]["facets"][0]["system"]   # https://ifa.gov/division/ociso/sca
 # The AR finding (target: an AC-6(1) objective) names this risk through
 # related-risks - that is the source's own risk -> control edge.
 RISK2 = risk_object(rk2, "goodread-risk-2", REQ_AC61)
+if ar_earlier: RISK2["facets"][F_RISKA]["assessment-results-state"] = ar_earlier
 RISK1 = risk_object(rk1, "goodread-risk-1", None)
 RISK_ID = {rk2["uuid"]: (rk2["uuid"], RISK2["id"]), rk1["uuid"]: (rk1["uuid"], RISK1["id"])}
 def risk_ref(ref):
@@ -994,10 +1048,14 @@ def poam_item_of(rk):
                      & uuids(rk.get("related-observations"), "observation-uuid")), None)
     if item is None: return {}
     named = [x for x in (risk_ref(rr["risk-uuid"]) for rr in item.get("related-risks", []) or []) if x is not None]
+    unresolved = [rr["risk-uuid"] for rr in item.get("related-risks", []) or [] if rr["risk-uuid"] not in RISK_ID]
     seen_in = [x for x in (evidence_ref(ro["observation-uuid"], POAM.get("observations"))
                            for ro in item.get("related-observations", []) or []) if x is not None]
-    return {"poam-item": {"title": item.get("title"), "description": T(pua_scan(item.get("description", "")), "finding"),
-                          **({"risks": named} if named else {}), **({"observations": seen_in} if seen_in else {})}}
+    return {"poam-item": {"uuid": item["uuid"], "title": item.get("title"),
+                          "description": T(pua_scan(item.get("description", "")), "finding"),
+                          **({"risks": named} if named else {}),
+                          **({"unresolved-risk-uuids": unresolved} if unresolved else {}),    # a defect of the source, verbatim
+                          **({"observations": seen_in} if seen_in else {})}}
 item2, item1 = poam_item_of(rk2), poam_item_of(rk1)
 # each Finding's edges, from the references the source gives
 finding2_risks = [x for x in (finding_risk(rr["risk-uuid"]) for rr in finding_src.get("related-risks", []) or [])
@@ -1014,7 +1072,9 @@ bundle.add("objects/finding/goodread-risk-2.json",
             "state": "in-remediation",
             "risk-refs": finding2_risks,
             "actions": actions_of(rk2),
-            "facets": {F_FTGT: {"target-objective-id": target_obj,
+            "facets": {COMPAT: {"uuid": finding_src["uuid"]},
+                       F_FTGT: {"target-objective-id": target_obj,
+                                **({"target-type": finding_src["target"]["type"]} if finding_src["target"].get("type") else {}),
                                 "implementation-statement-uuid": finding_src.get("implementation-statement-uuid"),
                                 **({"description": T(pua_scan(finding_src["description"]), "finding")}
                                    if finding_src.get("description") else {}),
@@ -1045,8 +1105,8 @@ bundle.add("objects/finding/goodread-risk-1.json",
 for holder, roles in ROLE_LISTS:
     if roles: holder["responsible-roles"] = roles
 for gap, n in sorted(source_gaps.items()):
-    note(f"**Dangling reference x{n}** (source finding): {gap}. Nothing is invented for it; the ledger declares the "
-         f"reference as a defect of the source.")
+    note(f"**Dangling reference x{n}** (a defect of the source): {gap}. Nothing is invented for it; the reference is "
+         f"carried verbatim where it stands, under a member `unresolved-...`.")
 # What the ledger cannot see: it follows source values into the bundle, not the
 # other way. These three values are written by this script with nothing in the
 # source behind them (the SSP defines no such role). Left as they are and said
@@ -1058,8 +1118,8 @@ note(f"**Values without a source x3**: `authority-ref` of the two authorizations
 for gap, n in sorted(party_gaps.items()):
     note(f"**Parties the source {gap} x{n}** (source finding): a role assignment names a party by uuid, and the "
          f"document {'has no such party' if gap == 'does not define' else 'gives that party no name'} - the leveraged "
-         f"pair's parties carry a type and at most a remark. The role is carried without a party; the reference is "
-         f"declared in the ledger.")
+         f"pair's parties carry a type and at most a remark. The party's uuid is carried beside the role "
+         f"(`party-uuids`), and on the leveraged authorization as `party-uuid`.")
 
 # ---------- stubs + write ----------
 # carried Requirements bring their facet pins along (#17 fail-closed:
@@ -1083,9 +1143,10 @@ bundle.stub("goodread-observations-stub.json", F_OBS.split("@")[0], [],
 bundle.stub("goodread-risk-analysis-stub.json", F_RISKA.split("@")[0], [],
             {"risk-status": {"type": "string"}, "description": {"type": "object"},
              "characterizations": {"type": "array"}, "responses": {"type": "array"},
-             "mitigating-factors": {"type": "array"}, "observations": {"type": "array"}})
+             "mitigating-factors": {"type": "array"}, "observations": {"type": "array"},
+             "assessment-results-state": {"type": "object"}})
 bundle.stub("goodread-finding-target-stub.json", F_FTGT.split("@")[0], [],
-            {"target-objective-id": {"type": "string"},
+            {"target-objective-id": {"type": "string"}, "target-type": {"type": "string"},
              "implementation-statement-uuid": {"type": "string"},
              "description": {"type": "object"}, "target-description": {"type": "object"},
              "observations": {"type": "array"}, "poam-item": {"type": "object"}})
@@ -1104,17 +1165,20 @@ def _entry(required, properties):
                                        "required": required, "properties": properties}}
 bundle.stub("goodread-ap-stub.json", F_AP.split("@")[0], [],
             {"activities": _entry(["title", "description", "steps", "related-controls", "source-doc"],
-                                  {"title": _STR, "description": _TEXT,
+                                  {"uuid": _STR, "title": _STR, "description": _TEXT,
                                    "steps": _entry(["title", "description"],
-                                                   {"title": _STR, "description": _TEXT, "remarks": _TEXT}),
+                                                   {"uuid": _STR, "title": _STR, "description": _TEXT, "remarks": _TEXT}),
                                    "props": {"type": "object",
                                              "additionalProperties": {"anyOf": [_STR, {"type": "array", "items": _STR}]}},
                                    "related-controls": {"type": "array", "items": _STR},
                                    "source-doc": _FROM}),
              "tasks": _entry(["title", "type", "source-doc"],
-                             {"title": _STR, "type": _STR, "description": _TEXT,
-                              "activities": {"type": "array", "items": _STR}, "remarks": _TEXT, "source-doc": _FROM}),
-             "subjects": _entry(["description"], {"description": _TEXT}),
+                             {"uuid": _STR, "title": _STR, "type": _STR, "description": _TEXT,
+                              "activities": {"type": "array", "items": _STR},
+                              "unresolved-activity-uuids": {"type": "array", "items": _STR},     # a defect of the source
+                              "subjects": {"type": "array", "items": {"type": "object"}},          # as the source writes them
+                              "remarks": _TEXT, "source-doc": _FROM}),
+             "subjects": _entry(["description"], {"type": _STR, "description": _TEXT}),
              "reviewed-controls": {"type": "array", "items": _STR},
              "responsible-roles": _entry(["role"], {"role": _STR, "parties": {"type": "array", "items": _STR}})})
 bundle.stub("goodread-protocols-stub.json", F_PROTO.split("@")[0], [], {"protocols": {"type": "array"}})
@@ -1123,12 +1187,38 @@ bundle.stub("goodread-implementation-stub.json", F_IMPL.split("@")[0], [],
 bundle.stub("goodread-component-stub.json", F_COMP.split("@")[0], [],
             {"title": {"type": "string"}, "description": {"type": "object"}, "purpose": {"type": "object"},
              "status": {"type": "string"}, "props": {"type": "object"}, "responsible-roles": {"type": "array"},
-             "control-implementations": {"type": "array"}})
+             "control-implementations": {"type": "array"},
+             "capabilities": {"type": "array"},                # the uuids of what each capability is made from
+             "authorizations": {"type": "array"},              # what the kernel's authorization entry has no member for
+             "listed-by-leveraging-plan": {"type": "object"}})   # the leveraging plan's own entry, where it differs
+bundle.pin_compat()      # `uuid` of the source element an object is made from: the one compat schema (1.1.0)
 # what each source document says about itself, handed on as it stands: the
-# bundle's objects come from seven documents, and the manifest names them
+# bundle's objects come from seven documents, and the manifest names them.
+# This bundle has no Set that stands for a document, so each document's entry
+# here holds the rest (the author's decisions of 2026-11-14): its uuid, the
+# rest of its metadata in the source's shape (revisions, roles, parties with
+# their uuids, responsible parties), its import link, and the back-matter
+# resources something in the document refers to, with their uuids. A resource
+# nothing refers to is an orphan and stays out by the ledger's rule (R1).
 DOC_META = ("title", "version", "oscal-version", "last-modified", "published", "remarks")
-source_documents = [{"file": fn, **{k: doc["metadata"][k] for k in DOC_META if k in doc["metadata"]}}
-                    for fn, doc in SOURCE_FILES]
+R_ORPHAN = "a back-matter resource that nothing in its document refers to: nobody can reach it, and it is not carried"
+ORPHANS = []
+def source_document(tag, fn, wrapped):
+    (key, doc), = wrapped.items()
+    entry = {"file": fn, **{k: doc["metadata"][k] for k in DOC_META if k in doc["metadata"]}, "uuid": doc["uuid"]}
+    rest = {k: v for k, v in doc["metadata"].items() if k not in DOC_META}
+    if rest: entry["metadata"] = rest
+    for k in ("import-profile", "import-ssp", "import-ap"):
+        if k in doc: entry[k] = doc[k]
+    kept = []
+    for r in doc.get("back-matter", {}).get("resources", []) or []:
+        if referred_to(wrapped, r): kept.append(r)
+        else: led.orphan(r["uuid"], R_ORPHAN); ORPHANS.append(f"{tag}: {r['uuid']}")
+    if kept: entry["back-matter"] = {"resources": kept}
+    return entry
+source_documents = [source_document(tag, fn, doc) for tag, fn, doc in SOURCE_FILES]
+STATED = []          # no object's lifecycle is a status of the source mapped by a rule: `active` is the converter's
+LIFECYCLE_DEFAULT = lifecycle_default_record(bundle.objects, STATED)
 manifest = bundle.write({"source": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/"
                         "leveraging SSP pair + component-definition example (usnistgov/oscal-content)",
               "source-note": "FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
@@ -1213,9 +1303,10 @@ note("**Authorization dates x2**: `date-authorized` of the system and of the lev
 # ---------- coverage ----------
 RULES = [
  (r"^(ssp|ap|ar|poam|lev|lvg|cdef)\.[a-z-]+\.(uuid$|metadata\.|import-profile|import-ssp|import-ap|back-matter\.)", "L1",
-  "bundle manifest provenance: source-documents (title, version, oscal-version, last-modified, published, remarks); "
-  "parties -> landmark party URIs where a role names them; the party and role directory, revisions, imports and "
-  "back-matter links are declared drops in the ledger"),
+  "bundle manifest provenance: source-documents, one entry per document (title, version, oscal-version, "
+  "last-modified, published, remarks, its uuid, the rest of its metadata - revisions, roles, parties, responsible "
+  "parties - in the source's shape, its import link, the back-matter resources something refers to); parties -> "
+  "landmark party URIs where a role names them; an orphaned back-matter resource is not carried (ledger rule)"),
  (r"^ssp\.system-security-plan\.system-characteristics\.", "L1",
   "system Component: authorizations[] (date-authorized -> the D5 anchor + Attestation) + system@1 facet "
   "(ids, status, sensitivity, FIPS-199 impact, boundary/network/data-flow, language-tagged)"),
@@ -1242,7 +1333,8 @@ RULES = [
   "implementation-statement-uuid -> finding-target@1 facet; related-risks -> Finding.risk-refs (the results' risk "
   "resolved to the Risk of its later state in the POA&M); related-observations -> finding-target@1 observations"),
  (r"^ar\.assessment-results\.results\[\]\.(risks|local-definitions)", "L1",
-  "risk content consolidated with the POA&M risks (same risk graph, later state)"),
+  "risk content consolidated with the POA&M risks (same risk graph, later state); what differs -> "
+  "risk-analysis@1 `assessment-results-state` on the Risk"),
  (r"^ar\.assessment-results\.local-definitions\.", "L2",
   "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"),
  (r"^poam\.plan-of-action-and-milestones\.(uuid$|system-id)", "L1", "provenance / system id (system@1)"),
@@ -1270,15 +1362,17 @@ RULES = [
  (r"^poam\.plan-of-action-and-milestones\.poam-items\[\]\.", "L1",
   "poam-item title and description -> finding-target@1 `poam-item` on the Finding of the risk the item names; "
   "its related-risks and related-observations -> `risks` and `observations` there, resolved (a risk the POA&M "
-  "does not define stays unaccounted)"),
+  "does not define: verbatim under `unresolved-risk-uuids`, a defect of the source)"),
  (r"^(lev|lvg)\.system-security-plan\.system-characteristics\.", "L1",
   "provider/consumer Components: system@1 facet, the same content as for the main system "
   "(ids, status, sensitivity, FIPS-199 impact, boundary, remarks)"),
  (r"^(lev|lvg)\.system-security-plan\.system-implementation\.components\[\]\.", "L1",
   "Components (kind mapped: appliance->hardware, application->software) + component@1 facet; the leveraging "
-  "plan's entries for components of the leveraged system are stood for by the provider's Components (declared)"),
+  "plan's entries for components of the leveraged system: what equals the provider's is linked to it, the rest "
+  "-> component@1 `listed-by-leveraging-plan` of the provider's Component"),
  (r"^lvg\.system-security-plan\.system-implementation\.(users|leveraged-authorizations)\[\]\.", "L1",
-  "leveraged-authorizations -> provider Component authorizations[] (the basis-ref anchor); users -> system@1"),
+  "leveraged-authorizations -> provider Component authorizations[] (the basis-ref anchor; uuid, links and party "
+  "-> component@1 `authorizations`); users -> system@1"),
  (r"^lev\.system-security-plan\.system-implementation\.users\[\]\.", "L2", "system@1 facet users[]"),
  (r"^lev\.system-security-plan\.control-implementation\.", "L1",
   "provider Implementation: export.provided -> capabilities on the Component that exports them "
@@ -1308,31 +1402,10 @@ rows, unmapped = coverage(paths, RULES)
 VA = global_occurrence(list(led.docs.items()), list(bundle.objects.values()))
 
 # the ledger: one entry per source value, each checked against the files just
-# written. The one declared drop restates what the coverage report has said
-# since 1.0.0 (identity is re-minted); everything else without a destination
-# stays unaccounted until somebody decides it, path by path.
-led.drop(r"\.uuid$", "the uuid of a source element: JASCON objects get URIs minted from names and titles, "
-                     "the uuid itself is not carried (uuids that ARE carried or resolved have a destination above)")
-# Decided by the author on 2026-11-13, class by class (register, "Amendments -
-# the value-level check of the converters"). A drop applies only to a value
-# that reached no destination, so a party name that became a landmark URI
-# stays a transformation. Role assignments and references by uuid are NOT
-# covered here: they are open and stay unaccounted.
-led.drop(r"\.metadata\.revisions\[\]\.",
-         "revision history of the source document: bookkeeping of the source, which the manifest pins by commit")
-led.drop(r"\.metadata\.(parties|roles)\[\]\.",
-         "the source's directory of parties and roles: a party is a landmark URI and there is no party object "
-         "(register, backlog #16); the name of a party the bundle refers to has a destination above")
-led.drop(r"\.back-matter\.|\.import-(ap|ssp|profile)\.href$|\.leveraged-authorizations\[\]\.links\[\]\.",
-         "a link to another serialisation of the source, to an imported document or to the catalogue: the bundle "
-         "carries the Requirements themselves and its objects refer to one another by id")
-led.drop(r"(\.subjects\[\]\.type|\.assessment-subjects\[\]\.type|\.actors\[\]\.type|\.target\.type|\.identifier-type)$",
-         "a type tag of a structural element: the bundle says by its shape what kind of thing the element is")
-# (the name of a remediation's prop `type` was a declared drop until 2026-11-14; it is no content by a
-#  rule the ledger checks now - see risk_analysis)
-led.drop(r"^ar\.assessment-results\.results\[\]\.risks\[\]\.",
-         "the assessment results hold the earlier state of a risk the POA&M carries in its later state; "
-         "text equal to the POA&M's is linked to it above, the rest is superseded")
+# written. No drop is declared (the author's decisions of 2026-11-14: every
+# drop the first ledger declared is carried now, or is no content by a rule
+# the ledger checks - an orphaned back-matter resource, a type tag rebuilt
+# from what its reference resolves to, a value equal to one that is kept).
 LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": manifest, ATTESTATION_FILE: attestation})
 with open(os.path.join(OUTDIR, "ifa-conversion-ledger.json"), "w", encoding="utf-8") as f:
     json.dump(LEDGER, f, indent=1, ensure_ascii=False); f.write("\n")
@@ -1393,6 +1466,15 @@ j = report(
      f"- **Unresolved parameter bindings**: {unresolved_bind or 'none'}" +
      (f" - `ac-2_prm_1` is a Rev-5.1-era param id; Rev 5.2.0 declares the _odp layer instead "
       f"(the binding is carried verbatim; a resolver follows the odp@1 aggregates map)." if unresolved_bind else "."),
+     # the library's line says "the source states no status on any object"; these sources state one on
+     # Components and Risks, and no rule maps it to a lifecycle: the line says that instead
+     lifecycle_default_line(LIFECYCLE_DEFAULT).replace(
+         " The source states no status on any object.",
+         f" The source states a status on {sum(1 for o in bundle.objects.values() if (o.get('facets') or {}).get(F_COMP, {}).get('status'))} "
+         f"Components (component@1 `status`) and on {sum(1 for o in bundle.objects.values() if (o.get('facets') or {}).get(F_RISKA, {}).get('risk-status'))} "
+         f"Risks (risk-analysis@1 `risk-status`, mapped to the Risk's `state`); no rule maps one of them to a lifecycle."),
+     f"- **Orphaned back-matter resources x{len(ORPHANS)}** (not carried, by the ledger's rule: nothing in their "
+     f"document refers to them): {', '.join(ORPHANS) or 'none'}.",
      f"- **Kind mapping**: " + (", ".join(f"{k} x{v}" for k, v in kind_mapped.items()) or "none") +
      f" (OSCAL free-text component types vs. the kernel's closed componentKind).",
      f"- **Global occurrence (measured; path coverage above is a DECLARATION)**: {VA['exact']:,} of "
@@ -1431,6 +1513,7 @@ j = report(
      "lang-wraps": dict(lang_wraps),
      "risk-shape-gaps": dict(risk_gaps), "response-types": dict(response_types),
      "global-occurrence": VA,
+     "lifecycle-default": LIFECYCLE_DEFAULT,
      "ledger": {"file": "ifa-conversion-ledger.json", "leaf-values": LEDGER["leaf-values"], "totals": LT,
                 "verification-failures": len(LEDGER["verification-failures"])}})
 _by_reason, _by_rule = collections.defaultdict(list), collections.Counter()

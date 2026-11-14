@@ -87,6 +87,7 @@
    },
    "users": [
     {
+     "uuid": "11111111-0000-4000-9000-200000000001",
      "privileges": [
       {
        "title": "Administrator",
@@ -99,10 +100,12 @@
    ],
    "customer-responsibilities": [
     {
+     "uuid": "11111111-0000-4000-9009-002001001002",
      "description": "Leveraging system's responsibilities with respect to inheriting this capability.\n\nIn the context of the application component in satisfaction of AC-2, part a.",
      "capability": "https://ifa.gov/goodread/component/csp-iaas#cap-provided-1"
     },
     {
+     "uuid": "11111111-0000-4000-9009-002001002002",
      "description": "Leveraging system's responsibilities with respect to inheriting this capability.\n\nIn the context of the application component in satisfaction of AC-2, part a.",
      "capability": "https://ifa.gov/goodread/component/csp-application#cap-provided-2"
     }
@@ -114,17 +117,59 @@
     "en": "This Leveraged IaaS.\n\nThe entire system as depicted in the system authorization boundary"
    },
    "status": "operational",
+   "authorizations": [
+    {
+     "authorization": "auth-csp-iaas-2018",
+     "uuid": "22222222-0000-4000-9000-300000000001",
+     "links": [
+      {
+       "href": "#c2c2f46c-3b36-4abe-84b8-139c00d8a8ec",
+       "rel": "oscal-ssp-xml"
+      }
+     ],
+     "party-uuid": "11111111-0000-4000-9000-100000000001"
+    }
+   ],
+   "listed-by-leveraging-plan": {
+    "uuid": "22222222-0000-4000-9001-000000000002",
+    "type": "system",
+    "title": " **LEVERAGED SYSTEM (IaaS)** ",
+    "description": "If the leveraged system owner provides a UUID for their system (such as in an OSCAL-based CRM), it should be used as the UUID for this component.",
+    "props": [
+     {
+      "name": "implementation-point",
+      "value": "external"
+     },
+     {
+      "name": "leveraged-authorization-uuid",
+      "value": "22222222-0000-4000-9000-300000000001"
+     },
+     {
+      "name": "inherited-uuid",
+      "value": "11111111-0000-4000-9001-000000000001"
+     }
+    ]
+   },
    "responsible-roles": [
     {
      "role": "admin"
     },
     {
-     "role": "poc-for-customers"
+     "role": "poc-for-customers",
+     "party-uuids": [
+      "11111111-0000-4000-9000-100000000001"
+     ]
     },
     {
-     "role": "customer"
+     "role": "customer",
+     "party-uuids": [
+      "11111111-0000-4000-9000-100000000002"
+     ]
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "11111111-0000-4000-9001-000000000001"
   }
  }
 }

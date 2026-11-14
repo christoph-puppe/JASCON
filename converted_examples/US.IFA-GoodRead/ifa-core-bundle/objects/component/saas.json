@@ -74,6 +74,7 @@
    },
    "users": [
     {
+     "uuid": "22222222-0000-4000-9000-200000000001",
      "privileges": [
       {
        "title": "Administrator",
@@ -93,9 +94,15 @@
    "status": "operational",
    "responsible-roles": [
     {
-     "role": "admin"
+     "role": "admin",
+     "party-uuids": [
+      "22222222-0000-4000-9000-100000000001"
+     ]
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "22222222-0000-4000-9001-000000000001"
   }
  }
 }

@@ -82,6 +82,7 @@
    },
    "users": [
     {
+     "uuid": "00d323d3-dc3f-4d93-900f-f13430e094d3",
      "title": "Application Administrator",
      "description": "The developer of the application supports IFA Public Affairs Officers by administering the application and its infrastructure.",
      "privileges": [
@@ -100,6 +101,7 @@
      ]
     },
     {
+     "uuid": "61405ba7-edb4-4243-8461-79aac5805e5c",
      "title": "Public Affairs Officers",
      "description": "IFA Public Affairs Officers (PAOs) in each division of the agency review public communications to citizens who are customers of the IFA. PAOs review requests from colleagues to generate and publish content that is the target of a shortlink and can unpublish shortlinks.",
      "privileges": [
@@ -116,6 +118,7 @@
      ]
     },
     {
+     "uuid": "fb36760a-143d-490b-8fc4-6a8c172fba86",
      "title": "General Public",
      "description": "The general public is free to click on shortlinks",
      "privileges": [
@@ -130,6 +133,7 @@
    ],
    "inventory-items": [
     {
+     "uuid": "4392599a-9117-416a-87d1-24c7d1b2dd0b",
      "description": "This is the custom SYSTEM1234 application within the system.",
      "props": {
       "software-name": "IFA SYSTEM1234",
@@ -151,6 +155,7 @@
      ]
     },
     {
+     "uuid": "d911b560-f564-4715-8d2a-76f86127ac73",
      "description": "This is the web application framework upon which the developer writes the custom SYSTEM1234 application for the user interface and API of this system.",
      "props": {
       "software-name": "Django Framework",
@@ -172,6 +177,7 @@
      ]
     },
     {
+     "uuid": "3e3a8d9a-e3d6-4c7d-b59b-a8d6514fa4a2",
      "description": "This is the database for the custom SYSTEM1234 application within the system.",
      "props": {
       "software-name": "PostgreSQL",
@@ -193,6 +199,7 @@
      ]
     },
     {
+     "uuid": "0fb95c4c-ebfd-492e-8145-363eb7947dbe",
      "description": "This is the operating system for the web server that runs the custom SYSTEM1234 application within the system.",
      "props": {
       "software-name": "Red Hat Enterprise Linux 9",
@@ -212,6 +219,7 @@
      ]
     },
     {
+     "uuid": "cd39f700-23ab-4574-a17e-c9c8f073cbec",
      "description": "This inventory item is an instance from the AWSomeCloud AWSome Compute Service (ACS) Service. It is a Linux server.",
      "props": {
       "asset-id": "instance-abcd1234",
@@ -241,6 +249,7 @@
      ]
     },
     {
+     "uuid": "d9550535-40b9-4d8b-861c-07aa8786bf43",
      "description": "This inventory item is an instance from the AWSomeCloud ASWome Load Balancer (ALB) Service. It is a Linux server.",
      "props": {
       "asset-type": "appliance",
@@ -288,6 +297,12 @@
     "en": "IFA develops, operates, and maintains the SYSTEM1234 link shortener system "
    },
    "status": "operational",
+   "capabilities": [
+    {
+     "capability": "cap-ac-6.1",
+     "uuid": "a4c2d318-26a9-49df-9818-ee0acaf066f2"
+    }
+   ],
    "responsible-roles": [
     {
      "role": "developer",
@@ -305,6 +320,9 @@
      "role": "public-affairs-office"
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "551b9706-d6a4-4d25-8207-f2ccec548b89"
   }
  }
 }
