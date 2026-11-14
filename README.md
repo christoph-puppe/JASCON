@@ -49,7 +49,7 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.16.0,
+key and has no word for a signature that holds. (Reader 1.17.0,
 2026-11-14, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage names Risk in its
 heading and lists none; the two Risk objects are in the object browser —
@@ -564,8 +564,9 @@ the five stages of the compliance graph *functional*, not diagrammatic:
 - **Export a real bundle** — the workspace leaves as a ZIP with a
   content-manifest carrying both digests per object: re-loadable here,
   verifiable by `validate_core.py`. The reader checks part of what the
-  validator checks (references that must resolve in the bundle, facet and
-  method keys, Attestations) and says so; it runs no kernel schema.
+  validator checks (references that must resolve in the bundle and what
+  they resolve to, facet and method keys, Attestations), on a bundle it
+  loads and on one it exports, and says so; it runs no kernel schema.
   Authored objects persist across reloads.
 
 ![Object browser on the Grundschutz++ corpus (content: BSI, CC BY-SA 4.0): fifteen auto-populated filter dimensions — modality, threats, target-object categories, tags, required documentation, C-I-A-Auth objectives, effort, class, security level — every vocabulary the corpus actually carries](docs/img/reader-browser-facets.png)

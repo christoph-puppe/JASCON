@@ -111,7 +111,7 @@ const P = (() => {
   assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
   return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty,
     canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState, listedAttestationErrors,
-    STDLIB_FACETS, facetHome, methodKeyErrors, facetKeyErrors, closureNeedErrors, manualMethod, isEarlierWorkbenchMethod };`)();
+    STDLIB_FACETS, facetHome, methodKeyErrors, facetKeyErrors, facetAndMethodKeyErrors, closureErrors, manualMethod, isEarlierWorkbenchMethod };`)();
 })();
 
 /* ---------- 1. the pin vectors ---------- */
@@ -1543,7 +1543,7 @@ test("an export never lists an Attestation: it is written beside the manifest, a
     /* the manifest is new, so what bound another one with unchanged subjects is a Semantic Match: the page says so when it writes, and the reference says the same of the export */
     const SEMANTIC = `binds: ${att.id} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`;
     assert.ok(x.log.includes("in this export — " + SEMANTIC + "\n"), x.log.slice(-900));
-    assert.match(x.log, /workspace bundle exported: 3 objects \+ content-manifest with both digests \+ 1 Attestation\(s\) beside the manifest, not listed \(D3\.1\) \([\d.]+ kB zip\) — loads back into this reader and nothing fails in what this page checks \(closure-required references, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
+    assert.match(x.log, /workspace bundle exported: 3 objects \+ content-manifest with both digests \+ 1 Attestation\(s\) beside the manifest, not listed \(D3\.1\) \([\d.]+ kB zip\) — loads back into this reader and nothing fails in what this page checks \(closure-required references and what they resolve to, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
     await R.load(x.dir);
     shown = await R.attested();
     assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest, a.line]), [["semantic-match", "false", "other", SEMANTIC]]);
@@ -2001,7 +2001,7 @@ test("the method on the page: the Assess workbench states a manual assessment un
     assert.deepEqual(Object.keys(written).sort(), ["id", "lifecycle", "method", "performer-ref", "result", "subject-refs", "time", "title", "version"], "and nothing on it names the tool");
     assert.equal(wm.provenance.converter, "jascon-reader.html " + (await page.locator("#pill-version").innerText()).split(" · ")[0], "the manifest does");
     assert.doesNotMatch(await R.log(), /in this export — .* method '/);
-    assert.match(await R.log(), /workspace bundle exported: 3 objects .* — loads back into this reader and nothing fails in what this page checks \(closure-required references, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
+    assert.match(await R.log(), /workspace bundle exported: 3 objects .* — loads back into this reader and nothing fails in what this page checks \(closure-required references and what they resolve to, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
     if (REFERENCE) { const ref = referenceMethods(workbench); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [true, [], [], []], ref.line); }
 
     /* 2. The folders as they lie. The example folder's three Assessments state their method under the standard facet;
@@ -2135,7 +2135,9 @@ const referenceFailures = dir => { const ref = reference(dir, "--as-of", "2026-1
 /* the lines an export wrote as failing it, after "in this export — " */
 const exportFails = log => [...log.matchAll(/in this export — (.*)$/gm)].map(m => m[1]);
 
-test("closure-required references: every reference need() asks for in closure_errors, resolved or not, gets the reference's sentence from the page's own function, and nothing of the typed checks",
+/* the lines of closure_errors the page ports: a reference that does not resolve, and one that resolves to another type */
+const PORTED_CLOSURE = / closure-required .* does not resolve in-bundle: |: (selects set-ref|excludes ref|treatments requirement-ref) resolves to a |: (risk-refs|component-refs|tailoring-refs) entry resolves /;
+test("closure-required references: every reference need() asks for in closure_errors, and every typed check, gets the reference's sentence from the page's own function, in the reference's order",
   { skip: !PYTHON && "python3 is not installed" }, () => {
     const E = "https://ex.org", R1 = { id: `${E}/req/1`, version: "1", lifecycle: "active", statements: [{ id: "s1" }] };
     const S = { id: `${E}/set/1`, version: "1", lifecycle: "active", members: [{ ref: R1.id }, { ref: `${E}/req/gone-member` }] };
@@ -2145,12 +2147,37 @@ test("closure-required references: every reference need() asks for in closure_er
     const F = { id: `${E}/finding/1`, "assessment-ref": `${E}/asmt/gone`, "requirement-ref": R1.id, state: "open", "risk-refs": [`${E}/risk/elsewhere`] };
     const K = { id: `${E}/risk/1`, scenario: "x", "owner-ref": `${E}/party/o`, treatments: [{ "requirement-ref": `${E}/req/gone-treat` }, { "requirement-ref": R1.id }],
       "component-refs": [`${E}/comp/gone-risk`], "tailoring-refs": [T.id, `${E}/tailoring/gone`] };
-    const objs = [R1, S, T, I, F, K], ref = referenceClosure(objs), page = P.closureNeedErrors(objs);
-    assert.deepEqual(page, ref.filter(e => / closure-required .* does not resolve in-bundle: /.test(e)));
+    const objs = [R1, S, T, I, F, K], ref = referenceClosure(objs), page = P.closureErrors(objs);
+    assert.deepEqual(page, ref.filter(e => PORTED_CLOSURE.test(e)));
     assert.deepEqual(page.map(e => / closure-required (.*) does not resolve/.exec(e)[1]), ["member ref", "selects set-ref", "excludes ref", "operation requirement-ref",
       "component-ref", "requirement-ref", "assessment-ref", "treatments requirement-ref (RISK-7)", "component-refs (RISK-7)", "tailoring-refs (RISK-7)"], "one of every kind");
-    assert.deepEqual(P.closureNeedErrors([R1, { ...S, members: [{ ref: R1.id }] }, { ...F, "assessment-ref": R1.id }]), [], "what resolves is not said; a Finding's risk-refs are a landmark, not closure-required");
+    assert.deepEqual(P.closureErrors([R1, { ...S, members: [{ ref: R1.id }] }, { ...F, "assessment-ref": R1.id }]), [], "what resolves is not said; a Finding's risk-refs are a landmark, not closure-required");
+    /* the typed checks (v1.17.0): every reference resolves, each to an object of another type than its edge allows */
+    const C = { id: `${E}/comp/1`, version: "1", lifecycle: "active", kind: "service" };
+    const T2 = { id: `${E}/tailoring/2`, version: "1", selects: [{ "set-ref": R1.id }, { "set-ref": S.id }], excludes: [{ ref: C.id }, { ref: S.id }, { ref: R1.id }] };
+    const F2 = { id: `${E}/finding/2`, "assessment-ref": R1.id, "requirement-ref": R1.id, state: "open", "risk-refs": [R1.id, K.id, `${E}/risk/elsewhere`] };
+    const K2 = { id: `${E}/risk/2`, scenario: "x", "owner-ref": `${E}/party/o`, treatments: [{ "requirement-ref": S.id }, { "requirement-ref": R1.id }],
+      "component-refs": [R1.id, C.id], "tailoring-refs": [S.id, T2.id] };
+    const whole = { ...S, members: [{ ref: R1.id }] }, typedObjs = [R1, whole, C, T2, F2, K2, { ...K, treatments: [], "component-refs": [], "tailoring-refs": [] }];
+    assert.deepEqual(typedObjs.map(o => P.inferType(o)), ["requirement", "requirementSet", "component", "tailoring", "finding", "risk", "risk"], "the page types the fixture as meant");
+    const typedRef = referenceClosure(typedObjs), typedPage = P.closureErrors(typedObjs);
+    assert.deepEqual(typedPage, typedRef, "every line of the reference, and nothing else: no rule the page does not port fires on this fixture");
+    assert.deepEqual(typedPage.map(e => /: (selects set-ref|excludes ref|treatments requirement-ref|risk-refs|component-refs|tailoring-refs) (?:entry )?resolves /.exec(e)[1]),
+      ["selects set-ref", "excludes ref", "risk-refs", "treatments requirement-ref", "component-refs", "tailoring-refs"], "one of every typed check, each once");
+    /* both kinds on one edge, in the reference's order: a reference that does not resolve is said before the next edge's type */
+    const mixed = [R1, whole, { ...T2, selects: [{ "set-ref": `${E}/set/gone` }, { "set-ref": R1.id }] }];
+    assert.deepEqual(P.closureErrors(mixed), referenceClosure(mixed));
+    assert.equal(P.closureErrors(mixed).length, 3);
   });
+
+/* facet_errors lists, object by object, the keys of `facets` and then those of `method` (v1.17.0) */
+test("facet and method keys no facet registers are listed object by object, facets before the method, as facet_errors lists them", () => {
+  const BADF = "https://no.example/f@1", BADM = "https://no.example/m@1";
+  const a = { id: "https://ex.org/asmt/1", facets: { [BADF]: 1 }, method: { [BADM]: 1 } }, b = { id: "https://ex.org/asmt/2", facets: { [BADF]: 1 }, method: { [BADM]: 1 } };
+  const got = P.facetAndMethodKeyErrors([a, b], new Map());
+  assert.deepEqual(got.map(e => [e.split(": ")[0].split("/").pop(), /unregistered facet/.test(e) ? "facet" : "method"]), [["1", "facet"], ["1", "method"], ["2", "facet"], ["2", "method"]]);
+  assert.deepEqual(got, [...P.facetKeyErrors(a, new Map()), ...P.methodKeyErrors(a, new Map()), ...P.facetKeyErrors(b, new Map()), ...P.methodKeyErrors(b, new Map())]);
+});
 
 test("an export whose Finding names a requirement of the loaded bundle: the page fails it with the reference's closure-required line, and where it finds nothing it says what it checked",
   OPTS, () => withReader(async R => {
@@ -2173,6 +2200,102 @@ test("an export whose Finding names a requirement of the loaded bundle: the page
       assert.deepEqual(ref.failures.filter(e => / closure-required /.test(e)), closure, "the reference's line, word for word");
       assert.deepEqual(ref.failures, fails, "and the reference fails it for nothing else");
     }
+  }));
+
+/* ---------- 15. the same check on a loaded bundle, and the order of an export's failures (v1.17.0; backlog #92) ---------- */
+test("a loaded bundle: a closure-required reference that does not resolve, and one that resolves to another type, fail in the reference's words in the overview and the console",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1", FINDING = "https://assessor.example/finding/2026-q3-acme-017";
+    await R.load(EXAMPLES);
+    await R.view("overview");
+    assert.equal(await page.locator("#ov-kv [data-closure-error]").count(), 0, "the example folder as committed has no such line");
+    /* a copy whose Finding names a requirement nobody holds and, as its risk, a Requirement; both digests anew */
+    const copy = path.join(R.tmp, "closure-load", "examples");
+    fs.cpSync(EXAMPLES, copy, { recursive: true });
+    const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === FINDING);
+    const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+    obj["requirement-ref"] = "https://ns.bsi.bund.de/gspp/req/NOT-HERE";
+    obj["risk-refs"] = [KONF];
+    const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+    fs.writeFileSync(path.join(copy, entry.path), bytes);
+    Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+    fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+    await R.load(copy);
+    await R.view("overview");
+    const want = [`${FINDING}: closure-required requirement-ref does not resolve in-bundle: https://ns.bsi.bund.de/gspp/req/NOT-HERE`,
+      `${FINDING}: risk-refs entry resolves in-bundle to a requirement, not a Risk: ${KONF} (RISK-12: a Risk edge is typed - a mis-aimed ref is a wrong statement, not a loose one)`];
+    assert.deepEqual(await page.locator("#ov-kv [data-closure-error]").evaluateAll(l => l.map(x => x.textContent)), want.map(e => "✗ " + e));
+    const errs = await page.locator("#log > div.l-err").evaluateAll(l => l.map(x => x.textContent));
+    for (const e of want) assert.ok(errs.some(x => x.endsWith(e)), "the console says it as an error: " + e);
+    if (REFERENCE) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures.filter(e => PORTED_CLOSURE.test(e)), want, "the reference's lines, word for word and in its order"); }
+  }));
+
+test("an export that fails for two rules lists its failures in the reference's order: the reference that does not resolve before the key no facet registers",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const NS = "https://example.org/other", BAD = "https://ns.bsi.bund.de/facet/not-pinned@1";
+    const REQ = { id: `${NS}/req/x`, version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [`${NS}/party/ops`], prose: { en: "X." } }], facets: { [BAD]: { a: 1 } } };
+    /* an Assessment and a Finding about a requirement of the loaded bundle, written in the workbench ... */
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    await page.fill("#wb-a-perf", "Lead Assessor");
+    await page.locator("#wb-a-perf").dispatchEvent("change");
+    await page.locator('[data-az$="|not-satisfied"]').first().click();
+    await page.click("#wb-a-gen");
+    /* ... and a requirement under a key no facet registers, put into the stored workspace after them; the page anew
+       restores the three, and no bundle is loaded */
+    await page.evaluate(req => { const w = JSON.parse(localStorage.getItem("scr-work")); w.created.push(req); localStorage.setItem("scr-work", JSON.stringify(w)); }, REQ);
+    await page.reload();
+    const out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "order"));
+    const log = await R.log(), fails = exportFails(log);
+    assert.equal(fails.length, 2, log.slice(-2500));
+    assert.match(fails[0], / closure-required requirement-ref does not resolve in-bundle: /, "until 1.16.0 the facet key stood first");
+    assert.equal(fails[1], `${REQ.id}: unregistered facet '${BAD}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`);
+    if (REFERENCE) { const ref = referenceFailures(out); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures, fails, "the reference's failures, in its order"); }
+  }));
+
+/* ---------- 16. what was withdrawn (v1.17.0; backlog #87) ---------- */
+test("withdrawn objects are left out of the list and of a Set's members until the switch shows them; a link opens one all the same",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const CSF = path.join(ROOT, "converted_examples/US.CSF/csf-core-bundle");
+    const manifest = JSON.parse(fs.readFileSync(path.join(CSF, "content-manifest.json"), "utf8"));
+    const objs = manifest.objects.map(e => JSON.parse(fs.readFileSync(path.join(CSF, e.path), "utf8")));
+    const total = objs.length, gone = objs.filter(o => o.lifecycle === "withdrawn"), goneIds = new Set(gone.map(o => o.id));
+    assert.ok(gone.length > 0 && gone.length < total, "the bundle holds withdrawn objects and others");
+    /* a Set that lists a withdrawn member and one that is not */
+    const mixedSet = objs.find(o => o.members && o.lifecycle !== "withdrawn" && o.members.some(m => goneIds.has(m.ref)) && o.members.some(m => !goneIds.has(m.ref)));
+    assert.ok(mixedSet, "the bundle has a Set in force with a withdrawn member");
+    const goneMembers = mixedSet.members.filter(m => goneIds.has(m.ref)).length;
+    await R.load(CSF);
+    await R.view("browser");
+    const rows = () => page.locator("#objlist .objrow").evaluateAll(l => l.map(x => x.dataset.id));
+    assert.equal(await R.text(page.locator("#life-withdrawn")), `withdrawn · ${gone.length} hidden`);
+    const hiddenRows = await rows();
+    assert.equal(hiddenRows.length, total - gone.length);
+    assert.equal(hiddenRows.filter(id => goneIds.has(id)).length, 0, "no withdrawn object is in the list");
+    assert.equal(await R.text(page.locator("#withdrawn-hint")), `${gone.length} withdrawn object(s) match and are not shown`);
+    /* the Set: its members without the withdrawn ones, and how many those are */
+    const d = await R.detail(mixedSet.id);
+    const members = () => d.locator("a.reflink[data-ref]").evaluateAll(l => l.map(x => x.dataset.ref));
+    assert.equal((await members()).filter(id => goneIds.has(id)).length, 0);
+    assert.equal(await d.locator("[data-withdrawn-members]").getAttribute("data-withdrawn-members"), String(goneMembers));
+    assert.match(await R.text(d), new RegExp(`Members \\(${mixedSet.members.length}\\) — ${goneMembers} withdrawn not shown`, "i"));
+    /* shown on request: the list, and the Set that is open */
+    await page.click("#life-withdrawn");
+    assert.equal(await R.text(page.locator("#life-withdrawn")), `withdrawn · ${gone.length} shown`);
+    assert.equal((await rows()).length, total);
+    assert.equal(await page.locator("#withdrawn-hint").count(), 0);
+    assert.equal((await members()).filter(id => goneIds.has(id)).length, goneMembers);
+    assert.equal(await d.locator("[data-withdrawn-members]").count(), 0);
+    /* hidden again, a link to a withdrawn object opens it */
+    await page.click("#life-withdrawn");
+    const old = gone.find(o => o.statements).id;
+    await page.evaluate(id => openObject(id), old);   // what a click on a link to it does (wireRefs)
+    await page.waitForFunction(id => document.querySelector("#detail")?.textContent.includes(id), old);
+    assert.match(await R.text(page.locator("#detail")), /withdrawn/);
+    assert.equal((await rows()).filter(id => goneIds.has(id)).length, 0, "the list still leaves them out");
   }));
 
 /* What the facet vectors say of the keys of `facets` against what the page decides. */

@@ -445,6 +445,8 @@ const state = {
   pinnedFacets: new Map(), // id -> path of the facet schemas the loaded manifest pins
   methodErrors: [],        // one message per key of a listed object's `method` that no facet registers (D10)
   facetErrors: [],         // one message per key of a listed object's `facets` that no facet registers (D10; v1.16.0)
+  closureErrors: [],       // closure-required references of the listed objects that do not resolve, or resolve to another type (v1.17.0)
+  showWithdrawn: false,    // objects whose lifecycle is `withdrawn` are left out of the list and of a Set's members until asked for (v1.17.0; backlog #87)
   envelopes: new Map(),    // relpath -> {text, bytes} — the files Attestations name in `envelope-ref`, beside the manifest; never objects
   binds: new Map(),        // attestation id -> what it binds of the loaded bundle (attestationBinds), with its line and its envelope's state
   bindsRun: 0,             // which run of judgeAttestations the verdicts in `binds` are from
@@ -856,39 +858,71 @@ function facetKeyErrors(obj, pinned, path) {
   return !isRecord(facets) ? [] : Object.keys(facets).filter(key => facetHome(key, pinned) === null)
     .map(key => `${path ?? obj.id}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`);
 }
-/* ---------- closure-required references (v1.16.0) ----------
+/* ---------- closure-required references, and what they resolve to (v1.16.0, v1.17.0) ----------
    The references the reference requires to resolve inside a bundle (`need` in closure_errors of
    validate_core.py): a Set's members, a Tailoring's selects set-ref, excludes ref and operations
    requirement-ref, an Implementation's component-ref and requirement-ref, a Finding's assessment-ref and
-   requirement-ref, a Risk's treatments requirement-ref, component-refs and tailoring-refs. Only that
-   they resolve: what a reference resolves to (the typed checks) and the other rules of closure_errors
-   are not ported. A reference that is absent is not asked for (the kernel schema requires it; this page
-   runs no kernel schema). Until 1.15.0 an export whose Finding named a requirement of the loaded bundle
-   was said to pass validate_core.py, which fails it on exactly this.
-   `objs`: the objects of the bundle. -> [message], in the order of the objects and of their references */
-function closureNeedErrors(objs) {
-  const list = (objs || []).filter(isRecord), ids = new Set(list.map(o => o.id)), errs = [];
+   requirement-ref, a Risk's treatments requirement-ref, component-refs and tailoring-refs. Since 1.17.0
+   (backlog #92) also what such a reference resolves to, the typed checks of closure_errors: a selects
+   set-ref is a Set, an excludes ref a Requirement or a Set (D13), a treatments requirement-ref a
+   Requirement, a component-refs entry a Component, a tailoring-refs entry a Tailoring, and a Finding's
+   risk-refs entry, a landmark that binds only where it resolves, a Risk (RISK-12). Until 1.16.0 only
+   that a reference resolves was looked at. The other rules of closure_errors are not ported: the same
+   content behind a canonical-alias, a statement-id that names a statement (an operation, a treatment,
+   a Mapping's scope), inherited-from and its basis-ref, one scale for a rating and its residual
+   (RISK-13), and that membership has no cycle. A reference that is absent is not asked for (the kernel
+   schema requires it; this page runs no kernel schema). Until 1.15.0 an export whose Finding named a
+   requirement of the loaded bundle was said to pass validate_core.py, which fails it on exactly this.
+   `objs`: the objects of the bundle. -> [message], in the reference's words and in its order: the
+   objects as given, each reference where the reference asks for it, "does not resolve" before the type */
+function closureErrors(objs) {
+  const list = (objs || []).filter(isRecord), byId = new Map(list.map(o => [o.id, o])), errs = [];
   const each = v => Array.isArray(v) ? v.filter(x => x !== undefined) : [];
   for (const o of list) {
-    const need = (ref, what) => { if (ref !== undefined && !ids.has(ref)) errs.push(`${o.id}: closure-required ${what} does not resolve in-bundle: ${ref}`); };
+    const need = (ref, what) => { if (ref !== undefined && !byId.has(ref)) errs.push(`${o.id}: closure-required ${what} does not resolve in-bundle: ${ref}`); };
+    /* the type of what `ref` resolves to, where it resolves and is none of `allowed` */
+    const other = (ref, allowed) => { const tgt = byId.get(ref), ty = tgt ? inferType(tgt) : null; return tgt && !allowed.includes(ty) ? ty : null; };
+    let ty;
     switch (inferType(o)) {
       case "requirementSet": for (const m of each(o.members)) need(m?.ref, "member ref"); break;
       case "tailoring":
-        for (const x of each(o.selects)) if (isRecord(x) && "set-ref" in x) need(x["set-ref"], "selects set-ref");
-        for (const x of each(o.excludes)) need(x?.ref, "excludes ref");
+        for (const x of each(o.selects)) if (isRecord(x) && "set-ref" in x) {
+          need(x["set-ref"], "selects set-ref");
+          if ((ty = other(x["set-ref"], ["requirementSet"]))) errs.push(`${o.id}: selects set-ref resolves to a ${ty}, not a RequirementSet: ${x["set-ref"]} (D13: a selection names a Set - chaining runs on the resolved package, never by reference)`);
+        }
+        for (const x of each(o.excludes)) {
+          need(x?.ref, "excludes ref");
+          if ((ty = other(x?.ref, ["requirement", "requirementSet"]))) errs.push(`${o.id}: excludes ref resolves to a ${ty}, neither a Requirement nor a RequirementSet: ${x.ref} (D13: an exclusion scopes out requirements - one, or a Set's members)`);
+        }
         for (const x of each(o.operations)) need(x?.["requirement-ref"], "operation requirement-ref");
         break;
       case "implementation": need(o["component-ref"], "component-ref"); need(o["requirement-ref"], "requirement-ref"); break;
-      case "finding": need(o["assessment-ref"], "assessment-ref"); need(o["requirement-ref"], "requirement-ref"); break;
+      case "finding":
+        need(o["assessment-ref"], "assessment-ref"); need(o["requirement-ref"], "requirement-ref");
+        for (const x of each(o["risk-refs"])) if ((ty = other(x, ["risk"]))) errs.push(`${o.id}: risk-refs entry resolves in-bundle to a ${ty}, not a Risk: ${x} (RISK-12: a Risk edge is typed - a mis-aimed ref is a wrong statement, not a loose one)`);
+        break;
       case "risk":
-        for (const x of each(o.treatments)) need(x?.["requirement-ref"], "treatments requirement-ref (RISK-7)");
-        for (const x of each(o["component-refs"])) need(x, "component-refs (RISK-7)");
-        for (const x of each(o["tailoring-refs"])) need(x, "tailoring-refs (RISK-7)");
+        for (const x of each(o.treatments)) {
+          need(x?.["requirement-ref"], "treatments requirement-ref (RISK-7)");
+          if ((ty = other(x?.["requirement-ref"], ["requirement"]))) errs.push(`${o.id}: treatments requirement-ref resolves to a ${ty}, not a Requirement: ${x["requirement-ref"]} (RISK-12: a Risk edge is typed - coverage joins on Requirement ids)`);
+        }
+        for (const x of each(o["component-refs"])) {
+          need(x, "component-refs (RISK-7)");
+          if ((ty = other(x, ["component"]))) errs.push(`${o.id}: component-refs entry resolves to a ${ty}, not a Component: ${x} (RISK-12: a Risk edge is typed - the asset at risk is a Component)`);
+        }
+        for (const x of each(o["tailoring-refs"])) {
+          need(x, "tailoring-refs (RISK-7)");
+          if ((ty = other(x, ["tailoring"]))) errs.push(`${o.id}: tailoring-refs entry resolves to a ${ty}, not a Tailoring: ${x} (RISK-12: a Risk edge is typed - the scope of a treatment is a Tailoring)`);
+        }
         break;
     }
   }
   return errs;
 }
+/* The keys of `facets` and of `method` that no facet registers, object by object and for one object
+   `facets` before `method`: the order of facet_errors in validate_core.py (v1.17.0; until 1.16.0 the
+   page listed the methods of all objects and then the facets of all objects). */
+const facetAndMethodKeyErrors = (objs, pinned) => (objs || []).flatMap(o => [...facetKeyErrors(o, pinned), ...methodKeyErrors(o, pinned)]);
 /* What the Assess workbench states as its method: a person answers each requirement in a form, which
    is a manual assessment under the standard assessment-criteria facet (its descriptor knows `method`:
    manual or automated). Until 1.14.0 it wrote { kind: "manual-check", note: "authored in JASCON
@@ -907,7 +941,7 @@ const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join(
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.16.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.17.0", READER_BUILD = "2026-11-14";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -1138,7 +1172,7 @@ function indexBundle() {
   state.objects.clear(); state.order = []; state.manifest = null;
   state.manifestByPath.clear(); state.verify = null; state.selected = null;
   state.browserDims = {}; state.stopped = null; state.pinErrors = []; state.listedErrors = [];
-  state.pinnedFacets = new Map(); state.methodErrors = []; state.facetErrors = [];
+  state.pinnedFacets = new Map(); state.methodErrors = []; state.facetErrors = []; state.closureErrors = [];
   state.binds = new Map(); state.missingEntries = 0;
   /* The detail that is up belongs to the bundle before (v1.14.0): it is taken down with it. Until 1.13.0 it stayed,
      and since 1.13.0 the detail of an Attestation says what it binds of a bundle - of one no longer loaded. */
@@ -1212,22 +1246,27 @@ function indexBundle() {
   if (state.manifest) {
     state.pinErrors = kernelPinErrors(state.manifest, [...state.objects.values()].filter(r => r.entry).map(r => r.obj));
     for (const e of state.pinErrors) l.err(e);
-    /* MANIFEST-1 (v1.14.0): no manifest lists an Attestation. Reported in the reference's words, and the
-       bundle is shown all the same; a listed Attestation is still held to what it binds. It stays counted
-       among the objects the manifest lists, because that is what the manifest does and what a validator
-       counts: the page says that one of them must not be there. */
+    /* What the manifest lists, held to four rules of the reference in the order in which it records their
+       failures (v1.17.0; until 1.16.0 MANIFEST-1, the methods of all objects, the facets of all objects, and
+       the closure-required references only in an export):
+       1. closure-required references, and what they resolve to (closureErrors). An Attestation beside the
+          manifest is none of the bundle's objects for this rule, as in the reference.
+       2. MANIFEST-1 (v1.14.0): no manifest lists an Attestation. Reported in the reference's words, and the
+          bundle is shown all the same; a listed Attestation is still held to what it binds. It stays counted
+          among the objects the manifest lists, because that is what the manifest does and what a validator
+          counts: the page says that one of them must not be there.
+       3. the keys of `facets` and of `method` (v1.16.0, v1.15.0; D10, backlog #55), object by object in the
+          manifest's order, against the standard library and the facet schemas this manifest pins. A key no
+          facet registers is reported in the reference's words. The payloads are not checked here. */
+    const listedObjs = state.order.map(id => state.objects.get(id)).filter(r => r && r.entry).map(r => r.obj);
+    state.closureErrors = closureErrors(listedObjs);
+    for (const e of state.closureErrors) l.err(e);
     state.listedErrors = listedAttestationErrors([...state.objects.values()].filter(r => r.entry).map(r => r.obj));
     for (const e of state.listedErrors) l.err(e);
-    /* An Assessment's method (v1.15.0; D10, backlog #55): the keys of `method` of every object the manifest
-       lists, in the manifest's order, against the standard library and the facet schemas this manifest pins.
-       A key no facet registers is reported in the reference's words. The payloads are not checked here. */
     state.pinnedFacets = pinnedFacets(state.manifest, path => state.files.get(prefix + path)?.text);
-    state.methodErrors = state.order.map(id => state.objects.get(id)).filter(r => r && r.entry).flatMap(r => methodKeyErrors(r.obj, state.pinnedFacets));
-    for (const e of state.methodErrors) l.err(e);
-    /* the keys of `facets` of every object the manifest lists, by the same rule (v1.16.0; D10). Until 1.15.0
-       they were not looked at. The payloads are not checked here either. */
-    state.facetErrors = state.order.map(id => state.objects.get(id)).filter(r => r && r.entry).flatMap(r => facetKeyErrors(r.obj, state.pinnedFacets));
-    for (const e of state.facetErrors) l.err(e);
+    state.methodErrors = listedObjs.flatMap(o => methodKeyErrors(o, state.pinnedFacets));
+    state.facetErrors = listedObjs.flatMap(o => facetKeyErrors(o, state.pinnedFacets));
+    for (const e of facetAndMethodKeyErrors(listedObjs, state.pinnedFacets)) l.err(e);
   }
   for (const p of [...state.evidence.keys()]) if (!p.startsWith(prefix + "evidence/sha256/")) state.evidence.delete(p);   // only the store beside THIS manifest
   if (state.evidence.size) l.info(`evidence store: ${state.evidence.size} file(s) beside the manifest — content-addressed (evidence/sha256/<hex>), not manifest entries`);
@@ -1376,6 +1415,8 @@ function renderOverview() {
       (state.missingEntries > 0 ? ` <span class="verdict-warn">— ${state.missingEntries} not loaded</span>` : "") +
       state.listedErrors.map(e => `<div class="verdict-bad" data-listed-error>✗ ${esc(e)}</div>`).join("")));
     rows.push(kvRow("attestations beside the manifest", besideSummaryHtml(tally)));
+    if (state.closureErrors.length) rows.push(kvRow("references", state.closureErrors.map(e => `<div class="verdict-bad" data-closure-error>✗ ${esc(e)}</div>`).join("") +
+      `<div class="hint">a reference the kernel requires to resolve inside the bundle, or to resolve to one type: either fails the bundle in a validator</div>`));
     if (state.methodErrors.length) rows.push(kvRow("methods of assessments", state.methodErrors.map(e => `<div class="verdict-bad" data-method-error>✗ ${esc(e)}</div>`).join("") +
       `<div class="hint">an Assessment's method is a facet payload (D10): a key no facet registers fails the bundle in a validator</div>`));
     if (state.facetErrors.length) rows.push(kvRow("facets of objects", state.facetErrors.map(e => `<div class="verdict-bad" data-facet-error>✗ ${esc(e)}</div>`).join("") +
@@ -1434,6 +1475,12 @@ function renderFilters() {
     state.filterTypes.has(t) ? state.filterTypes.delete(t) : state.filterTypes.add(t);
     renderBrowser();
   });
+  /* the lifecycle switch, only where a withdrawn object is loaded */
+  const gone = [...state.objects.values()].filter(isWithdrawn).length;
+  if (gone) {
+    $("typefilters").insertAdjacentHTML("beforeend", ` <span class="fpill ${state.showWithdrawn ? "on" : ""}" id="life-withdrawn" title="Withdrawn objects stay in the bundle. The list and a Set's members leave them out until they are shown.">withdrawn · ${gone} ${state.showWithdrawn ? "shown" : "hidden"}</span>`);
+    $("life-withdrawn").onclick = () => { state.showWithdrawn = !state.showWithdrawn; renderBrowser(); if (state.selected) openObject(state.selected); };
+  }
   /* facet/kernel dimension filters — same auto-populated index as the control selector */
   const bd = state.browserDims = state.browserDims || {};
   const idx = state.objects.size ? dimIndex() : null;
@@ -1446,7 +1493,14 @@ function renderFilters() {
   document.querySelectorAll("[data-bdim]").forEach(x => x.onchange = () => { state.browserDims[x.dataset.bdim] = x.value; renderBrowser(); });
   const bc = $("bdim-clear"); if (bc) bc.onclick = () => { state.browserDims = {}; renderBrowser(); };
 }
-function visibleIds() {
+/* Withdrawn objects (v1.17.0; backlog #87). Since 2026-11-14 a converter writes every withdrawn item of a
+   catalogue as an object (182 of the 1,196 Requirements of SP 800-53, 79 of the 185 of the CSF). The list of
+   objects and the members of a Set leave them out until the switch beside the type filters shows them; they
+   stay in the bundle, a link to one opens it, and the statistics count them. */
+const isWithdrawn = r => !!r && r.obj.lifecycle === "withdrawn";
+const visibleIds = () => (state.showWithdrawn ? matchingIds() : matchingIds().filter(id => !isWithdrawn(state.objects.get(id))));
+/* what the type pills, the facet filters and the search leave */
+function matchingIds() {
   const q = state.search.toLowerCase();
   const dimsActive = Object.entries(state.browserDims || {}).filter(([, v]) => v);
   const idx = dimsActive.length ? dimIndex() : null;
@@ -1467,7 +1521,7 @@ function visibleIds() {
 }
 function renderList() {
   const ids = visibleIds();
-  const cap = 400;
+  const cap = 400, hidden = state.showWithdrawn ? 0 : matchingIds().length - ids.length;
   const rows = ids.slice(0, cap).map(id => {
     const r = state.objects.get(id);
     const v = state.verify?.get(id);
@@ -1477,7 +1531,8 @@ function renderList() {
       <div class="s">${esc(id)}</div>${r.type === "attestation" ? attestationMark(r) : ""}</div>`;
   }).join("");
   $("objlist").innerHTML = (rows || `<div class="hint">nothing matches</div>`) +
-    (ids.length > cap ? `<div class="hint" style="padding:8px">…and ${ids.length - cap} more — narrow the search</div>` : "");
+    (ids.length > cap ? `<div class="hint" style="padding:8px">…and ${ids.length - cap} more — narrow the search</div>` : "") +
+    (hidden ? `<div class="hint" id="withdrawn-hint" style="padding:8px">${hidden} withdrawn object(s) match and are not shown</div>` : "");
   document.querySelectorAll(".objrow").forEach(el => el.onclick = () => { openObject(el.dataset.id); });
 }
 /* an Attestation in the list: where it lies and what it binds, in the same words as its detail */
@@ -1703,7 +1758,8 @@ function renderRequirement(r) {
   }).join("") + deviationsHtml(o);
 }
 function renderSet(r) {
-  const mem = r.obj.members || [];
+  const all = r.obj.members || [];
+  const mem = state.showWithdrawn ? all : all.filter(m => !isWithdrawn(state.objects.get(m.ref))), left = all.length - mem.length;
   const rows = mem.slice(0, 300).map(m => {
     const target = state.objects.get(m.ref);
     const label = target ? (target.obj.label || tt(target.obj.title) || m.ref) : m.ref;
@@ -1712,7 +1768,7 @@ function renderSet(r) {
       <span class="mono" style="font-size:10px;color:var(--text-quiet);width:44px;text-align:right">${m.sequence ?? ""}</span>
       <span>${glyph}${target ? `<a class="reflink" data-ref="${esc(m.ref)}">${esc(label)}</a>` : `<span class="reflink dead">${esc(m.ref)}</span>`}</span></div>`;
   }).join("");
-  return `<div class="nano sectionlabel">Members (${mem.length})${mem.length > 300 ? " — first 300 shown" : ""}</div>${rows || '<div class="hint">empty (structurally required, may legally be empty)</div>'}`;
+  return `<div class="nano sectionlabel">Members (${all.length})${mem.length > 300 ? " — first 300 shown" : ""}${left ? ` <span data-withdrawn-members="${left}">— ${left} withdrawn not shown</span>` : ""}</div>${rows || (left ? "" : '<div class="hint">empty (structurally required, may legally be empty)</div>')}`;
 }
 /* Tailoring (v1.11.0): every select, exclude and operation says who decided it and when - its own
    `provenance` or, marked as inherited, the Tailoring's - and an inline Deviation is shown in full. */
@@ -2778,24 +2834,26 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
   const manifestBytes = enc.encode(JSON.stringify(manifest, null, 1) + "\n");
   files.push({ name: "content-manifest.json", bytes: manifestBytes });
   files.listed = manifest.objects.length; files.attestations = attestations.length; files.fails = [];
-  /* a method under a key no facet registers (v1.15.0; D10): written as it is held, and said - against the standard
-     library and the facet schemas THIS export pins */
-  const pins = pinnedFacets(manifest, path => { const f = files.find(x => x.name === path); return f && new TextDecoder().decode(f.bytes); });
-  for (const e of objs.flatMap(o => methodKeyErrors(o, pins))) { l.err("in this export — " + e); files.fails.push(e); }
-  /* the keys of `facets` by the same rule, and the references the reference requires to resolve in-bundle
-     (v1.16.0): an object of the workspace may name one of the loaded bundle, which this export does not hold */
-  for (const e of objs.flatMap(o => facetKeyErrors(o, pins))) { l.err("in this export — " + e); files.fails.push(e); }
-  for (const e of closureNeedErrors(objs)) { l.err("in this export — " + e); files.fails.push(e); }
+  /* What fails this export in a validator, in the order in which the reference records it (v1.17.0; until
+     1.16.0 methods, facets, references, and then each Attestation with its envelope): the envelopes, what the
+     Attestations bind, the closure-required references and what they resolve to (an object of the workspace
+     may name one of the loaded bundle, which this export does not hold), and the keys of `facets` and of
+     `method` no facet registers - against the standard library and the facet schemas THIS export pins. */
   if (attestations.length) {
-    const manifestDigest = "sha256:" + await sha256hex(manifestBytes);
-    for (const a of attestations.sort((x, y) => (x.id < y.id ? -1 : x.id > y.id ? 1 : 0))) {
-      const b = attestationBinds(a, manifestDigest, delivered, []), line = bindsLine(a, b), e = envelopeState(a, undefined);
-      (b.fails ? l.err : l.warn)("in this export — " + line);
-      if (b.fails) files.fails.push(line);
+    const manifestDigest = "sha256:" + await sha256hex(manifestBytes), sorted = attestations.sort((x, y) => (x.id < y.id ? -1 : x.id > y.id ? 1 : 0));
+    for (const a of sorted) {
+      const e = envelopeState(a, undefined);
       if (e.state === "missing") { l.err(`in this export — dsse: ${a.id} = FAIL - ${e.detail} (the workspace holds no envelope files)`); files.fails.push(`dsse: ${a.id} = FAIL - ${e.detail}`); }
       else l.info(`in this export — dsse: ${a.id} = ${e.detail}`);
     }
+    for (const a of sorted) {
+      const b = attestationBinds(a, manifestDigest, delivered, []), line = bindsLine(a, b);
+      (b.fails ? l.err : l.warn)("in this export — " + line);
+      if (b.fails) files.fails.push(line);
+    }
   }
+  const pins = pinnedFacets(manifest, path => { const f = files.find(x => x.name === path); return f && new TextDecoder().decode(f.bytes); });
+  for (const e of [...closureErrors(objs), ...facetAndMethodKeyErrors(objs, pins)]) { l.err("in this export — " + e); files.fails.push(e); }
   return files;
 }
 /* what the last line of an export says about the Attestations: those it wrote, and those of the loaded bundle it did not */
@@ -2821,7 +2879,7 @@ async function exportWorkspaceBundle() {
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   (files.fails.length ? l.err : l.ok)(`workspace bundle exported: ${files.listed} objects + content-manifest with both digests${exportAttestationNote(files)} (${(zip.length / 1024).toFixed(1)} kB zip) — loads back into this reader and ` +
     (files.fails.length ? `validate_core.py fails it: ${files.fails.length} line(s) above say why`
-      : "nothing fails in what this page checks (closure-required references, facet and method keys, Attestations); it runs no kernel schema and checks no facet payload"));
+      : "nothing fails in what this page checks (closure-required references and what they resolve to, facet and method keys, Attestations); it runs no kernel schema and checks no facet payload"));
 }
 /* The approver of a Deviation (v1.12.0; backlog #70): required by the kernel, and named by a person.
    The field starts empty, for every Deviation anew, and not from the author either: a pre-filled
