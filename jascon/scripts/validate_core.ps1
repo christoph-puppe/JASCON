@@ -4428,6 +4428,7 @@ function Read-Envelope([string]$section, [string]$bdir, [string]$oid, $att, $env
     return $true
 }
 function Validate-Bundle([string]$bdir, [switch]$Flat) {
+    $bdir = $bdir.TrimEnd('\', '/')        # one spelling of the folder for everything below
     $section = $bdir.Replace($ROOT, '').TrimStart('\').Replace('\', '/')
     Write-Host "  -> $section"   # sign of life: big bundles run minutes with no output (P10 user report)
     $mpath = Join-Path $bdir 'content-manifest.json'
@@ -4630,8 +4631,22 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     }
     # on-disk vs manifest (a flat folder was checked above); one set lookup
     # per file ($listedPaths) - the nested loop was quadratic, 2.9 M compares on the ISM bundle
-    foreach ($f in (Get-ChildItem (Join-Path $bdir 'objects') -Recurse -Filter *.json -ErrorAction SilentlyContinue)) {
-        $rel = $f.FullName.Substring($bdir.Length + 1).Replace('\', '/')
+    # The path of a file below the bundle is taken from the enumeration itself,
+    # never by cutting the bundle's path off a full path. Until 2026-11-14 it
+    # was cut off at the LENGTH of the folder as the caller had spelled it, so a
+    # folder named with a trailing separator, or by a short (8.3) path that
+    # Windows spells out when it lists files, had every object reported as "on
+    # disk but not in manifest". The workflow's runner names its temporary
+    # folder that way; the end-to-end test of attestation-binds found it.
+    # .NET returns each name as the path it was given plus what lies below it.
+    $objRoot = Join-Path $bdir 'objects'
+    $below = @()
+    if ([System.IO.Directory]::Exists($objRoot)) {
+        $below = @([System.IO.Directory]::GetFiles($objRoot, '*.json', [System.IO.SearchOption]::AllDirectories))
+        [Array]::Sort($below, [System.StringComparer]::Ordinal)
+    }
+    foreach ($full in $below) {
+        $rel = ('objects' + $full.Substring($objRoot.Length)).Replace('\', '/')
         if (-not $listedPaths.Contains($rel)) { FAIL $section "${rel}: on disk but not in manifest" }
     }
     $summary = @()

@@ -96,6 +96,11 @@ class AttestationBesideTheManifest(unittest.TestCase):
             p = os.path.join(bundle, att_file)
             att = read_json(p)
             if change(att, bundle) != "removed": write_json(p, att)
+        # One folder is named with a trailing separator. However a caller spells a folder, the bundle in it is the
+        # same: the twin once cut relative paths off at the length of the spelling it was given, and reported every
+        # object of such a folder as "on disk but not in manifest" (found on the workflow's Windows runner, whose
+        # temporary folder has a short name that Windows spells out when it lists files).
+        dirs[0] += os.sep
         cls.code, cls.out = validator(dirs)
         # the lines of each copy: from the end of the copy before it to its own summary line
         cls.block, cls.counts, at = {}, {}, 0
