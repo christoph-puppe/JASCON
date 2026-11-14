@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.10. This build has the frame (the hub, the settings page and
+State: build 0.9.11. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -17,7 +17,8 @@ Since 0.9.9 the pages write who decided and when, and the Validate page
 shows where that is missing (see "Who decided, and when"). Since 0.9.10 no
 page writes a party that nobody named: where the kernel requires a party
 and the field is empty, the page refuses the save and says which field it
-is.
+is. Since 0.9.11 every Attestation of a set is held to what it binds, in the
+reference validator's words (see "What an Attestation binds").
 
 ## Start
 
@@ -77,7 +78,7 @@ is saved to the set at once; the other open tools reload.
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
 | Implement | Components and Implementation edges; whether the authorization an inherited edge names is found; the advice packs of the set and the recommendations of each product | Components with the capabilities their edges cite, a system Component that lists them, Implementations; a product as a member of one of your components, and an Implementation that adopts a recommendation |
 | Checks | The rules that carry assessment criteria (audit text, automated or manual) and their machine checks; a tester that computes the verdict for an observation you paste | A Check, written in the form or drafted by a model, one at a time or for many rules |
-| Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding; the decision on a Deviation of a Finding |
+| Assess | Assessments, Findings by state, Attestations with what each binds (Full Match, Semantic Match, or it does not bind) | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding; the decision on a Deviation of a Finding; an Attestation taken out of the set, or an unsigned one set to withdrawn |
 
 | Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about; who is not named as an author and which review date has passed; signatures against keys you trust; what composing the set with another set would report | A report as JSON, on request |
 
@@ -630,6 +631,86 @@ A pack manifest the set keeps under `packs/sha256/` is named by the SHA-256
 of its bytes; the same button checks each one against its name, and the
 Validate page reports a mismatch as ADVICE-8.
 
+## What an Attestation binds
+
+An Attestation names subjects, each by id and semantic digest or by a
+digest alone, and the digest of a content manifest. Since build 0.9.11 the
+Validate page holds every Attestation of the set to both, as the reference
+validator does since 2026-11-14 (Appendix B.1.7, backlog #46), and the
+Assess page shows the same for one Attestation at a time.
+
+- Each subject is compared with the objects the manifest lists. It
+  *matches* (the object of that id carries the signed digest; a bare digest
+  matches when any listed object carries it), it *differs* (the object of
+  that id has another digest: it was changed after signing), or it is
+  *absent*. An Attestation beside the manifest is no object of the manifest
+  and so no subject of anything.
+- The manifest it names is *this* one, *a pack manifest the set keeps*
+  (`packs/sha256/`), or *another*.
+- All subjects match and the manifest is this one or a kept pack's: **Full
+  Match**. All match and the manifest is another: **Semantic Match**, which
+  is reported and never a failure. Anything else does not bind.
+- An Attestation that does not bind is a failure while its lifecycle is
+  `active`. A draft, deprecated or withdrawn one is reported with the same
+  words and fails nothing.
+
+The page shows one line per Attestation, in the order of the ids, and the
+line is the reference's, character for character; a failure is the
+reference's failure with `error:` before it.
+
+**Which bundle is meant.** The reference validator reads a folder. A set is
+a bundle that was loaded and may have been written to since, so the page
+says first what it compared with:
+
+- *The bundle as it was loaded.* Nothing in the set was written in the app.
+  The manifest is the one the set came with, whose bytes the set keeps, and
+  the objects are the ones it lists. This is what the reference says about
+  the folder, also where the folder is damaged.
+- *The bundle an export would write now.* An object, a scale or a pack was
+  written here, or the set never had a manifest. The manifest the set came
+  with no longer describes it, and none has been written yet. The page
+  computes the manifest an export writes (the same bytes on every export of
+  the same set) and compares with that and with the objects it lists. This
+  is what the reference will say about the exported folder.
+
+Two things follow, and both are meant. An Attestation that bound the
+manifest the set came with is a Semantic Match after you change something
+else: its subjects are as signed, only the manifest is a new one. And an
+object you wrote here counts as an object of the bundle, although the
+manifest the set came with never listed it; held to that manifest, an
+Attestation naming it would fail for no reason but that the app had not
+written a manifest yet.
+
+**When a subject was changed.** That is a real failure, on the page and for
+the reference, while the Attestation is active. What can be done depends on
+whether the Attestation is signed, which is to say whether it names an
+envelope:
+
+- The signer issues it again for the content as it is now. The app cannot
+  do that: it does not sign.
+- It is taken out of the set, with the envelope it names (Assess page,
+  *Take it out of this set*).
+- An unsigned Attestation can be set to withdrawn (Assess page). It is then
+  reported and fails nothing. This is not offered for a signed one: the
+  payload of its envelope is the Attestation's canonical form, so a change
+  of its lifecycle breaks the signature in every mode, and withdrawing a
+  signed Attestation is the signer's act.
+
+Measured for this build, with `validate_core.py --as-of 2026-11-14`: for
+`jascon/examples` (two signed Attestations: Full Match against this manifest
+and against a kept pack manifest; 27 counted), for the IFA bundle (one
+unsigned: Full Match; 18 counted, the reference's count being the objects
+and the manifest) and for `jascon/example-packs/dbvendor-server-7-advice`
+(Full Match; 3 counted) the check gives the reference's lines, envelope
+lines and counts by type, without keys and with the fixture keys of
+`jascon/conformance/fixture-trusted-keys.json`, under which both signatures
+of the example folder verify. The hub does not load a pack over a set, so
+the pack folder was held to the reference on the rules and, imported into a
+set and exported, in the browser. After an edit the page's lines were
+compared with what the reference prints for the exported folder: a Semantic
+Match, a failure for a changed subject, nothing once the Attestation was
+taken out, and the reported line once an unsigned one was withdrawn.
+
 ## Export
 
 **Export the set as a bundle** downloads a ZIP with the objects, the pinned
@@ -645,7 +726,14 @@ files and a `content-manifest.json`.
   Deviation with `decided` or `review-due`; an authorization with a `date`).
   Its provenance gains the line `edited-with`.
 - An attestation the original manifest did not list stays beside the manifest
-  and is not added to it.
+  and is not added to it: it binds the digest of the manifest's bytes, so
+  the manifest cannot list it (D3.1). Its envelope travels with it. The app
+  never lists one of its own accord. Where the manifest a set came with
+  lists one, against that rule, the listing is kept as it came.
+- After a change the manifest is a new one, so an Attestation that bound
+  the old one is a Semantic Match for the reference while its subjects are
+  unchanged, and a failure where a subject was changed (see "What an
+  Attestation binds").
 - The pack manifests under `packs/sha256/`, a pack's attestation and its
   envelope leave as they came, beside the manifest; none of them is listed
   in it, and the manifest of a set never carries a pack header.
@@ -699,7 +787,9 @@ text in that language, the English text is shown, then whatever is there.
   and rounds an integer beyond 2^53), modality, parameter, tier, tailoring (the
   operation law), reference, lifecycle, kernel (with the typed dates and
   times, from `Finding.actions[].due` to `Attestation.timestamp`, named
-  DATE-1 to DATE-5 when an object matches no type), facet, attestation, risk,
+  DATE-1 to DATE-5 when an object matches no type), facet, attestation (the
+  two digests of one object and, since build 0.9.11, attestation-binds on a
+  bundle with its nineteen vectors), risk,
   scale, DSSE signatures, the composition of two bundles,
   conditional-apply, the Check type of `drafts/CP-CHECK-1.md`
   (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain),
@@ -735,18 +825,28 @@ text in that language, the English text is shown, then whatever is there.
   owner field of the catalogue view as who decided, and asks for it.
 - Signatures: Ed25519 over a DSSE envelope, verification only. A key is
   trusted because you say so on the Validate page, never because a bundle
-  carries it. The app cannot sign. The reference validator looks at the
-  envelope of an attestation only when the manifest lists the attestation;
-  the app looks at every attestation of the set and reports a missing
-  envelope of an unlisted one as a note.
+  carries it. The app cannot sign, so it cannot issue an Attestation again
+  or withdraw a signed one. The envelope of every attestation of the set is
+  looked at, beside the manifest or listed in it, and one that is named and
+  not there is an error, as for the reference since 2026-11-14.
+- What an Attestation binds: a set that was changed is compared with the
+  bundle an export would write, which the page says. Two cases are read as
+  "as loaded" although something happened: an object removed in the app
+  leaves no trace in the set, so the comparison still names the manifest
+  the set came with (the missing object is an error of its own, and the
+  export writes a new manifest); and a file that was only saved again
+  without a change. The page states the verdict about digests; whether the
+  signer may attest is not a question it can answer.
 - The other pages still take an object's type from its fields when a set is
   loaded; the Validate page says where the kernel schema disagrees.
 - Loading from a URL fetches what the manifest lists, the envelope a
   listed attestation names, and the evidence store the check results of an
   Assessment name (`evidence/sha256/<hex>`: the records and the outputs they
   list). A file beside the manifest that nothing listed names, such as an
-  attestation over the manifest, is not fetched; load the folder or a ZIP for
-  those.
+  Attestation over the manifest, is not fetched unless the folder is read
+  for the reason given next; the hub says so when it loads from a URL, and
+  the Validate page then holds no Attestation to what it binds. Load the
+  folder or a ZIP for those.
 - The pack manifests a set keeps (`packs/sha256/`) and the attestation of a
   pack's publisher are named by nothing a manifest lists, and a URL names
   files, not folders. Loading from a URL finds them only where the server
@@ -756,7 +856,11 @@ text in that language, the English text is shown, then whatever is there.
   lists Components under an origin from which it lists nothing else (a pack
   brings Components and nothing else, all under its publisher's origin).
   Without a listing nothing is found, a pack from a URL is then *claimed*,
-  and a folder or a ZIP carries these files.
+  and a folder or a ZIP carries these files. Where the folder is read, every
+  Attestation beside the manifest is taken, the set's own too (until build
+  0.9.11 only one that binds a kept pack manifest). A bundle that keeps no
+  pack is not asked for a listing, so its Attestation does not arrive from
+  a URL.
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.

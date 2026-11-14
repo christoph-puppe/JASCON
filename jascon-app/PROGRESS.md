@@ -217,6 +217,69 @@ and in `readme.md`; this file says only what is done and what is next.
   catalog and was changed to name the party the rules used to supply, so
   its result should be the one it had, and that was not run.
 
+- An Attestation is held to what it binds (build 0.9.11; backlog #46, the
+  app's port of the check the reference got on 2026-11-14):
+  - `jscAttestationBinds` in `jascon-rules.js` is the primitive
+    (attestation, bundle) -> full-match, semantic-match or fail, with which
+    manifest is bound and what became of every subject; `jscBindsReport`
+    makes the reference's lines; `jscSetBinds` applies both to a set.
+  - A set is a bundle that was loaded and may have been written to. As
+    loaded it is held to the manifest it came with and the objects that
+    manifest lists. Written to since, or without a manifest, it is held to
+    the bundle an export would write now. The page says which. The reasons
+    are above `jscSetBinds` and in the readme ("What an Attestation
+    binds").
+  - `jscCheckGraph` carries the result (`binds`) and files each line as a
+    finding; the Validate page shows the lines, the Assess page one
+    Attestation at a time through the same function.
+  - A missing envelope of an Attestation beside the manifest is an error
+    now, as for the reference; it was a note while the reference did not
+    look.
+  - The Assess page can take an Attestation out of the set, with its
+    envelope, and set an unsigned one to withdrawn. A signed one cannot be
+    withdrawn here: any change of it breaks its envelope.
+  - How the app held a bundle before this build, found by reading and by
+    the probe below: the set keeps the bytes of the manifest it was loaded
+    with and never rewrites them; a folder or ZIP brings every text file
+    beside the manifest, so an Attestation there was already an object of
+    the set (17 for the IFA bundle, where the reference now counts 18 with
+    the manifest), with its envelope and the kept pack manifests; the
+    export already left an Attestation out of the manifest and wrote it
+    beside it. Nothing held an Attestation to its subjects except the
+    button of the Assess page, which was wrong (`ERRATA.md`).
+  - From a URL the folder is read only for a pack or a set that keeps one.
+    Where it is read, every Attestation beside the manifest is taken now,
+    the set's own too. Where it is not, the hub says that no Attestation
+    was looked for.
+
+  Measured: the primitive passes the 19 `binds-vectors`, each by verdict,
+  manifest bound, every subject and failure. For three folders as they lie
+  (`jascon/examples`, the IFA bundle and
+  `jascon/example-packs/dbvendor-server-7-advice`) the check gives the
+  lines `validate_core.py --as-of 2026-11-14` prints for what binds and for
+  the envelopes, the same counts by type and no error, without keys and
+  with `fixture-trusted-keys.json`. The reference counts 27, 18 and 3,
+  which is the objects and the manifest. There are four Full Matches,
+  three against this manifest and one against a kept pack manifest; under
+  the fixture keys both signatures of the example folder verify, and the
+  pack's. The Validate page was driven in headless Chromium for the first
+  two folders. The hub does not load a pack over a set, so the pack folder
+  was held on the rules and, in the browser, imported and exported. From a
+  URL, with a server that lists folders, the example folder arrives with
+  both Attestations and the page shows the reference's lines. For a set
+  that was changed, the page's lines were compared with what the reference
+  prints for the exported folder in six states: unchanged; another object
+  changed (Semantic Match); a subject changed (one failure, the reference
+  not green); the Attestation taken out (green); for the IFA bundle a
+  subject changed (failure), and its unsigned Attestation withdrawn
+  (reported, green, 18 counted). No export listed an Attestation, and each
+  left beside the manifest with its envelope. 41 deliberate defects were
+  each tried on the final code and each turned a test red, the twelve of
+  the brief among them; a change that breaks nothing stayed green. Read
+  and not measured: a manifest that lists an Attestation; a set of a
+  thousand objects; any browser but Chromium. The four tests that need the
+  BSI and NIST source files are skipped here, as before.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written
@@ -289,6 +352,30 @@ and in `readme.md`; this file says only what is done and what is next.
     states no implementation level, as `convert_nist.py` does and counts
     in its report. By the rule of #70 that is a party the source did not
     name. It is the converter's rule and was not changed here.
+- Found with build 0.9.11:
+  - A bundle that keeps no pack does not bring its Attestation when it is
+    loaded from a URL. A URL names files; the Attestation is named by
+    nothing the manifest lists, so it is found only through a listing of
+    the folder, and the app asks a server for one only where a pack gives
+    it a reason (an earlier decision: a listing that is not there is an
+    error line in the browser's console). The hub now says that no
+    Attestation was looked for. Whether every server should be asked is the
+    author's to decide; it costs one request and, on a host that does not
+    list folders, that console line.
+  - A manifest that lists an Attestation, against D3.1: the export keeps
+    the listing as it came, also where it writes a new manifest, and the
+    check holds such an Attestation to what it binds like any other. The
+    app never lists one itself. Taking it off the list would mean moving
+    the file beside the manifest, because the reference reads an unlisted
+    Attestation only there. Not done; no bundle of the repository lists
+    one, and the case was read, not tried.
+  - An object removed in the app leaves no trace in the set, so a set from
+    which only something was removed is read as loaded: the comparison
+    names the manifest the set came with, where the reference will say
+    "another manifest" about the export. No verdict turns into a failure
+    or out of one by this; the missing object is an error of its own.
+  - *Verify* on the Assess page types every object of the set by schema
+    before it answers. Not measured on a set of a thousand objects.
 
 ## Open
 

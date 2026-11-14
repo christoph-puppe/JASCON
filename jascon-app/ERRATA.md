@@ -336,3 +336,36 @@ surprise, blunder.
   owner), `tests/oscal.test.mjs` (the generic rules refuse without a
   party), `one-page-apps/tests/pack-builder.test.mjs` (an origin typed
   makes no publisher).
+
+## 2026-11-14 · build 0.9.11 · the Assess page called an Attestation a Full Match while one of its subjects was not in the set
+
+- **Symptom.** Measured with build 0.9.10 on the IFA bundle, whose
+  Attestation names three subjects. With one of them, the Requirement
+  AC-6.1, removed from the set, *Verify* on the Assess page said "Full
+  Match: bytes and meaning as signed", and under it "subjects: 2 intact, 0
+  changed, 1 not in this set". With all three removed it said "Unknown".
+  A subject given as a bare digest was counted as not in the set, whatever
+  the set held. For the reference validator a subject that is not
+  delivered does not bind, and the bundle fails while the Attestation is
+  active.
+- **Cause.** The page had a judgement of its own, written before any tool
+  applied attestation-binds to a bundle. It counted the subjects that were
+  intact, changed and missing and decided from the first two: no subject
+  changed and at least one intact was a match. A missing subject was
+  printed and weighed nothing.
+- **Class.** A second implementation of one rule, with a case left out:
+  three things can become of a subject, and two were looked at.
+- **Why it was not caught.** No test pressed the button. Until 2026-11-14
+  there was no vector for the primitive on a bundle, and the reference did
+  not apply it to one either (backlog #46), so nothing existed to hold the
+  page to. The line under the verdict stated the fact and the verdict
+  ignored it.
+- **Fix.** The page has no judgement of its own any more. It shows what
+  `jscSetBinds` says, the rule the Validate page runs, through the function
+  both pages share (`jscView.bindsHtml`), in the reference's words. The
+  rule is held to the nineteen `binds-vectors`.
+- **Test.** `tests/pages.test.mjs`, "Attestations of a set that was
+  changed: …", the part marked ERRATA 2026-11-14: with AC-6.1 removed the
+  page shows the reference's failure, "not an object of this bundle".
+  `tests/rules.test.mjs`, "attestation-binds on a bundle: all 19 vectors
+  …".
