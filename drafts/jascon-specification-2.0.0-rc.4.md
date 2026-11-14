@@ -19,7 +19,9 @@
 > After rc.4, on the same day and again without a new candidate: a
 > pattern is read as its dialect says, so a value that ends in a line
 > break is refused by every tool (D3.10, backlog #68), and the tools
-> write who decided (backlog #69; IV.6).
+> write who decided (backlog #69; IV.6). On 2026-11-14: every
+> Attestation read with a bundle is held to what it binds (D7 amended,
+> backlog #46), and no tool writes a party nobody named (backlog #70).
 
 > **What changed since rc.2 (2026-11-12, the same day).** One decision is
 > new — **D25**, advice packs: a vendor's recommendations as one published
@@ -533,6 +535,34 @@ provenance map: statement-id/object-id → rendering anchor.
 **Rejected.** Hashing annotation-inclusive semantic payloads; P6's binary as
 originally posed — the manifest split plus bi-modal states preserves *both*
 the anti-tamper guarantee and the stripping right.
+
+*(2.0.0 — backlog #46, 2026-11-14)* **The two states are computed on
+every bundle.** Until that day no tool applied `attestation-binds`
+(Appendix B.1.7) to a bundle: the vectors exercised the two digests of
+one object, and a bundle's Attestation was read for its envelope, for a
+Tailoring's tier and for a pack's publisher, never for its subjects. The
+example folder shipped, from before 1.0.0, an Attestation whose three
+subject digests matched no object and whose manifest digest matched no
+manifest, and a converted corpus one whose digest of one subject matched
+nothing; every run was green. A tool now reads every Attestation that
+comes with a bundle — beside its manifest, where D3.1 puts it, and any a
+manifest lists — and judges each subject against the objects the
+manifest lists: it **matches** (the object of that id carries the signed
+semantic digest; a bare digest matches when any listed object carries
+it), it **differs** (the object of that id carries another digest), or
+it is **absent**. The manifest bound is this one, a pack manifest the
+bundle keeps (D25), or another. All subjects match and the manifest is
+this one or a kept pack's: Full Match. All match and the manifest is
+another: Semantic Match, reported as such. Anything else is a failure,
+and it fails the bundle while the Attestation is still claimed
+(`lifecycle: active`); a draft, a deprecated or a withdrawn Attestation
+that does not bind is reported with its verdict and fails nothing.
+*(The last clause is argued, not derived: the primitive does not speak
+of lifecycle, and without it a bundle whose attested object changed
+could never validate again, however openly the Attestation was
+withdrawn.)* Nothing in a shape changes. A bundle can fail today that
+passed yesterday: one that carries an active Attestation which does not
+bind what is delivered.
 
 ## D8 — `Deviation` sub-object.
 Unchanged: `{type (code system), state (investigating → pending → approved |
@@ -2198,6 +2228,8 @@ history. The compact line:
 | Code points in the twin · the open backlog | 2026-11-13 | The PowerShell twin compared strings with PowerShell's operators, which fold case and compare under a culture; a Tailoring whose id differed from its content's origin by one U+00AD was read as the authority's own. No operator compares two strings there any more, and a lint that parses the twin keeps it so (#58 closed, with the residue of #45). `reference` 13 → 18 vectors, `tier` 9 → 10; 574 in all. No shape and no rule changed. The same day: the record of catalogue entries that do not apply got a schema, outside the kernel (#54 closed); the two OSCAL response types without a treatment code stay without one (#47b closed, C.10); #65 and #66 accepted for 2.0.0 and not yet landed. After rc.3 | D2 · C.10 · "Amendments — the open backlog before 2.0.0" |
 | A value that ends in a line break | 2026-11-13 | Found by the app's port of D26 and decided by the author ("refuse"): a `pattern` is an ECMA-262 expression, and Python's `re` and .NET's `Regex` read `$` and `.` differently, so the reference and the twin accepted a date, a digest, a decimal and five more values with a line break at the end. **D3.10 new**; both validators translate the two constructs and tighten their own expressions; `kernel` 54 → 71, `parameter` 21 → 22, `check` 203 → 205, `composition` 7 → 9 vectors, 665 in all. No shipped value changes. After rc.4; the counts in the Status are those of rc.4 | "Phase C — the tools write who decided; a line break ends no value" |
 | The tools write who decided | 2026-11-13 | Author: "all converters should pre-fill that data from the source corpus but import tool should be able to overwrite it." One rule for the author of an OSCAL document, in the converter library and in the app's importer; the day of `last-modified` as the date; an overwrite, field by field. The IFA conversion is regenerated: one of seven records gets an author from its source, the two authorizations their date, and the Attestation of the ATO lies beside the manifest and binds its digest (the IFA half of backlog #46). The app's pages write `provenance`, its Validate page shows the two reports, the reader shows the fields. No kernel shape and no rule changes (backlog #69) | same section |
+| An Attestation is held to what it binds | 2026-11-14 | Backlog #46, phase D. `attestation-binds` (B.1.7) was defined and applied by no tool to a bundle; the example folder's Attestation bound nothing from before 1.0.0. D7 amended: every Attestation read with a bundle is judged subject by subject and against the manifest it binds, and a failing one fails the bundle while it is `active`. Attestations beside a manifest (D3.1) are read with every bundle, not only with a pack. `attestation` 5 → 24 vectors, 684 in all. The example Attestation is real and signed with the public fixture key. No shape changes; a bundle with an active Attestation that does not bind fails where it passed | "Phase D — an Attestation is held to what it binds; no tool invents a party" |
+| No tool invents a party | 2026-11-14 | Backlog #70, decided by the author: "refuse if no party is named". Where the kernel requires a party (a Mapping's and a Check's author, an Assessment's performer, a Deviation's approver, the obligated party of a statement) and the user named none, the app and the reader wrote one made from a word. They refuse the save now and say which field is missing. No kernel shape and no rule changes | same section |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
