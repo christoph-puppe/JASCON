@@ -42,325 +42,754 @@
   "ISM-principle": 49
  },
  "empty-narrative-groups-skipped": 2,
+ "groups-that-are-no-set": {
+  "with-an-overview-part": 16,
+  "a-heading-only": 4
+ },
+ "ledger": {
+  "file": "ism-conversion-ledger.json",
+  "leaf-values": 36161,
+  "totals": {
+   "copied": 3947,
+   "transformed": 14662,
+   "intentionally-dropped": 13130,
+   "unaccounted": 4422
+  },
+  "verification-failures": 0,
+  "rules": [
+   {
+    "rule": "Requirement id from the control id",
+    "source-values": 1150,
+    "destinations": 3450
+   },
+   {
+    "rule": "baseline Set id from the prop name (its kind) and the marker",
+    "source-values": 11114,
+    "destinations": 22228
+   },
+   {
+    "rule": "baseline Set title from the prop name (its kind) and the marker",
+    "source-values": 11114,
+    "destinations": 11114
+   },
+   {
+    "rule": "category Set id from the class",
+    "source-values": 1150,
+    "destinations": 2300
+   },
+   {
+    "rule": "category Set title from the class",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "entry in the baseline Set that the control's marker names: the Requirement of the control",
+    "source-values": 12264,
+    "destinations": 16671
+   },
+   {
+    "rule": "entry in the category Set that the control's class names: the Requirement of the control",
+    "source-values": 2300,
+    "destinations": 2300
+   },
+   {
+    "rule": "file name of the Requirement from the control id",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "file name of the baseline Set from the prop name (its kind) and the marker",
+    "source-values": 11114,
+    "destinations": 11114
+   },
+   {
+    "rule": "file name of the category Set from the class",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "file name of the taxonomy Set from the titles of the group and of the groups above it",
+    "source-values": 550,
+    "destinations": 1533
+   },
+   {
+    "rule": "label from the control id (ism-1234 -> ISM-1234; an id of another form as it is)",
+    "source-values": 1101,
+    "destinations": 1101
+   },
+   {
+    "rule": "label: the value of the prop that is named `label`, unchanged",
+    "source-values": 98,
+    "destinations": 98
+   },
+   {
+    "rule": "modality word-rule over the statement prose",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "statement id: the part id after its last underscore",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "taxonomy Set id from the titles of the group and of the groups above it",
+    "source-values": 550,
+    "destinations": 4599
+   }
+  ],
+  "declared-drops": {
+   "path-map": 11962,
+   "as-decided-for-ifa": 1168,
+   "reasons": [
+    {
+     "case": "path-map",
+     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
+     "values": 3440
+    },
+    {
+     "case": "path-map",
+     "reason": "path map, absorbed: the namespace of a prop; kernel fields need none",
+     "values": 7759
+    },
+    {
+     "case": "path-map",
+     "reason": "path map, declared drop: source-document references (guideline PDFs/links) - not requirement data",
+     "values": 763
+    },
+    {
+     "case": "ifa",
+     "reason": "as decided for IFA on 2026-11-13: a type tag of a structural element: the bundle says by its shape what kind of thing the element is (the part named `statement` is the entry of `statements`)",
+     "values": 1150
+    },
+    {
+     "case": "ifa",
+     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "values": 17
+    },
+    {
+     "case": "ifa",
+     "reason": "as decided for IFA on 2026-11-13: the uuid of a source element identifies it inside the source document; JASCON objects get URIs minted from names and titles, the uuid itself is not carried",
+     "values": 1
+    }
+   ],
+   "not-declared-by-the-path-map": 0
+  },
+  "sort-ids": {
+   "equal-to-position": 1720,
+   "other": 0
+  },
+  "path-map-and-ledger-disagree": [
+   {
+    "path": "catalog.groups[].groups[].title",
+    "level": "L1",
+    "ledger": "unaccounted",
+    "values": 2,
+    "first": "ism#/catalog/groups/0/groups/0/title"
+   },
+   {
+    "path": "catalog.groups[].title",
+    "level": "L1",
+    "ledger": "unaccounted",
+    "values": 2,
+    "first": "ism#/catalog/groups/0/title"
+   }
+  ],
+  "written-without-a-source-value": [
+   {
+    "in": "Requirement",
+    "pointer": "/lifecycle",
+    "count": 1150,
+    "example": "active"
+   },
+   {
+    "in": "Requirement",
+    "pointer": "/statements/[]/obligated-parties/[]",
+    "count": 1150,
+    "example": "https://ns.cyber.gov.au/ism/party/organisation"
+   },
+   {
+    "in": "Set",
+    "pointer": "/id",
+    "count": 1,
+    "example": "https://ns.cyber.gov.au/ism/set/tax/ism"
+   },
+   {
+    "in": "Set",
+    "pointer": "/lifecycle",
+    "count": 561,
+    "example": "active"
+   },
+   {
+    "in": "Set",
+    "pointer": "/members/[]/sequence",
+    "count": 8407,
+    "example": 10
+   },
+   {
+    "in": "manifest",
+    "pointer": "/facet-schemas/[]/digest",
+    "count": 1,
+    "example": "sha256:6494725928e95089b6d5b63fcf6117fb1065a67be1186c7c80a1c8559e4aecdc"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/facet-schemas/[]/exact-version",
+    "count": 1,
+    "example": "1.0.0"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/facet-schemas/[]/id",
+    "count": 1,
+    "example": "https://ns.jascon.net/compat/oscal-1x"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/facet-schemas/[]/path",
+    "count": 1,
+    "example": "schemas/oscal-1x-compat-1.0.0-stub.json"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/manifest-version",
+    "count": 1,
+    "example": "1"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/objects/[]/id",
+    "count": 1,
+    "example": "https://ns.cyber.gov.au/ism/set/tax/ism"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/objects/[]/package-digest",
+    "count": 1711,
+    "example": "sha256:07af7206d1d7920c632b80cd977a79d22e55f952de388313281208b1aa6d9a9f"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/objects/[]/path",
+    "count": 1,
+    "example": "objects/set-tax-root.json"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/objects/[]/semantic-digest",
+    "count": 1711,
+    "example": "sha256:393ec6026a75d4dc35cbe9967607fc198fcd0ff1ae49ae08d980f748d2128ca6"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/provenance/converter",
+    "count": 1,
+    "example": "convert_ism.py v0.2"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/provenance/source",
+    "count": 1,
+    "example": "ACSC ISM OSCAL catalog"
+   }
+  ],
+  "group-titles-not-carried": [
+   "ism#/catalog/groups/0/title",
+   "ism#/catalog/groups/0/groups/0/title",
+   "ism#/catalog/groups/0/groups/1/title",
+   "ism#/catalog/groups/24/title"
+  ],
+  "links-into-the-back-matter": {
+   "texts": 76,
+   "links": 481,
+   "resources": 241,
+   "resources-in-the-source": 246
+  }
+ },
  "unmapped-paths": [],
  "path-map": [
   {
    "path": "catalog.back-matter.resources[].props[].name",
    "count": 2,
    "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "destination": "source-document references (guideline PDFs/links) - not requirement data",
+   "ledger": {
+    "intentionally-dropped": 2
+   }
   },
   {
    "path": "catalog.back-matter.resources[].props[].value",
    "count": 2,
    "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "destination": "source-document references (guideline PDFs/links) - not requirement data",
+   "ledger": {
+    "intentionally-dropped": 2
+   }
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].href",
    "count": 254,
    "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "destination": "source-document references (guideline PDFs/links) - not requirement data",
+   "ledger": {
+    "intentionally-dropped": 254
+   }
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].media-type",
    "count": 13,
    "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "destination": "source-document references (guideline PDFs/links) - not requirement data",
+   "ledger": {
+    "intentionally-dropped": 13
+   }
   },
   {
    "path": "catalog.back-matter.resources[].title",
    "count": 246,
    "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "destination": "source-document references (guideline PDFs/links) - not requirement data",
+   "ledger": {
+    "intentionally-dropped": 246
+   }
   },
   {
    "path": "catalog.back-matter.resources[].uuid",
    "count": 246,
    "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "destination": "source-document references (guideline PDFs/links) - not requirement data",
+   "ledger": {
+    "intentionally-dropped": 246
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].class",
    "count": 1150,
    "level": "L1",
-   "destination": "category Sets: set/tax/principles | set/tax/controls"
+   "destination": "category Sets set/tax/by-class-<class>: id, title, file name and membership",
+   "ledger": {
+    "transformed": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].id",
    "count": 1150,
    "level": "L1",
-   "destination": "Requirement id (URI mint) + label derivation"
+   "destination": "Requirement id (URI mint) and file name; label where the control has no `label` prop; `ref` of its entry in every Set it is a member of",
+   "ledger": {
+    "transformed": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].parts[].id",
    "count": 1150,
    "level": "L1",
-   "destination": "statement id (part-id suffix)"
+   "destination": "statement id (part-id suffix)",
+   "ledger": {
+    "transformed": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].parts[].name",
    "count": 1150,
-   "level": "L1",
-   "destination": "statement (the one part kind present)"
+   "level": "declared-drop",
+   "destination": "type tag `statement` (the one part kind present): not carried as a value; the part is the entry of `statements`",
+   "ledger": {
+    "intentionally-dropped": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].parts[].prose",
    "count": 1150,
    "level": "L1",
-   "destination": "statements[].prose.en (+ modality word-rule, documented)"
+   "destination": "statements[].prose.en (+ modality word-rule, documented)",
+   "ledger": {
+    "copied": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].props[].name",
    "count": 8958,
    "level": "L1",
-   "destination": "dispatch (see per-prop rows)"
+   "destination": "dispatch (see per-prop rows)",
+   "ledger": {
+    "transformed": 5606,
+    "intentionally-dropped": 1150,
+    "unaccounted": 2202
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].props[].ns",
    "count": 7759,
-   "level": "L1",
-   "destination": "prop namespace: absorbed (kernel fields need none)"
+   "level": "absorbed",
+   "destination": "prop namespace: absorbed (kernel fields need none); the value is not carried",
+   "ledger": {
+    "intentionally-dropped": 7759
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].props[].value",
    "count": 8958,
    "level": "L1",
-   "destination": "dispatch (see per-prop rows)"
+   "destination": "dispatch (see per-prop rows)",
+   "ledger": {
+    "transformed": 5606,
+    "intentionally-dropped": 1150,
+    "unaccounted": 2202
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].title",
    "count": 1150,
    "level": "L1",
-   "destination": "Requirement title"
+   "destination": "Requirement title",
+   "ledger": {
+    "copied": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].parts[].name",
    "count": 470,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set"
+   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set",
+   "ledger": {
+    "copied": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].parts[].prose",
    "count": 470,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set (language-tagged {en})"
+   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set (language-tagged {en})",
+   "ledger": {
+    "copied": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].props[].name",
    "count": 470,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "absorbed",
+   "destination": "group sort-id: absorbed by document order -> sequence; the value is not carried",
+   "ledger": {
+    "intentionally-dropped": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].props[].value",
    "count": 470,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "absorbed",
+   "destination": "group sort-id: absorbed by document order -> sequence; the value is not carried",
+   "ledger": {
+    "intentionally-dropped": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].title",
    "count": 470,
    "level": "L1",
-   "destination": "Set title"
+   "destination": "Set title; with the titles of the groups above it, the Set id and file name; `group` of its overview parts in the compat facet. A group with no control below it is no Set: its title is carried only where it has an overview part of its own",
+   "ledger": {
+    "copied": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].parts[].name",
    "count": 69,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set"
+   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set",
+   "ledger": {
+    "copied": 69
+   }
   },
   {
    "path": "catalog.groups[].groups[].parts[].prose",
    "count": 69,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set (language-tagged {en})"
+   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set (language-tagged {en})",
+   "ledger": {
+    "copied": 69
+   }
   },
   {
    "path": "catalog.groups[].groups[].props[].name",
    "count": 75,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "absorbed",
+   "destination": "group sort-id: absorbed by document order -> sequence; the value is not carried",
+   "ledger": {
+    "intentionally-dropped": 75
+   }
   },
   {
    "path": "catalog.groups[].groups[].props[].value",
    "count": 75,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "absorbed",
+   "destination": "group sort-id: absorbed by document order -> sequence; the value is not carried",
+   "ledger": {
+    "intentionally-dropped": 75
+   }
   },
   {
    "path": "catalog.groups[].groups[].title",
    "count": 75,
    "level": "L1",
-   "destination": "Set title"
+   "destination": "Set title; with the titles of the groups above it, the Set id and file name; `group` of its overview parts in the compat facet. A group with no control below it is no Set: its title is carried only where it has an overview part of its own",
+   "ledger": {
+    "copied": 73,
+    "unaccounted": 2
+   }
   },
   {
    "path": "catalog.groups[].props[].name",
    "count": 25,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "absorbed",
+   "destination": "group sort-id: absorbed by document order -> sequence; the value is not carried",
+   "ledger": {
+    "intentionally-dropped": 25
+   }
   },
   {
    "path": "catalog.groups[].props[].value",
    "count": 25,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "absorbed",
+   "destination": "group sort-id: absorbed by document order -> sequence; the value is not carried",
+   "ledger": {
+    "intentionally-dropped": 25
+   }
   },
   {
    "path": "catalog.groups[].title",
    "count": 25,
    "level": "L1",
-   "destination": "Set title"
+   "destination": "Set title; with the titles of the groups above it, the Set id and file name; `group` of its overview parts in the compat facet. A group with no control below it is no Set: its title is carried only where it has an overview part of its own",
+   "ledger": {
+    "copied": 23,
+    "unaccounted": 2
+   }
   },
   {
    "path": "catalog.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "not-carried",
+   "destination": "not carried and not decided: the manifest names the source by its version, not by its dates",
+   "ledger": {
+    "unaccounted": 1
+   }
   },
   {
    "path": "catalog.metadata.links[].href",
    "count": 5,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "not-carried",
+   "destination": "not carried and not decided: links of the document to back-matter resources (other serialisations and neighbouring versions of the catalogue)",
+   "ledger": {
+    "unaccounted": 5
+   }
   },
   {
    "path": "catalog.metadata.links[].rel",
    "count": 5,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "not-carried",
+   "destination": "not carried and not decided: links of the document to back-matter resources (other serialisations and neighbouring versions of the catalogue)",
+   "ledger": {
+    "unaccounted": 5
+   }
   },
   {
    "path": "catalog.metadata.oscal-version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "manifest provenance.source-oscal-version",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].addr-lines[]",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 3
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].city",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].country",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].postal-code",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].state",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].type",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].email-addresses[]",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].links[].href",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].links[].rel",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].short-name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].type",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.published",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "not-carried",
+   "destination": "not carried and not decided: the manifest names the source by its version, not by its dates",
+   "ledger": {
+    "unaccounted": 1
+   }
   },
   {
    "path": "catalog.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "not-carried",
+   "destination": "not carried and not decided: who prepared the source document",
+   "ledger": {
+    "unaccounted": 1
+   }
   },
   {
    "path": "catalog.metadata.responsible-parties[].role-id",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "not-carried",
+   "destination": "not carried and not decided: who prepared the source document",
+   "ledger": {
+    "unaccounted": 1
+   }
   },
   {
    "path": "catalog.metadata.roles[].id",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.roles[].title",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "declared-drop",
+   "destination": "the source's directory of parties and roles: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   },
   {
    "path": "catalog.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "title of the root Set (set/tax/ism)",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "`version` of every object; manifest provenance.source-version",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "declared-drop",
+   "destination": "the uuid of the source document: not carried",
+   "ledger": {
+    "intentionally-dropped": 1
+   }
   }
  ]
 }
