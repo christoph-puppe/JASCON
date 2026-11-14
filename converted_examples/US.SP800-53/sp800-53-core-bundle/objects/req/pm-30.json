@@ -49,7 +49,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "An organization-wide supply chain risk management strategy includes an unambiguous expression of the supply chain risk appetite and tolerance for the organization, acceptable supply chain risk mitigation strategies or controls, a process for consistently evaluating and monitoring supply chain risk, approaches for implementing and communicating the supply chain risk management strategy, and the associated roles and responsibilities. Supply chain risk management includes considerations of the security and privacy risks associated with the development, acquisition, maintenance, and disposal of systems, system components, and system services. The supply chain risk management strategy can be incorporated into the organization’s overarching risk management strategy and can guide and inform supply chain policies and system-level supply chain risk management plans. In addition, the use of a risk executive function can facilitate a consistent, organization-wide application of the supply chain risk management strategy. The supply chain risk management strategy is implemented at the organization and mission/business levels, whereas the supply chain risk management plan (see SR-2 ) is implemented at the system level."
+     "en": "An organization-wide supply chain risk management strategy includes an unambiguous expression of the supply chain risk appetite and tolerance for the organization, acceptable supply chain risk mitigation strategies or controls, a process for consistently evaluating and monitoring supply chain risk, approaches for implementing and communicating the supply chain risk management strategy, and the associated roles and responsibilities. Supply chain risk management includes considerations of the security and privacy risks associated with the development, acquisition, maintenance, and disposal of systems, system components, and system services. The supply chain risk management strategy can be incorporated into the organization’s overarching risk management strategy and can guide and inform supply chain policies and system-level supply chain risk management plans. In addition, the use of a risk executive function can facilitate a consistent, organization-wide application of the supply chain risk management strategy. The supply chain risk management strategy is implemented at the organization and mission/business levels, whereas the supply chain risk management plan (see [SR-2](#sr-2) ) is implemented at the system level."
     }
    ]
   },
@@ -58,14 +58,29 @@
     {
      "id": "pm-30_obj",
      "label": "PM-30",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-30_obj.a",
        "label": "PM-30a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-30_obj.a-1",
          "label": "PM-30a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an organization-wide strategy for managing supply chain risks is developed;"
          }
@@ -73,6 +88,11 @@
         {
          "id": "pm-30_obj.a-2",
          "label": "PM-30a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the development of systems;"
          }
@@ -80,6 +100,11 @@
         {
          "id": "pm-30_obj.a-3",
          "label": "PM-30a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the development of system components;"
          }
@@ -87,6 +112,11 @@
         {
          "id": "pm-30_obj.a-4",
          "label": "PM-30a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the development of system services;"
          }
@@ -94,6 +124,11 @@
         {
          "id": "pm-30_obj.a-5",
          "label": "PM-30a.[05]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the acquisition of systems;"
          }
@@ -101,6 +136,11 @@
         {
          "id": "pm-30_obj.a-6",
          "label": "PM-30a.[06]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the acquisition of system components;"
          }
@@ -108,6 +148,11 @@
         {
          "id": "pm-30_obj.a-7",
          "label": "PM-30a.[07]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the acquisition of system services;"
          }
@@ -115,6 +160,11 @@
         {
          "id": "pm-30_obj.a-8",
          "label": "PM-30a.[08]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the maintenance of systems;"
          }
@@ -122,6 +172,11 @@
         {
          "id": "pm-30_obj.a-9",
          "label": "PM-30a.[09]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the maintenance of system components;"
          }
@@ -129,6 +184,11 @@
         {
          "id": "pm-30_obj.a-10",
          "label": "PM-30a.[10]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the maintenance of system services;"
          }
@@ -136,6 +196,11 @@
         {
          "id": "pm-30_obj.a-11",
          "label": "PM-30a.[11]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the disposal of systems;"
          }
@@ -143,6 +208,11 @@
         {
          "id": "pm-30_obj.a-12",
          "label": "PM-30a.[12]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the disposal of system components;"
          }
@@ -150,6 +220,11 @@
         {
          "id": "pm-30_obj.a-13",
          "label": "PM-30a.[13]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management strategy addresses risks associated with the disposal of system services;"
          }
@@ -159,6 +234,11 @@
       {
        "id": "pm-30_obj.b",
        "label": "PM-30b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the supply chain risk management strategy is implemented consistently across the organization;"
        }
@@ -166,6 +246,11 @@
       {
        "id": "pm-30_obj.c",
        "label": "PM-30c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the supply chain risk management strategy is reviewed and updated {param:pm-30_odp} or as required to address organizational changes."
        }
@@ -222,7 +307,8 @@
      ],
      "alt-identifiers": [
       "pm-30_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PM-30_ODP"
     }
    }
   },

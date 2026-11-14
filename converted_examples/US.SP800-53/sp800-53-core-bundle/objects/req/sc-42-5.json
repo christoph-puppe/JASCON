@@ -38,6 +38,11 @@
     {
      "id": "sc-42.5_obj",
      "label": "SC-42(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the {param:sc-42.05_odp} configured to minimize the collection of information about individuals that is not needed are employed."
      }
@@ -137,7 +142,8 @@
      ],
      "alt-identifiers": [
       "sc-42.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-42(05)_ODP"
     }
    }
   }

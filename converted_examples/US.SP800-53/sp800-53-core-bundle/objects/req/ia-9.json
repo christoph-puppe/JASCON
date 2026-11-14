@@ -39,6 +39,11 @@
     {
      "id": "ia-9_obj",
      "label": "IA-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ia-09_odp} are uniquely identified and authenticated before establishing communications with devices, users, or other services or applications."
      }
@@ -117,7 +122,8 @@
      ],
      "alt-identifiers": [
       "ia-9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-09_ODP"
     }
    }
   }
@@ -159,13 +165,13 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-9.1",
     "mode": "merged-into",
-    "label": "IA-09(01)",
+    "label": "IA-9(1)",
     "title": "Information Exchange"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-9.2",
     "mode": "merged-into",
-    "label": "IA-09(02)",
+    "label": "IA-9(2)",
     "title": "Transmission of Decisions"
    }
   ]

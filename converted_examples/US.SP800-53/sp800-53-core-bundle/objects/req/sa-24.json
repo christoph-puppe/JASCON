@@ -137,6 +137,11 @@
         {
          "id": "sa-24_obj.a.1",
          "label": "SA-24a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "organizational systems, system components, or system services achieve cyber resiliency through {param:sa-24_odp.01};"
          }
@@ -144,6 +149,11 @@
         {
          "id": "sa-24_obj.a.2",
          "label": "SA-24a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "prose": {
           "en": "organizational systems, system components, or system services achieve cyber resiliency through {param:sa-24_odp.02};"
          }
@@ -151,6 +161,11 @@
         {
          "id": "sa-24_obj.a.3",
          "label": "SA-24a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "prose": {
           "en": "organizational systems, system components, or system services achieve cyber resiliency through {param:sa-24_odp.03};"
          }
@@ -158,6 +173,11 @@
         {
          "id": "sa-24_obj.a.4",
          "label": "SA-24a.04",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.4"
+          }
+         ],
          "prose": {
           "en": "organizational systems, system components, or system services achieve cyber resiliency through {param:sa-24_odp.04};"
          }
@@ -165,6 +185,12 @@
         {
          "id": "sa-24_obj.a-5",
          "label": "SA-24a.05",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
+           "statement-id": "smt.a.5"
+          }
+         ],
          "prose": {
           "en": "organizational systems, system components, or system services achieve cyber resiliency through {param:sa-24_odp.05};"
          }
@@ -178,6 +204,12 @@
         {
          "id": "sa-24_obj.b-1",
          "label": "SA-24b.[01]",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "selected cyber resiliency goals are implemented as part of an organizational risk management process of systems security engineering process;"
          }
@@ -185,6 +217,12 @@
         {
          "id": "sa-24_obj.b-2",
          "label": "SA-24b.[02]",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "selected cyber resiliency objectives are implemented as part of an organizational risk management process of systems security engineering process;"
          }
@@ -192,6 +230,12 @@
         {
          "id": "sa-24_obj.b-3",
          "label": "SA-24b.[03]",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "selected cyber resiliency techniques are implemented as part of an organizational risk management process of systems security engineering process;"
          }
@@ -199,6 +243,12 @@
         {
          "id": "sa-24_obj.b-4",
          "label": "SA-24b.[04]",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "selected cyber resiliency implementation approaches are implemented as part of an organizational risk management process of systems security engineering process;"
          }
@@ -206,6 +256,12 @@
         {
          "id": "sa-24_obj.b-5",
          "label": "SA-24b.[05]",
+         "assessment-for": [
+          {
+           "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2",
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "selected cyber resiliency design principles are implemented as part of an organizational risk management process of systems security engineering process."
          }
@@ -294,7 +350,8 @@
      ],
      "alt-identifiers": [
       "sa-24_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-24_ODP[01]"
     },
     "sa-24_odp.02": {
      "guidelines": [
@@ -304,7 +361,8 @@
      ],
      "alt-identifiers": [
       "sa-24_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-24_ODP[02]"
     },
     "sa-24_odp.03": {
      "guidelines": [
@@ -314,7 +372,8 @@
      ],
      "alt-identifiers": [
       "sa-24_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SA-24_ODP[03]"
     },
     "sa-24_odp.04": {
      "guidelines": [
@@ -324,7 +383,8 @@
      ],
      "alt-identifiers": [
       "sa-24_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SA-24_ODP[04]"
     },
     "sa-24_odp.05": {
      "guidelines": [
@@ -334,7 +394,8 @@
      ],
      "alt-identifiers": [
       "sa-24_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "SA-24_ODP[05]"
     }
    }
   },

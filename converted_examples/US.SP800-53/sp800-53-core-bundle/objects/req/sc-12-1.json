@@ -32,6 +32,11 @@
     {
      "id": "sc-12.1_obj",
      "label": "SC-12(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information availability is maintained in the event of the loss of cryptographic keys by users."
      }

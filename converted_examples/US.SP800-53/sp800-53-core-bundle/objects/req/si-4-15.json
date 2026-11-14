@@ -31,6 +31,11 @@
     {
      "id": "si-4.15_obj",
      "label": "SI-04(15)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an intrusion detection system is employed to monitor wireless communications traffic as the traffic passes from wireless to wireline networks."
      }

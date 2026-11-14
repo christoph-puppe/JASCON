@@ -38,10 +38,20 @@
     {
      "id": "sc-23.3_obj",
      "label": "SC-23(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-23.3_obj-1",
        "label": "SC-23(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a unique session identifier is generated for each session with {param:sc-23.03_odp};"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sc-23.3_obj-2",
        "label": "SC-23(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "only system-generated session identifiers are recognized."
        }
@@ -120,7 +135,8 @@
      ],
      "alt-identifiers": [
       "sc-23.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-23(03)_ODP"
     }
    }
   }
@@ -154,7 +170,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SC-23.4",
     "mode": "merged-into",
-    "label": "SC-23(04)",
+    "label": "SC-23(4)",
     "title": "Unique Session Identifiers with Randomization"
    }
   ]

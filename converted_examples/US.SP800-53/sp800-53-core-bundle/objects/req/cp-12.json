@@ -43,6 +43,11 @@
     {
      "id": "cp-12_obj",
      "label": "CP-12",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a safe mode of operation is entered with {param:cp-12_odp.01} when {param:cp-12_odp.02} are detected."
      }
@@ -134,7 +139,8 @@
      "alt-identifiers": [
       "cp-12_prm_2"
      ],
-     "alt-label": "restrictions of safe mode of operation"
+     "alt-label": "restrictions of safe mode of operation",
+     "sp800-53a-label": "CP-12_ODP[01]"
     },
     "cp-12_odp.02": {
      "guidelines": [
@@ -144,7 +150,8 @@
      ],
      "alt-identifiers": [
       "cp-12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-12_ODP[02]"
     }
    }
   },

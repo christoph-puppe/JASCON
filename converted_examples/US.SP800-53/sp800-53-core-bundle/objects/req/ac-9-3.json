@@ -43,6 +43,11 @@
     {
      "id": "ac-9.3_obj",
      "label": "AC-09(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the user is notified, upon successful logon, of changes to {param:ac-09.03_odp.01} during {param:ac-09.03_odp.02}."
      }
@@ -113,7 +118,8 @@
      "alt-identifiers": [
       "ac-9.3_prm_1"
      ],
-     "alt-label": "security-related characteristics or parameters of the user’s account"
+     "alt-label": "security-related characteristics or parameters of the user’s account",
+     "sp800-53a-label": "AC-09(03)_ODP[01]"
     },
     "ac-09.03_odp.02": {
      "guidelines": [
@@ -123,7 +129,8 @@
      ],
      "alt-identifiers": [
       "ac-9.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-09(03)_ODP[02]"
     }
    }
   }

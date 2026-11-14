@@ -38,6 +38,11 @@
     {
      "id": "sc-40.2_obj",
      "label": "SC-40(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cryptographic mechanisms to reduce the detection potential of wireless links to {param:sc-40.02_odp} are implemented."
      }
@@ -128,7 +133,8 @@
      ],
      "alt-identifiers": [
       "sc-40.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-40(02)_ODP"
     }
    }
   }

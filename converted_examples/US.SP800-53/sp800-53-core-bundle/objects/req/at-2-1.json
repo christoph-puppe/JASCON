@@ -31,6 +31,11 @@
     {
      "id": "at-2.1_obj",
      "label": "AT-02(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "practical exercises in literacy training that simulate events and incidents are provided."
      }

@@ -31,10 +31,20 @@
     {
      "id": "ac-16.10_obj",
      "label": "AC-16(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.10_obj-1",
        "label": "AC-16(10)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "authorized individuals are provided with the capability to define or change the type and value of security attributes available for association with subjects and objects;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ac-16.10_obj-2",
        "label": "AC-16(10)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "authorized individuals are provided with the capability to define or change the type and value of privacy attributes available for association with subjects and objects."
        }

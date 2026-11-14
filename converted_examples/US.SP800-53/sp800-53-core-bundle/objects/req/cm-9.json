@@ -88,10 +88,20 @@
     {
      "id": "cm-9_obj",
      "label": "CM-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-9_obj-1",
        "label": "CM-09[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a configuration management plan for the system is developed and documented;"
        }
@@ -99,6 +109,11 @@
       {
        "id": "cm-9_obj-2",
        "label": "CM-09[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a configuration management plan for the system is implemented;"
        }
@@ -106,10 +121,20 @@
       {
        "id": "cm-9_obj.a",
        "label": "CM-09a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cm-9_obj.a-1",
          "label": "CM-09a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan addresses roles;"
          }
@@ -117,6 +142,11 @@
         {
          "id": "cm-9_obj.a-2",
          "label": "CM-09a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan addresses responsibilities;"
          }
@@ -124,6 +154,11 @@
         {
          "id": "cm-9_obj.a-3",
          "label": "CM-09a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan addresses configuration management processes and procedures;"
          }
@@ -133,10 +168,20 @@
       {
        "id": "cm-9_obj.b",
        "label": "CM-09b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cm-9_obj.b-1",
          "label": "CM-09b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan establishes a process for identifying configuration items throughout the system development life cycle;"
          }
@@ -144,6 +189,11 @@
         {
          "id": "cm-9_obj.b-2",
          "label": "CM-09b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan establishes a process for managing the configuration of the configuration items;"
          }
@@ -153,10 +203,20 @@
       {
        "id": "cm-9_obj.c",
        "label": "CM-09c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "cm-9_obj.c-1",
          "label": "CM-09c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan defines the configuration items for the system;"
          }
@@ -164,6 +224,11 @@
         {
          "id": "cm-9_obj.c-2",
          "label": "CM-09c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan places the configuration items under configuration management;"
          }
@@ -173,6 +238,11 @@
       {
        "id": "cm-9_obj.d",
        "label": "CM-09d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the configuration management plan is reviewed and approved by {param:cm-09_odp};"
        }
@@ -180,10 +250,20 @@
       {
        "id": "cm-9_obj.e",
        "label": "CM-09e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "cm-9_obj.e-1",
          "label": "CM-09e.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan is protected from unauthorized disclosure;"
          }
@@ -191,6 +271,11 @@
         {
          "id": "cm-9_obj.e-2",
          "label": "CM-09e.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the configuration management plan is protected from unauthorized modification."
          }
@@ -285,7 +370,8 @@
      ],
      "alt-identifiers": [
       "cm-9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-09_ODP"
     }
    }
   }

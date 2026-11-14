@@ -43,6 +43,11 @@
     {
      "id": "sa-11.4_obj",
      "label": "SA-11(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to perform a manual code review of {param:sa-11.04_odp.01} using {param:sa-11.04_odp.02}."
      }
@@ -139,7 +144,8 @@
      ],
      "alt-identifiers": [
       "sa-11.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-11(04)_ODP[01]"
     },
     "sa-11.04_odp.02": {
      "guidelines": [
@@ -149,7 +155,8 @@
      ],
      "alt-identifiers": [
       "sa-11.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-11(04)_ODP[02]"
     }
    }
   },

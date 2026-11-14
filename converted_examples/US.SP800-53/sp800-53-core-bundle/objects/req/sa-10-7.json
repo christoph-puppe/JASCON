@@ -54,7 +54,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Information security and privacy representatives can include system security officers, senior agency information security officers, senior agency officials for privacy, and system privacy officers. Representation by personnel with information security and privacy expertise is important because changes to system configurations can have unintended side effects, some of which may be security- or privacy-relevant. Detecting such changes early in the process can help avoid unintended, negative consequences that could ultimately affect the security and privacy posture of systems. The configuration change management and control process in this control enhancement refers to the change management and control process defined by organizations in SA-10b."
+     "en": "Information security and privacy representatives can include system security officers, senior agency information security officers, senior agency officials for privacy, and system privacy officers. Representation by personnel with information security and privacy expertise is important because changes to system configurations can have unintended side effects, some of which may be security- or privacy-relevant. Detecting such changes early in the process can help avoid unintended, negative consequences that could ultimately affect the security and privacy posture of systems. The configuration change management and control process in this control enhancement refers to the change management and control process defined by organizations in [SA-10b](#sa-10_smt.b)."
     }
    ]
   },
@@ -63,10 +63,20 @@
     {
      "id": "sa-10.7_obj",
      "label": "SA-10(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-10.7_obj-1",
        "label": "SA-10(07)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sa-10.07_odp.01} are required to be included in the {param:sa-10.07_odp.03};"
        }
@@ -74,6 +84,11 @@
       {
        "id": "sa-10.7_obj-2",
        "label": "SA-10(07)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sa-10.07_odp.02} are required to be included in the {param:sa-10.07_odp.04}."
        }
@@ -166,28 +181,32 @@
       {
        "en": "security representatives to be included in the configuration change management and control process are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-10(07)_ODP[01]"
     },
     "sa-10.07_odp.02": {
      "guidelines": [
       {
        "en": "privacy representatives to be included in the configuration change management and control process are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-10(07)_ODP[02]"
     },
     "sa-10.07_odp.03": {
      "guidelines": [
       {
        "en": "configuration change management and control processes in which security representatives are required to be included are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-10(07)_ODP[03]"
     },
     "sa-10.07_odp.04": {
      "guidelines": [
       {
        "en": "configuration change management and control processes in which privacy representatives are required to be included are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-10(07)_ODP[04]"
     }
    }
   },

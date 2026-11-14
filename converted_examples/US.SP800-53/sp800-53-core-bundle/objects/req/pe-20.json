@@ -48,6 +48,11 @@
     {
      "id": "pe-20_obj",
      "label": "PE-20",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pe-20_odp.01} are employed to track and monitor the location and movement of {param:pe-20_odp.02} within {param:pe-20_odp.03}."
      }
@@ -126,7 +131,8 @@
      ],
      "alt-identifiers": [
       "pe-20_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-20_ODP[01]"
     },
     "pe-20_odp.02": {
      "guidelines": [
@@ -136,7 +142,8 @@
      ],
      "alt-identifiers": [
       "pe-20_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-20_ODP[02]"
     },
     "pe-20_odp.03": {
      "guidelines": [
@@ -146,7 +153,8 @@
      ],
      "alt-identifiers": [
       "pe-20_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PE-20_ODP[03]"
     }
    }
   }

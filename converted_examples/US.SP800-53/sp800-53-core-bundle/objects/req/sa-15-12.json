@@ -31,6 +31,11 @@
     {
      "id": "sa-15.12_obj",
      "label": "SA-15(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system or system component is required to minimize the use of personally identifiable information in development and test environments."
      }

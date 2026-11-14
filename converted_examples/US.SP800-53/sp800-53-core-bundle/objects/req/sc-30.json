@@ -48,6 +48,11 @@
     {
      "id": "sc-30_obj",
      "label": "SC-30",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-30_odp.01} are employed for {param:sc-30_odp.02} for {param:sc-30_odp.03} to confuse and mislead adversaries."
      }
@@ -123,7 +128,8 @@
      ],
      "alt-identifiers": [
       "sc-30_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-30_ODP[01]"
     },
     "sc-30_odp.02": {
      "guidelines": [
@@ -133,7 +139,8 @@
      ],
      "alt-identifiers": [
       "sc-30_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-30_ODP[02]"
     },
     "sc-30_odp.03": {
      "guidelines": [
@@ -143,7 +150,8 @@
      ],
      "alt-identifiers": [
       "sc-30_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-30_ODP[03]"
     }
    }
   },

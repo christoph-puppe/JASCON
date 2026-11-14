@@ -38,6 +38,11 @@
     {
      "id": "si-15_obj",
      "label": "SI-15",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information output from {param:si-15_odp} is validated to ensure that the information is consistent with the expected content."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "si-15_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-15_ODP"
     }
    }
   },

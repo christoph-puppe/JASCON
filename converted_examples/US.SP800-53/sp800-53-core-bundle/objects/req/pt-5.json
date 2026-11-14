@@ -95,14 +95,29 @@
     {
      "id": "pt-5_obj",
      "label": "PT-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pt-5_obj.a",
        "label": "PT-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pt-5_obj.a-1",
          "label": "PT-05a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a notice to individuals about the processing of personally identifiable information is provided such that the notice is available to individuals upon first interacting with an organization;"
          }
@@ -110,6 +125,11 @@
         {
          "id": "pt-5_obj.a-2",
          "label": "PT-05a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a notice to individuals about the processing of personally identifiable information is provided such that the notice is subsequently available to individuals {param:pt-05_odp.01};"
          }
@@ -119,6 +139,11 @@
       {
        "id": "pt-5_obj.b",
        "label": "PT-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "a notice to individuals about the processing of personally identifiable information is provided that is clear, easy-to-understand, and expresses information about personally identifiable information processing in plain language;"
        }
@@ -126,6 +151,11 @@
       {
        "id": "pt-5_obj.c",
        "label": "PT-05c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "a notice to individuals about the processing of personally identifiable information that identifies the authority that authorizes the processing of personally identifiable information is provided;"
        }
@@ -133,6 +163,11 @@
       {
        "id": "pt-5_obj.d",
        "label": "PT-05d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "a notice to individuals about the processing of personally identifiable information that identifies the purpose for which personally identifiable information is to be processed is provided;"
        }
@@ -140,6 +175,11 @@
       {
        "id": "pt-5_obj.e",
        "label": "PT-05e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "a notice to individuals about the processing of personally identifiable information which includes {param:pt-05_odp.02} is provided."
        }
@@ -205,7 +245,8 @@
      ],
      "alt-identifiers": [
       "pt-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-05_ODP[01]"
     },
     "pt-05_odp.02": {
      "guidelines": [
@@ -215,7 +256,8 @@
      ],
      "alt-identifiers": [
       "pt-5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PT-05_ODP[02]"
     }
    }
   }

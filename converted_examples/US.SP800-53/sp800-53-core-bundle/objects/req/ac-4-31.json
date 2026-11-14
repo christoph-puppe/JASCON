@@ -31,6 +31,11 @@
     {
      "id": "ac-4.31_obj",
      "label": "AC-04(31)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "when transferring information between different security domains, the transfer of failed content to the receiving domain is prevented."
      }

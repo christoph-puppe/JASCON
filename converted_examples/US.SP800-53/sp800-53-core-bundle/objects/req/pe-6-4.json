@@ -38,6 +38,11 @@
     {
      "id": "pe-6.4_obj",
      "label": "PE-06(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "physical access to the system is monitored in addition to the physical access monitoring of the facility at {param:pe-06.04_odp}."
      }
@@ -123,7 +128,8 @@
      "alt-identifiers": [
       "pe-6.4_prm_1"
      ],
-     "alt-label": "physical spaces containing one or more components of the system"
+     "alt-label": "physical spaces containing one or more components of the system",
+     "sp800-53a-label": "PE-06(04)_ODP"
     }
    }
   },

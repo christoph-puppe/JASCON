@@ -64,6 +64,11 @@
     {
      "id": "sr-10_obj",
      "label": "SR-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sr-10_odp.01} are inspected {param:sr-10_odp.02} to detect tampering."
      }
@@ -151,12 +156,14 @@
      ],
      "alt-identifiers": [
       "sr-10_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SR-10_ODP[01]"
     },
     "sr-10_odp.02": {
      "alt-identifiers": [
       "sr-10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-10_ODP[02]"
     },
     "sr-10_odp.03": {
      "guidelines": [
@@ -166,7 +173,8 @@
      ],
      "alt-identifiers": [
       "sr-10_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SR-10_ODP[03]"
     },
     "sr-10_odp.04": {
      "guidelines": [
@@ -176,7 +184,8 @@
      ],
      "alt-identifiers": [
       "sr-10_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SR-10_ODP[04]"
     }
    }
   },
@@ -237,7 +246,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-18.2",
     "mode": "renamed",
-    "label": "SA-18(02)",
+    "label": "SA-18(2)",
     "title": "Inspection of Systems or Components"
    }
   ]

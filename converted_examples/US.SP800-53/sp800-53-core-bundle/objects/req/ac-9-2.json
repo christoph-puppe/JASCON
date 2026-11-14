@@ -53,6 +53,11 @@
     {
      "id": "ac-9.2_obj",
      "label": "AC-09(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the user is notified, upon successful logon, of the number of {param:ac-09.02_odp.01} during {param:ac-09.02_odp.02}."
      }
@@ -117,7 +122,8 @@
     "ac-09.02_odp.01": {
      "alt-identifiers": [
       "ac-9.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-09(02)_ODP[01]"
     },
     "ac-09.02_odp.02": {
      "guidelines": [
@@ -127,7 +133,8 @@
      ],
      "alt-identifiers": [
       "ac-9.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-09(02)_ODP[02]"
     }
    }
   }

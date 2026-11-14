@@ -53,10 +53,20 @@
     {
      "id": "au-12.3_obj",
      "label": "AU-12(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-12.3_obj-1",
        "label": "AU-12(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability for {param:au-12.03_odp.01} to change the logging to be performed on {param:au-12.03_odp.02} based on {param:au-12.03_odp.03} within {param:au-12.03_odp.04} is provided;"
        }
@@ -64,6 +74,11 @@
       {
        "id": "au-12.3_obj-2",
        "label": "AU-12(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability for {param:au-12.03_odp.01} to change the logging to be performed on {param:au-12.03_odp.02} based on {param:au-12.03_odp.03} within {param:au-12.03_odp.04} is implemented."
        }
@@ -144,7 +159,8 @@
      ],
      "alt-identifiers": [
       "au-12.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-12(03)_ODP[01]"
     },
     "au-12.03_odp.02": {
      "guidelines": [
@@ -154,7 +170,8 @@
      ],
      "alt-identifiers": [
       "au-12.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-12(03)_ODP[02]"
     },
     "au-12.03_odp.03": {
      "guidelines": [
@@ -164,7 +181,8 @@
      ],
      "alt-identifiers": [
       "au-12.3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AU-12(03)_ODP[03]"
     },
     "au-12.03_odp.04": {
      "guidelines": [
@@ -174,7 +192,8 @@
      ],
      "alt-identifiers": [
       "au-12.3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "AU-12(03)_ODP[04]"
     }
    }
   }

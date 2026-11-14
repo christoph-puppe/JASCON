@@ -62,7 +62,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "The purpose of accounting of disclosures is to allow individuals to learn to whom their personally identifiable information has been disclosed, to provide a basis for subsequently advising recipients of any corrected or disputed personally identifiable information, and to provide an audit trail for subsequent reviews of organizational compliance with conditions for disclosures. For federal agencies, keeping an accounting of disclosures is required by the PRIVACT ; agencies should consult with their senior agency official for privacy and legal counsel on this requirement and be aware of the statutory exceptions and OMB guidance relating to the provision.\n\nOrganizations can use any system for keeping notations of disclosures, if it can construct from such a system, a document listing of all disclosures along with the required information. Automated mechanisms can be used by organizations to determine when personally identifiable information is disclosed, including commercial services that provide notifications and alerts. Accounting of disclosures may also be used to help organizations verify compliance with applicable privacy statutes and policies governing the disclosure or dissemination of information and dissemination restrictions."
+     "en": "The purpose of accounting of disclosures is to allow individuals to learn to whom their personally identifiable information has been disclosed, to provide a basis for subsequently advising recipients of any corrected or disputed personally identifiable information, and to provide an audit trail for subsequent reviews of organizational compliance with conditions for disclosures. For federal agencies, keeping an accounting of disclosures is required by the [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) ; agencies should consult with their senior agency official for privacy and legal counsel on this requirement and be aware of the statutory exceptions and OMB guidance relating to the provision.\n\nOrganizations can use any system for keeping notations of disclosures, if it can construct from such a system, a document listing of all disclosures along with the required information. Automated mechanisms can be used by organizations to determine when personally identifiable information is disclosed, including commercial services that provide notifications and alerts. Accounting of disclosures may also be used to help organizations verify compliance with applicable privacy statutes and policies governing the disclosure or dissemination of information and dissemination restrictions."
     }
    ]
   },
@@ -71,10 +71,20 @@
     {
      "id": "pm-21_obj",
      "label": "PM-21",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-21_obj.a",
        "label": "PM-21a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "an accurate accounting of disclosures of personally identifiable information is developed and maintained;"
        },
@@ -82,10 +92,20 @@
         {
          "id": "pm-21_obj.a.1",
          "label": "PM-21a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "pm-21_obj.a.1-1",
            "label": "PM-21a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "the accounting includes the date of each disclosure;"
            }
@@ -93,6 +113,11 @@
           {
            "id": "pm-21_obj.a.1-2",
            "label": "PM-21a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "the accounting includes the nature of each disclosure;"
            }
@@ -100,6 +125,11 @@
           {
            "id": "pm-21_obj.a.1-3",
            "label": "PM-21a.01[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "the accounting includes the purpose of each disclosure;"
            }
@@ -109,10 +139,20 @@
         {
          "id": "pm-21_obj.a.2",
          "label": "PM-21a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "pm-21_obj.a.2-1",
            "label": "PM-21a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the accounting includes the name of the individual or organization to whom the disclosure was made;"
            }
@@ -120,6 +160,11 @@
           {
            "id": "pm-21_obj.a.2-2",
            "label": "PM-21a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the accounting includes the address or other contact information of the individual or organization to whom the disclosure was made;"
            }
@@ -131,6 +176,11 @@
       {
        "id": "pm-21_obj.b",
        "label": "PM-21b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the accounting of disclosures is retained for the length of time that the personally identifiable information is maintained or five years after the disclosure is made, whichever is longer;"
        }
@@ -138,6 +188,11 @@
       {
        "id": "pm-21_obj.c",
        "label": "PM-21c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the accounting of disclosures is made available to the individual to whom the personally identifiable information relates upon request."
        }

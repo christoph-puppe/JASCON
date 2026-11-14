@@ -31,6 +31,11 @@
     {
      "id": "cp-9.2_obj",
      "label": "CP-09(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a sample of backup information in the restoration of selected system functions is used as part of contingency plan testing."
      }

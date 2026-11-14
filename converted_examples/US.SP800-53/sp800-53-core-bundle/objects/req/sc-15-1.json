@@ -46,6 +46,11 @@
     {
      "id": "sc-15.1_obj",
      "label": "SC-15(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the {param:sc-15.01_odp} disconnect of collaborative computing devices is/are provided in a manner that supports ease of use."
      }
@@ -116,7 +121,8 @@
     "sc-15.01_odp": {
      "alt-identifiers": [
       "sc-15.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-15(01)_ODP"
     }
    }
   }

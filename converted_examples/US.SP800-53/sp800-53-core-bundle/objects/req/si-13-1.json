@@ -38,6 +38,11 @@
     {
      "id": "si-13.1_obj",
      "label": "SI-13(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "system components are taken out of service by transferring component responsibilities to substitute components no later than {param:si-13.01_odp} of mean time to failure."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "si-13.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-13(01)_ODP"
     }
    }
   },

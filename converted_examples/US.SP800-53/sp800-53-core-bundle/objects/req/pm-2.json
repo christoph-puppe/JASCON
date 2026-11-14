@@ -31,10 +31,20 @@
     {
      "id": "pm-2_obj",
      "label": "PM-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-2_obj-1",
        "label": "PM-02[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a senior agency information security officer is appointed;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pm-2_obj-2",
        "label": "PM-02[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the senior agency information security officer is provided with the mission and resources to coordinate an organization-wide information security program;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "pm-2_obj-3",
        "label": "PM-02[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the senior agency information security officer is provided with the mission and resources to develop an organization-wide information security program;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "pm-2_obj-4",
        "label": "PM-02[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the senior agency information security officer is provided with the mission and resources to implement an organization-wide information security program;"
        }
@@ -63,6 +88,11 @@
       {
        "id": "pm-2_obj-5",
        "label": "PM-02[05]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the senior agency information security officer is provided with the mission and resources to maintain an organization-wide information security program."
        }

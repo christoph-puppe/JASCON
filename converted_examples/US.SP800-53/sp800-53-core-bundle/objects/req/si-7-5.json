@@ -54,6 +54,11 @@
     {
      "id": "si-7.5_obj",
      "label": "SI-07(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-07.05_odp.01} are automatically performed when integrity violations are discovered."
      }
@@ -139,7 +144,8 @@
     "si-07.05_odp.01": {
      "alt-identifiers": [
       "si-7.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(05)_ODP[01]"
     },
     "si-07.05_odp.02": {
      "guidelines": [
@@ -149,7 +155,8 @@
      ],
      "alt-identifiers": [
       "si-7.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(05)_ODP[02]"
     }
    }
   },

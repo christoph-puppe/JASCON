@@ -38,6 +38,11 @@
     {
      "id": "si-4.20_obj",
      "label": "SI-04(20)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-04.20_odp} of privileged users is implemented."
      }
@@ -122,7 +127,8 @@
      ],
      "alt-identifiers": [
       "si-4.20_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(20)_ODP"
     }
    }
   },

@@ -31,10 +31,20 @@
     {
      "id": "cp-2.2_obj",
      "label": "CP-02(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-2.2_obj-1",
        "label": "CP-02(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "capacity planning is conducted so that the necessary capacity exists during contingency operations for information processing;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cp-2.2_obj-2",
        "label": "CP-02(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "capacity planning is conducted so that the necessary capacity exists during contingency operations for telecommunications;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "cp-2.2_obj-3",
        "label": "CP-02(02)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "capacity planning is conducted so that the necessary capacity exists during contingency operations for environmental support."
        }

@@ -53,10 +53,20 @@
     {
      "id": "ac-4.15_obj",
      "label": "AC-04(15)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-4.15_obj-1",
        "label": "AC-04(15)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "when transferring information between different security domains, information is examined for the presence of {param:ac-04.15_odp.01};"
        }
@@ -64,6 +74,11 @@
       {
        "id": "ac-4.15_obj-2",
        "label": "AC-04(15)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "when transferring information between different security domains, transfer of {param:ac-04.15_odp.01} is prohibited in accordance with the {param:ac-04.15_odp.02};"
        }
@@ -71,6 +86,11 @@
       {
        "id": "ac-4.15_obj-3",
        "label": "AC-04(15)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "when transferring information between different security domains, transfer of {param:ac-04.15_odp.01} is prohibited in accordance with the {param:ac-04.15_odp.03}."
        }
@@ -157,21 +177,24 @@
      ],
      "alt-identifiers": [
       "ac-4.15_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(15)_ODP[01]"
     },
     "ac-04.15_odp.02": {
      "guidelines": [
       {
        "en": "security policy that requires the transfer of unsanctioned information between different security domains to be prohibited is defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(15)_ODP[02]"
     },
     "ac-04.15_odp.03": {
      "guidelines": [
       {
        "en": "privacy policy that requires the transfer of organization-defined unsanctioned information between different security domains to be prohibited is defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(15)_ODP[03]"
     }
    }
   }

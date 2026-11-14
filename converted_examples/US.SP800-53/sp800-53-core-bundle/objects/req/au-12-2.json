@@ -31,6 +31,11 @@
     {
      "id": "au-12.2_obj",
      "label": "AU-12(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a system-wide (logical or physical) audit trail composed of audit records is produced in a standardized format."
      }

@@ -48,10 +48,20 @@
     {
      "id": "cm-8.9_obj",
      "label": "CM-08(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-8.9_obj.a",
        "label": "CM-08(09)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "system components are assigned to a system;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "cm-8.9_obj.b",
        "label": "CM-08(09)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "an acknowledgement of the component assignment is received from {param:cm-08.09_odp}."
        }
@@ -151,7 +166,8 @@
      ],
      "alt-identifiers": [
       "cm-8.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-08(09)_ODP"
     }
    }
   },
@@ -176,7 +192,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-4.4",
     "mode": "merged-into",
-    "label": "SA-04(04)",
+    "label": "SA-4(4)",
     "title": "Assignment of Components to Systems"
    }
   ]

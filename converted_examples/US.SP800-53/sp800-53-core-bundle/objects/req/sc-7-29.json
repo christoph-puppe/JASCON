@@ -50,6 +50,11 @@
     {
      "id": "sc-7.29_obj",
      "label": "SC-07(29)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "subnetworks are separated {param:sc-07.29_odp.01} to isolate {param:sc-07.29_odp.02}."
      }
@@ -126,7 +131,8 @@
     "sc-07.29_odp.01": {
      "alt-identifiers": [
       "sc-7.29_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(29)_ODP[01]"
     },
     "sc-07.29_odp.02": {
      "guidelines": [
@@ -136,7 +142,8 @@
      ],
      "alt-identifiers": [
       "sc-7.29_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(29)_ODP[02]"
     }
    }
   }

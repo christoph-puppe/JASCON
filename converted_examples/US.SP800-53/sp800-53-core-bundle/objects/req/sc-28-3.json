@@ -51,6 +51,11 @@
     {
      "id": "sc-28.3_obj",
      "label": "SC-28(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "protected storage for cryptographic keys is provided using {param:sc-28.03_odp.01}."
      }
@@ -115,7 +120,8 @@
     "sc-28.03_odp.01": {
      "alt-identifiers": [
       "sc-28.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-28(03)_ODP[01]"
     },
     "sc-28.03_odp.02": {
      "guidelines": [
@@ -125,7 +131,8 @@
      ],
      "alt-identifiers": [
       "sc-28.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-28(03)_ODP[02]"
     }
    }
   }

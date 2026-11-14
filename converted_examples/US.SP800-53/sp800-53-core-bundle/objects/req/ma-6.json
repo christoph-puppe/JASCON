@@ -43,6 +43,11 @@
     {
      "id": "ma-6_obj",
      "label": "MA-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "maintenance support and/or spare parts are obtained for {param:ma-06_odp.01} within {param:ma-06_odp.02} of failure."
      }
@@ -115,7 +120,8 @@
      ],
      "alt-identifiers": [
       "ma-6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-06_ODP[01]"
     },
     "ma-06_odp.02": {
      "guidelines": [
@@ -125,7 +131,8 @@
      ],
      "alt-identifiers": [
       "ma-6_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "MA-06_ODP[02]"
     }
    }
   }

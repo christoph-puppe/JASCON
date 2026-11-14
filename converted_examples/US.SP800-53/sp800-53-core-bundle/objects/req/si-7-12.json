@@ -39,6 +39,11 @@
     {
      "id": "si-7.12_obj",
      "label": "SI-07(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the integrity of {param:si-07.12_odp} is verified prior to execution."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "si-7.12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(12)_ODP"
     }
    }
   },

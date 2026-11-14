@@ -31,6 +31,11 @@
     {
      "id": "ac-6_obj",
      "label": "AC-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the principle of least privilege is employed, allowing only authorized accesses for users (or processes acting on behalf of users) that are necessary to accomplish assigned organizational tasks."
      }
@@ -160,7 +165,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AC-3.1",
     "mode": "merged-into",
-    "label": "AC-03(01)",
+    "label": "AC-3(1)",
     "title": "Restricted Access to Privileged Functions"
    },
    {
@@ -172,7 +177,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
     "mode": "merged-into",
-    "label": "SI-09",
+    "label": "SI-9",
     "title": "Information Input Restrictions"
    }
   ]

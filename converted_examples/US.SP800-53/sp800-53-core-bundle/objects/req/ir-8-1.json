@@ -61,10 +61,20 @@
     {
      "id": "ir-8.1_obj",
      "label": "IR-08(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-8.1_obj.a",
        "label": "IR-08(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the incident response plan for breaches involving personally identifiable information includes a process to determine if notice to individuals or other organizations, including oversight organizations, is needed;"
        }
@@ -72,6 +82,11 @@
       {
        "id": "ir-8.1_obj.b",
        "label": "IR-08(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the incident response plan for breaches involving personally identifiable information includes an assessment process to determine the extent of the harm, embarrassment, inconvenience, or unfairness to affected individuals and any mechanisms to mitigate such harms;"
        }
@@ -79,6 +94,11 @@
       {
        "id": "ir-8.1_obj.c",
        "label": "IR-08(01)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the incident response plan for breaches involving personally identifiable information includes the identification of applicable privacy requirements."
        }

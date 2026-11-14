@@ -48,14 +48,29 @@
     {
      "id": "sa-11.3_obj",
      "label": "SA-11(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-11.3_obj.a",
        "label": "SA-11(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-11.3_obj.a-1",
          "label": "SA-11(03)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an independent agent is required to satisfy {param:sa-11.03_odp} to verify the correct implementation of the developer security assessment plan and the evidence produced during testing and evaluation;"
          }
@@ -63,6 +78,11 @@
         {
          "id": "sa-11.3_obj.a-2",
          "label": "SA-11(03)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an independent agent is required to satisfy {param:sa-11.03_odp} to verify the correct implementation of the developer privacy assessment plan and the evidence produced during testing and evaluation;"
          }
@@ -72,6 +92,11 @@
       {
        "id": "sa-11.3_obj.b",
        "label": "SA-11(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the independent agent is provided with sufficient information to complete the verification process or granted the authority to obtain such information."
        }
@@ -173,7 +198,8 @@
      ],
      "alt-identifiers": [
       "sa-11.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-11(03)_ODP"
     }
    }
   },

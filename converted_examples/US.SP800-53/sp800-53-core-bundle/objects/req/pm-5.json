@@ -29,7 +29,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "OMB A-130 provides guidance on developing systems inventories and associated reporting requirements. System inventory refers to an organization-wide inventory of systems, not system components as described in CM-8."
+     "en": "[OMB A-130](#27847491-5ce1-4f6a-a1e4-9e483782f0ef) provides guidance on developing systems inventories and associated reporting requirements. System inventory refers to an organization-wide inventory of systems, not system components as described in [CM-8](#cm-8)."
     }
    ]
   },
@@ -38,10 +38,20 @@
     {
      "id": "pm-5_obj",
      "label": "PM-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-5_obj-1",
        "label": "PM-05[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "an inventory of organizational systems is developed;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "pm-5_obj-2",
        "label": "PM-05[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the inventory of organizational systems is updated {param:pm-05_odp}."
        }
@@ -117,7 +132,8 @@
      ],
      "alt-identifiers": [
       "pm-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PM-05_ODP"
     }
    }
   }

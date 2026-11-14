@@ -59,7 +59,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "A system development life cycle process provides the foundation for the successful development, implementation, and operation of organizational systems. The integration of security and privacy considerations early in the system development life cycle is a foundational principle of systems security engineering and privacy engineering. To apply the required controls within the system development life cycle requires a basic understanding of information security and privacy, threats, vulnerabilities, adverse impacts, and risk to critical mission and business functions. The security engineering principles in SA-8 help individuals properly design, code, and test systems and system components. Organizations include qualified personnel (e.g., senior agency information security officers, senior agency officials for privacy, security and privacy architects, and security and privacy engineers) in system development life cycle processes to ensure that established security and privacy requirements are incorporated into organizational systems. Role-based security and privacy training programs can ensure that individuals with key security and privacy roles and responsibilities have the experience, skills, and expertise to conduct assigned system development life cycle activities.\n\nThe effective integration of security and privacy requirements into enterprise architecture also helps to ensure that important security and privacy considerations are addressed throughout the system life cycle and that those considerations are directly related to organizational mission and business processes. This process also facilitates the integration of the information security and privacy architectures into the enterprise architecture, consistent with the risk management strategy of the organization. Because the system development life cycle involves multiple organizations, (e.g., external suppliers, developers, integrators, service providers), acquisition and supply chain risk management functions and controls play significant roles in the effective management of the system during the life cycle."
+     "en": "A system development life cycle process provides the foundation for the successful development, implementation, and operation of organizational systems. The integration of security and privacy considerations early in the system development life cycle is a foundational principle of systems security engineering and privacy engineering. To apply the required controls within the system development life cycle requires a basic understanding of information security and privacy, threats, vulnerabilities, adverse impacts, and risk to critical mission and business functions. The security engineering principles in [SA-8](#sa-8) help individuals properly design, code, and test systems and system components. Organizations include qualified personnel (e.g., senior agency information security officers, senior agency officials for privacy, security and privacy architects, and security and privacy engineers) in system development life cycle processes to ensure that established security and privacy requirements are incorporated into organizational systems. Role-based security and privacy training programs can ensure that individuals with key security and privacy roles and responsibilities have the experience, skills, and expertise to conduct assigned system development life cycle activities.\n\nThe effective integration of security and privacy requirements into enterprise architecture also helps to ensure that important security and privacy considerations are addressed throughout the system life cycle and that those considerations are directly related to organizational mission and business processes. This process also facilitates the integration of the information security and privacy architectures into the enterprise architecture, consistent with the risk management strategy of the organization. Because the system development life cycle involves multiple organizations, (e.g., external suppliers, developers, integrators, service providers), acquisition and supply chain risk management functions and controls play significant roles in the effective management of the system during the life cycle."
     }
    ]
   },
@@ -68,14 +68,29 @@
     {
      "id": "sa-3_obj",
      "label": "SA-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-3_obj.a",
        "label": "SA-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-3_obj.a-1",
          "label": "SA-03a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the system is acquired, developed, and managed using {param:sa-03_odp} that incorporates information security considerations;"
          }
@@ -83,6 +98,11 @@
         {
          "id": "sa-3_obj.a-2",
          "label": "SA-03a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the system is acquired, developed, and managed using {param:sa-03_odp} that incorporates privacy considerations;"
          }
@@ -92,10 +112,20 @@
       {
        "id": "sa-3_obj.b",
        "label": "SA-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sa-3_obj.b-1",
          "label": "SA-03b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "information security roles and responsibilities are defined and documented throughout the system development life cycle;"
          }
@@ -103,6 +133,11 @@
         {
          "id": "sa-3_obj.b-2",
          "label": "SA-03b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "privacy roles and responsibilities are defined and documented throughout the system development life cycle;"
          }
@@ -112,10 +147,20 @@
       {
        "id": "sa-3_obj.c",
        "label": "SA-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sa-3_obj.c-1",
          "label": "SA-03c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "individuals with information security roles and responsibilities are identified;"
          }
@@ -123,6 +168,11 @@
         {
          "id": "sa-3_obj.c-2",
          "label": "SA-03c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "individuals with privacy roles and responsibilities are identified;"
          }
@@ -132,10 +182,20 @@
       {
        "id": "sa-3_obj.d",
        "label": "SA-03d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "sa-3_obj.d-1",
          "label": "SA-03d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "organizational information security risk management processes are integrated into system development life cycle activities;"
          }
@@ -143,6 +203,11 @@
         {
          "id": "sa-3_obj.d-2",
          "label": "SA-03d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "organizational privacy risk management processes are integrated into system development life cycle activities."
          }
@@ -244,7 +309,8 @@
      "alt-identifiers": [
       "sa-3_prm_1"
      ],
-     "alt-label": "system development life cycle"
+     "alt-label": "system development life cycle",
+     "sp800-53a-label": "SA-03_ODP"
     }
    }
   },

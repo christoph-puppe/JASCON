@@ -53,10 +53,20 @@
     {
      "id": "ac-6.7_obj",
      "label": "AC-06(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-6.7_obj.a",
        "label": "AC-06(07)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "privileges assigned to {param:ac-06.07_odp.02} are reviewed {param:ac-06.07_odp.01} to validate the need for such privileges;"
        }
@@ -64,6 +74,11 @@
       {
        "id": "ac-6.7_obj.b",
        "label": "AC-06(07)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "privileges are reassigned or removed, if necessary, to correctly reflect organizational mission and business needs."
        }
@@ -144,7 +159,8 @@
      ],
      "alt-identifiers": [
       "ac-6.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-06(07)_ODP[01]"
     },
     "ac-06.07_odp.02": {
      "guidelines": [
@@ -155,7 +171,8 @@
      "alt-identifiers": [
       "ac-6.7_prm_2"
      ],
-     "alt-label": "roles or classes of users"
+     "alt-label": "roles or classes of users",
+     "sp800-53a-label": "AC-06(07)_ODP[02]"
     }
    }
   }

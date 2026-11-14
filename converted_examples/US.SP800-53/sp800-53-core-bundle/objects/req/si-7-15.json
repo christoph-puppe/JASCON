@@ -38,6 +38,11 @@
     {
      "id": "si-7.15_obj",
      "label": "SI-07(15)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cryptographic mechanisms are implemented to authenticate {param:si-07.15_odp} prior to installation."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "si-7.15_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(15)_ODP"
     }
    }
   },

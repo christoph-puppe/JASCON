@@ -55,10 +55,20 @@
     {
      "id": "ra-3.1_obj",
      "label": "RA-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ra-3.1_obj.a",
        "label": "RA-03(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "supply chain risks associated with {param:ra-03.01_odp.01} are assessed;"
        }
@@ -66,6 +76,11 @@
       {
        "id": "ra-3.1_obj.b",
        "label": "RA-03(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the supply chain risk assessment is updated {param:ra-03.01_odp.02} , when there are significant changes to the relevant supply chain, or when changes to the system, environments of operation, or other conditions may necessitate a change in the supply chain."
        }
@@ -158,7 +173,8 @@
      ],
      "alt-identifiers": [
       "ra-3.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-03(01)_ODP[01]"
     },
     "ra-03.01_odp.02": {
      "guidelines": [
@@ -168,7 +184,8 @@
      ],
      "alt-identifiers": [
       "ra-3.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "RA-03(01)_ODP[02]"
     }
    }
   },

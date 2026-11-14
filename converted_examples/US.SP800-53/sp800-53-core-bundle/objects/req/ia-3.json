@@ -54,6 +54,11 @@
     {
      "id": "ia-3_obj",
      "label": "IA-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ia-03_odp.01} are uniquely identified and authenticated before establishing a {param:ia-03_odp.02} connection."
      }
@@ -129,12 +134,14 @@
      ],
      "alt-identifiers": [
       "ia-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-03_ODP[01]"
     },
     "ia-03_odp.02": {
      "alt-identifiers": [
       "ia-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-03_ODP[02]"
     }
    }
   }

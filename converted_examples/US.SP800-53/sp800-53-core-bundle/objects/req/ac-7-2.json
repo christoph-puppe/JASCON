@@ -48,6 +48,11 @@
     {
      "id": "ac-7.2_obj",
      "label": "AC-07(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information is purged or wiped from {param:ac-07.02_odp.01} based on {param:ac-07.02_odp.02} after {param:ac-07.02_odp.03} consecutive, unsuccessful device logon attempts."
      }
@@ -120,7 +125,8 @@
      ],
      "alt-identifiers": [
       "ac-7.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-07(02)_ODP[01]"
     },
     "ac-07.02_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      "alt-identifiers": [
       "ac-7.2_prm_2"
      ],
-     "alt-label": "purging or wiping requirements and techniques"
+     "alt-label": "purging or wiping requirements and techniques",
+     "sp800-53a-label": "AC-07(02)_ODP[02]"
     },
     "ac-07.02_odp.03": {
      "guidelines": [
@@ -141,7 +148,8 @@
      ],
      "alt-identifiers": [
       "ac-7.2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-07(02)_ODP[03]"
     }
    }
   }

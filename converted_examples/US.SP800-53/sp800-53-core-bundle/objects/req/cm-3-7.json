@@ -43,6 +43,11 @@
     {
      "id": "cm-3.7_obj",
      "label": "CM-03(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "changes to the system are reviewed {param:cm-03.07_odp.01} or when {param:cm-03.07_odp.02} to determine whether unauthorized changes have occurred."
      }
@@ -127,7 +132,8 @@
      ],
      "alt-identifiers": [
       "cm-3.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(07)_ODP[01]"
     },
     "cm-03.07_odp.02": {
      "guidelines": [
@@ -137,7 +143,8 @@
      ],
      "alt-identifiers": [
       "cm-3.7_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(07)_ODP[02]"
     }
    }
   }
@@ -171,7 +178,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CM-5.2",
     "mode": "merged-into",
-    "label": "CM-05(02)",
+    "label": "CM-5(2)",
     "title": "Review System Changes"
    }
   ]

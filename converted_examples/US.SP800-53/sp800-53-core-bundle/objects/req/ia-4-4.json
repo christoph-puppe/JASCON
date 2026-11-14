@@ -38,6 +38,11 @@
     {
      "id": "ia-4.4_obj",
      "label": "IA-04(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "individual identifiers are managed by uniquely identifying each individual as {param:ia-04.04_odp}."
      }
@@ -105,7 +110,8 @@
      "alt-identifiers": [
       "ia-4.4_prm_1"
      ],
-     "alt-label": "characteristic identifying individual status"
+     "alt-label": "characteristic identifying individual status",
+     "sp800-53a-label": "IA-04(04)_ODP"
     }
    }
   }

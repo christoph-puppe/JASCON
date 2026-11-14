@@ -38,6 +38,11 @@
     {
      "id": "sc-44_obj",
      "label": "SC-44",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a detonation chamber capability is employed within the {param:sc-44_odp}."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "sc-44_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-44_ODP"
     }
    }
   }

@@ -31,10 +31,20 @@
     {
      "id": "sc-16.1_obj",
      "label": "SC-16(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-16.1_obj-1",
        "label": "SC-16(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the integrity of transmitted security attributes is verified;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-16.1_obj-2",
        "label": "SC-16(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the integrity of transmitted privacy attributes is verified."
        }

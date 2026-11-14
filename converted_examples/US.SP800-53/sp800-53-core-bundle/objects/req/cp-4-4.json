@@ -31,10 +31,20 @@
     {
      "id": "cp-4.4_obj",
      "label": "CP-04(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-4.4_obj-1",
        "label": "CP-04(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a full recovery of the system to a known state is included as part of contingency plan testing;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cp-4.4_obj-2",
        "label": "CP-04(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a full reconstitution of the system to a known state is included as part of contingency plan testing."
        }

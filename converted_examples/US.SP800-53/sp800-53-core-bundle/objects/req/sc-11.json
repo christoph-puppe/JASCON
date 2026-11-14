@@ -62,10 +62,20 @@
     {
      "id": "sc-11_obj",
      "label": "SC-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-11_obj.a",
        "label": "SC-11a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "a {param:sc-11_odp.01} isolated trusted communication path is provided for communications between the user and the trusted components of the system;"
        }
@@ -73,6 +83,11 @@
       {
        "id": "sc-11_obj.b",
        "label": "SC-11b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "users are permitted to invoke the trusted communication path for communications between the user and the {param:sc-11_odp.02} of the system, including authentication and re-authentication, at a minimum."
        }
@@ -145,7 +160,8 @@
     "sc-11_odp.01": {
      "alt-identifiers": [
       "sc-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-11_ODP[01]"
     },
     "sc-11_odp.02": {
      "guidelines": [
@@ -155,7 +171,8 @@
      ],
      "alt-identifiers": [
       "sc-11_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-11_ODP[02]"
     }
    }
   },

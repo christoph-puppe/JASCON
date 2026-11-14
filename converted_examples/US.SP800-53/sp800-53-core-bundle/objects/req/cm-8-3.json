@@ -82,7 +82,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Automated unauthorized component detection is applied in addition to the monitoring for unauthorized remote connections and mobile devices. Monitoring for unauthorized system components may be accomplished on an ongoing basis or by the periodic scanning of systems for that purpose. Automated mechanisms may also be used to prevent the connection of unauthorized components (see CM-7(9) ). Automated mechanisms can be implemented in systems or in separate system components. When acquiring and implementing automated mechanisms, organizations consider whether such mechanisms depend on the ability of the system component to support an agent or supplicant in order to be detected since some types of components do not have or cannot support agents (e.g., IoT devices, sensors). Isolation can be achieved , for example, by placing unauthorized system components in separate domains or subnets or quarantining such components. This type of component isolation is commonly referred to as \"sandboxing.\" "
+     "en": "Automated unauthorized component detection is applied in addition to the monitoring for unauthorized remote connections and mobile devices. Monitoring for unauthorized system components may be accomplished on an ongoing basis or by the periodic scanning of systems for that purpose. Automated mechanisms may also be used to prevent the connection of unauthorized components (see [CM-7(9)](#cm-7.9) ). Automated mechanisms can be implemented in systems or in separate system components. When acquiring and implementing automated mechanisms, organizations consider whether such mechanisms depend on the ability of the system component to support an agent or supplicant in order to be detected since some types of components do not have or cannot support agents (e.g., IoT devices, sensors). Isolation can be achieved , for example, by placing unauthorized system components in separate domains or subnets or quarantining such components. This type of component isolation is commonly referred to as \"sandboxing.\" "
     }
    ]
   },
@@ -91,14 +91,29 @@
     {
      "id": "cm-8.3_obj",
      "label": "CM-08(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-8.3_obj.a",
        "label": "CM-08(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cm-8.3_obj.a-1",
          "label": "CM-08(03)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the presence of unauthorized hardware within the system is detected using {param:cm-08.03_odp.01} {param:cm-08.03_odp.04};"
          }
@@ -106,6 +121,11 @@
         {
          "id": "cm-8.3_obj.a-2",
          "label": "CM-08(03)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the presence of unauthorized software within the system is detected using {param:cm-08.03_odp.02} {param:cm-08.03_odp.04};"
          }
@@ -113,6 +133,11 @@
         {
          "id": "cm-8.3_obj.a-3",
          "label": "CM-08(03)(a)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the presence of unauthorized firmware within the system is detected using {param:cm-08.03_odp.03} {param:cm-08.03_odp.04};"
          }
@@ -122,10 +147,20 @@
       {
        "id": "cm-8.3_obj.b",
        "label": "CM-08(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cm-8.3_obj.b-1",
          "label": "CM-08(03)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:cm-08.03_odp.05} are taken when unauthorized hardware is detected;"
          }
@@ -133,6 +168,11 @@
         {
          "id": "cm-8.3_obj.b-2",
          "label": "CM-08(03)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:cm-08.03_odp.05} are taken when unauthorized software is detected;"
          }
@@ -140,6 +180,11 @@
         {
          "id": "cm-8.3_obj.b-3",
          "label": "CM-08(03)(b)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "{param:cm-08.03_odp.05} are taken when unauthorized firmware is detected."
          }
@@ -250,21 +295,24 @@
       {
        "en": "automated mechanisms used to detect the presence of unauthorized hardware within the system are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-08(03)_ODP[01]"
     },
     "cm-08.03_odp.02": {
      "guidelines": [
       {
        "en": "automated mechanisms used to detect the presence of unauthorized software within the system are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-08(03)_ODP[02]"
     },
     "cm-08.03_odp.03": {
      "guidelines": [
       {
        "en": "automated mechanisms used to detect the presence of unauthorized firmware within the system are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-08(03)_ODP[03]"
     },
     "cm-08.03_odp.04": {
      "guidelines": [
@@ -274,12 +322,14 @@
      ],
      "alt-identifiers": [
       "cm-8.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-08(03)_ODP[04]"
     },
     "cm-08.03_odp.05": {
      "alt-identifiers": [
       "cm-8.3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CM-08(03)_ODP[05]"
     },
     "cm-08.03_odp.06": {
      "guidelines": [
@@ -289,7 +339,8 @@
      ],
      "alt-identifiers": [
       "cm-8.3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "CM-08(03)_ODP[06]"
     }
    }
   },
@@ -350,7 +401,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CM-11.1",
     "mode": "merged-into",
-    "label": "CM-11(01)",
+    "label": "CM-11(1)",
     "title": "Alerts for Unauthorized Installations"
    }
   ]

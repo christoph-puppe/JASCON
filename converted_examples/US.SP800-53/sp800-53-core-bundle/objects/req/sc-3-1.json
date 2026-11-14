@@ -31,6 +31,11 @@
     {
      "id": "sc-3.1_obj",
      "label": "SC-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "hardware separation mechanisms are employed to implement security function isolation."
      }

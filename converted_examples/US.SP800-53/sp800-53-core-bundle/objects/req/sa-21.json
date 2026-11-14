@@ -63,7 +63,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Developer screening is directed at external developers. Internal developer screening is addressed by PS-3 . Because the system, system component, or system service may be used in critical activities essential to the national or economic security interests of the United States, organizations have a strong interest in ensuring that developers are trustworthy. The degree of trust required of developers may need to be consistent with that of the individuals who access the systems, system components, or system services once deployed. Authorization and personnel screening criteria include clearances, background checks, citizenship, and nationality. Developer trustworthiness may also include a review and analysis of company ownership and relationships that the company has with entities that may potentially affect the quality and reliability of the systems, components, or services being developed. Satisfying the required access authorizations and personnel screening criteria includes providing a list of all individuals who are authorized to perform development activities on the selected system, system component, or system service so that organizations can validate that the developer has satisfied the authorization and screening requirements."
+     "en": "Developer screening is directed at external developers. Internal developer screening is addressed by [PS-3](#ps-3) . Because the system, system component, or system service may be used in critical activities essential to the national or economic security interests of the United States, organizations have a strong interest in ensuring that developers are trustworthy. The degree of trust required of developers may need to be consistent with that of the individuals who access the systems, system components, or system services once deployed. Authorization and personnel screening criteria include clearances, background checks, citizenship, and nationality. Developer trustworthiness may also include a review and analysis of company ownership and relationships that the company has with entities that may potentially affect the quality and reliability of the systems, components, or services being developed. Satisfying the required access authorizations and personnel screening criteria includes providing a list of all individuals who are authorized to perform development activities on the selected system, system component, or system service so that organizations can validate that the developer has satisfied the authorization and screening requirements."
     }
    ]
   },
@@ -72,10 +72,20 @@
     {
      "id": "sa-21_obj",
      "label": "SA-21",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-21_obj.a",
        "label": "SA-21a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the developer of {param:sa-21_odp.01} is required to have appropriate access authorizations as determined by assigned {param:sa-21_odp.02};"
        }
@@ -83,6 +93,11 @@
       {
        "id": "sa-21_obj.b",
        "label": "SA-21b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the developer of {param:sa-21_odp.01} is required to satisfy {param:sa-21_odp.03}."
        }
@@ -176,7 +191,8 @@
      "alt-identifiers": [
       "sa-21_prm_1"
      ],
-     "alt-label": "system, system component, or system service"
+     "alt-label": "system, system component, or system service",
+     "sp800-53a-label": "SA-21_ODP[01]"
     },
     "sa-21_odp.02": {
      "guidelines": [
@@ -186,7 +202,8 @@
      ],
      "alt-identifiers": [
       "sa-21_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-21_ODP[02]"
     },
     "sa-21_odp.03": {
      "guidelines": [
@@ -196,7 +213,8 @@
      ],
      "alt-identifiers": [
       "sa-21_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SA-21_ODP[03]"
     }
    }
   },
@@ -241,7 +259,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-21.1",
     "mode": "merged-into",
-    "label": "SA-21(01)",
+    "label": "SA-21(1)",
     "title": "Validation of Screening"
    }
   ]

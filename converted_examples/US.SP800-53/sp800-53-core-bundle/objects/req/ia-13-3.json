@@ -109,6 +109,11 @@
       {
        "id": "ia-13.3_obj.a-1",
        "label": "IA-13(03)(a)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "assertions are generated in accordance with {param:ia-13_odp.01};"
        }
@@ -116,6 +121,11 @@
       {
        "id": "ia-13.3_obj.a-2",
        "label": "IA-13(03)(a)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "access tokens are generated in accordance with {param:ia-13_odp.01};"
        }
@@ -123,6 +133,11 @@
       {
        "id": "ia-13.3_obj.b-1",
        "label": "IA-13(03)(b)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "assertions are issued in accordance with {param:ia-13_odp.01};"
        }
@@ -130,6 +145,11 @@
       {
        "id": "ia-13.3_obj.b-2",
        "label": "IA-13(03)(b)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "access tokens are issued in accordance with {param:ia-13_odp.01};"
        }
@@ -137,6 +157,11 @@
       {
        "id": "ia-13.3_obj.c-1",
        "label": "IA-13(03)(c)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "assertions are refreshed in accordance with {param:ia-13_odp.01};"
        }
@@ -144,6 +169,11 @@
       {
        "id": "ia-13.3_obj.c-2",
        "label": "IA-13(03)(c)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "access tokens are refreshed in accordance with {param:ia-13_odp.01};"
        }
@@ -151,6 +181,11 @@
       {
        "id": "ia-13.3_obj.d-1",
        "label": "IA-13(03)(d)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "assertions are revoked in accordance with {param:ia-13_odp.01};"
        }
@@ -158,6 +193,11 @@
       {
        "id": "ia-13.3_obj.d-2",
        "label": "IA-13(03)(d)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "access tokens are revoked in accordance with {param:ia-13_odp.01};"
        }
@@ -165,6 +205,11 @@
       {
        "id": "ia-13.3_obj.e-1",
        "label": "IA-13(03)(e)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "assertions are time-restricted in accordance with {param:ia-13_odp.01};"
        }
@@ -172,6 +217,11 @@
       {
        "id": "ia-13.3_obj.e-2",
        "label": "IA-13(03)(e)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "access tokens are time-restricted in accordance with {param:ia-13_odp.01};"
        }
@@ -179,6 +229,11 @@
       {
        "id": "ia-13.3_obj.f-1",
        "label": "IA-13(03)(f)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "assertions are audience-restricted in accordance with {param:ia-13_odp.01};"
        }
@@ -186,6 +241,11 @@
       {
        "id": "ia-13.3_obj.f-2",
        "label": "IA-13(03)(f)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "access tokens are audience-restricted in accordance with {param:ia-13_odp.01};"
        }

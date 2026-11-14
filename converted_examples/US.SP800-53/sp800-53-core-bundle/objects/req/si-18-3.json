@@ -32,6 +32,11 @@
     {
      "id": "si-18.3_obj",
      "label": "SI-18(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "personally identifiable information is collected directly from the individual."
      }

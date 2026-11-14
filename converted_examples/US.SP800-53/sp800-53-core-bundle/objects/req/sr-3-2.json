@@ -38,6 +38,11 @@
     {
      "id": "sr-3.2_obj",
      "label": "SR-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sr-03.02_odp} are employed to limit harm from potential adversaries identifying and targeting the organizational supply chain."
      }
@@ -143,7 +148,8 @@
      ],
      "alt-identifiers": [
       "sr-3.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-03(02)_ODP"
     }
    }
   },
@@ -168,7 +174,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-12.5",
     "mode": "renamed",
-    "label": "SA-12(05)",
+    "label": "SA-12(5)",
     "title": "Limitation of Harm"
    }
   ]

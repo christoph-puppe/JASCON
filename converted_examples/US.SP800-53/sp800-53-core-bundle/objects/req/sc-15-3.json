@@ -43,6 +43,11 @@
     {
      "id": "sc-15.3_obj",
      "label": "SC-15(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "collaborative computing devices and applications are disabled or removed from {param:sc-15.03_odp.01} in {param:sc-15.03_odp.02}."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "sc-15.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-15(03)_ODP[01]"
     },
     "sc-15.03_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "sc-15.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-15(03)_ODP[02]"
     }
    }
   }

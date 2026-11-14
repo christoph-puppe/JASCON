@@ -31,6 +31,11 @@
     {
      "id": "cm-11.2_obj",
      "label": "CM-11(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "user installation of software is allowed only with explicit privileged status."
      }

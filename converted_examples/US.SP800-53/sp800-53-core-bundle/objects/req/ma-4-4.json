@@ -78,10 +78,20 @@
     {
      "id": "ma-4.4_obj",
      "label": "MA-04(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ma-4.4_obj.a",
        "label": "MA-04(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "nonlocal maintenance sessions are protected by employing {param:ma-04.04_odp};"
        }
@@ -89,10 +99,20 @@
       {
        "id": "ma-4.4_obj.b",
        "label": "MA-04(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ma-4.4_obj.b.1",
          "label": "MA-04(04)(b)(01)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.1"
+          }
+         ],
          "prose": {
           "en": "nonlocal maintenance sessions are protected by separating maintenance sessions from other network sessions with the system by physically separated communication paths; or"
          }
@@ -100,6 +120,11 @@
         {
          "id": "ma-4.4_obj.b.2",
          "label": "MA-04(04)(b)(02)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.2"
+          }
+         ],
          "prose": {
           "en": "nonlocal maintenance sessions are protected by logically separated communication paths."
          }
@@ -185,7 +210,8 @@
      ],
      "alt-identifiers": [
       "ma-4.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-04(04)_ODP"
     }
    }
   }

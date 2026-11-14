@@ -31,10 +31,20 @@
     {
      "id": "at-2.2_obj",
      "label": "AT-02(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "at-2.2_obj-1",
        "label": "AT-02(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "literacy training on recognizing potential indicators of insider threat is provided;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "at-2.2_obj-2",
        "label": "AT-02(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "literacy training on reporting potential indicators of insider threat is provided."
        }

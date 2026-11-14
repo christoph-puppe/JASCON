@@ -38,6 +38,11 @@
     {
      "id": "sc-7.28_obj",
      "label": "SC-07(28)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the direct connection of the {param:sc-07.28_odp} to a public network is prohibited."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "sc-7.28_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(28)_ODP"
     }
    }
   }
@@ -138,7 +144,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CA-3.4",
     "mode": "renamed",
-    "label": "CA-03(04)",
+    "label": "CA-3(4)",
     "title": "Connections to Public Networks"
    }
   ]

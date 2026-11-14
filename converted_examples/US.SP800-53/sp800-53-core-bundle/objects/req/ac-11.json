@@ -61,10 +61,20 @@
     {
      "id": "ac-11_obj",
      "label": "AC-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-11_obj.a",
        "label": "AC-11a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "further access to the system is prevented by {param:ac-11_odp.01};"
        }
@@ -72,6 +82,11 @@
       {
        "id": "ac-11_obj.b",
        "label": "AC-11b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "device lock is retained until the user re-establishes access using established identification and authentication procedures."
        }
@@ -141,7 +156,8 @@
     "ac-11_odp.01": {
      "alt-identifiers": [
       "ac-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-11_ODP[01]"
     },
     "ac-11_odp.02": {
      "guidelines": [
@@ -151,7 +167,8 @@
      ],
      "alt-identifiers": [
       "ac-11_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-11_ODP[02]"
     }
    }
   }

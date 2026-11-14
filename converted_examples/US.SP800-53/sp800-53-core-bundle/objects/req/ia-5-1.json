@@ -134,10 +134,20 @@
     {
      "id": "ia-5.1_obj",
      "label": "IA-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ia-5.1_obj.a",
        "label": "IA-05(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "for password-based authentication, a list of commonly used, expected, or compromised passwords is maintained and updated {param:ia-05.01_odp.01} and when organizational passwords are suspected to have been compromised directly or indirectly;"
        }
@@ -145,6 +155,11 @@
       {
        "id": "ia-5.1_obj.b",
        "label": "IA-05(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "for password-based authentication when passwords are created or updated by users, the passwords are verified not to be found on the list of commonly used, expected, or compromised passwords in IA-05(01)(a);"
        }
@@ -152,6 +167,11 @@
       {
        "id": "ia-5.1_obj.c",
        "label": "IA-05(01)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "for password-based authentication, passwords are only transmitted over cryptographically protected channels;"
        }
@@ -159,6 +179,11 @@
       {
        "id": "ia-5.1_obj.d",
        "label": "IA-05(01)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "for password-based authentication, passwords are stored using an approved salted key derivation function, preferably using a keyed hash;"
        }
@@ -166,6 +191,11 @@
       {
        "id": "ia-5.1_obj.e",
        "label": "IA-05(01)(e)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "for password-based authentication, immediate selection of a new password is required upon account recovery;"
        }
@@ -173,6 +203,11 @@
       {
        "id": "ia-5.1_obj.f",
        "label": "IA-05(01)(f)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "for password-based authentication, user selection of long passwords and passphrases is allowed, including spaces and all printable characters;"
        }
@@ -180,6 +215,11 @@
       {
        "id": "ia-5.1_obj.g",
        "label": "IA-05(01)(g)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "prose": {
         "en": "for password-based authentication, automated tools are employed to assist the user in selecting strong password authenticators;"
        }
@@ -187,6 +227,11 @@
       {
        "id": "ia-5.1_obj.h",
        "label": "IA-05(01)(h)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.h"
+        }
+       ],
        "prose": {
         "en": "for password-based authentication, {param:ia-05.01_odp.02} are enforced."
        }
@@ -264,7 +309,8 @@
      ],
      "alt-identifiers": [
       "ia-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(01)_ODP[01]"
     },
     "ia-05.01_odp.02": {
      "guidelines": [
@@ -274,7 +320,8 @@
      ],
      "alt-identifiers": [
       "ia-5.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(01)_ODP[02]"
     }
    }
   }
@@ -300,7 +347,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-5.4",
     "mode": "merged-into",
-    "label": "IA-05(04)",
+    "label": "IA-5(4)",
     "title": "Automated Support for Password Strength Determination"
    }
   ]

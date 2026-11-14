@@ -38,6 +38,11 @@
     {
      "id": "cm-3.8_obj",
      "label": "CM-03(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "changes to the configuration of the system are prevented or restricted under {param:cm-03.08_odp}."
      }
@@ -92,7 +97,8 @@
      ],
      "alt-identifiers": [
       "cm-3.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(08)_ODP"
     }
    }
   }

@@ -48,10 +48,20 @@
     {
      "id": "sr-3.1_obj",
      "label": "SR-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-3.1_obj-1",
        "label": "SR-03(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a diverse set of sources is employed for {param:sr-03.01_odp.01};"
        }
@@ -59,6 +69,11 @@
       {
        "id": "sr-3.1_obj-2",
        "label": "SR-03(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a diverse set of sources is employed for {param:sr-03.01_odp.02}."
        }
@@ -148,14 +163,16 @@
       {
        "en": "system components with a diverse set of sources are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SR-03(01)_ODP[01]"
     },
     "sr-03.01_odp.02": {
      "guidelines": [
       {
        "en": "services with a diverse set of sources are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SR-03(01)_ODP[02]"
     }
    }
   },
@@ -180,7 +197,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-12.4",
     "mode": "renamed",
-    "label": "SA-12(04)",
+    "label": "SA-12(4)",
     "title": "Diversity of Suppliers"
    }
   ]

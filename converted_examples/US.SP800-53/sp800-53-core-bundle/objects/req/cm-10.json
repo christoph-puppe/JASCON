@@ -51,10 +51,20 @@
     {
      "id": "cm-10_obj",
      "label": "CM-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-10_obj.a",
        "label": "CM-10a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "software and associated documentation are used in accordance with contract agreements and copyright laws;"
        }
@@ -62,6 +72,11 @@
       {
        "id": "cm-10_obj.b",
        "label": "CM-10b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the use of software and associated documentation protected by quantity licenses is tracked to control copying and distribution;"
        }
@@ -69,6 +84,11 @@
       {
        "id": "cm-10_obj.c",
        "label": "CM-10c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the use of peer-to-peer file sharing technology is controlled and documented to ensure that peer-to-peer file sharing is not used for the unauthorized distribution, display, performance, or reproduction of copyrighted work."
        }
@@ -189,7 +209,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-6",
     "mode": "merged-into",
-    "label": "SA-06",
+    "label": "SA-6",
     "title": "Software Usage Restrictions"
    }
   ]

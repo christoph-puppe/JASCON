@@ -38,10 +38,20 @@
     {
      "id": "sc-28.2_obj",
      "label": "SC-28(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-28.2_obj-1",
        "label": "SC-28(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sc-28.02_odp} is removed from online storage;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sc-28.2_obj-2",
        "label": "SC-28(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sc-28.02_odp} is stored offline in a secure location."
        }
@@ -126,7 +141,8 @@
      ],
      "alt-identifiers": [
       "sc-28.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-28(02)_ODP"
     }
    }
   }

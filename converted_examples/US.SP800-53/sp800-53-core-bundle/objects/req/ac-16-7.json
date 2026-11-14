@@ -31,10 +31,20 @@
     {
      "id": "ac-16.7_obj",
      "label": "AC-16(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.7_obj-1",
        "label": "AC-16(07)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a consistent interpretation of security attributes transmitted between distributed system components is provided;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ac-16.7_obj-2",
        "label": "AC-16(07)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a consistent interpretation of privacy attributes transmitted between distributed system components is provided."
        }

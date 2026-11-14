@@ -53,10 +53,20 @@
     {
      "id": "ra-3.4_obj",
      "label": "RA-03(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ra-3.4_obj-1",
        "label": "RA-03(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ra-03.04_odp.01} are employed to predict and identify risks to {param:ra-03.04_odp.02};"
        }
@@ -64,6 +74,11 @@
       {
        "id": "ra-3.4_obj-2",
        "label": "RA-03(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ra-03.04_odp.03} are employed to predict and identify risks to {param:ra-03.04_odp.02}."
        }
@@ -147,7 +162,8 @@
       {
        "en": "advanced automation capabilities to predict and identify risks are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "RA-03(04)_ODP[01]"
     },
     "ra-03.04_odp.02": {
      "guidelines": [
@@ -157,14 +173,16 @@
      ],
      "alt-identifiers": [
       "ra-3.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-03(04)_ODP[02]"
     },
     "ra-03.04_odp.03": {
      "guidelines": [
       {
        "en": "advanced analytics capabilities to predict and identify risks are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "RA-03(04)_ODP[03]"
     }
    }
   },

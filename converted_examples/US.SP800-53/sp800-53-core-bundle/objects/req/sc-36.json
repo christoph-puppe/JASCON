@@ -84,10 +84,20 @@
     {
      "id": "sc-36_obj",
      "label": "SC-36",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-36_obj-1",
        "label": "SC-36[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sc-36_odp.01} are distributed across {param:sc-36_odp.02};"
        }
@@ -95,6 +105,11 @@
       {
        "id": "sc-36_obj-2",
        "label": "SC-36[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sc-36_odp.03} are distributed across {param:sc-36_odp.04}."
        }
@@ -199,14 +214,22 @@
       {
        "en": "processing components to be distributed across multiple locations/domains are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SC-36_ODP[01]"
+    },
+    "sc-36_odp.02": {
+     "sp800-53a-label": "SC-36_ODP[02]"
     },
     "sc-36_odp.03": {
      "guidelines": [
       {
        "en": "storage components to be distributed across multiple locations/domains are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SC-36_ODP[03]"
+    },
+    "sc-36_odp.04": {
+     "sp800-53a-label": "SC-36_ODP[04]"
     }
    }
   },

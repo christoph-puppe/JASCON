@@ -38,6 +38,11 @@
     {
      "id": "ca-8.2_obj",
      "label": "CA-08(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ca-08.02_odp} are employed to simulate attempts by adversaries to compromise organizational systems in accordance with applicable rules of engagement."
      }
@@ -122,7 +127,8 @@
      ],
      "alt-identifiers": [
       "ca-8.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CA-08(02)_ODP"
     }
    }
   },

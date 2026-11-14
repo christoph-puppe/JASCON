@@ -32,6 +32,11 @@
     {
      "id": "ac-18.3_obj",
      "label": "AC-18(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "when not intended for use, wireless networking capabilities embedded within system components are disabled prior to issuance and deployment."
      }

@@ -32,6 +32,11 @@
     {
      "id": "si-3.4_obj",
      "label": "SI-03(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "malicious code protection mechanisms are updated only when directed by a privileged user."
      }

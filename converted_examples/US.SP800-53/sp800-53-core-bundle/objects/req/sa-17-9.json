@@ -38,6 +38,11 @@
     {
      "id": "sa-17.9_obj",
      "label": "SA-17(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "different designs are used for {param:sa-17.09_odp} to satisfy a common set of requirements or to provide equivalent functionality."
      }
@@ -120,7 +125,8 @@
      "alt-identifiers": [
       "sa-17.9_prm_1"
      ],
-     "alt-label": "critical systems or system components"
+     "alt-label": "critical systems or system components",
+     "sp800-53a-label": "SA-17(09)_ODP"
     }
    }
   },

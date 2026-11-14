@@ -38,6 +38,11 @@
     {
      "id": "ir-4.1_obj",
      "label": "IR-04(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the incident handling process is supported using {param:ir-04.01_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ir-4.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(01)_ODP"
     }
    }
   }

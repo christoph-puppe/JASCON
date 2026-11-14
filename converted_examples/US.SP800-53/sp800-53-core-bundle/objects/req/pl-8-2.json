@@ -43,6 +43,11 @@
     {
      "id": "pl-8.2_obj",
      "label": "PL-08(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pl-08.02_odp.01} that are allocated to {param:pl-08.02_odp.02} are required to be obtained from different suppliers."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "pl-8.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PL-08(02)_ODP[01]"
     },
     "pl-08.02_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "pl-8.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PL-08(02)_ODP[02]"
     }
    }
   },

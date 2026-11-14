@@ -38,6 +38,11 @@
     {
      "id": "ia-5.12_obj",
      "label": "IA-05(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "mechanisms that satisfy {param:ia-05.12_odp} are employed for biometric-based authentication."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "ia-5.12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(12)_ODP"
     }
    }
   }

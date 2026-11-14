@@ -31,6 +31,11 @@
     {
      "id": "ac-11.1_obj",
      "label": "AC-11(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information previously visible on the display is concealed, via device lock, with a publicly viewable image."
      }

@@ -38,6 +38,11 @@
     {
      "id": "ac-4.2_obj",
      "label": "AC-04(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "protected processing domains are used to enforce {param:ac-04.02_odp} as a basis for flow control decisions."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ac-4.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(02)_ODP"
     }
    }
   }

@@ -38,6 +38,11 @@
     {
      "id": "cp-9.3_obj",
      "label": "CP-09(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "backup copies of {param:cp-09.03_odp} are stored in a separate facility or in a fire rated container that is not collocated with the operational system."
      }
@@ -101,7 +106,8 @@
      ],
      "alt-identifiers": [
       "cp-9.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-09(03)_ODP"
     }
    }
   }

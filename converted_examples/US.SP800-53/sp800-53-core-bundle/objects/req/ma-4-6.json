@@ -39,10 +39,20 @@
     {
      "id": "ma-4.6_obj",
      "label": "MA-04(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ma-4.6_obj-1",
        "label": "MA-04(06)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ma-04.06_odp} are implemented to protect the integrity of nonlocal maintenance and diagnostic communications;"
        }
@@ -50,6 +60,11 @@
       {
        "id": "ma-4.6_obj-2",
        "label": "MA-04(06)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ma-04.06_odp} are implemented to protect the confidentiality of nonlocal maintenance and diagnostic communications."
        }
@@ -133,7 +148,8 @@
      ],
      "alt-identifiers": [
       "ma-4.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-04(06)_ODP"
     }
    }
   }

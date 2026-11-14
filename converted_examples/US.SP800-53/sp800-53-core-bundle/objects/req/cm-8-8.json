@@ -38,6 +38,11 @@
     {
      "id": "cm-8.8_obj",
      "label": "CM-08(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cm-08.08_odp} are used to support the tracking of system components by geographic location."
      }
@@ -125,7 +130,8 @@
      ],
      "alt-identifiers": [
       "cm-8.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-08(08)_ODP"
     }
    }
   },

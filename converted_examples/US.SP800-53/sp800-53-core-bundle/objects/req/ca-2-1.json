@@ -31,6 +31,11 @@
     {
      "id": "ca-2.1_obj",
      "label": "CA-02(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "independent assessors or assessment teams are employed to conduct control assessments."
      }

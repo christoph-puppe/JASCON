@@ -40,7 +40,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Role-based access control (RBAC) is an access control policy that enforces access to objects and system functions based on the defined role (i.e., job function) of the subject. Organizations can create specific roles based on job functions and the authorizations (i.e., privileges) to perform needed operations on the systems associated with the organization-defined roles. When users are assigned to specific roles, they inherit the authorizations or privileges defined for those roles. RBAC simplifies privilege administration for organizations because privileges are not assigned directly to every user (which can be a large number of individuals) but are instead acquired through role assignments. RBAC can also increase privacy and security risk if individuals assigned to a role are given access to information beyond what they need to support organizational missions or business functions. RBAC can be implemented as a mandatory or discretionary form of access control. For organizations implementing RBAC with mandatory access controls, the requirements in AC-3(3) define the scope of the subjects and objects covered by the policy."
+     "en": "Role-based access control (RBAC) is an access control policy that enforces access to objects and system functions based on the defined role (i.e., job function) of the subject. Organizations can create specific roles based on job functions and the authorizations (i.e., privileges) to perform needed operations on the systems associated with the organization-defined roles. When users are assigned to specific roles, they inherit the authorizations or privileges defined for those roles. RBAC simplifies privilege administration for organizations because privileges are not assigned directly to every user (which can be a large number of individuals) but are instead acquired through role assignments. RBAC can also increase privacy and security risk if individuals assigned to a role are given access to information beyond what they need to support organizational missions or business functions. RBAC can be implemented as a mandatory or discretionary form of access control. For organizations implementing RBAC with mandatory access controls, the requirements in [AC-3(3)](#ac-3.3) define the scope of the subjects and objects covered by the policy."
     }
    ]
   },
@@ -49,10 +49,20 @@
     {
      "id": "ac-3.7_obj",
      "label": "AC-03(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-3.7_obj-1",
        "label": "AC-03(07)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a role-based access control policy is enforced over defined subjects;"
        }
@@ -60,6 +70,11 @@
       {
        "id": "ac-3.7_obj-2",
        "label": "AC-03(07)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a role-based access control policy is enforced over defined objects;"
        }
@@ -67,6 +82,11 @@
       {
        "id": "ac-3.7_obj-3",
        "label": "AC-03(07)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "access is controlled based on {param:ac-03.07_odp.01} and {param:ac-03.07_odp.02}."
        }
@@ -153,14 +173,16 @@
       {
        "en": "roles upon which to base control of access are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-03(07)_ODP[01]"
     },
     "ac-03.07_odp.02": {
      "guidelines": [
       {
        "en": "users authorized to assume roles (defined in AC-03(07)_ODP[01]) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-03(07)_ODP[02]"
     }
    }
   }

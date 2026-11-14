@@ -31,6 +31,11 @@
     {
      "id": "sc-7.22_obj",
      "label": "SC-07(22)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "separate network addresses are implemented to connect to systems in different security domains."
      }

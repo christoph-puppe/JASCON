@@ -57,6 +57,11 @@
     {
      "id": "au-6.5_obj",
      "label": "AU-06(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "analysis of audit records is integrated with analysis of {param:au-06.05_odp.01} to further enhance the ability to identify inappropriate or unusual activity."
      }
@@ -121,7 +126,8 @@
     "au-06.05_odp.01": {
      "alt-identifiers": [
       "au-6.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-06(05)_ODP[01]"
     },
     "au-06.05_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "au-6.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-06(05)_ODP[02]"
     }
    }
   },

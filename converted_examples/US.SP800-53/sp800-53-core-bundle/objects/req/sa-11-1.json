@@ -31,10 +31,20 @@
     {
      "id": "sa-11.1_obj",
      "label": "SA-11(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-11.1_obj-1",
        "label": "SA-11(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to employ static code analysis tools to identify common flaws;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sa-11.1_obj-2",
        "label": "SA-11(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to employ static code analysis tools to document the results of the analysis."
        }

@@ -31,10 +31,20 @@
     {
      "id": "si-7.6_obj",
      "label": "SI-07(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-7.6_obj-1",
        "label": "SI-07(06)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "cryptographic mechanisms are implemented to detect unauthorized changes to software;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "si-7.6_obj-2",
        "label": "SI-07(06)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "cryptographic mechanisms are implemented to detect unauthorized changes to firmware;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "si-7.6_obj-3",
        "label": "SI-07(06)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "cryptographic mechanisms are implemented to detect unauthorized changes to information."
        }

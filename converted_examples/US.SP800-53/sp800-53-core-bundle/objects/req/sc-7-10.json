@@ -48,10 +48,20 @@
     {
      "id": "sc-7.10_obj",
      "label": "SC-07(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-7.10_obj.a",
        "label": "SC-07(10)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the exfiltration of information is prevented;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "sc-7.10_obj.b",
        "label": "SC-07(10)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "exfiltration tests are conducted {param:sc-07.10_odp}."
        }
@@ -130,7 +145,8 @@
      ],
      "alt-identifiers": [
       "sc-7.10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(10)_ODP"
     }
    }
   }

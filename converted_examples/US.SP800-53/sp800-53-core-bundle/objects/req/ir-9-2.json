@@ -38,6 +38,11 @@
     {
      "id": "ir-9.2_obj",
      "label": "IR-09(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information spillage response training is provided {param:ir-09.02_odp}."
      }
@@ -98,7 +103,8 @@
      ],
      "alt-identifiers": [
       "ir-9.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-09(02)_ODP"
     }
    }
   }

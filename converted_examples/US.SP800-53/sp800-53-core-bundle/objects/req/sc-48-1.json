@@ -49,6 +49,11 @@
     {
      "id": "sc-48.1_obj",
      "label": "SC-48(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-48.01_odp.01} are dynamically relocated to {param:sc-48.01_odp.02} under {param:sc-48.01_odp.03}."
      }
@@ -127,7 +132,8 @@
      ],
      "alt-identifiers": [
       "sc-48.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-48(01)_ODP[01]"
     },
     "sc-48.01_odp.02": {
      "guidelines": [
@@ -137,7 +143,8 @@
      ],
      "alt-identifiers": [
       "sc-48.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-48(01)_ODP[02]"
     },
     "sc-48.01_odp.03": {
      "guidelines": [
@@ -147,7 +154,8 @@
      ],
      "alt-identifiers": [
       "sc-48.1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-48(01)_ODP[03]"
     }
    }
   }

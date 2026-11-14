@@ -53,10 +53,20 @@
     {
      "id": "ps-8_obj",
      "label": "PS-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-8_obj.a",
        "label": "PS-08a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "a formal sanctions process is employed for individuals failing to comply with established information security and privacy policies and procedures;"
        }
@@ -64,6 +74,11 @@
       {
        "id": "ps-8_obj.b",
        "label": "PS-08b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:ps-08_odp.01} is/are notified within {param:ps-08_odp.02} when a formal employee sanctions process is initiated, identifying the individual sanctioned and the reason for the sanction."
        }
@@ -147,7 +162,8 @@
      ],
      "alt-identifiers": [
       "ps-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PS-08_ODP[01]"
     },
     "ps-08_odp.02": {
      "guidelines": [
@@ -157,7 +173,8 @@
      ],
      "alt-identifiers": [
       "ps-8_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PS-08_ODP[02]"
     }
    }
   }

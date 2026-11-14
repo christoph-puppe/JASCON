@@ -31,10 +31,20 @@
     {
      "id": "ma-4.7_obj",
      "label": "MA-04(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ma-4.7_obj-1",
        "label": "MA-04(07)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "session connection termination is verified after the completion of nonlocal maintenance and diagnostic sessions;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ma-4.7_obj-2",
        "label": "MA-04(07)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "network connection termination is verified after the completion of nonlocal maintenance and diagnostic sessions."
        }

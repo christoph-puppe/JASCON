@@ -177,14 +177,29 @@
     {
      "id": "pe-1_obj",
      "label": "PE-01",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-1_obj.a",
        "label": "PE-01a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pe-1_obj.a-1",
          "label": "PE-01a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a physical and environmental protection policy is developed and documented;"
          }
@@ -192,6 +207,11 @@
         {
          "id": "pe-1_obj.a-2",
          "label": "PE-01a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the physical and environmental protection policy is disseminated to {param:pe-01_odp.01};"
          }
@@ -199,6 +219,11 @@
         {
          "id": "pe-1_obj.a-3",
          "label": "PE-01a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "physical and environmental protection procedures to facilitate the implementation of the physical and environmental protection policy and associated physical and environmental protection controls are developed and documented;"
          }
@@ -206,6 +231,11 @@
         {
          "id": "pe-1_obj.a-4",
          "label": "PE-01a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the physical and environmental protection procedures are disseminated to {param:pe-01_odp.02};"
          }
@@ -213,14 +243,29 @@
         {
          "id": "pe-1_obj.a.1",
          "label": "PE-01a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "pe-1_obj.a.1.a",
            "label": "PE-01a.01(a)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.a"
+            }
+           ],
            "children": [
             {
              "id": "pe-1_obj.a.1.a-1",
              "label": "PE-01a.01(a)[01]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:pe-01_odp.03} physical and environmental protection policy addresses purpose;"
              }
@@ -228,6 +273,11 @@
             {
              "id": "pe-1_obj.a.1.a-2",
              "label": "PE-01a.01(a)[02]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:pe-01_odp.03} physical and environmental protection policy addresses scope;"
              }
@@ -235,6 +285,11 @@
             {
              "id": "pe-1_obj.a.1.a-3",
              "label": "PE-01a.01(a)[03]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:pe-01_odp.03} physical and environmental protection policy addresses roles;"
              }
@@ -242,6 +297,11 @@
             {
              "id": "pe-1_obj.a.1.a-4",
              "label": "PE-01a.01(a)[04]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:pe-01_odp.03} physical and environmental protection policy addresses responsibilities;"
              }
@@ -249,6 +309,11 @@
             {
              "id": "pe-1_obj.a.1.a-5",
              "label": "PE-01a.01(a)[05]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:pe-01_odp.03} physical and environmental protection policy addresses management commitment;"
              }
@@ -256,6 +321,11 @@
             {
              "id": "pe-1_obj.a.1.a-6",
              "label": "PE-01a.01(a)[06]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:pe-01_odp.03} physical and environmental protection policy addresses coordination among organizational entities;"
              }
@@ -263,6 +333,11 @@
             {
              "id": "pe-1_obj.a.1.a-7",
              "label": "PE-01a.01(a)[07]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:pe-01_odp.03} physical and environmental protection policy addresses compliance;"
              }
@@ -272,6 +347,11 @@
           {
            "id": "pe-1_obj.a.1.b",
            "label": "PE-01a.01(b)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.b"
+            }
+           ],
            "prose": {
             "en": "the {param:pe-01_odp.03} physical and environmental protection policy is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines;"
            }
@@ -283,6 +363,11 @@
       {
        "id": "pe-1_obj.b",
        "label": "PE-01b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the {param:pe-01_odp.04} is designated to manage the development, documentation, and dissemination of the physical and environmental protection policy and procedures;"
        }
@@ -290,14 +375,29 @@
       {
        "id": "pe-1_obj.c",
        "label": "PE-01c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "pe-1_obj.c.1",
          "label": "PE-01c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "children": [
           {
            "id": "pe-1_obj.c.1-1",
            "label": "PE-01c.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current physical and environmental protection policy is reviewed and updated {param:pe-01_odp.05};"
            }
@@ -305,6 +405,11 @@
           {
            "id": "pe-1_obj.c.1-2",
            "label": "PE-01c.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current physical and environmental protection policy is reviewed and updated following {param:pe-01_odp.06};"
            }
@@ -314,10 +419,20 @@
         {
          "id": "pe-1_obj.c.2",
          "label": "PE-01c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "children": [
           {
            "id": "pe-1_obj.c.2-1",
            "label": "PE-01c.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current physical and environmental protection procedures are reviewed and updated {param:pe-01_odp.07};"
            }
@@ -325,6 +440,11 @@
           {
            "id": "pe-1_obj.c.2-2",
            "label": "PE-01c.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current physical and environmental protection procedures are reviewed and updated following {param:pe-01_odp.08}."
            }
@@ -385,19 +505,22 @@
       {
        "en": "personnel or roles to whom the physical and environmental protection policy is to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PE-01_ODP[01]"
     },
     "pe-01_odp.02": {
      "guidelines": [
       {
        "en": "personnel or roles to whom the physical and environmental protection procedures are to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PE-01_ODP[02]"
     },
     "pe-01_odp.03": {
      "alt-identifiers": [
       "pe-1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-01_ODP[03]"
     },
     "pe-01_odp.04": {
      "guidelines": [
@@ -407,7 +530,8 @@
      ],
      "alt-identifiers": [
       "pe-1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PE-01_ODP[04]"
     },
     "pe-01_odp.05": {
      "guidelines": [
@@ -417,7 +541,8 @@
      ],
      "alt-identifiers": [
       "pe-1_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "PE-01_ODP[05]"
     },
     "pe-01_odp.06": {
      "guidelines": [
@@ -427,7 +552,8 @@
      ],
      "alt-identifiers": [
       "pe-1_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "PE-01_ODP[06]"
     },
     "pe-01_odp.07": {
      "guidelines": [
@@ -437,7 +563,8 @@
      ],
      "alt-identifiers": [
       "pe-1_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "PE-01_ODP[07]"
     },
     "pe-01_odp.08": {
      "guidelines": [
@@ -447,7 +574,8 @@
      ],
      "alt-identifiers": [
       "pe-1_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "PE-01_ODP[08]"
     }
    }
   },

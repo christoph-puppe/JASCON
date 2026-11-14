@@ -38,6 +38,11 @@
     {
      "id": "sc-30.4_obj",
      "label": "SC-30(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "realistic but misleading information about the security state or posture of {param:sc-30.04_odp} is employed."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "sc-30.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-30(04)_ODP"
     }
    }
   },

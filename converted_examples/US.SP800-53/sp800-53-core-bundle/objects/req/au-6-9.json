@@ -31,6 +31,11 @@
     {
      "id": "au-6.9_obj",
      "label": "AU-06(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information from non-technical sources is correlated with audit record information to enhance organization-wide situational awareness."
      }

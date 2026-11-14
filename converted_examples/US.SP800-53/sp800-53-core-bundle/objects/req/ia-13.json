@@ -48,6 +48,11 @@
       {
        "id": "ia-13_obj-1",
        "label": "IA-13[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "identity providers are employed to manage user, device, and non-person entity (NPE) identities, attributes and access rights supporting authentication decisions in accordance with {param:ia-13_odp.02} using {param:ia-13_odp.02};"
        }
@@ -55,6 +60,11 @@
       {
        "id": "ia-13_obj-2",
        "label": "IA-13[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "identity providers are employed to manage user, device, and non-person entity (NPE) identities, attributes and access rights supporting authorization decisions in accordance with {param:ia-13_odp.02} using {param:ia-13_odp.02};"
        }
@@ -62,6 +72,11 @@
       {
        "id": "ia-13_obj-3",
        "label": "IA-13[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "authorization servers are employed to manage user, device, and non-person entity (NPE) identities, attributes and access rights supporting authentication decisions in accordance with {param:ia-13_odp.02} using {param:ia-13_odp.02};"
        }
@@ -69,6 +84,11 @@
       {
        "id": "ia-13_obj-4",
        "label": "IA-13[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "authorization servers are employed to manage user, device, and non-person entity (NPE) identities, attributes and access rights supporting authorization decisions in accordance with {param:ia-13_odp.02} using {param:ia-13_odp.02};"
        }
@@ -144,7 +164,8 @@
      "alt-identifiers": [
       "ia-13_prm_1"
      ],
-     "alt-label": "identification and authentication policy"
+     "alt-label": "identification and authentication policy",
+     "sp800-53a-label": "IA-13_ODP[01]"
     },
     "ia-13_odp.02": {
      "guidelines": [
@@ -154,7 +175,8 @@
      ],
      "alt-identifiers": [
       "ia-13_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-13_ODP[02]"
     }
    }
   }

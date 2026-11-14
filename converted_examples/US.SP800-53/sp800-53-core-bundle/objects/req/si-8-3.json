@@ -31,6 +31,11 @@
     {
      "id": "si-8.3_obj",
      "label": "SI-08(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "spam protection mechanisms with a learning capability are implemented to more effectively identify legitimate communications traffic."
      }

@@ -38,6 +38,11 @@
     {
      "id": "ac-3.11_obj",
      "label": "AC-03(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "access to data repositories containing {param:ac-03.11_odp} is restricted."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ac-3.11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-03(11)_ODP"
     }
    }
   }

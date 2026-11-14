@@ -179,7 +179,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "System monitoring includes external and internal monitoring. External monitoring includes the observation of events occurring at external interfaces to the system. Internal monitoring includes the observation of events occurring within the system. Organizations monitor systems by observing audit activities in real time or by observing other system aspects such as access patterns, characteristics of access, and other actions. The monitoring objectives guide and inform the determination of the events. System monitoring capabilities are achieved through a variety of tools and techniques, including intrusion detection and prevention systems, malicious code protection software, scanning tools, audit record monitoring software, and network monitoring software.\n\nDepending on the security architecture, the distribution and configuration of monitoring devices may impact throughput at key internal and external boundaries as well as at other locations across a network due to the introduction of network throughput latency. If throughput management is needed, such devices are strategically located and deployed as part of an established organization-wide security architecture. Strategic locations for monitoring devices include selected perimeter locations and near key servers and server farms that support critical applications. Monitoring devices are typically employed at the managed interfaces associated with controls SC-7 and AC-17 . The information collected is a function of the organizational monitoring objectives and the capability of systems to support such objectives. Specific types of transactions of interest include Hypertext Transfer Protocol (HTTP) traffic that bypasses HTTP proxies. System monitoring is an integral part of organizational continuous monitoring and incident response programs, and output from system monitoring serves as input to those programs. System monitoring requirements, including the need for specific types of system monitoring, may be referenced in other controls (e.g., AC-2g, AC-2(7), AC-2(12)(a), AC-17(1), AU-13, AU-13(1), AU-13(2), CM-3f, CM-6d, MA-3a, MA-4a, SC-5(3)(b), SC-7a, SC-7(24)(b), SC-18b, SC-43b ). Adjustments to levels of system monitoring are based on law enforcement information, intelligence information, or other sources of information. The legality of system monitoring activities is based on applicable laws, executive orders, directives, regulations, policies, standards, and guidelines."
+     "en": "System monitoring includes external and internal monitoring. External monitoring includes the observation of events occurring at external interfaces to the system. Internal monitoring includes the observation of events occurring within the system. Organizations monitor systems by observing audit activities in real time or by observing other system aspects such as access patterns, characteristics of access, and other actions. The monitoring objectives guide and inform the determination of the events. System monitoring capabilities are achieved through a variety of tools and techniques, including intrusion detection and prevention systems, malicious code protection software, scanning tools, audit record monitoring software, and network monitoring software.\n\nDepending on the security architecture, the distribution and configuration of monitoring devices may impact throughput at key internal and external boundaries as well as at other locations across a network due to the introduction of network throughput latency. If throughput management is needed, such devices are strategically located and deployed as part of an established organization-wide security architecture. Strategic locations for monitoring devices include selected perimeter locations and near key servers and server farms that support critical applications. Monitoring devices are typically employed at the managed interfaces associated with controls [SC-7](#sc-7) and [AC-17](#ac-17) . The information collected is a function of the organizational monitoring objectives and the capability of systems to support such objectives. Specific types of transactions of interest include Hypertext Transfer Protocol (HTTP) traffic that bypasses HTTP proxies. System monitoring is an integral part of organizational continuous monitoring and incident response programs, and output from system monitoring serves as input to those programs. System monitoring requirements, including the need for specific types of system monitoring, may be referenced in other controls (e.g., [AC-2g](#ac-2_smt.g), [AC-2(7)](#ac-2.7), [AC-2(12)(a)](#ac-2.12_smt.a), [AC-17(1)](#ac-17.1), [AU-13](#au-13), [AU-13(1)](#au-13.1), [AU-13(2)](#au-13.2), [CM-3f](#cm-3_smt.f), [CM-6d](#cm-6_smt.d), [MA-3a](#ma-3_smt.a), [MA-4a](#ma-4_smt.a), [SC-5(3)(b)](#sc-5.3_smt.b), [SC-7a](#sc-7_smt.a), [SC-7(24)(b)](#sc-7.24_smt.b), [SC-18b](#sc-18_smt.b), [SC-43b](#sc-43_smt.b) ). Adjustments to levels of system monitoring are based on law enforcement information, intelligence information, or other sources of information. The legality of system monitoring activities is based on applicable laws, executive orders, directives, regulations, policies, standards, and guidelines."
     }
    ]
   },
@@ -188,14 +188,29 @@
     {
      "id": "si-4_obj",
      "label": "SI-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4_obj.a",
        "label": "SI-04a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "si-4_obj.a.1",
          "label": "SI-04a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "the system is monitored to detect attacks and indicators of potential attacks in accordance with {param:si-04_odp.01};"
          }
@@ -203,10 +218,20 @@
         {
          "id": "si-4_obj.a.2",
          "label": "SI-04a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "si-4_obj.a.2-1",
            "label": "SI-04a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the system is monitored to detect unauthorized local connections;"
            }
@@ -214,6 +239,11 @@
           {
            "id": "si-4_obj.a.2-2",
            "label": "SI-04a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the system is monitored to detect unauthorized network connections;"
            }
@@ -221,6 +251,11 @@
           {
            "id": "si-4_obj.a.2-3",
            "label": "SI-04a.02[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the system is monitored to detect unauthorized remote connections;"
            }
@@ -232,6 +267,11 @@
       {
        "id": "si-4_obj.b",
        "label": "SI-04b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "unauthorized use of the system is identified through {param:si-04_odp.02};"
        }
@@ -239,10 +279,20 @@
       {
        "id": "si-4_obj.c",
        "label": "SI-04c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "si-4_obj.c.1",
          "label": "SI-04c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "prose": {
           "en": "internal monitoring capabilities are invoked or monitoring devices are deployed strategically within the system to collect organization-determined essential information;"
          }
@@ -250,6 +300,11 @@
         {
          "id": "si-4_obj.c.2",
          "label": "SI-04c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "prose": {
           "en": "internal monitoring capabilities are invoked or monitoring devices are deployed at ad hoc locations within the system to track specific types of transactions of interest to the organization;"
          }
@@ -259,10 +314,20 @@
       {
        "id": "si-4_obj.d",
        "label": "SI-04d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "si-4_obj.d-1",
          "label": "SI-04d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "detected events are analyzed;"
          }
@@ -270,6 +335,11 @@
         {
          "id": "si-4_obj.d-2",
          "label": "SI-04d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "detected anomalies are analyzed;"
          }
@@ -279,6 +349,11 @@
       {
        "id": "si-4_obj.e",
        "label": "SI-04e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "the level of system monitoring activity is adjusted when there is a change in risk to organizational operations and assets, individuals, other organizations, or the Nation;"
        }
@@ -286,6 +361,11 @@
       {
        "id": "si-4_obj.f",
        "label": "SI-04f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "a legal opinion regarding system monitoring activities is obtained;"
        }
@@ -293,6 +373,11 @@
       {
        "id": "si-4_obj.g",
        "label": "SI-04g.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "prose": {
         "en": "{param:si-04_odp.03} is provided to {param:si-04_odp.04} {param:si-04_odp.05}."
        }
@@ -382,7 +467,8 @@
      ],
      "alt-identifiers": [
       "si-4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04_ODP[01]"
     },
     "si-04_odp.02": {
      "guidelines": [
@@ -392,7 +478,8 @@
      ],
      "alt-identifiers": [
       "si-4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-04_ODP[02]"
     },
     "si-04_odp.03": {
      "guidelines": [
@@ -402,7 +489,8 @@
      ],
      "alt-identifiers": [
       "si-4_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-04_ODP[03]"
     },
     "si-04_odp.04": {
      "guidelines": [
@@ -412,12 +500,14 @@
      ],
      "alt-identifiers": [
       "si-4_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SI-04_ODP[04]"
     },
     "si-04_odp.05": {
      "alt-identifiers": [
       "si-4_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "SI-04_ODP[05]"
     },
     "si-04_odp.06": {
      "guidelines": [
@@ -427,7 +517,8 @@
      ],
      "alt-identifiers": [
       "si-4_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "SI-04_ODP[06]"
     }
    }
   },
@@ -648,19 +739,19 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AC-17.5",
     "mode": "merged-into",
-    "label": "AC-17(05)",
+    "label": "AC-17(5)",
     "title": "Monitoring for Unauthorized Connections"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AC-18.2",
     "mode": "merged-into",
-    "label": "AC-18(02)",
+    "label": "AC-18(2)",
     "title": "Monitoring Unauthorized Connections"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AU-6.2",
     "mode": "merged-into",
-    "label": "AU-06(02)",
+    "label": "AU-6(2)",
     "title": "Automated Security Alerts"
    },
    {
@@ -672,7 +763,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-4.8",
     "mode": "merged-into",
-    "label": "SI-04(08)",
+    "label": "SI-4(8)",
     "title": "Protection of Monitoring Information"
    }
   ]

@@ -31,6 +31,11 @@
     {
      "id": "cp-7.4_obj",
      "label": "CP-07(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the alternate processing site is prepared so that the site can serve as the operational site supporting essential mission and business functions."
      }

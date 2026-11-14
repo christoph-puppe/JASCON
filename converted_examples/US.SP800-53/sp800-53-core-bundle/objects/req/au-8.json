@@ -48,10 +48,20 @@
     {
      "id": "au-8_obj",
      "label": "AU-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-8_obj.a",
        "label": "AU-08a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "internal system clocks are used to generate timestamps for audit records;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "au-8_obj.b",
        "label": "AU-08b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "timestamps are recorded for audit records that meet {param:au-08_odp} and that use Coordinated Universal Time, have a fixed local time offset from Coordinated Universal Time, or include the local time offset as part of the timestamp."
        }
@@ -133,7 +148,8 @@
      ],
      "alt-identifiers": [
       "au-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-08_ODP"
     }
    }
   }

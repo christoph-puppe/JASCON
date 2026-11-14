@@ -58,10 +58,20 @@
     {
      "id": "ac-3.12_obj",
      "label": "AC-03(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-3.12_obj.a",
        "label": "AC-03(12)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "as part of the installation process, applications are required to assert the access needed to the following system applications and functions: {param:ac-03.12_odp};"
        }
@@ -69,6 +79,11 @@
       {
        "id": "ac-3.12_obj.b",
        "label": "AC-03(12)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "an enforcement mechanism to prevent unauthorized access is provided; "
        }
@@ -76,6 +91,11 @@
       {
        "id": "ac-3.12_obj.c",
        "label": "AC-03(12)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "access changes after initial installation of the application are approved."
        }
@@ -147,7 +167,8 @@
      ],
      "alt-identifiers": [
       "ac-3.12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-03(12)_ODP"
     }
    }
   }

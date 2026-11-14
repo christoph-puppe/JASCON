@@ -38,6 +38,11 @@
     {
      "id": "sc-15.4_obj",
      "label": "SC-15(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an explicit indication of current participants in {param:sc-15.04_odp} is provided."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "sc-15.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-15(04)_ODP"
     }
    }
   }

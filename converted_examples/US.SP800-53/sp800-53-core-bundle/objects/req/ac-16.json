@@ -96,7 +96,7 @@
     "https://ns.nist.gov/sp800-53/party/organization"
    ],
    "prose": {
-    "en": "Establish the following permitted security and privacy attributes from the attributes defined in AC-16a for {param:ac-16_prm_3}: {param:ac-16_prm_4};"
+    "en": "Establish the following permitted security and privacy attributes from the attributes defined in [AC-16a](#ac-16_smt.a) for {param:ac-16_prm_3}: {param:ac-16_prm_4};"
    },
    "parameters": [
     {
@@ -165,7 +165,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Information is represented internally within systems using abstractions known as data structures. Internal data structures can represent different types of entities, both active and passive. Active entities, also known as subjects, are typically associated with individuals, devices, or processes acting on behalf of individuals. Passive entities, also known as objects, are typically associated with data structures, such as records, buffers, tables, files, inter-process pipes, and communications ports. Security attributes, a form of metadata, are abstractions that represent the basic properties or characteristics of active and passive entities with respect to safeguarding information. Privacy attributes, which may be used independently or in conjunction with security attributes, represent the basic properties or characteristics of active or passive entities with respect to the management of personally identifiable information. Attributes can be either explicitly or implicitly associated with the information contained in organizational systems or system components.\n\nAttributes may be associated with active entities (i.e., subjects) that have the potential to send or receive information, cause information to flow among objects, or change the system state. These attributes may also be associated with passive entities (i.e., objects) that contain or receive information. The association of attributes to subjects and objects by a system is referred to as binding and is inclusive of setting the attribute value and the attribute type. Attributes, when bound to data or information, permit the enforcement of security and privacy policies for access control and information flow control, including data retention limits, permitted uses of personally identifiable information, and identification of personal information within data objects. Such enforcement occurs through organizational processes or system functions or mechanisms. The binding techniques implemented by systems affect the strength of attribute binding to information. Binding strength and the assurance associated with binding techniques play important parts in the trust that organizations have in the information flow enforcement process. The binding techniques affect the number and degree of additional reviews required by organizations. The content or assigned values of attributes can directly affect the ability of individuals to access organizational information.\n\nOrganizations can define the types of attributes needed for systems to support missions or business functions. There are many values that can be assigned to a security attribute. By specifying the permitted attribute ranges and values, organizations ensure that attribute values are meaningful and relevant. Labeling refers to the association of attributes with the subjects and objects represented by the internal data structures within systems. This facilitates system-based enforcement of information security and privacy policies. Labels include classification of information in accordance with legal and compliance requirements (e.g., top secret, secret, confidential, controlled unclassified), information impact level; high value asset information, access authorizations, nationality; data life cycle protection (i.e., encryption and data expiration), personally identifiable information processing permissions, including individual consent to personally identifiable information processing, and contractor affiliation. A related term to labeling is marking. Marking refers to the association of attributes with objects in a human-readable form and displayed on system media. Marking enables manual, procedural, or process-based enforcement of information security and privacy policies. Security and privacy labels may have the same value as media markings (e.g., top secret, secret, confidential). See MP-3 (Media Marking)."
+     "en": "Information is represented internally within systems using abstractions known as data structures. Internal data structures can represent different types of entities, both active and passive. Active entities, also known as subjects, are typically associated with individuals, devices, or processes acting on behalf of individuals. Passive entities, also known as objects, are typically associated with data structures, such as records, buffers, tables, files, inter-process pipes, and communications ports. Security attributes, a form of metadata, are abstractions that represent the basic properties or characteristics of active and passive entities with respect to safeguarding information. Privacy attributes, which may be used independently or in conjunction with security attributes, represent the basic properties or characteristics of active or passive entities with respect to the management of personally identifiable information. Attributes can be either explicitly or implicitly associated with the information contained in organizational systems or system components.\n\nAttributes may be associated with active entities (i.e., subjects) that have the potential to send or receive information, cause information to flow among objects, or change the system state. These attributes may also be associated with passive entities (i.e., objects) that contain or receive information. The association of attributes to subjects and objects by a system is referred to as binding and is inclusive of setting the attribute value and the attribute type. Attributes, when bound to data or information, permit the enforcement of security and privacy policies for access control and information flow control, including data retention limits, permitted uses of personally identifiable information, and identification of personal information within data objects. Such enforcement occurs through organizational processes or system functions or mechanisms. The binding techniques implemented by systems affect the strength of attribute binding to information. Binding strength and the assurance associated with binding techniques play important parts in the trust that organizations have in the information flow enforcement process. The binding techniques affect the number and degree of additional reviews required by organizations. The content or assigned values of attributes can directly affect the ability of individuals to access organizational information.\n\nOrganizations can define the types of attributes needed for systems to support missions or business functions. There are many values that can be assigned to a security attribute. By specifying the permitted attribute ranges and values, organizations ensure that attribute values are meaningful and relevant. Labeling refers to the association of attributes with the subjects and objects represented by the internal data structures within systems. This facilitates system-based enforcement of information security and privacy policies. Labels include classification of information in accordance with legal and compliance requirements (e.g., top secret, secret, confidential, controlled unclassified), information impact level; high value asset information, access authorizations, nationality; data life cycle protection (i.e., encryption and data expiration), personally identifiable information processing permissions, including individual consent to personally identifiable information processing, and contractor affiliation. A related term to labeling is marking. Marking refers to the association of attributes with objects in a human-readable form and displayed on system media. Marking enables manual, procedural, or process-based enforcement of information security and privacy policies. Security and privacy labels may have the same value as media markings (e.g., top secret, secret, confidential). See [MP-3](#mp-3) (Media Marking)."
     }
    ]
   },
@@ -174,14 +174,29 @@
     {
      "id": "ac-16_obj",
      "label": "AC-16",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16_obj.a",
        "label": "AC-16a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ac-16_obj.a-1",
          "label": "AC-16a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the means to associate {param:ac-16_odp.01} with {param:ac-16_odp.03} for information in storage, in process, and/or in transmission are provided;"
          }
@@ -189,6 +204,11 @@
         {
          "id": "ac-16_obj.a-2",
          "label": "AC-16a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the means to associate {param:ac-16_odp.02} with {param:ac-16_odp.04} for information in storage, in process, and/or in transmission are provided;"
          }
@@ -198,10 +218,20 @@
       {
        "id": "ac-16_obj.b",
        "label": "AC-16b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ac-16_obj.b-1",
          "label": "AC-16b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "attribute associations are made;"
          }
@@ -209,6 +239,11 @@
         {
          "id": "ac-16_obj.b-2",
          "label": "AC-16b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "attribute associations are retained with the information;"
          }
@@ -218,10 +253,20 @@
       {
        "id": "ac-16_obj.c",
        "label": "AC-16c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "ac-16_obj.c-1",
          "label": "AC-16c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the following permitted security attributes are established from the attributes defined in AC-16_ODP[01] for {param:ac-16_odp.05}: {param:ac-16_odp.07};"
          }
@@ -229,6 +274,11 @@
         {
          "id": "ac-16_obj.c-2",
          "label": "AC-16c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the following permitted privacy attributes are established from the attributes defined in AC-16_ODP[02] for {param:ac-16_odp.06}: {param:ac-16_odp.08};"
          }
@@ -238,6 +288,11 @@
       {
        "id": "ac-16_obj.d",
        "label": "AC-16d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the following permitted attribute values or ranges for each of the established attributes are determined: {param:ac-16_odp.09};"
        }
@@ -245,6 +300,11 @@
       {
        "id": "ac-16_obj.e",
        "label": "AC-16e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "changes to attributes are audited;"
        }
@@ -252,10 +312,20 @@
       {
        "id": "ac-16_obj.f",
        "label": "AC-16f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "children": [
         {
          "id": "ac-16_obj.f-1",
          "label": "AC-16f.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "{param:ac-16_odp.07} are reviewed for applicability {param:ac-16_odp.10};"
          }
@@ -263,6 +333,11 @@
         {
          "id": "ac-16_obj.f-2",
          "label": "AC-16f.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "{param:ac-16_odp.08} are reviewed for applicability {param:ac-16_odp.11}."
          }
@@ -372,56 +447,64 @@
       {
        "en": "types of security attributes to be associated with information security attribute values for information in storage, in process, and/or in transmission are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[01]"
     },
     "ac-16_odp.02": {
      "guidelines": [
       {
        "en": "types of privacy attributes to be associated with privacy attribute values for information in storage, in process, and/or in transmission are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[02]"
     },
     "ac-16_odp.03": {
      "guidelines": [
       {
        "en": "security attribute values for types of security attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[03]"
     },
     "ac-16_odp.04": {
      "guidelines": [
       {
        "en": "privacy attribute values for types of privacy attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[04]"
     },
     "ac-16_odp.05": {
      "guidelines": [
       {
        "en": "systems for which permitted security attributes are to be established are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[05]"
     },
     "ac-16_odp.06": {
      "guidelines": [
       {
        "en": "systems for which permitted privacy attributes are to be established are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[06]"
     },
     "ac-16_odp.07": {
      "guidelines": [
       {
        "en": "security attributes defined as part of AC-16a that are permitted for systems are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[07]"
     },
     "ac-16_odp.08": {
      "guidelines": [
       {
        "en": "privacy attributes defined as part of AC-16a that are permitted for systems are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[08]"
     },
     "ac-16_odp.09": {
      "guidelines": [
@@ -432,21 +515,24 @@
      "alt-identifiers": [
       "ac-16_prm_5"
      ],
-     "alt-label": "attribute values or ranges for established attributes"
+     "alt-label": "attribute values or ranges for established attributes",
+     "sp800-53a-label": "AC-16_ODP[09]"
     },
     "ac-16_odp.10": {
      "guidelines": [
       {
        "en": "the frequency at which to review security attributes for applicability is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[10]"
     },
     "ac-16_odp.11": {
      "guidelines": [
       {
        "en": "the frequency at which to review privacy attributes for applicability is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16_ODP[11]"
     }
    }
   }
@@ -548,7 +634,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AC-4.18",
     "mode": "merged-into",
-    "label": "AC-04(18)",
+    "label": "AC-4(18)",
     "title": "Security Attribute Binding"
    }
   ]

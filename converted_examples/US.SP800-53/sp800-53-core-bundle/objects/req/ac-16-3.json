@@ -73,10 +73,20 @@
     {
      "id": "ac-16.3_obj",
      "label": "AC-16(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.3_obj-1",
        "label": "AC-16(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the association and integrity of {param:ac-16.03_odp.01} to {param:ac-16.03_odp.03} is maintained;"
        }
@@ -84,6 +94,11 @@
       {
        "id": "ac-16.3_obj-2",
        "label": "AC-16(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the association and integrity of {param:ac-16.03_odp.01} to {param:ac-16.03_odp.04} is maintained."
        }
@@ -91,6 +106,11 @@
       {
        "id": "ac-16.3_obj-3",
        "label": "AC-16(03)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the association and integrity of {param:ac-16.03_odp.02} to {param:ac-16.03_odp.05} is maintained;"
        }
@@ -98,6 +118,11 @@
       {
        "id": "ac-16.3_obj-4",
        "label": "AC-16(03)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the association and integrity of {param:ac-16.03_odp.02} to {param:ac-16.03_odp.06} is maintained."
        }
@@ -180,42 +205,48 @@
       {
        "en": "security attributes that require association and integrity maintenance are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(03)_ODP[01]"
     },
     "ac-16.03_odp.02": {
      "guidelines": [
       {
        "en": "privacy attributes that require association and integrity maintenance are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(03)_ODP[02]"
     },
     "ac-16.03_odp.03": {
      "guidelines": [
       {
        "en": "subjects requiring the association and integrity of security attributes to such subjects to be maintained are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(03)_ODP[03]"
     },
     "ac-16.03_odp.04": {
      "guidelines": [
       {
        "en": "objects requiring the association and integrity of security attributes to such objects to be maintained are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(03)_ODP[04]"
     },
     "ac-16.03_odp.05": {
      "guidelines": [
       {
        "en": "subjects requiring the association and integrity of privacy attributes to such subjects to be maintained are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(03)_ODP[05]"
     },
     "ac-16.03_odp.06": {
      "guidelines": [
       {
        "en": "objects requiring the association and integrity of privacy attributes to such objects to be maintained are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(03)_ODP[06]"
     }
    }
   }

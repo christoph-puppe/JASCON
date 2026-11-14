@@ -38,6 +38,11 @@
     {
      "id": "ia-8.6_obj",
      "label": "IA-08(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ia-08.06_odp} to disassociate user attributes or identifier assertion relationships among individuals, credential service providers, and relying parties are implemented."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "ia-8.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-08(06)_ODP"
     }
    }
   }

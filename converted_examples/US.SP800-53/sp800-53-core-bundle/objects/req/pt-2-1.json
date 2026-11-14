@@ -43,6 +43,11 @@
     {
      "id": "pt-2.1_obj",
      "label": "PT-02(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "data tags containing {param:pt-02.01_odp.01} are attached to {param:pt-02.01_odp.02}."
      }
@@ -115,7 +120,8 @@
      ],
      "alt-identifiers": [
       "pt-2.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-02(01)_ODP[01]"
     },
     "pt-02.01_odp.02": {
      "guidelines": [
@@ -125,7 +131,8 @@
      ],
      "alt-identifiers": [
       "pt-2.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PT-02(01)_ODP[02]"
     }
    }
   },

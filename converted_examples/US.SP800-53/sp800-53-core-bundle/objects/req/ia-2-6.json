@@ -89,10 +89,20 @@
     {
      "id": "ia-2.6_obj",
      "label": "IA-02(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ia-2.6_obj.a",
        "label": "IA-02(06)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "multi-factor authentication is implemented for {param:ia-02.06_odp.01} access to {param:ia-02.06_odp.02} such that one of the factors is provided by a device separate from the system gaining access;"
        }
@@ -100,6 +110,11 @@
       {
        "id": "ia-2.6_obj.b",
        "label": "IA-02(06)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "multi-factor authentication is implemented for {param:ia-02.06_odp.01} access to {param:ia-02.06_odp.02} such that the device meets {param:ia-02.06_odp.03}."
        }
@@ -175,12 +190,14 @@
     "ia-02.06_odp.01": {
      "alt-identifiers": [
       "ia-2.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-02(06)_ODP[01]"
     },
     "ia-02.06_odp.02": {
      "alt-identifiers": [
       "ia-2.6_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-02(06)_ODP[02]"
     },
     "ia-02.06_odp.03": {
      "guidelines": [
@@ -190,7 +207,8 @@
      ],
      "alt-identifiers": [
       "ia-2.6_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "IA-02(06)_ODP[03]"
     }
    }
   }
@@ -220,13 +238,13 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-2.7",
     "mode": "merged-into",
-    "label": "IA-02(07)",
+    "label": "IA-2(7)",
     "title": "Network Access to Non-privileged Accounts — Separate Device"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-2.11",
     "mode": "merged-into",
-    "label": "IA-02(11)",
+    "label": "IA-2(11)",
     "title": "Remote Access — Separate Device"
    }
   ]

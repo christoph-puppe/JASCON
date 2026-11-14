@@ -38,6 +38,11 @@
     {
      "id": "sc-38_obj",
      "label": "SC-38",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-38_odp} are employed to protect key organizational information throughout the system development life cycle."
      }
@@ -125,7 +130,8 @@
      ],
      "alt-identifiers": [
       "sc-38_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-38_ODP"
     }
    }
   },

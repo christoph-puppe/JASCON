@@ -50,10 +50,20 @@
     {
      "id": "sc-43_obj",
      "label": "SC-43",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-43_obj.a",
        "label": "SC-43a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "usage restrictions and implementation guidelines are established for {param:sc-43_odp};"
        }
@@ -61,10 +71,20 @@
       {
        "id": "sc-43_obj.b",
        "label": "SC-43b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sc-43_obj.b-1",
          "label": "SC-43b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the use of {param:sc-43_odp} is authorized within the system;"
          }
@@ -72,6 +92,11 @@
         {
          "id": "sc-43_obj.b-2",
          "label": "SC-43b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the use of {param:sc-43_odp} is monitored within the system;"
          }
@@ -79,6 +104,11 @@
         {
          "id": "sc-43_obj.b-3",
          "label": "SC-43b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the use of {param:sc-43_odp} is controlled within the system."
          }
@@ -162,7 +192,8 @@
      "alt-identifiers": [
       "sc-43_prm_1"
      ],
-     "alt-label": "system components"
+     "alt-label": "system components",
+     "sp800-53a-label": "SC-43_ODP"
     }
    }
   }

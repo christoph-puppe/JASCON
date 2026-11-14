@@ -43,10 +43,20 @@
     {
      "id": "sc-18.4_obj",
      "label": "SC-18(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-18.4_obj-1",
        "label": "SC-18(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the automatic execution of mobile code in {param:sc-18.04_odp.01} is prevented;"
        }
@@ -54,6 +64,11 @@
       {
        "id": "sc-18.4_obj-2",
        "label": "SC-18(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sc-18.04_odp.02} are enforced prior to executing mobile code."
        }
@@ -140,7 +155,8 @@
      ],
      "alt-identifiers": [
       "sc-18.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-18(04)_ODP[01]"
     },
     "sc-18.04_odp.02": {
      "guidelines": [
@@ -150,7 +166,8 @@
      ],
      "alt-identifiers": [
       "sc-18.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-18(04)_ODP[02]"
     }
    }
   }

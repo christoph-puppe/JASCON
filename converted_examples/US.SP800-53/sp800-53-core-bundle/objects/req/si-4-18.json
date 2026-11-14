@@ -39,10 +39,20 @@
     {
      "id": "si-4.18_obj",
      "label": "SI-04(18)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4.18_obj-1",
        "label": "SI-04(18)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "outbound communications traffic is analyzed at interfaces external to the system to detect covert exfiltration of information;"
        }
@@ -50,6 +60,11 @@
       {
        "id": "si-4.18_obj-2",
        "label": "SI-04(18)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "outbound communications traffic is analyzed at {param:si-04.18_odp} to detect covert exfiltration of information."
        }
@@ -146,7 +161,8 @@
      "alt-identifiers": [
       "si-4.18_prm_1"
      ],
-     "alt-label": "interior points within the system"
+     "alt-label": "interior points within the system",
+     "sp800-53a-label": "SI-04(18)_ODP"
     }
    }
   },

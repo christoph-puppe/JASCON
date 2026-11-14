@@ -32,6 +32,11 @@
     {
      "id": "ac-6.4_obj",
      "label": "AC-06(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "separate processing domains are provided to enable finer-grain allocation of user privileges."
      }

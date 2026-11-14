@@ -32,6 +32,11 @@
     {
      "id": "si-18.2_obj",
      "label": "SI-18(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "data tags are employed to automate the correction or deletion of personally identifiable information across the information life cycle within organizational systems."
      }

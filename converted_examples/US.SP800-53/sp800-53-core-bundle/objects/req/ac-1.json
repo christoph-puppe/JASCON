@@ -177,14 +177,29 @@
     {
      "id": "ac-1_obj",
      "label": "AC-01",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-1_obj.a",
        "label": "AC-01a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ac-1_obj.a-1",
          "label": "AC-01a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an access control policy is developed and documented;"
          }
@@ -192,6 +207,11 @@
         {
          "id": "ac-1_obj.a-2",
          "label": "AC-01a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the access control policy is disseminated to {param:ac-01_odp.01};"
          }
@@ -199,6 +219,11 @@
         {
          "id": "ac-1_obj.a-3",
          "label": "AC-01a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "access control procedures to facilitate the implementation of the access control policy and associated controls are developed and documented;"
          }
@@ -206,6 +231,11 @@
         {
          "id": "ac-1_obj.a-4",
          "label": "AC-01a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the access control procedures are disseminated to {param:ac-01_odp.02};"
          }
@@ -213,14 +243,29 @@
         {
          "id": "ac-1_obj.a.1",
          "label": "AC-01a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "ac-1_obj.a.1.a",
            "label": "AC-01a.01(a)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.a"
+            }
+           ],
            "children": [
             {
              "id": "ac-1_obj.a.1.a-1",
              "label": "AC-01a.01(a)[01]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ac-01_odp.03} access control policy addresses purpose;"
              }
@@ -228,6 +273,11 @@
             {
              "id": "ac-1_obj.a.1.a-2",
              "label": "AC-01a.01(a)[02]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ac-01_odp.03} access control policy addresses scope;"
              }
@@ -235,6 +285,11 @@
             {
              "id": "ac-1_obj.a.1.a-3",
              "label": "AC-01a.01(a)[03]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ac-01_odp.03} access control policy addresses roles;"
              }
@@ -242,6 +297,11 @@
             {
              "id": "ac-1_obj.a.1.a-4",
              "label": "AC-01a.01(a)[04]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ac-01_odp.03} access control policy addresses responsibilities;"
              }
@@ -249,6 +309,11 @@
             {
              "id": "ac-1_obj.a.1.a-5",
              "label": "AC-01a.01(a)[05]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ac-01_odp.03} access control policy addresses management commitment;"
              }
@@ -256,6 +321,11 @@
             {
              "id": "ac-1_obj.a.1.a-6",
              "label": "AC-01a.01(a)[06]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ac-01_odp.03} access control policy addresses coordination among organizational entities;"
              }
@@ -263,6 +333,11 @@
             {
              "id": "ac-1_obj.a.1.a-7",
              "label": "AC-01a.01(a)[07]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ac-01_odp.03} access control policy addresses compliance;"
              }
@@ -272,6 +347,11 @@
           {
            "id": "ac-1_obj.a.1.b",
            "label": "AC-01a.01(b)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.b"
+            }
+           ],
            "prose": {
             "en": "the {param:ac-01_odp.03} access control policy is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines;"
            }
@@ -283,6 +363,11 @@
       {
        "id": "ac-1_obj.b",
        "label": "AC-01b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the {param:ac-01_odp.04} is designated to manage the development, documentation, and dissemination of the access control policy and procedures;"
        }
@@ -290,14 +375,29 @@
       {
        "id": "ac-1_obj.c",
        "label": "AC-01c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "ac-1_obj.c.1",
          "label": "AC-01c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "children": [
           {
            "id": "ac-1_obj.c.1-1",
            "label": "AC-01c.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current access control policy is reviewed and updated {param:ac-01_odp.05};"
            }
@@ -305,6 +405,11 @@
           {
            "id": "ac-1_obj.c.1-2",
            "label": "AC-01c.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current access control policy is reviewed and updated following {param:ac-01_odp.06};"
            }
@@ -314,10 +419,20 @@
         {
          "id": "ac-1_obj.c.2",
          "label": "AC-01c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "children": [
           {
            "id": "ac-1_obj.c.2-1",
            "label": "AC-01c.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current access control procedures are reviewed and updated {param:ac-01_odp.07};"
            }
@@ -325,6 +440,11 @@
           {
            "id": "ac-1_obj.c.2-2",
            "label": "AC-01c.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current access control procedures are reviewed and updated following {param:ac-01_odp.08}."
            }
@@ -382,19 +502,22 @@
       {
        "en": "personnel or roles to whom the access control policy is to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-01_ODP[01]"
     },
     "ac-01_odp.02": {
      "guidelines": [
       {
        "en": "personnel or roles to whom the access control procedures are to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-01_ODP[02]"
     },
     "ac-01_odp.03": {
      "alt-identifiers": [
       "ac-1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-01_ODP[03]"
     },
     "ac-01_odp.04": {
      "guidelines": [
@@ -404,7 +527,8 @@
      ],
      "alt-identifiers": [
       "ac-1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-01_ODP[04]"
     },
     "ac-01_odp.05": {
      "guidelines": [
@@ -414,7 +538,8 @@
      ],
      "alt-identifiers": [
       "ac-1_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "AC-01_ODP[05]"
     },
     "ac-01_odp.06": {
      "guidelines": [
@@ -424,7 +549,8 @@
      ],
      "alt-identifiers": [
       "ac-1_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "AC-01_ODP[06]"
     },
     "ac-01_odp.07": {
      "guidelines": [
@@ -434,7 +560,8 @@
      ],
      "alt-identifiers": [
       "ac-1_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "AC-01_ODP[07]"
     },
     "ac-01_odp.08": {
      "guidelines": [
@@ -444,7 +571,8 @@
      ],
      "alt-identifiers": [
       "ac-1_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "AC-01_ODP[08]"
     }
    }
   },

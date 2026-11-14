@@ -31,10 +31,20 @@
     {
      "id": "mp-6.1_obj",
      "label": "MP-06(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-6.1_obj-1",
        "label": "MP-06(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "media sanitization and disposal actions are reviewed;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "mp-6.1_obj-2",
        "label": "MP-06(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "media sanitization and disposal actions are approved;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "mp-6.1_obj-3",
        "label": "MP-06(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "media sanitization and disposal actions are tracked;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "mp-6.1_obj-4",
        "label": "MP-06(01)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "media sanitization and disposal actions are documented;"
        }
@@ -63,6 +88,11 @@
       {
        "id": "mp-6.1_obj-5",
        "label": "MP-06(01)[05]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "media sanitization and disposal actions are verified."
        }

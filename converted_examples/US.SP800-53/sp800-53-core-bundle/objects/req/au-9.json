@@ -48,10 +48,20 @@
     {
      "id": "au-9_obj",
      "label": "AU-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-9_obj.a",
        "label": "AU-09a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "audit information and audit logging tools are protected from unauthorized access, modification, and deletion;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "au-9_obj.b",
        "label": "AU-09b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:au-09_odp} are alerted upon detection of unauthorized access, modification, or deletion of audit information."
        }
@@ -142,7 +157,8 @@
      ],
      "alt-identifiers": [
       "au-9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-09_ODP"
     }
    }
   }
@@ -179,6 +195,10 @@
   {
    "type": "related",
    "ref": "https://ns.nist.gov/sp800-53/req/AU-14"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.nist.gov/sp800-53/req/AU-15"
   },
   {
    "type": "related",

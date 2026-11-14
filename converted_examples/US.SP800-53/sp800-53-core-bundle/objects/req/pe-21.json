@@ -43,6 +43,11 @@
     {
      "id": "pe-21_obj",
      "label": "PE-21",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pe-21_odp.01} are employed against electromagnetic pulse damage for {param:pe-21_odp.02}."
      }
@@ -109,7 +114,8 @@
      ],
      "alt-identifiers": [
       "pe-21_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-21_ODP[01]"
     },
     "pe-21_odp.02": {
      "guidelines": [
@@ -120,7 +126,8 @@
      "alt-identifiers": [
       "pe-21_prm_2"
      ],
-     "alt-label": "systems and system components"
+     "alt-label": "systems and system components",
+     "sp800-53a-label": "PE-21_ODP[02]"
     }
    }
   }

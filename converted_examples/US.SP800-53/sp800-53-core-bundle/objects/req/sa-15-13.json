@@ -39,7 +39,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "In support of better incident response and the ability to more quickly reconstruct security-related actions, identifying specific requirements for secure logging facilitates the ability to connect application-produced audit event logs with operational data. Event types are consistent with the event types defined in AU-02."
+     "en": "In support of better incident response and the ability to more quickly reconstruct security-related actions, identifying specific requirements for secure logging facilitates the ability to connect application-produced audit event logs with operational data. Event types are consistent with the event types defined in [AU-02](#au-2)."
     }
    ]
   },
@@ -48,6 +48,11 @@
     {
      "id": "sa-15.13_obj",
      "label": "SA-15(13)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "Determine if:\n\nthe developer of the system, system component, or system service uses {param:sa-15.13_odp.01} to log {param:sa-15.13_odp.02} at {param:sa-15.13_odp.03}."
      }
@@ -120,7 +125,8 @@
      ],
      "alt-identifiers": [
       "sa-15.13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-15.13_ODP[01]"
     },
     "sa-15.13_odp.02": {
      "guidelines": [
@@ -130,7 +136,8 @@
      ],
      "alt-identifiers": [
       "sa-15.13_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-15.13_ODP[02]"
     },
     "sa-15.13_odp.03": {
      "guidelines": [
@@ -140,7 +147,8 @@
      ],
      "alt-identifiers": [
       "sa-15.13_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SA-15.13_ODP[03]"
     }
    }
   },

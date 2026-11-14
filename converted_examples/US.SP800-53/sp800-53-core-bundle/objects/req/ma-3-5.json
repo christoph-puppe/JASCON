@@ -32,6 +32,11 @@
     {
      "id": "ma-3.5_obj",
      "label": "MA-03(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the use of maintenance tools that execute with increased privilege is monitored."
      }

@@ -62,10 +62,20 @@
     {
      "id": "si-7.8_obj",
      "label": "SI-07(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-7.8_obj-1",
        "label": "SI-07(08)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to audit an event upon the detection of a potential integrity violation is provided;"
        }
@@ -73,6 +83,11 @@
       {
        "id": "si-7.8_obj-2",
        "label": "SI-07(08)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:si-07.08_odp.01} is/are initiated upon the detection of a potential integrity violation."
        }
@@ -166,7 +181,8 @@
     "si-07.08_odp.01": {
      "alt-identifiers": [
       "si-7.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(08)_ODP[01]"
     },
     "si-07.08_odp.02": {
      "guidelines": [
@@ -176,7 +192,8 @@
      ],
      "alt-identifiers": [
       "si-7.8_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(08)_ODP[02]"
     },
     "si-07.08_odp.03": {
      "guidelines": [
@@ -186,7 +203,8 @@
      ],
      "alt-identifiers": [
       "si-7.8_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(08)_ODP[03]"
     }
    }
   },

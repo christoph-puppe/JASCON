@@ -31,6 +31,11 @@
     {
      "id": "cp-3.1_obj",
      "label": "CP-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "simulated events are incorporated into contingency training to facilitate effective response by personnel in crisis situations."
      }

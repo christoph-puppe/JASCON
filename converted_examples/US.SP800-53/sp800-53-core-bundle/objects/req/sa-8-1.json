@@ -32,6 +32,11 @@
     {
      "id": "sa-8.1_obj",
      "label": "SA-08(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the security design principle of clear abstractions is implemented."
      }

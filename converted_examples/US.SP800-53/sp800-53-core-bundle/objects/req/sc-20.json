@@ -41,14 +41,29 @@
     {
      "id": "sc-20_obj",
      "label": "SC-20",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-20_obj.a",
        "label": "SC-20a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sc-20_obj.a-1",
          "label": "SC-20a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "additional data origin authentication is provided along with the authoritative name resolution data that the system returns in response to external name/address resolution queries;"
          }
@@ -56,6 +71,11 @@
         {
          "id": "sc-20_obj.a-2",
          "label": "SC-20a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "integrity verification artifacts are provided along with the authoritative name resolution data that the system returns in response to external name/address resolution queries;"
          }
@@ -65,10 +85,20 @@
       {
        "id": "sc-20_obj.b",
        "label": "SC-20b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sc-20_obj.b-1",
          "label": "SC-20b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the means to indicate the security status of child zones (and if the child supports secure resolution services) is provided when operating as part of a distributed, hierarchical namespace;"
          }
@@ -76,6 +106,11 @@
         {
          "id": "sc-20_obj.b-2",
          "label": "SC-20b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the means to enable verification of a chain of trust among parent and child domains when operating as part of a distributed, hierarchical namespace is provided."
          }
@@ -186,7 +221,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SC-20.1",
     "mode": "merged-into",
-    "label": "SC-20(01)",
+    "label": "SC-20(1)",
     "title": "Child Subspaces"
    }
   ]

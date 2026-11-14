@@ -38,6 +38,11 @@
     {
      "id": "si-5.1_obj",
      "label": "SI-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-05.01_odp} are used to broadcast security alert and advisory information throughout the organization."
      }
@@ -125,7 +130,8 @@
      ],
      "alt-identifiers": [
       "si-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-05(01)_ODP"
     }
    }
   },

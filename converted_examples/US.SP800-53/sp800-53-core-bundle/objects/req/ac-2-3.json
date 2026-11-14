@@ -85,10 +85,20 @@
     {
      "id": "ac-2.3_obj",
      "label": "AC-02(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-2.3_obj.a",
        "label": "AC-02(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "accounts are disabled within {param:ac-02.03_odp.01} when the accounts have expired;"
        }
@@ -96,6 +106,11 @@
       {
        "id": "ac-2.3_obj.b",
        "label": "AC-02(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "accounts are disabled within {param:ac-02.03_odp.01} when the accounts are no longer associated with a user or individual;"
        }
@@ -103,6 +118,11 @@
       {
        "id": "ac-2.3_obj.c",
        "label": "AC-02(03)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "accounts are disabled within {param:ac-02.03_odp.01} when the accounts are in violation of organizational policy;"
        }
@@ -110,6 +130,11 @@
       {
        "id": "ac-2.3_obj.d",
        "label": "AC-02(03)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "accounts are disabled within {param:ac-02.03_odp.01} when the accounts have been inactive for {param:ac-02.03_odp.02}."
        }
@@ -193,7 +218,8 @@
      ],
      "alt-identifiers": [
       "ac-2.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(03)_ODP[01]"
     },
     "ac-02.03_odp.02": {
      "guidelines": [
@@ -203,7 +229,8 @@
      ],
      "alt-identifiers": [
       "ac-2.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(03)_ODP[02]"
     }
    }
   }

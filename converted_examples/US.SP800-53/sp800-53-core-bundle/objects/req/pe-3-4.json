@@ -38,6 +38,11 @@
     {
      "id": "pe-3.4_obj",
      "label": "PE-03(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "lockable physical casings are used to protect {param:pe-03.04_odp} from unauthorized access."
      }
@@ -101,7 +106,8 @@
      ],
      "alt-identifiers": [
       "pe-3.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-03(04)_ODP"
     }
    }
   }

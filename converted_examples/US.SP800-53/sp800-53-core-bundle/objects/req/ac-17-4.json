@@ -58,14 +58,29 @@
     {
      "id": "ac-17.4_obj",
      "label": "AC-17(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-17.4_obj.a",
        "label": "AC-17(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ac-17.4_obj.a-1",
          "label": "AC-17(04)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the execution of privileged commands via remote access is authorized only in a format that provides assessable evidence;"
          }
@@ -73,6 +88,11 @@
         {
          "id": "ac-17.4_obj.a-2",
          "label": "AC-17(04)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "access to security-relevant information via remote access is authorized only in a format that provides assessable evidence;"
          }
@@ -80,6 +100,11 @@
         {
          "id": "ac-17.4_obj.a-3",
          "label": "AC-17(04)(a)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the execution of privileged commands via remote access is authorized only for the following needs: {param:ac-17.04_odp.01};"
          }
@@ -87,6 +112,11 @@
         {
          "id": "ac-17.4_obj.a-4",
          "label": "AC-17(04)(a)[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "access to security-relevant information via remote access is authorized only for the following needs: {param:ac-17.04_odp.02};"
          }
@@ -96,6 +126,11 @@
       {
        "id": "ac-17.4_obj.b",
        "label": "AC-17(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the rationale for remote access is documented in the security plan for the system."
        }
@@ -167,14 +202,16 @@
       {
        "en": "needs requiring execution of privileged commands via remote access are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-17(04)_ODP[01]"
     },
     "ac-17.04_odp.02": {
      "guidelines": [
       {
        "en": "needs requiring access to security-relevant information via remote access are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-17(04)_ODP[02]"
     }
    }
   }

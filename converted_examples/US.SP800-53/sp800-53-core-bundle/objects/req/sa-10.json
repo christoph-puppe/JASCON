@@ -119,10 +119,20 @@
     {
      "id": "sa-10_obj",
      "label": "SA-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-10_obj.a",
        "label": "SA-10a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to perform configuration management during system, component, or service {param:sa-10_odp.01};"
        }
@@ -130,10 +140,20 @@
       {
        "id": "sa-10_obj.b",
        "label": "SA-10b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sa-10_obj.b-1",
          "label": "SA-10b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to document the integrity of changes to {param:sa-10_odp.02};"
          }
@@ -141,6 +161,11 @@
         {
          "id": "sa-10_obj.b-2",
          "label": "SA-10b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to manage the integrity of changes to {param:sa-10_odp.02};"
          }
@@ -148,6 +173,11 @@
         {
          "id": "sa-10_obj.b-3",
          "label": "SA-10b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to control the integrity of changes to {param:sa-10_odp.02};"
          }
@@ -157,6 +187,11 @@
       {
        "id": "sa-10_obj.c",
        "label": "SA-10c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to implement only organization-approved changes to the system, component, or service;"
        }
@@ -164,10 +199,20 @@
       {
        "id": "sa-10_obj.d",
        "label": "SA-10d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "sa-10_obj.d-1",
          "label": "SA-10d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to document approved changes to the system, component, or service;"
          }
@@ -175,6 +220,11 @@
         {
          "id": "sa-10_obj.d-2",
          "label": "SA-10d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to document the potential security impacts of approved changes;"
          }
@@ -182,6 +232,11 @@
         {
          "id": "sa-10_obj.d-3",
          "label": "SA-10d.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to document the potential privacy impacts of approved changes;"
          }
@@ -191,10 +246,20 @@
       {
        "id": "sa-10_obj.e",
        "label": "SA-10e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "sa-10_obj.e-1",
          "label": "SA-10e.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to track security flaws within the system, component, or service;"
          }
@@ -202,6 +267,11 @@
         {
          "id": "sa-10_obj.e-2",
          "label": "SA-10e.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to track security flaw resolutions within the system, component, or service;"
          }
@@ -209,6 +279,11 @@
         {
          "id": "sa-10_obj.e-3",
          "label": "SA-10e.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to report findings to {param:sa-10_odp.03}."
          }
@@ -301,7 +376,8 @@
     "sa-10_odp.01": {
      "alt-identifiers": [
       "sa-10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-10_ODP[01]"
     },
     "sa-10_odp.02": {
      "guidelines": [
@@ -312,7 +388,8 @@
      "alt-identifiers": [
       "sa-10_prm_2"
      ],
-     "alt-label": "configuration items under configuration management"
+     "alt-label": "configuration items under configuration management",
+     "sp800-53a-label": "SA-10_ODP[02]"
     },
     "sa-10_odp.03": {
      "guidelines": [
@@ -322,7 +399,8 @@
      ],
      "alt-identifiers": [
       "sa-10_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SA-10_ODP[03]"
     }
    }
   },

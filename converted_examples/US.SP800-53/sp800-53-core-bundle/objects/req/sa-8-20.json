@@ -39,6 +39,11 @@
     {
      "id": "sa-8.20_obj",
      "label": "SA-08(20)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.20_odp} implement the security design principle of secure metadata management."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "sa-8.20_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(20)_ODP"
     }
    }
   },

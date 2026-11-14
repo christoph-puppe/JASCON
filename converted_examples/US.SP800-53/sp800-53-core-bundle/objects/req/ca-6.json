@@ -98,10 +98,20 @@
     {
      "id": "ca-6_obj",
      "label": "CA-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ca-6_obj.a",
        "label": "CA-06a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "a senior official is assigned as the authorizing official for the system;"
        }
@@ -109,6 +119,11 @@
       {
        "id": "ca-6_obj.b",
        "label": "CA-06b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "a senior official is assigned as the authorizing official for common controls available for inheritance by organizational systems;"
        }
@@ -116,10 +131,20 @@
       {
        "id": "ca-6_obj.c",
        "label": "CA-06c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "ca-6_obj.c.1",
          "label": "CA-06c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "prose": {
           "en": "before commencing operations, the authorizing official for the system accepts the use of common controls inherited by the system;"
          }
@@ -127,6 +152,11 @@
         {
          "id": "ca-6_obj.c.2",
          "label": "CA-06c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "prose": {
           "en": "before commencing operations, the authorizing official for the system authorizes the system to operate;"
          }
@@ -136,6 +166,11 @@
       {
        "id": "ca-6_obj.d",
        "label": "CA-06d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the authorizing official for common controls authorizes the use of those controls for inheritance by organizational systems;"
        }
@@ -143,6 +178,11 @@
       {
        "id": "ca-6_obj.e",
        "label": "CA-06e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "the authorizations are updated {param:ca-06_odp}."
        }
@@ -205,7 +245,8 @@
      ],
      "alt-identifiers": [
       "ca-6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CA-06_ODP"
     }
    }
   },

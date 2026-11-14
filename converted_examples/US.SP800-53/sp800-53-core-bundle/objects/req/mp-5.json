@@ -83,14 +83,29 @@
     {
      "id": "mp-5_obj",
      "label": "MP-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-5_obj.a",
        "label": "MP-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "mp-5_obj.a-1",
          "label": "MP-05a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-05_odp.01} are protected during transport outside of controlled areas using {param:mp-05_odp.02};"
          }
@@ -98,6 +113,11 @@
         {
          "id": "mp-5_obj.a-2",
          "label": "MP-05a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-05_odp.01} are controlled during transport outside of controlled areas using {param:mp-05_odp.03};"
          }
@@ -107,6 +127,11 @@
       {
        "id": "mp-5_obj.b",
        "label": "MP-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "accountability for system media is maintained during transport outside of controlled areas;"
        }
@@ -114,6 +139,11 @@
       {
        "id": "mp-5_obj.c",
        "label": "MP-05c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "activities associated with the transport of system media are documented;"
        }
@@ -121,10 +151,20 @@
       {
        "id": "mp-5_obj.d",
        "label": "MP-05d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "mp-5_obj.d-1",
          "label": "MP-05d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "personnel authorized to conduct media transport activities is/are identified;"
          }
@@ -132,6 +172,11 @@
         {
          "id": "mp-5_obj.d-2",
          "label": "MP-05d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "activities associated with the transport of system media are restricted to identified authorized personnel."
          }
@@ -220,21 +265,24 @@
      ],
      "alt-identifiers": [
       "mp-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MP-05_ODP[01]"
     },
     "mp-05_odp.02": {
      "guidelines": [
       {
        "en": "controls used to protect system media outside of controlled areas are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-05_ODP[02]"
     },
     "mp-05_odp.03": {
      "guidelines": [
       {
        "en": "controls used to control system media outside of controlled areas are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-05_ODP[03]"
     }
    }
   }
@@ -316,13 +364,13 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/MP-5.1",
     "mode": "merged-into",
-    "label": "MP-05(01)",
+    "label": "MP-5(1)",
     "title": "Protection Outside of Controlled Areas"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/MP-5.2",
     "mode": "merged-into",
-    "label": "MP-05(02)",
+    "label": "MP-5(2)",
     "title": "Documentation of Activities"
    }
   ]

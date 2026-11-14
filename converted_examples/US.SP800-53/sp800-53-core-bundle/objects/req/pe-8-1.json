@@ -48,10 +48,20 @@
     {
      "id": "pe-8.1_obj",
      "label": "PE-08(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-8.1_obj-1",
        "label": "PE-08(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "visitor access records are maintained using {param:pe-08.01_odp.01};"
        }
@@ -59,6 +69,11 @@
       {
        "id": "pe-8.1_obj-2",
        "label": "PE-08(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "visitor access records are reviewed using {param:pe-08.01_odp.02}."
        }
@@ -133,14 +148,16 @@
       {
        "en": "automated mechanisms used to maintain visitor access records are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PE-08(01)_ODP[01]"
     },
     "pe-08.01_odp.02": {
      "guidelines": [
       {
        "en": "automated mechanisms used to review visitor access records are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PE-08(01)_ODP[02]"
     }
    }
   }

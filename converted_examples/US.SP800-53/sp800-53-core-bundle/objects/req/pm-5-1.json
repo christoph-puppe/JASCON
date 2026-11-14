@@ -38,10 +38,20 @@
     {
      "id": "pm-5.1_obj",
      "label": "PM-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-5.1_obj-1",
        "label": "PM-05(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "an inventory of all systems, applications, and projects that process personally identifiable information is established;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "pm-5.1_obj-2",
        "label": "PM-05(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "an inventory of all systems, applications, and projects that process personally identifiable information is maintained;"
        }
@@ -56,6 +71,11 @@
       {
        "id": "pm-5.1_obj-3",
        "label": "PM-05(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "an inventory of all systems, applications, and projects that process personally identifiable information is updated {param:pm-05.01_odp}."
        }
@@ -136,7 +156,8 @@
      ],
      "alt-identifiers": [
       "pm-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PM-05(01)_ODP"
     }
    }
   }

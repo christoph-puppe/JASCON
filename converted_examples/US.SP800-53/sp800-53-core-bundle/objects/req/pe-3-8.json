@@ -38,6 +38,11 @@
     {
      "id": "pe-3.8_obj",
      "label": "PE-03(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "access control vestibules are employed at {param:pe-03.08_odp}."
      }
@@ -99,7 +104,8 @@
      "alt-identifiers": [
       "pe-3.8_prm_1"
      ],
-     "alt-label": "locations within the facility"
+     "alt-label": "locations within the facility",
+     "sp800-53a-label": "PE-03(08)_ODP"
     }
    }
   }

@@ -31,10 +31,20 @@
     {
      "id": "cm-2.6_obj",
      "label": "CM-02(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-2.6_obj-1",
        "label": "CM-02(06)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a baseline configuration for system development environments that is managed separately from the operational baseline configuration is maintained;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cm-2.6_obj-2",
        "label": "CM-02(06)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a baseline configuration for test environments that is managed separately from the operational baseline configuration is maintained."
        }

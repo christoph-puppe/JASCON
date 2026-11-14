@@ -65,10 +65,20 @@
     {
      "id": "pe-10_obj",
      "label": "PE-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-10_obj.a",
        "label": "PE-10a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the capability to shut off power to {param:pe-10_odp.01} in emergency situations is provided;"
        }
@@ -76,6 +86,11 @@
       {
        "id": "pe-10_obj.b",
        "label": "PE-10b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "emergency shutoff switches or devices are placed in {param:pe-10_odp.02} to facilitate access for authorized personnel;"
        }
@@ -83,6 +98,11 @@
       {
        "id": "pe-10_obj.c",
        "label": "PE-10c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the emergency power shutoff capability is protected from unauthorized activation."
        }
@@ -151,7 +171,8 @@
      ],
      "alt-identifiers": [
       "pe-10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-10_ODP[01]"
     },
     "pe-10_odp.02": {
      "guidelines": [
@@ -162,7 +183,8 @@
      "alt-identifiers": [
       "pe-10_prm_2"
      ],
-     "alt-label": "location by system or system component"
+     "alt-label": "location by system or system component",
+     "sp800-53a-label": "PE-10_ODP[02]"
     }
    }
   }
@@ -184,7 +206,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PE-10.1",
     "mode": "merged-into",
-    "label": "PE-10(01)",
+    "label": "PE-10(1)",
     "title": "Accidental and Unauthorized Activation"
    }
   ]

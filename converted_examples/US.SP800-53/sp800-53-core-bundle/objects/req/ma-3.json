@@ -48,14 +48,29 @@
     {
      "id": "ma-3_obj",
      "label": "MA-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ma-3_obj.a",
        "label": "MA-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ma-3_obj.a-1",
          "label": "MA-03a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the use of system maintenance tools is approved;"
          }
@@ -63,6 +78,11 @@
         {
          "id": "ma-3_obj.a-2",
          "label": "MA-03a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the use of system maintenance tools is controlled;"
          }
@@ -70,6 +90,11 @@
         {
          "id": "ma-3_obj.a-3",
          "label": "MA-03a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the use of system maintenance tools is monitored;"
          }
@@ -79,6 +104,11 @@
       {
        "id": "ma-3_obj.b",
        "label": "MA-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "previously approved system maintenance tools are reviewed {param:ma-03_odp}."
        }
@@ -147,7 +177,8 @@
      ],
      "alt-identifiers": [
       "ma-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-03_ODP"
     }
    }
   }

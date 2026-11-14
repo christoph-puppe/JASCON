@@ -43,10 +43,20 @@
     {
      "id": "sr-4.4_obj",
      "label": "SR-04(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-4.4_obj-1",
        "label": "SR-04(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sr-04.04_odp.01} are employed to ensure the integrity of the system and system components;"
        }
@@ -54,6 +64,11 @@
       {
        "id": "sr-4.4_obj-2",
        "label": "SR-04(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sr-04.04_odp.02} is conducted to ensure the integrity of the system and system components."
        }
@@ -140,7 +155,8 @@
      ],
      "alt-identifiers": [
       "sr-4.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-04(04)_ODP[01]"
     },
     "sr-04.04_odp.02": {
      "guidelines": [
@@ -151,7 +167,8 @@
      "alt-identifiers": [
       "sr-4.4_prm_2"
      ],
-     "alt-label": "analysis"
+     "alt-label": "analysis",
+     "sp800-53a-label": "SR-04(04)_ODP[02]"
     }
    }
   },

@@ -101,10 +101,20 @@
     {
      "id": "si-5_obj",
      "label": "SI-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-5_obj.a",
        "label": "SI-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "system security alerts, advisories, and directives are received from {param:si-05_odp.01} on an ongoing basis;"
        }
@@ -112,6 +122,11 @@
       {
        "id": "si-5_obj.b",
        "label": "SI-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "internal security alerts, advisories, and directives are generated as deemed necessary;"
        }
@@ -119,6 +134,11 @@
       {
        "id": "si-5_obj.c",
        "label": "SI-05c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "security alerts, advisories, and directives are disseminated to {param:si-05_odp.02};"
        }
@@ -126,6 +146,11 @@
       {
        "id": "si-5_obj.d",
        "label": "SI-05d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "security directives are implemented in accordance with established time frames or if the issuing organization is notified of the degree of noncompliance."
        }
@@ -206,12 +231,14 @@
      ],
      "alt-identifiers": [
       "si-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-05_ODP[01]"
     },
     "si-05_odp.02": {
      "alt-identifiers": [
       "si-5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-05_ODP[02]"
     },
     "si-05_odp.03": {
      "guidelines": [
@@ -221,7 +248,8 @@
      ],
      "alt-identifiers": [
       "si-5_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-05_ODP[03]"
     },
     "si-05_odp.04": {
      "guidelines": [
@@ -232,7 +260,8 @@
      "alt-identifiers": [
       "si-5_prm_4"
      ],
-     "alt-label": "elements within the organization"
+     "alt-label": "elements within the organization",
+     "sp800-53a-label": "SI-05_ODP[04]"
     },
     "si-05_odp.05": {
      "guidelines": [
@@ -242,7 +271,8 @@
      ],
      "alt-identifiers": [
       "si-5_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "SI-05_ODP[05]"
     }
    }
   },

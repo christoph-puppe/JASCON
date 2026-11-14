@@ -38,6 +38,11 @@
     {
      "id": "sc-29_obj",
      "label": "SC-29",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a diverse set of information technologies is employed for {param:sc-29_odp} in the implementation of the system."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "sc-29_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-29_ODP"
     }
    }
   },

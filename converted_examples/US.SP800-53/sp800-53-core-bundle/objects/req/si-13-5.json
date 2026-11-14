@@ -50,6 +50,11 @@
     {
      "id": "si-13.5_obj",
      "label": "SI-13(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-13.05_odp.01} {param:si-13.05_odp.02} is provided for the system."
      }
@@ -126,7 +131,8 @@
     "si-13.05_odp.01": {
      "alt-identifiers": [
       "si-13.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-13(05)_ODP[01]"
     },
     "si-13.05_odp.02": {
      "guidelines": [
@@ -136,7 +142,8 @@
      ],
      "alt-identifiers": [
       "si-13.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-13(05)_ODP[02]"
     }
    }
   },

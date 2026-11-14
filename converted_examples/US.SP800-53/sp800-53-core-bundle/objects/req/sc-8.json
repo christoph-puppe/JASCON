@@ -46,6 +46,11 @@
     {
      "id": "sc-8_obj",
      "label": "SC-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the {param:sc-08_odp} of transmitted information is/are protected."
      }
@@ -110,7 +115,8 @@
     "sc-08_odp": {
      "alt-identifiers": [
       "sc-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-08_ODP"
     }
    }
   }
@@ -224,7 +230,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SC-9",
     "mode": "merged-into",
-    "label": "SC-09",
+    "label": "SC-9",
     "title": "Transmission Confidentiality"
    },
    {

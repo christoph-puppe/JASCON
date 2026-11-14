@@ -31,10 +31,20 @@
     {
      "id": "at-2.3_obj",
      "label": "AT-02(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "at-2.3_obj-1",
        "label": "AT-02(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "literacy training on recognizing potential and actual instances of social engineering is provided;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "at-2.3_obj-2",
        "label": "AT-02(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "literacy training on reporting potential and actual instances of social engineering is provided;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "at-2.3_obj-3",
        "label": "AT-02(03)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "literacy training on recognizing potential and actual instances of social mining is provided;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "at-2.3_obj-4",
        "label": "AT-02(03)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "literacy training on reporting potential and actual instances of social mining is provided."
        }

@@ -83,10 +83,20 @@
     {
      "id": "ps-7_obj",
      "label": "PS-07",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-7_obj.a",
        "label": "PS-07a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "personnel security requirements are established, including security roles and responsibilities for external providers;"
        }
@@ -94,6 +104,11 @@
       {
        "id": "ps-7_obj.b",
        "label": "PS-07b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "external providers are required to comply with personnel security policies and procedures established by the organization;"
        }
@@ -101,6 +116,11 @@
       {
        "id": "ps-7_obj.c",
        "label": "PS-07c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "personnel security requirements are documented;"
        }
@@ -108,6 +128,11 @@
       {
        "id": "ps-7_obj.d",
        "label": "PS-07d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "external providers are required to notify {param:ps-07_odp.01} of any personnel transfers or terminations of external personnel who possess organizational credentials and/or badges or who have system privileges within {param:ps-07_odp.02};"
        }
@@ -115,6 +140,11 @@
       {
        "id": "ps-7_obj.e",
        "label": "PS-07e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "provider compliance with personnel security requirements is monitored."
        }
@@ -198,7 +228,8 @@
      ],
      "alt-identifiers": [
       "ps-7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PS-07_ODP[01]"
     },
     "ps-07_odp.02": {
      "guidelines": [
@@ -208,7 +239,8 @@
      ],
      "alt-identifiers": [
       "ps-7_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PS-07_ODP[02]"
     }
    }
   },

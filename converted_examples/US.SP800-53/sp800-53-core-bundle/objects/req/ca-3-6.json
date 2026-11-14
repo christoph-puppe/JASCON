@@ -32,6 +32,11 @@
     {
      "id": "ca-3.6_obj",
      "label": "CA-03(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "individuals or systems transferring data between interconnecting systems have the requisite authorizations (i.e., write permissions or privileges) prior to accepting such data."
      }

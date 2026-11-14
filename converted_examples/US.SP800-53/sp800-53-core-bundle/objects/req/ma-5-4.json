@@ -51,10 +51,20 @@
     {
      "id": "ma-5.4_obj",
      "label": "MA-05(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ma-5.4_obj.a",
        "label": "MA-05(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "foreign nationals with appropriate security clearances are used to conduct maintenance and diagnostic activities on classified systems only when the systems are jointly owned and operated by the United States and foreign allied governments or owned and operated solely by foreign allied governments;"
        }
@@ -62,10 +72,20 @@
       {
        "id": "ma-5.4_obj.b",
        "label": "MA-05(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ma-5.4_obj.b-1",
          "label": "MA-05(04)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "approvals regarding the use of foreign nationals to conduct maintenance and diagnostic activities on classified systems are fully documented within Memoranda of Agreements;"
          }
@@ -73,6 +93,11 @@
         {
          "id": "ma-5.4_obj.b-2",
          "label": "MA-05(04)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "consents regarding the use of foreign nationals to conduct maintenance and diagnostic activities on classified systems are fully documented within Memoranda of Agreements;"
          }
@@ -80,6 +105,11 @@
         {
          "id": "ma-5.4_obj.b-3",
          "label": "MA-05(04)(b)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "detailed operational conditions regarding the use of foreign nationals to conduct maintenance and diagnostic activities on classified systems are fully documented within Memoranda of Agreements."
          }

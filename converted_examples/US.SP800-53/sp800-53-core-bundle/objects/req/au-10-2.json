@@ -55,10 +55,20 @@
     {
      "id": "au-10.2_obj",
      "label": "AU-10(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-10.2_obj.a",
        "label": "AU-10(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the binding of the information producer identity to the information is validated at {param:au-10.02_odp.01};"
        }
@@ -66,6 +76,11 @@
       {
        "id": "au-10.2_obj.b",
        "label": "AU-10(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:au-10.02_odp.02} in the event of a validation error are performed."
        }
@@ -143,7 +158,8 @@
      ],
      "alt-identifiers": [
       "au-10.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-10(02)_ODP[01]"
     },
     "au-10.02_odp.02": {
      "guidelines": [
@@ -153,7 +169,8 @@
      ],
      "alt-identifiers": [
       "au-10.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-10(02)_ODP[02]"
     }
    }
   },

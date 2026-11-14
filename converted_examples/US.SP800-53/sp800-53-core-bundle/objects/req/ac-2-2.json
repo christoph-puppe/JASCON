@@ -50,6 +50,11 @@
     {
      "id": "ac-2.2_obj",
      "label": "AC-02(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "temporary and emergency accounts are automatically {param:ac-02.02_odp.01} after {param:ac-02.02_odp.02}."
      }
@@ -123,7 +128,8 @@
     "ac-02.02_odp.01": {
      "alt-identifiers": [
       "ac-2.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(02)_ODP[01]"
     },
     "ac-02.02_odp.02": {
      "guidelines": [
@@ -134,7 +140,8 @@
      "alt-identifiers": [
       "ac-2.2_prm_2"
      ],
-     "alt-label": "time period for each type of account"
+     "alt-label": "time period for each type of account",
+     "sp800-53a-label": "AC-02(02)_ODP[02]"
     }
    }
   }

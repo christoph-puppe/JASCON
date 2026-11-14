@@ -62,10 +62,20 @@
     {
      "id": "ac-7.4_obj",
      "label": "AC-07(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-7.4_obj.a",
        "label": "AC-07(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:ac-07.04_odp.01} that are different from the primary authentication factors are allowed to be used after the number of organization-defined consecutive invalid logon attempts have been exceeded;"
        }
@@ -73,6 +83,11 @@
       {
        "id": "ac-7.4_obj.b",
        "label": "AC-07(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "a limit of {param:ac-07.04_odp.02} consecutive invalid logon attempts through the use of the alternative factors by the user during a {param:ac-07.04_odp.03} is enforced."
        }
@@ -141,7 +156,8 @@
      ],
      "alt-identifiers": [
       "ac-7.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-07(04)_ODP[01]"
     },
     "ac-07.04_odp.02": {
      "guidelines": [
@@ -151,7 +167,8 @@
      ],
      "alt-identifiers": [
       "ac-7.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-07(04)_ODP[02]"
     },
     "ac-07.04_odp.03": {
      "guidelines": [
@@ -161,7 +178,8 @@
      ],
      "alt-identifiers": [
       "ac-7.4_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-07(04)_ODP[03]"
     }
    }
   }

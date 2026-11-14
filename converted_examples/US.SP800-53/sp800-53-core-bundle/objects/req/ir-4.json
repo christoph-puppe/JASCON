@@ -61,14 +61,29 @@
     {
      "id": "ir-4_obj",
      "label": "IR-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-4_obj.a",
        "label": "IR-04a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ir-4_obj.a-1",
          "label": "IR-04a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an incident handling capability for incidents is implemented that is consistent with the incident response plan;"
          }
@@ -76,6 +91,11 @@
         {
          "id": "ir-4_obj.a-2",
          "label": "IR-04a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the incident handling capability for incidents includes preparation;"
          }
@@ -83,6 +103,11 @@
         {
          "id": "ir-4_obj.a-3",
          "label": "IR-04a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the incident handling capability for incidents includes detection and analysis;"
          }
@@ -90,6 +115,11 @@
         {
          "id": "ir-4_obj.a-4",
          "label": "IR-04a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the incident handling capability for incidents includes containment;"
          }
@@ -97,6 +127,11 @@
         {
          "id": "ir-4_obj.a-5",
          "label": "IR-04a.[05]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the incident handling capability for incidents includes eradication;"
          }
@@ -104,6 +139,11 @@
         {
          "id": "ir-4_obj.a-6",
          "label": "IR-04a.[06]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the incident handling capability for incidents includes recovery;"
          }
@@ -113,6 +153,11 @@
       {
        "id": "ir-4_obj.b",
        "label": "IR-04b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "incident handling activities are coordinated with contingency planning activities;"
        }
@@ -120,10 +165,20 @@
       {
        "id": "ir-4_obj.c",
        "label": "IR-04c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "ir-4_obj.c-1",
          "label": "IR-04c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "lessons learned from ongoing incident handling activities are incorporated into incident response procedures, training, and testing;"
          }
@@ -131,6 +186,11 @@
         {
          "id": "ir-4_obj.c-2",
          "label": "IR-04c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the changes resulting from the incorporated lessons learned are implemented accordingly;"
          }
@@ -140,10 +200,20 @@
       {
        "id": "ir-4_obj.d",
        "label": "IR-04d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "ir-4_obj.d-1",
          "label": "IR-04d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the rigor of incident handling activities is comparable and predictable across the organization;"
          }
@@ -151,6 +221,11 @@
         {
          "id": "ir-4_obj.d-2",
          "label": "IR-04d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the intensity of incident handling activities is comparable and predictable across the organization;"
          }
@@ -158,6 +233,11 @@
         {
          "id": "ir-4_obj.d-3",
          "label": "IR-04d.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the scope of incident handling activities is comparable and predictable across the organization;"
          }
@@ -165,6 +245,11 @@
         {
          "id": "ir-4_obj.d-4",
          "label": "IR-04d.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the results of incident handling activities are comparable and predictable across the organization."
          }

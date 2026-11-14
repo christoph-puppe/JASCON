@@ -89,10 +89,20 @@
     {
      "id": "pm-27_obj",
      "label": "PM-27",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-27_obj.a",
        "label": "PM-27a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:pm-27_odp.01} are developed;"
        },
@@ -100,6 +110,11 @@
         {
          "id": "pm-27_obj.a.1",
          "label": "PM-27a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "the privacy reports are disseminated to {param:pm-27_odp.02} to demonstrate accountability with statutory, regulatory, and policy privacy mandates;"
          }
@@ -107,10 +122,20 @@
         {
          "id": "pm-27_obj.a.2",
          "label": "PM-27a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "pm-27_obj.a.2-1",
            "label": "PM-27a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the privacy reports are disseminated to {param:pm-27_odp.03};"
            }
@@ -118,6 +143,11 @@
           {
            "id": "pm-27_obj.a.2-2",
            "label": "PM-27a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the privacy reports are disseminated to other personnel responsible for monitoring privacy program compliance;"
            }
@@ -129,6 +159,11 @@
       {
        "id": "pm-27_obj.b",
        "label": "PM-27b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the privacy reports are reviewed and updated {param:pm-27_odp.04}."
        }
@@ -191,7 +226,8 @@
      ],
      "alt-identifiers": [
       "pm-27_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PM-27_ODP[01]"
     },
     "pm-27_odp.02": {
      "guidelines": [
@@ -201,7 +237,8 @@
      ],
      "alt-identifiers": [
       "pm-27_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PM-27_ODP[02]"
     },
     "pm-27_odp.03": {
      "guidelines": [
@@ -211,7 +248,8 @@
      ],
      "alt-identifiers": [
       "pm-27_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PM-27_ODP[03]"
     },
     "pm-27_odp.04": {
      "guidelines": [
@@ -221,7 +259,8 @@
      ],
      "alt-identifiers": [
       "pm-27_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "PM-27_ODP[04]"
     }
    }
   }

@@ -38,10 +38,20 @@
     {
      "id": "cm-3.3_obj",
      "label": "CM-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-3.3_obj-1",
        "label": "CM-03(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the current system baseline are implemented using {param:cm-03.03_odp};"
        }
@@ -49,6 +59,11 @@
       {
        "id": "cm-3.3_obj-2",
        "label": "CM-03(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the updated baseline is deployed across the installed base using {param:cm-03.03_odp}."
        }
@@ -141,7 +156,8 @@
      ],
      "alt-identifiers": [
       "cm-3.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(03)_ODP"
     }
    }
   }

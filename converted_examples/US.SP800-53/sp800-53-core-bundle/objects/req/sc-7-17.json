@@ -31,6 +31,11 @@
     {
      "id": "sc-7.17_obj",
      "label": "SC-07(17)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "adherence to protocol formats is enforced."
      }

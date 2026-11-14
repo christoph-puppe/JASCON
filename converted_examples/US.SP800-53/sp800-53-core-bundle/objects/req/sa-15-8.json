@@ -31,10 +31,20 @@
     {
      "id": "sa-15.8_obj",
      "label": "SA-15(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-15.8_obj-1",
        "label": "SA-15(08)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to use threat modeling from similar systems, components, or services to inform the current development process;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sa-15.8_obj-2",
        "label": "SA-15(08)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to use vulnerability analyses from similar systems, components, or services to inform the current development process."
        }

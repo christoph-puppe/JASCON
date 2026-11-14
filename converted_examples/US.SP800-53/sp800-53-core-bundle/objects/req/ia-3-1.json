@@ -54,6 +54,11 @@
     {
      "id": "ia-3.1_obj",
      "label": "IA-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ia-03.01_odp.01} are authenticated before establishing {param:ia-03.01_odp.02} connection using bidirectional authentication that is cryptographically based."
      }
@@ -132,12 +137,14 @@
      ],
      "alt-identifiers": [
       "ia-3.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-03(01)_ODP[01]"
     },
     "ia-03.01_odp.02": {
      "alt-identifiers": [
       "ia-3.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-03(01)_ODP[02]"
     }
    }
   }
@@ -171,7 +178,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-3.2",
     "mode": "merged-into",
-    "label": "IA-03(02)",
+    "label": "IA-3(2)",
     "title": "Cryptographic Bidirectional Network Authentication"
    }
   ]

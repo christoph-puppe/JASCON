@@ -63,10 +63,20 @@
     {
      "id": "sa-22_obj",
      "label": "SA-22",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-22_obj.a",
        "label": "SA-22a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "system components are replaced when support for the components is no longer available from the developer, vendor, or manufacturer;"
        }
@@ -74,6 +84,11 @@
       {
        "id": "sa-22_obj.b",
        "label": "SA-22b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:sa-22_odp.01} provide options for alternative sources for continued support for unsupported components."
        }
@@ -146,7 +161,8 @@
     "sa-22_odp.01": {
      "alt-identifiers": [
       "sa-22_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-22_ODP[01]"
     },
     "sa-22_odp.02": {
      "guidelines": [
@@ -156,7 +172,8 @@
      ],
      "alt-identifiers": [
       "sa-22_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-22_ODP[02]"
     }
    }
   },
@@ -185,7 +202,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-22.1",
     "mode": "merged-into",
-    "label": "SA-22(01)",
+    "label": "SA-22(1)",
     "title": "Alternative Sources for Continued Support"
    }
   ]

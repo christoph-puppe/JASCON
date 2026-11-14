@@ -38,6 +38,11 @@
     {
      "id": "ir-7.1_obj",
      "label": "IR-07(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the availability of incident response information and support is increased using {param:ir-07.01_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ir-7.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-07(01)_ODP"
     }
    }
   }

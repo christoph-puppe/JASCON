@@ -38,6 +38,11 @@
     {
      "id": "ac-20.2_obj",
      "label": "AC-20(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the use of organization-controlled portable storage devices by authorized individuals is restricted on external systems using {param:ac-20.02_odp}."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "ac-20.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-20(02)_ODP"
     }
    }
   }

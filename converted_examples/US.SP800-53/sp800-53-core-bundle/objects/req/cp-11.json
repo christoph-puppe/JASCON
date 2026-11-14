@@ -38,6 +38,11 @@
     {
      "id": "cp-11_obj",
      "label": "CP-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the capability to employ {param:cp-11_odp} are provided in support of maintaining continuity of operations."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "cp-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-11_ODP"
     }
    }
   }

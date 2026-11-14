@@ -78,10 +78,20 @@
     {
      "id": "ma-3.3_obj",
      "label": "MA-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ma-3.3_obj.a",
        "label": "MA-03(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the removal of maintenance equipment containing organizational information is prevented by verifying that there is no organizational information contained on the equipment; or"
        }
@@ -89,6 +99,11 @@
       {
        "id": "ma-3.3_obj.b",
        "label": "MA-03(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the removal of maintenance equipment containing organizational information is prevented by sanitizing or destroying the equipment; or"
        }
@@ -96,6 +111,11 @@
       {
        "id": "ma-3.3_obj.c",
        "label": "MA-03(03)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the removal of maintenance equipment containing organizational information is prevented by retaining the equipment within the facility; or"
        }
@@ -103,6 +123,11 @@
       {
        "id": "ma-3.3_obj.d",
        "label": "MA-03(03)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the removal of maintenance equipment containing organizational information is prevented by obtaining an exemption from {param:ma-03.03_odp} explicitly authorizing removal of the equipment from the facility."
        }
@@ -186,7 +211,8 @@
      ],
      "alt-identifiers": [
       "ma-3.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-03(03)_ODP"
     }
    }
   }

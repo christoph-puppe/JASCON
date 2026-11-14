@@ -31,6 +31,11 @@
     {
      "id": "ra-3.2_obj",
      "label": "RA-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "all-source intelligence is used to assist in the analysis of risk."
      }
@@ -120,7 +125,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-12.8",
     "mode": "merged-into",
-    "label": "SA-12(08)",
+    "label": "SA-12(8)",
     "title": "Use of All-source Intelligence"
    }
   ]

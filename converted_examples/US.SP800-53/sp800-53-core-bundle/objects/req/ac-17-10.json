@@ -43,6 +43,11 @@
     {
      "id": "ac-17.10_obj",
      "label": "AC-17(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-17.10_odp.01} are implemented to authenticate {param:ac-17.10_odp.02}."
      }
@@ -112,7 +117,8 @@
      ],
      "alt-identifiers": [
       "ac-17.10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-17(10)_ODP[01]"
     },
     "ac-17.10_odp.02": {
      "guidelines": [
@@ -122,7 +128,8 @@
      ],
      "alt-identifiers": [
       "ac-17.10_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-17(10)_ODP[02]"
     }
    }
   }
@@ -156,7 +163,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-3.9",
     "mode": "renamed",
-    "label": "SI-03(09)",
+    "label": "SI-3(9)",
     "title": "Authenticate Remote Commands"
    }
   ]

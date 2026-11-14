@@ -49,10 +49,20 @@
     {
      "id": "sa-8.22_obj",
      "label": "SA-08(22)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-8.22_obj-1",
        "label": "SA-08(22)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sa-08.22_odp.01} implement the security design principle of accountability;"
        }
@@ -60,6 +70,11 @@
       {
        "id": "sa-8.22_obj-2",
        "label": "SA-08(22)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sa-08.22_odp.02} implement the security design principle of traceability."
        }
@@ -176,14 +191,16 @@
       {
        "en": "systems or system components that implement the security design principle of accountability are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-08(22)_ODP[01]"
     },
     "sa-08.22_odp.02": {
      "guidelines": [
       {
        "en": "systems or system components that implement the security design principle of traceability are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-08(22)_ODP[02]"
     }
    }
   },

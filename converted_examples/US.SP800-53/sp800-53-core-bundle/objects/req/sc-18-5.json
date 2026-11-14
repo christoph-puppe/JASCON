@@ -31,6 +31,11 @@
     {
      "id": "sc-18.5_obj",
      "label": "SC-18(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "execution of permitted mobile code is allowed only in confined virtual machine environments."
      }

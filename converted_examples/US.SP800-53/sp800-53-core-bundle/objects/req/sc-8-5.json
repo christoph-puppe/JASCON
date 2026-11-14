@@ -51,6 +51,11 @@
     {
      "id": "sc-8.5_obj",
      "label": "SC-08(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the {param:sc-08.05_odp.01} is implemented to {param:sc-08.05_odp.02} during transmission."
      }
@@ -123,12 +128,14 @@
      ],
      "alt-identifiers": [
       "sc-8.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-08(05)_ODP[01]"
     },
     "sc-08.05_odp.02": {
      "alt-identifiers": [
       "sc-8.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-08(05)_ODP[02]"
     }
    }
   }

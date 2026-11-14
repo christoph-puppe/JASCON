@@ -43,6 +43,11 @@
     {
      "id": "cm-12.1_obj",
      "label": "CM-12(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "automated tools are used to identify {param:cm-12.01_odp.01} on {param:cm-12.01_odp.02} to ensure that controls are in place to protect organizational information and individual privacy."
      }
@@ -133,7 +138,8 @@
      ],
      "alt-identifiers": [
       "cm-12.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-12(01)_ODP[01]"
     },
     "cm-12.01_odp.02": {
      "guidelines": [
@@ -143,7 +149,8 @@
      ],
      "alt-identifiers": [
       "cm-12.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-12(01)_ODP[02]"
     }
    }
   },

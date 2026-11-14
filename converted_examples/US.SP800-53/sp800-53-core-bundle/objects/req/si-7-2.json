@@ -38,6 +38,11 @@
     {
      "id": "si-7.2_obj",
      "label": "SI-07(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "automated tools that provide notification to {param:si-07.02_odp} upon discovering discrepancies during integrity verification are employed."
      }
@@ -134,7 +139,8 @@
      ],
      "alt-identifiers": [
       "si-7.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(02)_ODP"
     }
    }
   },

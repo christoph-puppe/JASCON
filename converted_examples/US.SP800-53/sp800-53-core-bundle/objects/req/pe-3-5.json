@@ -56,6 +56,11 @@
     {
      "id": "pe-3.5_obj",
      "label": "PE-03(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pe-03.05_odp.01} are employed to {param:pe-03.05_odp.02} physical tampering or alteration of {param:pe-03.05_odp.03} within the system."
      }
@@ -119,12 +124,14 @@
      ],
      "alt-identifiers": [
       "pe-3.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-03(05)_ODP[01]"
     },
     "pe-03.05_odp.02": {
      "alt-identifiers": [
       "pe-3.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-03(05)_ODP[02]"
     },
     "pe-03.05_odp.03": {
      "guidelines": [
@@ -134,7 +141,8 @@
      ],
      "alt-identifiers": [
       "pe-3.5_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PE-03(05)_ODP[03]"
     }
    }
   }

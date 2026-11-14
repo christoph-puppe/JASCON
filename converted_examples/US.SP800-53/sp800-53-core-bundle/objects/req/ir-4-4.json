@@ -31,6 +31,11 @@
     {
      "id": "ir-4.4_obj",
      "label": "IR-04(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "incident information and individual incident responses are correlated to achieve an organization-wide perspective on incident awareness and response."
      }

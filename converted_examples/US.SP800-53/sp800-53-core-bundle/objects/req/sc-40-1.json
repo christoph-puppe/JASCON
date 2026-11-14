@@ -38,6 +38,11 @@
     {
      "id": "sc-40.1_obj",
      "label": "SC-40(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cryptographic mechanisms that achieve {param:sc-40.01_odp} against the effects of intentional electromagnetic interference are implemented."
      }
@@ -128,7 +133,8 @@
      ],
      "alt-identifiers": [
       "sc-40.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-40(01)_ODP"
     }
    }
   }

@@ -121,14 +121,29 @@
     {
      "id": "sa-11.2_obj",
      "label": "SA-11(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-11.2_obj.a",
        "label": "SA-11(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-11.2_obj.a-1",
          "label": "SA-11(02)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform threat modeling during development of the system, component, or service that uses {param:sa-11.02_odp.01};"
          }
@@ -136,6 +151,11 @@
         {
          "id": "sa-11.2_obj.a-2",
          "label": "SA-11(02)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform vulnerability analyses during development of the system, component, or service that uses {param:sa-11.02_odp.01};"
          }
@@ -143,6 +163,11 @@
         {
          "id": "sa-11.2_obj.a-3",
          "label": "SA-11(02)(a)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform threat modeling during the subsequent testing and evaluation of the system, component, or service that uses {param:sa-11.02_odp.01};"
          }
@@ -150,6 +175,11 @@
         {
          "id": "sa-11.2_obj.a-4",
          "label": "SA-11(02)(a)[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform vulnerability analyses during the subsequent testing and evaluation of the system, component, or service that uses {param:sa-11.02_odp.01};"
          }
@@ -159,10 +189,20 @@
       {
        "id": "sa-11.2_obj.b",
        "label": "SA-11(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sa-11.2_obj.b-1",
          "label": "SA-11(02)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform threat modeling during development of the system, component, or service that employs {param:sa-11.02_odp.02};"
          }
@@ -170,6 +210,11 @@
         {
          "id": "sa-11.2_obj.b-2",
          "label": "SA-11(02)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform threat modeling during the subsequent testing and evaluation of the system, component, or service that employs {param:sa-11.02_odp.02};"
          }
@@ -177,6 +222,11 @@
         {
          "id": "sa-11.2_obj.b-3",
          "label": "SA-11(02)(b)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform vulnerability analyses during development of the system, component, or service that employs {param:sa-11.02_odp.02};"
          }
@@ -184,6 +234,11 @@
         {
          "id": "sa-11.2_obj.b-4",
          "label": "SA-11(02)(b)[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform vulnerability analyses during the subsequent testing and evaluation of the system, component, or service that employs {param:sa-11.02_odp.02};"
          }
@@ -193,10 +248,20 @@
       {
        "id": "sa-11.2_obj.c",
        "label": "SA-11(02)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sa-11.2_obj.c-1",
          "label": "SA-11(02)(c)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform threat modeling at {param:sa-11.02_odp.03} during development of the system, component, or service;"
          }
@@ -204,6 +269,11 @@
         {
          "id": "sa-11.2_obj.c-2",
          "label": "SA-11(02)(c)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform vulnerability analyses during the subsequent testing and evaluation of the system, component, or service that conducts modeling and analyses at {param:sa-11.02_odp.04};"
          }
@@ -213,10 +283,20 @@
       {
        "id": "sa-11.2_obj.d",
        "label": "SA-11(02)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "sa-11.2_obj.d-1",
          "label": "SA-11(02)(d)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform threat modeling during development of the system, component, or service that produces evidence that meets {param:sa-11.02_odp.05};"
          }
@@ -224,6 +304,11 @@
         {
          "id": "sa-11.2_obj.d-2",
          "label": "SA-11(02)(d)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform threat modeling during the subsequent testing and evaluation of the system, component, or service that produces evidence that meets {param:sa-11.02_odp.05};"
          }
@@ -231,6 +316,11 @@
         {
          "id": "sa-11.2_obj.d-3",
          "label": "SA-11(02)(d)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform vulnerability analyses during development of the system, component, or service that produces evidence that meets {param:sa-11.02_odp.06};"
          }
@@ -238,6 +328,11 @@
         {
          "id": "sa-11.2_obj.d-4",
          "label": "SA-11(02)(d)[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to perform vulnerability analyses during the subsequent testing and evaluation of the system, component, or service that produces evidence that meets {param:sa-11.02_odp.06}."
          }
@@ -354,7 +449,8 @@
      "alt-identifiers": [
       "sa-11.2_prm_1"
      ],
-     "alt-label": "information concerning impact, environment of operations, known or assumed threats, and acceptable risk levels"
+     "alt-label": "information concerning impact, environment of operations, known or assumed threats, and acceptable risk levels",
+     "sp800-53a-label": "SA-11(02)_ODP[01]"
     },
     "sa-11.02_odp.02": {
      "guidelines": [
@@ -364,35 +460,40 @@
      ],
      "alt-identifiers": [
       "sa-11.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-11(02)_ODP[02]"
     },
     "sa-11.02_odp.03": {
      "guidelines": [
       {
        "en": "the breadth and depth of threat modeling to be conducted is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-11(02)_ODP[03]"
     },
     "sa-11.02_odp.04": {
      "guidelines": [
       {
        "en": "the breadth and depth of vulnerability analyses to be conducted is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-11(02)_ODP[04]"
     },
     "sa-11.02_odp.05": {
      "guidelines": [
       {
        "en": "acceptance criteria to be met by produced evidence for threat modeling are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-11(02)_ODP[05]"
     },
     "sa-11.02_odp.06": {
      "guidelines": [
       {
        "en": "acceptance criteria to be met by produced evidence for vulnerability analyses are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-11(02)_ODP[06]"
     }
    }
   },
@@ -429,7 +530,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-15.4",
     "mode": "merged-into",
-    "label": "SA-15(04)",
+    "label": "SA-15(4)",
     "title": "Threat Modeling and Vulnerability Analysis"
    }
   ]

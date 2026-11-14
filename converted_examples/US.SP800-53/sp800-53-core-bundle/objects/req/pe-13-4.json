@@ -43,10 +43,20 @@
     {
      "id": "pe-13.4_obj",
      "label": "PE-13(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-13.4_obj-1",
        "label": "PE-13(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the facility undergoes fire protection inspections {param:pe-13.04_odp.01} by authorized and qualified inspectors;"
        }
@@ -54,6 +64,11 @@
       {
        "id": "pe-13.4_obj-2",
        "label": "PE-13(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the identified deficiencies from fire protection inspections are resolved within {param:pe-13.04_odp.02}."
        }
@@ -119,7 +134,8 @@
      ],
      "alt-identifiers": [
       "pe-13.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-13(04)_ODP[01]"
     },
     "pe-13.04_odp.02": {
      "guidelines": [
@@ -129,7 +145,8 @@
      ],
      "alt-identifiers": [
       "pe-13.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-13(04)_ODP[02]"
     }
    }
   }

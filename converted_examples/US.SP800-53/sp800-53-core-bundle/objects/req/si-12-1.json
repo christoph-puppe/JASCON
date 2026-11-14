@@ -38,6 +38,11 @@
     {
      "id": "si-12.1_obj",
      "label": "SI-12(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "personally identifiable information being processed in the information life cycle is limited to {param:si-12.01_odp}."
      }
@@ -140,7 +145,8 @@
      ],
      "alt-identifiers": [
       "si-12.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-12(01)_ODP"
     }
    }
   }

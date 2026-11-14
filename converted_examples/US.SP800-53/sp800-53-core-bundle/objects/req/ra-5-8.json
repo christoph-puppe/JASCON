@@ -43,6 +43,11 @@
     {
      "id": "ra-5.8_obj",
      "label": "RA-05(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "historic audit logs are reviewed to determine if a vulnerability identified in a {param:ra-05.08_odp.01} has been previously exploited within {param:ra-05.08_odp.02}."
      }
@@ -130,7 +135,8 @@
      ],
      "alt-identifiers": [
       "ra-5.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(08)_ODP[01]"
     },
     "ra-05.08_odp.02": {
      "guidelines": [
@@ -140,7 +146,8 @@
      ],
      "alt-identifiers": [
       "ra-5.8_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(08)_ODP[02]"
     }
    }
   },

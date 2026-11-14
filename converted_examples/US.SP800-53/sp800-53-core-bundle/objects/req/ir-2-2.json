@@ -38,6 +38,11 @@
     {
      "id": "ir-2.2_obj",
      "label": "IR-02(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an incident response training environment is provided using {param:ir-02.02_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ir-2.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-02(02)_ODP"
     }
    }
   },

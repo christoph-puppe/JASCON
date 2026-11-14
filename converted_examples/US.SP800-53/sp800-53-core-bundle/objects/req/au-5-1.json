@@ -48,6 +48,11 @@
     {
      "id": "au-5.1_obj",
      "label": "AU-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a warning is provided to {param:au-05.01_odp.01} within {param:au-05.01_odp.02} when allocated audit log storage volume reaches {param:au-05.01_odp.03} of repository maximum audit log storage capacity."
      }
@@ -120,7 +125,8 @@
      ],
      "alt-identifiers": [
       "au-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(01)_ODP[01]"
     },
     "au-05.01_odp.02": {
      "guidelines": [
@@ -130,7 +136,8 @@
      ],
      "alt-identifiers": [
       "au-5.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(01)_ODP[02]"
     },
     "au-05.01_odp.03": {
      "guidelines": [
@@ -140,7 +147,8 @@
      ],
      "alt-identifiers": [
       "au-5.1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(01)_ODP[03]"
     }
    }
   }

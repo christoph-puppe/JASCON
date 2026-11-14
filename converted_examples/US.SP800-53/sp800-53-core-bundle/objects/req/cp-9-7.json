@@ -38,6 +38,11 @@
     {
      "id": "cp-9.7_obj",
      "label": "CP-09(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "dual authorization for the deletion or destruction of {param:cp-09.07_odp} is enforced."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "cp-9.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-09(07)_ODP"
     }
    }
   }

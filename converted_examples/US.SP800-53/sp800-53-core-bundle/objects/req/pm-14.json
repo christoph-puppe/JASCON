@@ -61,18 +61,38 @@
     {
      "id": "pm-14_obj",
      "label": "PM-14",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-14_obj.a",
        "label": "PM-14a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-14_obj.a.1",
          "label": "PM-14a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "pm-14_obj.a.1-1",
            "label": "PM-14a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process is implemented for ensuring that organizational plans for conducting security testing, training, and monitoring activities associated with organizational systems are developed;"
            }
@@ -80,6 +100,11 @@
           {
            "id": "pm-14_obj.a.1-2",
            "label": "PM-14a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process is implemented for ensuring that organizational plans for conducting security testing, training, and monitoring activities associated with organizational systems are maintained;"
            }
@@ -87,6 +112,11 @@
           {
            "id": "pm-14_obj.a.1-3",
            "label": "PM-14a.01[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process is implemented for ensuring that organizational plans for conducting privacy testing, training, and monitoring activities associated with organizational systems are developed;"
            }
@@ -94,6 +124,11 @@
           {
            "id": "pm-14_obj.a.1-4",
            "label": "PM-14a.01[04]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process is implemented for ensuring that organizational plans for conducting privacy testing, training, and monitoring activities associated with organizational systems are maintained;"
            }
@@ -103,10 +138,20 @@
         {
          "id": "pm-14_obj.a.2",
          "label": "PM-14a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "pm-14_obj.a.2-1",
            "label": "PM-14a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a process is implemented for ensuring that organizational plans for conducting security testing, training, and monitoring activities associated with organizational systems continue to be executed;"
            }
@@ -114,6 +159,11 @@
           {
            "id": "pm-14_obj.a.2-2",
            "label": "PM-14a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a process is implemented for ensuring that organizational plans for conducting privacy testing, training, and monitoring activities associated with organizational systems continue to be executed;"
            }
@@ -125,10 +175,20 @@
       {
        "id": "pm-14_obj.b",
        "label": "PM-14b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-14_obj.b-1",
          "label": "PM-14b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "testing plans are reviewed for consistency with the organizational risk management strategy;"
          }
@@ -136,6 +196,11 @@
         {
          "id": "pm-14_obj.b-2",
          "label": "PM-14b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "training plans are reviewed for consistency with the organizational risk management strategy;"
          }
@@ -143,6 +208,11 @@
         {
          "id": "pm-14_obj.b-3",
          "label": "PM-14b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "monitoring plans are reviewed for consistency with the organizational risk management strategy;"
          }
@@ -150,6 +220,11 @@
         {
          "id": "pm-14_obj.b-4",
          "label": "PM-14b.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "testing plans are reviewed for consistency with organization-wide priorities for risk response actions;"
          }
@@ -157,6 +232,11 @@
         {
          "id": "pm-14_obj.b-5",
          "label": "PM-14b.[05]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "training plans are reviewed for consistency with organization-wide priorities for risk response actions;"
          }
@@ -164,6 +244,11 @@
         {
          "id": "pm-14_obj.b-6",
          "label": "PM-14b.[06]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "monitoring plans are reviewed for consistency with organization-wide priorities for risk response actions."
          }

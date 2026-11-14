@@ -31,6 +31,11 @@
     {
      "id": "ir-4.6_obj",
      "label": "IR-04(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an incident handling capability is implemented for incidents involving insider threats."
      }

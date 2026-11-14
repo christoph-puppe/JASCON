@@ -63,10 +63,20 @@
     {
      "id": "sc-40_obj",
      "label": "SC-40",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-40_obj-1",
        "label": "SC-40[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "external {param:sc-40_odp.01} are protected from {param:sc-40_odp.02}."
        }
@@ -74,6 +84,11 @@
       {
        "id": "sc-40_obj-2",
        "label": "SC-40[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "internal {param:sc-40_odp.03} are protected from {param:sc-40_odp.04}."
        }
@@ -175,28 +190,32 @@
       {
        "en": "external wireless links to be protected from particular types of signal parameter attacks are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SC-40_ODP[01]"
     },
     "sc-40_odp.02": {
      "guidelines": [
       {
        "en": "types of signal parameter attacks or references to sources for such attacks from which to protect external wireless links are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SC-40_ODP[02]"
     },
     "sc-40_odp.03": {
      "guidelines": [
       {
        "en": "internal wireless links to be protected from particular types of signal parameter attacks are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SC-40_ODP[03]"
     },
     "sc-40_odp.04": {
      "guidelines": [
       {
        "en": "types of signal parameter attacks or references to sources for such attacks from which to protect internal wireless links are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SC-40_ODP[04]"
     }
    }
   }

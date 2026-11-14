@@ -31,6 +31,11 @@
     {
      "id": "ac-20.5_obj",
      "label": "AC-20(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the use of organization-controlled portable storage devices by authorized individuals is prohibited on external systems."
      }

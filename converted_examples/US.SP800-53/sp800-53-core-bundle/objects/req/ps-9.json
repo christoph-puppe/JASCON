@@ -31,10 +31,20 @@
     {
      "id": "ps-9_obj",
      "label": "PS-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-9_obj-1",
        "label": "PS-09[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "security roles and responsibilities are incorporated into organizational position descriptions;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ps-9_obj-2",
        "label": "PS-09[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "privacy roles and responsibilities are incorporated into organizational position descriptions."
        }

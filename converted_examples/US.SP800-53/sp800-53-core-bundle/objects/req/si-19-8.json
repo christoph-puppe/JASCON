@@ -32,6 +32,11 @@
     {
      "id": "si-19.8_obj",
      "label": "SI-19(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a motivated intruder test is performed on the de-identified dataset to determine if the identified data remains or if the de-identified data can be re-identified."
      }

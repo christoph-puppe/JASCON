@@ -58,10 +58,20 @@
     {
      "id": "sa-4.5_obj",
      "label": "SA-04(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-4.5_obj.a",
        "label": "SA-04(05)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to deliver the system, component, or service with {param:sa-04.05_odp} implemented;"
        }
@@ -69,6 +79,11 @@
       {
        "id": "sa-4.5_obj.b",
        "label": "SA-04(05)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the configurations are used as the default for any subsequent system, component, or service reinstallation or upgrade."
        }
@@ -149,7 +164,8 @@
      ],
      "alt-identifiers": [
       "sa-4.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-04(05)_ODP"
     }
    }
   },

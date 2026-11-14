@@ -49,10 +49,20 @@
     {
      "id": "cm-14_obj",
      "label": "CM-14",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-14_obj-1",
        "label": "CM-14[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the installation of {param:cm-14_odp.01} is prevented unless it is verified that the software has been digitally signed using a certificate recognized and approved by the organization;"
        }
@@ -60,6 +70,11 @@
       {
        "id": "cm-14_obj-2",
        "label": "CM-14[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the installation of {param:cm-14_odp.02} is prevented unless it is verified that the firmware has been digitally signed using a certificate recognized and approved by the organization."
        }
@@ -152,14 +167,16 @@
       {
        "en": "software components requiring verification of a digitally signed certificate before installation are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-14_ODP[01]"
     },
     "cm-14_odp.02": {
      "guidelines": [
       {
        "en": "firmware components requiring verification of a digitally signed certificate before installation are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-14_ODP[02]"
     }
    }
   },
@@ -200,7 +217,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CM-5.3",
     "mode": "renamed",
-    "label": "CM-05(03)",
+    "label": "CM-5(3)",
     "title": "Signed Components"
    }
   ]

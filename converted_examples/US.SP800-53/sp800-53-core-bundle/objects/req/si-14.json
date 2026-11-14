@@ -56,10 +56,20 @@
     {
      "id": "si-14_obj",
      "label": "SI-14",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-14_obj-1",
        "label": "SI-14[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "non-persistent {param:si-14_odp.01} that are initiated in a known state are implemented;"
        }
@@ -67,6 +77,11 @@
       {
        "id": "si-14_obj-2",
        "label": "SI-14[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "non-persistent {param:si-14_odp.01} are terminated {param:si-14_odp.02}."
        }
@@ -144,12 +159,14 @@
      ],
      "alt-identifiers": [
       "si-14_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-14_ODP[01]"
     },
     "si-14_odp.02": {
      "alt-identifiers": [
       "si-14_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-14_ODP[02]"
     },
     "si-14_odp.03": {
      "guidelines": [
@@ -159,7 +176,8 @@
      ],
      "alt-identifiers": [
       "si-14_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-14_ODP[03]"
     }
    }
   },

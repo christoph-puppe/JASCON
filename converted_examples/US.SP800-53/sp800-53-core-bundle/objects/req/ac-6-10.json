@@ -22,7 +22,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Privileged functions include disabling, circumventing, or altering implemented security or privacy controls, establishing system accounts, performing system integrity checks, and administering cryptographic key management activities. Non-privileged users are individuals who do not possess appropriate authorizations. Privileged functions that require protection from non-privileged users include circumventing intrusion detection and prevention mechanisms or malicious code protection mechanisms. Preventing non-privileged users from executing privileged functions is enforced by AC-3."
+     "en": "Privileged functions include disabling, circumventing, or altering implemented security or privacy controls, establishing system accounts, performing system integrity checks, and administering cryptographic key management activities. Non-privileged users are individuals who do not possess appropriate authorizations. Privileged functions that require protection from non-privileged users include circumventing intrusion detection and prevention mechanisms or malicious code protection mechanisms. Preventing non-privileged users from executing privileged functions is enforced by [AC-3](#ac-3)."
     }
    ]
   },
@@ -31,6 +31,11 @@
     {
      "id": "ac-6.10_obj",
      "label": "AC-06(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "non-privileged users are prevented from executing privileged functions."
      }
@@ -115,13 +120,13 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-3.3",
     "mode": "merged-into",
-    "label": "SI-03(03)",
+    "label": "SI-3(3)",
     "title": "Non-privileged Users"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-4.6",
     "mode": "merged-into",
-    "label": "SI-04(06)",
+    "label": "SI-4(6)",
     "title": "Restrict Non-privileged Users"
    }
   ]

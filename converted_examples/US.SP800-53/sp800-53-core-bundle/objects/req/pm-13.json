@@ -31,10 +31,20 @@
     {
      "id": "pm-13_obj",
      "label": "PM-13",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-13_obj-1",
        "label": "PM-13[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a security workforce development and improvement program is established;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pm-13_obj-2",
        "label": "PM-13[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a privacy workforce development and improvement program is established."
        }

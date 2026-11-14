@@ -83,10 +83,20 @@
     {
      "id": "sc-7.24_obj",
      "label": "SC-07(24)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-7.24_obj.a",
        "label": "SC-07(24)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:sc-07.24_odp} are applied to data elements of personally identifiable information on systems that process personally identifiable information;"
        }
@@ -94,10 +104,20 @@
       {
        "id": "sc-7.24_obj.b",
        "label": "SC-07(24)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sc-7.24_obj.b-1",
          "label": "SC-07(24)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "permitted processing is monitored at the external interfaces to the systems that process personally identifiable information;"
          }
@@ -105,6 +125,11 @@
         {
          "id": "sc-7.24_obj.b-2",
          "label": "SC-07(24)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "permitted processing is monitored at key internal boundaries within the systems that process personally identifiable information;"
          }
@@ -114,6 +139,11 @@
       {
        "id": "sc-7.24_obj.c",
        "label": "SC-07(24)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "each processing exception is documented for systems that process personally identifiable information;"
        }
@@ -121,10 +151,20 @@
       {
        "id": "sc-7.24_obj.d",
        "label": "SC-07(24)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "sc-7.24_obj.d-1",
          "label": "SC-07(24)(d)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "exceptions for systems that process personally identifiable information are reviewed;"
          }
@@ -132,6 +172,11 @@
         {
          "id": "sc-7.24_obj.d-2",
          "label": "SC-07(24)(d)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "exceptions for systems that process personally identifiable information that are no longer supported are removed."
          }
@@ -226,7 +271,8 @@
      ],
      "alt-identifiers": [
       "sc-7.24_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(24)_ODP"
     }
    }
   }

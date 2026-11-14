@@ -38,10 +38,20 @@
     {
      "id": "ac-2.8_obj",
      "label": "AC-02(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-2.8_obj-1",
        "label": "AC-02(08)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ac-02.08_odp} are created dynamically;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "ac-2.8_obj-2",
        "label": "AC-02(08)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ac-02.08_odp} are activated dynamically;"
        }
@@ -56,6 +71,11 @@
       {
        "id": "ac-2.8_obj-3",
        "label": "AC-02(08)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ac-02.08_odp} are managed dynamically;"
        }
@@ -63,6 +83,11 @@
       {
        "id": "ac-2.8_obj-4",
        "label": "AC-02(08)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ac-02.08_odp} are deactivated dynamically."
        }
@@ -140,7 +165,8 @@
      ],
      "alt-identifiers": [
       "ac-2.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(08)_ODP"
     }
    }
   }

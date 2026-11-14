@@ -88,10 +88,20 @@
     {
      "id": "ac-4.1_obj",
      "label": "AC-04(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-4.1_obj-1",
        "label": "AC-04(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ac-04.01_odp.01} associated with {param:ac-04.01_odp.03}, {param:ac-04.01_odp.05} , and {param:ac-04.01_odp.07} are used to enforce {param:ac-04.01_odp.09} as a basis for flow control decisions;"
        }
@@ -99,6 +109,11 @@
       {
        "id": "ac-4.1_obj-2",
        "label": "AC-04(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ac-04.01_odp.02} associated with {param:ac-04.01_odp.04}, {param:ac-04.01_odp.06} , and {param:ac-04.01_odp.08} are used to enforce {param:ac-04.01_odp.09} as a basis for flow control decisions."
        }
@@ -195,56 +210,64 @@
       {
        "en": "security attributes to be associated with information, source, and destination objects are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[01]"
     },
     "ac-04.01_odp.02": {
      "guidelines": [
       {
        "en": "privacy attributes to be associated with information, source, and destination objects are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[02]"
     },
     "ac-04.01_odp.03": {
      "guidelines": [
       {
        "en": "information objects to be associated with information security attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[03]"
     },
     "ac-04.01_odp.04": {
      "guidelines": [
       {
        "en": "information objects to be associated with privacy attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[04]"
     },
     "ac-04.01_odp.05": {
      "guidelines": [
       {
        "en": "source objects to be associated with information security attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[05]"
     },
     "ac-04.01_odp.06": {
      "guidelines": [
       {
        "en": "source objects to be associated with privacy attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[06]"
     },
     "ac-04.01_odp.07": {
      "guidelines": [
       {
        "en": "destination objects to be associated with information security attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[07]"
     },
     "ac-04.01_odp.08": {
      "guidelines": [
       {
        "en": "destination objects to be associated with privacy attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[08]"
     },
     "ac-04.01_odp.09": {
      "guidelines": [
@@ -254,7 +277,8 @@
      ],
      "alt-identifiers": [
       "ac-4.1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(01)_ODP[09]"
     }
    }
   }

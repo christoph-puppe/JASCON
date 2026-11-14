@@ -71,14 +71,29 @@
     {
      "id": "sr-11_obj",
      "label": "SR-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-11_obj.a",
        "label": "SR-11a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sr-11_obj.a-1",
          "label": "SR-11a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an anti-counterfeit policy is developed and implemented;"
          }
@@ -86,6 +101,11 @@
         {
          "id": "sr-11_obj.a-2",
          "label": "SR-11a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "anti-counterfeit procedures are developed and implemented;"
          }
@@ -93,6 +113,11 @@
         {
          "id": "sr-11_obj.a-3",
          "label": "SR-11a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the anti-counterfeit procedures include the means to detect counterfeit components entering the system;"
          }
@@ -100,6 +125,11 @@
         {
          "id": "sr-11_obj.a-4",
          "label": "SR-11a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the anti-counterfeit procedures include the means to prevent counterfeit components from entering the system;"
          }
@@ -109,6 +139,11 @@
       {
        "id": "sr-11_obj.b",
        "label": "SR-11b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "counterfeit system components are reported to {param:sr-11_odp.01}."
        }
@@ -208,7 +243,8 @@
     "sr-11_odp.01": {
      "alt-identifiers": [
       "sr-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-11_ODP[01]"
     },
     "sr-11_odp.02": {
      "guidelines": [
@@ -218,7 +254,8 @@
      ],
      "alt-identifiers": [
       "sr-11_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SR-11_ODP[02]"
     },
     "sr-11_odp.03": {
      "guidelines": [
@@ -228,7 +265,8 @@
      ],
      "alt-identifiers": [
       "sr-11_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SR-11_ODP[03]"
     }
    }
   },

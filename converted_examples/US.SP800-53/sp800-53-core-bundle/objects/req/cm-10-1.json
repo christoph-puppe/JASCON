@@ -38,6 +38,11 @@
     {
      "id": "cm-10.1_obj",
      "label": "CM-10(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cm-10.01_odp} are established for the use of open-source software."
      }
@@ -128,7 +133,8 @@
      ],
      "alt-identifiers": [
       "cm-10.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-10(01)_ODP"
     }
    }
   }

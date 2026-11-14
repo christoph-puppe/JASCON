@@ -43,6 +43,11 @@
     {
      "id": "at-3.2_obj",
      "label": "AT-03(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:at-03.02_odp.01} is/are provided with initial and refresher training {param:at-03.02_odp.02} in the employment and operation of physical security controls."
      }
@@ -103,7 +108,8 @@
      ],
      "alt-identifiers": [
       "at-3.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AT-03(02)_ODP[01]"
     },
     "at-03.02_odp.02": {
      "guidelines": [
@@ -113,7 +119,8 @@
      ],
      "alt-identifiers": [
       "at-3.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AT-03(02)_ODP[02]"
     }
    }
   },

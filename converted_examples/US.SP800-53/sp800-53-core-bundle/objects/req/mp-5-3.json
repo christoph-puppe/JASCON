@@ -31,10 +31,20 @@
     {
      "id": "mp-5.3_obj",
      "label": "MP-05(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-5.3_obj-1",
        "label": "MP-05(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a custodian to transport system media outside of controlled areas is identified;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "mp-5.3_obj-2",
        "label": "MP-05(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the identified custodian is employed during the transport of system media outside of controlled areas."
        }

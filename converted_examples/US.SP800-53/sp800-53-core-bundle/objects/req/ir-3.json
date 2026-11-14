@@ -43,6 +43,11 @@
     {
      "id": "ir-3_obj",
      "label": "IR-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the effectiveness of the incident response capability for the system is tested {param:ir-03_odp.01} using {param:ir-03_odp.02}."
      }
@@ -115,7 +120,8 @@
      ],
      "alt-identifiers": [
       "ir-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-03_ODP[01]"
     },
     "ir-03_odp.02": {
      "guidelines": [
@@ -125,7 +131,8 @@
      ],
      "alt-identifiers": [
       "ir-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IR-03_ODP[02]"
     }
    }
   },

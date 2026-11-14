@@ -31,10 +31,20 @@
     {
      "id": "mp-8.3_obj",
      "label": "MP-08(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-8.3_obj-1",
        "label": "MP-08(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "system media containing controlled unclassified information is identified;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "mp-8.3_obj-2",
        "label": "MP-08(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "system media containing controlled unclassified information is downgraded prior to public release."
        }

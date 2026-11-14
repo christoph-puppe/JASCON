@@ -38,6 +38,11 @@
     {
      "id": "sc-30.2_obj",
      "label": "SC-30(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-30.02_odp} are employed to introduce randomness into organizational operations and assets."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "sc-30.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-30(02)_ODP"
     }
    }
   },

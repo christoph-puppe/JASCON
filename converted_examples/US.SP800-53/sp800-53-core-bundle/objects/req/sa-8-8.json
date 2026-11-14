@@ -39,6 +39,11 @@
     {
      "id": "sa-8.8_obj",
      "label": "SA-08(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.08_odp} implement the security design principle of secure evolvability."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "sa-8.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(08)_ODP"
     }
    }
   },

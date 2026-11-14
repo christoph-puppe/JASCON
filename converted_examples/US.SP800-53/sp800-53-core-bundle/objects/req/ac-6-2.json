@@ -38,6 +38,11 @@
     {
      "id": "ac-6.2_obj",
      "label": "AC-06(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "users of system accounts (or roles) with access to {param:ac-06.02_odp} are required to use non-privileged accounts or roles when accessing non-security functions."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "ac-6.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-06(02)_ODP"
     }
    }
   }

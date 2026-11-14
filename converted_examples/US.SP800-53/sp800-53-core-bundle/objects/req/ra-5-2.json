@@ -54,6 +54,11 @@
     {
      "id": "ra-5.2_obj",
      "label": "RA-05(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the system vulnerabilities to be scanned are updated {param:ra-05.02_odp.01}."
      }
@@ -124,7 +129,8 @@
     "ra-05.02_odp.01": {
      "alt-identifiers": [
       "ra-5.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(02)_ODP[01]"
     },
     "ra-05.02_odp.02": {
      "guidelines": [
@@ -134,7 +140,8 @@
      ],
      "alt-identifiers": [
       "ra-5.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(02)_ODP[02]"
     }
    }
   },

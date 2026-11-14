@@ -38,6 +38,11 @@
     {
      "id": "ac-3.5_obj",
      "label": "AC-03(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "access to {param:ac-03.05_odp} is prevented except during secure, non-operable system states."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ac-3.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-03(05)_ODP"
     }
    }
   }

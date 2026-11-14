@@ -51,10 +51,20 @@
     {
      "id": "cp-4.2_obj",
      "label": "CP-04(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-4.2_obj.a",
        "label": "CP-04(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the contingency plan is tested at the alternate processing site to familiarize contingency personnel with the facility and available resources;"
        }
@@ -62,6 +72,11 @@
       {
        "id": "cp-4.2_obj.b",
        "label": "CP-04(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the contingency plan is tested at the alternate processing site to evaluate the capabilities of the alternate processing site to support contingency operations."
        }

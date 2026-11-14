@@ -38,6 +38,11 @@
     {
      "id": "ia-5.13_obj",
      "label": "IA-05(13)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the use of cached authenticators is prohibited after {param:ia-05.13_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ia-5.13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(13)_ODP"
     }
    }
   }

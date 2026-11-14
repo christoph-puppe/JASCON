@@ -114,10 +114,20 @@
     {
      "id": "pm-26_obj",
      "label": "PM-26",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-26_obj-1",
        "label": "PM-26[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a process for receiving complaints, concerns, or questions from individuals about organizational security and privacy practices is implemented;"
        }
@@ -125,6 +135,11 @@
       {
        "id": "pm-26_obj-2",
        "label": "PM-26[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a process for responding to complaints, concerns, or questions from individuals about organizational security and privacy practices is implemented;"
        }
@@ -132,10 +147,20 @@
       {
        "id": "pm-26_obj.a",
        "label": "PM-26a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-26_obj.a-1",
          "label": "PM-26a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the complaint management process includes mechanisms that are easy to use by the public;"
          }
@@ -143,6 +168,11 @@
         {
          "id": "pm-26_obj.a-2",
          "label": "PM-26a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the complaint management process includes mechanisms that are readily accessible by the public;"
          }
@@ -152,6 +182,11 @@
       {
        "id": "pm-26_obj.b",
        "label": "PM-26b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the complaint management process includes all information necessary for successfully filing complaints;"
        }
@@ -159,10 +194,20 @@
       {
        "id": "pm-26_obj.c",
        "label": "PM-26c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "pm-26_obj.c-1",
          "label": "PM-26c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the complaint management process includes tracking mechanisms to ensure that all complaints are reviewed within {param:pm-26_odp.01};"
          }
@@ -170,6 +215,11 @@
         {
          "id": "pm-26_obj.c-2",
          "label": "PM-26c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the complaint management process includes tracking mechanisms to ensure that all complaints are addressed within {param:pm-26_odp.02};"
          }
@@ -179,6 +229,11 @@
       {
        "id": "pm-26_obj.d",
        "label": "PM-26d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the complaint management process includes acknowledging the receipt of complaints, concerns, or questions from individuals within {param:pm-26_odp.03};"
        }
@@ -186,6 +241,11 @@
       {
        "id": "pm-26_obj.e",
        "label": "PM-26e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "the complaint management process includes responding to complaints, concerns, or questions from individuals within {param:pm-26_odp.04}."
        }
@@ -257,14 +317,16 @@
       {
        "en": "the time period in which complaints (including concerns or questions) from individuals are to be reviewed is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PM-26_ODP[01]"
     },
     "pm-26_odp.02": {
      "guidelines": [
       {
        "en": "the time period in which complaints (including concerns or questions) from individuals are to be addressed is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PM-26_ODP[02]"
     },
     "pm-26_odp.03": {
      "guidelines": [
@@ -274,7 +336,8 @@
      ],
      "alt-identifiers": [
       "pm-26_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PM-26_ODP[03]"
     },
     "pm-26_odp.04": {
      "guidelines": [
@@ -284,7 +347,8 @@
      ],
      "alt-identifiers": [
       "pm-26_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PM-26_ODP[04]"
     }
    }
   }

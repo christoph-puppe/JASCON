@@ -38,6 +38,11 @@
     {
      "id": "pt-5.1_obj",
      "label": "PT-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a notice of personally identifiable information processing is presented to individuals at a time and location where the individual provides personally identifiable information, in conjunction with a data action, or {param:pt-05.01_odp}."
      }
@@ -98,7 +103,8 @@
      ],
      "alt-identifiers": [
       "pt-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-05(01)_ODP"
     }
    }
   }

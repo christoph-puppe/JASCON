@@ -31,6 +31,11 @@
     {
      "id": "ac-4.27_obj",
      "label": "AC-04(27)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "when transferring information between security domains, implemented content filtering solutions provide redundant and independent filtering mechanisms for each data type."
      }

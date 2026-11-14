@@ -38,6 +38,11 @@
     {
      "id": "sa-9.2_obj",
      "label": "SA-09(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "providers of {param:sa-09.02_odp} are required to identify the functions, ports, protocols, and other services required for the use of such services."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "sa-9.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-09(02)_ODP"
     }
    }
   },

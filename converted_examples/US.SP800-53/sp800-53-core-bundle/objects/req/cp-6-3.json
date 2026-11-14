@@ -31,10 +31,20 @@
     {
      "id": "cp-6.3_obj",
      "label": "CP-06(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-6.3_obj-1",
        "label": "CP-06(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "potential accessibility problems to the alternate storage site in the event of an area-wide disruption or disaster are identified;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cp-6.3_obj-2",
        "label": "CP-06(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "explicit mitigation actions to address identified accessibility problems are outlined."
        }

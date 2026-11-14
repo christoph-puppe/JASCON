@@ -38,6 +38,11 @@
     {
      "id": "ac-2.9_obj",
      "label": "AC-02(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the use of shared and group accounts is only permitted if {param:ac-02.09_odp} are met."
      }
@@ -111,7 +116,8 @@
      "alt-identifiers": [
       "ac-2.9_prm_1"
      ],
-     "alt-label": "conditions for establishing shared and group accounts"
+     "alt-label": "conditions for establishing shared and group accounts",
+     "sp800-53a-label": "AC-02(09)_ODP"
     }
    }
   }

@@ -31,10 +31,20 @@
     {
      "id": "at-3.3_obj",
      "label": "AT-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "at-3.3_obj-1",
        "label": "AT-03(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "practical exercises in security training that reinforce training objectives are provided;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "at-3.3_obj-2",
        "label": "AT-03(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "practical exercises in privacy training that reinforce training objectives are provided."
        }

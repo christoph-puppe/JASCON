@@ -91,10 +91,20 @@
     {
      "id": "si-13.4_obj",
      "label": "SI-13(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-13.4_obj.a",
        "label": "SI-13(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the standby components are successfully and transparently installed within {param:si-13.04_odp.01} if system component failures are detected;"
        }
@@ -102,6 +112,11 @@
       {
        "id": "si-13.4_obj.b",
        "label": "SI-13(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:si-13.04_odp.02} are performed if system component failures are detected."
        }
@@ -188,12 +203,14 @@
      ],
      "alt-identifiers": [
       "si-13.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-13(04)_ODP[01]"
     },
     "si-13.04_odp.02": {
      "alt-identifiers": [
       "si-13.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-13(04)_ODP[02]"
     },
     "si-13.04_odp.03": {
      "guidelines": [
@@ -203,7 +220,8 @@
      ],
      "alt-identifiers": [
       "si-13.4_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-13(04)_ODP[03]"
     },
     "si-13.04_odp.04": {
      "guidelines": [
@@ -213,7 +231,8 @@
      ],
      "alt-identifiers": [
       "si-13.4_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SI-13(04)_ODP[04]"
     }
    }
   },

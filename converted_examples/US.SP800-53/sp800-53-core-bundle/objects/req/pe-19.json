@@ -31,6 +31,11 @@
     {
      "id": "pe-19_obj",
      "label": "PE-19",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the system is protected from information leakage due to electromagnetic signal emanations."
      }

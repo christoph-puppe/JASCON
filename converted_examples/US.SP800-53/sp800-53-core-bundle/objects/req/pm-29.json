@@ -41,14 +41,29 @@
     {
      "id": "pm-29_obj",
      "label": "PM-29",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-29_obj.a",
        "label": "PM-29a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-29_obj.a-1",
          "label": "PM-29a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a Senior Accountable Official for Risk Management is appointed;"
          }
@@ -56,6 +71,11 @@
         {
          "id": "pm-29_obj.a-2",
          "label": "PM-29a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a Senior Accountable Official for Risk Management aligns information security and privacy management processes with strategic, operational, and budgetary planning processes;"
          }
@@ -65,10 +85,20 @@
       {
        "id": "pm-29_obj.b",
        "label": "PM-29b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-29_obj.b-1",
          "label": "PM-29b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "a Risk Executive (function) is established;"
          }
@@ -76,6 +106,11 @@
         {
          "id": "pm-29_obj.b-2",
          "label": "PM-29b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "a Risk Executive (function) views and analyzes risk from an organization-wide perspective;"
          }
@@ -83,6 +118,11 @@
         {
          "id": "pm-29_obj.b-3",
          "label": "PM-29b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "a Risk Executive (function) ensures that the management of risk is consistent across the organization."
          }

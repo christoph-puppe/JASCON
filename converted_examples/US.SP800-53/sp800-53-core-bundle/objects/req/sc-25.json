@@ -38,10 +38,20 @@
     {
      "id": "sc-25_obj",
      "label": "SC-25",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-25_obj-1",
        "label": "SC-25[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "minimal functionality for {param:sc-25_odp} is employed;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sc-25_obj-2",
        "label": "SC-25[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "minimal information storage on {param:sc-25_odp} is allocated."
        }
@@ -117,7 +132,8 @@
      ],
      "alt-identifiers": [
       "sc-25_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-25_ODP"
     }
    }
   }

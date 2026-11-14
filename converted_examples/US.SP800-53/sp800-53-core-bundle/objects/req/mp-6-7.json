@@ -38,6 +38,11 @@
     {
      "id": "mp-6.7_obj",
      "label": "MP-06(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "dual authorization for sanitization of {param:mp-06.07_odp} is enforced."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "mp-6.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MP-06(07)_ODP"
     }
    }
   }

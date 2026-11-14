@@ -62,6 +62,11 @@
     {
      "id": "ac-4.4_obj",
      "label": "AC-04(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "encrypted information is prevented from bypassing {param:ac-04.04_odp.01} by {param:ac-04.04_odp.02}."
      }
@@ -134,12 +139,14 @@
      ],
      "alt-identifiers": [
       "ac-4.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(04)_ODP[01]"
     },
     "ac-04.04_odp.02": {
      "alt-identifiers": [
       "ac-4.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(04)_ODP[02]"
     },
     "ac-04.04_odp.03": {
      "guidelines": [
@@ -150,7 +157,8 @@
      "alt-identifiers": [
       "ac-4.4_prm_3"
      ],
-     "alt-label": "procedure or method"
+     "alt-label": "procedure or method",
+     "sp800-53a-label": "AC-04(04)_ODP[03]"
     }
    }
   }

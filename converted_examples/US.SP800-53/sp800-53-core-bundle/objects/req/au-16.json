@@ -43,6 +43,11 @@
     {
      "id": "au-16_obj",
      "label": "AU-16",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:au-16_odp.01} for coordinating {param:au-16_odp.02} among external organizations when audit information is transmitted across organizational boundaries are employed."
      }
@@ -112,7 +117,8 @@
      ],
      "alt-identifiers": [
       "au-16_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-16_ODP[01]"
     },
     "au-16_odp.02": {
      "guidelines": [
@@ -122,7 +128,8 @@
      ],
      "alt-identifiers": [
       "au-16_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-16_ODP[02]"
     }
    }
   }

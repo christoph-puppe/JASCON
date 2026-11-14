@@ -38,10 +38,20 @@
     {
      "id": "sr-11.2_obj",
      "label": "SR-11(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-11.2_obj-1",
        "label": "SR-11(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "configuration control over {param:sr-11.02_odp} awaiting service or repair is maintained;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sr-11.2_obj-2",
        "label": "SR-11(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "configuration control over serviced or repaired {param:sr-11.02_odp} awaiting return to service is maintained."
        }
@@ -129,7 +144,8 @@
      ],
      "alt-identifiers": [
       "sr-11.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-11(02)_ODP"
     }
    }
   },
@@ -170,7 +186,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-19.2",
     "mode": "renamed",
-    "label": "SA-19(02)",
+    "label": "SA-19(2)",
     "title": "Configuration Control for Component Service and Repair"
    }
   ]

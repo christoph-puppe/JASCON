@@ -39,10 +39,20 @@
     {
      "id": "si-4.11_obj",
      "label": "SI-04(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4.11_obj-1",
        "label": "SI-04(11)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "outbound communications traffic at the external interfaces to the system is analyzed to discover anomalies;"
        }
@@ -50,6 +60,11 @@
       {
        "id": "si-4.11_obj-2",
        "label": "SI-04(11)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "outbound communications traffic at {param:si-04.11_odp} is analyzed to discover anomalies."
        }
@@ -146,7 +161,8 @@
      "alt-identifiers": [
       "si-4.11_prm_1"
      ],
-     "alt-label": "interior points within the system"
+     "alt-label": "interior points within the system",
+     "sp800-53a-label": "SI-04(11)_ODP"
     }
    }
   },

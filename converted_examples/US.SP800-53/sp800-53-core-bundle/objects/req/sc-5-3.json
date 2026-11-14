@@ -55,10 +55,20 @@
     {
      "id": "sc-5.3_obj",
      "label": "SC-05(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-5.3_obj.a",
        "label": "SC-05(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:sc-05.03_odp.01} are employed to detect indicators of denial-of-service attacks against or launched from the system;"
        }
@@ -66,6 +76,11 @@
       {
        "id": "sc-5.3_obj.b",
        "label": "SC-05(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:sc-05.03_odp.02} are monitored to determine if sufficient resources exist to prevent effective denial-of-service attacks."
        }
@@ -140,7 +155,8 @@
      ],
      "alt-identifiers": [
       "sc-5.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-05(03)_ODP[01]"
     },
     "sc-05.03_odp.02": {
      "guidelines": [
@@ -150,7 +166,8 @@
      ],
      "alt-identifiers": [
       "sc-5.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-05(03)_ODP[02]"
     }
    }
   }

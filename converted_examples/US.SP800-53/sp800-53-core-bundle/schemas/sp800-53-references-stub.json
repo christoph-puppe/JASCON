@@ -2,13 +2,89 @@
  "id": "https://ns.nist.gov/sp800-53/facet/references",
  "version": "1.0.0",
  "modifies-semantics": [],
- "note": "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
+ "note": "NORMATIVE pinned payload schema (backlog #26): the back-matter resources of the catalogue, as the source writes them; a link `(#uuid)` in a text of the bundle names the resource with that uuid",
  "schema": {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
    "resources": {
-    "type": "array"
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "uuid"
+     ],
+     "properties": {
+      "uuid": {
+       "type": "string"
+      },
+      "title": {
+       "type": "string"
+      },
+      "description": {
+       "type": "string"
+      },
+      "remarks": {
+       "type": "string"
+      },
+      "props": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "name",
+         "value"
+        ],
+        "properties": {
+         "name": {
+          "type": "string"
+         },
+         "uuid": {
+          "type": "string"
+         },
+         "ns": {
+          "type": "string"
+         },
+         "value": {
+          "type": "string"
+         },
+         "class": {
+          "type": "string"
+         },
+         "group": {
+          "type": "string"
+         },
+         "remarks": {
+          "type": "string"
+         }
+        }
+       }
+      },
+      "citation": {
+       "type": "object"
+      },
+      "rlinks": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "href"
+        ],
+        "properties": {
+         "href": {
+          "type": "string"
+         },
+         "media-type": {
+          "type": "string"
+         }
+        }
+       }
+      }
+     }
+    }
    }
   },
   "additionalProperties": false

@@ -34,7 +34,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Classes of incidents include malfunctions due to design or implementation errors and omissions, targeted malicious attacks, and untargeted malicious attacks. Incident response actions include orderly system degradation, system shutdown, fall back to manual mode or activation of alternative technology whereby the system operates differently, employing deceptive measures, alternate information flows, or operating in a mode that is reserved for when systems are under attack. Organizations consider whether continuity of operations requirements during an incident conflict with the capability to automatically disable the system as specified as part of IR-4(5)."
+     "en": "Classes of incidents include malfunctions due to design or implementation errors and omissions, targeted malicious attacks, and untargeted malicious attacks. Incident response actions include orderly system degradation, system shutdown, fall back to manual mode or activation of alternative technology whereby the system operates differently, employing deceptive measures, alternate information flows, or operating in a mode that is reserved for when systems are under attack. Organizations consider whether continuity of operations requirements during an incident conflict with the capability to automatically disable the system as specified as part of [IR-4(5)](#ir-4.5)."
     }
    ]
   },
@@ -43,10 +43,20 @@
     {
      "id": "ir-4.3_obj",
      "label": "IR-04(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-4.3_obj-1",
        "label": "IR-04(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ir-04.03_odp.01} are identified;"
        }
@@ -54,6 +64,11 @@
       {
        "id": "ir-4.3_obj-2",
        "label": "IR-04(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ir-04.03_odp.02} are taken in response to those incidents (defined in IR-04(03)_ODP[01]) to ensure the continuation of organizational mission and business functions."
        }
@@ -125,7 +140,8 @@
      ],
      "alt-identifiers": [
       "ir-4.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(03)_ODP[01]"
     },
     "ir-04.03_odp.02": {
      "guidelines": [
@@ -136,7 +152,8 @@
      "alt-identifiers": [
       "ir-4.3_prm_2"
      ],
-     "alt-label": "actions to take in response to classes of incidents"
+     "alt-label": "actions to take in response to classes of incidents",
+     "sp800-53a-label": "IR-04(03)_ODP[02]"
     }
    }
   }

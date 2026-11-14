@@ -43,6 +43,11 @@
     {
      "id": "ac-10_obj",
      "label": "AC-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the number of concurrent sessions for each {param:ac-10_odp.01} is limited to {param:ac-10_odp.02}."
      }
@@ -113,7 +118,8 @@
      "alt-identifiers": [
       "ac-10_prm_1"
      ],
-     "alt-label": "account and/or account type"
+     "alt-label": "account and/or account type",
+     "sp800-53a-label": "AC-10_ODP[01]"
     },
     "ac-10_odp.02": {
      "guidelines": [
@@ -123,7 +129,8 @@
      ],
      "alt-identifiers": [
       "ac-10_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-10_ODP[02]"
     }
    }
   }

@@ -22,7 +22,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "The privacy officer is an organizational official. For federal agencies—as defined by applicable laws, executive orders, directives, regulations, policies, standards, and guidelines—this official is designated as the senior agency official for privacy. Organizations may also refer to this official as the chief privacy officer. The senior agency official for privacy also has roles on the data management board (see PM-23 ) and the data integrity board (see PM-24)."
+     "en": "The privacy officer is an organizational official. For federal agencies—as defined by applicable laws, executive orders, directives, regulations, policies, standards, and guidelines—this official is designated as the senior agency official for privacy. Organizations may also refer to this official as the chief privacy officer. The senior agency official for privacy also has roles on the data management board (see [PM-23](#pm-23) ) and the data integrity board (see [PM-24](#pm-24))."
     }
    ]
   },
@@ -31,10 +31,20 @@
     {
      "id": "pm-19_obj",
      "label": "PM-19",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-19_obj-1",
        "label": "PM-19[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a senior agency official for privacy with authority, mission, accountability, and resources is appointed;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pm-19_obj-2",
        "label": "PM-19[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the senior agency official for privacy coordinates applicable privacy requirements;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "pm-19_obj-3",
        "label": "PM-19[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the senior agency official for privacy develops applicable privacy requirements;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "pm-19_obj-4",
        "label": "PM-19[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the senior agency official for privacy implements applicable privacy requirements;"
        }
@@ -63,6 +88,11 @@
       {
        "id": "pm-19_obj-5",
        "label": "PM-19[05]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the senior agency official for privacy manages privacy risks through the organization-wide privacy program."
        }

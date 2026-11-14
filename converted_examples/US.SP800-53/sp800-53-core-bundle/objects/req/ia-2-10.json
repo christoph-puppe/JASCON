@@ -38,6 +38,11 @@
     {
      "id": "ia-2.10_obj",
      "label": "IA-02(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a single sign-on capability is provided for {param:ia-02.10_odp}."
      }
@@ -122,7 +127,8 @@
      ],
      "alt-identifiers": [
       "ia-2.10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-02(10)_ODP"
     }
    }
   }

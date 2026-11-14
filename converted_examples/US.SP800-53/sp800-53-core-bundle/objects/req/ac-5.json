@@ -39,7 +39,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Separation of duties addresses the potential for abuse of authorized privileges and helps to reduce the risk of malevolent activity without collusion. Separation of duties includes dividing mission or business functions and support functions among different individuals or roles, conducting system support functions with different individuals, and ensuring that security personnel who administer access control functions do not also administer audit functions. Because separation of duty violations can span systems and application domains, organizations consider the entirety of systems and system components when developing policy on separation of duties. Separation of duties is enforced through the account management activities in AC-2 , access control mechanisms in AC-3 , and identity management activities in IA-2, IA-4 , and IA-12."
+     "en": "Separation of duties addresses the potential for abuse of authorized privileges and helps to reduce the risk of malevolent activity without collusion. Separation of duties includes dividing mission or business functions and support functions among different individuals or roles, conducting system support functions with different individuals, and ensuring that security personnel who administer access control functions do not also administer audit functions. Because separation of duty violations can span systems and application domains, organizations consider the entirety of systems and system components when developing policy on separation of duties. Separation of duties is enforced through the account management activities in [AC-2](#ac-2) , access control mechanisms in [AC-3](#ac-3) , and identity management activities in [IA-2](#ia-2), [IA-4](#ia-4) , and [IA-12](#ia-12)."
     }
    ]
   },
@@ -48,10 +48,20 @@
     {
      "id": "ac-5_obj",
      "label": "AC-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-5_obj.a",
        "label": "AC-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:ac-05_odp} are identified and documented;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "ac-5_obj.b",
        "label": "AC-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "system access authorizations to support separation of duties are defined."
        }
@@ -134,7 +149,8 @@
      "alt-identifiers": [
       "ac-5_prm_1"
      ],
-     "alt-label": "duties of individuals requiring separation"
+     "alt-label": "duties of individuals requiring separation",
+     "sp800-53a-label": "AC-05_ODP"
     }
    }
   }
@@ -226,7 +242,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
     "mode": "merged-into",
-    "label": "SI-09",
+    "label": "SI-9",
     "title": "Information Input Restrictions"
    }
   ]

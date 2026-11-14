@@ -31,10 +31,20 @@
     {
      "id": "ir-4.12_obj",
      "label": "IR-04(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-4.12_obj-1",
        "label": "IR-04(12)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "malicious code remaining in the system is analyzed after the incident;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ir-4.12_obj-2",
        "label": "IR-04(12)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "other residual artifacts remaining in the system (if any) are analyzed after the incident."
        }

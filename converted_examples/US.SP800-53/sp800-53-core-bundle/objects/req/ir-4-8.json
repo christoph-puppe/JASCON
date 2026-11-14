@@ -43,6 +43,11 @@
     {
      "id": "ir-4.8_obj",
      "label": "IR-04(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "there is coordination with {param:ir-04.08_odp.01} to correlate and share {param:ir-04.08_odp.02} to achieve a cross-organization perspective on incident awareness and more effective incident responses."
      }
@@ -115,7 +120,8 @@
      ],
      "alt-identifiers": [
       "ir-4.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(08)_ODP[01]"
     },
     "ir-04.08_odp.02": {
      "guidelines": [
@@ -125,7 +131,8 @@
      ],
      "alt-identifiers": [
       "ir-4.8_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(08)_ODP[02]"
     }
    }
   }

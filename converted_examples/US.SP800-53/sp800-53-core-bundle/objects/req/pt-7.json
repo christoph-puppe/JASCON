@@ -38,6 +38,11 @@
     {
      "id": "pt-7_obj",
      "label": "PT-07",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pt-07_odp} are applied for specific categories of personally identifiable information."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "pt-7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-07_ODP"
     }
    }
   }

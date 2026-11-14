@@ -31,6 +31,11 @@
     {
      "id": "ia-12.2_obj",
      "label": "IA-12(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "evidence of individual identification is presented to the registration authority."
      }
@@ -105,7 +110,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-4.3",
     "mode": "merged-into",
-    "label": "IA-04(03)",
+    "label": "IA-4(3)",
     "title": "Multiple Forms of Certification"
    }
   ]

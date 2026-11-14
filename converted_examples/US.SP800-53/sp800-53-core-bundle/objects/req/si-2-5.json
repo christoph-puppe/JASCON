@@ -44,6 +44,11 @@
     {
      "id": "si-2.5_obj",
      "label": "SI-02(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-02.05_odp.01} are installed automatically to {param:si-02.05_odp.02}."
      }
@@ -125,7 +130,8 @@
      ],
      "alt-identifiers": [
       "si-2.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-02(05)_ODP[01]"
     },
     "si-02.05_odp.02": {
      "guidelines": [
@@ -135,7 +141,8 @@
      ],
      "alt-identifiers": [
       "si-2.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-02(05)_ODP[02]"
     }
    }
   }
