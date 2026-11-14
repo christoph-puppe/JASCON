@@ -209,6 +209,14 @@ in validate_core.py before the change. A key of `method` may lack the '@'
 that the schema requires of a key of `facets`; Facet-Base reads both. Run
 under PowerShell 7.4 on Linux; the workflow runs it on Windows PowerShell
 5.1.
+EXECUTED 2026-11-14 on Windows PowerShell 5.1 (the workflow, commit
+daac38d0, run 43593672489): the lint, then the vectors of the repository
+at that commit (705 in 18 families by validate_core.py's count, facet: 20),
+the five bundles, the worked pack and the example folder, ALL GREEN in
+217.5 s, and the end-to-end test with this twin, 15 tests, two skipped by
+design, in 87 s. Again at commit 7450c627 (run 43623597359), after the
+bundles of four catalogues and of the IFA example had changed (phase E):
+the job passed, the end-to-end test in 38 s.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors

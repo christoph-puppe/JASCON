@@ -627,3 +627,40 @@ What it showed for what is left:
 - **Phase E is unchanged:** #41 and the validator half of #55.
 
 Open after this: #41, #55, #62, #71, #72, #79. None needs the author.
+
+## 14. Phase E as built (2026-11-14)
+
+The author: "phase E", and then three corrections, sixteen decisions and
+three answers the same day. The register entry "Phase E — a value is
+followed, not a path; real content is never dropped; a method is held to
+its facet" holds the measurements; `drafts/phase-e/` holds the decisions
+with their proposals.
+
+| Row | Built |
+|---|---|
+| #55 | An Assessment's `method` is held to its facet's schema: reference, twin (Windows PowerShell 5.1), app 0.9.13, reader 1.15.0. 13 vectors, 705 in all. Reader 1.16.0 holds `facets` to the same rule |
+| #41 | Six converters follow every source value (214,365). Each ledger reads 0 unaccounted and 0 dropped; a run with an unaccounted value ends with 1. The losses the first ledgers found are carried |
+| Grundschutz++ | Every control at every depth is a Requirement of its own (999); the nesting is a Set (126) |
+| The author's decisions E1 to E16 | Withdrawn items as objects (CSF 91, SP 800-53 182); orphaned back-matter out by a checked rule; one compat schema 1.1.0; the lifecycle default named; CR26's history and flow, IFA's 296 values and the document uuids carried; two converter failures fixed |
+| App 0.9.16 | Both presets give what their converters give (Grundschutz++ 1,287 of 1,287; SP 800-53 1,217 of 1,217, the baseline Sets aside) |
+| Reader 1.16.0 | An export is held to closure-required references and no longer said to pass |
+| Texts | Website (five languages), README, handbook, skill file, specification |
+
+**What the plan did not foresee.**
+
+- **The round was done twice.** The first ran under a rule of mine, "no
+  bundle file may change", which the author had never given. "Nothing is
+  shipped. We are in DEV."
+- **The author stopped the work once** to see where it stood, and the
+  way of working changed: decide first, then build; no parallel agents
+  on coupled artifacts; verification by risk; texts once at the end.
+- **The statement layer lost the evidence the handbook had built on.**
+  A nested Grundschutz++ control is a control. The texts argue from
+  SP 800-53 now, and say that no converted corpus varies modality or
+  party between the statements of one Requirement.
+- **The kernel is open before the tag.** "2.0.0 ist alles zur
+  Veränderung freigegeben, gut begründet." Six findings are candidates
+  with a proposal each: #80 to #85.
+
+Open after this: #62, #71, #72, #79, #80 to #92. #80 to #85 need the
+author. The clean-up the author named (E16) is a task of its own.
