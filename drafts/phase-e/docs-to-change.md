@@ -114,4 +114,4 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | converted_examples/DE.BSI/oscal-export/geman.bsi-catalog.json | an older file the export script does not write | read |
 | drafts/jascon-decision-rationale-register.md:144; backlog row #41 | nested controls as statements; the BSI figures | reported |
 | DEEP_RESEARCH_REVIEW.md:90, 97 | nested controls as statements | reported |
-| jascon-app: jascon-oscal.js:9-14, 376; readme.md:344; import.html:45, 93; PROGRESS.md:30; tests/oscal.test.mjs | the app's Grundschutz++ preset and its texts (not part of the plan agreed on 2026-11-14) | reported |
+| jascon-app: jascon-oscal.js:9-14, 376; readme.md:344; import.html:45, 93; PROGRESS.md:30; tests/oscal.test.mjs | the app's Grundschutz++ preset and its texts: being brought in line with the converter (author, 2026-11-14: "A. Bring both presets in line with the Python converters"); the SP 800-53 preset follows after that converter's rework | reported |
