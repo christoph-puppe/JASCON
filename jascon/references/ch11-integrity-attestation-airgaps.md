@@ -257,7 +257,11 @@ it fails the bundle while the Attestation is still claimed
 that does not bind is printed with its verdict and fails nothing: that
 is how an attested object is changed without leaving a bundle that can
 never validate again. Change the object, and withdraw the Attestation
-or issue it again.
+or issue it again. Withdrawing a *signed* Attestation is the signer's
+act: the envelope signs the Attestation's canonical form, lifecycle
+included, so whoever edits the lifecycle of a signed Attestation breaks
+its envelope, and the run says that instead (measured). The signer
+issues a new version, or the Attestation leaves the bundle.
 
 > **Don't** ship an Attestation that nothing checks. The example folder
 > of this handbook carried one from before 1.0.0 until 2026-11-14 whose

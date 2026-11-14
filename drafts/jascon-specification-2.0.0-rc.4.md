@@ -560,7 +560,10 @@ that does not bind is reported with its verdict and fails nothing.
 *(The last clause is argued, not derived: the primitive does not speak
 of lifecycle, and without it a bundle whose attested object changed
 could never validate again, however openly the Attestation was
-withdrawn.)* Nothing in a shape changes. A bundle can fail today that
+withdrawn. It gives nobody but the signer a way out for a signed
+Attestation: the envelope signs the canonical form, lifecycle included,
+so an edited lifecycle breaks the envelope — measured.)* Nothing in a
+shape changes. A bundle can fail today that
 passed yesterday: one that carries an active Attestation which does not
 bind what is delivered.
 

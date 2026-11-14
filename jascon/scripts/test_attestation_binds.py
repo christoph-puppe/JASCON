@@ -72,6 +72,31 @@ class AttestationBesideTheManifest(unittest.TestCase):
         self.assertIn(f"binds: {AID} = DOES NOT BIND [lifecycle withdrawn: reported, not a failure] subject https://ifa.gov/goodread/component/system1234: recomputed semantic digest", out)
         self.assertIn("ifa-core-bundle: 18 pass, 0 fail", out)
 
+    def test_backlog_46_a_signed_attestation_is_not_withdrawn_by_editing_it(self):
+        # The envelope signs the Attestation's canonical form, lifecycle included. Whoever edits the lifecycle of a
+        # signed Attestation breaks its envelope, in every mode: withdrawing it is the signer's act. Without its
+        # envelope it is an unsigned record, and a withdrawn one fails nothing.
+        pack = os.path.join(ROOT, "jascon", "example-packs", "dbvendor-server-7-advice")
+        name = "attestation-dbvendor-server-7-advice.json"
+        def run(change):
+            with tempfile.TemporaryDirectory() as tmp:
+                bundle = os.path.join(tmp, "pack"); shutil.copytree(pack, bundle)
+                p = os.path.join(bundle, name)
+                with open(p, encoding="utf-8") as f: att = json.load(f)
+                change(att)
+                with open(p, "w", encoding="utf-8", newline="\n") as f: f.write(json.dumps(att, indent=1, ensure_ascii=False) + "\n")
+                r = subprocess.run([sys.executable, os.path.join(HERE, "validate_core.py"), bundle, "--as-of", "2026-11-14"], capture_output=True, text=True)
+                return r.returncode, r.stdout
+        code, out = run(lambda a: a.__setitem__("lifecycle", "withdrawn"))
+        self.assertEqual(code, 1)
+        self.assertIn("dsse: payload != the Attestation's canonical form (attestation-binds)", out)
+        self.assertIn("pack: 3 pass, 1 fail", out)
+        def unsigned_and_withdrawn(a): a["lifecycle"] = "withdrawn"; a.pop("envelope-ref")
+        code, out = run(unsigned_and_withdrawn)
+        self.assertEqual(code, 0, out[-600:])
+        self.assertIn("= no envelope (unsigned attestation)", out)
+        self.assertIn("pack: 3 pass, 0 fail", out)
+
     def test_backlog_46_a_subject_the_bundle_does_not_hold_fails_the_bundle(self):
         def change(att, _): att["subject-semantic-digests"][1]["id"] = "https://ifa.gov/goodread/impl/not-delivered"
         code, out = self.run_on(change)
