@@ -914,6 +914,64 @@ def ledger_by_path(result, examples=3, collapse=()):
                                   for u in result["unaccounted-paths"]],
             "paths": paths}
 
+def path_map_check(paths, row_of):
+    """Holds a converter's path map against the record of its run (backlog
+    #89). The path map of a coverage report says where a source PATH goes;
+    the ledger measures where each VALUE went. A ledger holds a rule to what
+    it wrote: a rule that writes to another place than the map says passes
+    it, and so does a sentence of the map that says "not carried" of a value
+    that is. Three converters had written this check for themselves; it is
+    here so that every converter with a record by path has it.
+
+    paths: the rows of ledger_by_path(...)["paths"], one per source path and
+    outcome, each with `to`, the places its values stand at (a JSON Pointer
+    into the object, array positions as `[]`).
+    row_of(path) -> None where the map has no row for the path, else
+    (outcomes, places): the outcomes the row allows (names of
+    LEDGER_OUTCOMES) and a pattern over the places, read with re.search, or
+    None for a row whose values stand nowhere.
+
+    -> {"disagree": [{path, outcome, count, example, allowed}],
+        "elsewhere": [{path, pointer, count}],
+        "sentences": [one for each entry of the two lists, in that order]},
+    in the order of the record. `disagree`: a path and outcome its row does
+    not allow. `elsewhere`: a place values stand at that their row does not
+    name. An unaccounted value is the gate's (ledger_gate) and is in neither
+    list; a path without a row is the coverage's (UNMAPPED). Nothing is
+    written and nothing ends here: a converter adds the sentences to its
+    wiring checks and the lists to its report."""
+    disagree, elsewhere = [], []
+    for row in paths:
+        mapped_to = row_of(row["path"])
+        if mapped_to is None: continue
+        allowed, places = mapped_to
+        if row["outcome"] != "unaccounted" and row["outcome"] not in allowed:
+            disagree.append({"path": row["path"], "outcome": row["outcome"], "count": row["count"],
+                             "example": row["example"], "allowed": list(allowed)})
+        for t in row.get("to", []):
+            if places is None or not re.search(places, t["pointer"]):
+                elsewhere.append({"path": row["path"], "pointer": t["pointer"], "count": t["count"]})
+    return {"disagree": disagree, "elsewhere": elsewhere,
+            "sentences": [f"{d['count']:,} value(s) of {d['path']} are {d['outcome']}, and the path map allows "
+                          f"{' or '.join(d['allowed'])} there (first {d['example']})" for d in disagree]
+                       + [f"{e['count']:,} value(s) of {e['path']} stand at {e['pointer']}, "
+                          f"a place the path map does not name for that path" for e in elsewhere]}
+
+def path_map_measured(paths, row_key):
+    """What the record of a run measured for each row of a path map: the
+    material a converter's author reads against the row's sentence when the
+    outcomes and the places of a row are written down or changed.
+    row_key(path) -> a hashable name of the row, or None.
+    -> {row key: {"outcomes": {outcome: values}, "places": {pointer: values}}}"""
+    out = {}
+    for row in paths:
+        k = row_key(row["path"])
+        if k is None: continue
+        m = out.setdefault(k, {"outcomes": collections.Counter(), "places": collections.Counter()})
+        m["outcomes"][row["outcome"]] += row["count"]
+        for t in row.get("to", []): m["places"][t["pointer"]] += t["count"]
+    return out
+
 def props_by_name(props, ledger=None, field="value"):
     """OSCAL props [{name, value}, ...] -> {name: value}. A name that repeats
     keeps EVERY value, as a list in source order - the rule parameter

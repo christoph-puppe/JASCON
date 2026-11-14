@@ -41,7 +41,7 @@ hold on the written files, a source value that is unaccounted, or a wiring
 check that fails ends the run with a non-zero exit code, after the bundle,
 the reports and the record are written, so that a failed run says why."""
 import json, hashlib, os, re, sys, copy, collections, decimal
-from oscal_conv_lib import Bundle, BUNDLE_NEWLINE, Ledger, ledger_by_path, ledger_gate
+from oscal_conv_lib import Bundle, BUNDLE_NEWLINE, Ledger, ledger_by_path, ledger_gate, path_map_check
 from oscal_conv_lib import document_author, document_day
 from oscal_conv_lib import referred_to, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import REFERENCES, REFERENCES_FILE, ASSESSMENT_CRITERIA_FILE, resource_entry
@@ -906,20 +906,16 @@ names_by_rule=sum(1 for e in ACCOUNT["entries"] if e["outcome"]=="transformed"
 # wiring check: a drop that reaches a path the map does not give up, a
 # sentence of the map that says "not carried" of a value that is, a value
 # that went somewhere the map does not say.
-disagree=[]       # (ledger path, outcome, values, first value, what the map allows)
-elsewhere=[]      # (ledger path, place, values): a value stands where the map does not name a place for its path
-for row in LEDGER["paths"]:
-    mapped_to=path_map(row["path"].split(".",1)[1])
-    if mapped_to is None: continue                                  # a path without a row is reported as UNMAPPED
-    _,_,allowed,places=mapped_to
-    if row["outcome"]!="unaccounted" and row["outcome"] not in allowed:
-        disagree.append((row["path"],row["outcome"],row["count"],row["example"],allowed))
-    for t in row.get("to",[]):
-        if places is None or not re.search(places,t["pointer"]): elsewhere.append((row["path"],t["pointer"],t["count"]))
-for p,o,n,x,a in disagree:
-    wiring.append(f"{n:,} value(s) of {p} are {o}, and the path map allows {' or '.join(a)} there (first {x})")
-for p,place,n in elsewhere:
-    wiring.append(f"{n:,} value(s) of {p} stand at {place}, a place the path map does not name for that path")
+# The check is the library's since 2026-11-14 (path_map_check, backlog #89);
+# until then this script and two others each had their own.
+def row_of(path):
+    """(outcomes, places) of the path map's row for a path of the record (`gspp.catalog...`), or None"""
+    mapped_to=path_map(path.split(".",1)[1])
+    return None if mapped_to is None else (mapped_to[2],mapped_to[3])
+HELD=path_map_check(LEDGER["paths"],row_of)
+disagree=[(d["path"],d["outcome"],d["count"],d["example"],tuple(d["allowed"])) for d in HELD["disagree"]]   # as the reports below read them
+elsewhere=[(e["path"],e["pointer"],e["count"]) for e in HELD["elsewhere"]]
+wiring+=HELD["sentences"]
 
 def source_at(pointer):
     """the source value a pointer of the ledger names (`gspp#/catalog/groups/0/id`)"""

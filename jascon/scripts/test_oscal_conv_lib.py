@@ -18,6 +18,7 @@ from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import ledger_by_path, ledger_gate, Bundle, COMPAT, COMPAT_ID, COMPAT_FILE
 from oscal_conv_lib import lifecycle_default_record, lifecycle_default_line
+from oscal_conv_lib import path_map_check, path_map_measured
 
 
 def measure(source, output):
@@ -898,6 +899,70 @@ class PhaseEOneCompatSchemaAndTheLifecycleDefault(unittest.TestCase):
         self.assertIn("`active` on 2 object(s) is the converter's default", lifecycle_default_line(r))
         self.assertIn("On 1 object(s) the lifecycle is the source's own status", lifecycle_default_line(r))
         with self.assertRaises(SystemExit): lifecycle_default_record(objs, stated=[])     # `withdrawn` by nobody's word
+
+
+class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
+    """A ledger holds a rule to what it wrote. That a value stands where the
+    path map of the report says, and with the outcome its sentence states, is
+    asked by path_map_check on the record by path."""
+    RECORD = [
+        {"path": "src.catalog.title", "outcome": "copied", "count": 1, "example": "A title",
+         "to": [{"pointer": "/title/en", "count": 1}]},
+        {"path": "src.catalog.controls[].id", "outcome": "transformed", "count": 3, "example": "ac-1",
+         "to": [{"pointer": "/id", "count": 3, "rule": "URI from the id"}, {"pointer": "/members/[]/ref", "count": 3, "rule": "URI from the id"}]},
+        {"path": "src.catalog.controls[].class", "outcome": "intentionally-dropped", "count": 2, "example": "x",
+         "reasons": [{"reason": "not needed", "count": 2}]},
+        {"path": "src.catalog.controls[].ns", "outcome": "not-content", "count": 3, "example": "http://x"},
+        {"path": "src.catalog.controls[].odd", "outcome": "unaccounted", "count": 1, "example": "?"},
+        {"path": "src.catalog.unmapped", "outcome": "copied", "count": 1, "example": "u", "to": [{"pointer": "/anywhere", "count": 1}]}]
+    CARRIED = ("copied", "transformed")
+    def rows(self, **change):
+        table = {"src.catalog.title": (self.CARRIED, r"^/title/en$"),
+                 "src.catalog.controls[].id": (self.CARRIED, r"^(/id|/members/\[\]/ref)$"),
+                 "src.catalog.controls[].class": (("intentionally-dropped",), None),
+                 "src.catalog.controls[].ns": (("not-content",), None),
+                 "src.catalog.controls[].odd": (self.CARRIED, r"^/odd$")}
+        table.update(change)
+        return table.get
+
+    def test_a_record_the_map_describes_gives_no_sentence(self):
+        held = path_map_check(self.RECORD, self.rows())
+        self.assertEqual(held, {"disagree": [], "elsewhere": [], "sentences": []})
+
+    def test_a_value_at_a_place_its_row_does_not_name(self):
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].id": (self.CARRIED, r"^/id$")}))
+        self.assertEqual(held["elsewhere"], [{"path": "src.catalog.controls[].id", "pointer": "/members/[]/ref", "count": 3}])
+        self.assertEqual(held["sentences"], ["3 value(s) of src.catalog.controls[].id stand at /members/[]/ref, a place the path map does not name for that path"])
+        # a row that names no place at all has every place against it
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (self.CARRIED, None)}))
+        self.assertEqual([e["pointer"] for e in held["elsewhere"]], ["/title/en"])
+
+    def test_an_outcome_its_row_does_not_allow(self):
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].class": (self.CARRIED, None)}))
+        self.assertEqual(held["disagree"], [{"path": "src.catalog.controls[].class", "outcome": "intentionally-dropped", "count": 2,
+                                             "example": "x", "allowed": ["copied", "transformed"]}])
+        self.assertEqual(held["sentences"], ["2 value(s) of src.catalog.controls[].class are intentionally-dropped, and the path map "
+                                             "allows copied or transformed there (first x)"])
+        # a sentence that says "not carried" of a value that is
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (("not-content",), r"^/title/en$")}))
+        self.assertEqual([(d["path"], d["outcome"]) for d in held["disagree"]], [("src.catalog.title", "copied")])
+
+    def test_an_unaccounted_value_is_the_gates_and_a_path_without_a_row_the_coverages(self):
+        held = path_map_check(self.RECORD, self.rows())
+        self.assertNotIn("odd", " ".join(held["sentences"]))
+        self.assertNotIn("unmapped", " ".join(held["sentences"]))
+
+    def test_the_outcomes_are_asked_before_the_places_and_both_in_the_order_of_the_record(self):
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (("not-content",), None),
+                                                        "src.catalog.controls[].id": (("not-content",), r"^/id$")}))
+        self.assertEqual([s.split(" value(s) of ")[1].split(" ")[0] + (" at" if " stand at " in s else " is") for s in held["sentences"]],
+                         ["src.catalog.title is", "src.catalog.controls[].id is", "src.catalog.title at", "src.catalog.controls[].id at"])
+
+    def test_what_a_record_measured_for_each_row(self):
+        got = path_map_measured(self.RECORD, lambda p: None if p.endswith("unmapped") else p.rsplit(".", 1)[1])
+        self.assertEqual(sorted(got), ["class", "id", "ns", "odd", "title"])
+        self.assertEqual((dict(got["id"]["outcomes"]), dict(got["id"]["places"])), ({"transformed": 3}, {"/id": 3, "/members/[]/ref": 3}))
+        self.assertEqual((dict(got["class"]["outcomes"]), dict(got["class"]["places"])), ({"intentionally-dropped": 2}, {}))
 
 
 if __name__ == "__main__":
