@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.9.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.9.3",
  "lifecycle": "active",
  "title": {
@@ -64,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -85,7 +85,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "konf.9.3-prm1": {
-     "alt-identifier": "bd64ca41-01df-48ba-85ea-3241017cf750"
+     "alt-identifier": "e318a676-c377-4058-9601-078624a26e80"
     }
    }
   }

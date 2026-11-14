@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.13",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.13",
  "lifecycle": "active",
  "title": {
-  "de": "Hinweise bei Anmeldefehlern"
+  "de": "Sperre der Anwendung bei Inaktivität"
  },
  "statements": [
   {
@@ -14,17 +14,24 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für Anwendungen SOLLTE Hinweise darauf, ob ein Zugangskonto existiert bei erfolglosen Anmeldeversuchen deaktivieren."
-   }
+    "de": "Berechtigung für Anwendungen SOLLTE eine Sperre bei Inaktivität nach {param:ber.3.13-prm1} aktivieren."
+   },
+   "parameters": [
+    {
+     "name": "ber.3.13-prm1",
+     "type": "string",
+     "label": "einer Frist"
+    }
+   ]
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "deaktivieren",
-     "result": "Hinweise darauf, ob ein Zugangskonto existiert",
-     "result-specification": "bei erfolglosen Anmeldeversuchen",
+     "action": "aktivieren",
+     "result": "eine Sperre bei Inaktivität",
+     "result-specification": "nach {{einer Frist}}",
      "target-object-categories": [
       "Anwendungen"
      ]
@@ -43,7 +50,7 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
      "authenticity": "1",
@@ -58,12 +65,11 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3,
+     "effort": 2,
      "tags": [
-      "Credential Stuffing",
-      "Brute-Force-Attacke"
+      "Automatic Session Locking"
      ]
     }
    }
@@ -72,8 +78,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Den Hinweis, dass bei erfolglosen Anmeldeversuchen das Passwort oder die Kennung falsch ist, könnte ein Angreifer als sogenannte User Enumeration (Benutzerkonten-Aufzählung) oder Account Discovery (Konto-Entdeckung) Schwachstelle ausnutzen. Dadurch wird das Risiko einer Brute-Force-Attacke oder eines Credential Stuffings erhöht, bei der ein Angreifer eine Liste potenzieller Benutzernamen durchprobieren könnte, um gültige Konten zu identifizieren. Der Schutz kann gewährleisten, dass ein Angreifer nicht automatisch weiß, welche Konten er als Nächstes mit Passwörtern attackieren muss oder Rückschlüsse auf registrierte Zugangskonten erhält. Zur Umsetzung kann die Institution alle Rückmeldungen bei fehlgeschlagenen Anmeldeversuchen so vereinheitlichen, dass sie keinen Aufschluss über den Grund des Fehlschlags geben, beispielsweise durch die generische Nachricht „Der eingegebene Benutzername oder das Passwort ist ungültig.“."
+      "de": "Kann je nach Anmeldeweg durch eine Abmeldung (Automatic Session Locking) direkt an der Anwendung, über Single-Sign-On oder (bei Anmeldung über das Netz) die Trennung der Netzverbindung umgesetzt werden. Eine längere Inaktivität kann z.B. 5-15 Minuten lang sein. Verfügt die Anwendung über keine eigene Authentifizierungsmethode, so ist die Anforderung entbehrlich."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.3.13-prm1": {
+     "alt-identifier": "dda9ee5e-05d9-4b49-9bed-3b384eec70b6"
     }
    }
   }
@@ -81,7 +94,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "dd5fcc0c-d602-4d15-839c-5adb4fef150e"
+   "value": "5c8bb88d-6692-4904-908a-ed3f7a81b34e"
   }
  ]
 }

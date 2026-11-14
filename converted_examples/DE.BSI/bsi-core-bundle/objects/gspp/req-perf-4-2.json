@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERF.4.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERF.4.2",
  "lifecycle": "active",
  "title": {
@@ -56,7 +56,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "perf.4.2-prm1": {
-     "alt-identifier": "5d8dccb2-5fea-43c1-a804-0b49f481a1ca"
+     "alt-identifier": "57cd11be-8664-4036-90f2-b09dc91723fb"
     }
    }
   }

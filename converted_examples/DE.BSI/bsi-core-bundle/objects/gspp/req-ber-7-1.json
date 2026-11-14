@@ -1,0 +1,101 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.1",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.1",
+ "lifecycle": "active",
+ "title": {
+  "de": "Etablierte Algorithmen bei der Schlüsselerzeugung"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "should",
+   "obligated-parties": [
+    "https://ns.bsi.bund.de/gspp/party/institution"
+   ],
+   "prose": {
+    "de": "Berechtigung SOLLTE die ausschließliche Verwendung etablierter kryptografischer Algorithmen bei der Schlüsselerzeugung nach {param:ber.7.1-prm1} verankern."
+   },
+   "parameters": [
+    {
+     "name": "ber.7.1-prm1",
+     "type": "string",
+     "label": "einem anerkannten Standard"
+    }
+   ]
+  }
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
+   "by-statement": {
+    "smt": {
+     "action": "verankern",
+     "result": "die ausschließliche Verwendung etablierter kryptografischer Algorithmen",
+     "result-specification": "bei der Schlüsselerzeugung nach {{einem anerkannten Standard}}"
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+   "by-statement": {
+    "smt": {
+     "required-documentation": [
+      "IT-Betriebskonzept"
+     ]
+    }
+   }
+  },
+  "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
+   "by-statement": {
+    "smt": {
+     "confidentiality": "2",
+     "integrity": "1",
+     "availability": "1",
+     "authenticity": "0",
+     "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
+   "by-statement": {
+    "smt": {
+     "class": "BSI-Stand-der-Technik-Kernel",
+     "sec-level": "normal-SdT",
+     "effort": 2,
+     "tags": [
+      "Cryptography"
+     ]
+    }
+   }
+  },
+  "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
+   "by-statement": {
+    "smt": {
+     "guidance": {
+      "de": "Etablierte kryptografische Algorithmen sind mathematisch fundierte Verschlüsselungsverfahren und Protokolle, die in der aktuellen Praxis nicht mit vertretbarem Aufwand gebrochen werden können. Sie basieren auf mathematisch schwer lösbaren Problemen, bieten Resistenz gegen bekannte kryptanalytische Angriffe, unterstützen ausreichend große Schlüssellängen und wurden von Experten gründlich geprüft und analysiert. Aktuelle etablierte Algorithmen sind in BSI TR-02102 zu finden. Für weitere Details zur Implementierung siehe Detailspezifikation kryptografischer Abläufe und Mechanismen des BSI."
+     }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.7.1-prm1": {
+     "alt-identifier": "1f988c32-9930-4eaf-b5df-e5d6f7596a54"
+    }
+   }
+  }
+ },
+ "aliases": [
+  {
+   "scheme": "bsi-uuid",
+   "value": "d9e08db0-484e-4cce-89de-2f29f1a52e4e"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.4"
+  }
+ ]
+}

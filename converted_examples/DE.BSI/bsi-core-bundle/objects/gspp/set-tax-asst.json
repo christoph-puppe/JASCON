@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/asst",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Informationen und Assets"
@@ -39,7 +39,7 @@
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Im Rahmen der IT-Komponenten stellt das Asset Management sicher, dass die IT-Komponenten erfasst und inventarisiert werden. Hierbei geht es darum eine Übersicht, über relevante \"Assets\", wie Server, Clients, Netzwerkkomponenten sowie auch Datenträger sowie deren Verantwortlichkeiten, Besitzer oder auch Produktlebenszyklus zu haben. Des Weiteren soll im Rahmen des Asset Management auch die Ist-Dokumentation der Komponenten (z.B. Konfiguration, Patch-Level, Kritikalitätsstufen) erfasst werden.  Während die Praktik \"Konfiguration\" die Parameter einer IT-Komponenten betrachtet und IT-Betrieb die Vorgehensweisen zu Wartung und Pflege von IT-Komponenten, betrachtet Asset Management die Übersicht und Dokumentation aller IT-Komponenten."
+    "de": "Im Rahmen der IT-Komponenten stellt das Asset Management sicher, dass die IT-Komponenten erfasst und inventarisiert werden. Hierbei geht es darum eine Übersicht, über relevante \"Assets\", wie Server, Clients, Netzwerkkomponenten sowie auch Datenträger sowie deren Verantwortlichkeiten, Besitzer oder auch Produktlebenszyklus zu haben. Des Weiteren soll im Rahmen des Asset Management auch die Ist-Dokumentation der Komponenten (z.B. Konfiguration, Patch-Level, Kritikalitätsstufen) erfasst werden. Während die Praktik \"Konfiguration\" die Parameter einer IT-Komponenten betrachtet und IT-Betrieb die Vorgehensweisen zu Wartung und Pflege von IT-Komponenten, betrachtet Asset Management die Übersicht und Dokumentation aller IT-Komponenten."
    }
   }
  },

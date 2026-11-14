@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.7.14",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.7.14",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Konfiguration für IT-Systeme SOLLTE Code-Signierung im Betriebssystemkern aktivieren."
+    "de": "Konfiguration für IT-Systeme SOLLTE die Signaturprüfung für nachladbaren Code im Kernelmodus aktivieren."
    }
   }
  ],
@@ -23,7 +23,7 @@
    "by-statement": {
     "smt": {
      "action": "aktivieren",
-     "result": "Code-Signierung im Betriebssystemkern",
+     "result": "die Signaturprüfung für nachladbaren Code im Kernelmodus",
      "target-object-categories": [
       "IT-Systeme"
      ]
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4,
      "tags": [
@@ -69,7 +69,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Laufende Kernprozesse des Systems können geschützt werden, indem nur signierter Code hierauf zugreifen darf. Beispiele sind unter Windows der der PPL-Schutz (Protected Process Light) des Local Credential Store (LSA-Schutz) oder unter Linux mit SELinux oder dem Secure Computing Mode."
+      "de": "Nachladbarer Code im Kernelmodus verfügt typischerweise über weitreichende Berechtigungen und kann bei einer Kompromittierung erhebliche Auswirkungen auf das gesamte IT-System haben. Eine Signaturprüfung kann dazu beitragen, das Laden von nicht oder nicht vertrauenswürdig signiertem Code im Kernelmodus zu verhindern. Beispiele sind die erzwungene Signaturprüfung von Kernelmodulen unter Linux oder die Signaturprüfung von Kernelmodus-Treibern unter Windows. Die Schutzwirkung der Signaturprüfung hängt von den verwendeten Vertrauensankern ab. Hierbei kann insbesondere berücksichtigt werden, welche Signaturschlüssel beziehungsweise Herausgeber als vertrauenswürdig eingestuft werden. Eine gültige Signatur allein erlaubt keine Aussage über die Sicherheit oder Qualität des signierten Codes."
      }
     }
    }

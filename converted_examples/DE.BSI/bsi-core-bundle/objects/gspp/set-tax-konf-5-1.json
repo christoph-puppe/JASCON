@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-5-1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Authentifizierung am System"
@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.1",
-   "sequence": 10930
+   "sequence": 10950
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.1.1",
-   "sequence": 10940
+   "sequence": 10960
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.5.1.2",
-   "sequence": 10950
+   "sequence": 10970
   }
  ]
 }

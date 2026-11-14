@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/arch",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Architektur"
@@ -8,46 +8,46 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-1",
-   "sequence": 6900
+   "sequence": 6890
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-2",
-   "sequence": 7100
+   "sequence": 7090
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-3",
-   "sequence": 7150
+   "sequence": 7140
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-4",
-   "sequence": 7220
+   "sequence": 7210
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-5",
-   "sequence": 7430
+   "sequence": 7420
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-6",
-   "sequence": 7460
+   "sequence": 7450
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-7",
-   "sequence": 7500
+   "sequence": 7490
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-8",
-   "sequence": 7540
+   "sequence": 7530
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-9",
-   "sequence": 7600
+   "sequence": 7590
   }
  ],
  "label": "ARCH",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Architektur definiert die grundlegende Struktur sowie die Sicherheitsprinzipien der IT-Infrastruktur und leitet daraus Anforderungen für einzelne IT-Komponenten ab – etwa für Anwendungen oder IT-Systeme. Ziel ist es, eine sichere und skalierbare Basis zu schaffen.  Im Rahmen dieser Praktik werden Sicherheitsanforderungen systematisch in die Gesamtarchitektur eingebettet. Dazu gehören die Gestaltung der Netzarchitektur sowie die Entwicklung übergreifender Konzepte, beispielsweise für Kryptografie oder den Schutz vor Schadsoftware."
+    "de": "Die Praktik Architektur definiert die grundlegende Struktur sowie die Sicherheitsprinzipien der IT-Infrastruktur und leitet daraus Anforderungen für einzelne IT-Komponenten ab – etwa für Anwendungen oder IT-Systeme. Ziel ist es, eine sichere und skalierbare Basis zu schaffen. Im Rahmen dieser Praktik werden Sicherheitsanforderungen systematisch in die Gesamtarchitektur eingebettet. Dazu gehören die Gestaltung der Netzarchitektur sowie die Entwicklung übergreifender Konzepte, beispielsweise für Kryptografie oder den Schutz vor Schadsoftware."
    }
   }
  },

@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.8",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.8",
  "lifecycle": "active",
  "title": {
-  "de": "Kriterien für die Qualität von Passwörtern"
+  "de": "Mehr-Faktor-Authentisierung am Perimeter"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE Kriterien für die Qualität von Passwörtern anhand von Lebensdauer und Angriffsmöglichkeiten verankern."
+    "de": "Berechtigung für Anwendungen von Externe Netzanschlüssen SOLLTE Phishing-resistente Mehr-Faktor-Authentisierung für alle Schnittstellen, auf die von Extern zugegriffen werden könnte, aktivieren."
    }
   }
  ],
@@ -22,9 +22,13 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "verankern",
-     "result": "Kriterien für die Qualität von Passwörtern",
-     "result-specification": "anhand von Lebensdauer und Angriffsmöglichkeiten"
+     "action": "aktivieren",
+     "result": "Phishing-resistente Mehr-Faktor-Authentisierung",
+     "result-specification": "für alle Schnittstellen, auf die von Extern zugegriffen werden könnte,",
+     "target-object-categories": [
+      "Anwendungen",
+      "Externe Netzanschlüsse"
+     ]
     }
    }
   },
@@ -40,13 +44,14 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
+     "confidentiality": "2",
      "integrity": "1",
      "availability": "1",
      "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
      ]
     }
    }
@@ -54,15 +59,13 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3,
      "tags": [
-      "Privilege Escalation",
+      "MFA",
       "Credential Stuffing",
-      "Brute-Force-Attacke",
-      "Password Policy",
-      "Cryptography"
+      "Brute-Force-Attacke"
      ]
     }
    }
@@ -71,7 +74,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Kriterien für die Qualität von Passwörtern können z.B. eine minimale Entropie, Passwortlänge oder Verwendung verschiedener Symbole sein. Die Lebensdauer meint die erwartete Nutzungsdauer des Passwortes. Die erforderliche Qualität hängt von den Angriffsmöglichkeiten ab, z.B. Anzahl der Zugangskonten, verwendetes kryptografisches Verfahren (vgl. BSI TR-02102) und begleitenden Sicherheitsmaßnahmen wie maximale Passwortversuche oder Mehr-Faktor-Authentifizierung. Für Zugänge ohne begleitende Maßnahmen ist eine Passwortlänge nicht unter 14 Zeichen empfehlenswert. Die Kriterien können einmalig festgelegt werden oder zwischen Zugängen oder Anwendungen differenzieren."
+      "de": "Phishing-resistente Mehr-Faktor-Authentisierung bezeichnet Verfahren zur Anmeldung, bei denen mindestens zwei unterschiedliche Faktoren genutzt werden und bei denen die Authentisierung zusätzlich gegen typische Angriffe wie Credential Phishing, Adversary-in-the-Middle-Angriffe oder die Wiederverwendung abgefangener Sitzungsdaten abgesichert ist. Phishing-resistente Verfahren basieren typischerweise auf kryptographischen Nachweisen zwischen Endgerät und Zielsystem und verhindern dadurch, dass einmal abgefragte Zugangsdaten oder Einmalcodes durch täuschend echte Anmeldeseiten weiterverwendet werden können, beispielsweise FIDO2 Passkeys. Hintergrund ist, dass aus externen Netzen wie dem Internet erreichbare Anwendungen (insbesondere die VPN-Einwahl oder Cloud-Anwendungen) ein beliebtes Ziel für Angreifer sind. Klassische Passwörter oder einfache Einmalcodes könnten durch Social Engineering, gefälschte Login-Portale oder Man-in-the-Browser-Angriffe ausgespäht werden."
      }
     }
    }
@@ -80,7 +83,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "af5ba77a-8d77-4a4f-8842-23ba9dedb829"
+   "value": "2b9ddd3e-5233-46f5-abca-1793b89e2809"
   }
  ]
 }

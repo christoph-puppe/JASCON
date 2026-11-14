@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.1.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.1.4",
  "lifecycle": "active",
  "title": {
@@ -53,7 +53,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -63,7 +63,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ein Inventar der Berechtigungen kann helfen, Zugriffsrechte innerhalb einer Institution transparent zu machen und unnötige oder riskante Berechtigungen zu erkennen. Es dokumentiert, welche Identitäten – also digitale Repräsentationen von Personen oder Systemen – über welche Konten und Berechtigungen verfügen. So können potenzielle Risiken wie verwaiste Konten oder unautorisierte Privilegien sichtbar werden. Beispielsweise könnte ein ehemaliger Mitarbeitender noch aktive Zugänge besitzen, oder ein Dienstkonto könnte über weitreichende Rechte verfügen, obwohl der Einsatz längst beendet ist – beides kann ein Einfallstor für Missbrauch sein. Relevant sind neben den Berechtigungen von Personen auch Dienstekonten, Cloud-Zugänge und physische Zugangsberechtigungen wie Schlüssel-Schließpläne.  Berechtigungen bezeichnen konkrete Zugriffsrechte auf Ressourcen (z. B. Lesen oder Administrieren). Eine Institution kann dies etwa durch einen Verzeichnisdienst, ein zentrales Berechtigungsmanagement oder gepflegte Berechtigungsverzeichnisse abbilden. Die Benennung von Zuständigen je Fachbereich, regelmäßige Überprüfungen und der Einsatz von klaren Rollenkennzeichnungen (z. B. „temporär“, „Admin“) können helfen, das Inventar aktuell und verständlich zu halten. Auch eine strukturierte Offboarding-Checkliste kann sicherstellen, dass veraltete Zugänge rechtzeitig entfernt werden."
+      "de": "Ein Inventar der Berechtigungen kann helfen, Zugriffsrechte innerhalb einer Institution transparent zu machen und unnötige oder riskante Berechtigungen zu erkennen. Es dokumentiert, welche Identitäten – also digitale Repräsentationen von Personen oder Systemen – über welche Konten und Berechtigungen verfügen. So können potenzielle Risiken wie verwaiste Konten oder unautorisierte Privilegien sichtbar werden. Beispielsweise könnte ein ehemaliger Mitarbeitender noch aktive Zugänge besitzen, oder ein Dienstkonto könnte über weitreichende Rechte verfügen, obwohl der Einsatz längst beendet ist – beides kann ein Einfallstor für Missbrauch sein. Relevant sind neben den Berechtigungen von Personen auch Dienstekonten, Cloud-Zugänge und physische Zugangsberechtigungen wie Schlüssel-Schließpläne. Berechtigungen bezeichnen konkrete Zugriffsrechte auf Ressourcen (z. B. Lesen oder Administrieren). Eine Institution kann dies etwa durch einen Verzeichnisdienst, ein zentrales Berechtigungsmanagement oder gepflegte Berechtigungsverzeichnisse abbilden. Die Benennung von Zuständigen je Fachbereich, regelmäßige Überprüfungen und der Einsatz von klaren Rollenkennzeichnungen (z. B. „temporär“, „Admin“) können helfen, das Inventar aktuell und verständlich zu halten. Auch eine strukturierte Offboarding-Checkliste kann sicherstellen, dass veraltete Zugänge rechtzeitig entfernt werden."
      }
     }
    }

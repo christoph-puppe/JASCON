@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.4.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BES.7.4.4.1",
  "lifecycle": "active",
  "title": {
@@ -65,7 +65,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -86,7 +86,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "bes.7.4.4.1-prm1": {
-     "alt-identifier": "f89b0154-ccb8-401f-b352-9135e685a4e7"
+     "alt-identifier": "4ded8eda-2f03-4c70-bbcd-b5553fa1c1c7"
     }
    }
   }

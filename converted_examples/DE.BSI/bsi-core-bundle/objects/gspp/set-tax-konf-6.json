@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Rollen und Berechtigungen"
@@ -8,67 +8,67 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-6-1",
-   "sequence": 11030
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.2",
-   "sequence": 11040
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.3",
    "sequence": 11050
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.2",
+   "sequence": 11060
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.3",
+   "sequence": 11070
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-6-4",
-   "sequence": 11080
+   "sequence": 11100
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.5",
-   "sequence": 11090
+   "sequence": 11110
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-6-6",
-   "sequence": 11120
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.7",
-   "sequence": 11130
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.8",
    "sequence": 11140
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.7",
    "sequence": 11150
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.8",
    "sequence": 11160
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.9",
    "sequence": 11170
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.12",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.10",
    "sequence": 11180
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.13",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.11",
    "sequence": 11190
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.14",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.12",
    "sequence": 11200
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.15",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.13",
    "sequence": 11210
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.16",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.14",
    "sequence": 11220
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.15",
+   "sequence": 11230
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.16",
+   "sequence": 11240
   }
  ],
  "label": "6",

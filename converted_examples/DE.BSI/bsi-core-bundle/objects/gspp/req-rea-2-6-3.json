@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/REA.2.6.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "REA.2.6.3",
  "lifecycle": "active",
  "title": {
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -65,7 +65,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Koordinierung der Behandlung von Sicherheitsvorfällen dient dazu, die Auswirkungen auf Daten, Systeme oder Personen zu minimieren, Compliance-Verpflichtungen zu erfüllen und die Wirksamkeit von Gegenmaßnahmen zu verstärken.  Hierzu gehören interessierte Parteien wie Aufsichts- und Ermittlungsbehörden, Lieferanten oder Kunden. Für weitere Details siehe ISO/IEC 27035."
+      "de": "Die Koordinierung der Behandlung von Sicherheitsvorfällen dient dazu, die Auswirkungen auf Daten, Systeme oder Personen zu minimieren, Compliance-Verpflichtungen zu erfüllen und die Wirksamkeit von Gegenmaßnahmen zu verstärken. Hierzu gehören interessierte Parteien wie Aufsichts- und Ermittlungsbehörden, Lieferanten oder Kunden. Für weitere Details siehe ISO/IEC 27035."
      }
     }
    }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-14-1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Verschlüsselung beim Transport"
@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
-   "sequence": 12260
+   "sequence": 12280
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1.1",
-   "sequence": 12270
+   "sequence": 12290
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1.2",
-   "sequence": 12280
+   "sequence": 12300
   }
  ]
 }

@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.6.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.6.2",
  "lifecycle": "active",
  "title": {
-  "de": "Schlüssellänge"
+  "de": "Blockieren von Passwort Recycling"
  },
  "statements": [
   {
@@ -14,24 +14,19 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE die Schlüssellängen nach {param:ber.6.2-prm1} bei der Schlüsselerzeugung zuweisen."
-   },
-   "parameters": [
-    {
-     "name": "ber.6.2-prm1",
-     "type": "string",
-     "label": "einem anerkannten Standard"
-    }
-   ]
+    "de": "Berechtigung für Nutzende SOLLTE die Wiederverwendung von Passwörtern blockieren."
+   }
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "zuweisen",
-     "result": "die Schlüssellängen",
-     "result-specification": "nach {{einem anerkannten Standard}} bei der Schlüsselerzeugung"
+     "action": "blockieren",
+     "result": "die Wiederverwendung von Passwörtern",
+     "target-object-categories": [
+      "Nutzende"
+     ]
     }
    }
   },
@@ -39,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Verzeichnis öffentlicher Schlüssel"
+      "Konfigurationshistorie"
      ]
     }
    }
@@ -47,12 +42,14 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "0",
+     "authenticity": "1",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
      ]
     }
    }
@@ -60,11 +57,13 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
+     "effort": 3,
      "tags": [
-      "Cryptography"
+      "Credential Stuffing",
+      "Privilege Escalation",
+      "Password Policy"
      ]
     }
    }
@@ -73,15 +72,8 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Für die Sicherheit von Schlüsseln wie Passwörter oder PINs ist die Länge von Bedeutung. Für Details siehe BSI TR-02102."
+      "de": "Die Wiederverwendung von Passwörtern („password reuse“) ist die Nutzung identischer oder bereits früher verwendeter Passwörter für verschiedene Konten, Systeme oder aufeinanderfolgende Authentifizierungsvorgänge. Die Blockierung der Passwortwiederverwendung bedeutet hier, dass das Berechtigungsmanagementsystem („access management system“) technisch verhindert, dass ein neues Passwort mit einem zuvor verwendeten identisch ist oder einer vordefinierten Anzahl früherer Passwörter entspricht. Dies könnte nicht nur bei Wiederverwendung einer Person problematisch sein, sondern auch bei einer systemübergreifenden Fehlkonfiguration: Ein typisches Szenario wäre, dass in einer Institution mehrere Arbeitsplatzrechner mit identischen lokalen Administratorpasswörtern konfiguriert sind („local admin password reuse“). Wird ein einzelner Rechner durch Schadsoftware oder physischen Zugriff kompromittiert, könnte ein Angreifer dieses Passwort anschließend nutzen, um sich mit denselben Anmeldeinformationen lateral auf weitere Systeme auszubreiten. Die Wiederverwendung des lokalen Administratorpassworts könnte somit eine vollständige Kompromittierung der internen IT-Infrastruktur ermöglichen. Diese Anforderung adressiert den Schutz vor solchen Angriffen, die sich aus der Wiederverwendung kompromittierter Anmeldeinformationen ergeben könnten, etwa durch Credential-Stuffing oder Brute-Force-Angriffe auf bekannte Passwortmuster. Blockieren kann das Risiko verringern, dass ein Angreifer durch bekannte Passwörter unbefugten Zugang zu Konten erhält. Hierzu können zum einen eine lokale Passworthistorie oder zum anderen elektronische Passwortmanager genutzt werden, die unabhängige sichere Passwörter generieren, wo die Wahrscheinlichkeit einer Passwortwiederholung ausgeschlossen werden kann."
      }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.6.2-prm1": {
-     "alt-identifier": "39301f7d-20ca-49c0-97e5-a8b048877e68"
     }
    }
   }
@@ -89,7 +81,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "39301f7d-20ca-49c0-97e5-a8b048877e68"
+   "value": "d7c76736-0c1d-4693-92d5-894a8b740204"
   }
  ]
 }

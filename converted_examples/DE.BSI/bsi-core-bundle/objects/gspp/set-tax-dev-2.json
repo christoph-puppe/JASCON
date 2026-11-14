@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/dev-2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Softwareentwicklung - Security by Design"
@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.1",
-   "sequence": 12480
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.2",
-   "sequence": 12490
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.3",
    "sequence": 12500
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.2",
    "sequence": 12510
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.3",
    "sequence": 12520
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.4",
+   "sequence": 12530
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.2.5",
+   "sequence": 12540
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-2-6",
-   "sequence": 12560
+   "sequence": 12580
   }
  ],
  "label": "2",

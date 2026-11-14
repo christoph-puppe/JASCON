@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERF.2.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERF.2.1",
  "lifecycle": "active",
  "title": {
-  "de": "Überwachung der Einhaltung von Verpflichtungen"
+  "de": "Überprüfung der Einhaltung von Verpflichtungen"
  },
  "statements": [
   {
@@ -59,7 +59,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "perf.2.1-prm1": {
-     "alt-identifier": "9bb16672-4394-4ce9-bd14-12a080233f7a"
+     "alt-identifier": "1aefe6a8-956b-42b8-b47c-bf31fbb521de"
     }
    }
   }

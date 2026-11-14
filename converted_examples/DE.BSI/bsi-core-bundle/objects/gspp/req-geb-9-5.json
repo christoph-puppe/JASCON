@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.9.5",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.9.5",
  "lifecycle": "active",
  "title": {
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -65,7 +65,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Normgerecht ist eine Datenverkabelung, wenn Normen für Verkabelungssysteme wie DIN EN 50173 und DIN EN 50174, sowie bei Glasfaser DIN EN 60794 eingehalten werden. Sie ist auch bedarfsgerecht, wenn die verwendete Verkabelung ausreicht, um festgelegte Bandbreite und Antwortzeit zu erreichen. Das betrifft sowohl zentrale Netzanschlüsse, als auch Unterverteiler und die Zuleitung in die einzelnen Räume.  Zur Umsetzung ist es sinnvoll ein Kabelverlegungsdiagramm und eine standortspezifische Inspektionscheckliste zu erstellen oder erstellen zu lassen."
+      "de": "Normgerecht ist eine Datenverkabelung, wenn Normen für Verkabelungssysteme wie DIN EN 50173 und DIN EN 50174, sowie bei Glasfaser DIN EN 60794 eingehalten werden. Sie ist auch bedarfsgerecht, wenn die verwendete Verkabelung ausreicht, um festgelegte Bandbreite und Antwortzeit zu erreichen. Das betrifft sowohl zentrale Netzanschlüsse, als auch Unterverteiler und die Zuleitung in die einzelnen Räume. Zur Umsetzung ist es sinnvoll ein Kabelverlegungsdiagramm und eine standortspezifische Inspektionscheckliste zu erstellen oder erstellen zu lassen."
      }
     }
    }

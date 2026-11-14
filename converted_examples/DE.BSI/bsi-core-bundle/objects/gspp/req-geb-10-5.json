@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.5",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.10.5",
  "lifecycle": "active",
  "title": {
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 4
     }
@@ -65,7 +65,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ein ableitfähiger Boden ist ein Fußbodenbelag, der es ermöglicht, statische Aufladungen abzuleiten, beispielsweise durch eine geerdete Verbindung. Er zeichnet sich durch einen elektrischen Widerstand zwischen 10^6 und 10^9 Ohm aus. Ableitfähige Böden werden in Bereichen eingesetzt, in denen elektrostatische Entladungen (ESD) vermieden werden müssen.  Die Umsetzung kann nach DIN EN 14041 oder DIN IEC 61340-4-1 erfolgen."
+      "de": "Ein ableitfähiger Boden ist ein Fußbodenbelag, der es ermöglicht, statische Aufladungen abzuleiten, beispielsweise durch eine geerdete Verbindung. Er zeichnet sich durch einen elektrischen Widerstand zwischen 10^6 und 10^9 Ohm aus. Ableitfähige Böden werden in Bereichen eingesetzt, in denen elektrostatische Entladungen (ESD) vermieden werden müssen. Die Umsetzung kann nach DIN EN 14041 oder DIN IEC 61340-4-1 erfolgen."
      }
     }
    }

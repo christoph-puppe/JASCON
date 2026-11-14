@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-11-7",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Einschränkung von Schnittstellen"
@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.7",
-   "sequence": 11710
+   "sequence": 11730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.11.7.1",
-   "sequence": 11720
+   "sequence": 11740
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-11-7-2",
-   "sequence": 11750
+   "sequence": 11770
   }
  ]
 }

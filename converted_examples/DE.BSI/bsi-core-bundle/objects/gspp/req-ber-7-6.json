@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.9",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.9",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.6",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.6",
  "lifecycle": "active",
  "title": {
-  "de": "Zweckbindung"
+  "de": "Etablierte Algorithmen beim Transport"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE Verstöße gegen die Zweckbindung bei der Schlüsselnutzung untersagen."
+    "de": "Berechtigung SOLLTE die ausschließliche Verwendung etablierter kryptografischer Algorithmen beim Transport geheimer Schlüssel verankern."
    }
   }
  ],
@@ -22,9 +22,9 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "untersagen",
-     "result": "Verstöße gegen die Zweckbindung",
-     "result-specification": "bei der Schlüsselnutzung"
+     "action": "verankern",
+     "result": "die ausschließliche Verwendung etablierter kryptografischer Algorithmen",
+     "result-specification": "beim Transport geheimer Schlüssel"
     }
    }
   },
@@ -53,7 +53,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2,
      "tags": [
@@ -66,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Zweckbindung bedeutet, dass der Schlüssel ausschließlich zu dem im Verzeichnis öffentlicher Schlüssel festgelegten Nutzungszweck verwendet werden darf. Die Zweckbindung gilt insbesondere auch für den privaten Schlüssel."
+      "de": "Aktuelle etablierte Algorithmen sind in BSI TR-02102 zu finden. Der Transport kann mit Public Key Cryptography Standards (PKCS), z.B. PKCS#12 Dateiformat erfolgen. Für weitere Details zur Implementierung siehe Detailspezifikation kryptografischer Abläufe und Mechanismen des BSI."
      }
     }
    }
@@ -75,7 +75,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "c5ed06a9-b144-43a9-b269-ff914304036a"
+   "value": "88e6ce16-583d-40b4-a0cc-8a31bbb8c62c"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.4"
   }
  ]
 }

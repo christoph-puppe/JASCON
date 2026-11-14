@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/DET.6.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "DET.6.2",
  "lifecycle": "active",
  "title": {
-  "de": "Beurteilung  von Eingängen"
+  "de": "Beurteilung von Eingängen"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Detektion SOLLTE ein Verfahren zur Beurteilung  von Datei-Eingängen verankern."
+    "de": "Detektion SOLLTE ein Verfahren zur Beurteilung von Datei-Eingängen verankern."
    }
   }
  ],
@@ -23,7 +23,7 @@
    "by-statement": {
     "smt": {
      "action": "verankern",
-     "result": "ein Verfahren zur Beurteilung  von Datei-Eingängen"
+     "result": "ein Verfahren zur Beurteilung von Datei-Eingängen"
     }
    }
   },
@@ -54,7 +54,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4
     }

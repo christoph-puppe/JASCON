@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/NOT.1.1.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "NOT.1.1.4",
  "lifecycle": "active",
  "title": {
@@ -20,13 +20,13 @@
     {
      "name": "not.1.1.4-prm1",
      "type": "string",
-     "label": "BSI-Standard 200-4",
-     "default": "BSI-Standard 200-4"
+     "label": "Reaktiv-, Aufbau- oder Standard-"
     },
     {
      "name": "not.1.1.4-prm2",
      "type": "string",
-     "label": "einem anerkannten BCM-Standard"
+     "label": "BSI-Standard 200-4",
+     "default": "BSI-Standard 200-4"
     }
    ]
   }
@@ -65,7 +65,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -83,10 +83,10 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "not.1.1.4-prm1": {
-     "alt-identifier": "9cfedbf2-6dc8-4ca5-8d93-26610884e3b7"
+     "alt-identifier": "dd9e6d64-a1c1-4c1f-b9ac-819dfe9ba270"
     },
     "not.1.1.4-prm2": {
-     "alt-identifier": "9cfedbf2-6dc8-4ca5-8d93-26610884e3b7"
+     "alt-identifier": "9563ce91-94a9-429b-b1ef-c1c00e0665b7"
     }
    }
   }

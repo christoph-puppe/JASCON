@@ -1,57 +1,73 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/ber-5",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
-  "de": "Passwortgebrauch"
+  "de": "Umgang mit Authentisierungsmitteln"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.1",
-   "sequence": 8280
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-5-1",
+   "sequence": 8190
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.2",
-   "sequence": 8290
+   "sequence": 8200
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.3",
-   "sequence": 8300
+   "sequence": 8210
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.4",
-   "sequence": 8310
+   "sequence": 8220
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.5",
-   "sequence": 8320
+   "sequence": 8230
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.6",
-   "sequence": 8330
+   "sequence": 8240
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.7",
-   "sequence": 8340
+   "sequence": 8250
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.8",
-   "sequence": 8350
+   "sequence": 8260
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.9",
-   "sequence": 8360
+   "sequence": 8270
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.10",
-   "sequence": 8370
+   "sequence": 8280
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.11",
+   "sequence": 8290
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.12",
+   "sequence": 8300
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.13",
+   "sequence": 8310
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.14",
+   "sequence": 8320
   }
  ],
  "label": "5",
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "b2a0a857-7c7a-4a32-8abb-bf238de1f19c"
+   "value": "c23d7619-f0b2-49ef-92e8-4d5c5b62ead3"
   }
  ]
 }

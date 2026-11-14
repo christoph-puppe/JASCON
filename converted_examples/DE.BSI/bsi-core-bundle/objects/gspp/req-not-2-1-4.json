@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/NOT.2.1.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "NOT.2.1.4",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Notfallplanung KANN die Funktionsfähigkeit der BAO {param:not.2.1.4-prm1}  durch Stabsübungen überprüfen."
+    "de": "Notfallplanung KANN die Funktionsfähigkeit der BAO {param:not.2.1.4-prm1} durch Stabsübungen überprüfen."
    },
    "parameters": [
     {
@@ -31,7 +31,7 @@
     "smt": {
      "action": "überprüfen",
      "result": "die Funktionsfähigkeit der BAO",
-     "result-specification": "{{regelmäßig}}  durch Stabsübungen"
+     "result-specification": "{{regelmäßig}} durch Stabsübungen"
     }
    }
   },
@@ -60,7 +60,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -78,7 +78,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "not.2.1.4-prm1": {
-     "alt-identifier": "c733baed-3cf9-4752-8121-354766e49ab0"
+     "alt-identifier": "f9c5875f-abbf-44df-8fb5-9d06340e9035"
     }
    }
   }

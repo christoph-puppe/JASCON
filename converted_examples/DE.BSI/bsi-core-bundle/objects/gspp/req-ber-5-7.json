@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.7",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.7",
  "lifecycle": "active",
  "title": {
-  "de": "Trivialpasswörter"
+  "de": "Vorkonfigurierte Authentisierungsmittel von Anwendungen"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für Nutzende SOLLTE die Verwendung von Trivialpassworten blockieren."
+    "de": "Berechtigung für Anwendungen SOLLTE vorkonfigurierte Authentisierungsmittel deaktivieren."
    }
   }
  ],
@@ -22,10 +22,10 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "blockieren",
-     "result": "die Verwendung von Trivialpassworten",
+     "action": "deaktivieren",
+     "result": "vorkonfigurierte Authentisierungsmittel",
      "target-object-categories": [
-      "Nutzende"
+      "Anwendungen"
      ]
     }
    }
@@ -34,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Konfigurationshistorie"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -48,8 +48,7 @@
      "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
      ]
     }
    }
@@ -57,12 +56,11 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
+     "effort": 1,
      "tags": [
-      "Credential Stuffing",
-      "Password Policy"
+      "Advanced Persistent Threats (APT)"
      ]
     }
    }
@@ -71,7 +69,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Trivialpasswörter sind leicht zu erratende oder zu diesem Zugangskonto bereits öffentlich bekannte Passwörter (erkennbar durch Nutzung sog. Leak Check Datenbanken). Leicht zu erraten sind Passwörter, wenn sie mit gängigen Wörterbuchangriffen (dictionary attacks) bzw. systematischem Ausprobieren (brute force) in kurzer Zeit zu kompromittieren sind. Dazu zählen etwa einfache Folgen wie „123456“, „Passwort“ oder „qwerty“ sowie häufig vorkommende, in Leaks dokumentierte Standardkombinationen. Der Zweck der Anforderung liegt darin, das Risiko unautorisierter Zugriffe zu reduzieren: Ein Angreifer könnte mit automatisierten Tools in Sekunden oder Minuten triviale Passwörter durchprobieren, was zu einem unbefugten Zugriff auf Benutzerkonten, Systemressourcen oder sensible Daten führen könnte. Die Blockierung solcher Passwörter kann dagegen sicherstellen, dass nur schwer vorhersehbare Kennwörter verwendet werden, wodurch ein entscheidender Schutz gegen automatisierte Angriffsverfahren erreicht werden kann.  Zudem können Passwortmanager beim Generieren nicht-trivialer Passwörter unterstützen."
+      "de": "Herstellerseitige Standardkonten und Default-Passwörter stellen ein beliebtes Eingangstor für Angreifer dar. Achten Sie hierbei nicht nur auf Passwörter, sondern auch auf andere Zugangsmittel wie Hardware-Zugangstoken, Zertifikate oder physische Zugangskontrollsysteme."
      }
     }
    }
@@ -80,7 +78,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "f0722999-f8c4-4c75-810b-94d7563dd698"
+   "value": "ad063966-ffdb-42d1-a231-351d2526b8b0"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.6"
   }
  ]
 }

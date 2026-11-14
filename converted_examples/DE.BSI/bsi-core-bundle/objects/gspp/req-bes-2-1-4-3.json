@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BES.2.1.4.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BES.2.1.4.3",
  "lifecycle": "active",
  "title": {
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4,
      "tags": [
@@ -69,7 +69,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Unter „Kompatibilität im Hinblick auf das Administrationsmodell“ ist hier die technische und organisatorische Anschlussfähigkeit einer zu beschaffenden Lösung an das bestehende Berechtigungs- und Rollenmodell der Institution zu verstehen, also an die Struktur von Benutzerkonten, Rollen, Gruppen, Verantwortlichkeiten und administrativen Zuständigkeiten (z.B. Role-Based Access Control – RBAC, Attribute-Based Access Control – ABAC, Privileged Access Management – PAM). Das Administrationsmodell beschreibt dabei, wie Identitäten angelegt, geändert und gelöscht werden (Identity Lifecycle), wie Rechte vergeben und überprüft werden (Access Governance) und wie administrative Tätigkeiten nachvollziehbar protokolliert werden (Logging, Audit Trail). Die Dokumentation des Bedarfs für diese Kompatibilität bedeutet, dass im Beschaffungsprozess transparent festgehalten wird, welche Integrationsanforderungen bestehen, etwa hinsichtlich zentraler Verzeichnisdienste (z.B. LDAP, Active Directory), Single Sign-On (SSO), Multi-Faktor-Authentisierung (MFA), Mandantenfähigkeit oder der Trennung von administrativen und fachlichen Rollen. Der Zweck dieser Vorgabe liegt darin, Inkonsistenzen und Medienbrüche im Identitäts- und Berechtigungsmanagement zu vermeiden, da eine nicht kompatible Lösung zu Schattenadministration, doppelten Benutzerkonten oder unzureichender Trennung von Aufgaben führen könnte und dadurch unautorisierte Zugriffe oder fehlende Nachvollziehbarkeit begünstigt werden könnten. Eine frühzeitige und strukturierte Festlegung der Kompatibilitätsanforderungen kann hingegen eine einheitliche Durchsetzung von Sicherheitsrichtlinien, eine zentrale Steuerung privilegierter Konten und eine revisionssichere Protokollierung administrativer Handlungen unterstützen. die Unterstützung  sowie (3) die technische Möglichkeit zur rollenbasierten Delegation administrativer Rechte innerhalb der Anwendung umfassen."
+      "de": "Unter „Kompatibilität im Hinblick auf das Administrationsmodell“ ist hier die technische und organisatorische Anschlussfähigkeit einer zu beschaffenden Lösung an das bestehende Berechtigungs- und Rollenmodell der Institution zu verstehen, also an die Struktur von Benutzerkonten, Rollen, Gruppen, Verantwortlichkeiten und administrativen Zuständigkeiten (z.B. Role-Based Access Control – RBAC, Attribute-Based Access Control – ABAC, Privileged Access Management – PAM). Das Administrationsmodell beschreibt dabei, wie Identitäten angelegt, geändert und gelöscht werden (Identity Lifecycle), wie Rechte vergeben und überprüft werden (Access Governance) und wie administrative Tätigkeiten nachvollziehbar protokolliert werden (Logging, Audit Trail). Die Dokumentation des Bedarfs für diese Kompatibilität bedeutet, dass im Beschaffungsprozess transparent festgehalten wird, welche Integrationsanforderungen bestehen, etwa hinsichtlich zentraler Verzeichnisdienste (z.B. LDAP, Active Directory), Single Sign-On (SSO), Multi-Faktor-Authentisierung (MFA), Mandantenfähigkeit oder der Trennung von administrativen und fachlichen Rollen. Der Zweck dieser Vorgabe liegt darin, Inkonsistenzen und Medienbrüche im Identitäts- und Berechtigungsmanagement zu vermeiden, da eine nicht kompatible Lösung zu Schattenadministration, doppelten Benutzerkonten oder unzureichender Trennung von Aufgaben führen könnte und dadurch unautorisierte Zugriffe oder fehlende Nachvollziehbarkeit begünstigt werden könnten. Eine frühzeitige und strukturierte Festlegung der Kompatibilitätsanforderungen kann hingegen eine einheitliche Durchsetzung von Sicherheitsrichtlinien, eine zentrale Steuerung privilegierter Konten und eine revisionssichere Protokollierung administrativer Handlungen unterstützen. die Unterstützung sowie (3) die technische Möglichkeit zur rollenbasierten Delegation administrativer Rechte innerhalb der Anwendung umfassen."
      }
     }
    }

@@ -1,7 +1,7 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.7",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.7",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.7",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.7",
  "lifecycle": "active",
  "title": {
   "de": "Kein Transport privater Schlüssel"
@@ -14,11 +14,11 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung KANN den Export privater Schlüssel durch {param:ber.6.7-prm1} autorisieren."
+    "de": "Berechtigung KANN den Export privater Schlüssel durch {param:ber.7.7-prm1} autorisieren."
    },
    "parameters": [
     {
-     "name": "ber.6.7-prm1",
+     "name": "ber.7.7-prm1",
      "type": "string",
      "label": "eine zuständige Person oder Rolle"
     }
@@ -60,7 +60,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -80,8 +80,8 @@
   },
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
-    "ber.6.7-prm1": {
-     "alt-identifier": "c28426cd-d01c-427d-bade-141936177c55"
+    "ber.7.7-prm1": {
+     "alt-identifier": "1ed1a34d-90b5-4fb2-bb96-37101bc2996a"
     }
    }
   }

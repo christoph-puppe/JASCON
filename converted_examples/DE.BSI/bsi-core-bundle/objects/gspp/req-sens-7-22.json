@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.7.22",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.7.22",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Sensibilisierung für Nutzende von Faxen SOLLTE gegen die Risiken der unauthentisierten und unverschlüsselten Faxnutzung sensibilisieren."
+    "de": "Sensibilisierung für Nutzende von Faxanwendungen SOLLTE gegen die Risiken der unauthentisierten und unverschlüsselten Faxnutzung sensibilisieren."
    }
   }
  ],
@@ -26,7 +26,7 @@
      "result": "gegen die Risiken der unauthentisierten und unverschlüsselten Faxnutzung",
      "target-object-categories": [
       "Nutzende",
-      "Faxe"
+      "Faxanwendungen"
      ]
     }
    }
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4
     }

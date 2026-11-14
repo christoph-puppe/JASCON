@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.8.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.8.3",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Sensibilisierung für Nutzende von Endgeräten SOLLTE gegen Risiken der Nutzung von mobilen Endgeräten sensibilisieren."
+    "de": "Sensibilisierung für Nutzende von Mobilen Endgeräten SOLLTE gegen Risiken der Nutzung von mobilen Endgeräten sensibilisieren."
    }
   }
  ],
@@ -26,7 +26,7 @@
      "result": "gegen Risiken der Nutzung von mobilen Endgeräten",
      "target-object-categories": [
       "Nutzende",
-      "Endgeräte"
+      "Mobile Endgeräte"
      ]
     }
    }
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 1
     }

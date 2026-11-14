@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/not",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Notfallplanung"
@@ -8,26 +8,26 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-1",
-   "sequence": 8710
+   "sequence": 8730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-2",
-   "sequence": 8780
+   "sequence": 8800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-3",
-   "sequence": 8850
+   "sequence": 8870
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not-4",
-   "sequence": 9080
+   "sequence": 9100
   }
  ],
  "label": "NOT",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Notfallplanung stellt sicher, dass bei schwerwiegenden Störungen oder Krisen schnell und koordiniert reagiert wird, um den Fortbestand kritischer Geschäftsprozesse und die Wiederherstellung der betroffenen Systeme zu gewährleisten.  Notfallplanung adressiert umfassende Notfälle und Krisensituationen, während die Sicherheitsvorfallbehandlung spezifisch auf Informationssicherheitsvorfälle fokussiert ist. Notfallmanagement ist strategisch und organisatorisch umfassender, während die Vorfallbehandlung auf operative Sicherheitsprobleme eingeht."
+    "de": "Die Notfallplanung stellt sicher, dass bei schwerwiegenden Störungen oder Krisen schnell und koordiniert reagiert wird, um den Fortbestand kritischer Geschäftsprozesse und die Wiederherstellung der betroffenen Systeme zu gewährleisten. Notfallplanung adressiert umfassende Notfälle und Krisensituationen, während die Sicherheitsvorfallbehandlung spezifisch auf Informationssicherheitsvorfälle fokussiert ist. Notfallmanagement ist strategisch und organisatorisch umfassender, während die Vorfallbehandlung auf operative Sicherheitsprobleme eingeht."
    }
   }
  },

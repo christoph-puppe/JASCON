@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.5",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.3.5",
  "lifecycle": "active",
  "title": {
@@ -58,7 +58,9 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.44",
       "https://ns.bsi.bund.de/gspp/threat/G-0.16",
       "https://ns.bsi.bund.de/gspp/threat/G-0.24",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.34",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.41"
      ]
     }
    }
@@ -66,7 +68,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -76,7 +78,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Befinden sich am Standort Assets oder Geschäftsprozesse mit erhöhtem Schutzbedarf, so ist es sinnvoll, diese auch gegen hartnäckigere Einbruchsversuche zu schützen, z.B. größere Serverräume oder Datenträgerarchive, sowie Standorte im Fokus der Öffentlichkeit oder von ideologischen Gewalttätern.   Die passenden Maßnahmen richten sich nach dem Risikoprofil der zu schützenden Assets, sowie der potenziellen Täter. So kann der Einbau rundum einbruchsicherer Bauteile wie Wände und Türen nach DIN EN 1627 RC3 oder besser sinnvoll sein. Für massive Bedrohungen von Außen bieten sich Poller oder hydraulische Straßensperren, ausgelegt für ein bestimmtes Gewicht bei einer bestimmten Geschwindigkeit, an.  Die Anforderung ist auch dann erfüllt, wenn der Standort bereits von Dritten nach Normen wie DIN EN 1627 RC3 erbaut und abgenommen wurde."
+      "de": "Befinden sich am Standort Assets oder Geschäftsprozesse mit erhöhtem Schutzbedarf, so ist es sinnvoll, diese auch gegen hartnäckigere Einbruchsversuche zu schützen, z.B. größere Serverräume oder Datenträgerarchive, sowie Standorte im Fokus der Öffentlichkeit oder von ideologischen Gewalttätern. Die passenden Maßnahmen richten sich nach dem Risikoprofil der zu schützenden Assets, sowie der potenziellen Täter. So kann der Einbau rundum einbruchsicherer Bauteile wie Wände und Türen nach DIN EN 1627 RC3 oder besser sinnvoll sein. Für massive Bedrohungen von Außen bieten sich Poller oder hydraulische Straßensperren, ausgelegt für ein bestimmtes Gewicht bei einer bestimmten Geschwindigkeit, an. Die Anforderung ist auch dann erfüllt, wenn der Standort bereits von Dritten nach Normen wie DIN EN 1627 RC3 erbaut und abgenommen wurde."
      }
     }
    }
@@ -84,7 +86,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "geb.3.5-prm1": {
-     "alt-identifier": "02f648cd-8aec-4bfb-b751-dab8974d874c"
+     "alt-identifier": "be2f8c40-430c-422f-81b4-2871647e21a7"
     }
    }
   }

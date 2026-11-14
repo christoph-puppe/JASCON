@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.4.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.4.6",
  "lifecycle": "active",
  "title": {
-  "de": "Systemfunktionen ohne Authentifizierung"
+  "de": "Anwendungsfunktionen ohne Authentifizierung"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für IT-Systeme SOLLTE Funktionen, auf die ohne vorherige Authentifizierung zugegriffen werden kann, dokumentieren."
+    "de": "Berechtigung für Anwendungen SOLLTE Funktionen, auf die ohne vorherige Authentifizierung zugegriffen werden kann, dokumentieren."
    }
   }
  ],
@@ -25,7 +25,7 @@
      "action": "dokumentieren",
      "result": "Funktionen, auf die ohne vorherige Authentifizierung zugegriffen werden kann,",
      "target-object-categories": [
-      "IT-Systeme"
+      "Anwendungen"
      ]
     }
    }
@@ -34,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Systemdokumentation"
+      "Anwendungsdokumentation"
      ]
     }
    }
@@ -57,7 +57,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4
     }
@@ -67,7 +67,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Funktionen ohne Authentifizierung sind alle Zugriffsmöglichkeiten auf Schnittstellen oder Daten des Systems, für die keine Authentifizierung erforderlich ist. Hierzu gehören z. B. Sprachassistenten, offene Webserver-Ports oder das Einblenden von Inhalten aus Apps auf dem Sperrbildschirm, wodurch persönliche Nachrichten oder Logintoken für Unbefugte zugänglich sein könnten. Solche Funktionen sind häufige Einfallstore für Angriffe auf das System oder für Datenleaks. Daher ist es sinnvoll eine Übersicht dieser Funktionen zu führen, selbst wenn die Funktionen benötigt werden."
+      "de": "Hierzu gehören z.B. der Zugriff auf öffentliche Inhalte oder Funktionen zum Zurücksetzen des Passwortes, wodurch persönliche Daten oder Logintoken für Unbefugte zugänglich sein könnten. Allerdings kann es auch unauthentifizierte Funktionen geben, die für Betrieb oder Informationssicherheit benötigt werden, z.B. Meldeformulare für Sicherheitsvorfälle oder öffentliche Webseiteninhalte."
      }
     }
    }
@@ -76,7 +76,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "bf5b5f6a-f525-45fc-b5a5-62379b3e6b2f"
+   "value": "383f3a5e-d627-46aa-960f-4e8c5c9c9592"
   }
  ]
 }

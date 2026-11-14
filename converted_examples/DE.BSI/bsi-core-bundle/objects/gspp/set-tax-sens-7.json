@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-7",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Umgang mit spezifischen Zielobjekten"
@@ -101,10 +101,6 @@
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.24",
    "sequence": 6470
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.7.25",
-   "sequence": 6480
   }
  ],
  "label": "7",

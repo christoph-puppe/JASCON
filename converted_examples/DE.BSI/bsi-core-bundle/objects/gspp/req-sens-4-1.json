@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.4.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.4.1",
  "lifecycle": "active",
  "title": {
@@ -58,7 +58,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3,
      "tags": [
@@ -72,7 +72,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Authentisierungsmittel sind alle Methoden oder Technologien, die zur Überprüfung der Identität verwendet werden, z.B. Passwörter, Zugangschipkarte, Ausweis. Um Missbrauch zu vermeiden ist es wichtig, diese (1) geschützt aufzubewahren und niemals weiterzugeben, (2) den Verdacht, dass ein Passwort oder Token kompromittiert sein könnte, sofort zu melden und (3) aufmerksam gegenüber ungewöhnlichen Login-Masken oder Aufforderungen zu sein, die Zugangsdaten außerhalb der gewohnten Systeme einzugeben."
+      "de": "Zur Definition von Authentisierungsmitteln siehe Glossar/Namensräume. Um Missbrauch zu vermeiden ist es wichtig, diese (1) geschützt aufzubewahren und niemals weiterzugeben, (2) den Verdacht, dass ein Passwort oder Token kompromittiert sein könnte, sofort zu melden und (3) aufmerksam gegenüber ungewöhnlichen Login-Masken oder Aufforderungen zu sein, die Zugangsdaten außerhalb der gewohnten Systeme einzugeben."
      }
     }
    }
@@ -87,7 +87,7 @@
  "relations": [
   {
    "type": "required",
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.5"
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.7.5"
   }
  ]
 }

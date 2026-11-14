@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/VRB.7.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "VRB.7.1",
  "lifecycle": "active",
  "title": {
@@ -50,7 +50,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Das Verfahren sollte eine klare Definition enthalten, was als Verstoß gilt und die verschiedenen Arten von Verstößen kategorisieren. Es sollten  Melde- und Eskalationswegen für erkannte oder vermutete Verstöße festgelegt werden, ein systematischer Prozess zur Untersuchung und Dokumentation von Verstößen etabliert werden, eine Entscheidungsfindung über angemessene Reaktionen und Konsequenzen stattfinden und die Umsetzung beschlossener Maßnahmen sollte nachverfolgt werden."
+      "de": "Das Verfahren sollte eine klare Definition enthalten, was als Verstoß gilt und die verschiedenen Arten von Verstößen kategorisieren. Es sollten Melde- und Eskalationswegen für erkannte oder vermutete Verstöße festgelegt werden, ein systematischer Prozess zur Untersuchung und Dokumentation von Verstößen etabliert werden, eine Entscheidungsfindung über angemessene Reaktionen und Konsequenzen stattfinden und die Umsetzung beschlossener Maßnahmen sollte nachverfolgt werden."
      }
     }
    }

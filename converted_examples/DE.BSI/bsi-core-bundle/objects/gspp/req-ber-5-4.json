@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.4",
  "lifecycle": "active",
  "title": {
-  "de": "Mehr-Faktor-Authentisierung am Perimeter"
+  "de": "Nur etablierte Kryptographie"
  },
  "statements": [
   {
@@ -14,20 +14,24 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für Anwendungen von Externe Netzanschlüssen SOLLTE Phishing-resistente Mehr-Faktor-Authentisierung aktivieren."
-   }
+    "de": "Berechtigung SOLLTE bei kryptografischen Authentifizierungsmitteln die ausschließliche Verwendung etablierter kryptografischer Algorithmen nach {param:ber.5.4-prm1} verankern."
+   },
+   "parameters": [
+    {
+     "name": "ber.5.4-prm1",
+     "type": "string",
+     "label": "einem oder mehreren anerkannten Standards"
+    }
+   ]
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "aktivieren",
-     "result": "Phishing-resistente Mehr-Faktor-Authentisierung",
-     "target-object-categories": [
-      "Anwendungen",
-      "Externe Netzanschlüsse"
-     ]
+     "action": "verankern",
+     "result": "bei kryptografischen Authentifizierungsmitteln die ausschließliche Verwendung etablierter kryptografischer Algorithmen",
+     "result-specification": "nach {{einem oder mehreren anerkannten Standards}}"
     }
    }
   },
@@ -46,11 +50,9 @@
      "confidentiality": "2",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "1",
+     "authenticity": "0",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
      ]
     }
    }
@@ -58,13 +60,11 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3,
      "tags": [
-      "MFA",
-      "Credential Stuffing",
-      "Brute-Force-Attacke"
+      "Cryptography"
      ]
     }
    }
@@ -73,8 +73,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Phishing-resistente Mehr-Faktor-Authentisierung bezeichnet Verfahren zur Anmeldung, bei denen mindestens zwei unterschiedliche Faktoren genutzt werden und bei denen die Authentisierung zusätzlich gegen typische Angriffe wie Credential Phishing, Adversary-in-the-Middle-Angriffe oder die Wiederverwendung abgefangener Sitzungsdaten abgesichert ist. Phishing-resistente Verfahren basieren typischerweise auf kryptographischen Nachweisen zwischen Endgerät und Zielsystem und verhindern dadurch, dass einmal abgefragte Zugangsdaten oder Einmalcodes durch täuschend echte Anmeldeseiten weiterverwendet werden können, beispielsweise FIDO2 Passkeys. Hintergrund ist, dass aus externen Netzen wie dem Internet erreichbare Anwendungen (insbesondere die VPN-Einwahl oder Cloud-Anwendungen) ein beliebtes Ziel für Angreifer sind. Klassische Passwörter oder einfache Einmalcodes könnten durch Social Engineering, gefälschte Login-Portale oder Man-in-the-Browser-Angriffe ausgespäht werden."
+      "de": "Kryptografische Authentifizierungsmittel sind Authentisierungsnachweise, deren Sicherheit wesentlich auf kryptografischen Verfahren beruht, etwa Passwort-Hashing, Zertifikate, Schlüsselpaare, Smartcards, Hardware-Token, Passkeys/FIDO2-Authentifikatoren, signaturbasierte API-Zugänge oder SSH-Schlüssel (engl. cryptographic authenticators). Etablierte kryptografische Algorithmen sind mathematisch fundierte Verschlüsselungsverfahren und Protokolle, die in der aktuellen Praxis nicht mit vertretbarem Aufwand gebrochen werden können, beispielsweise für Signaturen, Message Authentication Codes, Hashfunktionen, Schlüsselableitung oder authentisierte Verschlüsselung. Sie basieren auf mathematisch schwer lösbaren Problemen, bieten Resistenz gegen bekannte kryptanalytische Angriffe, unterstützen ausreichend große Schlüssellängen und wurden von Experten gründlich geprüft und analysiert. Aktuelle etablierte Algorithmen sind in BSI TR-02102 zu finden. Für weitere Details zur Implementierung siehe Detailspezifikation kryptografischer Abläufe und Mechanismen des BSI."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.5.4-prm1": {
+     "alt-identifier": "81c0a855-3ba0-4055-9649-022cf09ccc07"
     }
    }
   }
@@ -82,7 +89,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "2b9ddd3e-5233-46f5-abca-1793b89e2809"
+   "value": "88946245-3ccb-4e9f-88f3-0b8c60e417e5"
   }
  ]
 }

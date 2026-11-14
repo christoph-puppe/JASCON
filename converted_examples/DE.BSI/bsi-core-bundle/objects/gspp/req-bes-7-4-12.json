@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BES.7.4.12",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BES.7.4.12",
  "lifecycle": "active",
  "title": {
@@ -65,7 +65,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -78,7 +78,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ein anerkannter Standard für SBOM ist die BSI TR-03183-2."
+      "de": "Im Kontext von Software-as-a-Service (SaaS), also Software, die durch einen externen Anbieter betrieben und über ein Netzwerk als Dienst bereitgestellt wird, beschreibt die SBOM die vom Anbieter eingesetzten Softwarekomponenten, beispielsweise proprietäre Softwaremodule, quelloffene Bibliotheken (Open-Source Components) und eingebundene Drittkomponenten (Third-Party Components). Dabei können sowohl direkte Abhängigkeiten (Direct Dependencies) als auch mittelbare beziehungsweise transitive Abhängigkeiten (Transitive Dependencies) berücksichtigt werden. Da die technische Infrastruktur und die Softwarezusammensetzung bei SaaS üblicherweise durch den Anbieter kontrolliert werden, kann sich die SBOM auf die für den bereitgestellten Dienst relevanten und vom Anbieter offengelegten Bestandteile beziehen. Ein anerkannter Standard für SBOM ist die BSI TR-03183-2. Eine Zuordnung der SBOM zum jeweiligen SaaS-Dienst sowie zu einem eindeutig identifizierbaren Softwarestand oder Bereitstellungszeitpunkt ermöglicht die Nachvollziehbarkeit der dokumentierten Komponenten bei softwarebezogenen Lieferkettenrisiken (Software Supply Chain Risks)."
      }
     }
    }
@@ -86,7 +86,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "bes.7.4.12-prm1": {
-     "alt-identifier": "7a3321a5-9f54-4ada-955d-647aeb0e51b5"
+     "alt-identifier": "9b9cde1a-ec0c-454e-b19a-445adfb24a3c"
     }
    }
   }

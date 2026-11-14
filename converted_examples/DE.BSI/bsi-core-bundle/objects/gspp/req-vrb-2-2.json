@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/VRB.2.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "VRB.2.2",
  "lifecycle": "active",
  "title": {
@@ -48,7 +48,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Hier erfolgt eine Bewertung der Wahrscheinlichkeit des Wiederauftretens von Nicht-Konformitäten und der potenziellen  Auswirkungen bei erneutem Auftreten, eine Überprüfung, ob ähnliche Nicht-Konformitäten in anderen Bereichen der Institution bestehen oder auftreten könnten und eine Analyse, inwieweit die Nicht-Konformität auf systemische Schwächen im ISMS hinweist und ob grundlegende Anpassungen des ISMS erforderlich sind.  Bei wiederholten oder systematischen Nicht-Konformitäten werden jedoch die zugrundeliegenden Prozesse, Richtlinien oder Verantwortlichkeiten überprüft und bei Bedarf angepasst."
+      "de": "Hier erfolgt eine Bewertung der Wahrscheinlichkeit des Wiederauftretens von Nicht-Konformitäten und der potenziellen Auswirkungen bei erneutem Auftreten, eine Überprüfung, ob ähnliche Nicht-Konformitäten in anderen Bereichen der Institution bestehen oder auftreten könnten und eine Analyse, inwieweit die Nicht-Konformität auf systemische Schwächen im ISMS hinweist und ob grundlegende Anpassungen des ISMS erforderlich sind. Bei wiederholten oder systematischen Nicht-Konformitäten werden jedoch die zugrundeliegenden Prozesse, Richtlinien oder Verantwortlichkeiten überprüft und bei Bedarf angepasst."
      }
     }
    }
@@ -56,7 +56,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "vrb.2.2-prm1": {
-     "alt-identifier": "b2be1d91-1744-467f-abd1-7bcde818fd65"
+     "alt-identifier": "2ac14d52-0a0e-4be2-a746-b11c6501e86b"
     }
    }
   }

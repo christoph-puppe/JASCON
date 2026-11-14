@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.2.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.2.4",
  "lifecycle": "active",
  "title": {
@@ -57,7 +57,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -67,7 +67,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die elektromagnetische Abschirmung von Standorten dient dem Schutz vertraulicher Informationen vor unbefugter Erfassung durch elektromagnetische Abstrahlung. Computersysteme, Netzwerkgeräte und andere elektronische Ausrüstungen senden elektromagnetische Signale aus, die außerhalb des Gebäudes abgefangen werden könnten. Dies könnte zur ungewollten Offenlegung sensibler Daten führen, wie etwa bei Van-Eck-Phreaking, bei dem Bildschirminhalte aus der Ferne rekonstruiert werden können. Ein Angreifer könnte beispielsweise mit speziellem Equipment die ausgesendeten Signale eines Monitors oder Netzwerkkabels abfangen und daraus Passwörter, Finanzdaten oder Geschäftsgeheimnisse extrahieren, ohne physischen Zugang zum Gebäude zu benötigen.  Bei der Umsetzung kann eine mehrstufige Strategie verfolgt werden. Die Räumlichkeiten können mit speziellen abschirmenden Materialien wie metallischen Geweben, leitfähigen Farben oder Folienbeschichtungen ausgekleidet werden, die als \"Faradayscher Käfig\" wirken. Fenster können mit metallbeschichteten Gläsern oder speziellen Folien versehen werden, die elektromagnetische Strahlung blockieren. Sicherheitsbereiche können nach Sensitivität der dort verarbeiteten Daten in verschiedene Zonen eingeteilt werden, wobei nur die kritischsten Bereiche vollständig abgeschirmt werden."
+      "de": "Die elektromagnetische Abschirmung von Standorten dient dem Schutz vertraulicher Informationen vor unbefugter Erfassung durch elektromagnetische Abstrahlung. Computersysteme, Netzwerkgeräte und andere elektronische Ausrüstungen senden elektromagnetische Signale aus, die außerhalb des Gebäudes abgefangen werden könnten. Dies könnte zur ungewollten Offenlegung sensibler Daten führen, wie etwa bei Van-Eck-Phreaking, bei dem Bildschirminhalte aus der Ferne rekonstruiert werden können. Ein Angreifer könnte beispielsweise mit speziellem Equipment die ausgesendeten Signale eines Monitors oder Netzwerkkabels abfangen und daraus Passwörter, Finanzdaten oder Geschäftsgeheimnisse extrahieren, ohne physischen Zugang zum Gebäude zu benötigen. Bei der Umsetzung kann eine mehrstufige Strategie verfolgt werden. Die Räumlichkeiten können mit speziellen abschirmenden Materialien wie metallischen Geweben, leitfähigen Farben oder Folienbeschichtungen ausgekleidet werden, die als \"Faradayscher Käfig\" wirken. Fenster können mit metallbeschichteten Gläsern oder speziellen Folien versehen werden, die elektromagnetische Strahlung blockieren. Sicherheitsbereiche können nach Sensitivität der dort verarbeiteten Daten in verschiedene Zonen eingeteilt werden, wobei nur die kritischsten Bereiche vollständig abgeschirmt werden."
      }
     }
    }

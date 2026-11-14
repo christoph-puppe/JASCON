@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/DET.5.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "DET.5.1",
  "lifecycle": "active",
  "title": {
@@ -54,7 +54,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4,
      "tags": [
@@ -67,7 +67,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Relevant können hierbei verschiedene Arten von Schwachstellen sein (z.B. Physisch und im Netz, Orte, Adressbereiche, Anwendungen und Ports).   Zur Erkennung können Schwachstellenscans, Pentests und ein Abgleich der eigenen Infrastruktur mit öffentlichen Schwachstellendatenbanken genutzt werden.  Zur Beurteilung der Kritikalität können Scoring-Systeme wie CVSS oder Berichte der betroffenen Hersteller oder Dienstleister herangezogen werden.  Zur Behandlung können z.B. Sicherheitspatches, die Deaktivierung betroffener (Teil-)Funktionen oder Komponenten oder die Isolierung betroffenen Systeme oder Anwendungen in Frage kommen.  Für Details siehe ISO/IEC 30111."
+      "de": "Relevant können hierbei verschiedene Arten von Schwachstellen sein (z.B. Physisch und im Netz, Orte, Adressbereiche, Anwendungen und Ports). Zur Erkennung können Schwachstellenscans, Pentests und ein Abgleich der eigenen Infrastruktur mit öffentlichen Schwachstellendatenbanken genutzt werden. Zur Beurteilung der Kritikalität können Scoring-Systeme wie CVSS oder Berichte der betroffenen Hersteller oder Dienstleister herangezogen werden. Zur Behandlung können z.B. Sicherheitspatches, die Deaktivierung betroffener (Teil-)Funktionen oder Komponenten oder die Isolierung betroffenen Systeme oder Anwendungen in Frage kommen. Für Details siehe ISO/IEC 30111."
      }
     }
    }

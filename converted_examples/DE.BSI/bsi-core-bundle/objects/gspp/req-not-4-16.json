@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/NOT.4.16",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "NOT.4.16",
  "lifecycle": "active",
  "title": {
@@ -64,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -74,7 +74,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Überprüfung der Vollständigkeit kann durch Statistiken des Datenumfangs plus Stichproben der Daten durchgeführt werden.  Ein Integritätstest prüft, ob die gesicherten Daten ohne Änderungen im Vergleich zum Original vorliegen. Hierzu können je nach Daten auch Berechtigungen und Metadaten gehören, wenn diese für die Rücksicherung erforderlich sind (z.B. Wiederherstellung eines Laufwerks mit Ordnern die verschiedene Zugriffsberechtigungen haben)."
+      "de": "Die Überprüfung der Vollständigkeit kann durch Statistiken des Datenumfangs plus Stichproben der Daten durchgeführt werden. Ein Integritätstest prüft, ob die gesicherten Daten ohne Änderungen im Vergleich zum Original vorliegen. Hierzu können je nach Daten auch Berechtigungen und Metadaten gehören, wenn diese für die Rücksicherung erforderlich sind (z.B. Wiederherstellung eines Laufwerks mit Ordnern die verschiedene Zugriffsberechtigungen haben)."
      }
     }
    }
@@ -82,7 +82,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "not.4.16-prm1": {
-     "alt-identifier": "09fe99af-64b5-478f-80c0-c4ea6f6d4561"
+     "alt-identifier": "88e0aa75-0b6d-4c76-b4ed-64c1872c68c5"
     }
    }
   }

@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.13",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.13",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.3",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.3",
  "lifecycle": "active",
  "title": {
-  "de": "Gültigkeit"
+  "de": "Verzeichnis öffentlicher Schlüssel"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE die Verifikation der Gültigkeit des Schlüssels vor jeder Nutzung verankern."
+    "de": "Berechtigung SOLLTE zu jedem öffentlichen Schlüssel die dazugehörige Identität, das Ablaufdatum, den Nutzungszweck, die Schlüsselart und den Algorithmus bei der Schlüsselbeglaubigung dokumentieren."
    }
   }
  ],
@@ -22,9 +22,9 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "verankern",
-     "result": "die Verifikation der Gültigkeit des Schlüssels",
-     "result-specification": "vor jeder Nutzung"
+     "action": "dokumentieren",
+     "result": "zu jedem öffentlichen Schlüssel die dazugehörige Identität, das Ablaufdatum, den Nutzungszweck, die Schlüsselart und den Algorithmus",
+     "result-specification": "bei der Schlüsselbeglaubigung"
     }
    }
   },
@@ -32,7 +32,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "IT-Betriebskonzept"
+      "Verzeichnis öffentlicher Schlüssel"
      ]
     }
    }
@@ -53,9 +53,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 1,
+     "effort": 3,
      "tags": [
       "Cryptography"
      ]
@@ -66,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Gültigkeit ergibt sich aus Nutzungszeit und Revocation-Status. Für die Implementierung genügt es, wenn die eingesetzten IT-Produkte bereits so entwickelt oder beschafft worden sind, dass sie die Prüfung automatisiert durchführen."
+      "de": "Im Verzeichnis öffentlicher Schlüssel werden die öffentlichen Schlüssel, die von der Institution erzeugt oder eingesetzt werden, aufgelistet. Hiermit werden kryptografische Schlüssel systematisch erfasst und dokumentiert. Zweckmäßig ist es, die Angaben direkt im Schlüssel abzuspeichern."
      }
     }
    }
@@ -75,7 +75,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "792bc79a-4114-461d-bc6e-3e16ee8069c4"
+   "value": "1434b374-7b49-427e-a015-82bfffd0d5ea"
   }
  ]
 }

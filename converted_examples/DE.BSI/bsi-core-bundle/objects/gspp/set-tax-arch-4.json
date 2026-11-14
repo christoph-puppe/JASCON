@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/arch-4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Zugangsbeschränkungen"
@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-4-1",
-   "sequence": 7190
+   "sequence": 7180
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.2",
-   "sequence": 7200
+   "sequence": 7190
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.4.3",
-   "sequence": 7210
+   "sequence": 7200
   }
  ],
  "label": "4",

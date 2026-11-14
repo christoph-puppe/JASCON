@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.12.9",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.12.9",
  "lifecycle": "active",
  "title": {
-  "de": "Information über Aufzeichnung"
+  "de": "Keine heimliche Aufzeichnung"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Konfiguration für VK-Anwendungen SOLLTE eine Anzeige laufender Aufzeichnungen für alle Teilnehmenden aktivieren."
+    "de": "Konfiguration für VK-Anwendungen SOLLTE heimliche Aufzeichnungen deaktivieren."
    }
   }
  ],
@@ -22,9 +22,8 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "aktivieren",
-     "result": "eine Anzeige laufender Aufzeichnungen",
-     "result-specification": "für alle Teilnehmenden",
+     "action": "deaktivieren",
+     "result": "heimliche Aufzeichnungen",
      "target-object-categories": [
       "VK-Anwendungen"
      ]
@@ -57,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 1,
      "tags": [
@@ -70,7 +69,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Heimliche Aufzeichnungen verletzen die Vertraulichkeit der Kommunikation. Eine Aufzeichnung von Wort und Bild ohne den Willen der Aufgezeichneten kann zudem eine Persönlichkeitsrechtsverletzung bis hin zur Straftat (§ 201 StGB) darstellen. Dies gilt auch für Aufzeichnungen, die KI-gestützt ausgewertet werden. Falls die Möglichkeit zur Aufzeichnung deaktiviert ist, so ist diese Anforderung ebenfalls erfüllt."
+      "de": "Heimliche Aufzeichnungen verletzen die Vertraulichkeit der Kommunikation. Eine Aufzeichnung von Wort und Bild ohne den Willen der Aufgezeichneten kann zudem eine Persönlichkeitsrechtsverletzung bis hin zur Straftat (§ 201 StGB) darstellen. Falls die Anwendung so konfiguriert ist, dass Bild und Ton aufgezeichnet werden könnten, ist es daher unabdingbar, dass alle Teilnehmenden von der Anwendung über die Aufzeichnung informiert werden - auch wenn sie eine Konfernzschaltung später betreten oder kurz nicht zugehört haben. Dies gilt auch für Aufzeichnungen, die KI-gestützt ausgewertet werden. Falls die Möglichkeit zur Aufzeichnung vollständig deaktiviert ist, so ist diese Anforderung ebenfalls erfüllt. Alternativ kann die Anforderung auch erfüllt werden, indem die Anwendung beim Start einer Aufnahme alle Teilnehmenden informiert, z.B. über die Anzeige eines zu bestätigenden Warnhinweises und eine Ansage."
      }
     }
    }

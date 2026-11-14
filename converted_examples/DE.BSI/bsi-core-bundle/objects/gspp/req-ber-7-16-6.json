@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.16.5",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.16.5",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.16.6",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.16.6",
  "lifecycle": "active",
  "title": {
-  "de": "Beglaubigungsstatus"
+  "de": "Revocationstatus"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE den Beglaubigungsstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel dokumentieren."
+    "de": "Berechtigung SOLLTE den Revocationstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel dokumentieren."
    }
   }
  ],
@@ -23,7 +23,7 @@
    "by-statement": {
     "smt": {
      "action": "dokumentieren",
-     "result": "den Beglaubigungsstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel"
+     "result": "den Revocationstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel"
     }
    }
   },
@@ -52,7 +52,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3,
      "tags": [
@@ -65,7 +65,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Der Beglaubigungsstatus erfasst, ob der Schlüssel von der Beglaubigungs- oder Zertifizierungsstelle der Institution beglaubigt wurde."
+      "de": "Der Revocationsstatus des Schlüsseln erfasst, ob der Schlüssel zurückgezogen wurde, etwa weil er aufgrund einer Kompromittierung nicht mehr sicher verwendet werden kann."
      }
     }
    }
@@ -74,13 +74,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "3f4e22f4-f99f-46fc-91c8-d9faad3cedcc"
+   "value": "7d843f5e-e393-4f0b-a72c-0c3de4936859"
   }
  ],
  "relations": [
   {
    "type": "required",
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.3"
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.7.3"
   }
  ]
 }

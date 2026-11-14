@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-10",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Konfiguration von Anwendungen"
@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-10-1",
-   "sequence": 11540
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.2",
-   "sequence": 11550
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.3",
    "sequence": 11560
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.2",
    "sequence": 11570
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.3",
+   "sequence": 11580
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.4",
+   "sequence": 11590
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-10-5",
-   "sequence": 11600
+   "sequence": 11620
   }
  ],
  "label": "10",

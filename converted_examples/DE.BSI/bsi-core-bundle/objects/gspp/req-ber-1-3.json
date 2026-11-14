@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.1.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.1.3",
  "lifecycle": "active",
  "title": {
@@ -52,7 +52,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -62,7 +62,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ein dokumentiertes Inventar der Authentifizierungs- und Autorisierungssysteme kann eine zentrale Grundlage sein, um den Überblick über sicherheitsrelevante Zugangskontrollen zu behalten, sowohl lokal als auch in der Cloud. Solche Systeme sind dafür zuständig zu prüfen, wer Zugriff auf IT-Ressourcen erhält (Authentifizierung) und was dieser Zugriff umfassen darf (Autorisierung). Wird kein vollständiges und gepflegtes Inventar geführt, könnten Schwachstellen unentdeckt bleiben, z.B. veraltete Login-Dienste, falsch konfigurierte Rollen oder Schatten-Identitäten in cloudbasierten Identitätsplattformen. In einem konkreten Vorfall könnte etwa ein ehemals genutzter Verzeichnisdienst (z.B. ein ausgemusterter LDAP-Server) unbemerkt weiterhin aktiv sein und von Angreifern für unautorisierte Zugriffe verwendet werden. Ebenso könnte ein unerkannter Konfigurationsfehler in einem Authentifizierungs-Gateway dazu führen, dass privilegierte Nutzerrollen ohne Zwei-Faktor-Absicherung zugänglich sind.  Zu Authentifizierungs- und Autorisierungssystemen zählen beispielsweise Verzeichnisdienste (Directory Services), Identity Provider (IdPs), Single Sign-On-Plattformen (SSO), lokale Passwortdatenbanken sowie API-Gateways mit Zugriffskontrolllogik. Eine Möglichkeit zur Umsetzung kann darin bestehen, auf eine Liste aller Systeme des Informationsverbundes zurückzugreifen und Informationen zum Berechtigungsmanagement zu ergänzen – inklusive ihrer Funktion, angebundenen Anwendungen, unterstützten Protokollen (wie SAML, OAuth2, OpenID Connect) sowie Zuständigkeiten. Die Pflege dieses Inventars kann über ein zentrales Configuration Management Database (CMDB) erfolgen oder alternativ über eine revisionsfähige Tabellenstruktur mit Zugriffskontrollen. Hilfreich kann es sein, den Lifecycle einzelner Systeme zu erfassen, etwa ob sich diese in Einführung, Nutzung oder Stilllegung befinden. Ein Abgleich mit dem Rollen- und Rechtemanagement der Institution kann die Konsistenz zusätzlich verbessern."
+      "de": "Ein dokumentiertes Inventar der Authentifizierungs- und Autorisierungssysteme kann eine zentrale Grundlage sein, um den Überblick über sicherheitsrelevante Zugangskontrollen zu behalten, sowohl lokal als auch in der Cloud. Solche Systeme sind dafür zuständig zu prüfen, wer Zugriff auf IT-Ressourcen erhält (Authentifizierung) und was dieser Zugriff umfassen darf (Autorisierung). Wird kein vollständiges und gepflegtes Inventar geführt, könnten Schwachstellen unentdeckt bleiben, z.B. veraltete Login-Dienste, falsch konfigurierte Rollen oder Schatten-Identitäten in cloudbasierten Identitätsplattformen. In einem konkreten Vorfall könnte etwa ein ehemals genutzter Verzeichnisdienst (z.B. ein ausgemusterter LDAP-Server) unbemerkt weiterhin aktiv sein und von Angreifern für unautorisierte Zugriffe verwendet werden. Ebenso könnte ein unerkannter Konfigurationsfehler in einem Authentifizierungs-Gateway dazu führen, dass privilegierte Nutzerrollen ohne Zwei-Faktor-Absicherung zugänglich sind. Zu Authentifizierungs- und Autorisierungssystemen zählen beispielsweise Verzeichnisdienste (Directory Services), Identity Provider (IdPs), Single Sign-On-Plattformen (SSO), lokale Passwortdatenbanken sowie API-Gateways mit Zugriffskontrolllogik. Eine Möglichkeit zur Umsetzung kann darin bestehen, auf eine Liste aller Systeme des Informationsverbundes zurückzugreifen und Informationen zum Berechtigungsmanagement zu ergänzen – inklusive ihrer Funktion, angebundenen Anwendungen, unterstützten Protokollen (wie SAML, OAuth2, OpenID Connect) sowie Zuständigkeiten. Die Pflege dieses Inventars kann über ein zentrales Configuration Management Database (CMDB) erfolgen oder alternativ über eine revisionsfähige Tabellenstruktur mit Zugriffskontrollen. Hilfreich kann es sein, den Lifecycle einzelner Systeme zu erfassen, etwa ob sich diese in Einführung, Nutzung oder Stilllegung befinden. Ein Abgleich mit dem Rollen- und Rechtemanagement der Institution kann die Konsistenz zusätzlich verbessern."
      }
     }
    }

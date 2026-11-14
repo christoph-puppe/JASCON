@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-13-1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Filtern schädlicher Nachrichten"
@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.1",
-   "sequence": 12060
+   "sequence": 12080
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.1.1",
-   "sequence": 12070
+   "sequence": 12090
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.13.1.2",
-   "sequence": 12080
+   "sequence": 12100
   }
  ]
 }

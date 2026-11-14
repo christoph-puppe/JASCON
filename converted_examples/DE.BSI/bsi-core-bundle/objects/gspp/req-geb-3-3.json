@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.3.3",
  "lifecycle": "active",
  "title": {
@@ -51,7 +51,9 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.44",
       "https://ns.bsi.bund.de/gspp/threat/G-0.16",
       "https://ns.bsi.bund.de/gspp/threat/G-0.24",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.34",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.41"
      ]
     }
    }
@@ -59,7 +61,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -69,7 +71,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Der Zweck der Authentifizierung von Zutritten liegt in der grundlegenden Absicherung physischer Zugänge gegen unbefugte Nutzung. Dies kann verhindern, dass Unbefugte Zugang zu sensiblen Bereichen oder Informationen erhalten. Ohne angemessene Zutrittskontrolle könnte beispielsweise ein nicht autorisierter Besucher in einen Serverraum gelangen und dort Hardware manipulieren, Datenträger entwenden oder Netzwerkkabel umstecken. Ebenso könnte ein ehemaliger Mitarbeiter ohne wirksame Authentifizierung weiterhin auf Systeme zugreifen und vertrauliche Daten entwenden oder geschäftskritische Informationen kompromittieren.  Bei der Umsetzung kann ein mehrstufiger Ansatz verfolgt werden, der verschiedene Authentifizierungsfaktoren kombiniert: Wissen (z.B. PIN-Codes, Passwörter), Besitz (z.B. Chipkarten, Tokens, Schlüssel) und biometrische Merkmale (z.B. Fingerabdruck, Gesichtserkennung). Die Stärke der Authentifizierung kann dabei an die Schutzbedürftigkeit des zu schützenden Bereichs angepasst werden – für hochsensible Bereiche können Zwei- oder Mehr-Faktor-Authentifizierungen implementiert werden. Als ergänzende Maßnahme kann ein Monitoring der Zutrittsereignisse eingerichtet werden, das ungewöhnliche Zugriffsversuche erkennt und meldet. Zudem kann die regelmäßige Überprüfung und Aktualisierung der Zutrittsberechtigungen dazu beitragen, dass nur aktuell berechtigte Personen Zugang erhalten. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
+      "de": "Der Zweck der Authentifizierung von Zutritten liegt in der grundlegenden Absicherung physischer Zugänge gegen unbefugte Nutzung. Dies kann verhindern, dass Unbefugte Zugang zu sensiblen Bereichen oder Informationen erhalten. Ohne angemessene Zutrittskontrolle könnte beispielsweise ein nicht autorisierter Besucher in einen Serverraum gelangen und dort Hardware manipulieren, Datenträger entwenden oder Netzwerkkabel umstecken. Ebenso könnte ein ehemaliger Mitarbeiter ohne wirksame Authentifizierung weiterhin auf Systeme zugreifen und vertrauliche Daten entwenden oder geschäftskritische Informationen kompromittieren. Bei der Umsetzung kann ein mehrstufiger Ansatz verfolgt werden, der verschiedene Authentifizierungsfaktoren kombiniert: Wissen (z.B. PIN-Codes, Passwörter), Besitz (z.B. Chipkarten, Tokens, Schlüssel) und biometrische Merkmale (z.B. Fingerabdruck, Gesichtserkennung). Die Stärke der Authentifizierung kann dabei an die Schutzbedürftigkeit des zu schützenden Bereichs angepasst werden – für hochsensible Bereiche können Zwei- oder Mehr-Faktor-Authentifizierungen implementiert werden. Als ergänzende Maßnahme kann ein Monitoring der Zutrittsereignisse eingerichtet werden, das ungewöhnliche Zugriffsversuche erkennt und meldet. Zudem kann die regelmäßige Überprüfung und Aktualisierung der Zutrittsberechtigungen dazu beitragen, dass nur aktuell berechtigte Personen Zugang erhalten. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
      }
     }
    }
@@ -84,7 +86,7 @@
  "relations": [
   {
    "type": "related",
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.4"
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.8"
   },
   {
    "type": "related",

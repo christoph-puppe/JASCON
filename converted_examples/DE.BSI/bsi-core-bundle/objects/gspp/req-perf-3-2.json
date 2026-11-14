@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERF.3.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERF.3.2",
  "lifecycle": "active",
  "title": {
@@ -49,7 +49,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ein Auditbericht muss nachvollziehbar, vollständig und strukturiert dokumentieren, wie das Audit durchgeführt wurde und welche Ergebnisse erzielt wurden. Er enthält Angaben zum Auditziel, Auditumfang, Auditteam, Auditmethoden, den bewerteten Bereichen sowie eine übersichtliche Darstellung der Feststellungen inklusive Abweichungen, Verbesserungspotenzialen und der Bewertung der Wirksamkeit der umgesetzten Sicherheitsmaßnahmen. Die Auditberichte sollten neben den identifizierten Schwachstellen auch positive  Feststellungen enthalten, um ein ausgewogenes Bild zu vermitteln und Best Practices zu fördern."
+      "de": "Ein Auditbericht muss nachvollziehbar, vollständig und strukturiert dokumentieren, wie das Audit durchgeführt wurde und welche Ergebnisse erzielt wurden. Er enthält Angaben zum Auditziel, Auditumfang, Auditteam, Auditmethoden, den bewerteten Bereichen sowie eine übersichtliche Darstellung der Feststellungen inklusive Abweichungen, Verbesserungspotenzialen und der Bewertung der Wirksamkeit der umgesetzten Sicherheitsmaßnahmen. Die Auditberichte sollten neben den identifizierten Schwachstellen auch positive Feststellungen enthalten, um ein ausgewogenes Bild zu vermitteln und Best Practices zu fördern."
      }
     }
    }

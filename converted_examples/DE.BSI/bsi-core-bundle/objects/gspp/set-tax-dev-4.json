@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/dev-4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Softwareentwicklung - Code"
@@ -8,47 +8,47 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.1",
-   "sequence": 12630
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.2",
-   "sequence": 12640
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.3",
    "sequence": 12650
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.2",
    "sequence": 12660
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.3",
    "sequence": 12670
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.6",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.4",
    "sequence": 12680
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.5",
    "sequence": 12690
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.6",
    "sequence": 12700
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.7",
    "sequence": 12710
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.10",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.8",
    "sequence": 12720
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.11",
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.9",
    "sequence": 12730
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.10",
+   "sequence": 12740
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DEV.4.11",
+   "sequence": 12750
   }
  ],
  "label": "4",

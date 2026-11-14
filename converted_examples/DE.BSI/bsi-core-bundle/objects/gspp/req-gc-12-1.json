@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.12.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.12.1",
  "lifecycle": "active",
  "title": {
@@ -14,8 +14,15 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Governance und Compliance MUSS eine einheitliche Methodik für das Informationssicherheitsrisikomanagement unter Berücksichtigungen von Kontext, Geschäftsprozessanalyse und interessierten Parteien verankern."
-   }
+    "de": "Governance und Compliance MUSS {param:gc.12.1-prm1} für das Informationssicherheitsrisikomanagement unter Berücksichtigungen von Kontext, Geschäftsprozessanalyse und interessierten Parteien verankern."
+   },
+   "parameters": [
+    {
+     "name": "gc.12.1-prm1",
+     "type": "string",
+     "label": "eine einheitliche Methodik"
+    }
+   ]
   }
  ],
  "facets": {
@@ -23,7 +30,7 @@
    "by-statement": {
     "smt": {
      "action": "verankern",
-     "result": "eine einheitliche Methodik für das Informationssicherheitsrisikomanagement",
+     "result": "{{eine einheitliche Methodik}} für das Informationssicherheitsrisikomanagement",
      "result-specification": "unter Berücksichtigungen von Kontext, Geschäftsprozessanalyse und interessierten Parteien"
     }
    }
@@ -32,7 +39,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Risikobewertung"
+      "Risikobetrachtung"
      ]
     }
    }
@@ -50,8 +57,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Das Risikomanagement stellt sicher, dass Risiken systematisch identifiziert, bewertet und behandelt werden. Die Festlegung einheitlicher Kriterien für Risikoidentifizierung, Risikobewertung und Risikobehandlung sowie die Rolle des Risikoeigentümers sorgen für Transparenz und Verbindlichkeit.  Die Risikomanagementmethodik kann frei gewählt werden, sollte aber anerkannte Standards erfüllen."
+      "de": "Das Risikomanagement stellt sicher, dass Risiken systematisch identifiziert, bewertet und behandelt werden. Die Festlegung einheitlicher Kriterien für Risikoidentifizierung, Risikobewertung und Risikobehandlung sowie die Rolle des Risikoeigentümers sorgen für Transparenz und Verbindlichkeit. Die Risikomanagementmethodik kann frei gewählt werden, sollte aber anerkannte Standards erfüllen."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "gc.12.1-prm1": {
+     "alt-identifier": "c1866ac1-a98a-424a-aa03-7400a04e7adf"
     }
    }
   }

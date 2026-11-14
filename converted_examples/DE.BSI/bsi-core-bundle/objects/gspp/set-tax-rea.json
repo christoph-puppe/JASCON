@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/rea",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Sicherheitsvorfallsbehandlung"
@@ -8,22 +8,22 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-1",
-   "sequence": 10200
+   "sequence": 10220
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-2",
-   "sequence": 10390
+   "sequence": 10410
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-3",
-   "sequence": 10430
+   "sequence": 10450
   }
  ],
  "label": "REA",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Sicherheitsvorfallsbehandlung sorgt dafür, dass Informationssicherheitsvorfälle effizient erkannt, gemeldet, analysiert und behoben werden, um Schäden zu minimieren und den Normalbetrieb so schnell wie möglich wiederherzustellen.  Diese Praktik ist reaktiv und konzentriert sich darauf, die Auswirkungen von Sicherheitsvorfällen zu minimieren. Sie stellt sicher, dass bei einem Sicherheitsvorfall schnell und effizient gehandelt wird, um den Schaden zu begrenzen.  Andere Praktiken, wie z.B. Architektur, Personal, Sensibilisierung wirken proaktiv und versuchen, Sicherheitsvorfälle durch präventive Maßnahmen zu verhindern oder deren Häufigkeit zu reduzieren."
+    "de": "Die Praktik Sicherheitsvorfallsbehandlung sorgt dafür, dass Informationssicherheitsvorfälle effizient erkannt, gemeldet, analysiert und behoben werden, um Schäden zu minimieren und den Normalbetrieb so schnell wie möglich wiederherzustellen. Diese Praktik ist reaktiv und konzentriert sich darauf, die Auswirkungen von Sicherheitsvorfällen zu minimieren. Sie stellt sicher, dass bei einem Sicherheitsvorfall schnell und effizient gehandelt wird, um den Schaden zu begrenzen. Andere Praktiken, wie z.B. Architektur, Personal, Sensibilisierung wirken proaktiv und versuchen, Sicherheitsvorfälle durch präventive Maßnahmen zu verhindern oder deren Häufigkeit zu reduzieren."
    }
   }
  },

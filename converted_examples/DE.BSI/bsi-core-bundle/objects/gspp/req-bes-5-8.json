@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BES.5.8",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BES.5.8",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Beschaffungsmanagement für Dienstleistungen SOLLTE für geistiges Eigentum, das während der Vertragslaufzeit entwickelt wird,  die Eigentumsrechte vereinbaren."
+    "de": "Beschaffungsmanagement für Dienstleistungen SOLLTE für geistiges Eigentum, das während der Vertragslaufzeit entwickelt wird, die Eigentumsrechte vereinbaren."
    }
   }
  ],
@@ -23,7 +23,7 @@
    "by-statement": {
     "smt": {
      "action": "vereinbaren",
-     "result": "für geistiges Eigentum, das während der Vertragslaufzeit entwickelt wird,  die Eigentumsrechte",
+     "result": "für geistiges Eigentum, das während der Vertragslaufzeit entwickelt wird, die Eigentumsrechte",
      "target-object-categories": [
       "Dienstleistungen"
      ]
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2,
      "tags": [

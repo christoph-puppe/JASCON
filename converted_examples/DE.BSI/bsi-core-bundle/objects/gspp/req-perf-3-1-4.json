@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERF.3.1.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERF.3.1.4",
  "lifecycle": "active",
  "title": {
@@ -40,7 +40,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Der Umfang eines Audits beschreibt, was, wie und in welchem Rahmen geprüft wird. Dazu gehören der organisatorische und technische Geltungsbereich (z. B. Standorte, Abteilungen, IT-Systeme), der Prüfzeitraum,  sowie die eingesetzten Prüfmethoden wie Interviews, Dokumentensichtung oder Systemtests. Der Auditumfang wird vor Beginn des Audits klar definiert, um den Ablauf gezielt zu planen und die Ergebnisse nachvollziehbar zu dokumentieren."
+      "de": "Der Umfang eines Audits beschreibt, was, wie und in welchem Rahmen geprüft wird. Dazu gehören der organisatorische und technische Geltungsbereich (z. B. Standorte, Abteilungen, IT-Systeme), der Prüfzeitraum, sowie die eingesetzten Prüfmethoden wie Interviews, Dokumentensichtung oder Systemtests. Der Auditumfang wird vor Beginn des Audits klar definiert, um den Ablauf gezielt zu planen und die Ergebnisse nachvollziehbar zu dokumentieren."
      }
     }
    }

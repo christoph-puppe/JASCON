@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.9",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.9",
  "lifecycle": "active",
  "title": {
-  "de": "Anlassbezogene Passwortwechsel"
+  "de": "Mehr-Faktor-Authentisierung für weitreichende Berechtigungen"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE einen Passwortwechsel ausschließlich anlassbezogen ausführen."
+    "de": "Berechtigung SOLLTE Mehr-Faktor-Authentisierung für weitreichende Berechtigungen aktivieren."
    }
   }
  ],
@@ -22,9 +22,9 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "ausführen",
-     "result": "einen Passwortwechsel",
-     "result-specification": "ausschließlich anlassbezogen"
+     "action": "aktivieren",
+     "result": "Mehr-Faktor-Authentisierung",
+     "result-specification": "für weitreichende Berechtigungen"
     }
    }
   },
@@ -46,8 +46,7 @@
      "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
      ]
     }
    }
@@ -55,11 +54,15 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 1,
+     "effort": 2,
      "tags": [
-      "Password Policy"
+      "MFA",
+      "Living off the land",
+      "Privilege Escalation",
+      "Credential Stuffing",
+      "Brute-Force-Attacke"
      ]
     }
    }
@@ -68,7 +71,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ein ausschließlich anlassbezogener Passwortwechsel bedeutet, dass Passwörter nur genau dann geändert werden, wenn ein begründeter Sicherheitsanlass vorliegt – beispielsweise ein Verdacht auf Kompromittierung des Endgerätes oder Zugangs, neue einschlägige Einträge in öffentlichen Leak-Datenbanken, die Weitergabe an Unbefugte durch einen Phishing-Vorfall, oder technische Indikatoren für einen möglichen Missbrauch des Zugangs zu Systemen oder Anwendungen. Dieser Ansatz unterscheidet sich vom früher häufig praktizierten, periodischen Passwortwechsel, der ohne konkreten Anlass in festen Intervallen erzwungen wurde. Ein solcher erzwungener Rhythmus könnte die Passwortsicherheit sogar verringern, weil Nutzende dann dazu neigen, schwächere, nur leicht veränderte Passwörter („sommer5“) zu wählen oder Zugangsdaten in verschiedenen Zugängen wiederzuverwenden. Zweck dieser Regelung ist es, die tatsächliche Sicherheit von Zugangskonten zu erhöhen und unnötige Belastungen der Nutzenden zu vermeiden."
+      "de": "Eine Mehr-Faktor-Authentifizierung bei Zugängen mit weitreichenden Berechtigungen, z.B. Administrationskonten, die Zugriff auf wichtige Server wie den Verzeichnisdienst, das MDM, EDR oder DNS haben, erschwert den unberechtigten Zugang zu diesen Zugängen. Auch der Zugriff auch besonders sensible Daten kann eine weitreichende Berechtigung sein."
      }
     }
    }
@@ -77,7 +80,17 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "4de1c314-e6b3-4b70-bc73-54cdafca7ae9"
+   "value": "55b70084-f446-42af-908b-0f514a72f380"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.6"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.8"
   }
  ]
 }

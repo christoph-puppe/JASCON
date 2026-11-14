@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Vertrauenswürdige Basisdienste"
@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-4-1",
-   "sequence": 10850
+   "sequence": 10870
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-4-2",
-   "sequence": 10880
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.3",
-   "sequence": 10890
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.4",
    "sequence": 10900
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.3",
    "sequence": 10910
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.4",
+   "sequence": 10920
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.4.5",
+   "sequence": 10930
   }
  ],
  "label": "4",

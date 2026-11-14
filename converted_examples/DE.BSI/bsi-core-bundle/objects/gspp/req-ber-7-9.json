@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.16.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.16.6",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.9",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.9",
  "lifecycle": "active",
  "title": {
-  "de": "Revocationstatus"
+  "de": "Zweckbindung"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE den Revocationstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel dokumentieren."
+    "de": "Berechtigung SOLLTE Verstöße gegen die Zweckbindung bei der Schlüsselnutzung untersagen."
    }
   }
  ],
@@ -22,8 +22,9 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "dokumentieren",
-     "result": "den Revocationstatus des Schlüssels im Verzeichnis öffentlicher Schlüssel"
+     "action": "untersagen",
+     "result": "Verstöße gegen die Zweckbindung",
+     "result-specification": "bei der Schlüsselnutzung"
     }
    }
   },
@@ -31,7 +32,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Verzeichnis öffentlicher Schlüssel"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -52,9 +53,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3,
+     "effort": 2,
      "tags": [
       "Cryptography"
      ]
@@ -65,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Der Revocationsstatus des Schlüsseln erfasst, ob der Schlüssel zurückgezogen wurde, etwa weil er aufgrund einer Kompromittierung nicht mehr sicher verwendet werden kann."
+      "de": "Zweckbindung bedeutet, dass der Schlüssel ausschließlich zu dem im Verzeichnis öffentlicher Schlüssel festgelegten Nutzungszweck verwendet werden darf. Die Zweckbindung gilt insbesondere auch für den privaten Schlüssel."
      }
     }
    }
@@ -74,13 +75,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "7d843f5e-e393-4f0b-a72c-0c3de4936859"
-  }
- ],
- "relations": [
-  {
-   "type": "required",
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.3"
+   "value": "c5ed06a9-b144-43a9-b269-ff914304036a"
   }
  ]
 }

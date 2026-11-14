@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.9.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.9.1.1",
  "lifecycle": "active",
  "title": {
@@ -63,7 +63,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -73,7 +73,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die prädiktive Lastanalyse in Stromversorgungssystemen bezieht sich auf die ausgefeilte Analyse von elektrischen Lastmustern, einschließlich Oberschwingungen der Stromqualität, um den zukünftigen Stromverbrauch und Qualitätsprobleme vorherzusagen, bevor sie auftreten. Sie kann in Bereichen, in denen die Stromversorgung von höchster Bedeutung ist, helfen, die kontinuierliche Verfügbarkeit der IT-Infrastruktur durch Überwachung und Vorhersage potenzieller Stromanomalien sicherzustellen, die die Systemintegrität gefährden könnten. Im Gegensatz zu reaktiven Ansätzen, die Probleme erst nach ihrem Auftreten angehen, werden bei der vorausschauenden Lastanalyse fortschrittliche Algorithmen zur Analyse historischer Stromverbrauchsdaten, harmonischer Verzerrungen und Spannungsschwankungen eingesetzt, um Muster zu erkennen, die auf bevorstehende Stromversorgungsprobleme hinweisen.  Die Implementierung kann mit Netzqualitätsanalysatoren an kritischen Infrastrukturpunkten, Integration mit SCADA-Systemen und durch Analyse mit Algorithmen des maschinellen Lernens, die Netzanomalien mit bestimmten Betriebsbedingungen korrelieren, geschehen. Eine regelmäßige Validierung der Vorhersagemodelle anhand tatsächlicher Vorfälle hilft die Analyse zu verbessern, während die Integration mit automatisierten Energieverwaltungssystemen einen dynamischen Lastausgleich während vorhergesagter Stressperioden ermöglichen kann, wodurch sowohl die Stromqualität, als auch die Systemverfügbarkeit ohne menschliches Eingreifen aufrechterhalten werden."
+      "de": "Die prädiktive Lastanalyse in Stromversorgungssystemen bezieht sich auf die ausgefeilte Analyse von elektrischen Lastmustern, einschließlich Oberschwingungen der Stromqualität, um den zukünftigen Stromverbrauch und Qualitätsprobleme vorherzusagen, bevor sie auftreten. Sie kann in Bereichen, in denen die Stromversorgung von höchster Bedeutung ist, helfen, die kontinuierliche Verfügbarkeit der IT-Infrastruktur durch Überwachung und Vorhersage potenzieller Stromanomalien sicherzustellen, die die Systemintegrität gefährden könnten. Im Gegensatz zu reaktiven Ansätzen, die Probleme erst nach ihrem Auftreten angehen, werden bei der vorausschauenden Lastanalyse fortschrittliche Algorithmen zur Analyse historischer Stromverbrauchsdaten, harmonischer Verzerrungen und Spannungsschwankungen eingesetzt, um Muster zu erkennen, die auf bevorstehende Stromversorgungsprobleme hinweisen. Die Implementierung kann mit Netzqualitätsanalysatoren an kritischen Infrastrukturpunkten, Integration mit SCADA-Systemen und durch Analyse mit Algorithmen des maschinellen Lernens, die Netzanomalien mit bestimmten Betriebsbedingungen korrelieren, geschehen. Eine regelmäßige Validierung der Vorhersagemodelle anhand tatsächlicher Vorfälle hilft die Analyse zu verbessern, während die Integration mit automatisierten Energieverwaltungssystemen einen dynamischen Lastausgleich während vorhergesagter Stressperioden ermöglichen kann, wodurch sowohl die Stromqualität, als auch die Systemverfügbarkeit ohne menschliches Eingreifen aufrechterhalten werden."
      }
     }
    }
@@ -81,7 +81,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "geb.9.1.1-prm1": {
-     "alt-identifier": "a73bc9c8-bd58-4816-9e18-d41e94c20341"
+     "alt-identifier": "3bbe0496-c39e-4d93-9555-32d1349d1206"
     }
    }
   }

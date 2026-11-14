@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.10.3",
  "lifecycle": "active",
  "title": {
@@ -48,7 +48,8 @@
      "availability": "2",
      "authenticity": "0",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.3"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.3",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.5"
      ]
     }
    }
@@ -56,7 +57,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2
     }
@@ -66,7 +67,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Relevant ist hierbei sowohl Wasser von oben (Regen und Schnee), als auch von unten (Überflutungen, gesammeltes Regenwasser).  Maßnahmen können z.B. witterungsbeständige Baumaterialien, Abdichtungen, Überdachungen, Entwässerungssysteme oder eine erhöhte Positionierung, die eher nicht in überfluteten Bereichen liegen wird, sein. Schränke und Gehäuse können auch mit einer geeigneten IP-Schutzklasse (z.B. IP65) gegen Wasser geschützt werden."
+      "de": "Relevant ist hierbei sowohl Wasser von oben (Regen und Schnee), als auch von unten (Überflutungen, gesammeltes Regenwasser). Maßnahmen können z.B. witterungsbeständige Baumaterialien, Abdichtungen, Überdachungen, Entwässerungssysteme oder eine erhöhte Positionierung, die eher nicht in überfluteten Bereichen liegen wird, sein. Schränke und Gehäuse können auch mit einer geeigneten IP-Schutzklasse (z.B. IP65) gegen Wasser geschützt werden."
      }
     }
    }

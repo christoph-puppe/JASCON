@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-12",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Spezifische Risiken"
@@ -8,7 +8,7 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.12.1",
-   "sequence": 6810
+   "sequence": 6800
   }
  ],
  "label": "12",

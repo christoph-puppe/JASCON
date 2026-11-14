@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/DET.4.19",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "DET.4.19",
  "lifecycle": "active",
  "title": {
@@ -65,7 +65,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -78,7 +78,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Bleiben unautorisierte Sendeanlagen unbemerkt, so könnten hierüber Abhörversuche stattfinden oder Störungen legitimer Sender und Empfänger auftreten. Bedenklich sind beispielsweise versteckte Wanzen in Büromöbeln, manipulierte Peripheriegeräte mit eingebauten Sendern, ohne Erlaubnis mitgebrachte Access Points, modifizierte Smartphones mit verdeckten Fernzugriffsfunktionen oder getarnte IoT-Geräte mit Netzwerkverbindung, die sensible Informationen abgreifen und nach außen übertragen könnten.   Zum Aufspüren können Wireless Intrusion Detection Systems (WIDS) genutzt werden, welche Sendeanagen auffinden und unbekannte Sender melden. Um unautorisierte Sender effektiv zu erkennen sind auch begleitende Maßnahmen sinnvoll:  Die Implementierung von Zugangsbeschränkungen und Mitnahmeverboten für nicht geprüfte elektronische Geräte; die Schulung des Personals zur Erkennung verdächtiger Objekte; sowie die Dokumentation aller autorisierten Geräte in einem Inventar, um unbekannte Signalquellen schnell identifizieren zu können."
+      "de": "Bleiben unautorisierte Sendeanlagen unbemerkt, so könnten hierüber Abhörversuche stattfinden oder Störungen legitimer Sender und Empfänger auftreten. Bedenklich sind beispielsweise versteckte Wanzen in Büromöbeln, manipulierte Peripheriegeräte mit eingebauten Sendern, ohne Erlaubnis mitgebrachte Access Points, modifizierte Smartphones mit verdeckten Fernzugriffsfunktionen oder getarnte IoT-Geräte mit Netzwerkverbindung, die sensible Informationen abgreifen und nach außen übertragen könnten. Zum Aufspüren können Wireless Intrusion Detection Systems (WIDS) genutzt werden, welche Sendeanagen auffinden und unbekannte Sender melden. Um unautorisierte Sender effektiv zu erkennen sind auch begleitende Maßnahmen sinnvoll: Die Implementierung von Zugangsbeschränkungen und Mitnahmeverboten für nicht geprüfte elektronische Geräte; die Schulung des Personals zur Erkennung verdächtiger Objekte; sowie die Dokumentation aller autorisierten Geräte in einem Inventar, um unbekannte Signalquellen schnell identifizieren zu können."
      }
     }
    }
@@ -86,7 +86,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "det.4.19-prm1": {
-     "alt-identifier": "d85d0d64-bc5c-4a11-91d8-7c567abd5b21"
+     "alt-identifier": "8ec156a4-e326-4303-a185-dfa2efb77ba2"
     }
    }
   }

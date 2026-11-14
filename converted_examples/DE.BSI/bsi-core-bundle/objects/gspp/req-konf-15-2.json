@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.15.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.15.2",
  "lifecycle": "active",
  "title": {
@@ -14,8 +14,15 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Konfiguration für Anwendungen von Hostsystemen KANN die Rechenleistung einschränken."
-   }
+    "de": "Konfiguration für Anwendungen von Hostsystemen KANN die Rechenleistung pro {param:konf.15.2-prm1} einschränken."
+   },
+   "parameters": [
+    {
+     "name": "konf.15.2-prm1",
+     "type": "string",
+     "label": "Zugangskonto oder Mandant"
+    }
+   ]
   }
  ],
  "facets": {
@@ -24,6 +31,7 @@
     "smt": {
      "action": "einschränken",
      "result": "die Rechenleistung",
+     "result-specification": "pro {{Zugangskonto oder Mandant}}",
      "target-object-categories": [
       "Anwendungen",
       "Hostsysteme"
@@ -57,7 +65,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -74,6 +82,13 @@
      "guidance": {
       "de": "Kann durch eine Beschränkung der Anzahl verwendeter Rechenkerne, der Rechenleistung pro Rechenkern oder durch eine indirekte Beschränkung (z.B. eine begrenzte Menge an Anfragen oder Eingabetoken) umgesetzt werden. Beispielsweise kann in einem Verzeichnisdienst ein maximaler Schwellwert für die Zeit eingestellt werden, die eine Suchanfrage in Anspruch nehmen darf, um die Auslastung des Verzeichnisdienstes durch einzelne Anfragen nicht zu gefährden."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "konf.15.2-prm1": {
+     "alt-identifier": "0e6cb5a0-241a-4a0a-84cc-64357d890873"
     }
    }
   }

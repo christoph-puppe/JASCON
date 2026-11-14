@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.4.1.6",
  "lifecycle": "active",
  "title": {
@@ -57,7 +57,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3,
      "tags": [
@@ -71,7 +71,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Personengebundene Authentisierungsmittel sind z.B. Passwörter, Private PKI-Schlüssel oder Mehr-Faktor-Authentifizierungstoken wie Smartcards."
+      "de": "Personengebundene Authentisierungsmittel sind z.B. Passwörter, Private PKI-Schlüssel oder Mehr-Faktor-Authentifizierungstoken wie Smartcards. Zur Definition von Authentisierungsmitteln siehe Glossar/Namensräume."
      }
     }
    }
@@ -81,6 +81,12 @@
   {
    "scheme": "bsi-uuid",
    "value": "b25f3f5e-0738-4794-b130-cc9a1e29084f"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.1"
   }
  ]
 }

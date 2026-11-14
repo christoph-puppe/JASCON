@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-10",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Administration"
@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.1",
-   "sequence": 6710
+   "sequence": 6700
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.2",
-   "sequence": 6720
+   "sequence": 6710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.3",
-   "sequence": 6730
+   "sequence": 6720
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.4",
-   "sequence": 6740
+   "sequence": 6730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.5",
-   "sequence": 6750
+   "sequence": 6740
   }
  ],
  "label": "10",

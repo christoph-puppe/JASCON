@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.7.5",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.7.5",
  "lifecycle": "active",
  "title": {
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 1
     }
@@ -66,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Das Nichtbeantworten von Spam kann  dazu beitragen, die eigene Angriffsfläche zu verringern und das Risiko von Folgeschäden zu minimieren. Spam – im Kontext hier als unerwünschte, massenhaft versendete elektronische Nachrichten verstanden, die oft mit betrügerischen oder schädigenden Absichten einhergehen – kann als Einfallstor für Phishing, Schadsoftware oder Betrugsversuche dienen. Eine Antwort, selbst in Form einer scheinbar harmlosen Rückfrage, kann Angreifenden bestätigen, dass die Adresse aktiv genutzt wird, was zu einer Zunahme der Spam-Flut oder gezielten Social-Engineering-Angriffen führen könnte. Spammer erraten Zieladressen oft nur und erhalten durch die Antwort weitere Hinweise auf Angriffsmöglichkeiten (z.B. Schema gültiger Mailadressen, E-Mail-Signaturen, aktive Server)."
+      "de": "Das Nichtbeantworten von Spam kann dazu beitragen, die eigene Angriffsfläche zu verringern und das Risiko von Folgeschäden zu minimieren. Spam – im Kontext hier als unerwünschte, massenhaft versendete elektronische Nachrichten verstanden, die oft mit betrügerischen oder schädigenden Absichten einhergehen – kann als Einfallstor für Phishing, Schadsoftware oder Betrugsversuche dienen. Eine Antwort, selbst in Form einer scheinbar harmlosen Rückfrage, kann Angreifenden bestätigen, dass die Adresse aktiv genutzt wird, was zu einer Zunahme der Spam-Flut oder gezielten Social-Engineering-Angriffen führen könnte. Spammer erraten Zieladressen oft nur und erhalten durch die Antwort weitere Hinweise auf Angriffsmöglichkeiten (z.B. Schema gültiger Mailadressen, E-Mail-Signaturen, aktive Server)."
      }
     }
    }

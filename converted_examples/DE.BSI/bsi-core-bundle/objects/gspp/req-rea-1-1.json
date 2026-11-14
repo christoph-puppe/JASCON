@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/REA.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "REA.1.1",
  "lifecycle": "active",
  "title": {
@@ -52,7 +52,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 0
     }
@@ -62,7 +62,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Bei Sicherheitsvorfällen gilt es, schnell und systematisch zu reagieren, um weitere Schäden von Daten, Assets oder Personen abzuwenden. Auch erfahrene Experten benötigen dafür klare Anleitungen, um keine Arbeitsschritte zu vergessen oder rechtlichen Unsicherheiten bei der Ermittlung von Ursachen und Ergreifung von Gegenmaßnahmen ausgesetzt zu sein.  Die bei der Festlegung des Verfahrens im Einzelnen zu berücksichtigenden Inhalte ergeben sich aus den Anforderungen dieser Praktik."
+      "de": "Bei Sicherheitsvorfällen gilt es, schnell und systematisch zu reagieren, um weitere Schäden von Daten, Assets oder Personen abzuwenden. Auch erfahrene Experten benötigen dafür klare Anleitungen, um keine Arbeitsschritte zu vergessen oder rechtlichen Unsicherheiten bei der Ermittlung von Ursachen und Ergreifung von Gegenmaßnahmen ausgesetzt zu sein. Die bei der Festlegung des Verfahrens im Einzelnen zu berücksichtigenden Inhalte ergeben sich aus den Anforderungen dieser Praktik."
      }
     }
    }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.3.6.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.3.6.1",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Konfiguration für Endgeräte KANN eine automatische Fernlöschung oder -sperre bei Inaktivität nach {param:konf.3.6.1-prm1} aktivieren."
+    "de": "Konfiguration für Mobile Endgeräte KANN eine automatische Fernlöschung oder -sperre bei Inaktivität nach {param:konf.3.6.1-prm1} aktivieren."
    },
    "parameters": [
     {
@@ -33,7 +33,7 @@
      "result": "eine automatische Fernlöschung oder -sperre",
      "result-specification": "bei Inaktivität nach {{einer längeren Frist}}",
      "target-object-categories": [
-      "Endgeräte"
+      "Mobile Endgeräte"
      ]
     }
    }
@@ -66,7 +66,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -87,7 +87,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "konf.3.6.1-prm1": {
-     "alt-identifier": "ffc45c05-597f-4be9-9358-124b4a008e50"
+     "alt-identifier": "f8392461-44d9-4325-aa7c-b93ddfabef82"
     }
    }
   }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-6-6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Getrennte Datenhaltung"
@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.6",
-   "sequence": 11100
+   "sequence": 11120
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.6.6.1",
-   "sequence": 11110
+   "sequence": 11130
   }
  ]
 }

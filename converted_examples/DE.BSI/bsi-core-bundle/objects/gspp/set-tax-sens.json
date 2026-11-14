@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/sens",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Sensibilisierung"
@@ -32,34 +32,34 @@
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-7",
-   "sequence": 6490
+   "sequence": 6480
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-8",
-   "sequence": 6620
+   "sequence": 6610
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-9",
-   "sequence": 6700
+   "sequence": 6690
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-10",
-   "sequence": 6760
+   "sequence": 6750
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-11",
-   "sequence": 6800
+   "sequence": 6790
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-12",
-   "sequence": 6820
+   "sequence": 6810
   }
  ],
  "label": "SENS",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Sensibilisierung sorgt dafür, dass alle Mitarbeitenden über die Leitlinie zur Informationssicherheit sowie relevanten Informationssicherheitsrichtlinien, -verfahren und -bedrohungen informiert sind. Ziel ist es, ein sicherheitsbewusstes Verhalten im Arbeitsalltag zu fördern und zu verankern.  Der Fokus liegt auf der Schaffung eines Verständnisses für die Bedeutung der Informationssicherheit innerhalb der Institution. Gleichzeitig wird die notwendige Qualifikation für den sicheren Betrieb und die Nutzung von Anwendungen und IT-Systemen vermittelt, um Fehler zu vermeiden.  Die Praktik Personalmanagement stellt sicher, dass Informationssicherheitsaspekte während des gesamten Beschäftigungszyklus von Mitarbeitenden berücksichtigt werden, während Sensibilisierung speziell auf die kontinuierliche Weiterbildung und Sensibilisierung im Bereich Informationssicherheit abzielt."
+    "de": "Die Praktik Sensibilisierung sorgt dafür, dass alle Mitarbeitenden über die Leitlinie zur Informationssicherheit sowie relevanten Informationssicherheitsrichtlinien, -verfahren und -bedrohungen informiert sind. Ziel ist es, ein sicherheitsbewusstes Verhalten im Arbeitsalltag zu fördern und zu verankern. Der Fokus liegt auf der Schaffung eines Verständnisses für die Bedeutung der Informationssicherheit innerhalb der Institution. Gleichzeitig wird die notwendige Qualifikation für den sicheren Betrieb und die Nutzung von Anwendungen und IT-Systemen vermittelt, um Fehler zu vermeiden. Die Praktik Personalmanagement stellt sicher, dass Informationssicherheitsaspekte während des gesamten Beschäftigungszyklus von Mitarbeitenden berücksichtigt werden, während Sensibilisierung speziell auf die kontinuierliche Weiterbildung und Sensibilisierung im Bereich Informationssicherheit abzielt."
    }
   }
  },

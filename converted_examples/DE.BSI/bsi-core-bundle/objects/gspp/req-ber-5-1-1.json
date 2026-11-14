@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.3.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.3.1.1",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.5.1.1",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.5.1.1",
  "lifecycle": "active",
  "title": {
-  "de": "Initiale Ausgabe"
+  "de": "Identität der vorgesehenen Empfänger"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE vor der Verteilung von Authentifizierungsmitteln die Identität authentifizieren."
+    "de": "Berechtigung SOLLTE vor der Verteilung von Authentifizierungsmitteln die Identität der vorgesehenen Personen oder technischen Instanzen authentifizieren."
    }
   }
  ],
@@ -23,7 +23,7 @@
    "by-statement": {
     "smt": {
      "action": "authentifizieren",
-     "result": "vor der Verteilung von Authentifizierungsmitteln die Identität"
+     "result": "vor der Verteilung von Authentifizierungsmitteln die Identität der vorgesehenen Personen oder technischen Instanzen"
     }
    }
   },
@@ -52,7 +52,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2
     }
@@ -62,7 +62,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Identität meint hier die natürliche Person, Gruppe, Rolle, Anwendung oder das IT-System, welches das Authentifizierungsmittel erhält. Verteilung meint hier die initiale Ausgabe, Weiterleitung oder Speicherung des Authentifizierungsfaktors, z.B. die Ausgabe eines initialen Passwortes an Nutzende oder die Speicherung eines X.509-Zertifikates zu einem neuen Hostsystem als vertrauenswürdig in einem Trust Store."
+      "de": "Identität meint hier die natürliche Person, Gruppe, Rolle, Anwendung oder das IT-System, welches das Authentifizierungsmittel erhält. Verteilung meint hier die initiale Ausgabe, Weiterleitung, Registrierung oder Speicherung des Authentifizierungsfaktors, z.B. die Ausgabe eines initialen Passwortes an Nutzende oder die Speicherung eines X.509-Zertifikates zu einem neuen Hostsystem als vertrauenswürdig in einem Trust Store."
      }
     }
    }

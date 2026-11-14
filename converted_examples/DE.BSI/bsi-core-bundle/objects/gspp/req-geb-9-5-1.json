@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.9.5.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.9.5.1",
  "lifecycle": "active",
  "title": {
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -65,7 +65,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Freigelegte Glasfaser- oder Kupferleitungen könnten angezapft oder durchtrennt werden.  Die Implementierung kann z.B. Erfolgen durch: Das Verlegen von Backbone-Kabeln in Metallrohren oder verschlossenen Kabelschränken; manipulationssichere Siegel an Stellen, an denen die Kabel die Sicherheitsbereiche verlassen."
+      "de": "Freigelegte Glasfaser- oder Kupferleitungen könnten angezapft oder durchtrennt werden. Die Implementierung kann z.B. Erfolgen durch: Das Verlegen von Backbone-Kabeln in Metallrohren oder verschlossenen Kabelschränken; manipulationssichere Siegel an Stellen, an denen die Kabel die Sicherheitsbereiche verlassen."
      }
     }
    }

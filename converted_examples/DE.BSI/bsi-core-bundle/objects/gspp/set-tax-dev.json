@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/dev",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Entwicklung"
@@ -8,38 +8,38 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-1",
-   "sequence": 12470
+   "sequence": 12490
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-2",
-   "sequence": 12570
+   "sequence": 12590
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-3",
-   "sequence": 12620
+   "sequence": 12640
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-4",
-   "sequence": 12740
+   "sequence": 12760
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-5",
-   "sequence": 12780
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-6",
    "sequence": 12800
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-6",
+   "sequence": 12820
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev-7",
-   "sequence": 12830
+   "sequence": 12850
   }
  ],
  "label": "DEV",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Entwicklung stellt sicher, dass Sicherheitsanforderungen bereits von Beginn an in die Planungs- und Entwicklungsphase von IT-Systemen und Anwendungen integriert werden. Auf diese Weise können potenzielle Schwachstellen frühzeitig erkannt und vermieden werden, wodurch die Sicherheit über den gesamten Lebenszyklus der IT-Systeme und Anwendungen hinweg gewährleistet ist.  Entwicklung berücksichtigt die Software- und Systementwicklung, also die Erzeugung und Integration neuer IT-Komponenten in die IT-Infrastruktur der Institution.  Durch die enge Zusammenarbeit mit anderen Praktiken wie IT-Betrieb, Asset Management und Konfiguration wird gewährleistet, dass die entwickelten IT-Komponenten nicht nur sicher entwickelt werden, sondern auch sicher betrieben, verwaltet und gepflegt werden können. Diese enge Verzahnung sorgt dafür, dass Sicherheitsanforderungen durchgängig und über alle Phasen hinweg eingehalten werden."
+    "de": "Die Praktik Entwicklung stellt sicher, dass Sicherheitsanforderungen bereits von Beginn an in die Planungs- und Entwicklungsphase von IT-Systemen und Anwendungen integriert werden. Auf diese Weise können potenzielle Schwachstellen frühzeitig erkannt und vermieden werden, wodurch die Sicherheit über den gesamten Lebenszyklus der IT-Systeme und Anwendungen hinweg gewährleistet ist. Entwicklung berücksichtigt die Software- und Systementwicklung, also die Erzeugung und Integration neuer IT-Komponenten in die IT-Infrastruktur der Institution. Durch die enge Zusammenarbeit mit anderen Praktiken wie IT-Betrieb, Asset Management und Konfiguration wird gewährleistet, dass die entwickelten IT-Komponenten nicht nur sicher entwickelt werden, sondern auch sicher betrieben, verwaltet und gepflegt werden können. Diese enge Verzahnung sorgt dafür, dass Sicherheitsanforderungen durchgängig und über alle Phasen hinweg eingehalten werden."
    }
   }
  },

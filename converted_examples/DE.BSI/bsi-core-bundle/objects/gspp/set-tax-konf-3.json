@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Physischer Schutz"
@@ -8,35 +8,35 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.1",
-   "sequence": 10720
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.2",
-   "sequence": 10730
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.3",
    "sequence": 10740
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.2",
    "sequence": 10750
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.5",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.3",
    "sequence": 10760
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.4",
+   "sequence": 10770
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.5",
+   "sequence": 10780
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-3-6",
-   "sequence": 10790
+   "sequence": 10810
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.7",
-   "sequence": 10800
+   "sequence": 10820
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.3.8",
-   "sequence": 10810
+   "sequence": 10830
   }
  ],
  "label": "3",

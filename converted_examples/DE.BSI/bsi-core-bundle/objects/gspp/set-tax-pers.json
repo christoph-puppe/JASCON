@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/pers",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Personal"
@@ -35,7 +35,7 @@
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Personal fokussiert sich auf die Integration von Sicherheitsanforderungen über den gesamten Beschäftigungs- oder Vertragszyklus von Mitarbeitenden sowie externen Partnern hinweg. Ziel ist es, einen sicheren Umgang mit Informationen während der gesamten Dauer der Beschäftigung oder Zusammenarbeit zu gewährleisten.  Diese Praktik fokussiert auf den sicheren Umgang mit Personen, während Praktiken, wie Berechtigungen, den systemseitigen Zugriff regeln."
+    "de": "Die Praktik Personal fokussiert sich auf die Integration von Sicherheitsanforderungen über den gesamten Beschäftigungs- oder Vertragszyklus von Mitarbeitenden sowie externen Partnern hinweg. Ziel ist es, einen sicheren Umgang mit Informationen während der gesamten Dauer der Beschäftigung oder Zusammenarbeit zu gewährleisten. Diese Praktik fokussiert auf den sicheren Umgang mit Personen, während Praktiken, wie Berechtigungen, den systemseitigen Zugriff regeln."
    }
   }
  },

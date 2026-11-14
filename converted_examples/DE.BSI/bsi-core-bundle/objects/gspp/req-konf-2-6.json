@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.2.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.2.6",
  "lifecycle": "active",
  "title": {
-  "de": "Automatische Konfigurationsverwaltung"
+  "de": "Mobile Device Management"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Konfiguration für Endgeräte SOLLTE die Verwaltung durch ein Mobile Device Management (MDM) aktivieren."
+    "de": "Konfiguration für Mobile Endgeräte SOLLTE die Verwaltung durch ein Mobile Device Management (MDM) aktivieren."
    }
   }
  ],
@@ -25,7 +25,7 @@
      "action": "aktivieren",
      "result": "die Verwaltung durch ein Mobile Device Management (MDM)",
      "target-object-categories": [
-      "Endgeräte"
+      "Mobile Endgeräte"
      ]
     }
    }
@@ -57,7 +57,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }

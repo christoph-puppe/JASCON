@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERS.3.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERS.3.1",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Personal für Mitarbeitende SOLLTE die vertrauliche Behandlung von Betriebs- und Geschäftsgeheimnissen im Dienst- oder Arbeitsvertrag vereinbaren."
+    "de": "Personal für Mitarbeitende SOLLTE die vertrauliche Behandlung von Betriebs- und Geschäftsgeheimnissen vereinbaren."
    }
   }
  ],
@@ -24,7 +24,6 @@
     "smt": {
      "action": "vereinbaren",
      "result": "die vertrauliche Behandlung von Betriebs- und Geschäftsgeheimnissen",
-     "result-specification": "im Dienst- oder Arbeitsvertrag",
      "target-object-categories": [
       "Mitarbeitende"
      ]
@@ -59,7 +58,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2
     }
@@ -69,7 +68,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ergänzend zu den gesetzlichen Verpflichtungen zur Wahrung von Betriebs- und Geschäftsgeheimnissen (z.B. aus dem GeschGehG) ist eine explizite Vertraulichkeitsvereinbarung (Non-disclosure Agreement, NDA) mit allen Externen und Mitarbeitenden sinnvoll, die Zugriff auf schützenswerte Informationen erhalten."
+      "de": "Die vertrauliche Behandlung meint hierbei die arbeits-, dienst- oder statusbezogene Festlegung, dass solche Informationen nur für berechtigte Zwecke, nur gegenüber befugten Personen und nicht privat, öffentlich oder gegenüber Dritten verwendet werden dürfen; bei Beamtinnen und Beamten ist dies nicht primär als privatrechtliche Nebenabrede zu verstehen, sondern regelmäßig als Konkretisierung bestehender beamtenrechtlicher Verschwiegenheits-, Treue- und Wohlverhaltenspflichten, die etwa durch Belehrung, Verpflichtungserklärung, Empfangsbestätigung oder dokumentierte Unterweisung nachvollziehbar gemacht werden kann. Sinn und Zweck der Anforderung ist, Vertraulichkeitserwartungen bereits im Personalverhältnis eindeutig zu machen und spätere Unklarheiten darüber zu verringern, welche internen Informationen geschützt zu behandeln sind. Ohne eine solche Klarstellung könnte eine Person vertrauliche Angebotsdaten an einen Wettbewerber weitergeben, Projektdetails in sozialen Medien veröffentlichen, interne Sicherheitsinformationen im privaten Umfeld besprechen oder Unterlagen nach einem Rollenwechsel unzulässig weiterverwenden; eine nachvollziehbare Vereinbarung oder Belehrung kann demgegenüber die persönliche Verantwortlichkeit stärken, Abschreckungswirkung entfalten und die Durchsetzung von Schutz- und Reaktionsmaßnahmen erleichtern. Genuzt werden können etwa eine Vertraulichkeitsklausel im Arbeitsvertrag, eine gesonderte Geheimhaltungsvereinbarung (Non-Disclosure Agreement, NDA), eine dienstrechtliche Verschwiegenheitsbelehrung für Beamte, oder eine Verpflichtungserklärung bei Tätigkeitsbegin. Zu beachten ist hierbei auch, dass eine erneute Bestätigung bei Rollen mit besonderem Geheimniszugang oder eine dokumentierte Belehrung beim Wechsel in vertraulichkeitskritische Aufgaben erforderlich sein kann."
      }
     }
    }

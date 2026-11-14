@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.6.5",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.6.5",
  "lifecycle": "active",
  "title": {
-  "de": "Kriterien für die Qualität von Zufallszahlen"
+  "de": "Anlassbezogene Passwortwechsel"
  },
  "statements": [
   {
@@ -14,24 +14,17 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE {param:ber.6.5-prm1} für die Qualität von Zufallszahlen bei der Schlüsselerzeugung verankern."
-   },
-   "parameters": [
-    {
-     "name": "ber.6.5-prm1",
-     "type": "string",
-     "label": "Kriterien"
-    }
-   ]
+    "de": "Berechtigung SOLLTE einen Passwortwechsel ausschließlich anlassbezogen ausführen."
+   }
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "verankern",
-     "result": "{{Kriterien}} für die Qualität von Zufallszahlen",
-     "result-specification": "bei der Schlüsselerzeugung"
+     "action": "ausführen",
+     "result": "einen Passwortwechsel",
+     "result-specification": "ausschließlich anlassbezogen"
     }
    }
   },
@@ -47,12 +40,14 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "0",
+     "authenticity": "1",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
      ]
     }
    }
@@ -60,11 +55,11 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3,
+     "effort": 1,
      "tags": [
-      "Cryptography"
+      "Password Policy"
      ]
     }
    }
@@ -73,15 +68,8 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Wenn bei der Schlüsselerzeugung ein ungeeigneter Zufallszahlengenerator verwendet wird, könnte ein Angreifer Schlüssel errechnen. Daher sind Kriterien für Zufallszahlengeneratoren zu wählen, z.B. Verwendung etablierter, durch unabängige Dritte geprüfter Zufallszahlengeneratoren. Für Details siehe BSI TR-02102-1. Wichtig ist dabei auch, dass die verwendete Zufallsquelle tatsächlich eine nicht vorhersagbare Zahlenerzeugung erreicht. Inbesondere virtualisierte Systeme könnten ungeeignet sein zur Schlüsselerzeugung, da ihre Zufallszahlenquellen nicht direkt auf Hardwarefunktionen zurückgreifen."
+      "de": "Ein ausschließlich anlassbezogener Passwortwechsel bedeutet, dass Passwörter nur genau dann geändert werden, wenn ein begründeter Sicherheitsanlass vorliegt – beispielsweise ein Verdacht auf Kompromittierung des Endgerätes oder Zugangs, neue einschlägige Einträge in öffentlichen Leak-Datenbanken, die Weitergabe an Unbefugte durch einen Phishing-Vorfall, oder technische Indikatoren für einen möglichen Missbrauch des Zugangs zu Systemen oder Anwendungen. Dieser Ansatz unterscheidet sich vom früher häufig praktizierten, periodischen Passwortwechsel, der ohne konkreten Anlass in festen Intervallen erzwungen wurde. Ein solcher erzwungener Rhythmus könnte die Passwortsicherheit sogar verringern, weil Nutzende dann dazu neigen, schwächere, nur leicht veränderte Passwörter („sommer5“) zu wählen oder Zugangsdaten in verschiedenen Zugängen wiederzuverwenden. Zweck dieser Regelung ist es, die tatsächliche Sicherheit von Zugangskonten zu erhöhen und unnötige Belastungen der Nutzenden zu vermeiden."
      }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.6.5-prm1": {
-     "alt-identifier": "426ad852-4455-43a4-b4ff-795ee2caa47b"
     }
    }
   }
@@ -89,7 +77,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "426ad852-4455-43a4-b4ff-795ee2caa47b"
+   "value": "4de1c314-e6b3-4b70-bc73-54cdafca7ae9"
   }
  ]
 }

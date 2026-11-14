@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.10.4.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.10.4.1",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Gebäudemanagement für Standorte KANN Blitzschutzeinrichtungen {param:geb.10.4.1-prm1}  auf Niederohmigkeit überprüfen."
+    "de": "Gebäudemanagement für Standorte KANN Blitzschutzeinrichtungen {param:geb.10.4.1-prm1} auf Niederohmigkeit überprüfen."
    },
    "parameters": [
     {
@@ -31,7 +31,7 @@
     "smt": {
      "action": "überprüfen",
      "result": "Blitzschutzeinrichtungen",
-     "result-specification": "{{regelmäßig}}  auf Niederohmigkeit",
+     "result-specification": "{{regelmäßig}} auf Niederohmigkeit",
      "target-object-categories": [
       "Standorte"
      ]
@@ -63,7 +63,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -84,7 +84,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "geb.10.4.1-prm1": {
-     "alt-identifier": "a70149a9-75af-4784-8011-e1433c72dcfc"
+     "alt-identifier": "7520d572-8a94-41ad-8b71-f7249fc932b1"
     }
    }
   }

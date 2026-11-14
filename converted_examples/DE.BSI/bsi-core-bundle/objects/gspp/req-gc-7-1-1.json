@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.7.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.7.1.1",
  "lifecycle": "active",
  "title": {
@@ -50,7 +50,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Hierbei kann oft auf bestehende Prozesslandkarten und Managementsysteme zurückgegriffen werden. Besteht noch keine Prozessübersicht in der Institution, so können die technischen und organisatorischen Praktiken als  Ausgangsvorschlag für relevante Prozesse herangezogen werden (siehe Prozessschritt 2 - Anforderungsanalyse)."
+      "de": "Hierbei kann oft auf bestehende Prozesslandkarten und Managementsysteme zurückgegriffen werden. Besteht noch keine Prozessübersicht in der Institution, so können die technischen und organisatorischen Praktiken als Ausgangsvorschlag für relevante Prozesse herangezogen werden (siehe Prozessschritt 2 - Anforderungsanalyse)."
      }
     }
    }

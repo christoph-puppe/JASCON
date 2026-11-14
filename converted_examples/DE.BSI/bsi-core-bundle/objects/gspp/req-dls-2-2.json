@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/DLS.2.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "DLS.2.2",
  "lifecycle": "active",
  "title": {
@@ -64,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2,
      "tags": [
@@ -85,7 +85,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "dls.2.2-prm1": {
-     "alt-identifier": "c9cd4b7e-8f76-4884-afb7-dcfd3d228624"
+     "alt-identifier": "03ad8886-c699-48c8-8ccd-b1f7b3e2ebce"
     }
    }
   }

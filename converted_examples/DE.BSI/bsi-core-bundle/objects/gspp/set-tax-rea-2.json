@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/rea-2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Reaktion"
@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.1",
-   "sequence": 10210
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.2",
-   "sequence": 10220
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.3",
    "sequence": 10230
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.4",
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.2",
    "sequence": 10240
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.3",
+   "sequence": 10250
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/REA.2.4",
+   "sequence": 10260
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-2-5",
-   "sequence": 10290
+   "sequence": 10310
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea-2-6",
-   "sequence": 10380
+   "sequence": 10400
   }
  ],
  "label": "2",

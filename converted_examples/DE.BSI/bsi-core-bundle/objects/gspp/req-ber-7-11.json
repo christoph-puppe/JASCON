@@ -1,7 +1,7 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.11",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.11",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.11",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.11",
  "lifecycle": "active",
  "title": {
   "de": "Integrität"
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 1,
      "tags": [

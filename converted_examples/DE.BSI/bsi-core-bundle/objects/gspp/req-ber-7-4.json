@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.12",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.12",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.4",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.4",
  "lifecycle": "active",
  "title": {
-  "de": "Authentizität"
+  "de": "Erzeugung auf sicheren IT-Systemen"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE die Verifikation der Authentizität öffentlicher Schlüssel vor jeder Nutzung verankern."
+    "de": "Berechtigung SOLLTE die Verwendung eines IT-Systems, welches mindestens dasselbe Schutzniveau bietet, für das der Schlüssel eingesetzt werden soll, bei der Schlüsselerzeugung verankern."
    }
   }
  ],
@@ -23,8 +23,8 @@
    "by-statement": {
     "smt": {
      "action": "verankern",
-     "result": "die Verifikation der Authentizität öffentlicher Schlüssel",
-     "result-specification": "vor jeder Nutzung"
+     "result": "die Verwendung eines IT-Systems, welches mindestens dasselbe Schutzniveau bietet, für das der Schlüssel eingesetzt werden soll,",
+     "result-specification": "bei der Schlüsselerzeugung"
     }
    }
   },
@@ -53,7 +53,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2,
      "tags": [
@@ -66,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Für die Implementierung genügt es, wenn die eingesetzten IT-Produkte bereits so entwickelt oder beschafft worden sind, dass sie die Prüfung automatisiert durchführen."
+      "de": "Wird ein Schlüssel auf einem System erzeugt, dass einen geringeren Schutz bietet als auf dem späteren Einsatzsystem, dann könnte der Schlüssel bereits kompromittiert sein."
      }
     }
    }
@@ -75,7 +75,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "4e4a2385-0cb0-4bb4-938f-a47b96b6f819"
+   "value": "f99e7db6-714a-4fd8-94dd-e27cce24f0a7"
   }
  ]
 }

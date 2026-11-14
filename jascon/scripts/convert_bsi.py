@@ -128,7 +128,6 @@ R_GROUPING_FILE = "file path of the Set that stands for a control with nested co
 R_BASE = "baseline Set URI from the sec_level of a control"
 R_BASE_TITLE = "baseline Set title from the sec_level of a control"
 R_BASE_FILE = "file path of a baseline Set from the sec_level of a control"
-R_ENUM = "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema"
 R_PROSE = "statement prose with every {{ insert: param, x }} rewritten to {param:x}"
 R_MODAL = "modality code from the modal verb (MODAL)"
 R_TERM = "one term of a list packed into one string (split on commas, trimmed)"
@@ -142,7 +141,6 @@ R_DATE = "date of the document: the day of its last-modified"
 R_DECIMAL = "a number that is no integer, written as a decimal string (the kernel's spelling of a fraction, NUMBER-1)"
 # two occurrences of one thing, of which the bundle keeps one (Ledger.same)
 SAME_BASELINE = "the controls of one sec_level name one baseline Set, written once"
-SAME_ENUM = "a value observed more than once is listed once"
 # What is no content (the author, 2026-11-14): "a name that merely selects a
 # field, a namespace, an id that is rebuilt exactly from another value. Each
 # such class needs a stated rule that the ledger checks." These are the
@@ -170,7 +168,14 @@ ALIAS_SCHEME = {"alt-identifier":"bsi-uuid"}
 # these, and a prop of the same name in another namespace is another prop:
 # it is not read, it is carried as the source holds it. `alt-identifier`
 # and `label` are read without a namespace, as the source writes them.
-CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/"
+# The publisher moved its lists between the catalogue of 2026-07-16
+# (`Dokumentation/namespaces/`) and that of 2026-10-29: with the old address
+# here, this script read none of the 12,400 props of the new catalogue and
+# ended with exit code 0, every one of them carried unread in the compat
+# facet and every statement `unspecified`. The ledger holds a rule to what it
+# wrote and saw nothing wrong. The wiring check on `props_elsewhere` below
+# ends such a run.
+CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/documentation/namespaces/"
 PROP_NS = {"modal_verb":CSV+"modal_verbs.csv","action_word":CSV+"action_words.csv","result":CSV+"result.csv",
            "result_specification":CSV+"result.csv","target_object_categories":CSV+"target_object_categories.csv",
            "documentation":CSV+"documentation_guidelines.csv",
@@ -178,6 +183,23 @@ PROP_NS = {"modal_verb":CSV+"modal_verbs.csv","action_word":CSV+"action_words.cs
            "availability":CSV+"security_targets.csv","authenticity":CSV+"security_targets.csv",
            "threats":CSV+"basethreats.csv","sec_level":CSV+"security_level.csv",
            "effort_level":CSV+"effort_level.csv","tags":CSV+"tags.csv"}
+# The values the publisher's lists hold, read on 2026-11-14 at commit
+# 10f3c22 of BSI-Bund/Stand-der-Technik-Bibliothek: security_level.csv and
+# effort_level.csv under documentation/namespaces/. The pinned taxonomy
+# schema lists exactly these. A control that states another value ends the
+# run: until v0.5 the schema's enum was made from the values the catalogue
+# happened to hold, so a new level changed the schema under one version and
+# no bundle could fail by it (backlog #94).
+SEC_LEVELS = ("normal-SdT", "erhöht")
+EFFORT_LEVELS = (0, 1, 2, 3, 4, 5)
+TAXONOMY_VERSION = "1.1.0"
+TAXONOMY_FILE = "gspp-taxonomy-1.1.0.json"
+TAXONOMY_PROPS = {"by-statement": {"type": "object", "additionalProperties": {
+    "type": "object", "additionalProperties": False,
+    "properties": {"class": {"type": "string", "minLength": 1},
+                   "sec-level": {"enum": list(SEC_LEVELS)},
+                   "effort": {"type": "integer", "minimum": EFFORT_LEVELS[0], "maximum": EFFORT_LEVELS[-1]},
+                   "tags": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}}}}}
 # the props this mapping reads, by the element that carries them
 CONTROL_PROPS = ("alt-identifier","label","sec_level","effort_level","tags",
                  "confidentiality","integrity","availability","authenticity","threats")
@@ -198,7 +220,6 @@ def field(prop):
     name=prop["name"]
     return name if FIELD[name]==name else D(R_FIELD,FIELD.__getitem__,name)
 def scheme(prop): return D(R_SCHEME,ALIAS_SCHEME.__getitem__,prop["name"])
-def same_value(v): return v
 def nth_term(v,i): return split_list(v)[i]
 def terms(v):
     """the terms of a list prop: the value itself where it is one term
@@ -239,6 +260,8 @@ def any_leaf(x):
     if isinstance(x,list): return any(any_leaf(v) for v in x)
     return hasattr(x,"_origins")
 
+props_read=collections.Counter()        # prop name -> the props read in the namespace this mapping is written for
+props_elsewhere=collections.Counter()   # prop name -> the props of that name in another namespace, carried unread
 def read_props(node,names,unread,members=("name","ns","value")):
     """-> {name: prop} of the props of `node` this mapping reads: a name
     among `names`, in the namespace the mapping is written for (PROP_NS;
@@ -255,7 +278,10 @@ def read_props(node,names,unread,members=("name","ns","value")):
             if name in last: rest.add(last[name])
             last[name]=i
             if set(p)-set(members): rest.add(i)
-        else: rest.add(i)
+            props_read[name]+=1
+        else:
+            rest.add(i)
+            if name in names and name in PROP_NS: props_elsewhere[name]+=1
     unread.extend(props[i] for i in sorted(rest))
     got={name:props[i] for name,i in last.items()}
     for p in got.values():
@@ -358,7 +384,7 @@ RULES = [       # (source path, level, sentence, outcomes, places)
   at(r"/label",r"/aliases/\[\]/(scheme|value)",TAX_AT+r"/(sec-level|effort|tags)(/\[\])?",
      SECO_AT+r"/(confidentiality|integrity|availability|authenticity|threat-refs)(/\[\])?",
      r"/id",r"/title/de",r"/objects/\[\]/(id|path)",                # the baseline Set a sec_level names
-     r"/schema/properties/observed-sec-levels/enum/\[\]",COMPAT_AT+r"/props/.*")),
+     COMPAT_AT+r"/props/.*")),
  (C+r"\.parts\[\]\.id$", "-",
   "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule "
   "does not give is carried (compat `parts`)", NOT_CONTENT+CARRIED, at(COMPAT_AT+r"/parts/.*")),
@@ -404,8 +430,9 @@ PROP_DEST = {
  "alt-identifier": ("L1","Requirement.aliases (scheme bsi-uuid)"),
  "label": ("L1","Requirement.label (the control id where a control has no label prop)"),
  "sec_level": ("L1","gspp-taxonomy: sec-level (by-statement); the baseline Set of that level, in which the Requirement "
-                    "is listed: its id, title and file; the enum of observed values in the pinned taxonomy schema"),
- "effort_level": ("L1","gspp-taxonomy: effort (by-statement)"),
+                    "is listed: its id, title and file. The value is one of the publisher's list (SEC_LEVELS), "
+                    "else the run ends"),
+ "effort_level": ("L1","gspp-taxonomy: effort (by-statement), an integer of the publisher's list (EFFORT_LEVELS), else the run ends"),
  "tags": ("L1","gspp-taxonomy: tags[] (comma-split; packed lists and inconsistencies reported)"),
  "confidentiality": ("L1","security-objectives (by-statement)"),
  "integrity": ("L1","security-objectives (by-statement)"),
@@ -438,7 +465,7 @@ objects={}
 params_unref=0; params_total=0; multi_value_params=[]
 tag_values=collections.Counter(); sec_values=collections.Counter()
 
-sec_enum={}        # sec_level value -> its entry in the enum of the pinned taxonomy schema
+off_list=[]        # (control, prop, value): a level the publisher's list does not hold; ends the run
 resources_named=set()   # uuids of the back-matter resources that a link of a control names
 resources_carried=[0]   # resources written into references@1
 document_uuid={}        # source key -> the uuid of its document
@@ -563,16 +590,17 @@ def collect_stmt(prefix_ns, c, cp, cunread, req, found):
         tv=cp["threats"]["value"]
         so[field(cp["threats"])]=[D(R_THREAT,threat_uri,prefix_ns,tv,i) for i in range(len(split_list(tv)))]
     if so: by(F_SECO).update(so)
-    tx=by(F_TAX); tx["class"]=c.get("class")
+    tx=by(F_TAX)
+    if c.get("class") is not None: tx["class"]=c["class"]
     if "sec_level" in cp:
         lv=cp["sec_level"]["value"]
         tx[field(cp["sec_level"])]=lv; sec_values[lv]+=1
-        # the pinned schema lists every observed value once: the first
-        # occurrence stands in the enum, every later one is linked to it
-        seen=D(R_ENUM,same_value,lv)
-        if lv in sec_enum: led.same(seen,sec_enum[lv],SAME_ENUM)
-        else: sec_enum[lv]=seen
-    if "effort_level" in cp: tx[field(cp["effort_level"])]=D(R_EFFORT,int,cp["effort_level"]["value"])
+        if lv not in SEC_LEVELS: off_list.append((c["id"],"sec_level",lv))
+    if "effort_level" in cp:
+        ev=cp["effort_level"]["value"]
+        if not (isinstance(ev,str) and ev.isascii() and ev.isdigit() and int(ev) in EFFORT_LEVELS):
+            off_list.append((c["id"],"effort_level",ev))
+        tx[field(cp["effort_level"])]=D(R_EFFORT,int,ev) if isinstance(ev,str) and ev.isascii() and ev.isdigit() else ev
     if "tags" in cp:
         tl=terms(cp["tags"]["value"]); tx[field(cp["tags"])]=tl
         for t in tl: tag_values[t]+=1
@@ -784,10 +812,24 @@ for (key,lvl),b in sorted(baseline.items()):
         "lifecycle":"active","title":b["set"]["title"],
         "members":[{"ref":r,"sequence":(i+1)*10} for i,r in enumerate(b["refs"])]})
 
-# facet schema stubs (enums generated from observed values); declaration
-# promotions per D10 rev 2 (backlog #8): security-objectives -> [selection]
-bundle.stub("gspp-taxonomy-1.0.0-stub.json","https://ns.bsi.bund.de/facet/gspp-taxonomy",["selection"],
-     {"by-statement":{"type":"object"},"observed-sec-levels":{"enum":sorted(sec_enum.values())}})
+# A level outside the publisher's lists ends the run here, before anything
+# is written: the pinned schema would refuse the bundle, and a schema made
+# to fit the value would be another schema under the same version.
+if off_list:
+    for cid,prop,val in off_list[:20]:
+        print(f"  {cid}: {prop} is {val!r}, which the publisher's list does not hold "
+              f"({', '.join(map(str, SEC_LEVELS if prop=='sec_level' else EFFORT_LEVELS))})")
+    raise SystemExit(f"{len(off_list):,} value(s) of sec_level or effort_level are outside the publisher's lists "
+                     f"(SEC_LEVELS, EFFORT_LEVELS). Nothing is written: read the lists under {CSV} again, and where "
+                     f"the publisher has added a level, the taxonomy schema gets a new version with it.")
+# The pinned schemas of this converter's own facets. The taxonomy schema is
+# typed since v0.6 (version 1.1.0; backlog #94): an entry per statement with
+# `class`, `sec-level` (the publisher's two levels), `effort` (0 to 5) and
+# `tags`, and no other member. Until then it was `by-statement: object` and
+# an enum on a member no payload has, and held no value to anything.
+# Declaration promotions per D10 rev 2 (backlog #8): -> [selection]
+bundle.stub(TAXONOMY_FILE,"https://ns.bsi.bund.de/facet/gspp-taxonomy",["selection"],TAXONOMY_PROPS,
+            version=TAXONOMY_VERSION)
 bundle.pin_stdlib("statement-grammar-1.0.0.json")   # 26: stdlib pins are VERBATIM
 bundle.pin_stdlib("security-objectives-1.0.0.json")
 bundle.pin_stdlib(ASSESSMENT_CRITERIA_FILE)          # the latest version of the library (1.1.0 since 2026-11-14)
@@ -803,13 +845,12 @@ for rel,o in objects.items(): bundle.add(rel,o)
 manifest=bundle.write({"sources":[{"title":t,"version":v,**({"uuid":document_uuid[k]} if document_uuid[k] is not None else {}),
                                    **provenance_of[k],"format":"OSCAL","format-version":o}
                for k,t,v,o in catalogs_meta],
-               "converter":"convert_bsi.py v0.5 (single-catalog: MS-TLS dropped by decision 2026-07-21; "
+               "converter":"convert_bsi.py v0.6 (single-catalog: MS-TLS dropped by decision 2026-07-21; "
                            "every control is a Requirement of its own since 2026-11-14)"})
 
 # ---------- the ledger's account ----------
 # Every file of the bundle is read back and every claim is checked against
-# it: the objects, the pinned schemas (the taxonomy stub lists the observed
-# sec_level values) and the manifest. ACCOUNT has one entry per source value
+# it: the objects, the pinned schemas and the manifest. ACCOUNT has one entry per source value
 # and lasts as long as the run. The record that is written and committed has
 # one row per source path and outcome (ledger_by_path); the payload keyed by
 # the id of a parameter is one row, not one for every parameter.
@@ -823,7 +864,7 @@ FILES_READ=len(bundle.objects)+len(bundle.schemas)+1
 # rule -> the source values it was applied to; reason -> the values dropped
 # for it; rule of what is no content -> the values it covers
 RULE_NAMES=[R_REQ,R_REQ_FILE,R_LINK,R_RESOURCE,R_SET,R_SET_FILE,R_GROUPING,R_GROUPING_FILE,R_BASE,R_BASE_TITLE,
-            R_BASE_FILE,R_ENUM,R_PROSE,R_MODAL,R_TERM,R_THREAT,R_EFFORT,R_FIELD,R_SCHEME,R_AUTHOR,R_DATE,R_DECIMAL]
+            R_BASE_FILE,R_PROSE,R_MODAL,R_TERM,R_THREAT,R_EFFORT,R_FIELD,R_SCHEME,R_AUTHOR,R_DATE,R_DECIMAL]
 rule_use=collections.Counter(); drop_use=collections.Counter(); no_content_use=collections.Counter()
 for e in ACCOUNT["entries"]:
     for r in {d["rule"] for d in e.get("destinations",[]) if "rule" in d}: rule_use[r]+=1
@@ -836,6 +877,16 @@ for e in ACCOUNT["entries"]:
 # with exit code 0 before the check existed. A check that fails ends the run
 # with a non-zero exit code, after the reports are written.
 wiring=[]
+# A prop of a name this mapping reads, in a namespace it is not written for,
+# is another prop and is carried as the source holds it. Where EVERY prop of
+# a name stands elsewhere, the publisher has moved its list and this mapping
+# reads nothing of it: the run that found this check ended with exit code 0
+# and 1,000 statements of modality `unspecified`.
+for name in sorted(props_elsewhere):
+    if not props_read[name]:
+        wiring.append(f"{props_elsewhere[name]:,} prop(s) named `{name}` stand in a namespace this mapping is not written "
+                      f"for, and none in the one it reads ({PROP_NS[name]}): the publisher has moved its list, and "
+                      f"every such value is carried unread")
 if not set(rule_use)<=set(RULE_NAMES): wiring.append("a rule is applied that the report does not list")
 if not set(no_content_use)<=set(NO_CONTENT): wiring.append("a value is no content by a rule that the report does not list")
 if not set(drop_use)<={r for _,r,_ in DROPS}: wiring.append("a value is dropped for a reason that DROPS does not hold")
@@ -1112,9 +1163,9 @@ md.append(f"- **Census delta (source moved)**: catalog v{catalogs_meta[0][2][:10
 inc = j["tag-value-inconsistencies"]
 if inc: md.append(f"- **Tag spelling drift** (space vs hyphen variants coexist): {inc} - "
                   "reported, not normalized.")
-md.append(f"- **sec_level value space observed**: {dict(sec_values)} "
-          "(note the bare 'erhöht' vs 'normal-SdT' asymmetry - vocabulary drift the "
-          "pinned schema now freezes).")
+md.append(f"- **sec_level values**: {dict(sec_values)}. The publisher's list holds {len(SEC_LEVELS)} "
+          f"({', '.join(SEC_LEVELS)}), and the pinned taxonomy schema (version {TAXONOMY_VERSION}) lists those; "
+          "a control that states another ends the run.")
 if links_to_nothing:
     md.append(f"- **A link names a control the catalogue does not define: {len(links_to_nothing)}.** First: "
               f"`{links_to_nothing[0][0]}` {links_to_nothing[0][1]} `#{links_to_nothing[0][2]}`. The relation is "

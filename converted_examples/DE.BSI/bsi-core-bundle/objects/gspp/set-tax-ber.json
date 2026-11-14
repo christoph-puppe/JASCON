@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/ber",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Berechtigung"
@@ -8,34 +8,38 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-1",
-   "sequence": 7700
+   "sequence": 7690
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-2",
-   "sequence": 7770
+   "sequence": 7760
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-3",
-   "sequence": 8120
+   "sequence": 8020
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-4",
-   "sequence": 8270
+   "sequence": 8160
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-5",
-   "sequence": 8380
+   "sequence": 8330
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-6",
-   "sequence": 8620
+   "sequence": 8400
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-7",
+   "sequence": 8640
   }
  ],
  "label": "BER",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Berechtigung stellt sicher, dass ausschließlich autorisierte Personen und IT-Systeme Zugriff auf sensible Informationen und Ressourcen erhalten. Sie regelt die Verwaltung von Identitäten und Berechtigungen, um die Vertraulichkeit, Integrität und Verfügbarkeit von Informationen zu gewährleisten.  Dabei bildet die Praktik Berechtigung eine zentrale Schnittstelle zwischen den Praktiken Personal, Dienstleistersteuerung, Asset Management und Gebäudemanagement. Während IT-Systeme den Zugriff regeln, behandeln die Praktik Personal den Umgang mit Mitarbeitenden. Die Praktik Berechtigung vereint diese organisatorischen und technischen Aspekte, um Zugriffsrechte sicher und effizient zu verwalten."
+    "de": "Die Praktik Berechtigung stellt sicher, dass ausschließlich autorisierte Personen und IT-Systeme Zugriff auf sensible Informationen und Ressourcen erhalten. Sie regelt die Verwaltung von Identitäten und Berechtigungen, um die Vertraulichkeit, Integrität und Verfügbarkeit von Informationen zu gewährleisten. Dabei bildet die Praktik Berechtigung eine zentrale Schnittstelle zwischen den Praktiken Personal, Dienstleistersteuerung, Asset Management und Gebäudemanagement. Während IT-Systeme den Zugriff regeln, behandeln die Praktik Personal den Umgang mit Mitarbeitenden. Die Praktik Berechtigung vereint diese organisatorischen und technischen Aspekte, um Zugriffsrechte sicher und effizient zu verwalten."
    }
   }
  },

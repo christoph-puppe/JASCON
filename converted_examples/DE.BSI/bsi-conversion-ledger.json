@@ -1,10 +1,10 @@
 {
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
- "leaf-values": 49431,
+ "leaf-values": 49521,
  "totals": {
-  "copied": 22632,
-  "transformed": 11795,
-  "not-content": 15004,
+  "copied": 22679,
+  "transformed": 11822,
+  "not-content": 15020,
   "intentionally-dropped": 0,
   "unaccounted": 0
  },
@@ -74,12 +74,12 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].class",
    "outcome": "copied",
-   "count": 651,
+   "count": 652,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/class",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/class",
-     "count": 651
+     "count": 652
     }
    ]
   },
@@ -365,12 +365,6 @@
      "count": 2,
      "rule": "file path of a baseline Set from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
-    },
-    {
-     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
-     "count": 2,
-     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
-     "via": "a value observed more than once is listed once"
     },
     {
      "pointer": "/title/de",
@@ -859,17 +853,6 @@
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
-     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
-     "count": 1,
-     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema"
-    },
-    {
-     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
-     "count": 18,
-     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
-     "via": "a value observed more than once is listed once"
-    },
-    {
      "pointer": "/title/de",
      "count": 1,
      "rule": "baseline Set title from the sec_level of a control"
@@ -972,12 +955,12 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].controls[].links[].href",
    "outcome": "transformed",
-   "count": 67,
+   "count": 71,
    "example": "gspp#/catalog/groups/0/groups/4/controls/0/controls/3/links/0/href",
    "to": [
     {
      "pointer": "/relations/[]/ref",
-     "count": 67,
+     "count": 71,
      "rule": "requirement URI from a link to a control (#id)"
     }
    ]
@@ -985,12 +968,12 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].controls[].links[].rel",
    "outcome": "copied",
-   "count": 67,
+   "count": 71,
    "example": "gspp#/catalog/groups/0/groups/4/controls/0/controls/3/links/0/rel",
    "to": [
     {
      "pointer": "/relations/[]/type",
-     "count": 67
+     "count": 71
     }
    ]
   },
@@ -1052,7 +1035,7 @@
    "path": "gspp.catalog.groups[].groups[].controls[].controls[].params[].values[]",
    "outcome": "copied",
    "count": 1,
-   "example": "gspp#/catalog/groups/15/groups/0/controls/0/controls/3/params/0/values/0",
+   "example": "gspp#/catalog/groups/15/groups/0/controls/0/controls/3/params/1/values/0",
    "to": [
     {
      "pointer": "/statements/[]/parameters/[]/default",
@@ -1368,12 +1351,6 @@
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
-     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
-     "count": 327,
-     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
-     "via": "a value observed more than once is listed once"
-    },
-    {
      "pointer": "/title/de",
      "count": 327,
      "rule": "baseline Set title from the sec_level of a control",
@@ -1399,7 +1376,7 @@
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs/[]",
-     "count": 655,
+     "count": 664,
      "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)"
     }
    ]
@@ -1419,7 +1396,7 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].id",
    "outcome": "copied",
-   "count": 651,
+   "count": 652,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/id",
    "to": [
     {
@@ -1429,12 +1406,12 @@
     },
     {
      "pointer": "/id",
-     "count": 651,
+     "count": 652,
      "rule": "requirement URI from the control id"
     },
     {
      "pointer": "/label",
-     "count": 651
+     "count": 652
     },
     {
      "pointer": "/members/[]/ref",
@@ -1443,7 +1420,7 @@
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 1302,
+     "count": 1304,
      "rule": "requirement URI from the control id"
     },
     {
@@ -1453,12 +1430,12 @@
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 651,
+     "count": 652,
      "rule": "requirement URI from the control id"
     },
     {
      "pointer": "/objects/[]/path",
-     "count": 651,
+     "count": 652,
      "rule": "file path of a Requirement from the control id"
     },
     {
@@ -1471,12 +1448,12 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].links[].href",
    "outcome": "transformed",
-   "count": 191,
+   "count": 198,
    "example": "gspp#/catalog/groups/0/groups/1/controls/0/links/0/href",
    "to": [
     {
      "pointer": "/relations/[]/ref",
-     "count": 191,
+     "count": 198,
      "rule": "requirement URI from a link to a control (#id)"
     }
    ]
@@ -1484,53 +1461,53 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].links[].rel",
    "outcome": "copied",
-   "count": 191,
+   "count": 198,
    "example": "gspp#/catalog/groups/0/groups/1/controls/0/links/0/rel",
    "to": [
     {
      "pointer": "/relations/[]/type",
-     "count": 191
+     "count": 198
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].controls[].params[].id",
    "outcome": "copied",
-   "count": 144,
+   "count": 147,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/id",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}",
-     "count": 144,
+     "count": 147,
      "as": "key"
     },
     {
      "pointer": "/statements/[]/parameters/[]/name",
-     "count": 144
+     "count": 147
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].controls[].params[].label",
    "outcome": "copied",
-   "count": 144,
+   "count": 147,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/label",
    "to": [
     {
      "pointer": "/statements/[]/parameters/[]/label",
-     "count": 144
+     "count": 147
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].controls[].params[].props[].name",
    "outcome": "copied",
-   "count": 144,
+   "count": 147,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/props/0/name",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
-     "count": 144,
+     "count": 147,
      "as": "key"
     }
    ]
@@ -1538,12 +1515,12 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].params[].props[].value",
    "outcome": "copied",
-   "count": 144,
+   "count": 147,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/props/0/value",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
-     "count": 144
+     "count": 147
     }
    ]
   },
@@ -1562,30 +1539,30 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].id",
    "outcome": "not-content",
-   "count": 1302,
+   "count": 1304,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/id",
    "rules": [
     {
      "kind": "rebuilt-id",
      "rule": "the id of a guidance part is its control's id and `_gdn`",
-     "count": 651
+     "count": 652
     },
     {
      "kind": "rebuilt-id",
      "rule": "the id of a statement part is its control's id and `_stm`",
-     "count": 651
+     "count": 652
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].name",
    "outcome": "copied",
-   "count": 651,
+   "count": 652,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/1/name",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance",
-     "count": 651,
+     "count": 652,
      "as": "key"
     }
    ]
@@ -1593,25 +1570,25 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].name",
    "outcome": "not-content",
-   "count": 651,
+   "count": 652,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/name",
    "rules": [
     {
      "kind": "selector",
      "rule": "the name `statement` of a part selects the part whose prose and props become the statement",
-     "count": 651
+     "count": 652
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].name",
    "outcome": "copied",
-   "count": 651,
+   "count": 652,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/1/name",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
-     "count": 651,
+     "count": 652,
      "as": "key"
     }
    ]
@@ -1619,18 +1596,18 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].name",
    "outcome": "transformed",
-   "count": 2657,
+   "count": 2662,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/0/name",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation",
-     "count": 620,
+     "count": 621,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
-     "count": 651,
+     "count": 652,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
@@ -1642,13 +1619,13 @@
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories",
-     "count": 432,
+     "count": 434,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
      "pointer": "/statements/[]/modality",
-     "count": 651,
+     "count": 652,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     }
@@ -1657,33 +1634,33 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].ns",
    "outcome": "not-content",
-   "count": 3308,
+   "count": 3314,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/0/ns",
    "rules": [
     {
      "kind": "namespace",
      "rule": "the namespace of a prop is the one this mapping is written for (PROP_NS)",
-     "count": 3308
+     "count": 3314
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].props[].value",
    "outcome": "copied",
-   "count": 2617,
+   "count": 2623,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/0/value",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation/[]",
-     "count": 620
+     "count": 621
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
-     "count": 651
+     "count": 652
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
-     "count": 651
+     "count": 652
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
@@ -1691,7 +1668,7 @@
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories/[]",
-     "count": 392
+     "count": 395
     }
    ]
   },
@@ -1703,12 +1680,12 @@
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories/[]",
-     "count": 80,
+     "count": 78,
      "rule": "one term of a list packed into one string (split on commas, trimmed)"
     },
     {
      "pointer": "/statements/[]/modality",
-     "count": 651,
+     "count": 652,
      "rule": "modality code from the modal verb (MODAL)"
     }
    ]
@@ -1716,28 +1693,28 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].prose",
    "outcome": "copied",
-   "count": 1164,
+   "count": 1163,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/1/prose",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance/de",
-     "count": 651
+     "count": 652
     },
     {
      "pointer": "/statements/[]/prose/de",
-     "count": 513
+     "count": 511
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].controls[].parts[].prose",
    "outcome": "transformed",
-   "count": 138,
+   "count": 141,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/prose",
    "to": [
     {
      "pointer": "/statements/[]/prose/de",
-     "count": 138,
+     "count": 141,
      "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}"
     }
    ]
@@ -1745,7 +1722,7 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].props[].name",
    "outcome": "copied",
-   "count": 2692,
+   "count": 2696,
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/props/3/name",
    "to": [
     {
@@ -1755,22 +1732,22 @@
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
-     "count": 594,
+     "count": 595,
      "as": "key"
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
-     "count": 595,
+     "count": 596,
      "as": "key"
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
-     "count": 595,
+     "count": 596,
      "as": "key"
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
-     "count": 595,
+     "count": 596,
      "as": "key"
     }
    ]
@@ -1778,29 +1755,29 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].props[].name",
    "outcome": "transformed",
-   "count": 2548,
+   "count": 2552,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/0/name",
    "to": [
     {
      "pointer": "/aliases/[]/scheme",
-     "count": 651,
+     "count": 652,
      "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
     },
     {
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
-     "count": 651,
+     "count": 652,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
-     "count": 651,
+     "count": 652,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs",
-     "count": 595,
+     "count": 596,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     }
@@ -1809,29 +1786,29 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].props[].ns",
    "outcome": "not-content",
-   "count": 4589,
+   "count": 4596,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/1/ns",
    "rules": [
     {
      "kind": "namespace",
      "rule": "the namespace of a prop is the one this mapping is written for (PROP_NS)",
-     "count": 4589
+     "count": 4596
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].controls[].props[].value",
    "outcome": "copied",
-   "count": 3904,
+   "count": 3910,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/0/value",
    "to": [
     {
      "pointer": "/aliases/[]/value",
-     "count": 651
+     "count": 652
     },
     {
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
-     "count": 651
+     "count": 652
     },
     {
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
@@ -1839,19 +1816,19 @@
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
-     "count": 594
+     "count": 595
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
-     "count": 595
+     "count": 596
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
-     "count": 595
+     "count": 596
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
-     "count": 595
+     "count": 596
     },
     {
      "pointer": "/id",
@@ -1860,7 +1837,7 @@
     },
     {
      "pointer": "/id",
-     "count": 650,
+     "count": 651,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
@@ -1871,7 +1848,7 @@
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 650,
+     "count": 651,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
@@ -1882,20 +1859,9 @@
     },
     {
      "pointer": "/objects/[]/path",
-     "count": 650,
+     "count": 651,
      "rule": "file path of a baseline Set from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
-    },
-    {
-     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
-     "count": 1,
-     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema"
-    },
-    {
-     "pointer": "/schema/properties/observed-sec-levels/enum/[]",
-     "count": 650,
-     "rule": "a sec_level value as an entry of the enum of observed values in the pinned taxonomy schema",
-     "via": "a value observed more than once is listed once"
     },
     {
      "pointer": "/title/de",
@@ -1904,7 +1870,7 @@
     },
     {
      "pointer": "/title/de",
-     "count": 650,
+     "count": 651,
      "rule": "baseline Set title from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     }
@@ -1913,12 +1879,12 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].props[].value",
    "outcome": "transformed",
-   "count": 1336,
+   "count": 1338,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/2/value",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
-     "count": 651,
+     "count": 652,
      "rule": "effort level as an integer"
     },
     {
@@ -1928,7 +1894,7 @@
     },
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs/[]",
-     "count": 1279,
+     "count": 1316,
      "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)"
     }
    ]
@@ -1936,39 +1902,39 @@
   {
    "path": "gspp.catalog.groups[].groups[].controls[].title",
    "outcome": "copied",
-   "count": 651,
+   "count": 652,
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/title",
    "to": [
     {
      "pointer": "/title/de",
-     "count": 766
+     "count": 767
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].id",
    "outcome": "transformed",
-   "count": 139,
+   "count": 140,
    "example": "gspp#/catalog/groups/0/groups/0/id",
    "to": [
     {
      "pointer": "/id",
-     "count": 139,
+     "count": 140,
      "rule": "taxonomy Set URI from the group id"
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 139,
+     "count": 140,
      "rule": "taxonomy Set URI from the group id"
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 139,
+     "count": 140,
      "rule": "taxonomy Set URI from the group id"
     },
     {
      "pointer": "/objects/[]/path",
-     "count": 139,
+     "count": 140,
      "rule": "file path of a taxonomy Set from the group id"
     }
    ]
@@ -1976,12 +1942,12 @@
   {
    "path": "gspp.catalog.groups[].groups[].props[].name",
    "outcome": "copied",
-   "count": 139,
+   "count": 140,
    "example": "gspp#/catalog/groups/0/groups/0/props/0/name",
    "to": [
     {
      "pointer": "/label",
-     "count": 139,
+     "count": 140,
      "as": "key"
     }
    ]
@@ -1989,12 +1955,12 @@
   {
    "path": "gspp.catalog.groups[].groups[].props[].name",
    "outcome": "transformed",
-   "count": 139,
+   "count": 140,
    "example": "gspp#/catalog/groups/0/groups/0/props/1/name",
    "to": [
     {
      "pointer": "/aliases/[]/scheme",
-     "count": 139,
+     "count": 140,
      "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
     }
    ]
@@ -2002,28 +1968,28 @@
   {
    "path": "gspp.catalog.groups[].groups[].props[].value",
    "outcome": "copied",
-   "count": 278,
+   "count": 280,
    "example": "gspp#/catalog/groups/0/groups/0/props/0/value",
    "to": [
     {
      "pointer": "/aliases/[]/value",
-     "count": 139
+     "count": 140
     },
     {
      "pointer": "/label",
-     "count": 139
+     "count": 140
     }
    ]
   },
   {
    "path": "gspp.catalog.groups[].groups[].title",
    "outcome": "copied",
-   "count": 139,
+   "count": 140,
    "example": "gspp#/catalog/groups/0/groups/0/title",
    "to": [
     {
      "pointer": "/title/de",
-     "count": 139
+     "count": 140
     }
    ]
   },
@@ -2118,6 +2084,30 @@
     {
      "pointer": "/title/de",
      "count": 20
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.document-ids[].identifier",
+   "outcome": "copied",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/document-ids/0/identifier",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/document-ids/[]/identifier",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "path": "gspp.catalog.metadata.document-ids[].scheme",
+   "outcome": "copied",
+   "count": 1,
+   "example": "gspp#/catalog/metadata/document-ids/0/scheme",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/document-ids/[]/scheme",
+     "count": 1
     }
    ]
   },
@@ -2246,12 +2236,12 @@
   {
    "path": "gspp.catalog.metadata.props[].name",
    "outcome": "copied",
-   "count": 3,
+   "count": 2,
    "example": "gspp#/catalog/metadata/props/0/name",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/name",
-     "count": 3
+     "count": 2
     }
    ]
   },
@@ -2259,7 +2249,7 @@
    "path": "gspp.catalog.metadata.props[].ns",
    "outcome": "copied",
    "count": 1,
-   "example": "gspp#/catalog/metadata/props/1/ns",
+   "example": "gspp#/catalog/metadata/props/0/ns",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/ns",
@@ -2270,12 +2260,12 @@
   {
    "path": "gspp.catalog.metadata.props[].value",
    "outcome": "copied",
-   "count": 3,
+   "count": 2,
    "example": "gspp#/catalog/metadata/props/0/value",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/value",
-     "count": 3
+     "count": 2
     }
    ]
   },
@@ -2363,7 +2353,7 @@
    "to": [
     {
      "pointer": "/objects/[]/version",
-     "count": 1287
+     "count": 1289
     },
     {
      "pointer": "/provenance/sources/[]/version",
@@ -2371,7 +2361,7 @@
     },
     {
      "pointer": "/version",
-     "count": 1287
+     "count": 1289
     }
    ]
   },

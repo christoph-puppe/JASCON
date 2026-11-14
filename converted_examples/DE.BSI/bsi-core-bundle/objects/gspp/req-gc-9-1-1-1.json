@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.9.1.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.9.1.1.1",
  "lifecycle": "active",
  "title": {
@@ -57,7 +57,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Informationssicherheit liegt in der Verantwortung der Institutionsleitung. Die operative Aufgabe „Informationssicherheit“ wird an einen Informationssicherheitsbeauftragten (ISB) delegiert, der diese Aufgabe innerhalb der Institution koordiniert und vorantreibt. Daher ist diese Rolle in jeder Institution (unabhängig von Art und Größe) zu besetzen. Je nach Art und Ausrichtung der Institution wird der ISB anders genannt. Häufige Titel sind neben dem Informationssicherheitsbeauftragten, Chief Information Security Officer (CISO) oder Informationssicherheitsmanager (ISM).  Die Hauptaufgabe des ISB besteht darin, die Institutionsleitung bei deren Aufgabenwahrnehmung bezüglich der Informationssicherheit zu beraten und diese bei der Umsetzung zu unterstützen. Zu den ISB-Aufgaben gehört es u.a., den Sicherheitsprozess operativ zu steuern und zu koordinieren, die Institutionsleitung bei der Erstellung der Sicherheitsleitlinie zu unterstützen, die Erstellung des Sicherheitskonzepts und zugehöriger Teilkonzepte und Richtlinien zu koordinieren, den Umsetzungsplan für Sicherheitsmaßnahmen anzufertigen, sowie ihre Umsetzung zu initiieren und zu überprüfen, der Institutionsleitung und anderen Sicherheitsverantwortlichen über den Status der Informationssicherheit zu berichten, sicherheitsrelevante Projekte zu koordinieren, sicherheitsrelevante Vorfälle zu untersuchen, sowie Sensibilisierungen und Schulungen zur Informationssicherheit zu initiieren und zu koordinieren."
+      "de": "Informationssicherheit liegt in der Verantwortung der Institutionsleitung. Die operative Aufgabe „Informationssicherheit“ wird an einen Informationssicherheitsbeauftragten (ISB) delegiert, der diese Aufgabe innerhalb der Institution koordiniert und vorantreibt. Daher ist diese Rolle in jeder Institution (unabhängig von Art und Größe) zu besetzen. Je nach Art und Ausrichtung der Institution wird der ISB anders genannt. Häufige Titel sind neben dem Informationssicherheitsbeauftragten, Chief Information Security Officer (CISO) oder Informationssicherheitsmanager (ISM). Die Hauptaufgabe des ISB besteht darin, die Institutionsleitung bei deren Aufgabenwahrnehmung bezüglich der Informationssicherheit zu beraten und diese bei der Umsetzung zu unterstützen. Zu den ISB-Aufgaben gehört es u.a., den Sicherheitsprozess operativ zu steuern und zu koordinieren, die Institutionsleitung bei der Erstellung der Sicherheitsleitlinie zu unterstützen, die Erstellung des Sicherheitskonzepts und zugehöriger Teilkonzepte und Richtlinien zu koordinieren, den Umsetzungsplan für Sicherheitsmaßnahmen anzufertigen, sowie ihre Umsetzung zu initiieren und zu überprüfen, der Institutionsleitung und anderen Sicherheitsverantwortlichen über den Status der Informationssicherheit zu berichten, sicherheitsrelevante Projekte zu koordinieren, sicherheitsrelevante Vorfälle zu untersuchen, sowie Sensibilisierungen und Schulungen zur Informationssicherheit zu initiieren und zu koordinieren."
      }
     }
    }
@@ -65,7 +65,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "gc.9.1.1.1-prm1": {
-     "alt-identifier": "96ebe8f3-2419-45d0-b981-dc973d21c17c"
+     "alt-identifier": "b329ef41-4e5a-4c06-9f2c-12964662425c"
     }
    }
   }

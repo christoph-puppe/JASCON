@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/arch-6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Vertraulichkeit und Integrität im Weitverkehrsnetz"
@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.6.1",
-   "sequence": 7440
+   "sequence": 7430
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.6.2",
-   "sequence": 7450
+   "sequence": 7440
   }
  ],
  "label": "6",

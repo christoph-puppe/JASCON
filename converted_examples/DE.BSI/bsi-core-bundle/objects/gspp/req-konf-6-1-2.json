@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.6.1.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.6.1.2",
  "lifecycle": "active",
  "title": {
@@ -64,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -77,7 +77,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Isolation von Anwendungen (auch Kapselung oder Application Sandboxing genannt) dient dazu, die Angriffsfläche eines Systems zu reduzieren und die Vertraulichkeit, Integrität sowie Verfügbarkeit kritischer Komponenten besser zu schützen. Durch eine klare Trennung der Anwendungs- und Systemprozesse und von deren Ressourcenzugriffen (Netzwerk, Datei‑ oder Geräte‑I/O) kann eine kompromittierte Applikation nicht unbegrenzt auf weitere Systemressourcen zugreifen, sondern ist auf genau definierte Schnittstellen beschränkt. Bestimmte Anwendungen meint hier, dass konkret festgelegt wird, welche Anwendungen konkret isoliert ausgeführt werden. Dies ermöglicht es, Fehlfunktionen oder Angriffe einzudämmen, Schadsoftware leichter zu erkennen und Verantwortlichkeiten einzelner Module transparent zu halten. Dies kann z.B. durch Containerisierung oder eine Microservice-Architektur, in der jede Komponente nur über REST- oder Message-Queue-Schnittstellen kommuniziert umgesetzt werden. Auch klassische Virtualisierung (Gastsysteme mit Hypervisor) oder Betriebssystemfunktionen wie SELinux/AppArmor‑Profile und chroot‑Jails zählen dazu, weil sie Applikationen auf genau festgelegte Ressourcen beschränken. Im Kontext der Containerisierung empfiehlt es sich ebenfalls eine feste Zuordnung von Containern zu Container-Hosts vorzunehmen."
+      "de": "Die Isolation von Anwendungen (auch Application Sandboxing oder Application Confinement genannt) kann die Auswirkungen von Fehlfunktionen oder einer Kompromittierung auf andere Anwendungen und Systemressourcen begrenzen. Hierzu werden Zugriffe einer Anwendung auf beispielsweise Prozesse, Dateisystembereiche, Netzwerkressourcen oder Geräte auf die für ihren Betrieb vorgesehenen Ressourcen und Schnittstellen beschränkt. „Bestimmte Anwendungen“ bezeichnet die Anwendungen, für die aufgrund ihres Einsatzzwecks oder der damit verbundenen Risiken eine isolierte Ausführung vorgesehen ist. Die Isolation kann mit unterschiedlichen technischen Mechanismen umgesetzt werden. Hierzu zählen beispielsweise Betriebssystemfunktionen zur Zugriffsbeschränkung wie SELinux- oder AppArmor-Profile, containerbasierte Isolation oder die Ausführung in virtuellen Maschinen. Die verschiedenen Verfahren bieten unterschiedliche Isolationsstärken. Container teilen sich typischerweise den Kernel des Hostsystems, während virtuelle Maschinen zusätzlich über ein eigenes Gastbetriebssystem und einen eigenen Kernel gegenüber dem Hostsystem abgegrenzt sind."
      }
     }
    }
@@ -85,7 +85,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "konf.6.1.2-prm1": {
-     "alt-identifier": "d380c6d8-1ab0-4e4b-bcca-2e620b40d934"
+     "alt-identifier": "e599991e-6f9f-409d-a770-b12a6e078fd9"
     }
    }
   }

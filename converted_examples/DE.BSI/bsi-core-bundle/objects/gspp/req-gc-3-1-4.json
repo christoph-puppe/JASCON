@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.3.1.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.3.1.4",
  "lifecycle": "active",
  "title": {
@@ -43,7 +43,7 @@
      "sec-level": "normal-SdT",
      "effort": 3,
      "tags": [
-      "Compliance Management"
+      "Compliance-Management"
      ]
     }
    }

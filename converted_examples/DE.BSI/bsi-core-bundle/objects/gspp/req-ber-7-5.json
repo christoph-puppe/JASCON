@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.16.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.16.1",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.5",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.5",
  "lifecycle": "active",
  "title": {
-  "de": "Zertifizierungsstelle"
+  "de": "Kriterien für die Qualität von Zufallszahlen"
  },
  "statements": [
   {
@@ -14,13 +14,13 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE die Beglaubigung von Schlüsseln {param:ber.6.16.1-prm1} zuweisen."
+    "de": "Berechtigung SOLLTE {param:ber.7.5-prm1} für die Qualität von Zufallszahlen bei der Schlüsselerzeugung verankern."
    },
    "parameters": [
     {
-     "name": "ber.6.16.1-prm1",
+     "name": "ber.7.5-prm1",
      "type": "string",
-     "label": "einer zuständigen Person oder Rolle"
+     "label": "Kriterien"
     }
    ]
   }
@@ -29,9 +29,9 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "zuweisen",
-     "result": "die Beglaubigung von Schlüsseln",
-     "result-specification": "{{einer zuständigen Person oder Rolle}}"
+     "action": "verankern",
+     "result": "{{Kriterien}} für die Qualität von Zufallszahlen",
+     "result-specification": "bei der Schlüsselerzeugung"
     }
    }
   },
@@ -60,9 +60,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 4,
+     "effort": 3,
      "tags": [
       "Cryptography"
      ]
@@ -73,15 +73,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Beglaubigung von Schlüsseln ist technisch komplex. Gleichzeitig hängt von ihr die Vertrauensstellung von Systemen und Anwendungen im Informationsverbund ab. Daher ist es sinnvoll diese Aufgabe konkret bestimmten Personen oder Rollen zuzuweisen."
+      "de": "Wenn bei der Schlüsselerzeugung ein ungeeigneter Zufallszahlengenerator verwendet wird, könnte ein Angreifer Schlüssel errechnen. Daher sind Kriterien für Zufallszahlengeneratoren zu wählen, z.B. Verwendung etablierter, durch unabängige Dritte geprüfter Zufallszahlengeneratoren. Für Details siehe BSI TR-02102-1. Wichtig ist dabei auch, dass die verwendete Zufallsquelle tatsächlich eine nicht vorhersagbare Zahlenerzeugung erreicht. Inbesondere virtualisierte Systeme könnten ungeeignet sein zur Schlüsselerzeugung, da ihre Zufallszahlenquellen nicht direkt auf Hardwarefunktionen zurückgreifen."
      }
     }
    }
   },
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
-    "ber.6.16.1-prm1": {
-     "alt-identifier": "7b80290b-5c6d-4e39-857c-0a63a8e2543a"
+    "ber.7.5-prm1": {
+     "alt-identifier": "63becbb2-b938-4b14-854b-9e70c382db10"
     }
    }
   }
@@ -89,7 +89,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "7b80290b-5c6d-4e39-857c-0a63a8e2543a"
+   "value": "426ad852-4455-43a4-b4ff-795ee2caa47b"
   }
  ]
 }

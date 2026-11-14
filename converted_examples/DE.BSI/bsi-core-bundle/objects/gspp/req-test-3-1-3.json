@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/TEST.3.1.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "TEST.3.1.3",
  "lifecycle": "active",
  "title": {
@@ -54,7 +54,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3,
      "tags": [
@@ -76,7 +76,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "3c9043c9-8700-4fb4-92b1-68d9cf48602c"
+   "value": "f59da6fb-9fb8-4eaa-b338-1081e9094029"
   }
  ],
  "relations": [

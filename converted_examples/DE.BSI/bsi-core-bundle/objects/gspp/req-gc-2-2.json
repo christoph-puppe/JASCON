@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.2.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.2.2",
  "lifecycle": "active",
  "title": {
@@ -40,7 +40,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Alle internen Faktoren, die einen Einfluss auf die Informationssicherheitsziele und -strategie der Institution haben, werden systematisch analysiert und dokumentiert. Dazu zählen institutionseigene Faktoren wie z.B. vorhandene Institutionsstrategien, Werte und Institutionsziele; die Institutionsstruktur mit Hierarchien, Abteilungen und Zuständigkeitsbereichen; die in Ihrer Institution etablierte Prozesse und Arbeitsabläufe; vorhandene IT-Infrastruktur und Informationssysteme und die  Institutionskultur und Einstellungen zur Sicherheit."
+      "de": "Alle internen Faktoren, die einen Einfluss auf die Informationssicherheitsziele und -strategie der Institution haben, werden systematisch analysiert und dokumentiert. Dazu zählen institutionseigene Faktoren wie z.B. vorhandene Institutionsstrategien, Werte und Institutionsziele; die Institutionsstruktur mit Hierarchien, Abteilungen und Zuständigkeitsbereichen; die in Ihrer Institution etablierte Prozesse und Arbeitsabläufe; vorhandene IT-Infrastruktur und Informationssysteme und die Institutionskultur und Einstellungen zur Sicherheit."
      }
     }
    }

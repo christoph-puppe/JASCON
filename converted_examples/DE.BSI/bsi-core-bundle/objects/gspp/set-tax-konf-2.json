@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Konfiguration von Systemen"
@@ -8,39 +8,39 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-2-1",
-   "sequence": 10570
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.2",
-   "sequence": 10580
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.3",
    "sequence": 10590
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.2",
+   "sequence": 10600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.3",
+   "sequence": 10610
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-2-4",
-   "sequence": 10630
+   "sequence": 10650
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-2-5",
-   "sequence": 10660
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.6",
-   "sequence": 10670
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.7",
    "sequence": 10680
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.6",
    "sequence": 10690
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.9",
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.7",
    "sequence": 10700
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.8",
+   "sequence": 10710
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.2.9",
+   "sequence": 10720
   }
  ],
  "label": "2",

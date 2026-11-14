@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.1.1",
  "lifecycle": "active",
  "title": {
@@ -66,7 +66,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "gc.1.1-prm1": {
-     "alt-identifier": "80351189-6ffc-495e-a995-6219b9704724"
+     "alt-identifier": "1334b334-6fad-4595-97eb-3bb27c13e64b"
     }
    }
   }

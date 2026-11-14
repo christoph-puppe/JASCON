@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.8.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.8.3",
  "lifecycle": "active",
  "title": {
@@ -55,6 +55,7 @@
      "availability": "2",
      "authenticity": "0",
      "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.1",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
     }
@@ -63,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -84,7 +85,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "geb.8.3-prm1": {
-     "alt-identifier": "7fa6a340-5f12-41a3-b9df-a44dfcc6e0be"
+     "alt-identifier": "dea80b4b-8721-4173-90cb-cb0750b6cc9c"
     }
    }
   }

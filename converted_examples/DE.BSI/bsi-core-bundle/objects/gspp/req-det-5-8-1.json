@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/DET.5.8.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "DET.5.8.1",
  "lifecycle": "active",
  "title": {
@@ -68,7 +68,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -81,7 +81,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Öffentliche Quellen können Hinweise zu aktuellen Schwachstellen geben oder sogar auf die Vorbereitung von Angriffen geben, beispielsweise auf die Nachahmung von Webseiten oder Marken, sowie Typosquatting. Auch Datenleaks wie API-Keys oder falsch konfigurierte Cloud-Systeme können hierüber aufgedeckt werden.  Relevante öffentliche Quellen können z.B. Schwachstellendatenbanken, Fachmedien, Security Mailing Listen, Dark Web Foren, Code Repositories, Suchmaschinen oder Soziale Medien sein. Als Kriterien zur Auswahl können verschiedene Suchbegriffe oder Suchmuster herangezogen werden, z.B. Bezeichnungen verwendeter Betriebssysteme oder Komponenten, eigene DNS-Domains, E-Mailadressen, API-Schnittstellen, Markennamen.  Die Umsetzung kann durch eigenes Personal oder Threat Intelligence Dienstleister erfolgen."
+      "de": "Öffentliche Quellen können Hinweise zu aktuellen Schwachstellen geben oder sogar auf die Vorbereitung von Angriffen geben, beispielsweise auf die Nachahmung von Webseiten oder Marken, sowie Typosquatting. Auch Datenleaks wie API-Keys oder falsch konfigurierte Cloud-Systeme können hierüber aufgedeckt werden. Relevante öffentliche Quellen können z.B. Schwachstellendatenbanken, Fachmedien, Security Mailing Listen, Dark Web Foren, Code Repositories, Suchmaschinen oder Soziale Medien sein. Als Kriterien zur Auswahl können verschiedene Suchbegriffe oder Suchmuster herangezogen werden, z.B. Bezeichnungen verwendeter Betriebssysteme oder Komponenten, eigene DNS-Domains, E-Mailadressen, API-Schnittstellen, Markennamen. Die Umsetzung kann durch eigenes Personal oder Threat Intelligence Dienstleister erfolgen."
      }
     }
    }
@@ -89,10 +89,10 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "det.5.8.1-prm1": {
-     "alt-identifier": "42bf3e91-d270-4a79-8ae9-a22918f94ad7"
+     "alt-identifier": "fdf9a492-962e-4549-998a-2b4151f005e0"
     },
     "det.5.8.1-prm2": {
-     "alt-identifier": "42bf3e91-d270-4a79-8ae9-a22918f94ad7"
+     "alt-identifier": "44be6582-52ce-4345-95c2-ab3298cfe20c"
     }
    }
   }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.3.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.3.3.1",
  "lifecycle": "active",
  "title": {
@@ -66,7 +66,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -76,7 +76,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Der Einsatz einer automatischen Zugangskontrollanlage zur Authentifizierung von Personen dient primär dem Schutz von sensiblen Bereichen, vertraulichen Informationen und kritischer Infrastruktur. Durch diese Maßnahme kann sichergestellt werden, dass nur autorisierte Personen Zutritt zu geschützten Bereichen erhalten, wodurch das Risiko von Industriespionage, Datendiebstahl oder Sabotage erheblich reduziert werden kann. Ohne eine solche Kontrolle könnte es beispielsweise zu unbefugtem Zutritt durch Fremde kommen, die sich als Mitarbeiter ausgeben, oder zu einem \"Tailgating\"-Vorfall, bei dem Unbefugte autorisierten Personen unbemerkt folgen und sich so Zugang verschaffen.  Bei der Implementierung einer automatischen Zugangskontrollanlage kann eine mehrfaktorielle Authentifizierung in Betracht gezogen werden, die auf einer Kombination aus Besitz (z.B. Chipkarte, Token), Wissen (PIN-Code, Passwort) und/oder biometrischen Merkmalen (Fingerabdruck, Gesichtserkennung) basiert. Die Zugangsrechte können granular nach Personengruppen, Zeitfenstern und Bereichen differenziert werden, was die Sicherheit weiter erhöht. Für eine effektive Umsetzung kann die regelmäßige Überprüfung der Protokolle der Zugangskontrollanlage auf ungewöhnliche Aktivitäten hilfreich sein, ebenso wie regelmäßige Sensibilisierungsmaßnahmen für Mitarbeiter bezüglich der korrekten Nutzung der Anlage und der Vermeidung von Sicherheitslücken wie dem gemeinsamen Nutzen von Zugangsmitteln. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
+      "de": "Der Einsatz einer automatischen Zugangskontrollanlage zur Authentifizierung von Personen dient primär dem Schutz von sensiblen Bereichen, vertraulichen Informationen und kritischer Infrastruktur. Durch diese Maßnahme kann sichergestellt werden, dass nur autorisierte Personen Zutritt zu geschützten Bereichen erhalten, wodurch das Risiko von Industriespionage, Datendiebstahl oder Sabotage erheblich reduziert werden kann. Ohne eine solche Kontrolle könnte es beispielsweise zu unbefugtem Zutritt durch Fremde kommen, die sich als Mitarbeiter ausgeben, oder zu einem \"Tailgating\"-Vorfall, bei dem Unbefugte autorisierten Personen unbemerkt folgen und sich so Zugang verschaffen. Bei der Implementierung einer automatischen Zugangskontrollanlage kann eine mehrfaktorielle Authentifizierung in Betracht gezogen werden, die auf einer Kombination aus Besitz (z.B. Chipkarte, Token), Wissen (PIN-Code, Passwort) und/oder biometrischen Merkmalen (Fingerabdruck, Gesichtserkennung) basiert. Die Zugangsrechte können granular nach Personengruppen, Zeitfenstern und Bereichen differenziert werden, was die Sicherheit weiter erhöht. Für eine effektive Umsetzung kann die regelmäßige Überprüfung der Protokolle der Zugangskontrollanlage auf ungewöhnliche Aktivitäten hilfreich sein, ebenso wie regelmäßige Sensibilisierungsmaßnahmen für Mitarbeiter bezüglich der korrekten Nutzung der Anlage und der Vermeidung von Sicherheitslücken wie dem gemeinsamen Nutzen von Zugangsmitteln. Die Formulierung \"im Einklang mit den Festlegungen des Identitäts- und Berechtigungsmanagements\" bedeutet, dass die Authentifizierung so erfolgt, wie in der Praktik IDM festgelegt. Hierzu gehört insbesondere die Verwendung aktueller kryptographischer Verfahren, wie sie im Thema Kryptographie zu finden ist."
      }
     }
    }
@@ -84,7 +84,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "geb.3.3.1-prm1": {
-     "alt-identifier": "5bc938de-7123-4793-8ba4-3183c2264acf"
+     "alt-identifier": "67cda122-f79e-4dfd-8cad-37a4a5f0a4d4"
     }
    }
   }

@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.8",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.8",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.16.1",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.16.1",
  "lifecycle": "active",
  "title": {
-  "de": "Etablierte Algorithmen bei der Schlüsselnutzung"
+  "de": "Zertifizierungsstelle"
  },
  "statements": [
   {
@@ -14,17 +14,24 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE die ausschließliche Verwendung etablierter Algorithmen bei der Schlüsselnutzung verankern."
-   }
+    "de": "Berechtigung SOLLTE die Beglaubigung von Schlüsseln {param:ber.7.16.1-prm1} zuweisen."
+   },
+   "parameters": [
+    {
+     "name": "ber.7.16.1-prm1",
+     "type": "string",
+     "label": "einer zuständigen Person oder Rolle"
+    }
+   ]
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "verankern",
-     "result": "die ausschließliche Verwendung etablierter Algorithmen",
-     "result-specification": "bei der Schlüsselnutzung"
+     "action": "zuweisen",
+     "result": "die Beglaubigung von Schlüsseln",
+     "result-specification": "{{einer zuständigen Person oder Rolle}}"
     }
    }
   },
@@ -53,9 +60,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
+     "effort": 4,
      "tags": [
       "Cryptography"
      ]
@@ -66,8 +73,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Aktuelle etablierte Algorithmen sind in BSI TR-02102 zu finden. Für weitere Details zur Implementierung siehe Detailspezifikation kryptografischer Abläufe und Mechanismen des BSI."
+      "de": "Die Beglaubigung von Schlüsseln ist technisch komplex. Gleichzeitig hängt von ihr die Vertrauensstellung von Systemen und Anwendungen im Informationsverbund ab. Daher ist es sinnvoll diese Aufgabe konkret bestimmten Personen oder Rollen zuzuweisen."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.7.16.1-prm1": {
+     "alt-identifier": "61f66399-1a81-48a9-b3a9-8a54b7c1c2c2"
     }
    }
   }
@@ -75,7 +89,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "efea2ba5-e5b5-4344-9341-b87340dab114"
+   "value": "7b80290b-5c6d-4e39-857c-0a63a8e2543a"
   }
  ]
 }

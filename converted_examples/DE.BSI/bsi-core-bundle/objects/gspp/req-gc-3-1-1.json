@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.3.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.3.1.1",
  "lifecycle": "active",
  "title": {
@@ -43,7 +43,7 @@
      "sec-level": "normal-SdT",
      "effort": 0,
      "tags": [
-      "Compliance Management",
+      "Compliance-Management",
       "Inventories"
      ]
     }
@@ -53,7 +53,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Gesetzliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen, sind dokumentiert. Gesetzliche Verpflichtungen meint alle Pflichten, die sich unmittelbar aus dem Recht ergeben, inklusive des Verfassungsrechts, Europarechts und Verordnungen. Relevante gesetzliche Verpflichtungen können sich je nach Institution z. B. aus Grundrechten, Cyber Resilience Act, Data Act, Data Markets Act, NIS, DSGVO, BDSG, TKG, TDDDG oder GeschGehG ergeben. Hierbei werden Verpflichtungen, die sich mittelbar auswirken wie die Arbeitsstättenverordnung oder allgemeine Regelungen zur Fürsorgepflicht, auch beachtet."
+      "de": "Gesetzliche Verpflichtungen, welche die Verarbeitung von Informationen durch die Institution betreffen, sind dokumentiert. Gesetzliche Verpflichtungen meint alle Pflichten, die sich unmittelbar aus dem Recht ergeben, inklusive des Verfassungsrechts, Europarechts und Verordnungen. Relevante gesetzliche Verpflichtungen können sich je nach Institution z. B. aus Grundrechten, Cyber Resilience Act, Data Act, Digital Markets Act, NIS, DSGVO, BDSG, TKG, TDDDG oder GeschGehG ergeben. Hierbei werden Verpflichtungen, die sich mittelbar auswirken wie die Arbeitsstättenverordnung oder allgemeine Regelungen zur Fürsorgepflicht, auch beachtet."
      }
     }
    }

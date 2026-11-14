@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/baseline/erh-ht",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Baseline sec_level: erhöht"
@@ -503,31 +503,31 @@
    "sequence": 1240
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.21",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.22",
    "sequence": 1250
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.28",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.24",
    "sequence": 1260
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.30",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.25",
    "sequence": 1270
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.31",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1.2",
    "sequence": 1280
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1.2",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.7",
    "sequence": 1290
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.8",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.12",
    "sequence": 1300
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.6.7",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.7.7",
    "sequence": 1310
   },
   {

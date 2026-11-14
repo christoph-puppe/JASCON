@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.1.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.1.4",
  "lifecycle": "active",
  "title": {
@@ -47,6 +47,9 @@
      "availability": "1",
      "authenticity": "0",
      "threat-refs": [
+      "https://ns.bsi.bund.de/gspp/threat/G-0.5",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.6",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.7",
       "https://ns.bsi.bund.de/gspp/threat/G-0.18"
      ]
     }
@@ -55,7 +58,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -65,7 +68,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Wenn schützenswerte Räume wie Datenträgerarchive, Hostsysteme oder zentrale Infrastrukturen wie die Strom- und Netzversorgung in besonders exponierten Gebäudeteilen oder unter freiem Himmel lokalisiert werden, erhöht dies das Risiko für Ausfälle. Beispiele für gefährdete Bereiche sind ein überflutungsgefährdeter Keller, an der Gebäudekante direkt neben einer Bundesstraße oder an einer von Außen leicht einsehbaren Stelle. Welche Bereiche gefährdet sind kann oft von lokalen oder nationalen staatlichen Stellen bezogen werden.  Wenn der gesamte Standort besonders exponiert oder gefährdet ist, kann dies nur durch die Nutzung anderer Standorte umgesetzt werden."
+      "de": "Wenn schützenswerte Räume wie Datenträgerarchive, Hostsysteme oder zentrale Infrastrukturen wie die Strom- und Netzversorgung in besonders exponierten Gebäudeteilen oder unter freiem Himmel lokalisiert werden, erhöht dies das Risiko für Ausfälle. Beispiele für gefährdete Bereiche sind ein überflutungsgefährdeter Keller, an der Gebäudekante direkt neben einer Bundesstraße oder an einer von Außen leicht einsehbaren Stelle. Welche Bereiche gefährdet sind kann oft von lokalen oder nationalen staatlichen Stellen bezogen werden. Wenn der gesamte Standort besonders exponiert oder gefährdet ist, kann dies nur durch die Nutzung anderer Standorte umgesetzt werden."
      }
     }
    }

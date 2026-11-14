@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.14",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.14",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.15",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.15",
  "lifecycle": "active",
  "title": {
-  "de": "Schlüssel vor Ablauf prüfen"
+  "de": "Vorgehensweise nach Nutzung"
  },
  "statements": [
   {
@@ -14,24 +14,17 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE Schlüssel auf das baldige Auslaufen der Nutzungszeit {param:ber.6.14-prm1} überprüfen."
-   },
-   "parameters": [
-    {
-     "name": "ber.6.14-prm1",
-     "type": "string",
-     "label": "regelmäßig"
-    }
-   ]
+    "de": "Berechtigung SOLLTE eine Vorgehensweise zur Außerbetriebnahme geheimer Schlüssel , sobald sie nicht mehr benötigt werden, verankern."
+   }
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "überprüfen",
-     "result": "Schlüssel auf das baldige Auslaufen der Nutzungszeit",
-     "result-specification": "{{regelmäßig}}"
+     "action": "verankern",
+     "result": "eine Vorgehensweise zur Außerbetriebnahme geheimer Schlüssel",
+     "result-specification": ", sobald sie nicht mehr benötigt werden,"
     }
    }
   },
@@ -62,9 +55,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
+     "effort": 3,
      "tags": [
       "Cryptography"
      ]
@@ -75,15 +68,8 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Wird die Gültigkeit von Schlüsseln vor dem Auslaufen nicht überwacht, so könnten Schlüssel ungültig werden, wodurch Schnittstellen oder Anwendungen plötzlich nicht mehr verfügbar sein könnten. Läuft ein Schlüssel bald ab, obwohl der Zweck weiterhin bestehen bleibt, so ist es sinnvoll den Schlüssel rechtzeitig durch einen neuen zu ersetzen. Hierbei ist zu beachten, dass bei Schlüsselwechsel verschlüsselte Daten entschlüsselt und erneut verschlüsselt werden."
+      "de": "Werden Schlüssen nicht mehr benötigt, so ist es sinnvoll diese im Einklang mit den Anforderungen zur Löschung von Informationen außer Betrieb zu nehmen. Hierbei ist zu beachten, dass bei einem Schlüsselwechsel verschlüsselte Daten entschlüsselt und erneut verschlüsselt werden. Flüchtige Schlüssel sind nach der Sitzung umgehend zu löschen."
      }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.6.14-prm1": {
-     "alt-identifier": "681822fa-f526-4580-9436-7c7d4c94edf3"
     }
    }
   }
@@ -91,7 +77,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "681822fa-f526-4580-9436-7c7d4c94edf3"
+   "value": "4eb39607-cb0f-4dac-8a4c-5637fe5f3ab3"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.3.2"
   }
  ]
 }

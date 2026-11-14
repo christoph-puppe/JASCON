@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/ber-2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Identitätsmanagement"
@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.1",
-   "sequence": 7710
+   "sequence": 7700
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.2",
-   "sequence": 7720
+   "sequence": 7710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.3",
-   "sequence": 7730
+   "sequence": 7720
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.4",
-   "sequence": 7740
+   "sequence": 7730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.5",
-   "sequence": 7750
+   "sequence": 7740
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.2.6",
-   "sequence": 7760
+   "sequence": 7750
   }
  ],
  "label": "2",

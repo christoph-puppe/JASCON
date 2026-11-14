@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERF.4.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERF.4.1",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Monitoring-Evaluation MUSS Ergebnisse der Überprüfungen der  Eignung, Angemessenheit und Wirksamkeit des ISMS der Institution {param:perf.4.1-prm1} sowie anlassbezogen in einem Managementbericht dokumentieren."
+    "de": "Monitoring-Evaluation MUSS Ergebnisse der Überprüfungen der Eignung, Angemessenheit und Wirksamkeit des ISMS der Institution {param:perf.4.1-prm1} sowie anlassbezogen in einem Managementbericht dokumentieren."
    },
    "parameters": [
     {
@@ -30,7 +30,7 @@
    "by-statement": {
     "smt": {
      "action": "dokumentieren",
-     "result": "Ergebnisse der Überprüfungen der  Eignung, Angemessenheit und Wirksamkeit des ISMS der Institution",
+     "result": "Ergebnisse der Überprüfungen der Eignung, Angemessenheit und Wirksamkeit des ISMS der Institution",
      "result-specification": "{{regelmäßig}} sowie anlassbezogen in einem Managementbericht"
     }
    }
@@ -65,7 +65,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "perf.4.1-prm1": {
-     "alt-identifier": "f9cf8bd8-9a68-4294-9e33-ab7b4f28c68c"
+     "alt-identifier": "ed6e6c46-c341-42ac-8d7f-f2337c4d2c0a"
     }
    }
   }

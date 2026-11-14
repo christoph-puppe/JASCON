@@ -28,13 +28,16 @@ record byte for byte. Here:
     converter below. Each change names the text it replaces and fails
     loudly if that text is no longer there.
 
-Standard library only."""
+Standard library only; where jsonschema is installed, the pinned taxonomy
+schema is also run against payloads it must hold and must refuse."""
 import ast, collections, json, os, shutil, subprocess, sys, tempfile, unittest
+try: import jsonschema
+except ImportError: jsonschema = None
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
 NS = "https://ns.bsi.bund.de/gspp"
-CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/Dokumentation/namespaces/"
+CSV = "https://github.com/BSI-Bund/Stand-der-Technik-Bibliothek/tree/main/documentation/namespaces/"
 COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 REFERENCES = "https://ns.jascon.net/stdlib/facet/references@1"   # the standard facet for resources (backlog #82)
 def as_resources(back_matter):
@@ -419,7 +422,7 @@ class TheGrundschutzConverter(unittest.TestCase):
         self.assertIsNotNone(run["report"], "the reports are written before the run ends, so that it says why")
         return run
 
-    CLASS = ('tx=by(F_TAX); tx["class"]=c.get("class")', 'tx=by(F_TAX)')
+    CLASS = ('    if c.get("class") is not None: tx["class"]=c["class"]\n', '')
 
     def test_defect_a_value_that_is_lost_ends_the_run(self):
         run = self.refused([self.CLASS], "LEDGER UNACCOUNTED", "5 source value(s) unaccounted")
@@ -532,6 +535,77 @@ class TheGrundschutzConverter(unittest.TestCase):
         self.assertEqual([m["ref"] for o in objects.values() for m in o.get("members", []) if m["ref"] not in objects], [])
         self.assertEqual(back["links-that-are-a-relation-of-their-own-requirement"], back["links"])
         self.assertGreater(back["links-of-nested-controls"], 0)
+
+
+    # ---------------- the taxonomy schema, and the publisher's lists (v0.6; backlog #94) ----------------
+    def schema(self, run):
+        """the taxonomy schema the run pinned: (file name, descriptor)"""
+        entry = next(e for e in run["manifest"]["facet-schemas"] if e["id"] == "https://ns.bsi.bund.de/facet/gspp-taxonomy")
+        with open(os.path.join(run["out"], "bsi-core-bundle", entry["path"]), encoding="utf-8") as f: return entry, json.load(f)
+
+    def test_the_taxonomy_schema_is_typed_and_lists_the_publishers_levels(self):
+        entry, d = self.schema(self.plain)
+        self.assertEqual((entry["path"], d["version"]), ("schemas/gspp-taxonomy-1.1.0.json", "1.1.0"))
+        per = d["schema"]["properties"]["by-statement"]["additionalProperties"]
+        self.assertEqual(d["schema"]["additionalProperties"], False)
+        self.assertEqual(per["additionalProperties"], False)
+        self.assertEqual(sorted(per["properties"]), ["class", "effort", "sec-level", "tags"])
+        self.assertEqual(per["properties"]["sec-level"], {"enum": ["normal-SdT", "erhöht"]},
+                         "the two levels of the publisher's list, whatever the catalogue holds")
+        self.assertEqual(per["properties"]["effort"], {"type": "integer", "minimum": 0, "maximum": 5})
+        # the schema is the same whether the catalogue holds one level or both: it is not made from what is observed
+        one = catalogue()
+        for c, _, _ in controls_of(one): next(p for p in c["props"] if p["name"] == "sec_level")["value"] = "normal-SdT"
+        self.assertEqual(self.schema(self.convert(one))[1], d)
+
+    @unittest.skipUnless(jsonschema, "jsonschema is not installed")
+    def test_the_taxonomy_schema_holds_every_payload_and_refuses_what_it_does_not_list(self):
+        _, d = self.schema(self.plain)
+        v = jsonschema.Draft202012Validator(d["schema"])
+        payloads = [o["facets"][TAX] for o in self.plain["objects"].values() if TAX in o.get("facets", {})]
+        self.assertEqual(len(payloads), 5)
+        for p in payloads: self.assertEqual([e.message for e in v.iter_errors(p)], [])
+        good = payloads[0]["by-statement"]["smt"]
+        for bad in ({**good, "sec-level": "hoch"}, {**good, "effort": 6}, {**good, "effort": "2"}, {**good, "tags": []},
+                    {**good, "class": ""}, {**good, "documentation": ["x"]}):
+            self.assertTrue(list(v.iter_errors({"by-statement": {"smt": bad}})), bad)
+        self.assertTrue(list(v.iter_errors({"by-statement": {"smt": good}, "observed-sec-levels": "erhöht"})), "no member beside by-statement")
+
+    def test_a_level_the_publishers_list_does_not_hold_ends_the_run_and_nothing_is_written(self):
+        for name, value, said in (("sec_level", "hoch", "sec_level is 'hoch'"), ("effort_level", "6", "effort_level is '6'"),
+                                  ("effort_level", "zwei", "effort_level is 'zwei'")):
+            doc = catalogue()
+            next(p for p in controls_of(doc)[2][0]["props"] if p["name"] == name)["value"] = value
+            run = self.convert(doc)
+            self.assertNotEqual(run["done"].returncode, 0, f"{name}={value} went through")
+            self.assertIn("1 value(s) of sec_level or effort_level are outside the publisher's lists", run["done"].stderr)
+            self.assertIn(said, run["done"].stdout)
+            self.assertEqual((run["manifest"], run["ledger"], run["report"], run["objects"]), (None, None, None, {}), "nothing is written")
+
+    def test_defect_a_level_outside_the_list_that_is_let_through_gives_a_bundle_its_own_schema_refuses(self):
+        """without the check the run ends with 0 and the ledger has nothing to say: the pinned schema is what refuses"""
+        doc = catalogue()
+        next(p for p in controls_of(doc)[2][0]["props"] if p["name"] == "sec_level")["value"] = "hoch"
+        run = self.convert(doc, [('        if lv not in SEC_LEVELS: off_list.append((c["id"],"sec_level",lv))\n', '')])
+        self.assertEqual(run["done"].returncode, 0, run["done"].stderr[-400:])
+        self.assertEqual(run["ledger"]["totals"]["unaccounted"], 0)
+        if jsonschema:
+            v = jsonschema.Draft202012Validator(self.schema(run)[1]["schema"])
+            refused = [o["id"] for o in run["objects"].values() if TAX in o.get("facets", {}) and list(v.iter_errors(o["facets"][TAX]))]
+            self.assertEqual(refused, [f"{NS}/req/PR.1.1.2"])
+
+    def test_every_prop_of_a_name_in_another_namespace_ends_the_run(self):
+        """the publisher moved its lists between two catalogues; the run on the second ended with 0 and read nothing"""
+        doc = catalogue()
+        for c, _, _ in controls_of(doc):
+            for p in c["props"]:
+                if p["name"] == "tags": p["ns"] = p["ns"].replace("/documentation/", "/Dokumentation/")
+        run = self.refused([], "LEDGER WIRING 5 prop(s) named `tags` stand in a namespace this mapping is not written for",
+                           "the publisher has moved its list", source=doc)
+        self.assertEqual(run["ledger"]["totals"]["unaccounted"], 0, "every value is carried, so the gate alone lets it through")
+        self.assertNotIn("tags", self.req(run, "PR.1.2")["facets"][TAX]["by-statement"]["smt"])
+        # one prop of a name elsewhere, the others where the mapping reads them, is another prop and no failure (the odd catalogue has one)
+        self.assertEqual(self.odd["done"].returncode, 0)
 
 
 if __name__ == "__main__":

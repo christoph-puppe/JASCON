@@ -1,20 +1,20 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.6.16",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.6.16",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.5.12",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.5.12",
  "lifecycle": "active",
  "title": {
-  "de": "Vorgaben für die Schlüsselbeglaubigung"
+  "de": "Zugang nur durch zwei Personen"
  },
  "statements": [
   {
    "id": "smt",
-   "modality": "should",
+   "modality": "may",
    "obligated-parties": [
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE Vorgaben für die Schlüsselbeglaubigung verankern."
+    "de": "Berechtigung KANN die Aufteilung von Authentisierungsmitteln auf mehrere Personen verankern."
    }
   }
  ],
@@ -23,7 +23,7 @@
    "by-statement": {
     "smt": {
      "action": "verankern",
-     "result": "Vorgaben für die Schlüsselbeglaubigung"
+     "result": "die Aufteilung von Authentisierungsmitteln auf mehrere Personen"
     }
    }
   },
@@ -44,7 +44,9 @@
      "availability": "1",
      "authenticity": "0",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
      ]
     }
    }
@@ -52,12 +54,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Cryptography"
-     ]
+     "class": "BSI-Stand-der-Technik-Kernel",
+     "sec-level": "erhöht",
+     "effort": 5
     }
    }
   },
@@ -65,7 +64,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Je nach Umfang der Beglaubigungstätigkeit gehören hierzu z.B. Algorithmen, Zweckbindung, Nutzungsdauer, sowie prozessuale Vorgaben für Speicherung, Beantragung, Revocation, Erneuerung und Verfügbarkeit. Für Details siehe IETF RFC 3647."
+      "de": "Dient zur Absicherung des Zugriffs auf Daten, deren Vertraulichkeit oder Integrität als hoch einzuschätzen ist, nach dem Vier-Augen-Prinzip. Dazu kann z.B. Person #1 die ersten zehn Stellen eines Passwort kennen und Person #2 die hinteren zehn Stellen eines Passwortes. Oder aber Person #1 erhält einen Hardwaretoken, während Person #2 das Passwort kennt."
      }
     }
    }
@@ -74,7 +73,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "38cae0e5-8758-426c-b02f-07e7d585c475"
+   "value": "cc01c015-42f4-4e42-a986-ad7c954733db"
   }
  ]
 }

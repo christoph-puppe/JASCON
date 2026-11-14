@@ -1,10 +1,10 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.3.26",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.3.26",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.5.14",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.5.14",
  "lifecycle": "active",
  "title": {
-  "de": "Zwischenspeicherung von Zugangsdaten"
+  "de": "Kompromittierte Authentifizierungsmittel"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für IT-Systeme SOLLTE die Zwischenspeicherung der Zugangsdaten von Nutzern deaktivieren."
+    "de": "Berechtigung SOLLTE die Sperrung kompromittierter Authentifizierungsmittel verankern."
    }
   }
  ],
@@ -22,12 +22,8 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "deaktivieren",
-     "result": "die Zwischenspeicherung der Zugangsdaten",
-     "result-specification": "von Nutzern",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
+     "action": "verankern",
+     "result": "die Sperrung kompromittierter Authentifizierungsmittel"
     }
    }
   },
@@ -35,7 +31,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Inventar Berechtigungen"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -58,9 +54,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3
+     "effort": 1
     }
    }
   },
@@ -68,7 +64,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Wird die Zwischenspeicherung von Zugangsdaten auf IT-Systemen deaktiviert, so wird Angreifern deren Diebstahl erschwert. Kann unter Windows ab Server 2012 R2 durch Zuweisung aller Zugangskonten zur Gruppe \"Geschützte Benutzer\" (Protected Users) umgesetzt werden. Konten für Dienste und Computer brauchen nicht Mitglied von „Geschützte Nutzer“ sein."
+      "de": "Ein Authentifizierungsmittel gilt als kompromittiert, wenn Anzeichen bestehen, dass Unbefugte es nutzen oder Zugriff darauf gehabt haben könnten. Beispiele sind Passwörter, die durch Datenlecks öffentlich geworden sind, oder biometrische Merkmale (z. B. Fingerabdrücke), die Unbefugten vorliegen. In solchen Fällen ist das Authentifizierungsmittel zu sperren oder zu entziehen, etwa durch den Einsatz von Sperrlisten. Bei biometrischen Merkmalen besteht zusätzlich ein enger Bezug zu datenschutzrechtlichen Anforderungen, da diese Daten nicht einfach ausgetauscht werden können."
      }
     }
    }
@@ -77,7 +73,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "13d83a70-bce9-4027-8d4b-d16ee051cfd5"
+   "value": "7dbede94-beea-430f-b058-3ff2f9f6b90c"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/DET.5.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "DET.5.6",
  "lifecycle": "active",
  "title": {
@@ -61,7 +61,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 4,
      "tags": [
@@ -82,7 +82,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "det.5.6-prm1": {
-     "alt-identifier": "ff549367-0992-4b06-a2c0-246915632cb1"
+     "alt-identifier": "4946e859-e156-4fa5-a104-2caac380c1f5"
     }
    }
   }

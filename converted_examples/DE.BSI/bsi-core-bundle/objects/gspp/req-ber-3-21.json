@@ -1,20 +1,20 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.21",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.21",
  "lifecycle": "active",
  "title": {
-  "de": "Zugang nur durch zwei Personen"
+  "de": "Dienstekonten"
  },
  "statements": [
   {
    "id": "smt",
-   "modality": "may",
+   "modality": "should",
    "obligated-parties": [
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung KANN die Aufteilung von Authentisierungsmitteln auf mehrere Personen verankern."
+    "de": "Berechtigung für Hostsysteme SOLLTE eine automatische Verwaltung der Zugangsdaten von Dienste-Konten aktivieren."
    }
   }
  ],
@@ -22,8 +22,12 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "verankern",
-     "result": "die Aufteilung von Authentisierungsmitteln auf mehrere Personen"
+     "action": "aktivieren",
+     "result": "eine automatische Verwaltung der Zugangsdaten",
+     "result-specification": "von Dienste-Konten",
+     "target-object-categories": [
+      "Hostsysteme"
+     ]
     }
    }
   },
@@ -31,7 +35,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "IT-Betriebskonzept"
+      "Inventar Berechtigungen"
      ]
     }
    }
@@ -39,10 +43,10 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "0",
+     "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
       "https://ns.bsi.bund.de/gspp/threat/G-0.30",
@@ -54,9 +58,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5
+     "class": "BSI-Stand-der-Technik-Kernel",
+     "sec-level": "normal-SdT",
+     "effort": 4
     }
    }
   },
@@ -64,7 +68,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Dient zur Absicherung des Zugriffs auf Daten, deren Vertraulichkeit oder Integrität als hoch einzuschätzen ist, nach dem Vier-Augen-Prinzip. Dazu kann z.B. Person #1 die ersten zehn Stellen eines Passwort kennen und Person #2 die hinteren zehn Stellen eines Passwortes. Oder aber Person #1 erhält einen Hardwaretoken, während Person #2 das Passwort kennt."
+      "de": "Eine automatische Verwaltung der Zugangsdaten von Dienste-Konten bezeichnet in diesem Kontext die technische Fähigkeit, Passwörter, Schlüssel oder Tokens solcher Konten – im Englischen häufig als service accounts oder machine identities bezeichnet – durch spezialisierte Systeme ohne manuelles Eingreifen zu erzeugen, zu speichern, regelmäßig zu erneuern und kontrolliert zu verteilen. Zugangsdaten sind hierbei sämtliche Authentifizierungsinformationen, die einem Dienst ermöglichen, auf Ressourcen anderer Systeme zuzugreifen, beispielsweise API-Schlüssel, SSH-Keys oder Anmeldedaten für Datenbanken. Dienste-Konten werden meist von Applikationen, Hintergrunddiensten oder Automatisierungsprozessen genutzt und unterscheiden sich von personenbezogenen Benutzerkonten dadurch, dass sie keinem Individuum zugeordnet sind, sondern einem technischen Zweck dienen. Erfolgt bei Zugangskonten für automatisierte Dienste eine automatische Rotation von Passwörtern oder Anmeldezertifikaten, so werden statische Passwörter, die Ablage von Zugangsdaten auf Netzlaufwerken oder plötzliche Fehlfunktionen durch Zertifikatsablauf vermieden. Ihre automatische Verwaltung kann durch zentrale Passworttresore (password vaults), Identitätsmanagementsysteme (Identity and Access Management, IAM) oder Secret-Management-Lösungen realisiert werden."
      }
     }
    }
@@ -73,7 +77,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "cc01c015-42f4-4e42-a986-ad7c954733db"
+   "value": "403fac1f-a78a-4548-858e-a06168253dea"
   }
  ]
 }

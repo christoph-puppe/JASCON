@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.7.18",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.7.18",
  "lifecycle": "active",
  "title": {
-  "de": "Mobiltelefone in Sicherheitsbereichen"
+  "de": "Mobile Endgeräte in Sicherheitsbereichen"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Sensibilisierung für Nutzende von Mobiltelefonen KANN das Mitführen von Mobiltelefonen in Sicherheitsbereichen untersagen."
+    "de": "Sensibilisierung für Nutzende von Mobilen Endgeräten KANN das Mitführen von Endgeräten in Sicherheitsbereichen untersagen."
    }
   }
  ],
@@ -23,10 +23,10 @@
    "by-statement": {
     "smt": {
      "action": "untersagen",
-     "result": "das Mitführen von Mobiltelefonen in Sicherheitsbereichen",
+     "result": "das Mitführen von Endgeräten in Sicherheitsbereichen",
      "target-object-categories": [
       "Nutzende",
-      "Mobiltelefone"
+      "Mobile Endgeräte"
      ]
     }
    }
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -66,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Das Mitführen von Mobiltelefonen in besonders geschützten Bereichen kann untersagt werden, um das Risiko unbefugter Informationsabflüsse, unbeabsichtigter Datenaufzeichnungen oder unkontrollierter Funkübertragungen zu reduzieren. Mobiltelefone verfügen heute fast immer über hochauflösende Kameras, Mikrofone, GPS-Module und vielfältige Funktechnologien (z. B. LTE, WLAN, Bluetooth), die sowohl gezielt als auch unbeabsichtigt vertrauliche Informationen erfassen und weitergeben können. So könnte etwa ein Besuchender in einem Forschungsbereich versehentlich sensible Projektdaten fotografieren, oder ein infiziertes Gerät könnte über eine Funkverbindung Schadsoftware ins interne Netz einschleusen. Auch unbeabsichtigte Sprachaufzeichnungen in Besprechungen, die durch Assistenzfunktionen aktiviert werden, könnten sicherheitskritische Informationen in Cloud-Dienste übertragen. Das Verbot oder die Einschränkung des Mitführens in bestimmten Bereichen kann daher ein wirksames Mittel sein, um die Angriffsfläche für Spionage, Sabotage oder unkontrollierte Datenverbreitung deutlich zu verringern."
+      "de": "Das Mitführen von Endgeräten in besonders geschützten Bereichen kann untersagt werden, um das Risiko unbefugter Informationsabflüsse, unbeabsichtigter Datenaufzeichnungen oder unkontrollierter Funkübertragungen zu reduzieren. Mitführen meint hier, dass dort Endgeräte eingeführt werden, die nicht explizit für diesen Sicherheitsbereich autorisiert wurden, z.B. durch Smartphones in der Tasche, Smartwatches am Handgelenk oder Notebooks in einer Tragetasche. Mobile Endgeräte verfügen heute fast immer über hochauflösende Kameras, Mikrofone, GPS-Module und vielfältige Funktechnologien (z. B. LTE, WLAN, Bluetooth), die sowohl gezielt als auch unbeabsichtigt vertrauliche Informationen erfassen und weitergeben können. So könnte etwa ein Besuchender in einem Forschungsbereich versehentlich sensible Projektdaten fotografieren, oder ein infiziertes Gerät könnte über eine Funkverbindung Schadsoftware ins interne Netz einschleusen. Auch unbeabsichtigte Sprachaufzeichnungen in Besprechungen, die durch Assistenzfunktionen aktiviert werden, könnten sicherheitskritische Informationen in Cloud-Dienste übertragen. Das Verbot oder die Einschränkung des Mitführens in bestimmten Bereichen kann daher ein wirksames Mittel sein, um die Angriffsfläche für Spionage, Sabotage oder unkontrollierte Datenverbreitung deutlich zu verringern."
      }
     }
    }

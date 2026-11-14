@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/REA.2.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "REA.2.6",
  "lifecycle": "active",
  "title": {
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2
     }
@@ -65,7 +65,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Um einen Vorfall vollständig beheben zu können, ist es zweckmäßig, zunächst zu analysieren, wie der Vorfall zustande kam (Root Cause Analysis): Welche Personen und Systeme sind betroffen? Welche systematischen Schwachstellen haben zu dem Vorfall geführt? Die Behebung des Vorfalls orientiert sich dann an diesen Erkenntnissen, z.B. durch Schließen der Sicherheitslücken und Wiederherstellung von Daten und Anwendungen.  Je nach Vorfall kann die Behandlung durch das Schließen ausgenutzter Sicherheitslücken, einem Test anderer IT-Systeme auf vergleichbare Schwachstellen oder dem Austausch betroffener IT-Systeme, Anwendungen oder Datenbestände umgesetzt werden. Sind die Originaldaten oder -Systeme nicht mehr zu retten, so kann die Neuinstallation betroffener Systeme und die Wiederherstellung von Daten aus Backups eine Möglichkeit der Behandlung sein."
+      "de": "Um einen Vorfall vollständig beheben zu können, ist es zweckmäßig, zunächst zu analysieren, wie der Vorfall zustande kam (Root Cause Analysis): Welche Personen und Systeme sind betroffen? Welche systematischen Schwachstellen haben zu dem Vorfall geführt? Die Behebung des Vorfalls orientiert sich dann an diesen Erkenntnissen, z.B. durch Schließen der Sicherheitslücken und Wiederherstellung von Daten und Anwendungen. Je nach Vorfall kann die Behandlung durch das Schließen ausgenutzter Sicherheitslücken, einem Test anderer IT-Systeme auf vergleichbare Schwachstellen oder dem Austausch betroffener IT-Systeme, Anwendungen oder Datenbestände umgesetzt werden. Sind die Originaldaten oder -Systeme nicht mehr zu retten, so kann die Neuinstallation betroffener Systeme und die Wiederherstellung von Daten aus Backups eine Möglichkeit der Behandlung sein."
      }
     }
    }

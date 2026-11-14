@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BES.8.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BES.8.1",
  "lifecycle": "active",
  "title": {
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -70,7 +70,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Das Bereithalten alternativer Lieferanten kann dazu beitragen, Abhängigkeiten zu reduzieren und die Resilienz der Liefer- und Beschaffungskette zu erhöhen. Das ist insbesondere dann von großer Bedeutung, wenn ein einzelner, wichtiger Lieferant kurzfristig ausfällt – etwa durch Produktionsstörungen, Insolvenzen, Lieferengpässe, politische Sanktionen oder Cyberangriffe auf dessen Systeme. In solchen Fällen könnte die institutionseigene Versorgung mit kritischen Gütern oder Dienstleistungen gefährdet sein, was wiederum Ausfälle, Qualitätsmängel oder Vertragsstrafen nach sich ziehen könnte. Gerade bei sicherheitskritischen Komponenten, Spezialsoftware oder Ersatzteilen mit langen Vorlaufzeiten könnte das Fehlen einer zweiten Bezugsquelle zu erheblichen Betriebsunterbrechungen führen. Der Begriff „alternative Lieferanten“ meint in diesem Kontext qualifizierte Drittanbieter, die vergleichbare Produkte oder Leistungen in einer wirtschaftlich und technisch angemessenen Qualität und Menge wirksam bereitstellen können. „Angemessenheit“ bezieht sich hier auf den Grad, in dem ein alternativer Lieferant die Mindestanforderungen der Institution hinsichtlich Qualität, Sicherheit, Verfügbarkeit und Kompatibilität erfüllt, während „Wirksamkeit“ bedeutet, dass dieser im Bedarfsfall tatsächlich kurzfristig und ohne erhebliche Zusatzrisiken einspringen kann.  Zur praktischen Umsetzung kann eine Institution zunächst identifizieren, für welche Materialien, Systeme oder Services ein Ausfall besonders kritisch wäre, und für diese gezielt alternative Bezugsquellen evaluieren. Dazu kann gehören, eine Lieferantenliste mit geprüften Zweitanbietern zu pflegen, Rahmenverträge vorzubereiten oder vereinbarte Notfallmengen zu definieren, die im Bedarfsfall abgerufen werden können. Eine Möglichkeit ist es, Testbestellungen bei alternativen Anbietern durchzuführen, um Qualität, Liefergeschwindigkeit und Kommunikationswege zu erproben. Ebenso kann es hilfreich sein, technische Spezifikationen so zu gestalten, dass mehrere Anbieter kompatible Produkte liefern können, um Lock-in-Effekte zu vermeiden."
+      "de": "Das Bereithalten alternativer Lieferanten kann dazu beitragen, Abhängigkeiten zu reduzieren und die Resilienz der Liefer- und Beschaffungskette zu erhöhen. Das ist insbesondere dann von großer Bedeutung, wenn ein einzelner, wichtiger Lieferant kurzfristig ausfällt – etwa durch Produktionsstörungen, Insolvenzen, Lieferengpässe, politische Sanktionen oder Cyberangriffe auf dessen Systeme. In solchen Fällen könnte die institutionseigene Versorgung mit kritischen Gütern oder Dienstleistungen gefährdet sein, was wiederum Ausfälle, Qualitätsmängel oder Vertragsstrafen nach sich ziehen könnte. Gerade bei sicherheitskritischen Komponenten, Spezialsoftware oder Ersatzteilen mit langen Vorlaufzeiten könnte das Fehlen einer zweiten Bezugsquelle zu erheblichen Betriebsunterbrechungen führen. Der Begriff „alternative Lieferanten“ meint in diesem Kontext qualifizierte Drittanbieter, die vergleichbare Produkte oder Leistungen in einer wirtschaftlich und technisch angemessenen Qualität und Menge wirksam bereitstellen können. „Angemessenheit“ bezieht sich hier auf den Grad, in dem ein alternativer Lieferant die Mindestanforderungen der Institution hinsichtlich Qualität, Sicherheit, Verfügbarkeit und Kompatibilität erfüllt, während „Wirksamkeit“ bedeutet, dass dieser im Bedarfsfall tatsächlich kurzfristig und ohne erhebliche Zusatzrisiken einspringen kann. Zur praktischen Umsetzung kann eine Institution zunächst identifizieren, für welche Materialien, Systeme oder Services ein Ausfall besonders kritisch wäre, und für diese gezielt alternative Bezugsquellen evaluieren. Dazu kann gehören, eine Lieferantenliste mit geprüften Zweitanbietern zu pflegen, Rahmenverträge vorzubereiten oder vereinbarte Notfallmengen zu definieren, die im Bedarfsfall abgerufen werden können. Eine Möglichkeit ist es, Testbestellungen bei alternativen Anbietern durchzuführen, um Qualität, Liefergeschwindigkeit und Kommunikationswege zu erproben. Ebenso kann es hilfreich sein, technische Spezifikationen so zu gestalten, dass mehrere Anbieter kompatible Produkte liefern können, um Lock-in-Effekte zu vermeiden."
      }
     }
    }

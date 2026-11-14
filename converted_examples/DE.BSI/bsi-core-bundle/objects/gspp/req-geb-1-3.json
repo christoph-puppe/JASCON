@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.1.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.1.3",
  "lifecycle": "active",
  "title": {
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2
     }
@@ -66,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die gezielte Autorisierung von Standorten für die Stationierung von Assets kann dazu beitragen, dass Informationen und Systeme nur an physischen Orten verarbeitet oder aufbewahrt werden, die zuvor auf ihre Sicherheitsanforderungen hin geprüft wurden. So kann beispielsweise verhindert werden, dass sensible Server in unkontrollierten Räumen ohne Zutrittskontrolle oder redundante Stromversorgung betrieben werden – ein Fehlen dieser Maßnahmen könnte im Ernstfall zu Datenverlust bei einem Kurzschluss oder unbefugtem Zugriff durch Dritte führen. Ebenso kann die Prüfung und Freigabe durch eine zuständige Rolle dafür sorgen, dass neue Außenstellen erst dann in den Betrieb gehen, wenn etwa Brandmelde‑, Videoüberwachungs‑ oder Netzwerksicherheitsanforderungen erfüllt sind; andernfalls könnte eine unerkannte technische Schwachstelle in einem Zweigstellenrechner dazu führen, dass Schadcode sich ins gesamte Unternehmensnetz ausbreitet. Auch bei der Nutzung von Cloud‑ oder Colocation‑Rechenzentren kann eine formale Freigabe sicherstellen, dass vorab vertraglich vereinbarte Sicherheits- und Compliance‑Anforderungen – wie beispielsweise ISO‑27001‑Zertifizierung oder Verschlüsselung im Ruhezustand – tatsächlich gegeben sind, andernfalls könnte es zu Datenschutzverletzungen oder Regulierungsstrafen kommen.  Zur praktischen Umsetzung kann ein Standort‑Freigabeprozess definiert werden, der folgende Elemente enthält: eine Checkliste für physische Sicherheitskriterien (Zutrittskontrolle, Umwelt‑ und Brandschutz), eine technische Abnahmematrix (Netzwerksegmentierung, Monitoring, Backup‑Anbindung) sowie die Benennung einer verantwortlichen Person oder Rolle, die das Go‑No‑Go‑Entscheidungsrecht hält. Bei Änderungen am Standort oder an den Assets kann diese Rolle regelmäßige Reviews anstoßen, wodurch nachträgliche Kontrollen möglich werden. Automatisierte Workflow‑Tools können dabei unterstützen, Prüf‑ und Genehmigungsschritte nachvollziehbar zu dokumentieren und Eskalationspfade abzubilden."
+      "de": "Die gezielte Autorisierung von Standorten für die Stationierung von Assets kann dazu beitragen, dass Informationen und Systeme nur an physischen Orten verarbeitet oder aufbewahrt werden, die zuvor auf ihre Sicherheitsanforderungen hin geprüft wurden. So kann beispielsweise verhindert werden, dass sensible Server in unkontrollierten Räumen ohne Zutrittskontrolle oder redundante Stromversorgung betrieben werden – ein Fehlen dieser Maßnahmen könnte im Ernstfall zu Datenverlust bei einem Kurzschluss oder unbefugtem Zugriff durch Dritte führen. Ebenso kann die Prüfung und Freigabe durch eine zuständige Rolle dafür sorgen, dass neue Außenstellen erst dann in den Betrieb gehen, wenn etwa Brandmelde‑, Videoüberwachungs‑ oder Netzwerksicherheitsanforderungen erfüllt sind; andernfalls könnte eine unerkannte technische Schwachstelle in einem Zweigstellenrechner dazu führen, dass Schadcode sich ins gesamte Unternehmensnetz ausbreitet. Auch bei der Nutzung von Cloud‑ oder Colocation‑Rechenzentren kann eine formale Freigabe sicherstellen, dass vorab vertraglich vereinbarte Sicherheits- und Compliance‑Anforderungen – wie beispielsweise ISO‑27001‑Zertifizierung oder Verschlüsselung im Ruhezustand – tatsächlich gegeben sind, andernfalls könnte es zu Datenschutzverletzungen oder Regulierungsstrafen kommen. Zur praktischen Umsetzung kann ein Standort‑Freigabeprozess definiert werden, der folgende Elemente enthält: eine Checkliste für physische Sicherheitskriterien (Zutrittskontrolle, Umwelt‑ und Brandschutz), eine technische Abnahmematrix (Netzwerksegmentierung, Monitoring, Backup‑Anbindung) sowie die Benennung einer verantwortlichen Person oder Rolle, die das Go‑No‑Go‑Entscheidungsrecht hält. Bei Änderungen am Standort oder an den Assets kann diese Rolle regelmäßige Reviews anstoßen, wodurch nachträgliche Kontrollen möglich werden. Automatisierte Workflow‑Tools können dabei unterstützen, Prüf‑ und Genehmigungsschritte nachvollziehbar zu dokumentieren und Eskalationspfade abzubilden."
      }
     }
    }

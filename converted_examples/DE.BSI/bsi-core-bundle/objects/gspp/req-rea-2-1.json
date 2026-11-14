@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/REA.2.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "REA.2.1",
  "lifecycle": "active",
  "title": {
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2
     }
@@ -65,7 +65,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Triage ist ein strukturiertes Vorgehen zur Priorisierung und Ersteinschätzung von Sicherheitsvorfällen, mit dem Ziel, rasch und effizient auf Bedrohungen zu reagieren, Ressourcen gezielt einzusetzen und weitere Schäden zu minimieren. Dabei wird festgestellt, welche Vorfälle sofortige Aufmerksamkeit benötigen, welche weiter analysiert oder beobachtet werden oder irrelevante Fehlalarme sind. Kritische Vorfälle können z.B. ein Virenfund auf einem Server, Ransomwarevorfälle oder Spionage durch professionelle Täter sein. Die Umsetzung kann auch automatisiert durch EDR/SOAR geschehen.   Eine Erstreaktion ist eine schnelle Handlung, die dazu dient, weitere Schäden wie eine Ausbreitung von Angriffen oder Störungen in Geschäftsprozessen zu vermeiden. Sie kann z.B. in der Abschaltung betroffener Systeme, der Deaktivierung eines Zugangskonto, der Information Nutzender über eine Störung oder der Aktivierung eines Ausweichrechenzentrums bestehen."
+      "de": "Triage ist ein strukturiertes Vorgehen zur Priorisierung und Ersteinschätzung von Sicherheitsvorfällen, mit dem Ziel, rasch und effizient auf Bedrohungen zu reagieren, Ressourcen gezielt einzusetzen und weitere Schäden zu minimieren. Dabei wird festgestellt, welche Vorfälle sofortige Aufmerksamkeit benötigen, welche weiter analysiert oder beobachtet werden oder irrelevante Fehlalarme sind. Kritische Vorfälle können z.B. ein Virenfund auf einem Server, Ransomwarevorfälle oder Spionage durch professionelle Täter sein. Die Umsetzung kann auch automatisiert durch EDR/SOAR geschehen. Eine Erstreaktion ist eine schnelle Handlung, die dazu dient, weitere Schäden wie eine Ausbreitung von Angriffen oder Störungen in Geschäftsprozessen zu vermeiden. Sie kann z.B. in der Abschaltung betroffener Systeme, der Deaktivierung eines Zugangskonto, der Information Nutzender über eine Störung oder der Aktivierung eines Ausweichrechenzentrums bestehen."
      }
     }
    }

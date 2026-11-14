@@ -1,20 +1,20 @@
 {
- "id": "https://ns.bsi.bund.de/gspp/req/BER.3.28",
- "version": "2026-07-16T05:11:52.605669+00:00",
- "label": "BER.3.28",
+ "id": "https://ns.bsi.bund.de/gspp/req/BER.7.10",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "label": "BER.7.10",
  "lifecycle": "active",
  "title": {
-  "de": "Notfallzugang"
+  "de": "Abgelaufene Schlüssel"
  },
  "statements": [
   {
    "id": "smt",
-   "modality": "may",
+   "modality": "should",
    "obligated-parties": [
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung KANN Notfallzugangskonten installieren."
+    "de": "Berechtigung SOLLTE die Nutzung des Schlüssels zur Verschlüsselung oder Signierung nach Ablauf der Nutzungszeit untersagen."
    }
   }
  ],
@@ -22,8 +22,9 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "installieren",
-     "result": "Notfallzugangskonten"
+     "action": "untersagen",
+     "result": "die Nutzung des Schlüssels zur Verschlüsselung oder Signierung",
+     "result-specification": "nach Ablauf der Nutzungszeit"
     }
    }
   },
@@ -31,7 +32,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Inventar Berechtigungen"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -45,8 +46,8 @@
      "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.22"
      ]
     }
    }
@@ -54,12 +55,11 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
+     "class": "BSI-Stand-der-Technik-Kernel",
+     "sec-level": "normal-SdT",
      "effort": 1,
      "tags": [
-      "BCM",
-      "Privilegierte Rechte"
+      "Cryptography"
      ]
     }
    }
@@ -68,7 +68,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ein Notfallzugangskonto (sog. Break Glass Account) ist ein Zugang mit privilegierten Berechtigungen, der bei Notfällen als letztes Mittel zum Zugang zu wichtigen Systemen verwendet werden kann, z.B. Verzeichnisdienste, Cloud-Infrastrukturen. Es empfiehlt sich für diese Konten die Verwendung langer Passwörter und die Aufbewahrung dieser z.B. in einem Safe oder aufgeteilt auf mehrere Administrierende."
+      "de": "Schlüssel dürfen nach Ablauf der Nutzungszeit nur noch zur Entschlüsselung oder Signaturprüfung alter Daten verwendet werden. Bei automatisierter Schlüsselnutzung ist der Schlüssel zu deaktivieren, bei manueller Schlüsselnutzung ist den Nutzenden weitere Verwendung des Schlüssels zu verbieten."
      }
     }
    }
@@ -77,7 +77,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "abdd8f32-ec02-491a-a39b-7b0b25a597ca"
+   "value": "f9429a00-a0c2-434c-89d5-cb768d87a192"
   }
  ]
 }

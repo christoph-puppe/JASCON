@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/REA.2.5.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "REA.2.5.3",
  "lifecycle": "active",
  "title": {
@@ -61,7 +61,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -79,7 +79,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "rea.2.5.3-prm1": {
-     "alt-identifier": "ef31b4b8-5e5d-46fc-9baa-237808678a6d"
+     "alt-identifier": "34176f7c-1671-44e9-8d1d-9a6085c1f4a0"
     }
    }
   }
