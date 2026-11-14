@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.19";
+const JSC_BUILD = "0.9.20";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -1774,6 +1774,170 @@ function jscDraftMemberReport(objs) {
 /* The DRAFT lines as the reference prints them, after the two reports. */
 const jscDraftLines = drafts => drafts.map(e => ({ kind: "note", rule: "DRAFT-1", object: e.id,
   text: `${e.id}: an active Set lists ${e.count} draft member(s) (DRAFT-1: a draft may be used; nothing fails)` }));
+
+/* ---------- WITHDRAWN-1: an object in force leans on a withdrawn one (backlog #93) ----------
+   The handbook has said since 1.0.0 that new references to a withdrawn
+   object fail validation. A validator reads one set and takes the state of
+   an object as the set holds it: a bundle put together before the
+   withdrawal holds the object as it was and stays valid. Held: the edges
+   below, on an object whose own lifecycle is not `withdrawn` (a Risk: on a
+   live one). Not held: `replaces`, `canonical-alias` and `relations`, which
+   keep the record; the members of a Set, which lists what its catalogue
+   withdrew; an Assessment, a Finding and an Attestation, which record what
+   was found or signed at a time; a Risk's treatments, which are RISK-11's;
+   facet payloads.
+   -> [{ id, edge, ref }], the objects in the order of their ids, the edges
+   in the order of the table, the entries in the order of the document. */
+const JSC_WITHDRAWN_RULES = {
+  "WITHDRAWN-1": "an object in force does not lean on a withdrawn one - what a Tailoring selects, excludes or changes, " +
+    "what a Mapping joins, what a Component claims or contains, what an Implementation answers, what a " +
+    "Check tests and what a live Risk is about is not withdrawn in the bundle that holds both",
+};
+const JSC_WITHDRAWN_EDGES = {     // type -> [[the array the entries are in, or null; the member; the edge's name in a message]]
+  tailoring: [["selects", "set-ref", "selects set-ref"], ["excludes", "ref", "excludes ref"], ["operations", "requirement-ref", "operation requirement-ref"]],
+  mapping: [[null, "source-ref", "source-ref"], [null, "target-ref", "target-ref"]],
+  component: [["capabilities", "requirement-ref", "capability requirement-ref"], ["members", "component-ref", "member component-ref"]],
+  implementation: [[null, "component-ref", "component-ref"], [null, "requirement-ref", "requirement-ref"],
+    ["satisfied-by", "inherited-from/component-ref", "inherited-from component-ref"]],
+  check: [[null, "requirement-ref", "requirement-ref"]],
+  risk: [[null, "component-refs", "component-refs"], [null, "tailoring-refs", "tailoring-refs"]],
+};
+function jscWithdrawnReferences(objs) {
+  const gone = new Set([...objs].filter(([, r]) => r.obj.lifecycle === "withdrawn").map(([id]) => id));
+  const out = [];
+  if (!gone.size) return out;
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    if (!Object.prototype.hasOwnProperty.call(JSC_WITHDRAWN_EDGES, type) || obj.lifecycle === "withdrawn") continue;
+    if (type === "risk" && !jscRiskIsLive(obj)) continue;
+    for (const [arr, member, edge] of JSC_WITHDRAWN_EDGES[type]) {
+      for (const entry of (arr === null ? [obj] : (Array.isArray(obj[arr]) ? obj[arr] : []))) {
+        let v = entry;
+        for (const part of member.split("/")) v = jscIsPlainObject(v) ? v[part] : undefined;
+        for (const ref of (Array.isArray(v) ? v : [v])) if (typeof ref === "string" && gone.has(ref)) out.push({ id, edge, ref });
+      }
+    }
+  }
+  return out;
+}
+const jscWithdrawnReferenceErrors = objs => jscWithdrawnReferences(objs)
+  .map(e => `${e.id}: ${e.edge} names ${e.ref}, which is withdrawn (WITHDRAWN-1: ${JSC_WITHDRAWN_RULES["WITHDRAWN-1"]})`);
+
+/* ---------- FRAGMENT-1: what a reference of the form #id names (backlog #82; D9) ----------
+   An object refers to something as `#id` in two forms: `(#id)` in a string
+   at any depth, and the whole of a string that begins with `#` under a
+   member named `href`. A `private:` facet is not read, under `facets` or
+   under an Assessment's `method`. The first kind that fits is counted, in
+   this order:
+   resource   an entry of `resources` with that `id`, in the references@1
+              facet of the object itself or of a Set that lists it as a
+              member, directly or through nested Sets;
+   object     an object of the set whose id ends, after its last `/`, in
+              that id - A to Z compared as a to z;
+   statement  `<object>_<statement id>`, split at one of its `_`;
+   parameter  the `name` of a parameter of a statement in the set;
+   source     the `uuid` of an entry of the manifest's provenance.sources.
+   What names nothing is listed, in the order of the object ids and then of
+   the ids named. Nothing fails by it.
+   -> { total, resource, object, statement, parameter, source, nothing: [[object id, id]] } */
+const JSC_REFERENCES_FACET = "https://ns.jascon.net/stdlib/facet/references@1";
+const JSC_FRAGMENT_RULES = {
+  "FRAGMENT-1": "a reference of the form #id names a resource the bundle carries, an object, a statement, a parameter " +
+    "or a source document of the manifest; the ones that name nothing are reported",
+};
+const JSC_FRAGMENT_KINDS = ["resource", "object", "statement", "parameter", "source"];
+/* A to Z as a to z, and no other character changed */
+const jscAsciiLower = s => s.replace(/[A-Z]/g, c => String.fromCharCode(c.charCodeAt(0) + 32));
+function jscFragmentsOf(o) {
+  const out = [];
+  const walk = (x, key) => {
+    if (Array.isArray(x)) for (const v of x) walk(v, key);
+    else if (jscIsPlainObject(x)) for (const k of Object.keys(x)) walk(x[k], k);
+    else if (typeof x === "string") {
+      if (key === "href" && x.startsWith("#") && x.length > 1) out.push(x.slice(1));
+      for (const m of x.matchAll(/\(#([^) \t\r\n]+)\)/g)) out.push(m[1]);
+    }
+  };
+  for (const k of Object.keys(o)) {
+    if ((k === "facets" || k === "method") && jscIsPlainObject(o[k])) {     // an Assessment's method has facet ids for keys too (D10)
+      for (const fid of Object.keys(o[k])) if (!fid.startsWith("private:")) walk(o[k][fid], fid);
+    } else walk(o[k], k);
+  }
+  return out;
+}
+function jscFragmentReport(objs, manifest) {
+  const parents = new Map(), own = new Map(), tail = new Map(), stmts = new Map(), params = new Set();
+  for (const [id, { type, obj }] of objs) {
+    if (type === "requirementSet") {
+      for (const m of (Array.isArray(obj.members) ? obj.members : [])) {
+        if (!jscIsPlainObject(m)) continue;
+        if (!parents.has(m.ref)) parents.set(m.ref, []);
+        parents.get(m.ref).push(id);
+      }
+    }
+    const payload = jscIsPlainObject(obj.facets) ? obj.facets[JSC_REFERENCES_FACET] : undefined;
+    const res = jscIsPlainObject(payload) && Array.isArray(payload.resources) ? payload.resources : [];
+    own.set(id, new Set(res.filter(r => jscIsPlainObject(r) && typeof r.id === "string").map(r => r.id)));
+    const seg = id.slice(id.lastIndexOf("/") + 1);
+    if (seg) { const k = jscAsciiLower(seg); if (!tail.has(k)) tail.set(k, []); tail.get(k).push(id); }
+    if (type === "requirement") {
+      const ss = new Set();
+      for (const st of (Array.isArray(obj.statements) ? obj.statements : [])) {
+        if (!jscIsPlainObject(st)) continue;
+        ss.add(st.id);
+        for (const pd of (Array.isArray(st.parameters) ? st.parameters : [])) if (jscIsPlainObject(pd)) params.add(pd.name);
+      }
+      stmts.set(id, ss);
+    }
+  }
+  const prov = jscIsPlainObject(manifest) && jscIsPlainObject(manifest.provenance) ? manifest.provenance : {};
+  const sources = new Set((Array.isArray(prov.sources) ? prov.sources : []).filter(e => jscIsPlainObject(e) && typeof e.uuid === "string").map(e => e.uuid));
+  const inReach = id => {
+    const seen = new Set([id]), todo = [id], found = new Set();
+    while (todo.length) {
+      const cur = todo.pop();
+      for (const x of own.get(cur) || []) found.add(x);
+      for (const p of parents.get(cur) || []) if (!seen.has(p)) { seen.add(p); todo.push(p); }
+    }
+    return found;
+  };
+  const namesStatement = x => {
+    for (let k = 0; k < x.length; k++) {
+      if (x[k] !== "_") continue;
+      const rest = x.slice(k + 1);
+      if ((tail.get(jscAsciiLower(x.slice(0, k))) || []).some(c => stmts.has(c) && stmts.get(c).has(rest))) return true;
+    }
+    return false;
+  };
+  const r = { total: 0, nothing: [] };
+  for (const k of JSC_FRAGMENT_KINDS) r[k] = 0;
+  for (const id of [...objs.keys()].sort()) {
+    const named = jscFragmentsOf(objs.get(id).obj);
+    if (!named.length) continue;
+    const reach = inReach(id), missing = [];
+    for (const x of named) {
+      r.total++;
+      if (reach.has(x)) r.resource++;
+      else if (tail.has(jscAsciiLower(x))) r.object++;
+      else if (namesStatement(x)) r.statement++;
+      else if (params.has(x)) r.parameter++;
+      else if (sources.has(x)) r.source++;
+      else missing.push(x);
+    }
+    for (const x of missing.sort()) r.nothing.push([id, x]);
+  }
+  return r;
+}
+/* The FRAGMENT lines as the reference prints them: the count, where there is a reference at all, and one note for
+   each that names nothing. */
+function jscFragmentLines(r) {
+  if (!r.total) return [];
+  return [{ kind: "note", rule: "FRAGMENT-1", object: null,
+    text: `fragments: ${r.total} reference(s) of the form #id: ${r.resource} to a resource, ${r.object} to an object, ${r.statement} to a statement, ` +
+      `${r.parameter} to a parameter, ${r.source} to a source document, ${r.nothing.length} to nothing (FRAGMENT-1)` },
+    ...r.nothing.map(([id, x]) => ({ kind: "note", rule: "FRAGMENT-1", object: id,
+      text: `${id}: #${x} names nothing the bundle carries (FRAGMENT-1: reported; nothing fails)` }))];
+}
 
 /* ====================================================================
    Who decided, and when: what the pages and the imports write
@@ -4152,6 +4316,7 @@ async function jscCheckGraph(g, verified, opts) {
   }
   const verify = trusted ? { envelopes, trusted } : null;
   pass("reference", "error")(jscClosureErrors(objs));
+  pass("lifecycle", "error")(jscWithdrawnReferenceErrors(objs));       // WITHDRAWN-1 (backlog #93)
   const pinnedSchemas = new Map(), pinnedDecl = new Map();
   for (const f of g.facetSchemas) {
     if (!f.def || !f.def.id) continue;
@@ -4227,11 +4392,14 @@ async function jscCheckGraph(g, verified, opts) {
   const authors = await jscAuthorReport(objs, verify), review = asOf ? jscReviewReport(objs, asOf) : null;
   /* DRAFT-1 (backlog #86): an active Set that lists draft members. A note, with any switch. */
   const drafts = jscDraftMemberReport(objs);
-  const lines = [...jscAuthorReviewLines(authors, review || { dated: 0, overdue: [], "not-evaluable": [] }, asOf, requireAuthors), ...jscDraftLines(drafts)];
-  const areaOf = { "REVIEW-1": "review", "DRAFT-1": "lifecycle" };
+  /* FRAGMENT-1 (backlog #82): what the references of the form #id name, over what the manifest lists. A note, with any switch. */
+  const fragments = jscFragmentReport(new Map([...objs].filter(([, r]) => !jscRulesBeside(r))), g.manifest);
+  const lines = [...jscAuthorReviewLines(authors, review || { dated: 0, overdue: [], "not-evaluable": [] }, asOf, requireAuthors), ...jscDraftLines(drafts),
+    ...jscFragmentLines(fragments)];
+  const areaOf = { "REVIEW-1": "review", "DRAFT-1": "lifecycle", "FRAGMENT-1": "reference" };
   for (const l of lines) add(l.kind === "error" ? "error" : "note", areaOf[l.rule] || "author", l.object, l.object ? strip(l.text) : l.text);
   return { findings, types, tiers, coverage: cov.report, signatures, packs, binds,
-    report: { "as-of": asOf, "require-authors": requireAuthors, authors, review, drafts, lines } };
+    report: { "as-of": asOf, "require-authors": requireAuthors, authors, review, drafts, fragments, lines } };
 }
 const jscRulesBeside = r => r.type === "attestation" && !r.entry;
 const jscRulesKeptPacks = jscRulesCore ? jscRulesCore.jscKeptPacks : g => jscKeptPacks(g);
@@ -4247,6 +4415,8 @@ if (typeof module !== "undefined" && module.exports) {
     jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
     JSC_DRAFT_RULES, jscDraftMemberReport, jscDraftLines,
+    JSC_WITHDRAWN_RULES, JSC_WITHDRAWN_EDGES, jscWithdrawnReferences, jscWithdrawnReferenceErrors,
+    JSC_REFERENCES_FACET, JSC_FRAGMENT_RULES, jscAsciiLower, jscFragmentsOf, jscFragmentReport, jscFragmentLines,
     JSC_HISTORY_RULES, jscHistoryErrors, jscFacetStatementAddresses, JSC_STDLIB_VERSIONS,
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, JSC_ASSESSMENT_CRITERIA, jscManualMethod, jscIsAppMethodBefore0913, jscRewriteAppMethod, jscTailoringDutyErrors, jscAttestationVerdict,

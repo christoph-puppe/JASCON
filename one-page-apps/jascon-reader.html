@@ -922,6 +922,49 @@ function closureErrors(objs) {
   }
   return errs;
 }
+/* ---------- WITHDRAWN-1: an object in force leans on a withdrawn one (v1.19.0; backlog #93) ----------
+   withdrawn_references of validate_core.py, ported whole. The handbook has said since 1.0.0 that new
+   references to a withdrawn object fail validation; since 2026-11-14 the validators hold it. A bundle
+   is read as it is: the state of an object is the state this bundle holds it in. Held, on an object
+   whose own lifecycle is not `withdrawn` (a Risk: one that is not retired either): the edges of the
+   table. Not held: `replaces`, `canonical-alias` and `relations`, which keep the record; the members
+   of a Set, which lists what its catalogue withdrew; an Assessment, a Finding and an Attestation,
+   which record what was found or signed at a time; a Risk's treatments, which are RISK-11's (not
+   ported to this page); facet payloads.
+   `objs`: the objects of the bundle. -> [message], in the reference's words and in its order: the
+   objects by their ids, the edges in the order of the table, the entries in the order of the document */
+const WITHDRAWN_RULE = "an object in force does not lean on a withdrawn one - what a Tailoring selects, excludes or changes, " +
+  "what a Mapping joins, what a Component claims or contains, what an Implementation answers, what a " +
+  "Check tests and what a live Risk is about is not withdrawn in the bundle that holds both";
+const WITHDRAWN_EDGES = {     // type -> [[the array the entries are in, or null; the member; the edge's name in a message]]
+  tailoring: [["selects", "set-ref", "selects set-ref"], ["excludes", "ref", "excludes ref"], ["operations", "requirement-ref", "operation requirement-ref"]],
+  mapping: [[null, "source-ref", "source-ref"], [null, "target-ref", "target-ref"]],
+  component: [["capabilities", "requirement-ref", "capability requirement-ref"], ["members", "component-ref", "member component-ref"]],
+  implementation: [[null, "component-ref", "component-ref"], [null, "requirement-ref", "requirement-ref"],
+    ["satisfied-by", "inherited-from/component-ref", "inherited-from component-ref"]],
+  check: [[null, "requirement-ref", "requirement-ref"]],
+  risk: [[null, "component-refs", "component-refs"], [null, "tailoring-refs", "tailoring-refs"]],
+};
+function withdrawnReferences(objs) {
+  const list = (objs || []).filter(isRecord), byId = new Map(list.map(o => [o.id, o]));
+  const gone = new Set(list.filter(o => o.lifecycle === "withdrawn").map(o => o.id)), out = [];
+  if (!gone.size) return out;
+  for (const id of [...byId.keys()].sort()) {
+    const o = byId.get(id), ty = inferType(o);
+    if (!Object.prototype.hasOwnProperty.call(WITHDRAWN_EDGES, ty) || o.lifecycle === "withdrawn") continue;
+    if (ty === "risk" && o.state === "retired") continue;
+    for (const [arr, member, edge] of WITHDRAWN_EDGES[ty]) {
+      for (const entry of (arr === null ? [o] : (Array.isArray(o[arr]) ? o[arr] : []))) {
+        let v = entry;
+        for (const part of member.split("/")) v = isRecord(v) ? v[part] : undefined;
+        for (const ref of (Array.isArray(v) ? v : [v])) if (typeof ref === "string" && gone.has(ref)) out.push([id, edge, ref]);
+      }
+    }
+  }
+  return out;
+}
+const withdrawnReferenceErrors = objs => withdrawnReferences(objs)
+  .map(([id, edge, ref]) => `${id}: ${edge} names ${ref}, which is withdrawn (WITHDRAWN-1: ${WITHDRAWN_RULE})`);
 /* The keys of `facets` and of `method` that no facet registers, object by object and for one object
    `facets` before `method`: the order of facet_errors in validate_core.py (v1.17.0; until 1.16.0 the
    page listed the methods of all objects and then the facets of all objects). */
@@ -944,7 +987,7 @@ const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join(
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.18.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.19.0", READER_BUILD = "2026-11-14";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -1262,7 +1305,7 @@ function indexBundle() {
           manifest's order, against the standard library and the facet schemas this manifest pins. A key no
           facet registers is reported in the reference's words. The payloads are not checked here. */
     const listedObjs = state.order.map(id => state.objects.get(id)).filter(r => r && r.entry).map(r => r.obj);
-    state.closureErrors = closureErrors(listedObjs);
+    state.closureErrors = [...closureErrors(listedObjs), ...withdrawnReferenceErrors(listedObjs)];     // WITHDRAWN-1 since 1.19.0
     for (const e of state.closureErrors) l.err(e);
     state.listedErrors = listedAttestationErrors([...state.objects.values()].filter(r => r.entry).map(r => r.obj));
     for (const e of state.listedErrors) l.err(e);
@@ -1421,7 +1464,7 @@ function renderOverview() {
       state.listedErrors.map(e => `<div class="verdict-bad" data-listed-error>✗ ${esc(e)}</div>`).join("")));
     rows.push(kvRow("attestations beside the manifest", besideSummaryHtml(tally)));
     if (state.closureErrors.length) rows.push(kvRow("references", state.closureErrors.map(e => `<div class="verdict-bad" data-closure-error>✗ ${esc(e)}</div>`).join("") +
-      `<div class="hint">a reference the kernel requires to resolve inside the bundle, or to resolve to one type: either fails the bundle in a validator</div>`));
+      `<div class="hint">a reference the kernel requires to resolve inside the bundle, or to resolve to one type, or one by which an object in force leans on a withdrawn one (WITHDRAWN-1): each fails the bundle in a validator</div>`));
     if (state.methodErrors.length) rows.push(kvRow("methods of assessments", state.methodErrors.map(e => `<div class="verdict-bad" data-method-error>✗ ${esc(e)}</div>`).join("") +
       `<div class="hint">an Assessment's method is a facet payload (D10): a key no facet registers fails the bundle in a validator</div>`));
     if (state.facetErrors.length) rows.push(kvRow("facets of objects", state.facetErrors.map(e => `<div class="verdict-bad" data-facet-error>✗ ${esc(e)}</div>`).join("") +
@@ -2877,7 +2920,7 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
     }
   }
   const pins = pinnedFacets(manifest, path => { const f = files.find(x => x.name === path); return f && new TextDecoder().decode(f.bytes); });
-  for (const e of [...closureErrors(objs), ...facetAndMethodKeyErrors(objs, pins)]) { l.err("in this export — " + e); files.fails.push(e); }
+  for (const e of [...closureErrors(objs), ...withdrawnReferenceErrors(objs), ...facetAndMethodKeyErrors(objs, pins)]) { l.err("in this export — " + e); files.fails.push(e); }
   return files;
 }
 /* what the last line of an export says about the Attestations: those it wrote, and those of the loaded bundle it did not */
@@ -2903,7 +2946,7 @@ async function exportWorkspaceBundle() {
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   (files.fails.length ? l.err : l.ok)(`workspace bundle exported: ${files.listed} objects + content-manifest with both digests${exportAttestationNote(files)} (${(zip.length / 1024).toFixed(1)} kB zip) — loads back into this reader and ` +
     (files.fails.length ? `validate_core.py fails it: ${files.fails.length} line(s) above say why`
-      : "nothing fails in what this page checks (closure-required references and what they resolve to, facet and method keys, Attestations); it runs no kernel schema and checks no facet payload"));
+      : "nothing fails in what this page checks (closure-required references and what they resolve to, references to a withdrawn object, facet and method keys, Attestations); it runs no kernel schema and checks no facet payload"));
 }
 /* The approver of a Deviation (v1.12.0; backlog #70): required by the kernel, and named by a person.
    The field starts empty, for every Deviation anew, and not from the author either: a pre-filled

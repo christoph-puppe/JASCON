@@ -111,7 +111,7 @@ const P = (() => {
   assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
   return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty,
     canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState, listedAttestationErrors,
-    STDLIB_FACETS, facetHome, methodKeyErrors, facetKeyErrors, facetAndMethodKeyErrors, closureErrors, manualMethod, isEarlierWorkbenchMethod };`)();
+    STDLIB_FACETS, facetHome, methodKeyErrors, facetKeyErrors, facetAndMethodKeyErrors, closureErrors, withdrawnReferences, withdrawnReferenceErrors, manualMethod, isEarlierWorkbenchMethod };`)();
 })();
 
 /* ---------- 1. the pin vectors ---------- */
@@ -1550,7 +1550,7 @@ test("an export never lists an Attestation: it is written beside the manifest, a
     /* the manifest is new, so what bound another one with unchanged subjects is a Semantic Match: the page says so when it writes, and the reference says the same of the export */
     const SEMANTIC = `binds: ${att.id} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`;
     assert.ok(x.log.includes("in this export — " + SEMANTIC + "\n"), x.log.slice(-900));
-    assert.match(x.log, /workspace bundle exported: 3 objects \+ content-manifest with both digests \+ 1 Attestation\(s\) beside the manifest, not listed \(D3\.1\) \([\d.]+ kB zip\) — loads back into this reader and nothing fails in what this page checks \(closure-required references and what they resolve to, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
+    assert.match(x.log, /workspace bundle exported: 3 objects \+ content-manifest with both digests \+ 1 Attestation\(s\) beside the manifest, not listed \(D3\.1\) \([\d.]+ kB zip\) — loads back into this reader and nothing fails in what this page checks \(closure-required references and what they resolve to, references to a withdrawn object, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
     await R.load(x.dir);
     shown = await R.attested();
     assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest, a.line]), [["semantic-match", "false", "other", SEMANTIC]]);
@@ -2008,7 +2008,7 @@ test("the method on the page: the Assess workbench states a manual assessment un
     assert.deepEqual(Object.keys(written).sort(), ["id", "lifecycle", "method", "performer-ref", "result", "subject-refs", "time", "title", "version"], "and nothing on it names the tool");
     assert.equal(wm.provenance.converter, "jascon-reader.html " + (await page.locator("#pill-version").innerText()).split(" · ")[0], "the manifest does");
     assert.doesNotMatch(await R.log(), /in this export — .* method '/);
-    assert.match(await R.log(), /workspace bundle exported: 3 objects .* — loads back into this reader and nothing fails in what this page checks \(closure-required references and what they resolve to, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
+    assert.match(await R.log(), /workspace bundle exported: 3 objects .* — loads back into this reader and nothing fails in what this page checks \(closure-required references and what they resolve to, references to a withdrawn object, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
     if (REFERENCE) { const ref = referenceMethods(workbench); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [true, [], [], []], ref.line); }
 
     /* 2. The folders as they lie. The example folder's three Assessments state their method under the standard facet;
@@ -2399,4 +2399,45 @@ test("the keys of facets on the page: each key says where its facet is registere
     assert.deepEqual(exportFails(log), [err(REQ.id, BAD)]);
     assert.match(log, /validate_core\.py fails it: 1 line\(s\) above say why$/m);
     if (REFERENCE) { const ref = referenceFailures(out); assert.deepEqual([ref.ok, ref.failures], [false, [err(REQ.id, BAD)]], ref.line); }
+  }));
+
+/* ---------- 18. WITHDRAWN-1: an object in force leans on a withdrawn one (v1.19.0; backlog #93) ---------- */
+/* withdrawn_references of the reference is ported whole, so every vector is decided here. `expected` lists
+   [object id, edge, id of the withdrawn object]; the sentence is the reference's. */
+const WITHDRAWN = json("jascon/conformance/lifecycle-vectors.json")["withdrawn-references"];
+test("WITHDRAWN-1: each of the 16 vectors gets the reference's entries from the page's own function, in its order, and its sentence", () => {
+  assert.equal(WITHDRAWN.length, 16);
+  for (const c of WITHDRAWN) {
+    assert.deepEqual(P.withdrawnReferences(c.objects), c.expected, c.name);
+    const errs = P.withdrawnReferenceErrors(c.objects);
+    assert.equal(errs.length, c.expected.length, c.name);
+    errs.forEach((e, i) => assert.ok(e.startsWith(`${c.expected[i][0]}: ${c.expected[i][1]} names ${c.expected[i][2]}, which is withdrawn (WITHDRAWN-1: an object in force does not lean on a withdrawn one - `), `${c.name}: ${e}`));
+  }
+  assert.deepEqual(P.withdrawnReferences([]), []);
+  assert.deepEqual(P.withdrawnReferences(null), []);
+});
+test("a loaded bundle that holds a requirement as withdrawn: what leans on it fails in the reference's words, in the overview and the console; the bundle as committed has no such line",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1", IS_W1 = e => /, which is withdrawn \(WITHDRAWN-1: /.test(e);
+    await R.load(EXAMPLES);
+    await R.view("overview");
+    assert.equal(await page.locator("#ov-kv [data-closure-error]").count(), 0, "the example folder as committed has no such line");
+    const copy = path.join(R.tmp, "withdrawn-load", "examples");
+    fs.cpSync(EXAMPLES, copy, { recursive: true });
+    const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === KONF);
+    const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+    obj.lifecycle = "withdrawn";
+    const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+    fs.writeFileSync(path.join(copy, entry.path), bytes);
+    Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+    fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+    await R.load(copy);
+    await R.view("overview");
+    const shown = (await page.locator("#ov-kv [data-closure-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, ""));
+    assert.ok(shown.length >= 2 && shown.every(IS_W1), shown.join("\n"));
+    assert.ok(shown.some(e => e.includes(": requirement-ref names " + KONF)) && shown.some(e => e.includes(": source-ref names " + KONF)), "the Implementation that answers it and the Mapping that joins it");
+    const errs = await page.locator("#log > div.l-err").evaluateAll(l => l.map(x => x.textContent));
+    for (const e of shown) assert.ok(errs.some(x => x.endsWith(e)), "the console says it as an error: " + e);
+    if (REFERENCE) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures.filter(IS_W1), shown, "the reference's lines, word for word and in its order"); }
   }));

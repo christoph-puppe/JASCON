@@ -644,6 +644,34 @@ and in `readme.md`; this file says only what is done and what is next.
   the import's report (`provenance-source`) and the manifest of the set
   keeps the provenance it came with.
 
+- An object in force that leans on a withdrawn one is an error, and what
+  the references of the form `#id` name is reported (build 0.9.20; backlog
+  #93 and #82, rules WITHDRAWN-1 and FRAGMENT-1 of `validate_core.py`).
+  `jscWithdrawnReferences` reads twelve named edges of a Tailoring, a
+  Mapping, a Component, an Implementation, a Check and a live Risk whose
+  own lifecycle is not `withdrawn`, and gives one entry for each that
+  names an object the set holds as withdrawn; `jscCheckGraph` files each
+  as an error of the area `lifecycle`. Lineage, relations, the members of
+  a Set, and an Assessment, a Finding and an Attestation are not read.
+  `jscFragmentReport` takes each `(#id)` in a string and each `href` that
+  begins with `#`, outside `private:` facets, and counts the first kind
+  that fits: a resource of references@1 in reach of the object, an object
+  by the end of its id (A to Z as a to z), a statement, a parameter, a
+  source document of the manifest. `jscCheckGraph` returns it as
+  `report.fragments` and adds notes of the area `reference`: the count,
+  and one line for each reference that names nothing.
+
+  The Validate page's block "Authors" holds AUTHOR lines only. Since
+  build 0.9.17 it had also shown and counted DRAFT-1 lines; those and the
+  FRAGMENT-1 lines stand as notes of their areas in the list below.
+
+  Measured: the sixteen `withdrawn-references` vectors of the family
+  `lifecycle` and the fourteen `fragment-references` vectors of the family
+  `reference` give what they expect; a whole set made of one vector of
+  each gets the error and the notes in the reference's words; the IFA
+  bundle reports one reference, to a source document. 191 tests of the
+  app's suite pass.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written

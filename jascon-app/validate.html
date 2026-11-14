@@ -206,7 +206,9 @@ function render() {
      A note carries the reference's prefix; an AUTHOR line the user requires is shown as the error it is. */
   const rep = last.report, isReview = l => l.rule === "REVIEW-1";
   const line = l => `<div class="mono ${l.kind === "error" ? "verdict-bad" : l.kind === "summary" ? "" : "hint"}" style="font-size:11.5px;margin:2px 0" data-line="${l.kind}" data-rule="${esc(l.rule)}">${esc((l.kind === "note" ? "note: " : l.kind === "error" ? "error: " : "") + l.text)}</div>`;
-  const authorLines = rep.lines.filter(l => !isReview(l)), reviewLines = rep.lines.filter(isReview);
+  /* since build 0.9.20 the block holds AUTHOR lines only: a DRAFT-1 or FRAGMENT-1 line is a note of its own area in the list below,
+     and until then a DRAFT-1 line was counted here among the authors */
+  const authorLines = rep.lines.filter(l => /^AUTHOR-/.test(l.rule)), reviewLines = rep.lines.filter(isReview);
   const reports = `<div id="report-author"><div><b>${esc(T("Authors: {n} line(s)", { n: authorLines.length }))}</b> <span class="hint">${esc(T(rep["require-authors"] ? "required: a line is an error" : "not required: a line is a note"))}</span></div>
       ${authorLines.map(line).join("") || `<div class="hint">${esc(T("Nothing is missing: every record the rules ask about names its author and its day."))}</div>`}</div>
     <div id="report-review" style="margin-top:8px"><div><b>${esc(T("Review dates as of {day}: {n} line(s)", { day: rep["as-of"], n: reviewLines.length }))}</b> <span class="hint">${esc(T("never an error"))}</span></div>

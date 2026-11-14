@@ -325,6 +325,49 @@ test("lifecycle: an active Set that lists draft members is reported, and nothing
     [["note", v[0].expected[0][0], "an active Set lists 1 draft member(s) (DRAFT-1: a draft may be used; nothing fails)"]]);
   assert.deepEqual(res.report.lines.filter(l => l.rule === "DRAFT-1"), rules.jscDraftLines(res.report.drafts));
 });
+test("lifecycle: an object in force that leans on a withdrawn one is an error, edge by edge (WITHDRAWN-1)", async () => {
+  const v = vectors("lifecycle")["withdrawn-references"];
+  assert.equal(v.length, 16);
+  for (const c of v) {
+    const objs = authorTyped(c), got = rules.jscWithdrawnReferences(objs);
+    assert.deepEqual(got.map(e => [e.id, e.edge, e.ref]), c.expected, c.name);
+    const errors = rules.jscWithdrawnReferenceErrors(objs);
+    assert.equal(errors.length, c.expected.length, c.name);
+    errors.forEach((m, i) => assert.ok(m.startsWith(`${c.expected[i][0]}: ${c.expected[i][1]} names ${c.expected[i][2]}, which is withdrawn (WITHDRAWN-1: `), `${c.name}: ${m}`));
+  }
+  /* the edges of the table are those the vectors expect, and no other */
+  const named = new Set(v.flatMap(c => c.expected.map(e => e[1])));
+  assert.deepEqual([...named].sort(), Object.values(rules.JSC_WITHDRAWN_EDGES).flat().map(e => e[2]).filter((x, i, a) => a.indexOf(x) === i).sort());
+  /* as part of the check of a whole set: an error of the area `lifecycle`, filed under the object that leans */
+  const file = obj => ({ path: "objects/" + obj.id.split("/").slice(-2).join("-") + ".json", text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin: "imported" });
+  const g = core.jscGraphFrom(v[0].objects.map(file));
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
+  const found = res.findings.filter(f => f.area === "lifecycle");
+  assert.deepEqual(found.map(f => [f.kind, f.object]), [["error", v[0].expected[0][0]]]);
+  assert.ok(found[0].message.startsWith(`requirement-ref names ${v[0].expected[0][2]}, which is withdrawn (WITHDRAWN-1: `), found[0].message);
+});
+test("reference: what the references of the form #id name, kind by kind, and which name nothing (FRAGMENT-1)", async () => {
+  const v = vectors("reference")["fragment-references"];
+  assert.equal(v.length, 14);
+  for (const c of v) {
+    const report = rules.jscFragmentReport(authorTyped(c), c.manifest);
+    assert.deepEqual(report, c.expected, c.name);
+    const lines = rules.jscFragmentLines(report);
+    assert.equal(lines.length, report.total ? 1 + report.nothing.length : 0, c.name);
+    for (const l of lines) assert.ok(l.kind === "note" && l.rule in rules.JSC_FRAGMENT_RULES, `${c.name}: ${l.text}`);
+  }
+  assert.equal(rules.jscAsciiLower("AC-2(1) ÄZ"), "ac-2(1) Äz", "A to Z only: a letter outside ASCII keeps its case");
+  /* as part of the check of a whole set: notes of the area `reference`, and no error */
+  const c = v.find(x => x.name === "a-statement-as-object-underscore-statement-id-and-one-the-object-does-not-have");
+  const file = obj => ({ path: "objects/" + obj.id.split("/").slice(-2).join("-") + ".json", text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin: "imported" });
+  const g = core.jscGraphFrom(c.objects.map(file));
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
+  assert.deepEqual(res.report.fragments, c.expected);
+  assert.deepEqual(res.findings.filter(f => f.area === "reference").map(f => [f.kind, f.object, f.message]), [
+    ["note", null, "fragments: 2 reference(s) of the form #id: 0 to a resource, 0 to an object, 1 to a statement, 0 to a parameter, 0 to a source document, 1 to nothing (FRAGMENT-1)"],
+    ["note", c.expected.nothing[0][0], "#ac-2_smt.z names nothing the bundle carries (FRAGMENT-1: reported; nothing fails)"]]);
+  assert.deepEqual(res.report.lines.filter(l => l.rule === "FRAGMENT-1"), rules.jscFragmentLines(res.report.fragments));
+});
 test("author: a review-due that has passed on the day asked about (REVIEW-1)", () => {
   const v = vectors("author")["review-vectors"];
   assert.equal(v.length, 22);
@@ -443,7 +486,10 @@ test("a whole set: the two reports are part of the check; AUTHOR lines fail only
   assert.equal(plain.report["require-authors"], false);
   assert.equal(plain.report.authors.length, 7);   // 7 since the converter pre-fills from the source (backlog #69); 10 before
   assert.deepEqual(plain.report.review, rules.jscReviewReport(g.objects, "2026-11-13"));
-  assert.deepEqual(plain.report.lines, rules.jscAuthorReviewLines(await rules.jscAuthorReport(g.objects), rules.jscReviewReport(g.objects, "2026-11-13"), "2026-11-13", false));
+  /* the author and review lines, then the one FRAGMENT-1 line of this bundle: a link names the source document it came from */
+  assert.deepEqual(plain.report.lines, [...rules.jscAuthorReviewLines(await rules.jscAuthorReport(g.objects), rules.jscReviewReport(g.objects, "2026-11-13"), "2026-11-13", false),
+    ...rules.jscFragmentLines(plain.report.fragments)]);
+  assert.deepEqual(plain.report.fragments, { total: 1, nothing: [], resource: 0, object: 0, statement: 0, parameter: 0, source: 1 });
   assert.deepEqual([of(plain, "author", "note").length, of(plain, "author", "error").length], [7, 0], "a missing author is a line of the report");
   assert.deepEqual([of(plain, "review", "note").length, of(plain, "review", "error").length], [3, 0], "the summary and the two overdue reviews");
   const errorsBefore = plain.findings.filter(f => f.kind === "error").length;
@@ -452,7 +498,8 @@ test("a whole set: the two reports are part of the check; AUTHOR lines fail only
   assert.deepEqual([of(strict, "author", "note").length, of(strict, "author", "error").length], [0, 7], "required: every AUTHOR line is a failure");
   assert.deepEqual([of(strict, "review", "note").length, of(strict, "review", "error").length], [3, 0], "REVIEW-1 fails nothing, with any switch");
   assert.equal(strict.findings.filter(f => f.kind === "error").length, errorsBefore + 7, "nothing else changes");
-  assert.ok(strict.report.lines.filter(l => l.rule !== "REVIEW-1").every(l => l.kind === "error") && strict.report.lines.filter(l => l.rule === "REVIEW-1").every(l => l.kind !== "error"));
+  const never = l => l.rule === "REVIEW-1" || l.rule === "FRAGMENT-1";     // reports that fail nothing, with any switch
+  assert.ok(strict.report.lines.filter(l => !never(l)).every(l => l.kind === "error") && strict.report.lines.filter(never).every(l => l.kind !== "error"));
   /* the day asked about decides what is overdue: due on that day is not overdue, the day after it is */
   const overdueOn = async day => (await rules.jscCheckGraph(g, verified, { asOf: day })).report.review.overdue.map(e => e.day);
   assert.deepEqual(await overdueOn("2023-06-23"), []);
