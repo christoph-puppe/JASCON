@@ -157,15 +157,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-14.1",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-14.1",
-    "mode": "merged-into",
-    "label": "SA-14(1)",
-    "title": "Critical Components with No Viable Alternative Sourcing"
-   }
-  ]
- }
+ ]
 }

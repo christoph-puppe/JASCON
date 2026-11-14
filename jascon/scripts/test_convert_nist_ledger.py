@@ -17,12 +17,14 @@ an unaccounted value ends with 1. Held here:
   - every source value has one of five outcomes, none is unaccounted, no
     claim fails, and the run ends with 0;
   - what the author's list of losses names is in the written bundle, counted
-    from the files: the `assessment-for` links, a withdrawn control without
-    a successor, the label of a withdrawn control as the source gives it for
-    a reader, the formal ODP labels, the document metadata, `merge.as-is`;
-  - what is not in the bundle is no content by a rule of one of three kinds,
-    or one of the drops that were declared before that rule, each with a
-    reading for the author;
+    from the files: the `assessment-for` links, every withdrawn control as an
+    object with the label the source gives it for a reader (E1) and, where it
+    names a successor, a statement made from its links (R2), the formal ODP
+    labels, the document metadata and uuid, `merge.as-is`, a profile's import
+    and the resource it names (E3, E4);
+  - what is not in the bundle is no content by a checked rule: a name that
+    selects, a namespace, an id that is rebuilt, an orphaned resource (E4);
+    no drop is declared (the author's decisions of 2026-11-14);
   - the gate is the last statement of the converter;
   - deliberate defects, each put into a copy of the converter or of the
     catalogue, end the run with 1: a value that is lost, a rule that does
@@ -46,14 +48,7 @@ F_COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
 PROFILES = ("LOW", "MODERATE", "HIGH", "PRIVACY")
 LEDGER = "sp800-53-conversion-ledger.json"
 OUTCOMES = ("copied", "transformed", "not-content", "intentionally-dropped", "unaccounted")
-# the reasons of the drops that were declared before 2026-11-14 and stay declared: how each begins
-DECLARED_BEFORE = ("path map: a withdrawn control is dropped as a tombstone",
-                   "path map: the print label of a statement item is derivable",
-                   "path map: profile resolution mechanics",
-                   "as decided for IFA on 2026-11-13: a back-matter resource or an import link",
-                   "as decided for IFA on 2026-11-13: the uuid of a source document")
-WITH = " - of a value that is dropped: "
-RES_A, RES_B, RES_C = (f"00000000-0000-4000-8000-00000000000{x}" for x in "abc")
+RES_A, RES_B, RES_C, RES_D = (f"00000000-0000-4000-8000-00000000000{x}" for x in "abce")
 
 
 def labels(plain, padded):
@@ -116,6 +111,7 @@ def invented_catalogue():
     c2 = {"id": "c-2", "class": "SP800-53", "title": "Second",
           "props": labels("C-2", "C-02") + [{"name": "sort-id", "value": "c-02"},
                                              {"name": "implementation-level", "ns": RMF, "value": "organization"}],
+          "links": [{"href": f"#{RES_D}", "rel": "reference"}],          # a resource without a link (E14)
           "parts": [{"id": "c-2_smt", "name": "statement", "prose": "Keep it."},
                     {"id": "c-2_gdn", "name": "guidance", "prose": "Nothing to add."}]}
     def withdrawn(cid, plain, padded, links=(), parts=()):
@@ -146,7 +142,8 @@ def invented_catalogue():
              "rlinks": [{"href": "https://paper.example/1"}]},
             {"uuid": RES_B, "title": "The catalogue as a document",
              "rlinks": [{"href": "https://paper.example/catalogue.pdf", "media-type": "application/pdf"}]},
-            {"uuid": RES_C, "title": "A paper nobody cites", "rlinks": [{"href": "https://paper.example/3"}]}]}}}
+            {"uuid": RES_C, "title": "A paper nobody cites", "rlinks": [{"href": "https://paper.example/3"}]},
+            {"uuid": RES_D, "title": "A paper without an address"}]}}}
 
 def invented_profile(name):
     return {"profile": {
@@ -201,26 +198,25 @@ def what_the_authors_list_names(catalogue, objects):
     controls = list(source_controls(catalogue))
     withdrawn = [c for c in controls if is_withdrawn(c)]
     reqs = {o["id"]: o for o in objects.values() if "statements" in o}
-    replaced = {}                                    # URI of a withdrawn control -> the labels its annotations give
-    for o in objects.values():
-        for e in (o.get("annotations") or {}).get("nist-withdrawal", []): replaced.setdefault(e["ref"], set()).add(e["label"])
+    gone = [r for r in reqs.values() if r["lifecycle"] == "withdrawn"]
     uri = lambda c: f"{NS}/req/{c['id'].upper()}"
     source = {
         "assessment-for links": sum(1 for c in controls for p in source_parts(c) for l in p.get("links", []) or []
                                     if l["rel"] == "assessment-for"),
-        "withdrawn controls": len(withdrawn),
-        "withdrawn controls that name no successor": sorted(c["id"] for c in withdrawn if not c.get("links")),
-        "labels of withdrawn controls that name a successor": sorted(plain_label(c) for c in withdrawn if c.get("links")),
+        "withdrawn controls": sorted(uri(c) for c in withdrawn),
+        "labels of withdrawn controls": sorted(plain_label(c) for c in withdrawn),
+        "withdrawn controls a successor names": sorted(uri(c) for c in withdrawn if c.get("links")),
         "formal ODP labels": sorted(p["value"] for c in controls for pm in c.get("params", []) or []
                                     for p in pm.get("props", []) if p["name"] == "label" and p.get("class") == "sp800-53a"),
     }
     written = {
         "assessment-for links": sum(len(o.get("assessment-for", [])) for r in reqs.values()
                                     for o in objectives((r.get("facets") or {}).get(F_53A, {}))),
-        "withdrawn controls": len(replaced) + sum(1 for r in reqs.values() if r["lifecycle"] == "withdrawn"),
-        "withdrawn controls that name no successor": sorted(c["id"] for c in withdrawn
-                                                            if reqs.get(uri(c), {}).get("lifecycle") == "withdrawn"),
-        "labels of withdrawn controls that name a successor": sorted(l for ls in replaced.values() for l in ls),
+        "withdrawn controls": sorted(r["id"] for r in gone),
+        "labels of withdrawn controls": sorted(r["label"] for r in gone),
+        # a successor's `replaces` names an object with lifecycle `withdrawn`
+        "withdrawn controls a successor names": sorted({e["ref"] for o in objects.values() for e in o.get("replaces", [])
+                                                        if reqs.get(e["ref"], {}).get("lifecycle") == "withdrawn"}),
         "formal ODP labels": sorted(a["sp800-53a-label"] for r in reqs.values()
                                     for a in (r.get("facets") or {}).get(F_ODP, {}).get("params", {}).values()
                                     if "sp800-53a-label" in a),
@@ -327,10 +323,9 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         source, written = what_the_authors_list_names(invented_catalogue()["catalog"], self.objects)
         self.assertEqual(source, written)
         self.assertEqual(source["assessment-for links"], 3)
-        self.assertEqual(source["withdrawn controls"], 3)
-        self.assertEqual(source["withdrawn controls that name no successor"], ["w-3"])
+        self.assertEqual(source["withdrawn controls"], [f"{NS}/req/W-{i}" for i in (1, 2, 3)])
         # the label of a withdrawn control is the one the source gives for a reader, not the zero-padded one
-        self.assertEqual(source["labels of withdrawn controls that name a successor"], ["W-1", "W-2"])
+        self.assertEqual(source["labels of withdrawn controls"], ["W-1", "W-2", "W-3"])
         self.assertEqual(source["formal ODP labels"], ["C-01(01)_ODP", "C-01_ODP"])
         # the links as the source states them: a statement, the statement part as a whole, a statement of another control
         seen = {o["id"]: o.get("assessment-for") for o in objectives(self.req("c-1")["facets"][F_53A])}
@@ -339,34 +334,57 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(self.report["assessment-for"]["links"], 3)
         self.assertEqual(sorted(self.report["assessment-for"]["names"].values()), [1, 1, 1])
 
-    def test_backlog_41_a_withdrawn_control_without_a_successor_is_an_object_with_the_sources_own_status(self):
-        w3 = self.req("w-3")
-        self.assertEqual({k: w3[k] for k in ("id", "label", "lifecycle", "title")},
-                         {"id": f"{NS}/req/W-3", "label": "W-3", "lifecycle": "withdrawn", "title": {"en": "Withdrawn W-3"}})
-        self.assertEqual(w3["statements"], [{"id": "smt", "modality": "unspecified",        # it states no obligation
-                                             "obligated-parties": [f"{NS}/party/organization"],
-                                             "prose": {"en": "Addressed elsewhere."}}])
-        self.assertIn({"ref": f"{NS}/req/W-3", "sequence": 40}, self.objects["objects/set/family-g.json"]["members"])
-        self.assertEqual(self.outcomes("groups[].controls[].props[].value").get("intentionally-dropped"), 2,
-                         "the status of w-1 and w-2, which name a successor, stays the drop it was declared as; w-3's is its lifecycle")
-        self.assertEqual({o["lifecycle"] for o in self.objects.values()}, {"active", "withdrawn"})
-        self.assertEqual(self.report["withdrawn"]["objects"], ["w-3"])
-        self.assertEqual(self.report["objects-emitted"], {"requirements": 4, "sets": 6, "requirements-in-force": 3,
-                                                          "requirements-withdrawn": 1})
-        # a control in force is still read as `must`
+    def test_backlog_41_E1_R2_every_withdrawn_control_is_an_object_and_its_statement_is_made_from_its_links(self):
+        party = [f"{NS}/party/organization"]
+        for cid, prose in (("w-1", "Incorporated into C-1a."),       # a link to a statement item: control label + item label
+                           ("w-2", "Moved to C-2."),
+                           ("w-3", "Addressed elsewhere.")):        # the source's own statement
+            w = self.req(cid)
+            self.assertEqual({k: w[k] for k in ("id", "label", "lifecycle", "title")},
+                             {"id": f"{NS}/req/{cid.upper()}", "label": cid.upper(), "lifecycle": "withdrawn",
+                              "title": {"en": f"Withdrawn {cid.upper()}"}})
+            self.assertEqual(w["statements"], [{"id": "smt", "modality": "unspecified", "obligated-parties": party,
+                                                "prose": {"en": prose}}], cid)
+            self.assertNotIn("annotations", w)
+        # the place by sort-id in the family Set; the successor's `replaces` names the object
+        self.assertEqual(self.objects["objects/set/family-g.json"]["members"][3:],
+                         [{"ref": f"{NS}/req/W-{i}", "sequence": 30 + 10 * i} for i in (1, 2, 3)])
+        self.assertEqual(self.req("c-1")["replaces"], [{"ref": f"{NS}/req/W-1", "mode": "merged-into"}])
+        self.assertEqual(self.req("c-2")["replaces"], [{"ref": f"{NS}/req/W-2", "mode": "renamed"}])
+        self.assertFalse(any("annotations" in o for o in self.objects.values()), "the nist-withdrawal annotation is gone")
+        # the status is the lifecycle by a named rule; the links are read into the statement and the successor
+        rules = self.rules()
+        self.assertEqual(rules["lifecycle from the status the source states: `withdrawn`, the kernel's own word"], 3)
+        self.assertEqual(sum(n for r, n in rules.items() if r.startswith("the statement of a withdrawn control")), 2 * 2)
+        self.assertEqual(self.report["lifecycle-default"],
+                         {"value": "active", "origin": "converter-default", "objects": 3 + 6, "source-states": 3})
+        self.assertEqual(self.report["objects-emitted"], {"requirements": 6, "sets": 6, "requirements-in-force": 3,
+                                                          "requirements-withdrawn": 3})
         self.assertEqual({s["modality"] for cid in ("c-1", "c-1.1", "c-2") for s in self.req(cid)["statements"]}, {"must"})
-        # a relation to a withdrawn control that is no object is written as the source states it
         self.assertIn({"type": "related", "ref": f"{NS}/req/W-2"}, self.req("c-1")["relations"])
+
+    def test_backlog_41_E4_what_is_referred_to_is_carried_and_an_orphan_stays_out(self):
+        cat, root = invented_catalogue()["catalog"], self.objects["objects/set/root.json"]
+        # RES_C: nothing refers to it (no `#uuid` outside it); RES_D: a reference link names it and it gives no link
+        self.assertEqual(root["facets"][F_REF], {"resources": [r for r in cat["back-matter"]["resources"] if r["uuid"] != RES_C]})
+        self.assertEqual({(x["kind"], x["count"]) for x in self.report["ledger"]["not-content"] if x["kind"] == "orphan"},
+                         {("orphan", 3)})                           # its uuid, title and link
+        self.assertEqual(self.req("c-2")["facets"][F_COMPAT], {"links": [{"href": f"#{RES_D}", "rel": "reference"}]})
+        for b in PROFILES:
+            prof, compat = invented_profile(b)["profile"], self.objects[f"objects/set/baseline-{b.lower()}.json"]["facets"][F_COMPAT]
+            self.assertEqual((compat["back-matter"], compat["imports"]),
+                             (prof["back-matter"], [{"href": prof["imports"][0]["href"]}]))
 
     def test_backlog_41_the_document_metadata_stands_on_the_set_of_the_document_in_the_sources_shape(self):
         cat, root = invented_catalogue()["catalog"], self.objects["objects/set/root.json"]
         want = {k: v for k, v in cat["metadata"].items() if k not in ("title", "version")}
-        self.assertEqual(root["facets"][F_COMPAT], {"metadata": want})
+        self.assertEqual(root["facets"][F_COMPAT], {"metadata": want, "uuid": cat["uuid"]})
         self.assertEqual((root["title"], root["version"]), ({"en": cat["metadata"]["title"]}, cat["metadata"]["version"]))
         for b in PROFILES:
             prof, bset = invented_profile(b)["profile"], self.objects[f"objects/set/baseline-{b.lower()}.json"]
             want = {k: v for k, v in prof["metadata"].items() if k not in ("title", "version")}
-            self.assertEqual(bset["facets"][F_COMPAT], {"metadata": want, "merge": {"as-is": True}})
+            self.assertEqual({k: v for k, v in bset["facets"][F_COMPAT].items() if k not in ("back-matter", "imports")},
+                             {"metadata": want, "uuid": prof["uuid"], "merge": {"as-is": True}})
             self.assertIs(bset["facets"][F_COMPAT]["merge"]["as-is"], True, "a JSON boolean, not the number 1")
             self.assertEqual((bset["title"], bset["version"]), ({"en": prof["metadata"]["title"]}, "1.1"))
         # every value of a document's metadata is a copy; none is dropped, none is unaccounted
@@ -376,10 +394,6 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(meta, {"copied": 18 + 4 * 6})
         self.assertEqual(collections.Counter(r["outcome"] for r in self.record["paths"] if r["path"].endswith(".merge.as-is")),
                          {"copied": 4})
-        # the back-matter resources stand on the root Set as the source writes them, each with its uuid: the guidance
-        # of c-1 names the first, the document metadata the second, nothing the third
-        self.assertEqual(root["facets"][F_REF], {"resources": cat["back-matter"]["resources"]})
-        self.assertEqual([r["uuid"] for r in root["facets"][F_REF]["resources"]], [RES_A, RES_B, RES_C])
         # the manifest names the author and the day of the catalogue, by the library's rule (the one party it defines)
         with open(os.path.join(self.out, "sp800-53-core-bundle", "content-manifest.json"), encoding="utf-8") as f:
             provenance = json.load(f)["provenance"]
@@ -390,37 +404,37 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
 
     def test_backlog_41_what_is_copied_and_what_a_named_rule_made(self):
         o = self.outcomes
-        self.assertEqual(o("groups[].controls[].title"), {"copied": 6})                # 4 objects, 2 on a successor
+        self.assertEqual(o("groups[].controls[].title"), {"copied": 6})                # 6 objects
         self.assertEqual(o("groups[].controls[].id"), {"transformed": 6})
         self.assertEqual(o("groups[].controls[].params[].id"), {"copied": 2})
         self.assertEqual(o("groups[].controls[].params[].props[].value"), {"copied": 5})
         self.assertEqual(o("groups[].controls[].params[].select.choice[]"), {"copied": 2})
         self.assertEqual(o("groups[].controls[].params[].select.how-many"), {"transformed": 1})
-        self.assertEqual(o("back-matter.resources[].title"), {"copied": 3})
-        # every value of a resource is a copy, its uuid and the media type of its link too
-        self.assertEqual(o("back-matter.resources[].uuid"), {"copied": 3})
+        self.assertEqual(o("back-matter.resources[].title"), {"copied": 3, "not-content": 1})     # RES_C is an orphan
+        # every value of a resource something refers to is a copy, its uuid and the media type of its link too
+        self.assertEqual(o("back-matter.resources[].uuid"), {"copied": 3, "not-content": 1})
         self.assertEqual(o("back-matter.resources[].rlinks[].media-type"), {"copied": 1})
         self.assertEqual(o("back-matter.resources[].citation.text"), {"copied": 1})
         # prose: an insertion (item a, the statement of the enhancement) or two paragraphs (the assessment objects)
         # make it a transformation; a markdown link does not, it stays as the source wrote it
         self.assertEqual(o("groups[].controls[].parts[].prose"), {"copied": 12, "transformed": 3})
-        self.assertEqual(o("groups[].controls[].links[].rel"), {"copied": 4, "transformed": 2})
-        self.assertEqual(o("groups[].controls[].links[].href"), {"transformed": 6})
+        self.assertEqual(o("groups[].controls[].links[].rel"), {"copied": 5, "transformed": 2})
+        self.assertEqual(o("groups[].controls[].links[].href"), {"copied": 1, "transformed": 6})
         self.assertEqual(o("groups[].controls[].parts[].links[].href"), {"transformed": 3})
         self.assertEqual(o("groups[].parts[].title"), {"copied": 1})
         rules = self.rules()
         for rule, destinations in (
-                ("requirement URI from the control id", 4 * 3 + 4 * 2),      # id, manifest, family Set; two members in each of four baselines
+                ("requirement URI from the control id", 6 * 3 + 4 * 2),      # id, manifest, family Set; two members in each of four baselines
                 ("requirement URI from the control a link names", 3),        # required, related, related to a withdrawn control
                 ("a reference link resolved by uuid: the first link of the back-matter resource it names", 3),   # three inputs, one relation
                 ("statement id without the control prefix", 10 * 2),         # ten statements; the part id and the control id
                 ("obligated party URI from the implementation level", 2 * 4 + 4 + 1),   # c-1: two levels on four statements
+                ("lifecycle from the status the source states: `withdrawn`, the kernel's own word", 3),
                 ("parameter cardinality `many` from the selection's how-many `one-or-more`", 1),
-                ("lineage inverted: the URI of a withdrawn control, written on the successor its link names", 2 * 2 * 3),
-                ("lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)", 2 * 2),
-                ("the statement a lineage link names, as a statement id", 1),
+                ("lineage inverted: the URI of a withdrawn control, written on the successor its link names", 2 * 3),
+                ("lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)", 2),
                 ("family Set URI from the group id", 3),
-                ("member sequence: ten times the control's place in its family, ordered by sort-id", 4),
+                ("member sequence: ten times the control's place in its family, ordered by sort-id", 6),
                 ("the prop value `true` or `false`, written as a JSON boolean", 1),
                 ("the statement part an `assessment-for` link names, as a statement id (the part id without the control prefix)", 3),
                 ("requirement URI from the control whose part an `assessment-for` link names, where that is another control", 1),
@@ -431,7 +445,7 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(sum(n for r, n in rules.items() if "parameter insertion" in r), 2)
         self.assertIs(self.req("c-1")["facets"][F_RMF]["contributes-to-assurance"], True)
 
-    def test_backlog_41_what_is_not_in_the_bundle_is_no_content_by_a_rule_of_one_of_three_kinds(self):
+    def test_backlog_41_what_is_not_in_the_bundle_is_no_content_by_a_checked_rule(self):
         o = self.outcomes
         # a name that selects: of a prop, of a part, of a link, the class of a prop and of a group
         self.assertEqual(o("groups[].controls[].parts[].name"), {"not-content": 18})
@@ -445,56 +459,41 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertEqual(o("groups[].controls[].props[].ns"), {"not-content": 5})
         self.assertEqual(o("groups[].controls[].params[].props[].ns"), {"not-content": 1})
         self.assertEqual(o("groups[].controls[].parts[].props[].ns"), {"not-content": 1})
-        # ... an id or a label that a rule rebuilds: class, zero-padded and SP 800-53A label of every control, the
-        # sort-id of the two that are no objects; guidance x2, method, the statement part of c-1; the item labels
+        # ... an id or a label that a rule rebuilds: class, zero-padded and SP 800-53A label of every control;
+        # guidance x2, method, the statement part of c-1; the item labels
         self.assertEqual(o("groups[].controls[].class"), {"not-content": 6})
-        self.assertEqual(o("groups[].controls[].props[].value"),
-                         {"copied": 6 + 1, "transformed": 4 + 4 + 1, "not-content": 12 + 2, "intentionally-dropped": 2})
-        self.assertEqual(o("groups[].controls[].parts[].id"), {"copied": 3, "transformed": 10, "not-content": 4})
+        # labels x6; levels x4, statuses x3, sort-ids x6, the boolean; padded and 53A labels x12
+        self.assertEqual(o("groups[].controls[].props[].value"), {"copied": 6, "transformed": 4 + 3 + 6 + 1, "not-content": 12})
+        self.assertEqual(o("groups[].controls[].parts[].id"), {"copied": 4, "transformed": 9, "not-content": 4})
         # the print label of an item on each level of a control (`a.`, `1.`, `(a)`, `b.`) and of an enhancement
-        # (`(a)`, `(1)`) is rebuilt; `b.` on an item of the enhancement is a form the rule does not give, and
-        # stays the drop it was declared as, with the name that selects it
-        self.assertEqual(o("groups[].controls[].parts[].props[].value"), {"copied": 5, "not-content": 6, "intentionally-dropped": 1})
-        self.assertEqual(o("groups[].controls[].parts[].props[].name"), {"not-content": 11, "intentionally-dropped": 1})
-        self.assertEqual(self.report["item-labels"], {"rebuilt": 6, "declared-drop": ["c-1.1_smt.b"]})
+        # (`(a)`, `(1)`) is rebuilt; `b.` on an item of the enhancement is a form the rule does not give: the item's id
+        # and its label prop stand in the compat facet of the Requirement (E7)
+        self.assertEqual(o("groups[].controls[].parts[].props[].value"), {"copied": 5 + 1, "not-content": 6})
+        self.assertEqual(o("groups[].controls[].parts[].props[].name"), {"copied": 1, "not-content": 11})
+        self.assertEqual(self.report["item-labels"], {"rebuilt": 6, "compat-parts": ["c-1.1_smt.b"]})
+        self.assertEqual(self.req("c-1.1")["facets"][F_COMPAT],
+                         {"parts": [{"id": "c-1.1_smt.b", "props": [{"name": "label", "value": "b."}]}]})
         self.assertEqual(o("groups[].parts[].id"), {"not-content": 1})
-        # the name of the status of w-1 and w-2 goes with its value, which is a declared drop
-        self.assertEqual(o("groups[].controls[].props[].name"), {"not-content": 6 * 4 + 4 + 1 + 1, "intentionally-dropped": 2})
+        # three labels and a sort-id on each of six controls, four levels, three statuses, one boolean
+        self.assertEqual(o("groups[].controls[].props[].name"), {"not-content": 6 * 4 + 4 + 3 + 1})
         kinds = collections.Counter()
         for r in self.record["paths"]:
             if r["outcome"] == "not-content":
                 self.assertEqual(sum(x["count"] for x in r["rules"]), r["count"], r["path"])
                 for x in r["rules"]: kinds[x["kind"]] += x["count"]
-        self.assertEqual(set(kinds), {"selector", "namespace", "rebuilt-id"})
+        self.assertEqual(set(kinds), {"selector", "namespace", "rebuilt-id", "orphan"})
         self.assertEqual(sum(kinds.values()), self.record["totals"]["not-content"])
         listed = self.report["ledger"]["not-content"]
         self.assertEqual(sum(x["count"] for x in listed), self.record["totals"]["not-content"], "the report lists every rule with its count")
         self.assertEqual({x["kind"] for x in listed}, set(kinds))
 
-    def test_backlog_41_the_drops_that_stay_are_the_ones_declared_before_and_each_has_a_reading(self):
-        rows = self.report["ledger"]["declared-drops"]
-        self.assertEqual(sum(r["count"] for r in rows), self.record["totals"]["intentionally-dropped"])
-        for r in rows:
-            self.assertTrue(r["reason"].split(WITH)[-1].startswith(DECLARED_BEFORE), r["reason"])
-            self.assertTrue(r["reading"].startswith(("content: ", "not content, because ")), r)
-            self.assertIn("example-value", r)
-        got = {(r["path"], r["reason"].split(WITH)[-1][:40], WITH in r["reason"]): r["count"] for r in rows}
-        self.assertEqual(got, {
-            ("nist.catalog.groups[].controls[].props[].value", "path map: a withdrawn control is dropped", False): 2,
-            ("nist.catalog.groups[].controls[].props[].name", "path map: a withdrawn control is dropped", True): 2,
-            ("nist.catalog.uuid", "as decided for IFA on 2026-11-13: the uu", False): 1,
-            ("nist.catalog.groups[].controls[].parts[].props[].value", "path map: the print label of a statement", False): 1,
-            ("nist.catalog.groups[].controls[].parts[].props[].name", "path map: the print label of a statement", True): 1,
-            ("*.profile.uuid", "as decided for IFA on 2026-11-13: the uu", False): 4,
-            ("*.profile.imports[].href", "path map: profile resolution mechanics; ", False): 4,
-            ("*.profile.back-matter.resources[].uuid", "as decided for IFA on 2026-11-13: a back", False): 4,
-            ("*.profile.back-matter.resources[].description", "as decided for IFA on 2026-11-13: a back", False): 4,
-            ("*.profile.back-matter.resources[].rlinks[].href", "as decided for IFA on 2026-11-13: a back", False): 4,
-            ("*.profile.back-matter.resources[].rlinks[].media-type", "as decided for IFA on 2026-11-13: a back", False): 4})
-        # the converter declares no drop of its own: every call is one of the five reasons, by name
+    def test_backlog_41_no_drop_is_declared(self):
+        """The author decided the drops of 2026-11-14: each is carried, or is an orphan (E1, E3, E4, E7)."""
+        self.assertEqual((self.record["totals"]["intentionally-dropped"], self.report["ledger"]["declared-drops"]), (0, []))
+        # the converter declares no drop of its own: the one call left reads the empty list of drops by path
         with open(os.path.join(HERE, "convert_nist.py"), encoding="utf-8") as f: code = f.read()
-        reasons = re.findall(r"led\.drop(?:_value)?\(.*?, ([A-Za-z_]+)\)", code)
-        self.assertEqual(sorted(reasons), ["A_ITEM_LABEL", "A_TOMBSTONE", "reason"])
+        self.assertEqual(re.findall(r"led\.drop(?:_value)?\(.*?, ([A-Za-z_]+)\)", code), ["reason"])
+        self.assertIn("PATH_DROPS = []", code)
 
     def test_backlog_41_the_path_map_says_what_the_ledger_measured(self):
         self.assertEqual(self.report["unmapped-paths"], [])
@@ -511,32 +510,26 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
 
     def test_backlog_41_a_value_that_is_lost_ends_the_run_with_1(self):
         for name, old, new, path, lost in (
-                # the annotation loses the title of the withdrawn control
-                ("title-lost", '"label": label, "title": c.get("title", "")}\n', '"label": label, "title": ""}\n',
-                 "groups[].controls[].title", 2),
-                # the annotation takes the zero-padded label again: the label the source gives for a reader is in no object
-                ("padded-label", '    label = prop(c, "label")                    #', '    label = prop(c, "label", cls="zero-padded")   #',
-                 "groups[].controls[].props[].value", 2),
+                # a Requirement takes the zero-padded label: the label the source gives for a reader is in no object
+                ("padded-label", '    plain = prop(c, "label")\n', '    plain = prop(c, "label", cls="zero-padded")\n',
+                 "groups[].controls[].props[].value", 6),
                 # the `assessment-for` links are built and not written
                 ("links-lost", '    if links: node["assessment-for"] = links\n', "    pass\n",
                  "groups[].controls[].parts[].links[].href", 3),
-                # a withdrawn control without a successor is left out again
-                ("withdrawn-left-out", "written = [(c, par, g) for c, par, g in controls if c[\"id\"] not in tombstones]",
-                 "written = [(c, par, g) for c, par, g in controls if c[\"id\"] not in withdrawn]",
-                 "groups[].controls[].title", 1),
+
                 # the metadata of the profiles is not written
                 ("profile-metadata", '    if document_metadata(prof["metadata"]): compat["metadata"] = document_metadata(prof["metadata"])\n', "",
                  None, 4 * 4),
                 # the back-matter resources are not written: their titles are in no object. The uuid and the link of
                 # the resource a `reference` link names are still inputs of a rule, so the path map's sentence
                 # (`copied`) no longer holds either, and that wiring check stops the run before the gate
-                ("resources-lost", 'if RESOURCES: root_facets[F_REF] = {"resources": RESOURCES}\n', "",
+                ("resources-lost", 'if RESOURCES_KEPT: root_facets[F_REF] = {"resources": RESOURCES_KEPT}\n', "",
                  "back-matter.resources[].title", 3)):
             done, _, record = self.tree.changed(name, old, new)
             self.fails(name, done)
             self.assertEqual(record["totals"]["unaccounted"] >= lost, True, name)
             if name == "resources-lost":
-                self.assertEqual(record["totals"]["unaccounted"], 9, name)      # 3 titles, 1 citation, 2 links, 1 media type, 2 uuids
+                self.assertEqual(record["totals"]["unaccounted"], 8, name)      # 3 titles, 1 citation, 1 link, 1 media type, 2 uuids
                 self.assertIn("the path map does not say `transformed` of nist.catalog.back-matter.resources[].uuid", done.stderr)
             else:
                 self.assertIn(self.GATE.format(0, record["totals"]["unaccounted"]), done.stderr, name)
@@ -568,7 +561,6 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         for name, change, claims in (
                 ("method-id", lambda c: c["groups"][0]["controls"][0]["parts"][3].update(id="c-1_examine"), 1),
                 ("padded-label", lambda c: c["groups"][0]["controls"][1]["props"][0].update(value="C-002"), 1),
-                ("sort-id", lambda c: c["groups"][0]["controls"][3]["props"][3].update(value="w-2"), 1),
                 ("statement-id", lambda c: c["groups"][0]["controls"][0]["parts"][0].update(id="c-1_statement"), 1)):
             cat = invented_catalogue(); change(cat["catalog"])
             tree = Tree(cat)
@@ -634,30 +626,54 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
         self.assertIn("LEDGER CHECK FAILED", done.stderr)
         self.assertEqual([x["source"] for x in record["verification-failures"]], ["nist#/catalog/groups/0/controls/1/title"])
 
-    TITLE_LOST = ('"label": label, "title": c.get("title", "")}\n', '"label": label, "title": ""}\n')
+    PROSE = {"w-1": "Incorporated into C-1a.", "w-2": "Moved to C-2.", "w-3": "Addressed elsewhere."}
+
+    def test_backlog_41_E1_R2_E4_deliberate_defects_of_the_new_logic(self):
+        """Each defect of what the author's decisions of 2026-11-14 brought ends the run with 1 - or, where the
+        ledger agrees with a rule that is wrong, turns the expectation of the statement red."""
+        for name, old, new, unaccounted, failures in (
+                # E1: the withdrawn controls that name a successor are no objects again: their titles, classes and props are lost
+                ("withdrawn-left-out", "written = [(c, par, g) for c, par, g in controls]",
+                 'written = [(c, par, g) for c, par, g in controls if c["id"] not in tombstones]', 28, 0),
+                # E1: the status is not read into the lifecycle: the three values and their names are lost
+                ("status-ignored", '    lifecycle = D(R_LIFECYCLE, _lifecycle, status) if status is not None else "active"',
+                 '    lifecycle = "active"', 6, 0),
+                # E4: an orphan left out without the checked claim
+                ("orphan-undeclared", '    else: ORPHANS.append(r); led.orphan(r["uuid"], N_ORPHAN)', "    else: ORPHANS.append(r)", 3, 0),
+                # E4: every resource called an orphan: the claim does not hold where something refers to one
+                ("orphan-everything", '    if referred_to(i, r["uuid"]): RESOURCES_KEPT.append(r)', "    if False: RESOURCES_KEPT.append(r)", None, 1),
+                # E4: a profile's import, or the resource it names, is not written
+                ("imports-lost", '    compat["imports"] = [{"href": imp["href"]} for imp in prof["imports"]]\n', "", 4, 0),
+                ("profile-resource-lost", '    if (prof.get("back-matter") or {}).get("resources"): compat["back-matter"] = '
+                                          '{"resources": prof["back-matter"]["resources"]}\n', "", 16, 0),
+                # E4/E14: a reference link to a resource without a link is not carried
+                ("reference-without-link", '            compat.setdefault("links", []).append(l); rel_count[REF_NO_LINK] += 1',
+                 "            pass", 2, 0)):
+            done, _, record = self.tree.changed(name, old, new)
+            self.fails(name, done)
+            if unaccounted is not None: self.assertEqual(record["totals"]["unaccounted"], unaccounted, name)
+            self.assertGreaterEqual(len(record["verification-failures"]), failures, name)
+        # R2: the label of a statement item keeps its full stop. The ledger applies the same rule again and agrees;
+        # the statement the test expects is what turns red
+        done, out, _ = self.tree.changed("item-label-stop", '(_reader_label(ITEMS[t]) or "").rstrip(".")', '(_reader_label(ITEMS[t]) or "")')
+        self.assertEqual(done.returncode, 0, done.stderr[-300:])
+        prose = {cid: read_bundle(os.path.join(out, "sp800-53-core-bundle"))[f"objects/req/{cid}.json"]["statements"][0]["prose"]["en"]
+                 for cid in self.PROSE}
+        self.assertNotEqual(prose, self.PROSE)
+        self.assertEqual(prose["w-1"], "Incorporated into C-1a..")
+
+    TITLE_LOST = ('"title": c.get("title", cid), "statements": stmts}', '"title": "", "statements": stmts}')
 
     def test_backlog_41_what_the_ledger_cannot_see_by_itself_ends_the_run_with_1(self):
         """A declaration that reaches too far, a path map that says something
         else, a record that is not this run's: the ledger's own checks pass
         on each of these, the converter's wiring checks do not."""
         for name, changes, word in (
-                # the status of a tombstone declared for the whole control: the lost titles would read as dropped on purpose
-                ("whole-tombstone", self.TITLE_LOST + ('        led.drop_value(prop(c, "status"), A_TOMBSTONE)\n',
-                                                       '        led.drop_value({k: v for k, v in c.items() if k != "controls"}, A_TOMBSTONE)\n'),
-                 "a drop reaches further than it names: nist.catalog.groups[].controls[].title"),
-                # a drop by path on a path where other values are carried
-                ("beside-carried", self.TITLE_LOST + (' (r"^(nist\\.catalog|[a-z]+\\.profile)\\.uuid$", B_UUID),\n',
-                                                      ' (r"^(nist\\.catalog|[a-z]+\\.profile)\\.uuid$|\\.controls\\[\\]\\.title$", B_UUID),\n'),
-                 "on which other values are carried"),
-                # a drop this converter did not declare before: the lost titles get a reason of their own
-                ("a-new-drop", self.TITLE_LOST + (' (r"\\.profile\\.imports\\[\\]\\.href$", A_PROFILE),\n',
-                                                  ' (r"\\.profile\\.imports\\[\\]\\.href$", A_PROFILE),\n (r"\\.controls\\[\\]\\.title$", "not needed"),\n'),
+                # a drop this converter does not declare: the lost titles get a reason of their own
+                ("a-new-drop", self.TITLE_LOST + ('PATH_DROPS = []', 'PATH_DROPS = [(r"\\.controls\\[\\]\\.title$", "not needed")]'),
                  "a drop is declared with a reason this converter does not state: 'not needed'"),
-                # a drop that stays declared and has no reading for the author
-                ("no-reading", (' (r"\\.uuid$", B_UUID, "content: the identifier', ' (r"\\.uuid-of-nothing$", B_UUID, "content: the identifier'),
-                 "a declared drop has no reading for the author: *.profile.uuid"),
                 # the path map says `transformed` of a title, which is copied
-                ("path-map", ('`title` in the nist-withdrawal annotation", {C}),', '`title` in the nist-withdrawal annotation", {X}),'),
+                ("path-map", ('(CTL + r"\\.title$", "L1", "Requirement title", {C}),', '(CTL + r"\\.title$", "L1", "Requirement title", {X}),'),
                  "the path map does not say `copied` of nist.catalog.groups[].controls[].title (x6)"),
                 # a source path without a row in the path map
                 ("no-row", (' (r"^nist\\.catalog\\.groups\\[\\]\\.title$", "L1", "family Set title", {C}),\n', ""),
@@ -699,14 +715,12 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         self.assertEqual(report["ledger"]["totals"], record["totals"])
         self.assertEqual(report["ledger"]["path-map-not-confirmed"], [], "a sentence of the path map names an outcome this source does not show")
         self.assertEqual(sum(r["count"] for r in report["ledger"]["declared-drops"]), record["totals"]["intentionally-dropped"])
-        for r in report["ledger"]["declared-drops"]:
-            self.assertTrue(r["reason"].split(WITH)[-1].startswith(DECLARED_BEFORE), r["reason"])
-            self.assertTrue(r["reading"].startswith(("content: ", "not content, because ")), r)
-        # a rule that stops giving a value must not move it among the declared drops unseen: 5.2.0 has three item
-        # labels the rule does not give, and no control whose class it does not give
-        self.assertEqual(report["item-labels"], {"rebuilt": 1119, "declared-drop": ["si-2.7_smt.a", "si-2.7_smt.b", "si-2.7_smt.c"]})
+        # 5.2.0 has three item labels the rule does not give (carried, E7), and no control whose class it does not give
+        self.assertEqual(report["item-labels"], {"rebuilt": 1119, "compat-parts": ["si-2.7_smt.a", "si-2.7_smt.b", "si-2.7_smt.c"]})
         self.assertEqual(report["class-written"], 0)
-        self.assertEqual(record["totals"]["intentionally-dropped"], 407)
+        self.assertEqual((record["totals"]["intentionally-dropped"], report["ledger"]["declared-drops"]), (0, []))
+        self.assertEqual(report["lifecycle-default"], {"value": "active", "origin": "converter-default", "objects": 1039,
+                                                        "source-states": 182})
 
     def test_backlog_41_the_committed_bundle_holds_what_the_authors_list_names(self):
         """Counted from the committed files alone (measured on SP 800-53
@@ -715,16 +729,17 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         reqs = {o["id"]: o for o in objects.values() if "statements" in o}
         self.assertEqual(sum(len(o.get("assessment-for", [])) for r in reqs.values()
                              for o in objectives((r.get("facets") or {}).get(F_53A, {}))), 3707)
-        gone = {cid: reqs[f"{NS}/req/{cid}"] for cid in ("CP-10.3", "SC-19")}
-        self.assertEqual({cid: (r["lifecycle"], r["label"], [s["modality"] for s in r["statements"]]) for cid, r in gone.items()},
-                         {"CP-10.3": ("withdrawn", "CP-10(3)", ["unspecified"]), "SC-19": ("withdrawn", "SC-19", ["unspecified"])})
-        self.assertEqual(sorted(r["id"] for r in reqs.values() if r["lifecycle"] != "active"), sorted(r["id"] for r in gone.values()))
-        replaced = {e["ref"]: e["label"] for o in objects.values() for e in (o.get("annotations") or {}).get("nist-withdrawal", [])}
-        self.assertEqual(len(replaced) + len(gone), 182, "the withdrawn controls of the source: named in a lineage, or objects")
-        # the label the source gives for a reader: no number of it is padded
-        self.assertEqual([l for l in replaced.values() if re.search(r"(?<![0-9])0[0-9]", l)], [])
-        self.assertEqual(sorted(replaced.items())[0], (f"{NS}/req/AC-13", "AC-13"))
-        self.assertEqual(replaced[f"{NS}/req/AC-2.10"], "AC-2(10)")
+        gone = [r for r in reqs.values() if r["lifecycle"] != "active"]
+        self.assertEqual((len(gone), {r["lifecycle"] for r in gone}), (182, {"withdrawn"}))
+        self.assertEqual({s["modality"] for r in gone for s in r["statements"]}, {"unspecified"})
+        self.assertFalse(any("annotations" in o for o in objects.values()))
+        # every `replaces` names an object; the label the source gives for a reader: no number of it is padded
+        refs = {e["ref"] for o in objects.values() for e in o.get("replaces", [])}
+        self.assertEqual((len(refs), refs <= set(reqs)), (180, True))
+        self.assertEqual([r["label"] for r in gone if re.search(r"(?<![0-9])0[0-9]", r["label"])], [])
+        self.assertEqual((reqs[f"{NS}/req/AC-2.10"]["label"], reqs[f"{NS}/req/AC-2.10"]["statements"][0]["prose"]),
+                         ("AC-2(10)", {"en": "Incorporated into AC-2k."}))
+        self.assertEqual(reqs[f"{NS}/req/AU-15"]["statements"][0]["prose"], {"en": "Moved to AU-5(5)."})
         self.assertEqual(sum(1 for r in reqs.values() for a in (r.get("facets") or {}).get(F_ODP, {}).get("params", {}).values()
                              if "sp800-53a-label" in a), 1458)
         root = objects["objects/set/root.json"]
@@ -734,8 +749,9 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
             compat = objects[f"objects/set/baseline-{b.lower()}.json"]["facets"][F_COMPAT]
             self.assertEqual(sorted(compat["metadata"]), ["last-modified", "oscal-version", "parties", "responsible-parties", "roles"])
             self.assertIs(compat["merge"]["as-is"], True)
-        # the back-matter on the root Set, every resource with its uuid; the catalogue's author and day in the manifest
-        self.assertEqual(len(root["facets"][F_REF]["resources"]), 201)
+        # the back-matter on the root Set, every resource something refers to, with its uuid (E4); the document's uuid (E3)
+        self.assertEqual(len(root["facets"][F_REF]["resources"]), 178)
+        self.assertIn("uuid", root["facets"][F_COMPAT])
         self.assertTrue(all("uuid" in r for r in root["facets"][F_REF]["resources"]))
         with open(os.path.join(self.CORPUS, "sp800-53-core-bundle", "content-manifest.json"), encoding="utf-8") as f:
             provenance = json.load(f)["provenance"]
@@ -751,13 +767,15 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         catalogue = json.loads(raw)["catalog"]
         source, written = what_the_authors_list_names(catalogue, read_bundle(os.path.join(self.CORPUS, "sp800-53-core-bundle")))
         self.assertEqual(source, written)
-        self.assertEqual((source["assessment-for links"], source["withdrawn controls"], len(source["formal ODP labels"])), (3707, 182, 1458))
-        self.assertEqual(source["withdrawn controls that name no successor"], ["cp-10.3", "sc-19"])
-        self.assertEqual(len(source["labels of withdrawn controls that name a successor"]), 180)
+        self.assertEqual((source["assessment-for links"], len(source["withdrawn controls"]), len(source["formal ODP labels"])),
+                         (3707, 182, 1458))
+        self.assertEqual(len(source["withdrawn controls a successor names"]), 180)
         root = read_bundle(os.path.join(self.CORPUS, "sp800-53-core-bundle"))["objects/set/root.json"]
         self.assertEqual(root["facets"][F_COMPAT]["metadata"], {k: v for k, v in catalogue["metadata"].items() if k not in ("title", "version")})
-        self.assertEqual(root["facets"][F_REF], {"resources": catalogue["back-matter"]["resources"]})
-        self.assertEqual(len(root["facets"][F_REF]["resources"]), 201)
+        self.assertEqual(root["facets"][F_COMPAT]["uuid"], catalogue["uuid"])
+        kept = root["facets"][F_REF]["resources"]
+        self.assertEqual(kept, [r for r in catalogue["back-matter"]["resources"] if r in kept])
+        self.assertEqual(len(catalogue["back-matter"]["resources"]) - len(kept), 23)
 
 
 if __name__ == "__main__":

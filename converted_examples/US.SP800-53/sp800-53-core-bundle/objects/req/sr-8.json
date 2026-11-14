@@ -197,15 +197,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.12",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.12",
-    "mode": "renamed",
-    "label": "SA-12(12)",
-    "title": "Inter-organizational Agreements"
-   }
-  ]
- }
+ ]
 }

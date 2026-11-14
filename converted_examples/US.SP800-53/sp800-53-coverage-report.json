@@ -10,32 +10,32 @@
   {
    "path": "high.profile.back-matter.resources[].description",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "high.profile.back-matter.resources[].rlinks[].href",
    "count": 3,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "high.profile.back-matter.resources[].rlinks[].media-type",
    "count": 3,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "high.profile.back-matter.resources[].uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "high.profile.imports[].href",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4) [ledger: copied 1]"
   },
   {
    "path": "high.profile.imports[].include-controls[].with-ids[]",
@@ -154,38 +154,38 @@
   {
    "path": "high.profile.uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `uuid` (E3) [ledger: copied 1]"
   },
   {
    "path": "low.profile.back-matter.resources[].description",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "low.profile.back-matter.resources[].rlinks[].href",
    "count": 3,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "low.profile.back-matter.resources[].rlinks[].media-type",
    "count": 3,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "low.profile.back-matter.resources[].uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "low.profile.imports[].href",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4) [ledger: copied 1]"
   },
   {
    "path": "low.profile.imports[].include-controls[].with-ids[]",
@@ -304,38 +304,38 @@
   {
    "path": "low.profile.uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `uuid` (E3) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.back-matter.resources[].description",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.back-matter.resources[].rlinks[].href",
    "count": 3,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "moderate.profile.back-matter.resources[].rlinks[].media-type",
    "count": 3,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "moderate.profile.back-matter.resources[].uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.imports[].href",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.imports[].include-controls[].with-ids[]",
@@ -454,38 +454,38 @@
   {
    "path": "moderate.profile.uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `uuid` (E3) [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].citation.text",
    "count": 192,
    "level": "L2",
-   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 192]"
+   "destination": "references@1 on the root Set: the resources something in the catalogue refers to, in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 169, not-content 23]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].rlinks[].href",
    "count": 201,
    "level": "L2",
-   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 201]"
+   "destination": "references@1 on the root Set: the resources something in the catalogue refers to, in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 178, not-content 23]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].rlinks[].media-type",
    "count": 2,
    "level": "L2",
-   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 2]"
+   "destination": "references@1 on the root Set: the resources something in the catalogue refers to, in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].title",
    "count": 201,
    "level": "L2",
-   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 201]"
+   "destination": "references@1 on the root Set: the resources something in the catalogue refers to, in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 178, not-content 23]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].uuid",
    "count": 201,
    "level": "L2",
-   "destination": "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule) [ledger: copied 201]"
+   "destination": "references@1 on the root Set: the resources something in the catalogue refers to, in the source's own shape (uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 178, not-content 23]"
   },
   {
    "path": "nist.catalog.groups[].class",
@@ -503,19 +503,19 @@
    "path": "nist.catalog.groups[].controls[].id",
    "count": 1196,
    "level": "L1",
-   "destination": "Requirement URI (dot form = corpus mapping endpoints); of a withdrawn control that names a successor: its URI in `replaces` and in the nist-withdrawal annotation of that successor [ledger: transformed 1,196]"
+   "destination": "Requirement URI (dot form = corpus mapping endpoints); of a withdrawn control that names a successor also its URI in the successor's `replaces` [ledger: transformed 1,196]"
   },
   {
    "path": "nist.catalog.groups[].controls[].links[].href",
    "count": 5265,
    "level": "L1",
-   "destination": "related, required -> relation to the Requirement the link names (also where that is a withdrawn control that is no object); reference -> relation to the link of the back-matter resource; incorporated-into, moved-to -> the successor's `replaces[]` and nist-withdrawal annotation (`into` for a link to a statement) [ledger: transformed 5,265]"
+   "destination": "related, required -> relation to the Requirement the link names; reference -> relation to the link of the back-matter resource, or, where the resource gives none, compat facet `links` as the source writes it (E14); incorporated-into, moved-to -> the successor's `replaces[]` and the statement of the withdrawn control (R2) [ledger: transformed 5,265]"
   },
   {
    "path": "nist.catalog.groups[].controls[].links[].rel",
    "count": 5265,
    "level": "L1",
-   "destination": "related, required, reference -> the relation type, the same word; incorporated-into, moved-to -> `mode` merged-into, renamed [ledger: copied 5,065, transformed 200]"
+   "destination": "related, required, reference -> the relation type, the same word; incorporated-into, moved-to -> `mode` merged-into, renamed, and the verb of the withdrawn control's statement (R2) [ledger: copied 5,065, transformed 200]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].guidelines[].prose",
@@ -575,7 +575,7 @@
    "path": "nist.catalog.groups[].controls[].parts[].id",
    "count": 9798,
    "level": "L1",
-   "destination": "statement or item with text -> statement id (control prefix removed); assessment-objective -> its id in sp800-53a@1; guidance, assessment-method and a statement part without text of its own -> not content, rebuilt from the control id [ledger: copied 3,715, transformed 1,920, not-content 4,163]"
+   "destination": "statement or item with text -> statement id (control prefix removed); assessment-objective -> its id in sp800-53a@1; guidance, assessment-method and a statement part without text of its own -> not content, rebuilt from the control id [ledger: copied 3,718, transformed 1,917, not-content 4,163]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].links[].href",
@@ -598,26 +598,26 @@
   {
    "path": "nist.catalog.groups[].controls[].parts[].props[].class",
    "count": 6644,
-   "level": "not content",
-   "destination": "select the rule for the prop's value; the name of an item label that is a declared drop is dropped with it [ledger: not-content 6,644]"
+   "level": "L2",
+   "destination": "select the rule for the prop's value; the name of an item label the rule does not give is carried with it (E7) [ledger: not-content 6,644]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].props[].name",
    "count": 10697,
-   "level": "not content",
-   "destination": "select the rule for the prop's value; the name of an item label that is a declared drop is dropped with it [ledger: not-content 10,694, intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "select the rule for the prop's value; the name of an item label the rule does not give is carried with it (E7) [ledger: copied 3, not-content 10,694]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].props[].ns",
    "count": 2931,
-   "level": "not content",
-   "destination": "select the rule for the prop's value; the name of an item label that is a declared drop is dropped with it [ledger: not-content 2,931]"
+   "level": "L2",
+   "destination": "select the rule for the prop's value; the name of an item label the rule does not give is carried with it (E7) [ledger: not-content 2,931]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].props[].value",
    "count": 10697,
    "level": "L2",
-   "destination": "sp800-53a label of an objective or a method -> sp800-53a@1 `label`; method -> sp800-53a@1 `method`; print label of a statement item -> not content, rebuilt from the item id; where the rule does not give it: a declared drop, see the table of declared drops [ledger: copied 9,575, not-content 1,119, intentionally-dropped 3]"
+   "destination": "sp800-53a label of an objective or a method -> sp800-53a@1 `label`; method -> sp800-53a@1 `method`; print label of a statement item -> not content, rebuilt from the item id; where the rule does not give it: compat facet `parts` of the Requirement, the item's id with its label prop as the source writes them (E7) [ledger: copied 9,578, not-content 1,119]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].prose",
@@ -629,31 +629,31 @@
    "path": "nist.catalog.groups[].controls[].props[].class",
    "count": 2391,
    "level": "not content",
-   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name; the name of a status that is a declared drop is dropped with it [ledger: not-content 2,391]"
+   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name [ledger: not-content 2,391]"
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].name",
    "count": 6557,
    "level": "not content",
-   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name; the name of a status that is a declared drop is dropped with it [ledger: not-content 6,377, intentionally-dropped 180]"
+   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name [ledger: not-content 6,557]"
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].ns",
    "count": 1592,
    "level": "not content",
-   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name; the name of a status that is a declared drop is dropped with it [ledger: not-content 1,592]"
+   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name [ledger: not-content 1,592]"
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].value",
    "count": 6557,
    "level": "L1",
-   "destination": "label (no class) -> `label` of the Requirement, or of the nist-withdrawal annotation for a withdrawn control that names a successor; zero-padded and sp800-53a label -> not content, rebuilt from that label; sort-id -> member sequence in the family Set (of a withdrawn control that is no object: not content, rebuilt from the id); implementation-level -> obligated-parties; contributes-to-assurance -> rmf@1 (a JSON boolean); status -> `lifecycle` of a withdrawn control that is an object; of one that names a successor: a declared drop, see the table of declared drops [ledger: copied 1,198, transformed 2,608, not-content 2,571, intentionally-dropped 180]"
+   "destination": "label (no class) -> `label` of the Requirement; zero-padded and sp800-53a label -> not content, rebuilt from that label; sort-id -> member sequence in the family Set; implementation-level -> obligated-parties; contributes-to-assurance -> rmf@1 (a JSON boolean); status -> `lifecycle` (E1) [ledger: copied 1,196, transformed 2,970, not-content 2,391]"
   },
   {
    "path": "nist.catalog.groups[].controls[].title",
    "count": 1196,
    "level": "L1",
-   "destination": "Requirement title; of a withdrawn control that names a successor: `title` in the nist-withdrawal annotation [ledger: copied 1,196]"
+   "destination": "Requirement title [ledger: copied 1,196]"
   },
   {
    "path": "nist.catalog.groups[].id",
@@ -874,38 +874,38 @@
   {
    "path": "nist.catalog.uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `uuid` (E3) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.back-matter.resources[].description",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.back-matter.resources[].rlinks[].href",
    "count": 3,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "privacy.profile.back-matter.resources[].rlinks[].media-type",
    "count": 3,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 3]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "privacy.profile.back-matter.resources[].uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.imports[].href",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.imports[].include-controls[].with-ids[]",
@@ -1024,16 +1024,16 @@
   {
    "path": "privacy.profile.uuid",
    "count": 1,
-   "level": "dropped",
-   "destination": "not carried: a declared drop, see the table of declared drops [ledger: intentionally-dropped 1]"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `uuid` (E3) [ledger: copied 1]"
   }
  ],
  "source-version": "5.2.0",
  "objects-emitted": {
-  "requirements": 1016,
+  "requirements": 1196,
   "sets": 25,
   "requirements-in-force": 1014,
-  "requirements-withdrawn": 2
+  "requirements-withdrawn": 182
  },
  "withdrawn": {
   "count": 182,
@@ -1069,7 +1069,7 @@
  },
  "modality": {
   "must": 1918,
-  "unspecified": 2
+  "unspecified": 182
  },
  "obligated-party": {
   "value": "https://ns.nist.gov/sp800-53/party/organization",
@@ -1080,17 +1080,17 @@
  "obligated-party-use": {
   "controls": {
    "source-states": 1014,
-   "not-stated": 2
+   "not-stated": 182
   },
   "statements": {
    "source-states": 1918,
-   "not-stated": 2
+   "not-stated": 182
   },
   "implementation-levels": {
    "organization": 613,
    "system": 250,
    "organization + system": 151,
-   "(none)": 2
+   "(none)": 182
   }
  },
  "backlog-10": {
@@ -1128,11 +1128,17 @@
  "formal-odp-labels": 1458,
  "item-labels": {
   "rebuilt": 1119,
-  "declared-drop": [
+  "compat-parts": [
    "si-2.7_smt.a",
    "si-2.7_smt.b",
    "si-2.7_smt.c"
   ]
+ },
+ "lifecycle-default": {
+  "value": "active",
+  "origin": "converter-default",
+  "objects": 1039,
+  "source-states": 182
  },
  "class-written": 0,
  "document-metadata": {
@@ -1157,10 +1163,10 @@
   "file": "sp800-53-conversion-ledger.json",
   "leaf-values": 115680,
   "totals": {
-   "copied": 33371,
-   "transformed": 20830,
-   "not-content": 61072,
-   "intentionally-dropped": 407,
+   "copied": 33327,
+   "transformed": 21189,
+   "not-content": 61164,
+   "intentionally-dropped": 0,
    "unaccounted": 0
   },
   "verification-failures": 0,
@@ -1192,8 +1198,13 @@
    },
    {
     "rule": "requirement URI from the control id",
-    "source-values": 1918,
-    "destinations": 3950
+    "source-values": 2098,
+    "destinations": 4490
+   },
+   {
+    "rule": "member sequence: ten times the control's place in its family, ordered by sort-id",
+    "source-values": 1196,
+    "destinations": 1196
    },
    {
     "rule": "obligated party URI from the implementation level",
@@ -1206,14 +1217,9 @@
     "destinations": 2514
    },
    {
-    "rule": "member sequence: ten times the control's place in its family, ordered by sort-id",
-    "source-values": 1016,
-    "destinations": 1016
-   },
-   {
     "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names",
     "source-values": 523,
-    "destinations": 1200
+    "destinations": 600
    },
    {
     "rule": "the prop value `true` or `false`, written as a JSON boolean",
@@ -1221,9 +1227,19 @@
     "destinations": 427
    },
    {
+    "rule": "the statement of a withdrawn control that names a successor, from its links: `Incorporated into X.` or `Moved to X.`, the targets in source order (`X and Y`, `X, Y, and Z`), each by the label the source gives it for a reader (a statement item: its control's label and the item's label without the full stop)",
+    "source-values": 400,
+    "destinations": 400
+   },
+   {
     "rule": "lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)",
     "source-values": 200,
-    "destinations": 400
+    "destinations": 200
+   },
+   {
+    "rule": "lifecycle from the status the source states: `withdrawn`, the kernel's own word",
+    "source-values": 182,
+    "destinations": 182
    },
    {
     "rule": "parameter cardinality `many` from the selection's how-many `one-or-more`",
@@ -1249,18 +1265,13 @@
     "rule": "date of the catalogue: the day of its last-modified",
     "source-values": 1,
     "destinations": 1
-   },
-   {
-    "rule": "the statement a lineage link names, as a statement id",
-    "source-values": 1,
-    "destinations": 1
    }
   ],
   "not-content": [
    {
     "kind": "selector",
     "rule": "the name of a prop selects the member its value is written to",
-    "count": 20112
+    "count": 20292
    },
    {
     "kind": "selector",
@@ -1318,9 +1329,9 @@
     "count": 218
    },
    {
-    "kind": "rebuilt-id",
-    "rule": "the sort-id of a withdrawn control that is no object, rebuilt from its id: every number padded to two digits",
-    "count": 180
+    "kind": "orphan",
+    "rule": "a back-matter resource that nothing in the catalogue refers to (no `#uuid` outside it) is orphaned and not carried (author, 2026-11-14)",
+    "count": 92
    },
    {
     "kind": "selector",
@@ -1333,101 +1344,12 @@
     "count": 1
    }
   ],
-  "declared-drops": [
-   {
-    "path": "nist.catalog.groups[].controls[].props[].value",
-    "count": 180,
-    "reason": "path map: a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor its link names, which carries its URI, a label and its title",
-    "example": "nist#/catalog/groups/0/controls/1/controls/9/props/4/value",
-    "example-value": "withdrawn",
-    "reading": "not content, because the value `withdrawn` of a control that names a successor only decides where the control is written (as a lineage entry on its successor, under `replaces` and the annotation `nist-withdrawal`, which say the same by their names); it is a value and not a name, so none of the three classes names it"
-   },
-   {
-    "path": "*.profile.back-matter.resources[].rlinks[].href",
-    "count": 12,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
-    "example": "low#/profile/back-matter/resources/0/rlinks/0/href",
-    "example-value": "../../../../nist.gov/SP800-53/rev5/xml/NIST_SP-800-53_rev5_catalog.xml",
-    "reading": "content: the resource of the profile that names the imported catalogue in three serialisations (uuid, description, links, media types); it goes with the import link"
-   },
-   {
-    "path": "*.profile.back-matter.resources[].rlinks[].media-type",
-    "count": 12,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
-    "example": "low#/profile/back-matter/resources/0/rlinks/0/media-type",
-    "example-value": "application/oscal.catalog+xml",
-    "reading": "content: the resource of the profile that names the imported catalogue in three serialisations (uuid, description, links, media types); it goes with the import link"
-   },
-   {
-    "path": "*.profile.back-matter.resources[].description",
-    "count": 4,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
-    "example": "low#/profile/back-matter/resources/0/description",
-    "example-value": "NIST Special Publication 800-53 Revision 5: Security and Privacy Controls for Federal Information Systems and Organizations",
-    "reading": "content: the resource of the profile that names the imported catalogue in three serialisations (uuid, description, links, media types); it goes with the import link"
-   },
-   {
-    "path": "*.profile.back-matter.resources[].uuid",
-    "count": 4,
-    "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
-    "example": "low#/profile/back-matter/resources/0/uuid",
-    "example-value": "84cbf061-eb87-4ec1-8112-1f529232e907",
-    "reading": "content: the resource of the profile that names the imported catalogue in three serialisations (uuid, description, links, media types); it goes with the import link"
-   },
-   {
-    "path": "*.profile.imports[].href",
-    "count": 4,
-    "reason": "path map: profile resolution mechanics; the selection is the Set",
-    "example": "low#/profile/imports/0/href",
-    "example-value": "#84cbf061-eb87-4ec1-8112-1f529232e907",
-    "reading": "content: the link from the profile to the document it selects from (it names the profile's back-matter resource); the baseline Set names the selected Requirements and not that document"
-   },
-   {
-    "path": "*.profile.uuid",
-    "count": 4,
-    "reason": "as decided for IFA on 2026-11-13: the uuid of a source document, which identifies it among source documents only: JASCON objects get URIs minted from ids",
-    "example": "low#/profile/uuid",
-    "example-value": "201765f8-6d45-4941-8789-9eef2effd7d0",
-    "reading": "content: the identifier of the source document; nothing in the bundle gives it"
-   },
-   {
-    "path": "nist.catalog.groups[].controls[].parts[].props[].value",
-    "count": 3,
-    "reason": "path map: the print label of a statement item is derivable: its letter or number is the last segment of the item id (checked for this value), its punctuation is print form",
-    "example": "nist#/catalog/groups/18/controls/1/controls/6/parts/0/parts/0/props/0/value",
-    "example-value": "a.",
-    "reading": "content: the source writes another form here than the rule gives that rebuilds the other item labels from the item id, and a statement has no member for a label"
-   },
-   {
-    "path": "nist.catalog.uuid",
-    "count": 1,
-    "reason": "as decided for IFA on 2026-11-13: the uuid of a source document, which identifies it among source documents only: JASCON objects get URIs minted from ids",
-    "example": "nist#/catalog/uuid",
-    "example-value": "ea7c7688-79c5-463b-a91b-0650f2d98623",
-    "reading": "content: the identifier of the source document; nothing in the bundle gives it"
-   },
-   {
-    "path": "nist.catalog.groups[].controls[].props[].name",
-    "count": 180,
-    "reason": "the name of a prop selects the member its value is written to - of a value that is dropped: path map: a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor its link names, which carries its URI, a label and its title",
-    "example": "nist#/catalog/groups/0/controls/1/controls/9/props/4/name",
-    "example-value": "status",
-    "reading": "not content, because it is the name that selects a value which is a declared drop, and shares its fate"
-   },
-   {
-    "path": "nist.catalog.groups[].controls[].parts[].props[].name",
-    "count": 3,
-    "reason": "the name of a prop selects the member its value is written to - of a value that is dropped: path map: the print label of a statement item is derivable: its letter or number is the last segment of the item id (checked for this value), its punctuation is print form",
-    "example": "nist#/catalog/groups/18/controls/1/controls/6/parts/0/parts/0/props/0/name",
-    "example-value": "label",
-    "reading": "not content, because it is the name that selects a value which is a declared drop, and shares its fate"
-   }
-  ],
+  "declared-drops": [],
   "path-map-not-confirmed": [],
   "written-without-a-source-value": [
    {
     "place": "/statements/[]/modality",
-    "count": 1920,
+    "count": 2100,
     "example": "must",
     "from": "the converter's: a statement of a control in force is read as `must` (corpus rule); the statement of a withdrawn control states no obligation and is `unspecified`"
    },
@@ -1441,13 +1363,25 @@
     "place": "/lifecycle",
     "count": 1039,
     "example": "active",
-    "from": "the converter's: `active` on an object the source gives no status (the kernel requires a lifecycle). The source's own `withdrawn` is a copy and is not counted here"
+    "from": "the converter's default: `active` on an object the source gives no status (the kernel requires a lifecycle; E8). The source's own `withdrawn` is written by a rule and is not counted here"
    },
    {
     "place": "/members/[]/sequence",
     "count": 922,
     "example": 10,
     "from": "the member's position: in the catalogue (root Set) or in the profile's list (baseline Sets)"
+   },
+   {
+    "place": "/statements/[]/obligated-parties/[]",
+    "count": 182,
+    "example": "https://ns.nist.gov/sp800-53/party/organization",
+    "from": "the converter's default party or the caller's, where the source gives no implementation level"
+   },
+   {
+    "place": "/statements/[]/id",
+    "count": 180,
+    "example": "smt",
+    "from": "`smt`: the one statement of a withdrawn control the source gives no statement part (R2)"
    },
    {
     "place": "/id",
@@ -1460,12 +1394,6 @@
     "count": 4,
     "example": "HIGH",
     "from": "the label of a baseline Set, from the name of the profile's file"
-   },
-   {
-    "place": "/statements/[]/obligated-parties/[]",
-    "count": 2,
-    "example": "https://ns.nist.gov/sp800-53/party/organization",
-    "from": "the converter's default party or the caller's, where the source gives no implementation level"
    }
   ]
  }

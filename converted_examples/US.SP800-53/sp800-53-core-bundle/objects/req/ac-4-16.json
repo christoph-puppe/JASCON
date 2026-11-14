@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AC-4.16",
+ "version": "5.2.0",
+ "label": "AC-4(16)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Information Transfers on Interconnected Systems"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into AC-4."
+   }
+  }
+ ]
+}

@@ -114,21 +114,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SI-4.6",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-3.3",
-    "mode": "merged-into",
-    "label": "SI-3(3)",
-    "title": "Non-privileged Users"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-4.6",
-    "mode": "merged-into",
-    "label": "SI-4(6)",
-    "title": "Restrict Non-privileged Users"
-   }
-  ]
- }
+ ]
 }

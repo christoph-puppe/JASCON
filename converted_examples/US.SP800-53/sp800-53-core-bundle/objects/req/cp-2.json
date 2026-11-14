@@ -881,15 +881,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/CP-5",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/CP-5",
-    "mode": "merged-into",
-    "label": "CP-5",
-    "title": "Contingency Plan Update"
-   }
-  ]
- }
+ ]
 }

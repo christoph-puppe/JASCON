@@ -487,21 +487,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/CA-7.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/CA-4",
-    "mode": "merged-into",
-    "label": "CA-4",
-    "title": "Security Certification"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/CA-7.2",
-    "mode": "merged-into",
-    "label": "CA-7(2)",
-    "title": "Types of Assessments"
-   }
-  ]
- }
+ ]
 }

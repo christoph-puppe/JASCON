@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AU-2.4",
+ "version": "5.2.0",
+ "label": "AU-2(4)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Privileged Functions"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into AC-6(9)."
+   }
+  }
+ ]
+}

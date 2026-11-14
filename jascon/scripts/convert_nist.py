@@ -2,16 +2,18 @@
 """NIST SP 800-53 Rev 5 catalog + 800-53B baselines -> Semantic Core bundle.
 Census: drafts/gate-3-census.md (2026-07-22). 20 families -> Sets; the
 controls and enhancements in force -> Requirements (statement items
-flattened, modality `must` corpus rule); a withdrawn control that names a
-successor -> no object, its lineage inverted onto the successor's kernel
-`replaces[]`; a withdrawn control that names none -> a Requirement with
-lifecycle `withdrawn`; SP 800-53A layer -> sp800-53a@1 facet; two-layer ODP
+flattened, modality `must` corpus rule); every withdrawn control -> a
+Requirement with lifecycle `withdrawn` (E1, 2026-11-14), and where it names a
+successor, the successor's kernel `replaces[]` names it and its one
+statement is made from its links (R2); SP 800-53A layer -> sp800-53a@1 facet; two-layer ODP
 params -> statement-scoped kernel parameters (declared where inserted, the
 per-statement parameter rule) + odp@1 admin facet; baselines -> 4 membership
 Sets; the metadata of the catalogue and of each profile -> the compat facet
-on the Set that stands for the document, the catalogue's author and day ->
-the manifest's provenance; the back-matter resources, as the source writes
-them -> references@1 on the root Set. Coverage target: 0.
+on the Set that stands for the document, with the document's uuid (E3), a
+profile's import and the resource it names (E4); the catalogue's author and
+day -> the manifest's provenance; the back-matter resources something refers
+to, as the source writes them -> references@1 on the root Set, an orphaned
+one not at all (E4, checked). Coverage target: 0.
 
     convert_nist.py [--obligated-party URI] [--out DIR]
 
@@ -42,10 +44,10 @@ dropped. What stays out of the bundle is no content by one of three rules
 the ledger checks: a name that only selects the member a value is written
 to, a namespace the mapping is written for, an id (or a label made of one)
 that a stated function rebuilds exactly from a value the bundle holds. The
-drops that were declared before that rule and are none of the three stay
-declared, each with its reason, and the report lists them with a reading,
-for the author to decide; this script declares no drop that was not
-declared before.
+author decided the drops that were declared before that rule on
+2026-11-14 (drafts/phase-e/entscheidungen-phase-e.md): every one of them is
+carried now, and a back-matter resource nothing refers to is an orphan, by a
+fourth rule the ledger checks. This script declares no drop.
 
 The run ends with exit code 1 on an unaccounted value, on a claim the
 written files do not bear out, and on a failed wiring check (a drop that
@@ -56,6 +58,7 @@ import json, os, re, sys, time, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, walk_controls
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, document_author, document_day
+from oscal_conv_lib import COMPAT, COMPAT_PROPERTIES, lifecycle_default_record, lifecycle_default_line
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
@@ -72,7 +75,7 @@ F_53A = f"{NS}/facet/sp800-53a@1"
 F_ODP = f"{NS}/facet/odp@1"
 F_RMF = f"{NS}/facet/rmf@1"
 F_REF = f"{NS}/facet/references@1"
-F_COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"    # what of an OSCAL document the kernel has no member for
+F_COMPAT = COMPAT                                       # what of an OSCAL document the kernel has no member for
 RMF = "http://csrc.nist.gov/ns/rmf"                      # the one prop namespace this mapping is written for
 
 lang_wraps = collections.Counter()
@@ -105,25 +108,13 @@ VER = cat["metadata"]["version"]
 BASELINES = {b: load(b.lower(), f"NIST_SP-800-53_rev5_{b}-baseline_profile.json", "profile")
              for b in ("LOW", "MODERATE", "HIGH", "PRIVACY")}
 
-# ---------- the drops that stay declared (see the header) ----------
-# Each was declared before the author's rule of 2026-11-14 and is none of
-# the three classes of that rule; the report lists them with a reading and
-# the author decides. The reasons are worded as they were declared. What
-# else was declared until then is carried now (the revision history, the
-# directory of parties and roles, the formal ODP labels, `merge.as-is`, the
-# uuid and the media type of a back-matter resource of the catalogue) or is
-# no content by a checked rule (the name of a part, the class of a group or
-# of a control, a label or an id that a rule rebuilds).
-IFA = "as decided for IFA on 2026-11-13: "
-B_BACKMATTER = IFA + ("a back-matter resource or an import link: a link to another serialisation of the source or to "
-                      "an imported document; the bundle carries the Requirements themselves")
-B_UUID = IFA + ("the uuid of a source document, which identifies it among source documents only: JASCON objects get "
-                "URIs minted from ids")
-A_TOMBSTONE = ("path map: a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor "
-               "its link names, which carries its URI, a label and its title")
-A_ITEM_LABEL = ("path map: the print label of a statement item is derivable: its letter or number is the last "
-                "segment of the item id (checked for this value), its punctuation is print form")
-A_PROFILE = "path map: profile resolution mechanics; the selection is the Set"
+# ---------- no declared drop (the author's decisions of 2026-11-14) ----------
+# What was declared as a drop until then is carried now: the status of a
+# withdrawn control is its lifecycle (E1), the uuid of a document stands in
+# its compat facet (E3), a profile's import and the resource it names on its
+# baseline Set (E4), the three print labels the rule does not give in the
+# compat facet of their Requirement (E7). A back-matter resource that nothing
+# in the catalogue refers to is an orphan (E4/R1), a claim the ledger checks.
 
 def norm(p):
     p = re.sub(r"(\.controls\[\])+", ".controls[]", p)
@@ -148,11 +139,12 @@ N_GROUP_CLASS = "the class `family` of a group selects that the group is written
 N_CLASS = "the class of a control, rebuilt from its id: `SP800-53-enhancement` where the id has a dot, else `SP800-53`"
 N_LABEL_PADDED = "the zero-padded label of a control, rebuilt from its label: every number padded to two digits"
 N_LABEL_53A = "the SP 800-53A label of a control, rebuilt from its label: every number padded to two digits"
-N_SORT_ID = "the sort-id of a withdrawn control that is no object, rebuilt from its id: every number padded to two digits"
 N_ID_GUIDANCE = "the id of a guidance part, rebuilt from the control id: <control id>_gdn"
 N_ID_STATEMENT = "the id of a statement part without text of its own, rebuilt from the control id: <control id>_smt"
 N_ID_METHOD = "the id of an assessment method, rebuilt from the control id and the method: <control id>_asm-<method in lower case>"
 N_ID_OVERVIEW = "the id of a family's overview part, rebuilt from the group id: <group id>_ovw"
+N_ORPHAN = ("a back-matter resource that nothing in the catalogue refers to (no `#uuid` outside it) is orphaned and "
+            "not carried (author, 2026-11-14)")
 N_ITEM_LABEL = ("the print label of a statement item, rebuilt from the item id: its last segment, written `x.` on the "
                 "first two levels of a control, `(x)` on its third level and in an enhancement")
 PROP_NAMES = ("label", "sort-id", "status", "implementation-level", "contributes-to-assurance",
@@ -211,7 +203,11 @@ R_PARTY = "obligated party URI from the implementation level"
 R_CARDINALITY = "parameter cardinality `many` from the selection's how-many `one-or-more`"
 R_LINEAGE = "lineage inverted: the URI of a withdrawn control, written on the successor its link names"
 R_MODE = "lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)"
-R_INTO = "the statement a lineage link names, as a statement id"
+R_LIFECYCLE = "lifecycle from the status the source states: `withdrawn`, the kernel's own word"
+R_WITHDRAWN = ("the statement of a withdrawn control that names a successor, from its links: `Incorporated into X.` "
+               "or `Moved to X.`, the targets in source order (`X and Y`, `X, Y, and Z`), each by the label the "
+               "source gives it for a reader (a statement item: its control's label and the item's label without "
+               "the full stop)")
 R_FAMILY = "family Set URI from the group id"
 R_SEQUENCE = "member sequence: ten times the control's place in its family, ordered by sort-id"
 R_SAME_RELATION = "a relation the control states twice is written once"
@@ -239,6 +235,8 @@ def _lineage_ref(withdrawn_id, href, successor_id):
     return mint(withdrawn_id) if href.lstrip("#").split("_smt")[0] == successor_id else None
 def _mode(rel): return MODE[rel]
 def _into(href): return "smt" + href.lstrip("#").split("_smt")[1]
+LIFECYCLE = {"withdrawn": "withdrawn"}
+def _lifecycle(status): return LIFECYCLE[status]
 def _part_req(href): return mint(href.lstrip("#").split("_smt")[0])
 def _family_uri(gid): return f"{NS}/set/family/{gid}"
 PARTIES = PARTY_DEFAULT.rsplit("/", 1)[0] + "/"          # where the landmark URI of a party stands (as in convert_ism.py)
@@ -295,6 +293,17 @@ RES = {r["uuid"]: r for r in RESOURCES}                                  # uuid 
 def res_url(uuid):
     """the first link of a resource, as the source writes it ("" where it gives none)"""
     return ((RES[uuid].get("rlinks") or [{}])[0]).get("href", "")
+# E4/R1: a resource is referred to where `#uuid` stands in a string of the catalogue outside the resource. The others
+# are orphans: not carried, by a claim the ledger checks against the whole document.
+_OUTSIDE = "\x00".join(strings({k: v for k, v in cat.items() if k != "back-matter"}))
+_RES_TEXT = ["\x00".join(strings(r)) for r in RESOURCES]
+def referred_to(i, uuid):
+    ref = "#" + uuid
+    return ref in _OUTSIDE or any(ref in t for j, t in enumerate(_RES_TEXT) if j != i)
+RESOURCES_KEPT, ORPHANS = [], []
+for i, r in enumerate(RESOURCES):
+    if referred_to(i, r["uuid"]): RESOURCES_KEPT.append(r)
+    else: ORPHANS.append(r); led.orphan(r["uuid"], N_ORPHAN)
 
 controls = list(walk_controls(cat))
 by_id = {c["id"]: c for c, _, _ in controls}
@@ -307,6 +316,9 @@ if unknown_status:
 withdrawn = {c["id"] for c, _, _ in controls if prop(c, "status") == "withdrawn"}
 groups_by_id = {g["id"]: g for g in cat.get("groups", []) or []}
 params_global = {pm["id"]: pm for c, _, _ in controls for pm in c.get("params", []) or []}
+def ordered(compat):
+    """a compat payload with its members in the order of the library's one compat schema"""
+    return {k: compat[k] for k in COMPAT_PROPERTIES if k in compat}
 def all_parts(node):
     for p in node.get("parts", []) or []:
         yield p
@@ -331,24 +343,17 @@ MODE = {"incorporated-into": "merged-into", "moved-to": "renamed"}
 succ_replaces = collections.defaultdict(list)   # successor cid -> entries
 fam_replaces = collections.defaultdict(list)    # successor group id -> entries (moved-to a family)
 wd_chain, wd_dangling = [], []
-wd_no_successor = []                            # withdrawn controls of which no lineage entry was written
+wd_no_successor = []                            # withdrawn controls that name no successor
 for c, _, _ in controls:
     if c["id"] not in withdrawn: continue
     landed = 0
-    label = prop(c, "label")                    # the label the source gives for a reader: the prop without a class
-    if label is None: label = c["id"].upper()
-    class_ok = class_given(c)
     for l in c.get("links", []) or []:
         rel, href = l.get("rel"), (l.get("href") or "").lstrip("#")
         if rel not in MODE: continue
-        target, into = href, None
-        if "_smt" in href:                       # statement-level target
-            target, into = href.split("_smt")[0], D(R_INTO, _into, l["href"])
+        target = href.split("_smt")[0]           # a link to a statement names its control
         successor = None if target in withdrawn else by_id.get(target) or groups_by_id.get(target)
         e = {"ref": D(R_LINEAGE, _lineage_ref, c["id"], l["href"], successor["id"]) if successor else mint(c["id"]),
-             "mode": D(R_MODE, _mode, l["rel"]), "label": label, "title": c.get("title", "")}
-        if into: e["into"] = into
-        if not class_ok: e["class"] = c["class"]
+             "mode": D(R_MODE, _mode, l["rel"])}
         if target in withdrawn:
             wd_chain.append((c["id"], target)); continue
         if target in by_id:
@@ -357,21 +362,28 @@ for c, _, _ in controls:
             fam_replaces[target].append(e); landed += 1
         else:
             wd_dangling.append((c["id"], href))
-    if landed:
-        # A withdrawn control that names a successor is no object. Its id, its title, its label and its links
-        # are carried by the lineage entry; its other labels, its sort-id and its class are rebuilt by a rule.
-        # Its status stays the drop it was declared as: the value only, so that nothing else of such a
-        # control can read as dropped on purpose.
-        for cls, rule in (("zero-padded", N_LABEL_PADDED), ("sp800-53a", N_LABEL_53A)):
-            for v in prop(c, "label", cls=cls, all_=True): rebuilt(v, rule, zero_padded, label)
-        for v in prop(c, "sort-id", all_=True): rebuilt(v, N_SORT_ID, zero_padded, c["id"])
-        led.drop_value(prop(c, "status"), A_TOMBSTONE)
-        if not class_ok: class_written[0] += 1
-    else:
-        wd_no_successor.append(c["id"])
-tombstones = withdrawn - set(wd_no_successor)
-# what becomes a Requirement: a control in force, and a withdrawn control that no other control replaces
-written = [(c, par, g) for c, par, g in controls if c["id"] not in tombstones]
+    if not landed: wd_no_successor.append(c["id"])
+tombstones = withdrawn - set(wd_no_successor)    # withdrawn controls that name a successor: objects all the same (E1)
+written = [(c, par, g) for c, par, g in controls]
+
+# R2: the statement of a withdrawn control that names a successor, made from its links. The label of a target is the
+# one the source gives it for a reader; a statement item is named by its control's label and its own.
+def _reader_label(node):
+    return next((str(p["value"]) for p in node.get("props", []) or [] if p.get("name") == "label" and "class" not in p), None)
+READER = {**{g["id"]: _reader_label(g) for g in groups_by_id.values()}, **{cid: _reader_label(c) for cid, c in by_id.items()}}
+ITEMS = {p["id"]: p for c, _, _ in controls for p in all_parts(c) if "id" in p}
+VERB = {"incorporated-into": "Incorporated into", "moved-to": "Moved to"}
+def _target_label(href):
+    t = href.lstrip("#")
+    # the statement part as a whole has no label in SP 800-53 (none of the pinned catalogue has): its control's
+    if "_smt" in t: return READER[t.split("_smt")[0]] + (_reader_label(ITEMS[t]) or "").rstrip(".")
+    return READER[t]
+def _withdrawn_prose(*rel_href):
+    """`rel, href, rel, href, ...` of a withdrawn control's lineage links -> the sentence of its one statement"""
+    rels, names = rel_href[0::2], [_target_label(h) for h in rel_href[1::2]]
+    if len(set(rels)) != 1: raise SystemExit(f"convert_nist.py: a withdrawn control names successors by {sorted(set(rels))}")
+    joined = names[0] if len(names) == 1 else " and ".join(names) if len(names) == 2 else ", ".join(names[:-1]) + ", and " + names[-1]
+    return f"{VERB[rels[0]]} {joined}."
 
 # ---------- parameter declarations ----------
 def param_decl(pm):
@@ -449,15 +461,14 @@ def methods_of(c, used):
     return out
 
 # ---------- statements: flatten prose-bearing statement/item nodes ----------
-item_label_declared = []               # items whose print label the rule does not give: the declared drop stays
+labels_kept = collections.defaultdict(list)    # control id -> the items whose print label the rule does not give
 def item_label(pt, cid):
     """the print label of a statement item (`a.`, `1.`, `(a)`): rebuilt from the item id where the rule gives it
-    exactly. Where it does not, the drop that was declared for it stays, if its reason holds for this value."""
-    for label in prop(pt, "label", all_=True):
-        if given_by(label, N_ITEM_LABEL, _item_label, pt.get("id"), cid): continue
-        last = (pt.get("id") or "").rsplit(".", 1)[-1]
-        if label.strip("().") == last.strip("()"):
-            led.drop_value(label, A_ITEM_LABEL); item_label_declared.append(pt.get("id"))
+    exactly. Where it does not (E7), the item's id and its label prop are carried in the compat facet `parts` of the
+    Requirement, in the source's own shape."""
+    for p in picked(pt, "label"):
+        if given_by(p["value"], N_ITEM_LABEL, _item_label, pt.get("id"), cid): continue
+        labels_kept[cid].append({"id": pt["id"], "props": [p]})
 
 def flat_statements(c):
     out = []
@@ -486,9 +497,11 @@ op_default = 0                         # controls without an implementation leve
 op_default_stmts = 0                   # ... and their statements, which carry PARTY
 lvl_count = collections.Counter()      # implementation levels as the source combines them
 rel_count = collections.Counter()
+REF_NO_LINK = "reference to a resource without a link (compat `links`)"
 req_ids = {}
 n_53a = 0
 n_formal = 0                           # formal ODP labels written
+stated = []                            # Requirements whose lifecycle is the source's status (E8)
 n_inserted = 0                         # parameter insertions in statement text
 
 for c, parents, gchain in written:
@@ -497,7 +510,8 @@ for c, parents, gchain in written:
     # lifecycle: the source's own word where it states a status. A control it gives none is in force; the kernel
     # requires a lifecycle, and the converter writes `active` for it.
     status = prop(c, "status")
-    lifecycle = status if status is not None else "active"
+    lifecycle = D(R_LIFECYCLE, _lifecycle, status) if status is not None else "active"
+    if status is not None: stated.append(rid)
     plain = prop(c, "label")
     label = plain if plain is not None else cid.upper()
     for cls, rule in (("zero-padded", N_LABEL_PADDED), ("sp800-53a", N_LABEL_53A)):
@@ -513,6 +527,9 @@ for c, parents, gchain in written:
     # A control in force is read as `must` (the corpus rule). The statement of a withdrawn control says why it
     # was withdrawn and states no obligation: `unspecified`.
     modality = "must" if status is None else "unspecified"
+    def statement(sid, prose):
+        """the one place that writes whom a statement binds (backlog #74)"""
+        return {"id": sid, "modality": modality, "obligated-parties": parties, "prose": {"en": prose}}
     # statements + per-statement param declaration
     params = {pm["id"]: pm for pm in c.get("params", []) or []}
     stmts, declared_any = [], set()
@@ -521,8 +538,7 @@ for c, parents, gchain in written:
         prose = rewrite(pt["prose"], used)
         n_inserted += len(INSERT.findall(pt["prose"]))
         sid = carried(R_STATEMENT, _statement_id, pt.get("id", f"{cid}_smt"), cid)
-        s = {"id": sid, "modality": modality, "obligated-parties": parties,
-             "prose": {"en": prose}}
+        s = statement(sid, prose)
         decls = []
         for u in sorted(used):
             if u in params:
@@ -533,6 +549,12 @@ for c, parents, gchain in written:
         if decls: s["parameters"] = decls
         declared_any |= used
         stmts.append(s)
+        mod_count[modality] += 1
+        if not lvls: op_default_stmts += 1
+    # R2: a withdrawn control the source gives no statement keeps the one the kernel requires, made from its links
+    lineage = [l for l in c.get("links", []) or [] if l.get("rel") in MODE]
+    if status is not None and not stmts and lineage:
+        stmts.append(statement("smt", D(R_WITHDRAWN, _withdrawn_prose, *[x for l in lineage for x in (l["rel"], l["href"])])))
         mod_count[modality] += 1
         if not lvls: op_default_stmts += 1
     # params without a statement insertion site -> declare on first statement (counted)
@@ -585,9 +607,11 @@ for c, parents, gchain in written:
     if odp_admin: facets[F_ODP] = {"params": odp_admin}
     for v in prop(c, "contributes-to-assurance", ns=RMF, all_=True):
         if v in BOOLEAN: facets[F_RMF] = {"contributes-to-assurance": D(R_ASSURANCE, _boolean, v)}
+    compat = {}                          # what the kernel has no member for, in the source's own shape
     if not class_given(c):               # a class the rule does not give is written as the source gives it
-        facets[F_COMPAT] = {"class": c["class"]}; class_written[0] += 1
-    if facets: req["facets"] = facets
+        compat["class"] = c["class"]; class_written[0] += 1
+    if labels_kept.get(cid): compat["parts"] = labels_kept[cid]
+    req["facets"] = facets               # here, so that a Requirement's members keep their order; filled up below
     # relations
     rels = []
     for l in c.get("links", []) or []:
@@ -595,10 +619,13 @@ for c, parents, gchain in written:
         # the link's own `rel` is written as the relation type: it is the same word
         if rel in ("related", "required") and href in by_id:
             rels.append({"type": rel, "ref": D(R_LINK, _link_ref, l["href"])}); rel_count[rel] += 1
-            if href in tombstones: rel_count[f"of which {rel} to a withdrawn control that is no object"] += 1
         elif rel == "reference" and href in RES and res_url(href):
             rels.append({"type": rel, "ref": D(R_REFERENCE, _resolved, l["href"], RES[href]["uuid"], res_url(href))})
             rel_count["reference"] += 1
+        elif rel == "reference" and href in RES:  # E14: the resource gives no link to resolve to; the link as it stands
+            compat.setdefault("links", []).append(l); rel_count[REF_NO_LINK] += 1
+        elif rel in MODE:                        # on the successor's `replaces[]`, and in this control's statement (R2)
+            rel_count[f"{rel} (the successor's `replaces[]`, and the statement of this control)"] += 1
         else:
             rel_count[f"not written ({rel})"] += 1
     if rels:
@@ -608,13 +635,11 @@ for c, parents, gchain in written:
             if k not in seen: seen[k] = r; ded.append(r)
             else: led.same(r, seen[k], R_SAME_RELATION)
         req["relations"] = ded
-    # withdrawal inversion
+    if compat: facets[F_COMPAT] = ordered(compat)
+    if not facets: del req["facets"]
+    # withdrawal inversion: the successor names the withdrawn control, which is an object of its own (E1)
     if succ_replaces.get(cid):
-        entries = succ_replaces[cid]
-        req["replaces"] = [{"ref": e["ref"], "mode": e["mode"]} for e in entries]
-        req["annotations"] = {"nist-withdrawal": [
-            {k: v for k, v in e.items() if k in ("ref", "label", "title", "into", "mode", "class")}
-            for e in entries]}
+        req["replaces"] = [{"ref": e["ref"], "mode": e["mode"]} for e in succ_replaces[cid]]
     req_ids[cid] = (rid, f"objects/req/{slug(cid)}.json", req)
 
 bundle = Bundle(os.path.join(OUTDIR, "sp800-53-core-bundle"))
@@ -660,18 +685,17 @@ for g in cat.get("groups", []):
     if fam_replaces.get(g["id"]):                # sa-12 "moved to SR family": Set-level successor
         entries = fam_replaces[g["id"]]
         sobj["replaces"] = [{"ref": e["ref"], "mode": e["mode"]} for e in entries]
-        sobj["annotations"] = {"nist-withdrawal": [
-            {k: v for k, v in e.items() if k in ("ref", "label", "title", "into", "mode", "class")}
-            for e in entries]}
     bundle.add(f"objects/set/family-{slug(g['id'])}.json", sobj)
     root_members.append({"ref": suri, "sequence": len(root_members) * 10 + 10})
     fam_sets += 1
 root = {"id": f"{NS}/set/root", "version": VER, "lifecycle": "active",
         "title": cat["metadata"]["title"], "members": root_members}
 root_facets = {}
-if RESOURCES: root_facets[F_REF] = {"resources": RESOURCES}
-if document_metadata(cat["metadata"]): root_facets[F_COMPAT] = {"metadata": document_metadata(cat["metadata"])}
-if root_facets: root["facets"] = root_facets
+if RESOURCES_KEPT: root_facets[F_REF] = {"resources": RESOURCES_KEPT}
+root_compat = {"uuid": cat["uuid"]}                                       # E3
+if document_metadata(cat["metadata"]): root_compat["metadata"] = document_metadata(cat["metadata"])
+root_facets[F_COMPAT] = ordered(root_compat)
+root["facets"] = root_facets
 bundle.add("objects/set/root.json", root)
 
 # ---------- baseline Sets ----------
@@ -685,10 +709,13 @@ for b, prof in BASELINES.items():
         members.append({"ref": req_uri(cid), "sequence": (i + 1) * 10})
     bset = {"id": f"{NS}/set/baseline/{b.lower()}", "version": prof["metadata"].get("version") or VER,
             "lifecycle": "active", "title": prof["metadata"]["title"], "label": b, "members": members}
-    compat = {}
+    compat = {"uuid": prof["uuid"]}                               # E3
     if document_metadata(prof["metadata"]): compat["metadata"] = document_metadata(prof["metadata"])
+    # E4: the import, as the source writes it (its include list is the Set's members), and the resource it names
+    compat["imports"] = [{"href": imp["href"]} for imp in prof["imports"]]
+    if (prof.get("back-matter") or {}).get("resources"): compat["back-matter"] = {"resources": prof["back-matter"]["resources"]}
     if "merge" in prof: compat["merge"] = prof["merge"]          # how the profile merges what it selects (a boolean)
-    if compat: bset["facets"] = {F_COMPAT: compat}
+    bset["facets"] = {F_COMPAT: ordered(compat)}
     bundle.add(f"objects/set/baseline-{b.lower()}.json", bset)
 
 # What the ledger cannot see. It follows source values into the bundle; a value the converter writes on its own has
@@ -725,11 +752,7 @@ _RESOURCE = {"type": "object", "additionalProperties": False, "required": ["uuid
 bundle.stub("sp800-53-references-stub.json", F_REF.split("@")[0], [], {"resources": {"type": "array", "items": _RESOURCE}},
             note="NORMATIVE pinned payload schema (backlog #26): the back-matter resources of the catalogue, as the "
                  "source writes them; a link `(#uuid)` in a text of the bundle names the resource with that uuid")
-bundle.stub("oscal-1x-compat-1.0.0-stub.json", F_COMPAT.split("@")[0], [],
-            {"metadata": {"type": "object"}, "merge": {"type": "object"}, "class": {"type": "string"}},
-            note="NORMATIVE pinned payload schema (backlog #26): what of an OSCAL document the kernel has no member "
-                 "for, in the source's own shape - the document `metadata` and a profile's `merge` on the Set that "
-                 "stands for the document, the `class` of a control where no rule gives it")
+bundle.pin_compat()                          # E10: the one compat schema of the repository, 1.1.0
 # The manifest's provenance names the catalogue: its title, version and OSCAL version, and - by the library's rule
 # for the author of an OSCAL document, as every converter pre-fills it (backlog #69) - its author and its day.
 PROVENANCE = {"source": cat["metadata"]["title"], "source-version": VER,
@@ -743,6 +766,7 @@ PROVENANCE.update({"baselines": {b: p["metadata"]["version"] for b, p in BASELIN
                                      "pre-existing mapping-endpoint URIs; pending a NIST-published URI"})
 led.resolve(bundle.objects)      # a boolean that carries its origin becomes the plain one, and its place is noted
 MANIFEST = bundle.write(PROVENANCE)
+LIFECYCLE_DEFAULT = lifecycle_default_record(bundle.objects, stated)      # E8
 
 # ---------- corpus cross-check: mapping endpoints vs minted ids ----------
 cited = collections.Counter()
@@ -760,7 +784,7 @@ for base, _, files in os.walk(os.path.join(ROOT, "converted_examples")):
         for m in re.finditer(r'"https://ns\.nist\.gov/sp800-53/req/([A-Za-z0-9.()-]+)"', txt):
             cited[m.group(1)] += 1
 minted_names = {rid.rsplit("/", 1)[-1] for cid, (rid, _, _) in req_ids.items()}
-wd_names = {cid.upper() for cid in tombstones}
+wd_names = {cid.upper() for cid in withdrawn} - minted_names       # since E1 every withdrawn control is an object
 hit = {k: v for k, v in cited.items() if k in minted_names}
 hit_wd = {k: v for k, v in cited.items() if k in wd_names}
 miss = {k: v for k, v in cited.items() if k not in minted_names and k not in wd_names}
@@ -772,42 +796,17 @@ miss = {k: v for k, v in cited.items() if k not in minted_names and k not in wd_
 # path are carried and others are not, the drop is declared value by value at
 # the place the script decides it (the status of a tombstone, an item label
 # the rule does not give).
-PATH_DROPS = [
- (r"\.profile\.back-matter\.", B_BACKMATTER),
- (r"\.profile\.imports\[\]\.href$", A_PROFILE),
- (r"^(nist\.catalog|[a-z]+\.profile)\.uuid$", B_UUID),
-]
+PATH_DROPS = []          # none since the author's decisions of 2026-11-14 (see the head of this script)
 for pattern, reason in PATH_DROPS: led.drop(pattern, reason)
 # What each reason may be declared for: the source paths a drop with that reason stands on. A declaration that
 # reaches further (a whole control where its status was meant) would swallow a value that was lost.
-DROP_REACH = {
- A_TOMBSTONE: r"\.controls\[\]\.props\[\]\.value$",
- A_ITEM_LABEL: r"\.parts\[\]\.props\[\]\.value$",
- A_PROFILE: r"\.profile\.imports\[\]\.href$",
- B_UUID: r"^(nist\.catalog|[a-z]+\.profile)\.uuid$",
- B_BACKMATTER: r"\.profile\.back-matter\.",
-}
+DROP_REACH = {}
 # A selector beside a value that is a declared drop is dropped with it; the ledger words its reason with this
 WITH = " - of a value that is dropped: "
 WITH_REACH = r"\.props\[\]\.(name|class|ns)$"
 # The reading of each drop that stays declared, under the author's rule of 2026-11-14: `content`, or `not
 # content, because ...`. The author decides them; the converter only lists them. (path, reason, reading)
-READINGS = [
- (r"\.controls\[\]\.props\[\]\.value$", A_TOMBSTONE,
-  "not content, because the value `withdrawn` of a control that names a successor only decides where the control is "
-  "written (as a lineage entry on its successor, under `replaces` and the annotation `nist-withdrawal`, which say "
-  "the same by their names); it is a value and not a name, so none of the three classes names it"),
- (r"\.parts\[\]\.props\[\]\.value$", A_ITEM_LABEL,
-  "content: the source writes another form here than the rule gives that rebuilds the other item labels from the "
-  "item id, and a statement has no member for a label"),
- (r"\.profile\.imports\[\]\.href$", A_PROFILE,
-  "content: the link from the profile to the document it selects from (it names the profile's back-matter "
-  "resource); the baseline Set names the selected Requirements and not that document"),
- (r"\.profile\.back-matter\.", B_BACKMATTER,
-  "content: the resource of the profile that names the imported catalogue in three serialisations (uuid, "
-  "description, links, media types); it goes with the import link"),
- (r"\.uuid$", B_UUID, "content: the identifier of the source document; nothing in the bundle gives it"),
-]
+READINGS = []
 READING_WITH = "not content, because it is the name that selects a value which is a declared drop, and shares its fate"
 def root_reason(reason): return reason.split(WITH)[-1]
 def reading_of(path, reason):
@@ -856,7 +855,8 @@ for e in LEDGER["entries"]:
         row = declared.setdefault((pattern_of(e["path"]), e["reason"]),
                                   {"count": 0, "example": e["source"], "value": source_value(e)})
         row["count"] += 1
-KIND = {"selector": "a name that selects", "namespace": "a namespace", "rebuilt-id": "an id rebuilt exactly"}
+KIND = {"selector": "a name that selects", "namespace": "a namespace", "rebuilt-id": "an id rebuilt exactly",
+        "orphan": "an orphaned element"}
 declared_rows = [{"path": p, "count": row["count"], "reason": reason, "example": row["example"],
                   "example-value": row["value"], "reading": reading_of(p, reason)}
                  for (p, reason), row in sorted(declared.items(), key=lambda x: (WITH in x[0][1], -x[1]["count"], x[0]))]
@@ -887,8 +887,9 @@ for p in sorted({e["path"] for e in LEDGER["entries"] if e.get("reason") in {r f
                   f"read as dropped on purpose; declare such a drop value by value")
 
 OWN_WHY = [   # place pattern -> what stands behind the value, if not a source value
- (r"/lifecycle$", "the converter's: `active` on an object the source gives no status (the kernel requires a "
-                  "lifecycle). The source's own `withdrawn` is a copy and is not counted here"),
+ (r"/lifecycle$", "the converter's default: `active` on an object the source gives no status (the kernel requires a "
+                  "lifecycle; E8). The source's own `withdrawn` is written by a rule and is not counted here"),
+ (r"^/statements/\[\]/id$", "`smt`: the one statement of a withdrawn control the source gives no statement part (R2)"),
  (r"/modality$", "the converter's: a statement of a control in force is read as `must` (corpus rule); the statement "
                  "of a withdrawn control states no obligation and is `unspecified`"),
  (r"/parameters/\[\]/type$", "decided by the shape of the source parameter: `choice` where it has a `select`, else `string`"),
@@ -920,11 +921,12 @@ RULES = [
   "states; oscal-version also manifest `provenance.source-oscal-version`; the name of the party the metadata names "
   "as the author -> manifest `provenance.author-ref` (a landmark URI), the day of last-modified -> manifest "
   "`provenance.date`", {C}),
- (r"^nist\.catalog\.uuid$", DROPPED, f"not carried: a declared drop, {SEE}", {DR}),
+ (r"^nist\.catalog\.uuid$", "L2", "compat facet oscal-1x@1 on the root Set, member `uuid` (E3)", {C}),
  (r"^nist\.catalog\.back-matter\.resources\[\]\.", "L2",
-  "references@1 on the root Set: the resources in the source's own shape (uuid, title, citation, rlinks with href "
-  "and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is "
-  "resolved to its first link (the uuid and the link are then also inputs of that rule)", {C}),
+  "references@1 on the root Set: the resources something in the catalogue refers to, in the source's own shape "
+  "(uuid, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its "
+  "uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs "
+  "of that rule); a resource nothing refers to -> not content, an orphan (E4)", {C, N}),
  (r"^nist\.catalog\.groups\[\]\.id$", "L1", "family Set URI (D21 nesting under root)", {X}),
  (r"^nist\.catalog\.groups\[\]\.title$", "L1", "family Set title", {C}),
  (r"^nist\.catalog\.groups\[\]\.class$", NOT_CONTENT, "`family`: selects that the group is written as a family Set", {N}),
@@ -936,33 +938,29 @@ RULES = [
  (r"^nist\.catalog\.groups\[\]\.parts\[\]\.name$", NOT_CONTENT, "`overview`: selects where the part is written", {N}),
  (r"^nist\.catalog\.groups\[\]\.parts\[\]\.id$", NOT_CONTENT, "rebuilt from the group id (<group id>_ovw)", {N}),
  (CTL + r"\.id$", "L1",
-  "Requirement URI (dot form = corpus mapping endpoints); of a withdrawn control that names a successor: its URI in "
-  "`replaces` and in the nist-withdrawal annotation of that successor", {X}),
- (CTL + r"\.title$", "L1",
-  "Requirement title; of a withdrawn control that names a successor: `title` in the nist-withdrawal annotation", {C}),
+  "Requirement URI (dot form = corpus mapping endpoints); of a withdrawn control that names a successor also its URI "
+  "in the successor's `replaces`", {X}),
+ (CTL + r"\.title$", "L1", "Requirement title", {C}),
  (CTL + r"\.class$", NOT_CONTENT if not class_written[0] else "L2",
   "rebuilt from the control id (an id with a dot is an enhancement)"
   + ("" if not class_written[0] else "; where that rule does not give it: compat facet oscal-1x@1 `class` on the "
-     "Requirement (`class` in the nist-withdrawal annotation for a withdrawn control that is no object)"),
+     "Requirement"),
   {N} | ({C} if class_written[0] else set())),
  (CTL + r"\.props\[\]\.value$", "L1",
-  "label (no class) -> `label` of the Requirement, or of the nist-withdrawal annotation for a withdrawn control "
-  "that names a successor; zero-padded and sp800-53a label -> not content, rebuilt from that label; sort-id -> "
-  "member sequence in the family Set (of a withdrawn control that is no object: not content, rebuilt from the id); "
-  "implementation-level -> obligated-parties; contributes-to-assurance -> rmf@1 (a JSON boolean); status -> "
-  f"`lifecycle` of a withdrawn control that is an object; of one that names a successor: a declared drop, {SEE}",
-  {C, X, N, DR}),
+  "label (no class) -> `label` of the Requirement; zero-padded and sp800-53a label -> not content, rebuilt from that "
+  "label; sort-id -> member sequence in the family Set; implementation-level -> obligated-parties; "
+  "contributes-to-assurance -> rmf@1 (a JSON boolean); status -> `lifecycle` (E1)", {C, X, N}),
  (CTL + r"\.props\[\]\.(name|ns|class)$", NOT_CONTENT,
   "select the rule for the prop's value: the name the member, the class which label, the namespace "
-  "(http://csrc.nist.gov/ns/rmf) the meaning of the name; the name of a status that is a declared drop is dropped "
-  "with it", {N, DR}),
+  "(http://csrc.nist.gov/ns/rmf) the meaning of the name", {N}),
  (CTL + r"\.links\[\]\.href$", "L1",
-  "related, required -> relation to the Requirement the link names (also where that is a withdrawn control that is "
-  "no object); reference -> relation to the link of the back-matter resource; incorporated-into, moved-to -> the "
-  "successor's `replaces[]` and nist-withdrawal annotation (`into` for a link to a statement)", {X}),
+  "related, required -> relation to the Requirement the link names; reference -> relation to the link of the "
+  "back-matter resource, or, where the resource gives none, compat facet `links` as the source writes it (E14); "
+  "incorporated-into, moved-to -> the successor's `replaces[]` and the statement of the withdrawn control (R2)",
+  {X} | ({C} if rel_count[REF_NO_LINK] else set())),
  (CTL + r"\.links\[\]\.rel$", "L1",
   "related, required, reference -> the relation type, the same word; incorporated-into, moved-to -> `mode` "
-  "merged-into, renamed", {C, X}),
+  "merged-into, renamed, and the verb of the withdrawn control's statement (R2)", {C, X}),
  (CTL + r"\.params\[\]\.(id|label)$", "L1",
   "statement-scoped kernel parameter (name, label) on each inserting statement (per-statement parameter rule); the "
   "id is also the key of the parameter in odp@1", {C}),
@@ -985,10 +983,10 @@ RULES = [
   "(language-tagged); a markdown link stays as the source wrote it", {C, X}),
  (CTL + r"\.parts\[\]\.props\[\]\.value$", "L2",
   "sp800-53a label of an objective or a method -> sp800-53a@1 `label`; method -> sp800-53a@1 `method`; print label "
-  f"of a statement item -> not content, rebuilt from the item id; where the rule does not give it: a declared drop, {SEE}",
-  {C, N, DR}),
- (CTL + r"\.parts\[\]\.props\[\]\.(name|ns|class)$", NOT_CONTENT,
-  "select the rule for the prop's value; the name of an item label that is a declared drop is dropped with it", {N, DR}),
+  "of a statement item -> not content, rebuilt from the item id; where the rule does not give it: compat facet "
+  "`parts` of the Requirement, the item's id with its label prop as the source writes them (E7)", {C, N}),
+ (CTL + r"\.parts\[\]\.props\[\]\.(name|ns|class)$", "L2",
+  "select the rule for the prop's value; the name of an item label the rule does not give is carried with it (E7)", {C, N}),
  (CTL + r"\.parts\[\]\.links\[\]\.href$", "L2",
   "`assessment-for` of an assessment objective -> sp800-53a@1 objective `assessment-for[]`: `statement-id` (the "
   "statement part by the statement-id rule) and, where the part is another control's, `requirement-ref`", {X}),
@@ -1000,8 +998,11 @@ RULES = [
   "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, "
   "oscal-version, roles, parties, responsible-parties and whatever else the document states", {C}),
  (PROF + r"\.merge\.", "L2", "compat facet oscal-1x@1 on the baseline Set, member `merge` (`as-is`, a JSON boolean)", {C}),
- (PROF + r"\.(uuid|imports\[\]\.href)$", DROPPED, f"not carried: a declared drop, {SEE}", {DR}),
- (PROF + r"\.back-matter\.", DROPPED, f"not carried: a declared drop, {SEE}", {DR}),
+ (PROF + r"\.uuid$", "L2", "compat facet oscal-1x@1 on the baseline Set, member `uuid` (E3)", {C}),
+ (PROF + r"\.imports\[\]\.href$", "L2", "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4)", {C}),
+ (PROF + r"\.back-matter\.", "L2",
+  "compat facet oscal-1x@1 on the baseline Set, member `back-matter`, in the source's own shape: the resource its "
+  "import names (E4)", {C}),
 ]
 rows, unmapped = coverage(paths, [(rx, level, text) for rx, level, text, _ in RULES])
 
@@ -1044,31 +1045,32 @@ j = report(
     f"Source: **{cat['metadata']['title']}** v{VER} (OSCAL {cat['metadata']['oscal-version']}) "
     f"+ four 800-53B baseline profiles. Census: `drafts/gate-3-census.md`.",
     [f"- Objects emitted: **{len(req_ids)} Requirements** ({len(req_ids) - n_wd_objects} controls and enhancements in "
-     f"force, {n_wd_objects} withdrawn that name no successor; {len(tombstones)} withdrawn controls that name one are "
-     f"no objects), **{nset} Sets** ({fam_sets} families + root + 4 baselines), manifest with both digests.",
+     f"force, {n_wd_objects} withdrawn), **{nset} Sets** ({fam_sets} families + root + 4 baselines), manifest with "
+     f"both digests.",
      f"- Baseline membership: " + ", ".join(f"{b} {len(BASELINES[b]['imports'][0]['include-controls'][0]['with-ids'])}"
                                             for b in BASELINES) + ".",
      f"- **Conversion ledger** (every source value followed into the written files): **{LT['copied']:,} copied**, "
      f"**{LT['transformed']:,} transformed** by a named rule, **{LT['not-content']:,} not content** by a checked rule, "
-     f"**{LT['intentionally-dropped']:,} dropped** for a reason declared before 2026-11-14 (the author decides them), "
+     f"**{LT['intentionally-dropped']:,} dropped** for a declared reason, "
      f"**{LT['unaccounted']:,} unaccounted**; claims that do not hold: {len(LEDGER['verification-failures'])}. The "
      f"line `UNMAPPED` above counts source paths that have a row in the path map. The ledger is the measure of what "
      f"arrived; its sections are at the end of this report."],
-    [f"- **Withdrawn controls x{len(withdrawn)}**: x{len(tombstones)} name a successor and are no objects; their "
-     f"lineage is inverted (kernel `replaces[]`): {sum(len(v) for v in succ_replaces.values())} successor edges on "
-     f"Requirements + {sum(len(v) for v in fam_replaces.values())} on family Sets (sa-12 'moved to SR' - the "
-     f"successor is a whole family; shared base makes Set-level `replaces` legal) (incorporated-into->merged-into, "
-     f"moved-to->renamed), naming x{len(lineage_uris)} withdrawn controls; statement-precision and the withdrawn "
-     f"control's label (the one the source gives without a class) and title in `annotations['nist-withdrawal']`; "
+    [f"- **Withdrawn controls x{len(withdrawn)}**: every one is a Requirement with lifecycle `withdrawn` (the "
+     f"source's status, by a rule; E1), with its id, label, title, its place in its family Set and its links. "
+     f"x{len(tombstones)} name a successor: the successor names them in kernel `replaces[]` "
+     f"({sum(len(v) for v in succ_replaces.values())} edges on Requirements + {sum(len(v) for v in fam_replaces.values())} "
+     f"on family Sets: sa-12 'incorporated into SR', the successor is a whole family; incorporated-into->merged-into, "
+     f"moved-to->renamed), and their one statement is made from those links (R2), e.g. "
+     f"{next((repr(s['prose']['en']) for cid in sorted(tombstones) for s in req_ids[cid][2]['statements']), 'none')}; "
      f"withdrawn->withdrawn chains x{len(wd_chain)}, dangling x{len(wd_dangling)}. x{len(wd_no_successor)} name no "
-     f"successor" + (f" ({', '.join(wd_no_successor)})" if wd_no_successor else "") + " and are Requirements with "
-     f"lifecycle `withdrawn` (the source's own word), members of their family Set, with the one statement the source "
-     f"gives them.",
+     f"successor" + (f" ({', '.join(wd_no_successor)})" if wd_no_successor else "") + " and keep the one statement "
+     f"the source gives them.",
      f"- **Modality**: " + ", ".join(f"`{k}` x{v}" for k, v in sorted(mod_count.items())) + ". Rev 5 statements are "
      f"uniformly imperative and obligation binds on baseline selection - the INVERSE of the declarative national "
      f"pattern (ISM/CIS/CyFun/C5): corpus rule `must` for a control in force. Force in the mood, selection in the "
      f"baseline Sets; both confirm D13's split axes. The statement of a withdrawn control says why it was withdrawn "
      f"and states no obligation: `unspecified`.",
+     lifecycle_default_line(LIFECYCLE_DEFAULT),
      obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, source_states=PARTY_SOURCE_STATES)
      + f" The source gives a level on x{len(req_ids) - op_default} controls ("
      + ", ".join(f"{k} x{v}" for k, v in sorted(lvl_count.items(), key=lambda x: -x[1]) if k != "(none)")
@@ -1088,11 +1090,14 @@ j = report(
      f"- **Relations**: " + ", ".join(f"{k} x{v}" for k, v in sorted(rel_count.items(), key=lambda x: -x[1])) +
      f"; reference targets resolved to publication URLs (landmark); the back-matter resources, as the source writes "
      f"them, -> references@1 on the root Set.",
-     f"- **Back-matter -> references@1 on the root Set** x{len(RESOURCES)} resources in the source's own shape, each "
-     f"with its uuid (the convention of the ISM converter): uuid, title, citation, rlinks with href and media-type.",
+     f"- **Back-matter -> references@1 on the root Set** x{len(RESOURCES_KEPT)} of {len(RESOURCES)} resources in the "
+     f"source's own shape, each with its uuid (the convention of the ISM converter): uuid, title, citation, rlinks "
+     f"with href and media-type. x{len(ORPHANS)} are orphans, which nothing in the catalogue refers to (no `#uuid` "
+     f"outside them): not carried, a claim the ledger checks (E4). A profile's one resource, which its import names, "
+     f"stands with the import in the compat facet of its baseline Set.",
      f"- **Markdown links in the texts stay as the source wrote them** x{len(MD_LINKS)}; the target of a link is an "
      f"id of the source. x{md_targets['a back-matter resource']} name a back-matter resource by its uuid "
-     f"(x{len({t for t in MD_LINKS if t in RES})} distinct resources), which references@1 carries with every resource; "
+     f"(x{len({t for t in MD_LINKS if t in RES})} distinct resources), which references@1 carries; "
      f"x{md_targets['another control']} name "
      f"another control and x{md_targets['a withdrawn control']} a withdrawn one (the Requirement URI ends in the id "
      f"in upper case), x{md_targets['a statement of a control']} a statement of a control (control id, `_`, "
@@ -1101,7 +1106,8 @@ j = report(
      f"- **Document metadata -> compat facet oscal-1x@1, member `metadata`**, on the Set that stands for the "
      f"document, in the source's own shape: x{F_CATALOG_META} values of the catalogue on the root Set, "
      f"x{F_PROFILE_META} values of the four profiles on their baseline Sets. `title` and `version` are the Set's own "
-     f"members. A profile's `merge` directive stands beside it (x{F_MERGE}, a JSON boolean). The manifest's "
+     f"members; the document's `uuid` stands beside it (E3). A profile's `merge` directive and its `imports` stand "
+     f"there too (x{F_MERGE}, a JSON boolean). The manifest's "
      f"`provenance` names the catalogue's author and day by the library's rule for an OSCAL document (backlog #69): "
      f"`author-ref` {PROVENANCE.get('author-ref', 'none: the metadata names no author')}, `date` "
      f"{PROVENANCE.get('date', 'none: last-modified does not begin with a day')}. The manifest has one provenance; "
@@ -1113,9 +1119,9 @@ j = report(
      f"stands, with its type, at the destination, read back from the written file), **{LT['transformed']:,} "
      f"transformed** (a named rule made the destination from it; the rule was applied to the source again and "
      f"compared), **{LT['not-content']:,} not content** (a name that only selects where a value is written, a "
-     f"namespace, an id or label a function rebuilds exactly; each claim checked against the source, and against "
-     f"what became of the value it rests on), **{LT['intentionally-dropped']:,} intentionally dropped** (a reason "
-     f"declared before the author's rule of 2026-11-14, listed with a reading for the author to decide), "
+     f"namespace, an id or label a function rebuilds exactly, an orphaned resource; each claim checked against the "
+     f"source, and against what became of the value it rests on), **{LT['intentionally-dropped']:,} intentionally "
+     f"dropped** (a declared reason), "
      f"**{LT['unaccounted']:,} unaccounted**. Claims that do not hold: {len(LEDGER['verification-failures'])}. The "
      f"record is `{LEDGER_FILE}`: one row per source path and outcome, every row a count over values that were "
      f"traced one by one in the run that wrote it. An equal value elsewhere in the bundle does not count: a value is "
@@ -1130,10 +1136,8 @@ j = report(
      f" - the (requirement, ODP) address resolves via the declaring statement"
      + ("" if not multi_decl else "; ambiguous cases need the statement map") + ".",
      f"- **Corpus mapping endpoints vs minted ids**: {sum(hit.values())} citations resolve "
-     f"({len(hit)} distinct), {sum(hit_wd.values())} hit withdrawn controls that are no objects "
-     f"({sorted(hit_wd)[:8] if hit_wd else []}) - a resolver follows the successor's `replaces[]` backwards; "
-     f"{sum(miss.values())} cite unknown labels ({sorted(miss)[:8] if miss else []}).",
-     f"- **Baseline ids not emitted** (a withdrawn control that is no object, or unknown): " +
+     f"({len(hit)} distinct); {sum(miss.values())} cite unknown labels ({sorted(miss)[:8] if miss else []}).",
+     f"- **Baseline ids not emitted** (an id the catalogue does not define): " +
      ("; ".join(f"{b}: {v}" for b, v in bl_missing.items()) if bl_missing else "none") + ".",
      f"- **Cross-control param insertions x{len(cross_param)}** ({cross_param}): prose in one control "
      f"inserts another control's ODP - a source irregularity (of x{n_inserted:,} insertions in statement text); the declaration is "
@@ -1159,17 +1163,17 @@ j = report(
      f"dates, the OSCAL version, revisions, keywords, links, roles, parties and who is responsible. Written in the "
      f"compat facet, member `metadata`. (3) A profile's `merge` x{F_MERGE}: a Set does not say how a selection is "
      f"merged. Compat facet, member `merge`. "
-     f"(4) A withdrawn control without a successor x{n_wd_objects}: the kernel requires a statement with a modality "
-     f"and an obligated party on every Requirement; the source gives such a control one sentence on why it was "
-     f"withdrawn. Written as a statement with modality `unspecified` and the party of a control without an "
-     f"implementation level. (5) The print label of a statement item x{rebuilt_by[N_ITEM_LABEL] + len(item_label_declared)}: "
+     f"(4) A withdrawn control x{n_wd_objects}: the kernel requires a statement with a modality and an obligated "
+     f"party on every Requirement (R2: the statement stays). The source gives x{len(wd_no_successor)} of them one "
+     f"sentence on why they were withdrawn and the other x{len(tombstones)} only links; theirs is made from the links. "
+     f"Written with modality `unspecified` and the party of a control without an implementation level. "
+     f"(5) The print label of a statement item x{rebuilt_by[N_ITEM_LABEL] + sum(len(v) for v in labels_kept.values())}: "
      f"a statement has an id and no label. x{rebuilt_by[N_ITEM_LABEL]} are rebuilt from the item id; "
-     f"x{len(item_label_declared)} the rule does not give and stay a declared drop"
-     + (f" ({', '.join(item_label_declared)})" if item_label_declared else "") + ". "
+     f"x{sum(len(v) for v in labels_kept.values())} the rule does not give stand in the compat facet `parts` of their "
+     f"Requirement, the item's id with its label prop (E7)"
+     + (f" ({', '.join(e['id'] for v in labels_kept.values() for e in v)})" if labels_kept else "") + ". "
      f"(6) The formal ODP label x{n_formal}: a kernel parameter has one `label`, which holds the parameter's own. "
-     f"Written in odp@1. (7) `lifecycle`: the kernel requires one on every object and the source states a status on "
-     f"withdrawn controls only; `active` on the other x{len(req_ids) - n_wd_objects} Requirements and on the "
-     f"x{nset} Sets is the converter's.",
+     f"Written in odp@1.",
      f"- **Path map and ledger**: every outcome the ledger measured on a path is one the sentence of its row speaks "
      f"of (a sentence that says something else ends the run). Outcomes a sentence speaks of and this source does "
      f"not show: " + ("; ".join(f"`{m['paths']}` {m['sentence-speaks-of']}" for m in map_not_confirmed) or "none") + "."],
@@ -1199,7 +1203,8 @@ j = report(
      "assessment-for": {"links": af_total, "names": dict(assessed_kind),
                         "objectives-that-name-another-statement-than-the-one-above": assessed_apart[0]},
      "formal-odp-labels": n_formal,
-     "item-labels": {"rebuilt": rebuilt_by[N_ITEM_LABEL], "declared-drop": item_label_declared},
+     "item-labels": {"rebuilt": rebuilt_by[N_ITEM_LABEL], "compat-parts": [e["id"] for v in labels_kept.values() for e in v]},
+     "lifecycle-default": LIFECYCLE_DEFAULT,
      "class-written": class_written[0],
      "document-metadata": {"catalogue": F_CATALOG_META, "profiles": F_PROFILE_META, "merge": F_MERGE},
      "markdown-links": {"links": len(MD_LINKS), "names": dict(md_targets),

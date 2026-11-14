@@ -52,520 +52,608 @@
    "sequence": 110
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-4.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-4.1",
    "sequence": 120
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-5",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-4.2",
    "sequence": 130
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-5.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-5",
    "sequence": 140
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-5.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-5.1",
    "sequence": 150
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-5.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-5.2",
    "sequence": 160
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-6",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-5.3",
    "sequence": 170
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-6",
    "sequence": 180
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7",
    "sequence": 190
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.1",
    "sequence": 200
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.5",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.2",
    "sequence": 210
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.7",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.3",
    "sequence": 220
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.8",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.4",
    "sequence": 230
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.9",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.5",
    "sequence": 240
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.10",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.6",
    "sequence": 250
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.11",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.7",
    "sequence": 260
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.12",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.8",
    "sequence": 270
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.13",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.9",
    "sequence": 280
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.14",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.10",
    "sequence": 290
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.15",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.11",
    "sequence": 300
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.16",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.12",
    "sequence": 310
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.17",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.13",
    "sequence": 320
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.18",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.14",
    "sequence": 330
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.19",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.15",
    "sequence": 340
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.20",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.16",
    "sequence": 350
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.21",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.17",
    "sequence": 360
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.22",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.18",
    "sequence": 370
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.23",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.19",
    "sequence": 380
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.24",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.20",
    "sequence": 390
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.25",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.21",
    "sequence": 400
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.26",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.22",
    "sequence": 410
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.27",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.23",
    "sequence": 420
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.28",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.24",
    "sequence": 430
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.29",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.25",
    "sequence": 440
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-8",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.26",
    "sequence": 450
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.27",
    "sequence": 460
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.28",
    "sequence": 470
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-7.29",
    "sequence": 480
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-8",
    "sequence": 490
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.5",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.1",
    "sequence": 500
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-10",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.2",
    "sequence": 510
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-11",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.3",
    "sequence": 520
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-11.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.4",
    "sequence": 530
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-12",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-8.5",
    "sequence": 540
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-9",
    "sequence": 550
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-10",
    "sequence": 560
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-11",
    "sequence": 570
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.6",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-11.1",
    "sequence": 580
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-13",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-12",
    "sequence": 590
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-15",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.1",
    "sequence": 600
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-15.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.2",
    "sequence": 610
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-15.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.3",
    "sequence": 620
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-15.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.4",
    "sequence": 630
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-16",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.5",
    "sequence": 640
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-16.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-12.6",
    "sequence": 650
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-16.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-13",
    "sequence": 660
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-16.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-13.1",
    "sequence": 670
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-17",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-13.2",
    "sequence": 680
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-18",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-13.3",
    "sequence": 690
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-13.4",
    "sequence": 700
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-14",
    "sequence": 710
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-15",
    "sequence": 720
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-15.1",
    "sequence": 730
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.5",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-15.2",
    "sequence": 740
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-19",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-15.3",
    "sequence": 750
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-20",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-15.4",
    "sequence": 760
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-20.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-16",
    "sequence": 770
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-21",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-16.1",
    "sequence": 780
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-22",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-16.2",
    "sequence": 790
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-23",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-16.3",
    "sequence": 800
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-23.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-17",
    "sequence": 810
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-23.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-18",
    "sequence": 820
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-23.5",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.1",
    "sequence": 830
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-24",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.2",
    "sequence": 840
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-25",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.3",
    "sequence": 850
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-26",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.4",
    "sequence": 860
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-27",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-18.5",
    "sequence": 870
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-28",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-19",
    "sequence": 880
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-28.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-20",
    "sequence": 890
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-28.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-20.1",
    "sequence": 900
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-28.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-20.2",
    "sequence": 910
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-29",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-21",
    "sequence": 920
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-29.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-21.1",
    "sequence": 930
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-30",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-22",
    "sequence": 940
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-23",
    "sequence": 950
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-23.1",
    "sequence": 960
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-23.2",
    "sequence": 970
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.5",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-23.3",
    "sequence": 980
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-31",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-23.4",
    "sequence": 990
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-31.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-23.5",
    "sequence": 1000
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-31.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-24",
    "sequence": 1010
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-31.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-25",
    "sequence": 1020
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-32",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-26",
    "sequence": 1030
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-32.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-26.1",
    "sequence": 1040
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-34",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-27",
    "sequence": 1050
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-34.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-28",
    "sequence": 1060
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-34.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-28.1",
    "sequence": 1070
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-35",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-28.2",
    "sequence": 1080
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-36",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-28.3",
    "sequence": 1090
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-36.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-29",
    "sequence": 1100
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-36.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-29.1",
    "sequence": 1110
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-37",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-30",
    "sequence": 1120
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-37.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.1",
    "sequence": 1130
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-38",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.2",
    "sequence": 1140
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-39",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.3",
    "sequence": 1150
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-39.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.4",
    "sequence": 1160
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-39.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-30.5",
    "sequence": 1170
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-40",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-31",
    "sequence": 1180
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-40.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-31.1",
    "sequence": 1190
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-40.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-31.2",
    "sequence": 1200
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-40.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-31.3",
    "sequence": 1210
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-40.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-32",
    "sequence": 1220
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-41",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-32.1",
    "sequence": 1230
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-42",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-33",
    "sequence": 1240
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-34",
    "sequence": 1250
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-34.1",
    "sequence": 1260
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-34.2",
    "sequence": 1270
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.5",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-34.3",
    "sequence": 1280
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-43",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-35",
    "sequence": 1290
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-44",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-36",
    "sequence": 1300
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-45",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-36.1",
    "sequence": 1310
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-45.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-36.2",
    "sequence": 1320
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-45.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-37",
    "sequence": 1330
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-46",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-37.1",
    "sequence": 1340
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-47",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-38",
    "sequence": 1350
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-48",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-39",
    "sequence": 1360
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-48.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-39.1",
    "sequence": 1370
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-49",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-39.2",
    "sequence": 1380
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-50",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-40",
    "sequence": 1390
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/SC-51",
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-40.1",
    "sequence": 1400
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-40.2",
+   "sequence": 1410
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-40.3",
+   "sequence": 1420
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-40.4",
+   "sequence": 1430
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-41",
+   "sequence": 1440
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-42",
+   "sequence": 1450
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.1",
+   "sequence": 1460
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.2",
+   "sequence": 1470
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.3",
+   "sequence": 1480
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.4",
+   "sequence": 1490
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-42.5",
+   "sequence": 1500
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-43",
+   "sequence": 1510
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-44",
+   "sequence": 1520
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-45",
+   "sequence": 1530
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-45.1",
+   "sequence": 1540
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-45.2",
+   "sequence": 1550
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-46",
+   "sequence": 1560
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-47",
+   "sequence": 1570
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-48",
+   "sequence": 1580
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-48.1",
+   "sequence": 1590
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-49",
+   "sequence": 1600
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-50",
+   "sequence": 1610
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/SC-51",
+   "sequence": 1620
   }
  ]
 }

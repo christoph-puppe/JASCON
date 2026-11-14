@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/IA-5.3",
+ "version": "5.2.0",
+ "label": "IA-5(3)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "In-person or Trusted External Party Registration"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into IA-12(4)."
+   }
+  }
+ ]
+}

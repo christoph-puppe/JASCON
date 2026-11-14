@@ -2,10 +2,10 @@
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
  "leaf-values": 115680,
  "totals": {
-  "copied": 33371,
-  "transformed": 20830,
-  "not-content": 61072,
-  "intentionally-dropped": 407,
+  "copied": 33327,
+  "transformed": 21189,
+  "not-content": 61164,
+  "intentionally-dropped": 0,
   "unaccounted": 0
  },
  "verification-failures": [],
@@ -13,60 +13,60 @@
  "paths": [
   {
    "path": "high.profile.back-matter.resources[].description",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "high#/profile/back-matter/resources/0/description",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/description",
      "count": 1
     }
    ]
   },
   {
    "path": "high.profile.back-matter.resources[].rlinks[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "high#/profile/back-matter/resources/0/rlinks/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/href",
      "count": 3
     }
    ]
   },
   {
    "path": "high.profile.back-matter.resources[].rlinks[].media-type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "high#/profile/back-matter/resources/0/rlinks/0/media-type",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/media-type",
      "count": 3
     }
    ]
   },
   {
    "path": "high.profile.back-matter.resources[].uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "high#/profile/back-matter/resources/0/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/uuid",
      "count": 1
     }
    ]
   },
   {
    "path": "high.profile.imports[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "high#/profile/imports/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map: profile resolution mechanics; the selection is the Set",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/imports/[]/href",
      "count": 1
     }
    ]
@@ -310,72 +310,72 @@
   },
   {
    "path": "high.profile.uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "high#/profile/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source document, which identifies it among source documents only: JASCON objects get URIs minted from ids",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
      "count": 1
     }
    ]
   },
   {
    "path": "low.profile.back-matter.resources[].description",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "low#/profile/back-matter/resources/0/description",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/description",
      "count": 1
     }
    ]
   },
   {
    "path": "low.profile.back-matter.resources[].rlinks[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "low#/profile/back-matter/resources/0/rlinks/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/href",
      "count": 3
     }
    ]
   },
   {
    "path": "low.profile.back-matter.resources[].rlinks[].media-type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "low#/profile/back-matter/resources/0/rlinks/0/media-type",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/media-type",
      "count": 3
     }
    ]
   },
   {
    "path": "low.profile.back-matter.resources[].uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "low#/profile/back-matter/resources/0/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/uuid",
      "count": 1
     }
    ]
   },
   {
    "path": "low.profile.imports[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "low#/profile/imports/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map: profile resolution mechanics; the selection is the Set",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/imports/[]/href",
      "count": 1
     }
    ]
@@ -619,72 +619,72 @@
   },
   {
    "path": "low.profile.uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "low#/profile/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source document, which identifies it among source documents only: JASCON objects get URIs minted from ids",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
      "count": 1
     }
    ]
   },
   {
    "path": "moderate.profile.back-matter.resources[].description",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "moderate#/profile/back-matter/resources/0/description",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/description",
      "count": 1
     }
    ]
   },
   {
    "path": "moderate.profile.back-matter.resources[].rlinks[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "moderate#/profile/back-matter/resources/0/rlinks/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/href",
      "count": 3
     }
    ]
   },
   {
    "path": "moderate.profile.back-matter.resources[].rlinks[].media-type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "moderate#/profile/back-matter/resources/0/rlinks/0/media-type",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/media-type",
      "count": 3
     }
    ]
   },
   {
    "path": "moderate.profile.back-matter.resources[].uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "moderate#/profile/back-matter/resources/0/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/uuid",
      "count": 1
     }
    ]
   },
   {
    "path": "moderate.profile.imports[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "moderate#/profile/imports/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map: profile resolution mechanics; the selection is the Set",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/imports/[]/href",
      "count": 1
     }
    ]
@@ -928,12 +928,12 @@
   },
   {
    "path": "moderate.profile.uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "moderate#/profile/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source document, which identifies it among source documents only: JASCON objects get URIs minted from ids",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
      "count": 1
     }
    ]
@@ -941,29 +941,55 @@
   {
    "path": "nist.catalog.back-matter.resources[].citation.text",
    "outcome": "copied",
-   "count": 192,
+   "count": 169,
    "example": "nist#/catalog/back-matter/resources/0/citation/text",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/citation/text",
-     "count": 192
+     "count": 169
+    }
+   ]
+  },
+  {
+   "path": "nist.catalog.back-matter.resources[].citation.text",
+   "outcome": "not-content",
+   "count": 23,
+   "example": "nist#/catalog/back-matter/resources/3/citation/text",
+   "rules": [
+    {
+     "kind": "orphan",
+     "rule": "a back-matter resource that nothing in the catalogue refers to (no `#uuid` outside it) is orphaned and not carried (author, 2026-11-14)",
+     "count": 23
     }
    ]
   },
   {
    "path": "nist.catalog.back-matter.resources[].rlinks[].href",
    "outcome": "copied",
-   "count": 201,
+   "count": 178,
    "example": "nist#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/rlinks/[]/href",
-     "count": 201
+     "count": 178
     },
     {
      "pointer": "/relations/[]/ref",
      "count": 838,
      "rule": "a reference link resolved by uuid: the first link of the back-matter resource it names"
+    }
+   ]
+  },
+  {
+   "path": "nist.catalog.back-matter.resources[].rlinks[].href",
+   "outcome": "not-content",
+   "count": 23,
+   "example": "nist#/catalog/back-matter/resources/3/rlinks/0/href",
+   "rules": [
+    {
+     "kind": "orphan",
+     "rule": "a back-matter resource that nothing in the catalogue refers to (no `#uuid` outside it) is orphaned and not carried (author, 2026-11-14)",
+     "count": 23
     }
    ]
   },
@@ -982,29 +1008,55 @@
   {
    "path": "nist.catalog.back-matter.resources[].title",
    "outcome": "copied",
-   "count": 201,
+   "count": 178,
    "example": "nist#/catalog/back-matter/resources/0/title",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/title",
-     "count": 201
+     "count": 178
+    }
+   ]
+  },
+  {
+   "path": "nist.catalog.back-matter.resources[].title",
+   "outcome": "not-content",
+   "count": 23,
+   "example": "nist#/catalog/back-matter/resources/3/title",
+   "rules": [
+    {
+     "kind": "orphan",
+     "rule": "a back-matter resource that nothing in the catalogue refers to (no `#uuid` outside it) is orphaned and not carried (author, 2026-11-14)",
+     "count": 23
     }
    ]
   },
   {
    "path": "nist.catalog.back-matter.resources[].uuid",
    "outcome": "copied",
-   "count": 201,
+   "count": 178,
    "example": "nist#/catalog/back-matter/resources/0/uuid",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1references@1/resources/[]/uuid",
-     "count": 201
+     "count": 178
     },
     {
      "pointer": "/relations/[]/ref",
      "count": 838,
      "rule": "a reference link resolved by uuid: the first link of the back-matter resource it names"
+    }
+   ]
+  },
+  {
+   "path": "nist.catalog.back-matter.resources[].uuid",
+   "outcome": "not-content",
+   "count": 23,
+   "example": "nist#/catalog/back-matter/resources/3/uuid",
+   "rules": [
+    {
+     "kind": "orphan",
+     "rule": "a back-matter resource that nothing in the catalogue refers to (no `#uuid` outside it) is orphaned and not carried (author, 2026-11-14)",
+     "count": 23
     }
    ]
   },
@@ -1054,23 +1106,18 @@
    "example": "nist#/catalog/groups/0/controls/1/controls/0/id",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 233,
-     "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names"
-    },
-    {
      "pointer": "/id",
-     "count": 715,
+     "count": 872,
      "rule": "requirement URI from the control id"
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 715,
+     "count": 872,
      "rule": "requirement URI from the control id"
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 715,
+     "count": 872,
      "rule": "requirement URI from the control id"
     },
     {
@@ -1092,16 +1139,6 @@
    "example": "nist#/catalog/groups/0/controls/1/controls/0/links/0/href",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/into",
-     "count": 1,
-     "rule": "the statement a lineage link names, as a statement id"
-    },
-    {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 162,
-     "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names"
-    },
-    {
      "pointer": "/relations/[]/ref",
      "count": 4,
      "rule": "a reference link resolved by uuid: the first link of the back-matter resource it names"
@@ -1115,6 +1152,11 @@
      "pointer": "/replaces/[]/ref",
      "count": 162,
      "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names"
+    },
+    {
+     "pointer": "/statements/[]/prose/en",
+     "count": 162,
+     "rule": "the statement of a withdrawn control that names a successor, from its links: `Incorporated into X.` or `Moved to X.`, the targets in source order (`X and Y`, `X, Y, and Z`), each by the label the source gives it for a reader (a statement item: its control's label and the item's label without the full stop)"
     }
    ]
   },
@@ -1137,14 +1179,14 @@
    "example": "nist#/catalog/groups/0/controls/1/controls/9/links/0/rel",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/mode",
+     "pointer": "/replaces/[]/mode",
      "count": 162,
      "rule": "lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)"
     },
     {
-     "pointer": "/replaces/[]/mode",
+     "pointer": "/statements/[]/prose/en",
      "count": 162,
-     "rule": "lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)"
+     "rule": "the statement of a withdrawn control that names a successor, from its links: `Incorporated into X.` or `Moved to X.`, the targets in source order (`X and Y`, `X, Y, and Z`), each by the label the source gives it for a reader (a statement item: its control's label and the item's label without the full stop)"
     }
    ]
   },
@@ -1393,24 +1435,33 @@
   {
    "path": "nist.catalog.groups[].controls[].controls[].parts[].parts[].id",
    "outcome": "copied",
-   "count": 694,
+   "count": 697,
    "example": "nist#/catalog/groups/0/controls/1/controls/2/parts/2/parts/0/id",
    "to": [
     {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/parts/[]/id",
+     "count": 3
+    },
+    {
      "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1sp800-53a@1/objectives/[]/children/[]/id",
      "count": 694
+    },
+    {
+     "pointer": "/statements/[]/id",
+     "count": 3,
+     "rule": "statement id without the control prefix"
     }
    ]
   },
   {
    "path": "nist.catalog.groups[].controls[].controls[].parts[].parts[].id",
    "outcome": "transformed",
-   "count": 279,
+   "count": 276,
    "example": "nist#/catalog/groups/0/controls/1/controls/2/parts/0/parts/0/id",
    "to": [
     {
      "pointer": "/statements/[]/id",
-     "count": 279,
+     "count": 276,
      "rule": "statement id without the control prefix"
     }
    ]
@@ -1732,12 +1783,12 @@
   },
   {
    "path": "nist.catalog.groups[].controls[].controls[].parts[].parts[].props[].name",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "nist#/catalog/groups/18/controls/1/controls/6/parts/0/parts/0/props/0/name",
-   "reasons": [
+   "to": [
     {
-     "reason": "the name of a prop selects the member its value is written to - of a value that is dropped: path map: the print label of a statement item is derivable: its letter or number is the last segment of the item id (checked for this value), its punctuation is print form",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/parts/[]/props/[]/name",
      "count": 3
     }
    ]
@@ -1758,24 +1809,16 @@
   {
    "path": "nist.catalog.groups[].controls[].controls[].parts[].parts[].props[].value",
    "outcome": "copied",
-   "count": 694,
+   "count": 697,
    "example": "nist#/catalog/groups/0/controls/1/controls/2/parts/2/parts/0/props/0/value",
    "to": [
     {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/parts/[]/props/[]/value",
+     "count": 3
+    },
+    {
      "pointer": "/facets/https:~1~1ns.nist.gov~1sp800-53~1facet~1sp800-53a@1/objectives/[]/children/[]/label",
      "count": 694
-    }
-   ]
-  },
-  {
-   "path": "nist.catalog.groups[].controls[].controls[].parts[].parts[].props[].value",
-   "outcome": "intentionally-dropped",
-   "count": 3,
-   "example": "nist#/catalog/groups/18/controls/1/controls/6/parts/0/parts/0/props/0/value",
-   "reasons": [
-    {
-     "reason": "path map: the print label of a statement item is derivable: its letter or number is the last segment of the item id (checked for this value), its punctuation is print form",
-     "count": 3
     }
    ]
   },
@@ -1947,26 +1990,14 @@
   },
   {
    "path": "nist.catalog.groups[].controls[].controls[].props[].name",
-   "outcome": "intentionally-dropped",
-   "count": 157,
-   "example": "nist#/catalog/groups/0/controls/1/controls/9/props/4/name",
-   "reasons": [
-    {
-     "reason": "the name of a prop selects the member its value is written to - of a value that is dropped: path map: a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor its link names, which carries its URI, a label and its title",
-     "count": 157
-    }
-   ]
-  },
-  {
-   "path": "nist.catalog.groups[].controls[].controls[].props[].name",
    "outcome": "not-content",
-   "count": 4614,
+   "count": 4771,
    "example": "nist#/catalog/groups/0/controls/1/controls/0/props/0/name",
    "rules": [
     {
      "kind": "selector",
      "rule": "the name of a prop selects the member its value is written to",
-     "count": 4614
+     "count": 4771
     }
    ]
   },
@@ -1986,50 +2017,25 @@
   {
    "path": "nist.catalog.groups[].controls[].controls[].props[].value",
    "outcome": "copied",
-   "count": 873,
+   "count": 872,
    "example": "nist#/catalog/groups/0/controls/1/controls/0/props/1/value",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/label",
-     "count": 162
-    },
-    {
      "pointer": "/label",
-     "count": 715
-    },
-    {
-     "pointer": "/lifecycle",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "path": "nist.catalog.groups[].controls[].controls[].props[].value",
-   "outcome": "intentionally-dropped",
-   "count": 157,
-   "example": "nist#/catalog/groups/0/controls/1/controls/9/props/4/value",
-   "reasons": [
-    {
-     "reason": "path map: a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor its link names, which carries its URI, a label and its title",
-     "count": 157
+     "count": 872
     }
    ]
   },
   {
    "path": "nist.catalog.groups[].controls[].controls[].props[].value",
    "outcome": "not-content",
-   "count": 1900,
+   "count": 1743,
    "example": "nist#/catalog/groups/0/controls/1/controls/0/props/0/value",
    "rules": [
     {
      "kind": "rebuilt-id",
      "rule": "the SP 800-53A label of a control, rebuilt from its label: every number padded to two digits",
      "count": 871
-    },
-    {
-     "kind": "rebuilt-id",
-     "rule": "the sort-id of a withdrawn control that is no object, rebuilt from its id: every number padded to two digits",
-     "count": 157
     },
     {
      "kind": "rebuilt-id",
@@ -2041,7 +2047,7 @@
   {
    "path": "nist.catalog.groups[].controls[].controls[].props[].value",
    "outcome": "transformed",
-   "count": 1841,
+   "count": 2156,
    "example": "nist#/catalog/groups/0/controls/1/controls/0/props/3/value",
    "to": [
     {
@@ -2050,8 +2056,13 @@
      "rule": "the prop value `true` or `false`, written as a JSON boolean"
     },
     {
+     "pointer": "/lifecycle",
+     "count": 158,
+     "rule": "lifecycle from the status the source states: `withdrawn`, the kernel's own word"
+    },
+    {
      "pointer": "/members/[]/sequence",
-     "count": 715,
+     "count": 872,
      "rule": "member sequence: ten times the control's place in its family, ordered by sort-id"
     },
     {
@@ -2068,12 +2079,8 @@
    "example": "nist#/catalog/groups/0/controls/1/controls/0/title",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/title",
-     "count": 162
-    },
-    {
      "pointer": "/title/en",
-     "count": 715
+     "count": 872
     }
    ]
   },
@@ -2084,23 +2091,18 @@
    "example": "nist#/catalog/groups/0/controls/0/id",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 166,
-     "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names"
-    },
-    {
      "pointer": "/id",
-     "count": 301,
+     "count": 324,
      "rule": "requirement URI from the control id"
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 301,
+     "count": 324,
      "rule": "requirement URI from the control id"
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 301,
+     "count": 324,
      "rule": "requirement URI from the control id"
     },
     {
@@ -2122,11 +2124,6 @@
    "example": "nist#/catalog/groups/0/controls/0/links/0/href",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 38,
-     "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names"
-    },
-    {
      "pointer": "/relations/[]/ref",
      "count": 834,
      "rule": "a reference link resolved by uuid: the first link of the back-matter resource it names"
@@ -2140,6 +2137,11 @@
      "pointer": "/replaces/[]/ref",
      "count": 38,
      "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names"
+    },
+    {
+     "pointer": "/statements/[]/prose/en",
+     "count": 38,
+     "rule": "the statement of a withdrawn control that names a successor, from its links: `Incorporated into X.` or `Moved to X.`, the targets in source order (`X and Y`, `X, Y, and Z`), each by the label the source gives it for a reader (a statement item: its control's label and the item's label without the full stop)"
     }
    ]
   },
@@ -2162,14 +2164,14 @@
    "example": "nist#/catalog/groups/0/controls/12/links/0/rel",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/mode",
+     "pointer": "/replaces/[]/mode",
      "count": 38,
      "rule": "lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)"
     },
     {
-     "pointer": "/replaces/[]/mode",
+     "pointer": "/statements/[]/prose/en",
      "count": 38,
-     "rule": "lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)"
+     "rule": "the statement of a withdrawn control that names a successor, from its links: `Incorporated into X.` or `Moved to X.`, the targets in source order (`X and Y`, `X, Y, and Z`), each by the label the source gives it for a reader (a statement item: its control's label and the item's label without the full stop)"
     }
    ]
   },
@@ -3085,26 +3087,14 @@
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].name",
-   "outcome": "intentionally-dropped",
-   "count": 23,
-   "example": "nist#/catalog/groups/0/controls/12/props/4/name",
-   "reasons": [
-    {
-     "reason": "the name of a prop selects the member its value is written to - of a value that is dropped: path map: a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor its link names, which carries its URI, a label and its title",
-     "count": 23
-    }
-   ]
-  },
-  {
-   "path": "nist.catalog.groups[].controls[].props[].name",
    "outcome": "not-content",
-   "count": 1763,
+   "count": 1786,
    "example": "nist#/catalog/groups/0/controls/0/props/0/name",
    "rules": [
     {
      "kind": "selector",
      "rule": "the name of a prop selects the member its value is written to",
-     "count": 1763
+     "count": 1786
     }
    ]
   },
@@ -3124,50 +3114,25 @@
   {
    "path": "nist.catalog.groups[].controls[].props[].value",
    "outcome": "copied",
-   "count": 325,
+   "count": 324,
    "example": "nist#/catalog/groups/0/controls/0/props/1/value",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/label",
-     "count": 38
-    },
-    {
      "pointer": "/label",
-     "count": 301
-    },
-    {
-     "pointer": "/lifecycle",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "path": "nist.catalog.groups[].controls[].props[].value",
-   "outcome": "intentionally-dropped",
-   "count": 23,
-   "example": "nist#/catalog/groups/0/controls/12/props/4/value",
-   "reasons": [
-    {
-     "reason": "path map: a withdrawn control is dropped as a tombstone; its lineage is inverted onto the successor its link names, which carries its URI, a label and its title",
-     "count": 23
+     "count": 324
     }
    ]
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].value",
    "outcome": "not-content",
-   "count": 671,
+   "count": 648,
    "example": "nist#/catalog/groups/0/controls/0/props/0/value",
    "rules": [
     {
      "kind": "rebuilt-id",
      "rule": "the SP 800-53A label of a control, rebuilt from its label: every number padded to two digits",
      "count": 324
-    },
-    {
-     "kind": "rebuilt-id",
-     "rule": "the sort-id of a withdrawn control that is no object, rebuilt from its id: every number padded to two digits",
-     "count": 23
     },
     {
      "kind": "rebuilt-id",
@@ -3179,7 +3144,7 @@
   {
    "path": "nist.catalog.groups[].controls[].props[].value",
    "outcome": "transformed",
-   "count": 767,
+   "count": 814,
    "example": "nist#/catalog/groups/0/controls/0/props/3/value",
    "to": [
     {
@@ -3188,8 +3153,13 @@
      "rule": "the prop value `true` or `false`, written as a JSON boolean"
     },
     {
+     "pointer": "/lifecycle",
+     "count": 24,
+     "rule": "lifecycle from the status the source states: `withdrawn`, the kernel's own word"
+    },
+    {
      "pointer": "/members/[]/sequence",
-     "count": 301,
+     "count": 324,
      "rule": "member sequence: ten times the control's place in its family, ordered by sort-id"
     },
     {
@@ -3206,12 +3176,8 @@
    "example": "nist#/catalog/groups/0/controls/0/title",
    "to": [
     {
-     "pointer": "/annotations/nist-withdrawal/[]/title",
-     "count": 38
-    },
-    {
      "pointer": "/title/en",
-     "count": 301
+     "count": 324
     }
    ]
   },
@@ -3221,11 +3187,6 @@
    "count": 20,
    "example": "nist#/catalog/groups/0/id",
    "to": [
-    {
-     "pointer": "/annotations/nist-withdrawal/[]/ref",
-     "count": 1,
-     "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names"
-    },
     {
      "pointer": "/id",
      "count": 20,
@@ -3685,7 +3646,7 @@
    "to": [
     {
      "pointer": "/objects/[]/version",
-     "count": 1037
+     "count": 1217
     },
     {
      "pointer": "/provenance/source-version",
@@ -3693,78 +3654,78 @@
     },
     {
      "pointer": "/version",
-     "count": 1037
+     "count": 1217
     }
    ]
   },
   {
    "path": "nist.catalog.uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "nist#/catalog/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source document, which identifies it among source documents only: JASCON objects get URIs minted from ids",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
      "count": 1
     }
    ]
   },
   {
    "path": "privacy.profile.back-matter.resources[].description",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "privacy#/profile/back-matter/resources/0/description",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/description",
      "count": 1
     }
    ]
   },
   {
    "path": "privacy.profile.back-matter.resources[].rlinks[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "privacy#/profile/back-matter/resources/0/rlinks/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/href",
      "count": 3
     }
    ]
   },
   {
    "path": "privacy.profile.back-matter.resources[].rlinks[].media-type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "privacy#/profile/back-matter/resources/0/rlinks/0/media-type",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/rlinks/[]/media-type",
      "count": 3
     }
    ]
   },
   {
    "path": "privacy.profile.back-matter.resources[].uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "privacy#/profile/back-matter/resources/0/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a back-matter resource or an import link: a link to another serialisation of the source or to an imported document; the bundle carries the Requirements themselves",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/back-matter/resources/[]/uuid",
      "count": 1
     }
    ]
   },
   {
    "path": "privacy.profile.imports[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "privacy#/profile/imports/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map: profile resolution mechanics; the selection is the Set",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/imports/[]/href",
      "count": 1
     }
    ]
@@ -4008,12 +3969,12 @@
   },
   {
    "path": "privacy.profile.uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "privacy#/profile/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the uuid of a source document, which identifies it among source documents only: JASCON objects get URIs minted from ids",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/uuid",
      "count": 1
     }
    ]

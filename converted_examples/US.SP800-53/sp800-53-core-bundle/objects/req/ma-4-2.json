@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/MA-4.2",
+ "version": "5.2.0",
+ "label": "MA-4(2)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Document Nonlocal Maintenance"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into MA-1 and MA-4."
+   }
+  }
+ ]
+}

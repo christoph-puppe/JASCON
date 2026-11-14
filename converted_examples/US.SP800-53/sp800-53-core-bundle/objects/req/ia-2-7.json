@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/IA-2.7",
+ "version": "5.2.0",
+ "label": "IA-2(7)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Network Access to Non-privileged Accounts — Separate Device"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into IA-2(6)."
+   }
+  }
+ ]
+}

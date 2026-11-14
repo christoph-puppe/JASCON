@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/CP-10.1",
+ "version": "5.2.0",
+ "label": "CP-10(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Contingency Plan Testing"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into CP-4."
+   }
+  }
+ ]
+}

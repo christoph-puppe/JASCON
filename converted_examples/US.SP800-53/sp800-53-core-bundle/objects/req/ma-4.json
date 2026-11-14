@@ -372,15 +372,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/MA-4.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MA-4.2",
-    "mode": "merged-into",
-    "label": "MA-4(2)",
-    "title": "Document Nonlocal Maintenance"
-   }
-  ]
- }
+ ]
 }

@@ -186,15 +186,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-4.4",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-4.4",
-    "mode": "merged-into",
-    "label": "SA-4(4)",
-    "title": "Assignment of Components to Systems"
-   }
-  ]
- }
+ ]
 }

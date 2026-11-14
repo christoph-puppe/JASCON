@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AC-2.10",
+ "version": "5.2.0",
+ "label": "AC-2(10)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Shared and Group Account Credential Change"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into AC-2k."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SI-7.13",
+ "version": "5.2.0",
+ "label": "SI-7(13)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Code Execution in Protected Environments"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to CM-7(7)."
+   }
+  }
+ ]
+}

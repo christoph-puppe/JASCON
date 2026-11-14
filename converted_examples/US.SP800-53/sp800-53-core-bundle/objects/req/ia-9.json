@@ -159,21 +159,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/IA-9.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-9.1",
-    "mode": "merged-into",
-    "label": "IA-9(1)",
-    "title": "Information Exchange"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-9.2",
-    "mode": "merged-into",
-    "label": "IA-9(2)",
-    "title": "Transmission of Decisions"
-   }
-  ]
- }
+ ]
 }

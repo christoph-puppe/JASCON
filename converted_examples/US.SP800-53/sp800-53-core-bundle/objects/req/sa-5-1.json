@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-5.1",
+ "version": "5.2.0",
+ "label": "SA-5(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Functional Properties of Security Controls"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SA-4(1)."
+   }
+  }
+ ]
+}

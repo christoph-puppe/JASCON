@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/RA-5.7",
+ "version": "5.2.0",
+ "label": "RA-5(7)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Automated Detection and Notification of Unauthorized Components"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into CM-8."
+   }
+  }
+ ]
+}

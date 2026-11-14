@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/RA-5.9",
+ "version": "5.2.0",
+ "label": "RA-5(9)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Penetration Testing and Analyses"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into CA-8."
+   }
+  }
+ ]
+}

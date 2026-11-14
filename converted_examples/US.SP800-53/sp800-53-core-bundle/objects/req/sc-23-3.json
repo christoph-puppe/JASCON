@@ -164,15 +164,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SC-23.4",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-23.4",
-    "mode": "merged-into",
-    "label": "SC-23(4)",
-    "title": "Unique Session Identifiers with Randomization"
-   }
-  ]
- }
+ ]
 }

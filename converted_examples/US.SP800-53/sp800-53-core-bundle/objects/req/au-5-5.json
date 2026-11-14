@@ -139,15 +139,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/AU-15",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AU-15",
-    "mode": "renamed",
-    "label": "AU-15",
-    "title": "Alternate Audit Logging Capability"
-   }
-  ]
- }
+ ]
 }

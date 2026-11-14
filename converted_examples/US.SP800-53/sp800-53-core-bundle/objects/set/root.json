@@ -127,18 +127,6 @@
      ]
     },
     {
-     "uuid": "d3b71d4d-27c1-40f7-ad7f-1c1fe6d8bde8",
-     "title": "ATOM54",
-     "citation": {
-      "text": "Atomic Energy Act (P.L. 83-703), August 1954."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.govinfo.gov/content/pkg/STATUTE-68/pdf/STATUTE-68-Pg919.pdf"
-      }
-     ]
-    },
-    {
      "uuid": "94c64e1a-456c-457f-86da-83ac0dfc85ac",
      "title": "CMPPA",
      "citation": {
@@ -175,30 +163,6 @@
      ]
     },
     {
-     "uuid": "6f63a36d-24bb-44f3-885a-5a50b5e1ada0",
-     "title": "CNSSI 4009",
-     "citation": {
-      "text": "Committee on National Security Systems Instruction No. 4009, *Committee on National Security Systems (CNSS) Glossary* , April 2015."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
-      }
-     ]
-    },
-    {
-     "uuid": "8a687894-cdab-423d-b95b-8d9475e4b51e",
-     "title": "CNSSP 22",
-     "citation": {
-      "text": "Committee on National Security Systems Policy No. 22, *Cybersecurity Risk Management Policy* , August 2016."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.cnss.gov/CNSS/issuances/Policies.cfm"
-      }
-     ]
-    },
-    {
      "uuid": "b9951d04-6385-478c-b1a3-ab68c19d9041",
      "title": "DHS NIPP",
      "citation": {
@@ -231,42 +195,6 @@
      "rlinks": [
       {
        "href": "https://public.cyber.mil/stigs"
-      }
-     ]
-    },
-    {
-     "uuid": "d6f8ff7f-4b71-47ba-b61b-a5ee3ffd3af0",
-     "title": "DODI 8510.01",
-     "citation": {
-      "text": "Department of Defense Instruction 8510.01, *Risk Management Framework (RMF) for DoD Information Technology (IT)* , March 2014."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.esd.whs.mil/Portals/54/Documents/DD/issuances/dodi/851001p.pdf?ver=2019-02-26-101520-300"
-      }
-     ]
-    },
-    {
-     "uuid": "1c861e8c-cb40-463e-9cf2-693554107693",
-     "title": "DODTERMS",
-     "citation": {
-      "text": "Department of Defense, *Dictionary of Military and Associated Terms*."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.jcs.mil/Portals/36/Documents/Doctrine/pubs/dictionary.pdf"
-      }
-     ]
-    },
-    {
-     "uuid": "00db708b-4704-4fcb-b854-b66d1d756a58",
-     "title": "DSB 2017",
-     "citation": {
-      "text": "Department of Defense, Defense Science Board, *Task Force on Cyber Deterrence* , February 2017."
-     },
-     "rlinks": [
-      {
-       "href": "https://dsb.cto.mil/reports/2010s/DSB-CyberDeterrenceReport_02-28-17_Final.pdf"
       }
      ]
     },
@@ -327,18 +255,6 @@
      "rlinks": [
       {
        "href": "https://obamawhitehouse.archives.gov/the-press-office/2013/02/12/executive-order-improving-critical-infrastructure-cybersecurity"
-      }
-     ]
-    },
-    {
-     "uuid": "09afa3a7-e564-4c5f-865f-2679049563b0",
-     "title": "EO 13800",
-     "citation": {
-      "text": "Executive Order 13800, *Strengthening the Cybersecurity of Federal Networks and Critical Infrastructure* , May 2017."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.whitehouse.gov/presidential-actions/presidential-executive-order-strengthening-cybersecurity-federal-networks-critical-infrastructure"
       }
      ]
     },
@@ -511,18 +427,6 @@
      ]
     },
     {
-     "uuid": "d68867c0-2f21-4193-bef8-300f3270db56",
-     "title": "FISMA IMP",
-     "citation": {
-      "text": "Federal Information Security Modernization Act (FISMA) Implementation Project."
-     },
-     "rlinks": [
-      {
-       "href": "https://nist.gov/RMF"
-      }
-     ]
-    },
-    {
      "uuid": "0c67b2a9-bede-43d2-b86d-5f35b8be36e9",
      "title": "FISMA",
      "citation": {
@@ -531,18 +435,6 @@
      "rlinks": [
       {
        "href": "https://www.congress.gov/113/plaws/publ283/PLAW-113publ283.pdf"
-      }
-     ]
-    },
-    {
-     "uuid": "d9b1262c-9ee6-4c3e-846f-3a15f9d7eaa6",
-     "title": "FOIA96",
-     "citation": {
-      "text": "Freedom of Information Act (FOIA), 5 U.S.C. § 552, As Amended By Public Law No. 104-231, 110 Stat. 3048, Electronic Freedom of Information Act Amendments of 1996."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.govinfo.gov/content/pkg/PLAW-104publ231/pdf/PLAW-104publ231.pdf"
       }
      ]
     },
@@ -567,18 +459,6 @@
      "rlinks": [
       {
        "href": "https://www.dhs.gov/homeland-security-presidential-directive-7"
-      }
-     ]
-    },
-    {
-     "uuid": "7623635e-1a92-4250-a829-4a5c8a4da2bc",
-     "title": "IETF 4949",
-     "citation": {
-      "text": "Internet Engineering Task Force (IETF), Request for Comments: 4949, *Internet Security Glossary, Version 2* , August 2007."
-     },
-     "rlinks": [
-      {
-       "href": "https://tools.ietf.org/html/rfc4949"
       }
      ]
     },
@@ -847,30 +727,6 @@
      ]
     },
     {
-     "uuid": "0c559766-0df1-468f-a499-3577bb6dfa46",
-     "title": "ISO 15026-1",
-     "citation": {
-      "text": "International Organization for Standardization/International Electrotechnical Commission/Institute of Electrical and Electronics Engineers (ISO/IEC/IEEE) 15026-1:2019, *Systems and software engineering — Systems and software assurance — Part 1: Concepts and vocabulary* , March 2019."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.iso.org/standard/73567.html"
-      }
-     ]
-    },
-    {
-     "uuid": "7d8ec7b7-dba0-4a17-981c-c959dbcc6c68",
-     "title": "ISO 15288",
-     "citation": {
-      "text": "International Organization for Standardization/International Electrotechnical Commission/Institute of Electrical and Electronics Engineers (ISO/IEC/IEEE) 15288:2015, *Systems and software engineering —Systems life cycle processes* , May 2015."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.iso.org/standard/63711.html"
-      }
-     ]
-    },
-    {
      "uuid": "6afc1b04-c9d6-4023-adbc-f8fbe33a3c73",
      "title": "ISO 15408-1",
      "citation": {
@@ -919,18 +775,6 @@
      ]
     },
     {
-     "uuid": "c22d2905-4087-4397-b574-c534b9e808c8",
-     "title": "ISO 25237",
-     "citation": {
-      "text": "International Organization for Standardization/International Electrotechnical Commission 25237:2017, *Health informatics —Pseudonymization* , January 2017."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.iso.org/standard/63553.html"
-      }
-     ]
-    },
-    {
      "uuid": "863caf2a-978a-4260-9e8d-4a8929bce40c",
      "title": "ISO 27036",
      "citation": {
@@ -939,18 +783,6 @@
      "rlinks": [
       {
        "href": "https://www.iso.org/standard/59648.html"
-      }
-     ]
-    },
-    {
-     "uuid": "094ad8c9-960f-4091-acff-8c99a390f08d",
-     "title": "ISO 29100",
-     "citation": {
-      "text": "International Organization for Standardization/International Electrotechnical Commission 29100:2011, *Information technology—Security techniques—Privacy framework* , December 2011."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.iso.org/standard/45123.html"
       }
      ]
     },
@@ -1015,18 +847,6 @@
      ]
     },
     {
-     "uuid": "aea5026f-e5c5-4256-8293-ffcdc487bcd5",
-     "title": "NEUM04",
-     "citation": {
-      "text": "*Principled Assuredly Trustworthy Composable Architectures* , P. Neumann, CDRL A001 Final Report, SRI International, December 2004."
-     },
-     "rlinks": [
-      {
-       "href": "http://www.csl.sri.com/users/neumann/chats4.pdf"
-      }
-     ]
-    },
-    {
      "uuid": "795aff72-3e6c-4b6b-a80a-b14d84b7f544",
      "title": "NIAP CCEVS",
      "citation": {
@@ -1063,30 +883,6 @@
      ]
     },
     {
-     "uuid": "a806de34-70a2-4239-8030-4ab286acc7b8",
-     "title": "NIST CSF",
-     "citation": {
-      "text": "National Institute of Standards and Technology (2018) Framework for Improving Critical Infrastructure Cybersecurity, Version 1.1. (National Institute of Standards and Technology, Gaithersburg, MD)."
-     },
-     "rlinks": [
-      {
-       "href": "https://doi.org/10.6028/NIST.CSWP.04162018"
-      }
-     ]
-    },
-    {
-     "uuid": "956dcbb3-8109-4b6a-9058-ff0b909ec812",
-     "title": "NIST PF",
-     "citation": {
-      "text": "National Institute of Standards and Technology (2020) Privacy Framework: A Tool for Improving Privacy through Enterprise Risk Management, Version 1.0. (National Institute of Standards and Technology, Gaithersburg, MD)."
-     },
-     "rlinks": [
-      {
-       "href": "https://doi.org/10.6028/NIST.CSWP.01162020"
-      }
-     ]
-    },
-    {
      "uuid": "528135e3-c65b-461a-93d3-46513610f792",
      "title": "NITP12",
      "citation": {
@@ -1119,18 +915,6 @@
      "rlinks": [
       {
        "href": "https://www.nsa.gov/resources/everyone/media-destruction"
-      }
-     ]
-    },
-    {
-     "uuid": "782a8c6d-39a4-45df-a6db-ad0b9226fa38",
-     "title": "NVD 800-53",
-     "citation": {
-      "text": "National Institute of Standards and Technology (2020) *National Vulnerability Database: NIST Special Publication 800-53 [database of controls].* Available at"
-     },
-     "rlinks": [
-      {
-       "href": "https://nvd.nist.gov/800-53"
       }
      ]
     },
@@ -1927,18 +1711,6 @@
      ]
     },
     {
-     "uuid": "4e0d3c99-0f4e-496f-8951-d4f57c122fc2",
-     "title": "SP 800-53 RES",
-     "citation": {
-      "text": "NIST Special Publication 800-53, Revision 5 Resource Center."
-     },
-     "rlinks": [
-      {
-       "href": "https://csrc.nist.gov/publications/detail/sp/800-53/rev-5/final"
-      }
-     ]
-    },
-    {
      "uuid": "a21aef46-7330-48a0-b2e1-c5bb8b2dd11d",
      "title": "SP 800-53A",
      "citation": {
@@ -2203,18 +1975,6 @@
      ]
     },
     {
-     "uuid": "6264c85d-19f5-408a-aa44-d737daaf311e",
-     "title": "SP 800-82",
-     "citation": {
-      "text": "Stouffer KA, Lightman S, Pillitteri VY, Abrams M, Hahn A (2015) Guide to Industrial Control Systems (ICS) Security. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-82, Rev. 2."
-     },
-     "rlinks": [
-      {
-       "href": "https://doi.org/10.6028/NIST.SP.800-82r2"
-      }
-     ]
-    },
-    {
      "uuid": "3dd249b0-f57d-44ba-a03e-c3eab1b835ff",
      "title": "SP 800-83",
      "citation": {
@@ -2323,18 +2083,6 @@
      ]
     },
     {
-     "uuid": "dd1a42a3-20c0-43ba-bbdb-6ea3624f1d38",
-     "title": "USC 11101",
-     "citation": {
-      "text": "\"Definitions,\" Title 40 U.S. Code, Sec. 11101. 2018 ed."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.govinfo.gov/app/details/USCODE-2018-title40/USCODE-2018-title40-subtitleIII-chap111-sec11101"
-      }
-     ]
-    },
-    {
      "uuid": "e922fc50-b1f9-469f-92ef-ed7d9803611c",
      "title": "USC 2901",
      "citation": {
@@ -2343,30 +2091,6 @@
      "rlinks": [
       {
        "href": "https://www.govinfo.gov/content/pkg/USCODE-2011-title44/pdf/USCODE-2011-title44-chap29-sec2901.pdf"
-      }
-     ]
-    },
-    {
-     "uuid": "82460f0b-1060-420e-9181-554e2dc921df",
-     "title": "USC 3502",
-     "citation": {
-      "text": "\"Definitions,\" Title 44 U.S. Code, Sec. 3502. 2011 ed."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.govinfo.gov/app/details/USCODE-2011-title44/USCODE-2011-title44-chap35-subchapI-sec3502"
-      }
-     ]
-    },
-    {
-     "uuid": "ef3550b5-60a0-4489-8d4e-08223a929c7a",
-     "title": "USC 552",
-     "citation": {
-      "text": "United States Code, 2006 Edition, Supplement 4, Title 5 - *Government Organization and Employees* , January 2011."
-     },
-     "rlinks": [
-      {
-       "href": "https://www.govinfo.gov/content/pkg/USCODE-2010-title5/pdf/USCODE-2010-title5-partI-chap5-subchapII-sec552a.pdf"
       }
      ]
     },
@@ -2685,7 +2409,8 @@
       ]
      }
     ]
-   }
+   },
+   "uuid": "ea7c7688-79c5-463b-a91b-0650f2d98623"
   }
  }
 }

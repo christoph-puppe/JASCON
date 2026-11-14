@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-18.2",
+ "version": "5.2.0",
+ "label": "SA-18(2)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Inspection of Systems or Components"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to SR-10."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/CP-9.4",
+ "version": "5.2.0",
+ "label": "CP-9(4)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Protection from Unauthorized Modification"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into CP-9."
+   }
+  }
+ ]
+}

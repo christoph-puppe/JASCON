@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/IA-3.2",
+ "version": "5.2.0",
+ "label": "IA-3(2)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Cryptographic Bidirectional Network Authentication"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into IA-3(1)."
+   }
+  }
+ ]
+}

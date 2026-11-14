@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/PE-5.1",
+ "version": "5.2.0",
+ "label": "PE-5(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Access to Output by Authorized Individuals"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into PE-5."
+   }
+  }
+ ]
+}

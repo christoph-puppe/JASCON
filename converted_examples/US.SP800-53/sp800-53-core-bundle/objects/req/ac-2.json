@@ -1055,34 +1055,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AC-2.10",
-    "mode": "merged-into",
-    "label": "AC-2(10)",
-    "title": "Shared and Group Account Credential Change",
-    "into": "smt.k"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AC-13",
-    "mode": "merged-into",
-    "label": "AC-13",
-    "title": "Supervision and Review — Access Control"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-14",
-    "mode": "merged-into",
-    "label": "SC-14",
-    "title": "Public Access Protections"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
-    "mode": "merged-into",
-    "label": "SI-9",
-    "title": "Information Input Restrictions"
-   }
-  ]
- }
+ ]
 }
