@@ -69,8 +69,12 @@ The texts for #80 to #84 are written when those are built.
 | Website `facts.json` | measured after the commits of the round | with the last commit |
 | Register, backlog, plan, decisions, twin header | "After phase E"; #80 to #94; section 15; the author's answers and what was built otherwise | done |
 
+The website's model page said that `version` and the two digests carry
+the history; it says now, in the five languages, that `version` is the
+object's own version and `history` its publisher's record of its
+changes (the four translations checked for structure and stamped).
+
 Left: handbook 3.6 on references to a withdrawn object (#93) and the
-example folder's `gspp-taxonomy` schema (#94), both for the author; the
-website's pages say nothing of `history`, labels or sources beyond the
-numbers they print (`model.html` says that `version` and the two digests
-carry the history, which is half of it now).
+example folder's `gspp-taxonomy` schema (#94), both for the author. The
+website's other pages say nothing of labels or sources beyond the
+numbers they print.
