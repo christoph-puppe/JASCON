@@ -672,6 +672,29 @@ and in `readme.md`; this file says only what is done and what is next.
   bundle reports one reference, to a source document. 191 tests of the
   app's suite pass.
 
+- The Grundschutz++ preset follows `convert_bsi.py` v0.6 (build 0.9.21;
+  backlog #94). The props are read under
+  `.../tree/main/documentation/namespaces/`, where the catalogue of
+  2026-10-29 has them; with the old address `Dokumentation/namespaces/` the
+  preset read none of them and carried every one unread. The taxonomy
+  schema is typed and pinned as `gspp-taxonomy-1.1.0.json` (per statement
+  `class`, `sec-level` of the publisher's two levels, `effort` from 0 to 5,
+  `tags`; closed), and `class` is written only where the control has one.
+  Two cases refuse the import with the converter's sentence, and nothing
+  is imported: a `sec_level` or `effort_level` outside the publisher's
+  lists, and a name the mapping reads of which every prop stands in
+  another namespace. One stray prop among props that are read is carried.
+
+  Measured on the pinned catalogue: 1,289 of 1,289 objects (1,000
+  Requirements, 289 Sets) equal the committed bundle by semantic digest
+  and by bytes, the pinned schemas byte for byte, the manifest's source
+  entry; modality must 149, should 627, may 224. The party test's digest
+  for Grundschutz++ is taken anew on the regenerated OSCAL export (1,362
+  objects, 1,000 statements); CIS and SP 800-53 are unchanged. The
+  converter gives the same two sentences on the two small catalogues of
+  the new tests. 190 tests of the app's suite pass, 3 are skipped (the
+  NIST sources are not fetched here), none fails.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written
