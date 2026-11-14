@@ -664,6 +664,9 @@ test("Attestations of a set that was changed: the page compares with the bundle 
 
   /* ---- the IFA bundle: one unsigned Attestation ---- */
   const IMPL = "https://ifa.gov/goodread/impl/system1234-ac-6.1";
+  /* what the committed Attestation signed for that Implementation: read from its file, so that a conversion run again
+     (2026-11-14: the bundle changed twice that day) does not leave a digest of an earlier bundle in this test */
+  const IFA_SIGNED = JSON.parse(fs.readFileSync(path.join(IFA, "attestation-ifa-ato.json"), "utf8"))["subject-semantic-digests"].find(x => x.id === IMPL)["semantic-digest"];
   s = await session(); p = s.page;
   try {
     await load(s, zipOf(IFA, "ifa"));
@@ -683,7 +686,7 @@ test("Attestations of a set that was changed: the page compares with the bundle 
     await p.locator(`[data-att-card="${IFA_ATT}"] .badge`, { hasText: "withdrawn" }).waitFor();
     const withdrawn = await checked(s);
     assert.deepEqual(withdrawn.lines.map(l => [l.kind, l.verdict]), [["line", "fail"]]);
-    assert.match(withdrawn.lines[0].text, new RegExp(`^binds: ${IFA_ATT.replace(/[.]/g, "\\.")} = DOES NOT BIND \\[lifecycle withdrawn: reported, not a failure\\] subject ${IMPL.replace(/[.]/g, "\\.")}: recomputed semantic digest sha256:[0-9a-f]{64}, signed sha256:30c85d363fe959f2c18735c3a66f6fdf261a27381a489350581a9556596fa577 - another manifest$`));
+    assert.match(withdrawn.lines[0].text, new RegExp(`^binds: ${IFA_ATT.replace(/[.]/g, "\\.")} = DOES NOT BIND \\[lifecycle withdrawn: reported, not a failure\\] subject ${IMPL.replace(/[.]/g, "\\.")}: recomputed semantic digest sha256:[0-9a-f]{64}, signed ${IFA_SIGNED} - another manifest$`));
     assert.equal(withdrawn.lines[0].advice, "Reported and no failure: the Attestation is not active, so nothing is claimed with it.");
     assert.deepEqual(withdrawn.errors, []);
     const passing = await shipped(s, [["attestation-ifa-ato.json", null]]);

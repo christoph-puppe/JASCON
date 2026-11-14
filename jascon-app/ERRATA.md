@@ -548,3 +548,26 @@ surprise, blunder.
   baseline Set carries", and the part of "profile: excludes, …" on a
   profile's own Set.
 
+
+## 2026-11-14 · build 0.9.16 · both presets left out what the converters had declared as drops
+
+- **Symptom.** Measured with build 0.9.15 against this build, on the pinned
+  sources. Grundschutz++: the uuid of the catalogue and its one back-matter
+  resource, which a link of the metadata names, were not carried. SP
+  800-53: the uuid of the catalogue and the three print labels `a.` of
+  SI-2(7) were not carried, and the status of the 180 withdrawn controls
+  that name a successor stood nowhere; a profile's uuid, its imports and
+  its back-matter were not carried by the profile import. The report said
+  nothing of it.
+- **Cause.** The converters had declared these values as drops for the
+  author's decision; the presets followed them. The author decided on
+  2026-11-14 that all of them are content (`drafts/phase-e/`).
+- **Class.** Forgotten: a drop that was declared in the converter and had
+  no line in the app.
+- **Fix.** The presets and the profile import follow the converters' new
+  round (see `readme.md`, "Importing OSCAL"). Measured: Grundschutz++ 1,287
+  of 1,287 objects, SP 800-53 1,217 of 1,217, each by semantic digest and
+  by bytes.
+- **Test.** `tests/oscal.test.mjs`, the two digest tests, "NIST preset: the
+  rules on a small catalog", and the two tests that run a converter on a
+  catalogue written for the tests, now without a tolerated failure.
