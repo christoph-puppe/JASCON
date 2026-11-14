@@ -43,10 +43,20 @@
     {
      "id": "sc-28.1_obj",
      "label": "SC-28(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-28.1_obj-1",
        "label": "SC-28(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "cryptographic mechanisms are implemented to prevent unauthorized disclosure of {param:sc-28.01_odp.01} at rest on {param:sc-28.01_odp.02};"
        }
@@ -54,6 +64,11 @@
       {
        "id": "sc-28.1_obj-2",
        "label": "SC-28(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "cryptographic mechanisms are implemented to prevent unauthorized modification of {param:sc-28.01_odp.01} at rest on {param:sc-28.01_odp.02}."
        }
@@ -128,7 +143,8 @@
      ],
      "alt-identifiers": [
       "sc-28.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-28(01)_ODP[01]"
     },
     "sc-28.01_odp.02": {
      "guidelines": [
@@ -138,7 +154,8 @@
      ],
      "alt-identifiers": [
       "sc-28.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-28(01)_ODP[02]"
     }
    }
   }
@@ -180,19 +197,19 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/MP-2.2",
     "mode": "merged-into",
-    "label": "MP-02(02)",
+    "label": "MP-2(2)",
     "title": "Cryptographic Protection"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/MP-4.1",
     "mode": "merged-into",
-    "label": "MP-04(01)",
+    "label": "MP-4(1)",
     "title": "Cryptographic Protection"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/MP-5.4",
     "mode": "merged-into",
-    "label": "MP-05(04)",
+    "label": "MP-5(4)",
     "title": "Cryptographic Protection"
    }
   ]

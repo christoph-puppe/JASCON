@@ -38,6 +38,11 @@
     {
      "id": "sc-7.14_obj",
      "label": "SC-07(14)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-07.14_odp} are protected against unauthorized physical connections."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "sc-7.14_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(14)_ODP"
     }
    }
   }

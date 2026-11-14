@@ -51,10 +51,20 @@
     {
      "id": "ac-20.1_obj",
      "label": "AC-20(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-20.1_obj.a",
        "label": "AC-20(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "authorized individuals are permitted to use an external system to access the system or to process, store, or transmit organization-controlled information only after verification of the implementation of controls on the external system as specified in the organization’s security and privacy policies and security and privacy plans (if applicable);"
        }
@@ -62,6 +72,11 @@
       {
        "id": "ac-20.1_obj.b",
        "label": "AC-20(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "authorized individuals are permitted to use an external system to access the system or to process, store, or transmit organization-controlled information only after retention of approved system connection or processing agreements with the organizational entity hosting the external system (if applicable)."
        }

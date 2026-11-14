@@ -54,7 +54,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Organizations strategically allocate security and privacy controls in the security and privacy architectures so that adversaries must overcome multiple controls to achieve their objective. Requiring adversaries to defeat multiple controls makes it more difficult to attack information resources by increasing the work factor of the adversary; it also increases the likelihood of detection. The coordination of allocated controls is essential to ensure that an attack that involves one control does not create adverse, unintended consequences by interfering with other controls. Unintended consequences can include system lockout and cascading alarms. The placement of controls in systems and organizations is an important activity that requires thoughtful analysis. The value of organizational assets is an important consideration in providing additional layering. Defense-in-depth architectural approaches include modularity and layering (see SA-8(3) ), separation of system and user functionality (see SC-2 ), and security function isolation (see SC-3)."
+     "en": "Organizations strategically allocate security and privacy controls in the security and privacy architectures so that adversaries must overcome multiple controls to achieve their objective. Requiring adversaries to defeat multiple controls makes it more difficult to attack information resources by increasing the work factor of the adversary; it also increases the likelihood of detection. The coordination of allocated controls is essential to ensure that an attack that involves one control does not create adverse, unintended consequences by interfering with other controls. Unintended consequences can include system lockout and cascading alarms. The placement of controls in systems and organizations is an important activity that requires thoughtful analysis. The value of organizational assets is an important consideration in providing additional layering. Defense-in-depth architectural approaches include modularity and layering (see [SA-8(3)](#sa-8.3) ), separation of system and user functionality (see [SC-2](#sc-2) ), and security function isolation (see [SC-3](#sc-3))."
     }
    ]
   },
@@ -63,14 +63,29 @@
     {
      "id": "pl-8.1_obj",
      "label": "PL-08(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pl-8.1_obj.a",
        "label": "PL-08(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pl-8.1_obj.a-1",
          "label": "PL-08(01)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the security architecture for the system is designed using a defense-in-depth approach that allocates {param:pl-08.01_odp.01} to {param:pl-08.01_odp.02};"
          }
@@ -78,6 +93,11 @@
         {
          "id": "pl-8.1_obj.a-2",
          "label": "PL-08(01)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the privacy architecture for the system is designed using a defense-in-depth approach that allocates {param:pl-08.01_odp.01} to {param:pl-08.01_odp.02};"
          }
@@ -87,10 +107,20 @@
       {
        "id": "pl-8.1_obj.b",
        "label": "PL-08(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pl-8.1_obj.b-1",
          "label": "PL-08(01)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the security architecture for the system is designed using a defense-in-depth approach that ensures the allocated controls operate in a coordinated and mutually reinforcing manner;"
          }
@@ -98,6 +128,11 @@
         {
          "id": "pl-8.1_obj.b-2",
          "label": "PL-08(01)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the privacy architecture for the system is designed using a defense-in-depth approach that ensures the allocated controls operate in a coordinated and mutually reinforcing manner."
          }
@@ -177,7 +212,8 @@
      ],
      "alt-identifiers": [
       "pl-8.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PL-08(01)_ODP[01]"
     },
     "pl-08.01_odp.02": {
      "guidelines": [
@@ -187,7 +223,8 @@
      ],
      "alt-identifiers": [
       "pl-8.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PL-08(01)_ODP[02]"
     }
    }
   },

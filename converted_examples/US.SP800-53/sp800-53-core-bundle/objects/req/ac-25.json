@@ -38,6 +38,11 @@
     {
      "id": "ac-25_obj",
      "label": "AC-25",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a reference monitor is implemented for {param:ac-25_odp} that is tamper-proof, always invoked, and small enough to be subject to analysis and testing, the completeness of which can be assured."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ac-25_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-25_ODP"
     }
    }
   },

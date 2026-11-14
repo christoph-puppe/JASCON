@@ -62,7 +62,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "The plan of action and milestones is a key organizational document and is subject to reporting requirements established by the Office of Management and Budget. Organizations develop plans of action and milestones with an organization-wide perspective, prioritizing risk response actions and ensuring consistency with the goals and objectives of the organization. Plan of action and milestones updates are based on findings from control assessments and continuous monitoring activities. There can be multiple plans of action and milestones corresponding to the information system level, mission/business process level, and organizational/governance level. While plans of action and milestones are required for federal organizations, other types of organizations can help reduce risk by documenting and tracking planned remediations. Specific guidance on plans of action and milestones at the system level is provided in CA-5."
+     "en": "The plan of action and milestones is a key organizational document and is subject to reporting requirements established by the Office of Management and Budget. Organizations develop plans of action and milestones with an organization-wide perspective, prioritizing risk response actions and ensuring consistency with the goals and objectives of the organization. Plan of action and milestones updates are based on findings from control assessments and continuous monitoring activities. There can be multiple plans of action and milestones corresponding to the information system level, mission/business process level, and organizational/governance level. While plans of action and milestones are required for federal organizations, other types of organizations can help reduce risk by documenting and tracking planned remediations. Specific guidance on plans of action and milestones at the system level is provided in [CA-5](#ca-5)."
     }
    ]
   },
@@ -71,18 +71,38 @@
     {
      "id": "pm-4_obj",
      "label": "PM-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-4_obj.a",
        "label": "PM-04a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-4_obj.a.1",
          "label": "PM-04a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "pm-4_obj.a.1-1",
            "label": "PM-04a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the information security program and associated organizational systems are developed;"
            }
@@ -90,6 +110,11 @@
           {
            "id": "pm-4_obj.a.1-2",
            "label": "PM-04a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the information security program and associated organizational systems are maintained;"
            }
@@ -97,6 +122,11 @@
           {
            "id": "pm-4_obj.a.1-3",
            "label": "PM-04a.01[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the privacy program and associated organizational systems are developed;"
            }
@@ -104,6 +134,11 @@
           {
            "id": "pm-4_obj.a.1-4",
            "label": "PM-04a.01[04]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the privacy program and associated organizational systems are maintained;"
            }
@@ -111,6 +146,11 @@
           {
            "id": "pm-4_obj.a.1-5",
            "label": "PM-04a.01[05]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the supply chain risk management program and associated organizational systems are developed;"
            }
@@ -118,6 +158,11 @@
           {
            "id": "pm-4_obj.a.1-6",
            "label": "PM-04a.01[06]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the supply chain risk management program and associated organizational systems are maintained;"
            }
@@ -127,10 +172,20 @@
         {
          "id": "pm-4_obj.a.2",
          "label": "PM-04a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "pm-4_obj.a.2-1",
            "label": "PM-04a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the information security program and associated organizational systems document remedial information security risk management actions to adequately respond to risks to organizational operations and assets, individuals, other organizations, and the Nation;"
            }
@@ -138,6 +193,11 @@
           {
            "id": "pm-4_obj.a.2-2",
            "label": "PM-04a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the privacy program and associated organizational systems document remedial privacy risk management actions to adequately respond to risks to organizational operations and assets, individuals, other organizations, and the Nation;"
            }
@@ -145,6 +205,11 @@
           {
            "id": "pm-4_obj.a.2-3",
            "label": "PM-04a.02[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the supply chain risk management program and associated organizational systems document remedial supply chain risk management actions to adequately respond to risks to organizational operations and assets, individuals, other organizations, and the Nation;"
            }
@@ -154,10 +219,20 @@
         {
          "id": "pm-4_obj.a.3",
          "label": "PM-04a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "children": [
           {
            "id": "pm-4_obj.a.3-1",
            "label": "PM-04a.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the information security risk management programs and associated organizational systems are reported in accordance with established reporting requirements;"
            }
@@ -165,6 +240,11 @@
           {
            "id": "pm-4_obj.a.3-2",
            "label": "PM-04a.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the privacy risk management programs and associated organizational systems are reported in accordance with established reporting requirements;"
            }
@@ -172,6 +252,11 @@
           {
            "id": "pm-4_obj.a.3-3",
            "label": "PM-04a.03[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "a process to ensure that plans of action and milestones for the supply chain risk management programs and associated organizational systems are reported in accordance with established reporting requirements;"
            }
@@ -183,10 +268,20 @@
       {
        "id": "pm-4_obj.b",
        "label": "PM-04b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-4_obj.b-1",
          "label": "PM-04b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "plans of action and milestones are reviewed for consistency with the organizational risk management strategy;"
          }
@@ -194,6 +289,11 @@
         {
          "id": "pm-4_obj.b-2",
          "label": "PM-04b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "plans of action and milestones are reviewed for consistency with organization-wide priorities for risk response actions."
          }

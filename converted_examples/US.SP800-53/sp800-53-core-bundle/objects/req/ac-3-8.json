@@ -39,10 +39,20 @@
     {
      "id": "ac-3.8_obj",
      "label": "AC-03(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-3.8_obj-1",
        "label": "AC-03(08)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "revocation of access authorizations is enforced, resulting from changes to the security attributes of subjects based on {param:ac-03.08_odp};"
        }
@@ -50,6 +60,11 @@
       {
        "id": "ac-3.8_obj-2",
        "label": "AC-03(08)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "revocation of access authorizations is enforced resulting from changes to the security attributes of objects based on {param:ac-03.08_odp}."
        }
@@ -125,7 +140,8 @@
      "alt-identifiers": [
       "ac-3.8_prm_1"
      ],
-     "alt-label": "rules governing the timing of revocations of access authorizations"
+     "alt-label": "rules governing the timing of revocations of access authorizations",
+     "sp800-53a-label": "AC-03(08)_ODP"
     }
    }
   }

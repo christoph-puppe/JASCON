@@ -38,6 +38,11 @@
     {
      "id": "sa-20_obj",
      "label": "SA-20",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-20_odp} are reimplemented or custom-developed."
      }
@@ -120,7 +125,8 @@
      "alt-identifiers": [
       "sa-20_prm_1"
      ],
-     "alt-label": "critical system components"
+     "alt-label": "critical system components",
+     "sp800-53a-label": "SA-20_ODP"
     }
    }
   },
@@ -157,7 +163,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-14.1",
     "mode": "merged-into",
-    "label": "SA-14(01)",
+    "label": "SA-14(1)",
     "title": "Critical Components with No Viable Alternative Sourcing"
    }
   ]

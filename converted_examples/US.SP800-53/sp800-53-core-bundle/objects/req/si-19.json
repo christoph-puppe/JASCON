@@ -57,10 +57,20 @@
     {
      "id": "si-19_obj",
      "label": "SI-19",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-19_obj.a",
        "label": "SI-19a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:si-19_odp.01} are removed from datasets;"
        }
@@ -68,6 +78,11 @@
       {
        "id": "si-19_obj.b",
        "label": "SI-19b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the effectiveness of de-identification is evaluated {param:si-19_odp.02}."
        }
@@ -152,7 +167,8 @@
      "alt-identifiers": [
       "si-19_prm_1"
      ],
-     "alt-label": "elements of personally identifiable information"
+     "alt-label": "elements of personally identifiable information",
+     "sp800-53a-label": "SI-19_ODP[01]"
     },
     "si-19_odp.02": {
      "guidelines": [
@@ -162,7 +178,8 @@
      ],
      "alt-identifiers": [
       "si-19_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-19_ODP[02]"
     }
    }
   }

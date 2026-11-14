@@ -52,7 +52,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "For federal agencies, the webpage is located at www.[agency].gov/privacy. Federal agencies include public privacy impact assessments, system of records notices, computer matching notices and agreements, PRIVACT exemption and implementation rules, privacy reports, privacy policies, instructions for individuals making an access or amendment request, email addresses for questions/complaints, blogs, and periodic publications."
+     "en": "For federal agencies, the webpage is located at www.[agency].gov/privacy. Federal agencies include public privacy impact assessments, system of records notices, computer matching notices and agreements, [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) exemption and implementation rules, privacy reports, privacy policies, instructions for individuals making an access or amendment request, email addresses for questions/complaints, blogs, and periodic publications."
     }
    ]
   },
@@ -61,10 +61,20 @@
     {
      "id": "pm-20_obj",
      "label": "PM-20",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-20_obj-1",
        "label": "PM-20[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a central resource webpage is maintained on the organization’s principal public website;"
        }
@@ -72,6 +82,11 @@
       {
        "id": "pm-20_obj-2",
        "label": "PM-20[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the webpage serves as a central source of information about the organization’s privacy program;"
        }
@@ -79,10 +94,20 @@
       {
        "id": "pm-20_obj.a",
        "label": "PM-20a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-20_obj.a-1",
          "label": "PM-20a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the webpage ensures that the public has access to information about organizational privacy activities;"
          }
@@ -90,6 +115,11 @@
         {
          "id": "pm-20_obj.a-2",
          "label": "PM-20a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the webpage ensures that the public can communicate with its senior agency official for privacy;"
          }
@@ -99,10 +129,20 @@
       {
        "id": "pm-20_obj.b",
        "label": "PM-20b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-20_obj.b-1",
          "label": "PM-20b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the webpage ensures that organizational privacy practices are publicly available;"
          }
@@ -110,6 +150,11 @@
         {
          "id": "pm-20_obj.b-2",
          "label": "PM-20b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the webpage ensures that organizational privacy reports are publicly available;"
          }
@@ -119,6 +164,11 @@
       {
        "id": "pm-20_obj.c",
        "label": "PM-20c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the webpage employs publicly facing email addresses and/or phone numbers to enable the public to provide feedback and/or direct questions to privacy offices regarding privacy practices."
        }

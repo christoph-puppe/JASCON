@@ -32,6 +32,11 @@
     {
      "id": "si-19.6_obj",
      "label": "SI-19(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the disclosure of personally identifiable information is prevented by adding non-deterministic noise to the results of mathematical operations before the results are reported."
      }

@@ -32,10 +32,20 @@
     {
      "id": "ir-4.14_obj",
      "label": "IR-04(14)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-4.14_obj-1",
        "label": "IR-04(14)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a security operations center is established;"
        }
@@ -43,6 +53,11 @@
       {
        "id": "ir-4.14_obj-2",
        "label": "IR-04(14)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a security operations center is maintained."
        }

@@ -48,6 +48,11 @@
     {
      "id": "ac-24.1_obj",
      "label": "AC-24(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-24.01_odp.01} is transmitted using {param:ac-24.01_odp.02} to {param:ac-24.01_odp.03} that enforce access control decisions."
      }
@@ -120,7 +125,8 @@
      ],
      "alt-identifiers": [
       "ac-24.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-24(01)_ODP[01]"
     },
     "ac-24.01_odp.02": {
      "guidelines": [
@@ -130,7 +136,8 @@
      ],
      "alt-identifiers": [
       "ac-24.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-24(01)_ODP[02]"
     },
     "ac-24.01_odp.03": {
      "guidelines": [
@@ -140,7 +147,8 @@
      ],
      "alt-identifiers": [
       "ac-24.1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-24(01)_ODP[03]"
     }
    }
   }

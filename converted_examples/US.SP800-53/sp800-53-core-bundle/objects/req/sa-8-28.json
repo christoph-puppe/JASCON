@@ -39,6 +39,11 @@
     {
      "id": "sa-8.28_obj",
      "label": "SA-08(28)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.28_odp} implement the security design principle of acceptable security."
      }
@@ -132,7 +137,8 @@
      ],
      "alt-identifiers": [
       "sa-8.28_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(28)_ODP"
     }
    }
   },

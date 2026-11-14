@@ -38,6 +38,11 @@
     {
      "id": "ia-8.4_obj",
      "label": "IA-08(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "there is conformance with {param:ia-08.04_odp} for identity management."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ia-8.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-08(04)_ODP"
     }
    }
   }

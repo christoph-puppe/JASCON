@@ -31,10 +31,20 @@
     {
      "id": "cp-7.6_obj",
      "label": "CP-07(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-7.6_obj-1",
        "label": "CP-07(06)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "circumstances that preclude returning to the primary processing site are planned for;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cp-7.6_obj-2",
        "label": "CP-07(06)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "circumstances that preclude returning to the primary processing site are prepared for."
        }

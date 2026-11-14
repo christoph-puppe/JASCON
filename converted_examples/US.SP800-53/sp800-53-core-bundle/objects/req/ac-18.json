@@ -41,14 +41,29 @@
     {
      "id": "ac-18_obj",
      "label": "AC-18",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-18_obj.a",
        "label": "AC-18a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ac-18_obj.a-1",
          "label": "AC-18a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "configuration requirements are established for each type of wireless access;"
          }
@@ -56,6 +71,11 @@
         {
          "id": "ac-18_obj.a-2",
          "label": "AC-18a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "connection requirements are established for each type of wireless access;"
          }
@@ -63,6 +83,11 @@
         {
          "id": "ac-18_obj.a-3",
          "label": "AC-18a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "implementation guidance is established for each type of wireless access;"
          }
@@ -72,6 +97,11 @@
       {
        "id": "ac-18_obj.b",
        "label": "AC-18b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "each type of wireless access to the system is authorized prior to allowing such connections."
        }

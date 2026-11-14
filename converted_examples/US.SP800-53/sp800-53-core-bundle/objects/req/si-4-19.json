@@ -43,6 +43,11 @@
     {
      "id": "si-4.19_obj",
      "label": "SI-04(19)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-04.19_odp.01} is implemented on individuals who have been identified by {param:si-04.19_odp.02} as posing an increased level of risk."
      }
@@ -136,7 +141,8 @@
      ],
      "alt-identifiers": [
       "si-4.19_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(19)_ODP[01]"
     },
     "si-04.19_odp.02": {
      "guidelines": [
@@ -146,7 +152,8 @@
      ],
      "alt-identifiers": [
       "si-4.19_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(19)_ODP[02]"
     }
    }
   },

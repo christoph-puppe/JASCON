@@ -31,6 +31,11 @@
     {
      "id": "sa-10.6_obj",
      "label": "SA-10(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to execute procedures for ensuring that security-relevant hardware, software, and firmware updates distributed to the organization are exactly as specified by the master copies."
      }

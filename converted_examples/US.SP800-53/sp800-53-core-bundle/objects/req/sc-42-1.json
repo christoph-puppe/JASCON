@@ -38,6 +38,11 @@
     {
      "id": "sc-42.1_obj",
      "label": "SC-42(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the system is configured so that data or information collected by the {param:sc-42.01_odp} is only reported to authorized individuals or roles."
      }
@@ -129,7 +134,8 @@
      "alt-identifiers": [
       "sc-42.1_prm_1",
       "sc-42.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-42(01)_ODP"
     }
    }
   }

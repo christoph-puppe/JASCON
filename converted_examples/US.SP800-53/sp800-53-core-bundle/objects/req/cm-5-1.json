@@ -48,10 +48,20 @@
     {
      "id": "cm-5.1_obj",
      "label": "CM-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-5.1_obj.a",
        "label": "CM-05(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "access restrictions for change are enforced using {param:cm-05.01_odp};"
        }
@@ -59,6 +69,11 @@
       {
        "id": "cm-5.1_obj.b",
        "label": "CM-05(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "audit records of enforcement actions are automatically generated."
        }
@@ -145,7 +160,8 @@
      ],
      "alt-identifiers": [
       "cm-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-05(01)_ODP"
     }
    }
   }

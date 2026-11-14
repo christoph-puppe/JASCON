@@ -43,6 +43,11 @@
     {
      "id": "sc-7.12_obj",
      "label": "SC-07(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-07.12_odp.01} are implemented at {param:sc-07.12_odp.02}."
      }
@@ -118,7 +123,8 @@
      ],
      "alt-identifiers": [
       "sc-7.12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(12)_ODP[01]"
     },
     "sc-07.12_odp.02": {
      "guidelines": [
@@ -128,7 +134,8 @@
      ],
      "alt-identifiers": [
       "sc-7.12_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(12)_ODP[02]"
     }
    }
   }

@@ -43,6 +43,11 @@
     {
      "id": "sr-12_obj",
      "label": "SR-12",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sr-12_odp.01} are disposed of using {param:sr-12_odp.02}."
      }
@@ -124,7 +129,8 @@
      ],
      "alt-identifiers": [
       "sr-12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-12_ODP[01]"
     },
     "sr-12_odp.02": {
      "guidelines": [
@@ -134,7 +140,8 @@
      ],
      "alt-identifiers": [
       "sr-12_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SR-12_ODP[02]"
     }
    }
   },
@@ -159,7 +166,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-19.3",
     "mode": "renamed",
-    "label": "SA-19(03)",
+    "label": "SA-19(3)",
     "title": "Component Disposal"
    }
   ]

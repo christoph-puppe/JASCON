@@ -43,6 +43,11 @@
     {
      "id": "ma-6.1_obj",
      "label": "MA-06(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "preventive maintenance is performed on {param:ma-06.01_odp.01} at {param:ma-06.01_odp.02}."
      }
@@ -118,7 +123,8 @@
      ],
      "alt-identifiers": [
       "ma-6.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-06(01)_ODP[01]"
     },
     "ma-06.01_odp.02": {
      "guidelines": [
@@ -128,7 +134,8 @@
      ],
      "alt-identifiers": [
       "ma-6.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "MA-06(01)_ODP[02]"
     }
    }
   }

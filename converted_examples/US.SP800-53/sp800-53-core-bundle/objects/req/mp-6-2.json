@@ -48,10 +48,20 @@
     {
      "id": "mp-6.2_obj",
      "label": "MP-06(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-6.2_obj-1",
        "label": "MP-06(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "sanitization equipment is tested {param:mp-06.02_odp.01} to ensure that the intended sanitization is being achieved;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "mp-6.2_obj-2",
        "label": "MP-06(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "sanitization procedures are tested {param:mp-06.02_odp.02} to ensure that the intended sanitization is being achieved."
        }
@@ -151,14 +166,16 @@
       {
        "en": "frequency with which to test sanitization equipment is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-06(02)_ODP[01]"
     },
     "mp-06.02_odp.02": {
      "guidelines": [
       {
        "en": "frequency with which to test sanitization procedures is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-06(02)_ODP[02]"
     }
    }
   }

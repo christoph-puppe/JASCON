@@ -31,10 +31,20 @@
     {
      "id": "sc-20.2_obj",
      "label": "SC-20(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-20.2_obj-1",
        "label": "SC-20(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "data origin artifacts are provided for internal name/address resolution queries;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-20.2_obj-2",
        "label": "SC-20(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "integrity protection artifacts are provided for internal name/address resolution queries."
        }

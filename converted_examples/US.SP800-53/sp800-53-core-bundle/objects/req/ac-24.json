@@ -51,6 +51,11 @@
     {
      "id": "ac-24_obj",
      "label": "AC-24",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-24_odp.01} are taken to ensure that {param:ac-24_odp.02} are applied to each access request prior to access enforcement."
      }
@@ -112,7 +117,8 @@
     "ac-24_odp.01": {
      "alt-identifiers": [
       "ac-24_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-24_ODP[01]"
     },
     "ac-24_odp.02": {
      "guidelines": [
@@ -122,7 +128,8 @@
      ],
      "alt-identifiers": [
       "ac-24_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-24_ODP[02]"
     }
    }
   }

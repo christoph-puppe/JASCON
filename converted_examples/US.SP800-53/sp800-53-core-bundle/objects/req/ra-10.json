@@ -72,14 +72,29 @@
     {
      "id": "ra-10_obj",
      "label": "RA-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ra-10_obj.a",
        "label": "RA-10a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ra-10_obj.a.1",
          "label": "RA-10a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "a cyber threat capability is established and maintained to search for indicators of compromise in organizational systems;"
          }
@@ -87,6 +102,11 @@
         {
          "id": "ra-10_obj.a.2",
          "label": "RA-10a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "prose": {
           "en": "a cyber threat capability is established and maintained to detect, track, and disrupt threats that evade existing controls;"
          }
@@ -96,6 +116,11 @@
       {
        "id": "ra-10_obj.b",
        "label": "RA-10b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the threat hunting capability is employed {param:ra-10_odp}."
        }
@@ -167,7 +192,8 @@
      ],
      "alt-identifiers": [
       "ra-10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-10_ODP"
     }
    }
   },

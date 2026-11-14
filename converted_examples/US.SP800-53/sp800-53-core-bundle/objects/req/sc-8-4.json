@@ -38,6 +38,11 @@
     {
      "id": "sc-8.4_obj",
      "label": "SC-08(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cryptographic mechanisms are implemented to conceal or randomize communication patterns unless otherwise protected by {param:sc-08.04_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "sc-8.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-08(04)_ODP"
     }
    }
   }

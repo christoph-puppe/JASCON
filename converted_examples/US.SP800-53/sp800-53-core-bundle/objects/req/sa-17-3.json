@@ -81,14 +81,29 @@
     {
      "id": "sa-17.3_obj",
      "label": "SA-17(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-17.3_obj.a",
        "label": "SA-17(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-17.3_obj.a-1",
          "label": "SA-17(03)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "as an integral part of the development process, the developer of the system, system component, or system service is required to produce a formal top-level specification that specifies the interfaces to security-relevant hardware, software, and firmware in terms of exceptions;"
          }
@@ -96,6 +111,11 @@
         {
          "id": "sa-17.3_obj.a-2",
          "label": "SA-17(03)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "as an integral part of the development process, the developer of the system, system component, or system service is required to produce a formal top-level specification that specifies the interfaces to security-relevant hardware, software, and firmware in terms of error messages;"
          }
@@ -103,6 +123,11 @@
         {
          "id": "sa-17.3_obj.a-3",
          "label": "SA-17(03)(a)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "as an integral part of the development process, the developer of the system, system component, or system service is required to produce a formal top-level specification that specifies the interfaces to security-relevant hardware, software, and firmware in terms of effects;"
          }
@@ -112,6 +137,11 @@
       {
        "id": "sa-17.3_obj.b",
        "label": "SA-17(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to show proof that the formal top-level specification is consistent with the formal policy model to the extent feasible with additional informal demonstration as necessary;"
        }
@@ -119,6 +149,11 @@
       {
        "id": "sa-17.3_obj.c",
        "label": "SA-17(03)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to show via informal demonstration that the formal top-level specification completely covers the interfaces to security-relevant hardware, software, and firmware;"
        }
@@ -126,6 +161,11 @@
       {
        "id": "sa-17.3_obj.d",
        "label": "SA-17(03)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to show that the formal top-level specification is an accurate description of the implemented security-relevant hardware, software, and firmware;"
        }
@@ -133,6 +173,11 @@
       {
        "id": "sa-17.3_obj.e",
        "label": "SA-17(03)(e)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to describe the security-relevant hardware, software, and firmware mechanisms that are not addressed in the formal top-level specification but are strictly internal to the security-relevant hardware, software, and firmware."
        }

@@ -38,6 +38,11 @@
     {
      "id": "ac-6.5_obj",
      "label": "AC-06(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "privileged accounts on the system are restricted to {param:ac-06.05_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ac-6.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-06(05)_ODP"
     }
    }
   }

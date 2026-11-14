@@ -29,7 +29,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "When, by contract, an organization provides for the operation of a system of records to accomplish an organizational mission or function, the organization, consistent with its authority, causes the requirements of the PRIVACT to be applied to the system of records."
+     "en": "When, by contract, an organization provides for the operation of a system of records to accomplish an organizational mission or function, the organization, consistent with its authority, causes the requirements of the [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) to be applied to the system of records."
     }
    ]
   },
@@ -38,6 +38,11 @@
     {
      "id": "sa-4.11_obj",
      "label": "SA-04(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-04.11_odp} are defined in the acquisition contract for the operation of a system of records on behalf of an organization to accomplish an organizational mission or function."
      }
@@ -128,7 +133,8 @@
      ],
      "alt-identifiers": [
       "sa-4.11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-04(11)_ODP"
     }
    }
   },

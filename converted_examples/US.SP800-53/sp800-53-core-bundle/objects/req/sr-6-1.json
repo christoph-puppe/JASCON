@@ -57,6 +57,11 @@
     {
      "id": "sr-6.1_obj",
      "label": "SR-06(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sr-06.01_odp.01} is/are employed on {param:sr-06.01_odp.02} associated with the system, system component, or system service."
      }
@@ -130,7 +135,8 @@
     "sr-06.01_odp.01": {
      "alt-identifiers": [
       "sr-6.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-06(01)_ODP[01]"
     },
     "sr-06.01_odp.02": {
      "guidelines": [
@@ -140,7 +146,8 @@
      ],
      "alt-identifiers": [
       "sr-6.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SR-06(01)_ODP[02]"
     }
    }
   },

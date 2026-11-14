@@ -48,10 +48,20 @@
     {
      "id": "ac-16.8_obj",
      "label": "AC-16(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.8_obj-1",
        "label": "AC-16(08)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ac-16.08_odp.01} are implemented in associating security attributes to information;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "ac-16.8_obj-2",
        "label": "AC-16(08)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ac-16.08_odp.02} are implemented in associating privacy attributes to information."
        }
@@ -136,14 +151,16 @@
       {
        "en": "techniques and technologies to be implemented in associating security attributes to information are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(08)_ODP[01]"
     },
     "ac-16.08_odp.02": {
      "guidelines": [
       {
        "en": "techniques and technologies to be implemented in associating privacy attributes to information are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(08)_ODP[02]"
     }
    }
   }

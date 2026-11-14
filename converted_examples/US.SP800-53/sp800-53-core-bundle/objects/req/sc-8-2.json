@@ -46,10 +46,20 @@
     {
      "id": "sc-8.2_obj",
      "label": "SC-08(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-8.2_obj-1",
        "label": "SC-08(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "information {param:sc-08.02_odp} is/are maintained during preparation for transmission;"
        }
@@ -57,6 +67,11 @@
       {
        "id": "sc-8.2_obj-2",
        "label": "SC-08(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "information {param:sc-08.02_odp} is/are maintained during reception."
        }
@@ -123,7 +138,8 @@
     "sc-08.02_odp": {
      "alt-identifiers": [
       "sc-8.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-08(02)_ODP"
     }
    }
   }

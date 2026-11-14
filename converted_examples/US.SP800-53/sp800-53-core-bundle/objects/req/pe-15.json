@@ -31,10 +31,20 @@
     {
      "id": "pe-15_obj",
      "label": "PE-15",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-15_obj-1",
        "label": "PE-15[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the system is protected from damage resulting from water leakage by providing master shutoff or isolation valves;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pe-15_obj-2",
        "label": "PE-15[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the master shutoff or isolation valves are accessible;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "pe-15_obj-3",
        "label": "PE-15[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the master shutoff or isolation valves are working properly;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "pe-15_obj-4",
        "label": "PE-15[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the master shutoff or isolation valves are known to key personnel."
        }

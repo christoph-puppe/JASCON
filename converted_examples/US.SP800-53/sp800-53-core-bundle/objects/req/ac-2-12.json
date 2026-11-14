@@ -57,10 +57,20 @@
     {
      "id": "ac-2.12_obj",
      "label": "AC-02(12)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-2.12_obj.a",
        "label": "AC-02(12)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "system accounts are monitored for {param:ac-02.12_odp.01}; "
        }
@@ -68,6 +78,11 @@
       {
        "id": "ac-2.12_obj.b",
        "label": "AC-02(12)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "atypical usage of system accounts is reported to {param:ac-02.12_odp.02}."
        }
@@ -151,7 +166,8 @@
      ],
      "alt-identifiers": [
       "ac-2.12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(12)_ODP[01]"
     },
     "ac-02.12_odp.02": {
      "guidelines": [
@@ -161,7 +177,8 @@
      ],
      "alt-identifiers": [
       "ac-2.12_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(12)_ODP[02]"
     }
    }
   }

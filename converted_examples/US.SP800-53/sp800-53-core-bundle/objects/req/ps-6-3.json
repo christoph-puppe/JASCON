@@ -41,10 +41,20 @@
     {
      "id": "ps-6.3_obj",
      "label": "PS-06(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-6.3_obj.a",
        "label": "PS-06(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "individuals are notified of applicable, legally binding post-employment requirements for the protection of organizational information;"
        }
@@ -52,6 +62,11 @@
       {
        "id": "ps-6.3_obj.b",
        "label": "PS-06(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "individuals are required to sign an acknowledgement of applicable, legally binding post-employment requirements as part of being granted initial access to covered information."
        }

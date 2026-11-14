@@ -31,10 +31,20 @@
     {
      "id": "ra-7_obj",
      "label": "RA-07",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ra-7_obj-1",
        "label": "RA-07[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "findings from security assessments are responded to in accordance with organizational risk tolerance;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ra-7_obj-2",
        "label": "RA-07[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "findings from privacy assessments are responded to in accordance with organizational risk tolerance;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "ra-7_obj-3",
        "label": "RA-07[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "findings from monitoring are responded to in accordance with organizational risk tolerance;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "ra-7_obj-4",
        "label": "RA-07[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "findings from audits are responded to in accordance with organizational risk tolerance."
        }

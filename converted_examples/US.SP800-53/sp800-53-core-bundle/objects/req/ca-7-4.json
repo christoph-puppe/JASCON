@@ -65,6 +65,11 @@
     {
      "id": "ca-7.4_obj",
      "label": "CA-07(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "risk monitoring is an integral part of the continuous monitoring strategy;"
      },
@@ -72,6 +77,11 @@
       {
        "id": "ca-7.4_obj.a",
        "label": "CA-07(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "effectiveness monitoring is included in risk monitoring;"
        }
@@ -79,6 +89,11 @@
       {
        "id": "ca-7.4_obj.b",
        "label": "CA-07(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "compliance monitoring is included in risk monitoring;"
        }
@@ -86,6 +101,11 @@
       {
        "id": "ca-7.4_obj.c",
        "label": "CA-07(04)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "change monitoring is included in risk monitoring."
        }

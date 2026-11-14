@@ -51,6 +51,11 @@
     {
      "id": "ca-8.3_obj",
      "label": "CA-08(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the penetration testing process includes {param:ca-08.03_odp.01} {param:ca-08.03_odp.02} attempts to bypass or circumvent controls associated with physical access points to facility."
      }
@@ -135,12 +140,14 @@
      ],
      "alt-identifiers": [
       "ca-8.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CA-08(03)_ODP[01]"
     },
     "ca-08.03_odp.02": {
      "alt-identifiers": [
       "ca-8.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CA-08(03)_ODP[02]"
     }
    }
   },

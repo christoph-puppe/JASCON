@@ -38,6 +38,11 @@
     {
      "id": "ac-4.5_obj",
      "label": "AC-04(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-04.05_odp} are enforced on embedding data types within other data types."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ac-4.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(05)_ODP"
     }
    }
   }

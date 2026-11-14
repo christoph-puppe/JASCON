@@ -177,14 +177,29 @@
     {
      "id": "sr-1_obj",
      "label": "SR-01",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-1_obj.a",
        "label": "SR-01a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sr-1_obj.a-1",
          "label": "SR-01a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a supply chain risk management policy is developed and documented;"
          }
@@ -192,6 +207,11 @@
         {
          "id": "sr-1_obj.a-2",
          "label": "SR-01a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management policy is disseminated to {param:sr-01_odp.01};"
          }
@@ -199,6 +219,11 @@
         {
          "id": "sr-1_obj.a-3",
          "label": "SR-01a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "supply chain risk management procedures to facilitate the implementation of the supply chain risk management policy and the associated supply chain risk management controls are developed and documented;"
          }
@@ -206,6 +231,11 @@
         {
          "id": "sr-1_obj.a-4",
          "label": "SR-01a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the supply chain risk management procedures are disseminated to {param:sr-01_odp.02}."
          }
@@ -213,14 +243,29 @@
         {
          "id": "sr-1_obj.a.1",
          "label": "SR-01a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "sr-1_obj.a.1.a",
            "label": "SR-01a.01(a)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.a"
+            }
+           ],
            "children": [
             {
              "id": "sr-1_obj.a.1.a-1",
              "label": "SR-01a.01(a)[01]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sr-01_odp.03} supply chain risk management policy addresses purpose;"
              }
@@ -228,6 +273,11 @@
             {
              "id": "sr-1_obj.a.1.a-2",
              "label": "SR-01a.01(a)[02]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sr-01_odp.03} supply chain risk management policy addresses scope; "
              }
@@ -235,6 +285,11 @@
             {
              "id": "sr-1_obj.a.1.a-3",
              "label": "SR-01a.01(a)[03]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "{param:sr-01_odp.03} supply chain risk management policy addresses roles;"
              }
@@ -242,6 +297,11 @@
             {
              "id": "sr-1_obj.a.1.a-4",
              "label": "SR-01a.01(a)[04]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sr-01_odp.03} supply chain risk management policy addresses responsibilities;"
              }
@@ -249,6 +309,11 @@
             {
              "id": "sr-1_obj.a.1.a-5",
              "label": "SR-01a.01(a)[05]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sr-01_odp.03} supply chain risk management policy addresses management commitment;"
              }
@@ -256,6 +321,11 @@
             {
              "id": "sr-1_obj.a.1.a-6",
              "label": "SR-01a.01(a)[06]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sr-01_odp.03} supply chain risk management policy addresses coordination among organizational entities;"
              }
@@ -263,6 +333,11 @@
             {
              "id": "sr-1_obj.a.1.a-7",
              "label": "SR-01a.01(a)[07]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sr-01_odp.03} supply chain risk management policy addresses compliance."
              }
@@ -272,6 +347,11 @@
           {
            "id": "sr-1_obj.a.1.b",
            "label": "SR-01a.01(b)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.b"
+            }
+           ],
            "prose": {
             "en": "the {param:sr-01_odp.03} supply chain risk management policy is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines;"
            }
@@ -283,6 +363,11 @@
       {
        "id": "sr-1_obj.b",
        "label": "SR-01b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the {param:sr-01_odp.04} is designated to manage the development, documentation, and dissemination of the supply chain risk management policy and procedures;"
        }
@@ -290,14 +375,29 @@
       {
        "id": "sr-1_obj.c",
        "label": "SR-01c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sr-1_obj.c.1",
          "label": "SR-01c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "children": [
           {
            "id": "sr-1_obj.c.1-1",
            "label": "SR-01c.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current supply chain risk management policy is reviewed and updated {param:sr-01_odp.05};"
            }
@@ -305,6 +405,11 @@
           {
            "id": "sr-1_obj.c.1-2",
            "label": "SR-01c.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current supply chain risk management policy is reviewed and updated following {param:sr-01_odp.06};"
            }
@@ -314,10 +419,20 @@
         {
          "id": "sr-1_obj.c.2",
          "label": "SR-01c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "children": [
           {
            "id": "sr-1_obj.c.2-1",
            "label": "SR-01c.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current supply chain risk management procedures are reviewed and updated {param:sr-01_odp.07};"
            }
@@ -325,6 +440,11 @@
           {
            "id": "sr-1_obj.c.2-2",
            "label": "SR-01c.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current supply chain risk management procedures are reviewed and updated following {param:sr-01_odp.08}."
            }
@@ -391,19 +511,22 @@
       {
        "en": "personnel or roles to whom supply chain risk management policy is to be disseminated to is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SR-01_ODP[01]"
     },
     "sr-01_odp.02": {
      "guidelines": [
       {
        "en": "personnel or roles to whom supply chain risk management procedures are disseminated to is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SR-01_ODP[02]"
     },
     "sr-01_odp.03": {
      "alt-identifiers": [
       "sr-1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SR-01_ODP[03]"
     },
     "sr-01_odp.04": {
      "guidelines": [
@@ -413,7 +536,8 @@
      ],
      "alt-identifiers": [
       "sr-1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SR-01_ODP[04]"
     },
     "sr-01_odp.05": {
      "guidelines": [
@@ -423,7 +547,8 @@
      ],
      "alt-identifiers": [
       "sr-1_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SR-01_ODP[05]"
     },
     "sr-01_odp.06": {
      "guidelines": [
@@ -433,7 +558,8 @@
      ],
      "alt-identifiers": [
       "sr-1_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "SR-01_ODP[06]"
     },
     "sr-01_odp.07": {
      "guidelines": [
@@ -443,7 +569,8 @@
      ],
      "alt-identifiers": [
       "sr-1_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "SR-01_ODP[07]"
     },
     "sr-01_odp.08": {
      "guidelines": [
@@ -453,7 +580,8 @@
      ],
      "alt-identifiers": [
       "sr-1_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "SR-01_ODP[08]"
     }
    }
   },

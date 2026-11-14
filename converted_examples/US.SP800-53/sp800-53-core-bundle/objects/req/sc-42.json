@@ -78,10 +78,20 @@
     {
      "id": "sc-42_obj",
      "label": "SC-42",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-42_obj.a",
        "label": "SC-42a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:sc-42_odp.01} is/are prohibited;"
        }
@@ -89,6 +99,11 @@
       {
        "id": "sc-42_obj.b",
        "label": "SC-42b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "an explicit indication of sensor use is provided to {param:sc-42_odp.05}."
        }
@@ -170,7 +185,8 @@
     "sc-42_odp.01": {
      "alt-identifiers": [
       "sc-42_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-42_ODP[01]"
     },
     "sc-42_odp.02": {
      "guidelines": [
@@ -180,7 +196,8 @@
      ],
      "alt-identifiers": [
       "sc-42_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-42_ODP[02]"
     },
     "sc-42_odp.03": {
      "guidelines": [
@@ -190,7 +207,8 @@
      ],
      "alt-identifiers": [
       "sc-42_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-42_ODP[03]"
     },
     "sc-42_odp.04": {
      "guidelines": [
@@ -200,7 +218,8 @@
      ],
      "alt-identifiers": [
       "sc-42_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SC-42_ODP[04]"
     },
     "sc-42_odp.05": {
      "guidelines": [
@@ -210,7 +229,8 @@
      ],
      "alt-identifiers": [
       "sc-42_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "SC-42_ODP[05]"
     }
    }
   }
@@ -240,7 +260,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SC-42.3",
     "mode": "merged-into",
-    "label": "SC-42(03)",
+    "label": "SC-42(3)",
     "title": "Prohibit Use of Devices"
    }
   ]

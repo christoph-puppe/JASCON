@@ -31,10 +31,20 @@
     {
      "id": "si-4.3_obj",
      "label": "SI-04(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4.3_obj-1",
        "label": "SI-04(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "automated tools and mechanisms are employed to integrate intrusion detection tools and mechanisms into access control mechanisms;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "si-4.3_obj-2",
        "label": "SI-04(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "automated tools and mechanisms are employed to integrate intrusion detection tools and mechanisms into flow control mechanisms."
        }

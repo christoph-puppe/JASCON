@@ -31,10 +31,20 @@
     {
      "id": "sc-34.2_obj",
      "label": "SC-34(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-34.2_obj-1",
        "label": "SC-34(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the integrity of information is protected prior to storage on read-only media;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-34.2_obj-2",
        "label": "SC-34(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the media is controlled after such information has been recorded onto the media;"
        }

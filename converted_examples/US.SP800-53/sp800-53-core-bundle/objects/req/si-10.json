@@ -38,6 +38,11 @@
     {
      "id": "si-10_obj",
      "label": "SI-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the validity of the {param:si-10_odp} is checked."
      }
@@ -127,7 +132,8 @@
       "si-10_prm_1",
       "si-10.1_prm_1"
      ],
-     "alt-label": "information inputs to the system"
+     "alt-label": "information inputs to the system",
+     "sp800-53a-label": "SI-10_ODP"
     }
    }
   },

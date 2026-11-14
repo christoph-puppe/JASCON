@@ -45,10 +45,20 @@
     {
      "id": "si-14.3_obj",
      "label": "SI-14(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-14.3_obj-1",
        "label": "SI-14(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "connections to the system are established on demand;"
        }
@@ -56,6 +66,11 @@
       {
        "id": "si-14.3_obj-2",
        "label": "SI-14(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "connections to the system are terminated after {param:si-14.03_odp}."
        }
@@ -125,7 +140,8 @@
     "si-14.03_odp": {
      "alt-identifiers": [
       "si-14.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-14(03)_ODP"
     }
    }
   },

@@ -43,6 +43,11 @@
     {
      "id": "au-12.1_obj",
      "label": "AU-12(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "audit records from {param:au-12.01_odp.01} are compiled into a system-wide (logical or physical) audit trail that is time-correlated to within {param:au-12.01_odp.02}."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "au-12.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-12(01)_ODP[01]"
     },
     "au-12.01_odp.02": {
      "guidelines": [
@@ -132,7 +138,8 @@
      "alt-identifiers": [
       "au-12.1_prm_2"
      ],
-     "alt-label": "level of tolerance for the relationship between time stamps of individual records in the audit trail"
+     "alt-label": "level of tolerance for the relationship between time stamps of individual records in the audit trail",
+     "sp800-53a-label": "AU-12(01)_ODP[02]"
     }
    }
   }

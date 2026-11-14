@@ -108,14 +108,29 @@
     {
      "id": "pm-18_obj",
      "label": "PM-18",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-18_obj.a",
        "label": "PM-18a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-18_obj.a-1",
          "label": "PM-18a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an organization-wide privacy program plan that provides an overview of the agency’s privacy program is developed;"
          }
@@ -123,10 +138,20 @@
         {
          "id": "pm-18_obj.a.1",
          "label": "PM-18a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "pm-18_obj.a.1-1",
            "label": "PM-18a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan includes a description of the structure of the privacy program;"
            }
@@ -134,6 +159,11 @@
           {
            "id": "pm-18_obj.a.1-2",
            "label": "PM-18a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan includes a description of the resources dedicated to the privacy program;"
            }
@@ -143,10 +173,20 @@
         {
          "id": "pm-18_obj.a.2",
          "label": "PM-18a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "pm-18_obj.a.2-1",
            "label": "PM-18a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan provides an overview of the requirements for the privacy program;"
            }
@@ -154,6 +194,11 @@
           {
            "id": "pm-18_obj.a.2-2",
            "label": "PM-18a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan provides a description of the privacy program management controls in place or planned for meeting the requirements of the privacy program;"
            }
@@ -161,6 +206,11 @@
           {
            "id": "pm-18_obj.a.2-3",
            "label": "PM-18a.02[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan provides a description of common controls in place or planned for meeting the requirements of the privacy program;"
            }
@@ -170,10 +220,20 @@
         {
          "id": "pm-18_obj.a.3",
          "label": "PM-18a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "children": [
           {
            "id": "pm-18_obj.a.3-1",
            "label": "PM-18a.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan includes the role of the senior agency official for privacy;"
            }
@@ -181,6 +241,11 @@
           {
            "id": "pm-18_obj.a.3-2",
            "label": "PM-18a.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan includes the identification and assignment of the roles of other privacy officials and staff and their responsibilities;"
            }
@@ -190,10 +255,20 @@
         {
          "id": "pm-18_obj.a.4",
          "label": "PM-18a.04",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.4"
+          }
+         ],
          "children": [
           {
            "id": "pm-18_obj.a.4-1",
            "label": "PM-18a.04[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.4"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan describes management commitment;"
            }
@@ -201,6 +276,11 @@
           {
            "id": "pm-18_obj.a.4-2",
            "label": "PM-18a.04[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.4"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan describes compliance;"
            }
@@ -208,6 +288,11 @@
           {
            "id": "pm-18_obj.a.4-3",
            "label": "PM-18a.04[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.4"
+            }
+           ],
            "prose": {
             "en": "the privacy program plan describes the strategic goals and objectives of the privacy program;"
            }
@@ -217,6 +302,11 @@
         {
          "id": "pm-18_obj.a.5",
          "label": "PM-18a.05",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.5"
+          }
+         ],
          "prose": {
           "en": "the privacy program plan reflects coordination among organizational entities responsible for the different aspects of privacy;"
          }
@@ -224,6 +314,11 @@
         {
          "id": "pm-18_obj.a.6",
          "label": "PM-18a.06",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.6"
+          }
+         ],
          "prose": {
           "en": "the privacy program plan is approved by a senior official with responsibility and accountability for the privacy risk being incurred by organizational operations (including, mission, functions, image, and reputation), organizational assets, individuals, other organizations, and the Nation;"
          }
@@ -231,6 +326,11 @@
         {
          "id": "pm-18_obj.a-2",
          "label": "PM-18a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the privacy program plan is disseminated;"
          }
@@ -240,10 +340,20 @@
       {
        "id": "pm-18_obj.b",
        "label": "PM-18b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-18_obj.b-1",
          "label": "PM-18b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the privacy program plan is updated {param:pm-18_odp};"
          }
@@ -251,6 +361,11 @@
         {
          "id": "pm-18_obj.b-2",
          "label": "PM-18b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the privacy program plan is updated to address changes in federal privacy laws and policies;"
          }
@@ -258,6 +373,11 @@
         {
          "id": "pm-18_obj.b-3",
          "label": "PM-18b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the privacy program plan is updated to address organizational changes;"
          }
@@ -265,6 +385,11 @@
         {
          "id": "pm-18_obj.b-4",
          "label": "PM-18b.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the privacy program plan is updated to address problems identified during plan implementation or privacy control assessments."
          }
@@ -323,7 +448,8 @@
      ],
      "alt-identifiers": [
       "pm-18_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PM-18_ODP"
     }
    }
   }

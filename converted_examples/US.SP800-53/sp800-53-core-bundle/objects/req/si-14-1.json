@@ -38,6 +38,11 @@
     {
      "id": "si-14.1_obj",
      "label": "SI-14(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the software and data employed during system component and service refreshes are obtained from {param:si-14.01_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "si-14.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-14(01)_ODP"
     }
    }
   },

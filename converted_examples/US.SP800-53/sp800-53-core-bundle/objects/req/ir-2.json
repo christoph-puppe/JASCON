@@ -88,7 +88,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Incident response training is associated with the assigned roles and responsibilities of organizational personnel to ensure that the appropriate content and level of detail are included in such training. For example, users may only need to know who to call or how to recognize an incident; system administrators may require additional training on how to handle incidents; and incident responders may receive more specific training on forensics, data collection techniques, reporting, system recovery, and system restoration. Incident response training includes user training in identifying and reporting suspicious activities from external and internal sources. Incident response training for users may be provided as part of AT-2 or AT-3 . Events that may precipitate an update to incident response training content include, but are not limited to, incident response plan testing or response to an actual incident (lessons learned), assessment or audit findings, or changes in applicable laws, executive orders, directives, regulations, policies, standards, and guidelines."
+     "en": "Incident response training is associated with the assigned roles and responsibilities of organizational personnel to ensure that the appropriate content and level of detail are included in such training. For example, users may only need to know who to call or how to recognize an incident; system administrators may require additional training on how to handle incidents; and incident responders may receive more specific training on forensics, data collection techniques, reporting, system recovery, and system restoration. Incident response training includes user training in identifying and reporting suspicious activities from external and internal sources. Incident response training for users may be provided as part of [AT-2](#at-2) or [AT-3](#at-3) . Events that may precipitate an update to incident response training content include, but are not limited to, incident response plan testing or response to an actual incident (lessons learned), assessment or audit findings, or changes in applicable laws, executive orders, directives, regulations, policies, standards, and guidelines."
     }
    ]
   },
@@ -97,14 +97,29 @@
     {
      "id": "ir-2_obj",
      "label": "IR-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-2_obj.a",
        "label": "IR-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ir-2_obj.a.1",
          "label": "IR-02a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "incident response training is provided to system users consistent with assigned roles and responsibilities within {param:ir-02_odp.01} of assuming an incident response role or responsibility or acquiring system access;"
          }
@@ -112,6 +127,11 @@
         {
          "id": "ir-2_obj.a.2",
          "label": "IR-02a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "prose": {
           "en": "incident response training is provided to system users consistent with assigned roles and responsibilities when required by system changes;"
          }
@@ -119,6 +139,11 @@
         {
          "id": "ir-2_obj.a.3",
          "label": "IR-02a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "prose": {
           "en": "incident response training is provided to system users consistent with assigned roles and responsibilities {param:ir-02_odp.02} thereafter;"
          }
@@ -128,10 +153,20 @@
       {
        "id": "ir-2_obj.b",
        "label": "IR-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ir-2_obj.b-1",
          "label": "IR-02b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "incident response training content is reviewed and updated {param:ir-02_odp.03};"
          }
@@ -139,6 +174,11 @@
         {
          "id": "ir-2_obj.b-2",
          "label": "IR-02b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "incident response training content is reviewed and updated following {param:ir-02_odp.04}."
          }
@@ -209,7 +249,8 @@
      ],
      "alt-identifiers": [
       "ir-2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-02_ODP[01]"
     },
     "ir-02_odp.02": {
      "guidelines": [
@@ -219,7 +260,8 @@
      ],
      "alt-identifiers": [
       "ir-2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IR-02_ODP[02]"
     },
     "ir-02_odp.03": {
      "guidelines": [
@@ -229,7 +271,8 @@
      ],
      "alt-identifiers": [
       "ir-2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "IR-02_ODP[03]"
     },
     "ir-02_odp.04": {
      "guidelines": [
@@ -239,7 +282,8 @@
      ],
      "alt-identifiers": [
       "ir-2_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "IR-02_ODP[04]"
     }
    }
   },

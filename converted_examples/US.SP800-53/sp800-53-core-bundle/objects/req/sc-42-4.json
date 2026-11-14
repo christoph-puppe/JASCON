@@ -43,6 +43,11 @@
     {
      "id": "sc-42.4_obj",
      "label": "SC-42(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-42.04_odp.01} are employed to facilitate an individual’s awareness that personally identifiable information is being collected by {param:sc-42.04_odp.02} "
      }
@@ -142,7 +147,8 @@
      ],
      "alt-identifiers": [
       "sc-42.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-42(04)_ODP[01]"
     },
     "sc-42.04_odp.02": {
      "guidelines": [
@@ -152,7 +158,8 @@
      ],
      "alt-identifiers": [
       "sc-42.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-42(04)_ODP[02]"
     }
    }
   }

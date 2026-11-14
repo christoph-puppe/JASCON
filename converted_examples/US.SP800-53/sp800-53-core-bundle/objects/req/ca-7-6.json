@@ -39,6 +39,11 @@
     {
      "id": "ca-7.6_obj",
      "label": "CA-07(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ca-07.06_odp} are used to ensure the accuracy, currency, and availability of monitoring results for the system."
      }
@@ -120,7 +125,8 @@
      ],
      "alt-identifiers": [
       "ca-7.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CA-07(06)_ODP"
     }
    }
   },

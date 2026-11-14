@@ -22,7 +22,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Classified information is the most sensitive information that the Federal Government processes, stores, or transmits. It is imperative that individuals have the requisite security clearances and system access authorizations prior to gaining access to such information. Access authorizations are enforced by system access controls (see AC-3 ) and flow controls (see AC-4)."
+     "en": "Classified information is the most sensitive information that the Federal Government processes, stores, or transmits. It is imperative that individuals have the requisite security clearances and system access authorizations prior to gaining access to such information. Access authorizations are enforced by system access controls (see [AC-3](#ac-3) ) and flow controls (see [AC-4](#ac-4))."
     }
    ]
   },
@@ -31,10 +31,20 @@
     {
      "id": "ps-3.1_obj",
      "label": "PS-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-3.1_obj-1",
        "label": "PS-03(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "individuals accessing a system processing, storing, or transmitting classified information are cleared;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ps-3.1_obj-2",
        "label": "PS-03(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "individuals accessing a system processing, storing, or transmitting classified information are indoctrinated to the highest classification level of the information to which they have access on the system."
        }

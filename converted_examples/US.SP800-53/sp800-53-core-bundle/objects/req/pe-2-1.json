@@ -31,6 +31,11 @@
     {
      "id": "pe-2.1_obj",
      "label": "PE-02(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "physical access to the facility where the system resides is authorized based on position or role."
      }

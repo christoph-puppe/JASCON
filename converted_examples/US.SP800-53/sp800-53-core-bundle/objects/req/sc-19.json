@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SC-19",
+ "version": "5.2.0",
+ "label": "SC-19",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Voice Over Internet Protocol"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Technology-specific; addressed as any other technology or protocol."
+   }
+  }
+ ]
+}

@@ -38,10 +38,20 @@
     {
      "id": "sr-5_obj",
      "label": "SR-05",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-5_obj-1",
        "label": "SR-05[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sr-05_odp} are employed to protect against supply chain risks;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sr-5_obj-2",
        "label": "SR-05[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sr-05_odp} are employed to identify supply chain risks;"
        }
@@ -56,6 +71,11 @@
       {
        "id": "sr-5_obj-3",
        "label": "SR-05[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sr-05_odp} are employed to mitigate supply chain risks."
        }
@@ -155,7 +175,8 @@
      "alt-identifiers": [
       "sr-5_prm_1"
      ],
-     "alt-label": "acquisition strategies, contract tools, and procurement methods"
+     "alt-label": "acquisition strategies, contract tools, and procurement methods",
+     "sp800-53a-label": "SR-05_ODP"
     }
    }
   },
@@ -264,7 +285,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-12.1",
     "mode": "renamed",
-    "label": "SA-12(01)",
+    "label": "SA-12(1)",
     "title": "Acquisition Strategies / Tools / Methods"
    }
   ]

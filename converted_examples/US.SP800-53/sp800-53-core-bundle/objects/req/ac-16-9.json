@@ -48,10 +48,20 @@
     {
      "id": "ac-16.9_obj",
      "label": "AC-16(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.9_obj-1",
        "label": "AC-16(09)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "security attributes associated with information are changed only via regrading mechanisms validated using {param:ac-16.09_odp.01};"
        }
@@ -59,6 +69,11 @@
       {
        "id": "ac-16.9_obj-2",
        "label": "AC-16(09)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "privacy attributes associated with information are changed only via regrading mechanisms validated using {param:ac-16.09_odp.02}."
        }
@@ -136,14 +151,16 @@
       {
        "en": "techniques or procedures used to validate regrading mechanisms for security attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(09)_ODP[01]"
     },
     "ac-16.09_odp.02": {
      "guidelines": [
       {
        "en": "techniques or procedures used to validate regrading mechanisms for privacy attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(09)_ODP[02]"
     }
    }
   }

@@ -48,10 +48,20 @@
     {
      "id": "ac-24.2_obj",
      "label": "AC-24(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-24.2_obj-1",
        "label": "AC-24(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "access control decisions are enforced based on {param:ac-24.02_odp.01} that do not include the identity of the user or process acting on behalf of the user (if selected);"
        }
@@ -59,6 +69,11 @@
       {
        "id": "ac-24.2_obj-2",
        "label": "AC-24(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "access control decisions are enforced based on {param:ac-24.02_odp.02} that do not include the identity of the user or process acting on behalf of the user (if selected)."
        }
@@ -139,14 +154,16 @@
       {
        "en": "security attributes that do not include the identity of the user or process acting on behalf of the user are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-24(02)_ODP[01]"
     },
     "ac-24.02_odp.02": {
      "guidelines": [
       {
        "en": "privacy attributes that do not include the identity of the user or process acting on behalf of the user are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-24(02)_ODP[02]"
     }
    }
   }

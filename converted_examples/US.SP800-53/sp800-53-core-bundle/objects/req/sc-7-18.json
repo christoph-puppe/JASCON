@@ -31,6 +31,11 @@
     {
      "id": "sc-7.18_obj",
      "label": "SC-07(18)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "systems are prevented from entering unsecure states in the event of an operational failure of a boundary protection device."
      }
@@ -129,7 +134,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SC-7.6",
     "mode": "merged-into",
-    "label": "SC-07(06)",
+    "label": "SC-7(6)",
     "title": "Response to Recognized Failures"
    }
   ]

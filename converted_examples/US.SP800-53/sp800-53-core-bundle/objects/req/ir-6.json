@@ -55,10 +55,20 @@
     {
      "id": "ir-6_obj",
      "label": "IR-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-6_obj.a",
        "label": "IR-06a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "personnel is/are required to report suspected incidents to the organizational incident response capability within {param:ir-06_odp.01};"
        }
@@ -66,6 +76,11 @@
       {
        "id": "ir-6_obj.b",
        "label": "IR-06b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "incident information is reported to {param:ir-06_odp.02}."
        }
@@ -146,7 +161,8 @@
      ],
      "alt-identifiers": [
       "ir-6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-06_ODP[01]"
     },
     "ir-06_odp.02": {
      "guidelines": [
@@ -156,7 +172,8 @@
      ],
      "alt-identifiers": [
       "ir-6_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IR-06_ODP[02]"
     }
    }
   }

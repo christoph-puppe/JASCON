@@ -177,14 +177,29 @@
     {
      "id": "ia-1_obj",
      "label": "IA-01",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ia-1_obj.a",
        "label": "IA-01a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ia-1_obj.a-1",
          "label": "IA-01a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an identification and authentication policy is developed and documented;"
          }
@@ -192,6 +207,11 @@
         {
          "id": "ia-1_obj.a-2",
          "label": "IA-01a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the identification and authentication policy is disseminated to {param:ia-01_odp.01};"
          }
@@ -199,6 +219,11 @@
         {
          "id": "ia-1_obj.a-3",
          "label": "IA-01a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "identification and authentication procedures to facilitate the implementation of the identification and authentication policy and associated identification and authentication controls are developed and documented;"
          }
@@ -206,6 +231,11 @@
         {
          "id": "ia-1_obj.a-4",
          "label": "IA-01a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the identification and authentication procedures are disseminated to {param:ia-01_odp.02};"
          }
@@ -213,14 +243,29 @@
         {
          "id": "ia-1_obj.a.1",
          "label": "IA-01a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "ia-1_obj.a.1.a",
            "label": "IA-01a.01(a)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.a"
+            }
+           ],
            "children": [
             {
              "id": "ia-1_obj.a.1.a-1",
              "label": "IA-01a.01(a)[01]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ia-01_odp.03} identification and authentication policy addresses purpose;"
              }
@@ -228,6 +273,11 @@
             {
              "id": "ia-1_obj.a.1.a-2",
              "label": "IA-01a.01(a)[02]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ia-01_odp.03} identification and authentication policy addresses scope;"
              }
@@ -235,6 +285,11 @@
             {
              "id": "ia-1_obj.a.1.a-3",
              "label": "IA-01a.01(a)[03]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ia-01_odp.03} identification and authentication policy addresses roles;"
              }
@@ -242,6 +297,11 @@
             {
              "id": "ia-1_obj.a.1.a-4",
              "label": "IA-01a.01(a)[04]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ia-01_odp.03} identification and authentication policy addresses responsibilities;"
              }
@@ -249,6 +309,11 @@
             {
              "id": "ia-1_obj.a.1.a-5",
              "label": "IA-01a.01(a)[05]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ia-01_odp.03} identification and authentication policy addresses management commitment;"
              }
@@ -256,6 +321,11 @@
             {
              "id": "ia-1_obj.a.1.a-6",
              "label": "IA-01a.01(a)[06]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ia-01_odp.03} identification and authentication policy addresses coordination among organizational entities;"
              }
@@ -263,6 +333,11 @@
             {
              "id": "ia-1_obj.a.1.a-7",
              "label": "IA-01a.01(a)[07]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ia-01_odp.03} identification and authentication policy addresses compliance;"
              }
@@ -272,6 +347,11 @@
           {
            "id": "ia-1_obj.a.1.b",
            "label": "IA-01a.01(b)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.b"
+            }
+           ],
            "prose": {
             "en": "the {param:ia-01_odp.03} identification and authentication policy is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines;"
            }
@@ -283,6 +363,11 @@
       {
        "id": "ia-1_obj.b",
        "label": "IA-01b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the {param:ia-01_odp.04} is designated to manage the development, documentation, and dissemination of the identification and authentication policy and procedures;"
        }
@@ -290,14 +375,29 @@
       {
        "id": "ia-1_obj.c",
        "label": "IA-01c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "ia-1_obj.c.1",
          "label": "IA-01c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "children": [
           {
            "id": "ia-1_obj.c.1-1",
            "label": "IA-01c.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current identification and authentication policy is reviewed and updated {param:ia-01_odp.05};"
            }
@@ -305,6 +405,11 @@
           {
            "id": "ia-1_obj.c.1-2",
            "label": "IA-01c.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current identification and authentication policy is reviewed and updated following {param:ia-01_odp.06};"
            }
@@ -314,10 +419,20 @@
         {
          "id": "ia-1_obj.c.2",
          "label": "IA-01c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "children": [
           {
            "id": "ia-1_obj.c.2-1",
            "label": "IA-01c.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current identification and authentication procedures are reviewed and updated {param:ia-01_odp.07};"
            }
@@ -325,6 +440,11 @@
           {
            "id": "ia-1_obj.c.2-2",
            "label": "IA-01c.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current identification and authentication procedures are reviewed and updated following {param:ia-01_odp.08}."
            }
@@ -388,19 +508,22 @@
       {
        "en": "personnel or roles to whom the identification and authentication policy is to be disseminated are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IA-01_ODP[01]"
     },
     "ia-01_odp.02": {
      "guidelines": [
       {
        "en": "personnel or roles to whom the identification and authentication procedures are to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "IA-01_ODP[02]"
     },
     "ia-01_odp.03": {
      "alt-identifiers": [
       "ia-1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-01_ODP[03]"
     },
     "ia-01_odp.04": {
      "guidelines": [
@@ -410,7 +533,8 @@
      ],
      "alt-identifiers": [
       "ia-1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "IA-01_ODP[04]"
     },
     "ia-01_odp.05": {
      "guidelines": [
@@ -420,7 +544,8 @@
      ],
      "alt-identifiers": [
       "ia-1_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "IA-01_ODP[05]"
     },
     "ia-01_odp.06": {
      "guidelines": [
@@ -430,7 +555,8 @@
      ],
      "alt-identifiers": [
       "ia-1_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "IA-01_ODP[06]"
     },
     "ia-01_odp.07": {
      "guidelines": [
@@ -440,7 +566,8 @@
      ],
      "alt-identifiers": [
       "ia-1_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "IA-01_ODP[07]"
     },
     "ia-01_odp.08": {
      "guidelines": [
@@ -450,7 +577,8 @@
      ],
      "alt-identifiers": [
       "ia-1_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "IA-01_ODP[08]"
     }
    }
   },

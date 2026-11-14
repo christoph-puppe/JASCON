@@ -55,10 +55,20 @@
     {
      "id": "ma-4.5_obj",
      "label": "MA-04(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ma-4.5_obj.a",
        "label": "MA-04(05)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the approval of each nonlocal maintenance session is required by {param:ma-04.05_odp.01};"
        }
@@ -66,6 +76,11 @@
       {
        "id": "ma-4.5_obj.b",
        "label": "MA-04(05)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:ma-04.05_odp.02} is/are notified of the date and time of planned nonlocal maintenance."
        }
@@ -143,7 +158,8 @@
      ],
      "alt-identifiers": [
       "ma-4.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-04(05)_ODP[01]"
     },
     "ma-04.05_odp.02": {
      "guidelines": [
@@ -154,7 +170,8 @@
      "alt-identifiers": [
       "ma-4.5_prm_2"
      ],
-     "alt-label": "personnel or roles"
+     "alt-label": "personnel or roles",
+     "sp800-53a-label": "MA-04(05)_ODP[02]"
     }
    }
   }

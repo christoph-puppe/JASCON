@@ -32,10 +32,20 @@
     {
      "id": "sc-3.4_obj",
      "label": "SC-03(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-3.4_obj-1",
        "label": "SC-03(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "security functions are implemented as largely independent modules that maximize internal cohesiveness within modules;"
        }
@@ -43,6 +53,11 @@
       {
        "id": "sc-3.4_obj-2",
        "label": "SC-03(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "security functions are implemented as largely independent modules that minimize coupling between modules."
        }

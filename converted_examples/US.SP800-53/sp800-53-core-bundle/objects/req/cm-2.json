@@ -85,14 +85,29 @@
     {
      "id": "cm-2_obj",
      "label": "CM-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-2_obj.a",
        "label": "CM-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cm-2_obj.a-1",
          "label": "CM-02a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a current baseline configuration of the system is developed and documented;"
          }
@@ -100,6 +115,11 @@
         {
          "id": "cm-2_obj.a-2",
          "label": "CM-02a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a current baseline configuration of the system is maintained under configuration control;"
          }
@@ -109,10 +129,20 @@
       {
        "id": "cm-2_obj.b",
        "label": "CM-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cm-2_obj.b.1",
          "label": "CM-02b.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.1"
+          }
+         ],
          "prose": {
           "en": "the baseline configuration of the system is reviewed and updated {param:cm-02_odp.01};"
          }
@@ -120,6 +150,11 @@
         {
          "id": "cm-2_obj.b.2",
          "label": "CM-02b.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.2"
+          }
+         ],
          "prose": {
           "en": "the baseline configuration of the system is reviewed and updated when required due to {param:cm-02_odp.02};"
          }
@@ -127,6 +162,11 @@
         {
          "id": "cm-2_obj.b.3",
          "label": "CM-02b.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.3"
+          }
+         ],
          "prose": {
           "en": "the baseline configuration of the system is reviewed and updated when system components are installed or upgraded."
          }
@@ -218,7 +258,8 @@
      ],
      "alt-identifiers": [
       "cm-2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-02_ODP[01]"
     },
     "cm-02_odp.02": {
      "guidelines": [
@@ -228,7 +269,8 @@
      ],
      "alt-identifiers": [
       "cm-2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-02_ODP[02]"
     }
    }
   },
@@ -333,7 +375,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CM-2.1",
     "mode": "merged-into",
-    "label": "CM-02(01)",
+    "label": "CM-2(1)",
     "title": "Reviews and Updates"
    }
   ]

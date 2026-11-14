@@ -31,10 +31,20 @@
     {
      "id": "ir-7_obj",
      "label": "IR-07",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-7_obj-1",
        "label": "IR-07[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "an incident response support resource, integral to the organizational incident response capability, is provided;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ir-7_obj-2",
        "label": "IR-07[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the incident response support resource offers advice and assistance to users of the system for the response and reporting of incidents."
        }

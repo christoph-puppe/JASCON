@@ -61,14 +61,29 @@
     {
      "id": "pm-15_obj",
      "label": "PM-15",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-15_obj.a",
        "label": "PM-15a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-15_obj.a-1",
          "label": "PM-15a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "contact is established and institutionalized with selected groups and associations within the security community to facilitate ongoing security education and training for organizational personnel;"
          }
@@ -76,6 +91,11 @@
         {
          "id": "pm-15_obj.a-2",
          "label": "PM-15a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "contact is established and institutionalized with selected groups and associations within the privacy community to facilitate ongoing privacy education and training for organizational personnel;"
          }
@@ -85,10 +105,20 @@
       {
        "id": "pm-15_obj.b",
        "label": "PM-15b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-15_obj.b-1",
          "label": "PM-15b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "contact is established and institutionalized with selected groups and associations within the security community to maintain currency with recommended security practices, techniques, and technologies;"
          }
@@ -96,6 +126,11 @@
         {
          "id": "pm-15_obj.b-2",
          "label": "PM-15b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "contact is established and institutionalized with selected groups and associations within the privacy community to maintain currency with recommended privacy practices, techniques, and technologies;"
          }
@@ -105,10 +140,20 @@
       {
        "id": "pm-15_obj.c",
        "label": "PM-15c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "pm-15_obj.c-1",
          "label": "PM-15c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "contact is established and institutionalized with selected groups and associations within the security community to share current security information, including threats, vulnerabilities, and incidents;"
          }
@@ -116,6 +161,11 @@
         {
          "id": "pm-15_obj.c-2",
          "label": "PM-15c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "contact is established and institutionalized with selected groups and associations within the privacy community to share current privacy information, including threats, vulnerabilities, and incidents."
          }
@@ -208,7 +258,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AT-5",
     "mode": "merged-into",
-    "label": "AT-05",
+    "label": "AT-5",
     "title": "Contacts with Security Groups and Associations"
    }
   ]

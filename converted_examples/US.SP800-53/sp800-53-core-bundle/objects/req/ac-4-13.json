@@ -38,6 +38,11 @@
     {
      "id": "ac-4.13_obj",
      "label": "AC-04(13)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "when transferring information between different security domains, information is decomposed into {param:ac-04.13_odp} for submission to policy enforcement mechanisms."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ac-4.13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(13)_ODP"
     }
    }
   }

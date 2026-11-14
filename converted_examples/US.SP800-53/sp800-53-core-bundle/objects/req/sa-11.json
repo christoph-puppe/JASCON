@@ -112,14 +112,29 @@
     {
      "id": "sa-11_obj",
      "label": "SA-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-11_obj.a",
        "label": "SA-11a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-11_obj.a-1",
          "label": "SA-11a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to develop a plan for ongoing security assessments;"
          }
@@ -127,6 +142,11 @@
         {
          "id": "sa-11_obj.a-2",
          "label": "SA-11a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to implement a plan for ongoing security assessments;"
          }
@@ -134,6 +154,11 @@
         {
          "id": "sa-11_obj.a-3",
          "label": "SA-11a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to develop a plan for privacy assessments;"
          }
@@ -141,6 +166,11 @@
         {
          "id": "sa-11_obj.a-4",
          "label": "SA-11a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to implement a plan for ongoing privacy assessments;"
          }
@@ -150,6 +180,11 @@
       {
        "id": "sa-11_obj.b",
        "label": "SA-11b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to perform {param:sa-11_odp.01} testing/evaluation {param:sa-11_odp.02} at {param:sa-11_odp.03};"
        }
@@ -157,10 +192,20 @@
       {
        "id": "sa-11_obj.c",
        "label": "SA-11c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sa-11_obj.c-1",
          "label": "SA-11c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to produce evidence of the execution of the assessment plan;"
          }
@@ -168,6 +213,11 @@
         {
          "id": "sa-11_obj.c-2",
          "label": "SA-11c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to produce the results of the testing and evaluation;"
          }
@@ -177,6 +227,11 @@
       {
        "id": "sa-11_obj.d",
        "label": "SA-11d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to implement a verifiable flaw remediation process;"
        }
@@ -184,6 +239,11 @@
       {
        "id": "sa-11_obj.e",
        "label": "SA-11e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required at all post-design stages of the system development life cycle to correct flaws identified during testing and evaluation."
        }
@@ -289,7 +349,8 @@
     "sa-11_odp.01": {
      "alt-identifiers": [
       "sa-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-11_ODP[01]"
     },
     "sa-11_odp.02": {
      "guidelines": [
@@ -300,7 +361,8 @@
      "alt-identifiers": [
       "sa-11_prm_2"
      ],
-     "alt-label": "frequency"
+     "alt-label": "frequency",
+     "sp800-53a-label": "SA-11_ODP[02]"
     },
     "sa-11_odp.03": {
      "guidelines": [
@@ -310,7 +372,8 @@
      ],
      "alt-identifiers": [
       "sa-11_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SA-11_ODP[03]"
     }
    }
   },

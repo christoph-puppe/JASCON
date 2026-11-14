@@ -39,6 +39,11 @@
     {
      "id": "si-18.5_obj",
      "label": "SI-18(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-18.05_odp} and individuals are notified when the personally identifiable information has been corrected or deleted."
      }
@@ -124,7 +129,8 @@
      "alt-identifiers": [
       "si-18.5_prm_1"
      ],
-     "alt-label": "recipients of personally identifiable information"
+     "alt-label": "recipients of personally identifiable information",
+     "sp800-53a-label": "SI-18(05)_ODP"
     }
    }
   }

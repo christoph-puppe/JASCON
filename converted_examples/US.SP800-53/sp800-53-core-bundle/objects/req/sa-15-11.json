@@ -31,6 +31,11 @@
     {
      "id": "sa-15.11_obj",
      "label": "SA-15(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system or system component is required to archive the system or component to be released or delivered together with the corresponding evidence supporting the final security and privacy review."
      }

@@ -38,6 +38,11 @@
     {
      "id": "sr-11.1_obj",
      "label": "SR-11(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sr-11.01_odp} are trained to detect counterfeit system components (including hardware, software, and firmware)."
      }
@@ -122,7 +127,8 @@
      ],
      "alt-identifiers": [
       "sr-11.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-11(01)_ODP"
     }
    }
   },
@@ -151,7 +157,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-19.1",
     "mode": "renamed",
-    "label": "SA-19(01)",
+    "label": "SA-19(1)",
     "title": "Anti-counterfeit Training"
    }
   ]

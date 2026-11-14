@@ -55,6 +55,11 @@
     {
      "id": "sc-30.3_obj",
      "label": "SC-30(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the location of {param:sc-30.03_odp.01} is changed {param:sc-30.03_odp.02}."
      }
@@ -130,12 +135,14 @@
      ],
      "alt-identifiers": [
       "sc-30.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-30(03)_ODP[01]"
     },
     "sc-30.03_odp.02": {
      "alt-identifiers": [
       "sc-30.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-30(03)_ODP[02]"
     },
     "sc-30.03_odp.03": {
      "guidelines": [
@@ -145,7 +152,8 @@
      ],
      "alt-identifiers": [
       "sc-30.3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-30(03)_ODP[03]"
     }
    }
   },

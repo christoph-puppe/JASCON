@@ -38,6 +38,11 @@
     {
      "id": "si-7.9_obj",
      "label": "SI-07(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the integrity of the boot process of {param:si-07.09_odp} is verified."
      }
@@ -122,7 +127,8 @@
      ],
      "alt-identifiers": [
       "si-7.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(09)_ODP"
     }
    }
   },

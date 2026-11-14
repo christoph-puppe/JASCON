@@ -31,6 +31,11 @@
     {
      "id": "sa-10.3_obj",
      "label": "SA-10(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to enable integrity verification of hardware components."
      }

@@ -63,10 +63,20 @@
     {
      "id": "cp-7_obj",
      "label": "CP-07",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-7_obj.a",
        "label": "CP-07a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "an alternate processing site, including necessary agreements to permit the transfer and resumption of {param:cp-07_odp.01} for essential mission and business functions, is established within {param:cp-07_odp.02} when the primary processing capabilities are unavailable;"
        }
@@ -74,10 +84,20 @@
       {
        "id": "cp-7_obj.b",
        "label": "CP-07b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cp-7_obj.b-1",
          "label": "CP-07b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the equipment and supplies required to transfer operations are made available at the alternate processing site or if contracts are in place to support delivery to the site within {param:cp-07_odp.02} for transfer;"
          }
@@ -85,6 +105,11 @@
         {
          "id": "cp-7_obj.b-2",
          "label": "CP-07b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the equipment and supplies required to resume operations are made available at the alternate processing site or if contracts are in place to support delivery to the site within {param:cp-07_odp.02} for resumption;"
          }
@@ -94,6 +119,11 @@
       {
        "id": "cp-7_obj.c",
        "label": "CP-07c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "controls provided at the alternate processing site are equivalent to those at the primary site."
        }
@@ -174,7 +204,8 @@
      ],
      "alt-identifiers": [
       "cp-7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-07_ODP[01]"
     },
     "cp-07_odp.02": {
      "guidelines": [
@@ -185,7 +216,8 @@
      "alt-identifiers": [
       "cp-7_prm_2"
      ],
-     "alt-label": "time period consistent with recovery time and recovery point objectives"
+     "alt-label": "time period consistent with recovery time and recovery point objectives",
+     "sp800-53a-label": "CP-07_ODP[02]"
     }
    }
   }
@@ -255,7 +287,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CP-7.5",
     "mode": "merged-into",
-    "label": "CP-07(05)",
+    "label": "CP-7(5)",
     "title": "Equivalent Information Security Safeguards"
    }
   ]

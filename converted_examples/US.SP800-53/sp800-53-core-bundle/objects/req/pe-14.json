@@ -82,10 +82,20 @@
     {
      "id": "pe-14_obj",
      "label": "PE-14",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-14_obj.a",
        "label": "PE-14a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:pe-14_odp.01} levels are maintained at {param:pe-14_odp.03} within the facility where the system resides;"
        }
@@ -93,6 +103,11 @@
       {
        "id": "pe-14_obj.b",
        "label": "PE-14b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "environmental control levels are monitored {param:pe-14_odp.04}."
        }
@@ -159,7 +174,8 @@
     "pe-14_odp.01": {
      "alt-identifiers": [
       "pe-14_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-14_ODP[01]"
     },
     "pe-14_odp.02": {
      "guidelines": [
@@ -169,7 +185,8 @@
      ],
      "alt-identifiers": [
       "pe-14_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-14_ODP[02]"
     },
     "pe-14_odp.03": {
      "guidelines": [
@@ -179,7 +196,8 @@
      ],
      "alt-identifiers": [
       "pe-14_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PE-14_ODP[03]"
     },
     "pe-14_odp.04": {
      "guidelines": [
@@ -189,7 +207,8 @@
      ],
      "alt-identifiers": [
       "pe-14_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "PE-14_ODP[04]"
     }
    }
   }

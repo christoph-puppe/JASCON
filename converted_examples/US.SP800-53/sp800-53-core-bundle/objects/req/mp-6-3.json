@@ -38,6 +38,11 @@
     {
      "id": "mp-6.3_obj",
      "label": "MP-06(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "non-destructive sanitization techniques are applied to portable storage devices prior to connecting such devices to the system under {param:mp-06.03_odp}."
      }
@@ -111,7 +116,8 @@
      "alt-identifiers": [
       "mp-6.3_prm_1"
      ],
-     "alt-label": "circumstances requiring sanitization of portable storage devices"
+     "alt-label": "circumstances requiring sanitization of portable storage devices",
+     "sp800-53a-label": "MP-06(03)_ODP"
     }
    }
   }

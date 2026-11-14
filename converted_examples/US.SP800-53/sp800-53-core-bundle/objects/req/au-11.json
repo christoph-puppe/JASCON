@@ -38,6 +38,11 @@
     {
      "id": "au-11_obj",
      "label": "AU-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "audit records are retained for {param:au-11_odp} to provide support for after-the-fact investigations of incidents and to meet regulatory and organizational information retention requirements."
      }
@@ -108,7 +113,8 @@
      "alt-identifiers": [
       "au-11_prm_1"
      ],
-     "alt-label": "time period consistent with records retention policy"
+     "alt-label": "time period consistent with records retention policy",
+     "sp800-53a-label": "AU-11_ODP"
     }
    }
   }

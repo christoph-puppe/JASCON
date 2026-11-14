@@ -31,6 +31,11 @@
     {
      "id": "sc-2.2_obj",
      "label": "SC-02(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "state information is stored separately from applications and software."
      }

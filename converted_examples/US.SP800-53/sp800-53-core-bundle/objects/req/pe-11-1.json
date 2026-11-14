@@ -45,10 +45,20 @@
     {
      "id": "pe-11.1_obj",
      "label": "PE-11(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-11.1_obj-1",
        "label": "PE-11(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "an alternate power supply provided for the system is activated {param:pe-11.01_odp};"
        }
@@ -56,6 +66,11 @@
       {
        "id": "pe-11.1_obj-2",
        "label": "PE-11(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the alternate power supply provided for the system can maintain minimally required operational capability in the event of an extended loss of the primary power source."
        }
@@ -122,7 +137,8 @@
     "pe-11.01_odp": {
      "alt-identifiers": [
       "pe-11.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-11(01)_ODP"
     }
    }
   }

@@ -38,6 +38,11 @@
     {
      "id": "si-7.16_obj",
      "label": "SI-07(16)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "processes are prohibited from executing without supervision for more than {param:si-07.16_odp}."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "si-7.16_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(16)_ODP"
     }
    }
   },
@@ -141,7 +147,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-13.2",
     "mode": "merged-into",
-    "label": "SI-13(02)",
+    "label": "SI-13(2)",
     "title": "Time Limit on Process Execution Without Supervision"
    }
   ]

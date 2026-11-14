@@ -52,7 +52,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "The PRIVACT requires that federal agencies publish a system of records notice in the Federal Register upon the establishment and/or modification of a PRIVACT system of records. As a general matter, a system of records notice is required when an agency maintains a group of any records under the control of the agency from which information is retrieved by the name of an individual or by some identifying number, symbol, or other identifier. The notice describes the existence and character of the system and identifies the system of records, the purpose(s) of the system, the authority for maintenance of the records, the categories of records maintained in the system, the categories of individuals about whom records are maintained, the routine uses to which the records are subject, and additional details about the system as described in OMB A-108."
+     "en": "The [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) requires that federal agencies publish a system of records notice in the Federal Register upon the establishment and/or modification of a [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) system of records. As a general matter, a system of records notice is required when an agency maintains a group of any records under the control of the agency from which information is retrieved by the name of an individual or by some identifying number, symbol, or other identifier. The notice describes the existence and character of the system and identifies the system of records, the purpose(s) of the system, the authority for maintenance of the records, the categories of records maintained in the system, the categories of individuals about whom records are maintained, the routine uses to which the records are subject, and additional details about the system as described in [OMB A-108](#3671ff20-c17c-44d6-8a88-7de203fa74aa)."
     }
    ]
   },
@@ -61,14 +61,29 @@
     {
      "id": "pt-6_obj",
      "label": "PT-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pt-6_obj.a",
        "label": "PT-06a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pt-6_obj.a-1",
          "label": "PT-06a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "system of records notices are drafted in accordance with OMB guidance for systems that process information that will be maintained in a Privacy Act system of records;"
          }
@@ -76,6 +91,11 @@
         {
          "id": "pt-6_obj.a-2",
          "label": "PT-06a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "new and significantly modified system of records notices are submitted to the OMB and appropriate congressional committees for advance review for systems that process information that will be maintained in a Privacy Act system of records;"
          }
@@ -85,6 +105,11 @@
       {
        "id": "pt-6_obj.b",
        "label": "PT-06b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "system of records notices are published in the Federal Register for systems that process information that will be maintained in a Privacy Act system of records;"
        }
@@ -92,6 +117,11 @@
       {
        "id": "pt-6_obj.c",
        "label": "PT-06c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "system of records notices are kept accurate, up-to-date, and scoped in accordance with policy for systems that process information that will be maintained in a Privacy Act system of records."
        }

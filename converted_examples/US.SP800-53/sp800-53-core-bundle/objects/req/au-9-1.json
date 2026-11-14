@@ -31,6 +31,11 @@
     {
      "id": "au-9.1_obj",
      "label": "AU-09(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "audit trails are written to hardware-enforced, write-once media."
      }

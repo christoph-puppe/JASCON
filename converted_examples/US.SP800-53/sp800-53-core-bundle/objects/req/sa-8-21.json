@@ -39,6 +39,11 @@
     {
      "id": "sa-8.21_obj",
      "label": "SA-08(21)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.21_odp} implement the security design principle of self-analysis."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "sa-8.21_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(21)_ODP"
     }
    }
   },

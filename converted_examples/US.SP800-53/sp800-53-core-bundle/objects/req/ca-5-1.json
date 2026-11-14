@@ -38,6 +38,11 @@
     {
      "id": "ca-5.1_obj",
      "label": "CA-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ca-05.01_odp} are used to ensure the accuracy, currency, and availability of the plan of action and milestones for the system."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ca-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CA-05(01)_ODP"
     }
    }
   },

@@ -49,6 +49,11 @@
     {
      "id": "au-6.7_obj",
      "label": "AU-06(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the permitted actions for each {param:au-06.07_odp} associated with the review, analysis, and reporting of audit record information are specified."
      }
@@ -104,7 +109,8 @@
     "au-06.07_odp": {
      "alt-identifiers": [
       "au-6.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-06(07)_ODP"
     }
    }
   },

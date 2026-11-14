@@ -31,10 +31,20 @@
     {
      "id": "cm-4.2_obj",
      "label": "CM-04(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-4.2_obj-1",
        "label": "CM-04(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the impacted controls are implemented correctly with regard to meeting the security requirements for the system after system changes;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cm-4.2_obj-2",
        "label": "CM-04(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the impacted controls are implemented correctly with regard to meeting the privacy requirements for the system after system changes;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "cm-4.2_obj-3",
        "label": "CM-04(02)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the impacted controls are operating as intended with regard to meeting the security requirements for the system after system changes;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "cm-4.2_obj-4",
        "label": "CM-04(02)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the impacted controls are operating as intended with regard to meeting the privacy requirements for the system after system changes;"
        }
@@ -63,6 +88,11 @@
       {
        "id": "cm-4.2_obj-5",
        "label": "CM-04(02)[05]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the impacted controls are producing the desired outcome with regard to meeting the security requirements for the system after system changes;"
        }
@@ -70,6 +100,11 @@
       {
        "id": "cm-4.2_obj-6",
        "label": "CM-04(02)[06]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the impacted controls are producing the desired outcome with regard to meeting the privacy requirements for the system after system changes."
        }

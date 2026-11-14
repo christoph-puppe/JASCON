@@ -31,6 +31,11 @@
     {
      "id": "ac-4.30_obj",
      "label": "AC-04(30)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "when transferring information between security domains, content-filtering mechanisms using multiple processes are implemented."
      }

@@ -32,6 +32,11 @@
     {
      "id": "au-10.3_obj",
      "label": "AU-10(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "reviewer or releaser credentials are maintained within the established chain of custody for information reviewed or released."
      }

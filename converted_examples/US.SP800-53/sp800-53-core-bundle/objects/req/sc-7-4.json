@@ -99,7 +99,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "External telecommunications services can provide data and/or voice communications services. Examples of control plane traffic include Border Gateway Protocol (BGP) routing, Domain Name System (DNS), and management protocols. See SP 800-189 for additional information on the use of the resource public key infrastructure (RPKI) to protect BGP routes and detect unauthorized BGP announcements."
+     "en": "External telecommunications services can provide data and/or voice communications services. Examples of control plane traffic include Border Gateway Protocol (BGP) routing, Domain Name System (DNS), and management protocols. See [SP 800-189](#f5edfe51-d1f2-422e-9b27-5d0e90b49c72) for additional information on the use of the resource public key infrastructure (RPKI) to protect BGP routes and detect unauthorized BGP announcements."
     }
    ]
   },
@@ -108,10 +108,20 @@
     {
      "id": "sc-7.4_obj",
      "label": "SC-07(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-7.4_obj.a",
        "label": "SC-07(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "a managed interface is implemented for each external telecommunication service;"
        }
@@ -119,6 +129,11 @@
       {
        "id": "sc-7.4_obj.b",
        "label": "SC-07(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "a traffic flow policy is established for each managed interface;"
        }
@@ -126,10 +141,20 @@
       {
        "id": "sc-7.4_obj.c",
        "label": "SC-07(04)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sc-7.4_obj.c-1",
          "label": "SC-07(04)(c)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the confidentiality of the information being transmitted across each interface is protected;"
          }
@@ -137,6 +162,11 @@
         {
          "id": "sc-7.4_obj.c-2",
          "label": "SC-07(04)(c)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "the integrity of the information being transmitted across each interface is protected;"
          }
@@ -146,6 +176,11 @@
       {
        "id": "sc-7.4_obj.d",
        "label": "SC-07(04)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "each exception to the traffic flow policy is documented with a supporting mission or business need and duration of that need;"
        }
@@ -153,10 +188,20 @@
       {
        "id": "sc-7.4_obj.e",
        "label": "SC-07(04)(e)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "sc-7.4_obj.e-1",
          "label": "SC-07(04)(e)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "exceptions to the traffic flow policy are reviewed {param:sc-07.04_odp};"
          }
@@ -164,6 +209,11 @@
         {
          "id": "sc-7.4_obj.e-2",
          "label": "SC-07(04)(e)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "exceptions to the traffic flow policy that are no longer supported by an explicit mission or business need are removed;"
          }
@@ -173,6 +223,11 @@
       {
        "id": "sc-7.4_obj.f",
        "label": "SC-07(04)(f)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "unauthorized exchanges of control plan traffic with external networks are prevented;"
        }
@@ -180,6 +235,11 @@
       {
        "id": "sc-7.4_obj.g",
        "label": "SC-07(04)(g)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "prose": {
         "en": "information is published to enable remote networks to detect unauthorized control plane traffic from internal networks;"
        }
@@ -187,6 +247,11 @@
       {
        "id": "sc-7.4_obj.h",
        "label": "SC-07(04)(h)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.h"
+        }
+       ],
        "prose": {
         "en": "unauthorized control plane traffic is filtered from external networks."
        }
@@ -285,7 +350,8 @@
      ],
      "alt-identifiers": [
       "sc-7.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(04)_ODP"
     }
    }
   }

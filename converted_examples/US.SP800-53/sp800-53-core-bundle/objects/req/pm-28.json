@@ -105,18 +105,38 @@
     {
      "id": "pm-28_obj",
      "label": "PM-28",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-28_obj.a",
        "label": "PM-28a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-28_obj.a.1",
          "label": "PM-28a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "pm-28_obj.a.1-1",
            "label": "PM-28a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "assumptions affecting risk assessments are identified and documented;"
            }
@@ -124,6 +144,11 @@
           {
            "id": "pm-28_obj.a.1-2",
            "label": "PM-28a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "assumptions affecting risk responses are identified and documented;"
            }
@@ -131,6 +156,11 @@
           {
            "id": "pm-28_obj.a.1-3",
            "label": "PM-28a.01[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "assumptions affecting risk monitoring are identified and documented;"
            }
@@ -140,10 +170,20 @@
         {
          "id": "pm-28_obj.a.2",
          "label": "PM-28a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "pm-28_obj.a.2-1",
            "label": "PM-28a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "constraints affecting risk assessments are identified and documented;"
            }
@@ -151,6 +191,11 @@
           {
            "id": "pm-28_obj.a.2-2",
            "label": "PM-28a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "constraints affecting risk responses are identified and documented;"
            }
@@ -158,6 +203,11 @@
           {
            "id": "pm-28_obj.a.2-3",
            "label": "PM-28a.02[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "constraints affecting risk monitoring are identified and documented;"
            }
@@ -167,10 +217,20 @@
         {
          "id": "pm-28_obj.a.3",
          "label": "PM-28a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "children": [
           {
            "id": "pm-28_obj.a.3-1",
            "label": "PM-28a.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "priorities considered by the organization for managing risk are identified and documented;"
            }
@@ -178,6 +238,11 @@
           {
            "id": "pm-28_obj.a.3-2",
            "label": "PM-28a.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "trade-offs considered by the organization for managing risk are identified and documented;"
            }
@@ -187,6 +252,11 @@
         {
          "id": "pm-28_obj.a.4",
          "label": "PM-28a.04",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.4"
+          }
+         ],
          "prose": {
           "en": "organizational risk tolerance is identified and documented;"
          }
@@ -196,6 +266,11 @@
       {
        "id": "pm-28_obj.b",
        "label": "PM-28b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the results of risk framing activities are distributed to {param:pm-28_odp.01};"
        }
@@ -203,6 +278,11 @@
       {
        "id": "pm-28_obj.c",
        "label": "PM-28c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "risk framing considerations are reviewed and updated {param:pm-28_odp.02}."
        }
@@ -283,7 +363,8 @@
      ],
      "alt-identifiers": [
       "pm-28_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PM-28_ODP[01]"
     },
     "pm-28_odp.02": {
      "guidelines": [
@@ -293,7 +374,8 @@
      ],
      "alt-identifiers": [
       "pm-28_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PM-28_ODP[02]"
     }
    }
   },

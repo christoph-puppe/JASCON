@@ -51,6 +51,11 @@
     {
      "id": "sr-8_obj",
      "label": "SR-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "agreements and procedures are established with entities involved in the supply chain for the system, system components, or system service for {param:sr-08_odp.01}."
      }
@@ -124,7 +129,8 @@
     "sr-08_odp.01": {
      "alt-identifiers": [
       "sr-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-08_ODP[01]"
     },
     "sr-08_odp.02": {
      "guidelines": [
@@ -135,7 +141,8 @@
      "alt-identifiers": [
       "sr-8_prm_2"
      ],
-     "alt-label": "information"
+     "alt-label": "information",
+     "sp800-53a-label": "SR-08_ODP[02]"
     }
    }
   },

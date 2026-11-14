@@ -48,6 +48,11 @@
     {
      "id": "sc-37_obj",
      "label": "SC-37",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-37_odp.01} are employed for the physical delivery or electronic transmission of {param:sc-37_odp.02} to {param:sc-37_odp.03}."
      }
@@ -147,7 +152,8 @@
      ],
      "alt-identifiers": [
       "sc-37_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-37_ODP[01]"
     },
     "sc-37_odp.02": {
      "guidelines": [
@@ -157,7 +163,8 @@
      ],
      "alt-identifiers": [
       "sc-37_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-37_ODP[02]"
     },
     "sc-37_odp.03": {
      "guidelines": [
@@ -167,7 +174,8 @@
      ],
      "alt-identifiers": [
       "sc-37_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-37_ODP[03]"
     }
    }
   },

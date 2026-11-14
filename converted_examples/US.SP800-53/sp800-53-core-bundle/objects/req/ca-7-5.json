@@ -48,10 +48,20 @@
     {
      "id": "ca-7.5_obj",
      "label": "CA-07(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ca-7.5_obj-1",
        "label": "CA-07(05)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ca-07.05_odp.01} are employed to validate that policies are established;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "ca-7.5_obj-2",
        "label": "CA-07(05)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:ca-07.05_odp.02} are employed to validate that implemented controls are operating in a consistent manner."
        }
@@ -142,14 +157,16 @@
       {
        "en": "actions to validate that policies are established are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CA-07(05)_ODP[01]"
     },
     "ca-07.05_odp.02": {
      "guidelines": [
       {
        "en": "actions to validate that implemented controls are operating in a consistent manner are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CA-07(05)_ODP[02]"
     }
    }
   },

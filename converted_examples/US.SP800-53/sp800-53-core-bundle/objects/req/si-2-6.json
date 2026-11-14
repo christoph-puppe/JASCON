@@ -39,6 +39,11 @@
     {
      "id": "si-2.6_obj",
      "label": "SI-02(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "previous versions of {param:si-02.06_odp} are removed after updated versions have been installed."
      }
@@ -120,7 +125,8 @@
      ],
      "alt-identifiers": [
       "si-2.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-02(06)_ODP"
     }
    }
   }

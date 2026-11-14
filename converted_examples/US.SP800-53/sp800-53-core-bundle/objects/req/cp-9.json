@@ -78,7 +78,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "System-level information includes system state information, operating system software, middleware, application software, and licenses. User-level information includes information other than system-level information. Mechanisms employed to protect the integrity of system backups include digital signatures and cryptographic hashes. Protection of system backup information while in transit is addressed by MP-5 and SC-8 . System backups reflect the requirements in contingency plans as well as other organizational requirements for backing up information. Organizations may be subject to laws, executive orders, directives, regulations, or policies with requirements regarding specific categories of information (e.g., personal health information). Organizational personnel consult with the senior agency official for privacy and legal counsel regarding such requirements."
+     "en": "System-level information includes system state information, operating system software, middleware, application software, and licenses. User-level information includes information other than system-level information. Mechanisms employed to protect the integrity of system backups include digital signatures and cryptographic hashes. Protection of system backup information while in transit is addressed by [MP-5](#mp-5) and [SC-8](#sc-8) . System backups reflect the requirements in contingency plans as well as other organizational requirements for backing up information. Organizations may be subject to laws, executive orders, directives, regulations, or policies with requirements regarding specific categories of information (e.g., personal health information). Organizational personnel consult with the senior agency official for privacy and legal counsel regarding such requirements."
     }
    ]
   },
@@ -87,10 +87,20 @@
     {
      "id": "cp-9_obj",
      "label": "CP-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-9_obj.a",
        "label": "CP-09a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "backups of user-level information contained in {param:cp-09_odp.01} are conducted {param:cp-09_odp.02};"
        }
@@ -98,6 +108,11 @@
       {
        "id": "cp-9_obj.b",
        "label": "CP-09b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "backups of system-level information contained in the system are conducted {param:cp-09_odp.03};"
        }
@@ -105,6 +120,11 @@
       {
        "id": "cp-9_obj.c",
        "label": "CP-09c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "backups of system documentation, including security- and privacy-related documentation are conducted {param:cp-09_odp.04};"
        }
@@ -112,10 +132,20 @@
       {
        "id": "cp-9_obj.d",
        "label": "CP-09d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "cp-9_obj.d-1",
          "label": "CP-09d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the confidentiality of backup information is protected;"
          }
@@ -123,6 +153,11 @@
         {
          "id": "cp-9_obj.d-2",
          "label": "CP-09d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the integrity of backup information is protected;"
          }
@@ -130,6 +165,11 @@
         {
          "id": "cp-9_obj.d-3",
          "label": "CP-09d.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "the availability of backup information is protected."
          }
@@ -206,7 +246,8 @@
      ],
      "alt-identifiers": [
       "cp-9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-09_ODP[01]"
     },
     "cp-09_odp.02": {
      "guidelines": [
@@ -217,7 +258,8 @@
      "alt-identifiers": [
       "cp-9_prm_2"
      ],
-     "alt-label": "frequency consistent with recovery time and recovery point objectives"
+     "alt-label": "frequency consistent with recovery time and recovery point objectives",
+     "sp800-53a-label": "CP-09_ODP[02]"
     },
     "cp-09_odp.03": {
      "guidelines": [
@@ -228,7 +270,8 @@
      "alt-identifiers": [
       "cp-9_prm_3"
      ],
-     "alt-label": "frequency consistent with recovery time and recovery point objectives"
+     "alt-label": "frequency consistent with recovery time and recovery point objectives",
+     "sp800-53a-label": "CP-09_ODP[03]"
     },
     "cp-09_odp.04": {
      "guidelines": [
@@ -239,7 +282,8 @@
      "alt-identifiers": [
       "cp-9_prm_4"
      ],
-     "alt-label": "frequency consistent with recovery time and recovery point objectives"
+     "alt-label": "frequency consistent with recovery time and recovery point objectives",
+     "sp800-53a-label": "CP-09_ODP[04]"
     }
    }
   }
@@ -317,7 +361,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CP-9.4",
     "mode": "merged-into",
-    "label": "CP-09(04)",
+    "label": "CP-9(4)",
     "title": "Protection from Unauthorized Modification"
    }
   ]

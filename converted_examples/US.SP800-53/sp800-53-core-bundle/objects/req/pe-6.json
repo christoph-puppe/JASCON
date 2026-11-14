@@ -54,7 +54,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Physical access monitoring includes publicly accessible areas within organizational facilities. Examples of physical access monitoring include the employment of guards, video surveillance equipment (i.e., cameras), and sensor devices. Reviewing physical access logs can help identify suspicious activity, anomalous events, or potential threats. The reviews can be supported by audit logging controls, such as AU-2 , if the access logs are part of an automated system. Organizational incident response capabilities include investigations of physical security incidents and responses to the incidents. Incidents include security violations or suspicious physical access activities. Suspicious physical access activities include accesses outside of normal work hours, repeated accesses to areas not normally accessed, accesses for unusual lengths of time, and out-of-sequence accesses."
+     "en": "Physical access monitoring includes publicly accessible areas within organizational facilities. Examples of physical access monitoring include the employment of guards, video surveillance equipment (i.e., cameras), and sensor devices. Reviewing physical access logs can help identify suspicious activity, anomalous events, or potential threats. The reviews can be supported by audit logging controls, such as [AU-2](#au-2) , if the access logs are part of an automated system. Organizational incident response capabilities include investigations of physical security incidents and responses to the incidents. Incidents include security violations or suspicious physical access activities. Suspicious physical access activities include accesses outside of normal work hours, repeated accesses to areas not normally accessed, accesses for unusual lengths of time, and out-of-sequence accesses."
     }
    ]
   },
@@ -63,10 +63,20 @@
     {
      "id": "pe-6_obj",
      "label": "PE-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-6_obj.a",
        "label": "PE-06a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "physical access to the facility where the system resides is monitored to detect and respond to physical security incidents;"
        }
@@ -74,10 +84,20 @@
       {
        "id": "pe-6_obj.b",
        "label": "PE-06b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pe-6_obj.b-1",
          "label": "PE-06b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "physical access logs are reviewed {param:pe-06_odp.01};"
          }
@@ -85,6 +105,11 @@
         {
          "id": "pe-6_obj.b-2",
          "label": "PE-06b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "physical access logs are reviewed upon occurrence of {param:pe-06_odp.02};"
          }
@@ -94,10 +119,20 @@
       {
        "id": "pe-6_obj.c",
        "label": "PE-06c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "pe-6_obj.c-1",
          "label": "PE-06c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "results of reviews are coordinated with organizational incident response capabilities;"
          }
@@ -105,6 +140,11 @@
         {
          "id": "pe-6_obj.c-2",
          "label": "PE-06c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "results of investigations are coordinated with organizational incident response capabilities."
          }
@@ -184,7 +224,8 @@
      ],
      "alt-identifiers": [
       "pe-6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-06_ODP[01]"
     },
     "pe-06_odp.02": {
      "guidelines": [
@@ -195,7 +236,8 @@
      "alt-identifiers": [
       "pe-6_prm_2"
      ],
-     "alt-label": "events or potential indications of events"
+     "alt-label": "events or potential indications of events",
+     "sp800-53a-label": "PE-06_ODP[02]"
     }
    }
   },

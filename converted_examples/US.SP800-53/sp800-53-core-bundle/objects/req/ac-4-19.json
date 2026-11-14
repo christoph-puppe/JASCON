@@ -48,10 +48,20 @@
     {
      "id": "ac-4.19_obj",
      "label": "AC-04(19)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-4.19_obj-1",
        "label": "AC-04(19)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "when transferring information between different security domains, {param:ac-04.19_odp.01} are implemented on metadata;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "ac-4.19_obj-2",
        "label": "AC-04(19)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "when transferring information between different security domains, {param:ac-04.19_odp.02} are implemented on metadata."
        }
@@ -151,14 +166,16 @@
       {
        "en": "security policy filters to be implemented on metadata are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(19)_ODP[01]"
     },
     "ac-04.19_odp.02": {
      "guidelines": [
       {
        "en": "privacy policy filters to be implemented on metadata are defined (if selected);"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(19)_ODP[02]"
     }
    }
   }

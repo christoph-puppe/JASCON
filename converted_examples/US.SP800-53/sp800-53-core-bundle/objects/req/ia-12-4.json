@@ -31,6 +31,11 @@
     {
      "id": "ia-12.4_obj",
      "label": "IA-12(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the validation and verification of identity evidence is conducted in person before a designated registration authority."
      }
@@ -109,13 +114,13 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-4.7",
     "mode": "merged-into",
-    "label": "IA-04(07)",
+    "label": "IA-4(7)",
     "title": "In-person Registration"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/IA-5.3",
     "mode": "merged-into",
-    "label": "IA-05(03)",
+    "label": "IA-5(3)",
     "title": "In-person or Trusted External Party Registration"
    }
   ]

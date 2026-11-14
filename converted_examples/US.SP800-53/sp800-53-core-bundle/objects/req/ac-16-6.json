@@ -98,10 +98,20 @@
     {
      "id": "ac-16.6_obj",
      "label": "AC-16(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.6_obj-1",
        "label": "AC-16(06)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "personnel are required to associate and maintain the association of {param:ac-16.06_odp.01} with {param:ac-16.06_odp.05} in accordance with {param:ac-16.06_odp.09};"
        }
@@ -109,6 +119,11 @@
       {
        "id": "ac-16.6_obj-2",
        "label": "AC-16(06)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "personnel are required to associate and maintain the association of {param:ac-16.06_odp.02} with {param:ac-16.06_odp.06} in accordance with {param:ac-16.06_odp.09};"
        }
@@ -116,6 +131,11 @@
       {
        "id": "ac-16.6_obj-3",
        "label": "AC-16(06)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "personnel are required to associate and maintain the association of {param:ac-16.06_odp.03} with {param:ac-16.06_odp.07} in accordance with {param:ac-16.06_odp.10};"
        }
@@ -123,6 +143,11 @@
       {
        "id": "ac-16.6_obj-4",
        "label": "AC-16(06)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "personnel are required to associate and maintain the association of {param:ac-16.06_odp.04} with {param:ac-16.06_odp.08} in accordance with {param:ac-16.06_odp.10}."
        }
@@ -207,70 +232,80 @@
       {
        "en": "security attributes to be associated with subjects are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[01]"
     },
     "ac-16.06_odp.02": {
      "guidelines": [
       {
        "en": "security attributes to be associated with objects are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[02]"
     },
     "ac-16.06_odp.03": {
      "guidelines": [
       {
        "en": "privacy attributes to be associated with subjects are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[03]"
     },
     "ac-16.06_odp.04": {
      "guidelines": [
       {
        "en": "privacy attributes to be associated with objects are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[04]"
     },
     "ac-16.06_odp.05": {
      "guidelines": [
       {
        "en": "subjects to be associated with information security attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[05]"
     },
     "ac-16.06_odp.06": {
      "guidelines": [
       {
        "en": "objects to be associated with information security attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[06]"
     },
     "ac-16.06_odp.07": {
      "guidelines": [
       {
        "en": "subjects to be associated with privacy attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[07]"
     },
     "ac-16.06_odp.08": {
      "guidelines": [
       {
        "en": "objects to be associated with privacy attributes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[08]"
     },
     "ac-16.06_odp.09": {
      "guidelines": [
       {
        "en": "security policies that require personnel to associate and maintain the association of security and privacy attributes with subjects and objects;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[09]"
     },
     "ac-16.06_odp.10": {
      "guidelines": [
       {
        "en": "privacy policies that require personnel to associate and maintain the association of security and privacy attributes with subjects and objects;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(06)_ODP[10]"
     }
    }
   }

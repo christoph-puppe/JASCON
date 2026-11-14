@@ -39,6 +39,11 @@
     {
      "id": "sa-8.25_obj",
      "label": "SA-08(25)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.25_odp} implement the security design principle of economic security."
      }
@@ -117,7 +122,8 @@
      ],
      "alt-identifiers": [
       "sa-8.25_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(25)_ODP"
     }
    }
   },

@@ -22,7 +22,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Remote access to organizational information by non-organizational entities can increase the risk of unauthorized use and disclosure about remote access mechanisms. The organization considers including remote access requirements in the information exchange agreements with other organizations, as applicable. Remote access requirements can also be included in rules of behavior (see PL-4 ) and access agreements (see PS-6)."
+     "en": "Remote access to organizational information by non-organizational entities can increase the risk of unauthorized use and disclosure about remote access mechanisms. The organization considers including remote access requirements in the information exchange agreements with other organizations, as applicable. Remote access requirements can also be included in rules of behavior (see [PL-4](#pl-4) ) and access agreements (see [PS-6](#ps-6))."
     }
    ]
   },
@@ -31,6 +31,11 @@
     {
      "id": "ac-17.6_obj",
      "label": "AC-17(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information about remote access mechanisms is protected from unauthorized use and disclosure."
      }

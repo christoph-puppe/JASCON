@@ -31,6 +31,11 @@
     {
      "id": "ma-5.3_obj",
      "label": "MA-05(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "personnel performing maintenance and diagnostic activities on a system processing, storing, or transmitting classified information are U.S. citizens."
      }

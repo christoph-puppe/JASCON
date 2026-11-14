@@ -43,6 +43,11 @@
     {
      "id": "ca-8_obj",
      "label": "CA-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "penetration testing is conducted {param:ca-08_odp.01} on {param:ca-08_odp.02}."
      }
@@ -118,7 +123,8 @@
      ],
      "alt-identifiers": [
       "ca-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CA-08_ODP[01]"
     },
     "ca-08_odp.02": {
      "guidelines": [
@@ -129,7 +135,8 @@
      "alt-identifiers": [
       "ca-8_prm_2"
      ],
-     "alt-label": "systems or system components"
+     "alt-label": "systems or system components",
+     "sp800-53a-label": "CA-08_ODP[02]"
     }
    }
   },
@@ -174,13 +181,13 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PE-3.6",
     "mode": "merged-into",
-    "label": "PE-03(06)",
+    "label": "PE-3(6)",
     "title": "Facility Penetration Testing"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/RA-5.9",
     "mode": "merged-into",
-    "label": "RA-05(09)",
+    "label": "RA-5(9)",
     "title": "Penetration Testing and Analyses"
    }
   ]

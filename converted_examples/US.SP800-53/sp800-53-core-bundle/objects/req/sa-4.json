@@ -132,7 +132,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Security and privacy functional requirements are typically derived from the high-level security and privacy requirements described in SA-2 . The derived requirements include security and privacy capabilities, functions, and mechanisms. Strength requirements associated with such capabilities, functions, and mechanisms include degree of correctness, completeness, resistance to tampering or bypass, and resistance to direct attack. Assurance requirements include development processes, procedures, and methodologies as well as the evidence from development and assessment activities that provide grounds for confidence that the required functionality is implemented and possesses the required strength of mechanism. SP 800-160-1 describes the process of requirements engineering as part of the system development life cycle.\n\nControls can be viewed as descriptions of the safeguards and protection capabilities appropriate for achieving the particular security and privacy objectives of the organization and for reflecting the security and privacy requirements of stakeholders. Controls are selected and implemented in order to satisfy system requirements and include developer and organizational responsibilities. Controls can include technical, administrative, and physical aspects. In some cases, the selection and implementation of a control may necessitate additional specification by the organization in the form of derived requirements or instantiated control parameter values. The derived requirements and control parameter values may be necessary to provide the appropriate level of implementation detail for controls within the system development life cycle.\n\nSecurity and privacy documentation requirements address all stages of the system development life cycle. Documentation provides user and administrator guidance for the implementation and operation of controls. The level of detail required in such documentation is based on the security categorization or classification level of the system and the degree to which organizations depend on the capabilities, functions, or mechanisms to meet risk response expectations. Requirements can include mandated configuration settings that specify allowed functions, ports, protocols, and services. Acceptance criteria for systems, system components, and system services are defined in the same manner as the criteria for any organizational acquisition or procurement.\n\nOrganizations can determine other requirements that support security and operations, to include responsibilities for the organization and developer, and notification and timing requirements for support, maintenance and updates."
+     "en": "Security and privacy functional requirements are typically derived from the high-level security and privacy requirements described in [SA-2](#sa-2) . The derived requirements include security and privacy capabilities, functions, and mechanisms. Strength requirements associated with such capabilities, functions, and mechanisms include degree of correctness, completeness, resistance to tampering or bypass, and resistance to direct attack. Assurance requirements include development processes, procedures, and methodologies as well as the evidence from development and assessment activities that provide grounds for confidence that the required functionality is implemented and possesses the required strength of mechanism. [SP 800-160-1](#e3cc0520-a366-4fc9-abc2-5272db7e3564) describes the process of requirements engineering as part of the system development life cycle.\n\nControls can be viewed as descriptions of the safeguards and protection capabilities appropriate for achieving the particular security and privacy objectives of the organization and for reflecting the security and privacy requirements of stakeholders. Controls are selected and implemented in order to satisfy system requirements and include developer and organizational responsibilities. Controls can include technical, administrative, and physical aspects. In some cases, the selection and implementation of a control may necessitate additional specification by the organization in the form of derived requirements or instantiated control parameter values. The derived requirements and control parameter values may be necessary to provide the appropriate level of implementation detail for controls within the system development life cycle.\n\nSecurity and privacy documentation requirements address all stages of the system development life cycle. Documentation provides user and administrator guidance for the implementation and operation of controls. The level of detail required in such documentation is based on the security categorization or classification level of the system and the degree to which organizations depend on the capabilities, functions, or mechanisms to meet risk response expectations. Requirements can include mandated configuration settings that specify allowed functions, ports, protocols, and services. Acceptance criteria for systems, system components, and system services are defined in the same manner as the criteria for any organizational acquisition or procurement.\n\nOrganizations can determine other requirements that support security and operations, to include responsibilities for the organization and developer, and notification and timing requirements for support, maintenance and updates."
     }
    ]
   },
@@ -141,14 +141,29 @@
     {
      "id": "sa-4_obj",
      "label": "SA-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-4_obj.a",
        "label": "SA-04a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-4_obj.a-1",
          "label": "SA-04a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "security functional requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -156,6 +171,11 @@
         {
          "id": "sa-4_obj.a-2",
          "label": "SA-04a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "privacy functional requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -165,6 +185,11 @@
       {
        "id": "sa-4_obj.b",
        "label": "SA-04b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "strength of mechanism requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
        }
@@ -172,10 +197,20 @@
       {
        "id": "sa-4_obj.c",
        "label": "SA-04c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sa-4_obj.c-1",
          "label": "SA-04c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "security assurance requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -183,6 +218,11 @@
         {
          "id": "sa-4_obj.c-2",
          "label": "SA-04c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "privacy assurance requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -192,10 +232,20 @@
       {
        "id": "sa-4_obj.d",
        "label": "SA-04d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "sa-4_obj.d-1",
          "label": "SA-04d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "controls needed to satisfy the security requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -203,6 +253,11 @@
         {
          "id": "sa-4_obj.d-2",
          "label": "SA-04d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "controls needed to satisfy the privacy requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -212,10 +267,20 @@
       {
        "id": "sa-4_obj.e",
        "label": "SA-04e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "sa-4_obj.e-1",
          "label": "SA-04e.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "security documentation requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -223,6 +288,11 @@
         {
          "id": "sa-4_obj.e-2",
          "label": "SA-04e.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "privacy documentation requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -232,10 +302,20 @@
       {
        "id": "sa-4_obj.f",
        "label": "SA-04f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "children": [
         {
          "id": "sa-4_obj.f-1",
          "label": "SA-04f.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "requirements for protecting security documentation, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -243,6 +323,11 @@
         {
          "id": "sa-4_obj.f-2",
          "label": "SA-04f.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "requirements for protecting privacy documentation, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -252,6 +337,11 @@
       {
        "id": "sa-4_obj.g",
        "label": "SA-04g.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "prose": {
         "en": "the description of the system development environment and environment in which the system is intended to operate, requirements, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
        }
@@ -259,10 +349,20 @@
       {
        "id": "sa-4_obj.h",
        "label": "SA-04h.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.h"
+        }
+       ],
        "children": [
         {
          "id": "sa-4_obj.h-1",
          "label": "SA-04h.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.h"
+          }
+         ],
          "prose": {
           "en": "the allocation of responsibility or identification of parties responsible for information security requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service;"
          }
@@ -270,6 +370,11 @@
         {
          "id": "sa-4_obj.h-2",
          "label": "SA-04h.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.h"
+          }
+         ],
          "prose": {
           "en": "the allocation of responsibility or identification of parties responsible for privacy requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01};"
          }
@@ -277,6 +382,11 @@
         {
          "id": "sa-4_obj.h-3",
          "label": "SA-04h.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.h"
+          }
+         ],
          "prose": {
           "en": "the allocation of responsibility or identification of parties responsible for supply chain risk management requirements, descriptions, and criteria are included explicitly or by reference using {param:sa-04_odp.01};"
          }
@@ -286,6 +396,11 @@
       {
        "id": "sa-4_obj.i",
        "label": "SA-04i.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.i"
+        }
+       ],
        "prose": {
         "en": "acceptance criteria requirements and descriptions are included explicitly or by reference using {param:sa-04_odp.01} in the acquisition contract for the system, system component, or system service."
        }
@@ -370,7 +485,8 @@
     "sa-04_odp.01": {
      "alt-identifiers": [
       "sa-4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-04_ODP[01]"
     },
     "sa-04_odp.02": {
      "guidelines": [
@@ -380,7 +496,8 @@
      ],
      "alt-identifiers": [
       "sa-4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-04_ODP[02]"
     }
    }
   },

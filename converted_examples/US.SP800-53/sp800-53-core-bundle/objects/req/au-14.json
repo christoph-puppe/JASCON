@@ -72,14 +72,29 @@
     {
      "id": "au-14_obj",
      "label": "AU-14",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-14_obj.a",
        "label": "AU-14a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "au-14_obj.a-1",
          "label": "AU-14a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:au-14_odp.01} are provided with the capability to {param:au-14_odp.02} the content of a user session under {param:au-14_odp.03};"
          }
@@ -87,6 +102,11 @@
         {
          "id": "au-14_obj.a-2",
          "label": "AU-14a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the capability for {param:au-14_odp.01} to {param:au-14_odp.02} the content of a user session under {param:au-14_odp.03} is implemented;"
          }
@@ -96,10 +116,20 @@
       {
        "id": "au-14_obj.b",
        "label": "AU-14b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "au-14_obj.b-1",
          "label": "AU-14b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "session auditing activities are developed in consultation with legal counsel and in accordance with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines;"
          }
@@ -107,6 +137,11 @@
         {
          "id": "au-14_obj.b-2",
          "label": "AU-14b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "session auditing activities are integrated in consultation with legal counsel and in accordance with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines;"
          }
@@ -114,6 +149,11 @@
         {
          "id": "au-14_obj.b-3",
          "label": "AU-14b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "session auditing activities are used in consultation with legal counsel and in accordance with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines;"
          }
@@ -196,12 +236,14 @@
      ],
      "alt-identifiers": [
       "au-14_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-14_ODP[01]"
     },
     "au-14_odp.02": {
      "alt-identifiers": [
       "au-14_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-14_ODP[02]"
     },
     "au-14_odp.03": {
      "guidelines": [
@@ -211,7 +253,8 @@
      ],
      "alt-identifiers": [
       "au-14_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AU-14_ODP[03]"
     }
    }
   },
@@ -272,7 +315,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/AU-14.2",
     "mode": "merged-into",
-    "label": "AU-14(02)",
+    "label": "AU-14(2)",
     "title": "Capture and Record Content"
    }
   ]

@@ -38,6 +38,11 @@
     {
      "id": "cp-4.3_obj",
      "label": "CP-04(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the contingency plan is tested using {param:cp-04.03_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "cp-4.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-04(03)_ODP"
     }
    }
   },

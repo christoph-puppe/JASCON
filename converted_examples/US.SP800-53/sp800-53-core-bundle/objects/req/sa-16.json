@@ -38,6 +38,11 @@
     {
      "id": "sa-16_obj",
      "label": "SA-16",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to provide {param:sa-16_odp} on the correct use and operation of the implemented security and privacy functions, controls, and/or mechanisms."
      }
@@ -125,7 +130,8 @@
      ],
      "alt-identifiers": [
       "sa-16_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-16_ODP"
     }
    }
   },

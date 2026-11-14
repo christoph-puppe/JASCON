@@ -39,6 +39,11 @@
     {
      "id": "sa-8.30_obj",
      "label": "SA-08(30)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.30_odp} implement the security design principle of procedural rigor."
      }
@@ -117,7 +122,8 @@
      ],
      "alt-identifiers": [
       "sa-8.30_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(30)_ODP"
     }
    }
   },

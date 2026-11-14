@@ -38,6 +38,11 @@
     {
      "id": "ac-4.3_obj",
      "label": "AC-04(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-04.03_odp} are enforced."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ac-4.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(03)_ODP"
     }
    }
   }

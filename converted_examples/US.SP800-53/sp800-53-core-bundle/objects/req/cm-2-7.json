@@ -51,7 +51,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "When it is known that systems or system components will be in high-risk areas external to the organization, additional controls may be implemented to counter the increased threat in such areas. For example, organizations can take actions for notebook computers used by individuals departing on and returning from travel. Actions include determining the locations that are of concern, defining the required configurations for the components, ensuring that components are configured as intended before travel is initiated, and applying controls to the components after travel is completed. Specially configured notebook computers include computers with sanitized hard drives, limited applications, and more stringent configuration settings. Controls applied to mobile devices upon return from travel include examining the mobile device for signs of physical tampering and purging and reimaging disk drives. Protecting information that resides on mobile devices is addressed in the MP (Media Protection) family."
+     "en": "When it is known that systems or system components will be in high-risk areas external to the organization, additional controls may be implemented to counter the increased threat in such areas. For example, organizations can take actions for notebook computers used by individuals departing on and returning from travel. Actions include determining the locations that are of concern, defining the required configurations for the components, ensuring that components are configured as intended before travel is initiated, and applying controls to the components after travel is completed. Specially configured notebook computers include computers with sanitized hard drives, limited applications, and more stringent configuration settings. Controls applied to mobile devices upon return from travel include examining the mobile device for signs of physical tampering and purging and reimaging disk drives. Protecting information that resides on mobile devices is addressed in the [MP](#mp) (Media Protection) family."
     }
    ]
   },
@@ -60,10 +60,20 @@
     {
      "id": "cm-2.7_obj",
      "label": "CM-02(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-2.7_obj.a",
        "label": "CM-02(07)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:cm-02.07_odp.01} with {param:cm-02.07_odp.02} are issued to individuals traveling to locations that the organization deems to be of significant risk;"
        }
@@ -71,6 +81,11 @@
       {
        "id": "cm-2.7_obj.b",
        "label": "CM-02(07)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:cm-02.07_odp.03} are applied to the systems or system components when the individuals return from travel."
        }
@@ -157,7 +172,8 @@
      ],
      "alt-identifiers": [
       "cm-2.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-02(07)_ODP[01]"
     },
     "cm-02.07_odp.02": {
      "guidelines": [
@@ -167,7 +183,8 @@
      ],
      "alt-identifiers": [
       "cm-2.7_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-02(07)_ODP[02]"
     },
     "cm-02.07_odp.03": {
      "guidelines": [
@@ -177,7 +194,8 @@
      ],
      "alt-identifiers": [
       "cm-2.7_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CM-02(07)_ODP[03]"
     }
    }
   },

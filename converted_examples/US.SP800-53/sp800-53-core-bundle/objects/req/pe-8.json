@@ -72,10 +72,20 @@
     {
      "id": "pe-8_obj",
      "label": "PE-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-8_obj.a",
        "label": "PE-08a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "visitor access records for the facility where the system resides are maintained for {param:pe-08_odp.01};"
        }
@@ -83,6 +93,11 @@
       {
        "id": "pe-8_obj.b",
        "label": "PE-08b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "visitor access records are reviewed {param:pe-08_odp.02};"
        }
@@ -90,6 +105,11 @@
       {
        "id": "pe-8_obj.c",
        "label": "PE-08c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "visitor access records anomalies are reported to {param:pe-08_odp.03}."
        }
@@ -167,7 +187,8 @@
      ],
      "alt-identifiers": [
       "pe-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-08_ODP[01]"
     },
     "pe-08_odp.02": {
      "guidelines": [
@@ -177,7 +198,8 @@
      ],
      "alt-identifiers": [
       "pe-8_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-08_ODP[02]"
     },
     "pe-08_odp.03": {
      "guidelines": [
@@ -187,7 +209,8 @@
      ],
      "alt-identifiers": [
       "pe-8_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PE-08_ODP[03]"
     }
    }
   },

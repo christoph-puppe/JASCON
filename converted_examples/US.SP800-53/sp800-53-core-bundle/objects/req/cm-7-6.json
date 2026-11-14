@@ -38,6 +38,11 @@
     {
      "id": "cm-7.6_obj",
      "label": "CM-07(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cm-07.06_odp} is required to be executed in a confined physical or virtual machine environment with limited privileges."
      }
@@ -125,7 +130,8 @@
      ],
      "alt-identifiers": [
       "cm-7.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-07(06)_ODP"
     }
    }
   },
@@ -158,7 +164,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-7.11",
     "mode": "renamed",
-    "label": "SI-07(11)",
+    "label": "SI-7(11)",
     "title": "Confined Environments with Limited Privileges"
    }
   ]

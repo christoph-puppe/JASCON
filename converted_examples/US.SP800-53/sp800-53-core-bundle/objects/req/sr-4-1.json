@@ -38,10 +38,20 @@
     {
      "id": "sr-4.1_obj",
      "label": "SR-04(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-4.1_obj-1",
        "label": "SR-04(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "unique identification of {param:sr-04.01_odp} is established;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sr-4.1_obj-2",
        "label": "SR-04(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "unique identification of {param:sr-04.01_odp} is maintained."
        }
@@ -130,7 +145,8 @@
      "alt-identifiers": [
       "sr-4.1_prm_1"
      ],
-     "alt-label": "supply chain elements, processes, and personnel associated with organization-defined systems and critical system components"
+     "alt-label": "supply chain elements, processes, and personnel associated with organization-defined systems and critical system components",
+     "sp800-53a-label": "SR-04(01)_ODP"
     }
    }
   },

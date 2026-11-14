@@ -61,14 +61,29 @@
     {
      "id": "ir-3.3_obj",
      "label": "IR-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-3.3_obj.a",
        "label": "IR-03(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ir-3.3_obj.a-1",
          "label": "IR-03(03)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "qualitative data from testing are used to determine the effectiveness of incident response processes;"
          }
@@ -76,6 +91,11 @@
         {
          "id": "ir-3.3_obj.a-2",
          "label": "IR-03(03)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "quantitative data from testing are used to determine the effectiveness of incident response processes;"
          }
@@ -85,10 +105,20 @@
       {
        "id": "ir-3.3_obj.b",
        "label": "IR-03(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ir-3.3_obj.b-1",
          "label": "IR-03(03)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "qualitative data from testing are used to continuously improve incident response processes;"
          }
@@ -96,6 +126,11 @@
         {
          "id": "ir-3.3_obj.b-2",
          "label": "IR-03(03)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "quantitative data from testing are used to continuously improve incident response processes;"
          }
@@ -105,10 +140,20 @@
       {
        "id": "ir-3.3_obj.c",
        "label": "IR-03(03)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "ir-3.3_obj.c-1",
          "label": "IR-03(03)(c)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "qualitative data from testing are used to provide incident response measures and metrics that are accurate;"
          }
@@ -116,6 +161,11 @@
         {
          "id": "ir-3.3_obj.c-2",
          "label": "IR-03(03)(c)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "quantitative data from testing are used to provide incident response measures and metrics that are accurate;"
          }
@@ -123,6 +173,11 @@
         {
          "id": "ir-3.3_obj.c-3",
          "label": "IR-03(03)(c)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "qualitative data from testing are used to provide incident response measures and metrics that are consistent;"
          }
@@ -130,6 +185,11 @@
         {
          "id": "ir-3.3_obj.c-4",
          "label": "IR-03(03)(c)[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "quantitative data from testing are used to provide incident response measures and metrics that are consistent;"
          }
@@ -137,6 +197,11 @@
         {
          "id": "ir-3.3_obj.c-5",
          "label": "IR-03(03)(c)[05]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "qualitative data from testing are used to provide incident response measures and metrics in a reproducible format;"
          }
@@ -144,6 +209,11 @@
         {
          "id": "ir-3.3_obj.c-6",
          "label": "IR-03(03)(c)[06]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "quantitative data from testing are used to provide incident response measures and metrics in a reproducible format."
          }

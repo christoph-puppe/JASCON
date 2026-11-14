@@ -31,6 +31,11 @@
     {
      "id": "cm-9.1_obj",
      "label": "CM-09(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the responsibility for developing the configuration management process is assigned to organizational personnel who are not directly involved in system development."
      }

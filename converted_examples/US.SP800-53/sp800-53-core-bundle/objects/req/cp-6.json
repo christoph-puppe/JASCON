@@ -41,14 +41,29 @@
     {
      "id": "cp-6_obj",
      "label": "CP-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-6_obj.a",
        "label": "CP-06a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cp-6_obj.a-1",
          "label": "CP-06a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an alternate storage site is established;"
          }
@@ -56,6 +71,11 @@
         {
          "id": "cp-6_obj.a-2",
          "label": "CP-06a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "establishment of the alternate storage site includes necessary agreements to permit the storage and retrieval of system backup information;"
          }
@@ -65,6 +85,11 @@
       {
        "id": "cp-6_obj.b",
        "label": "CP-06b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the alternate storage site provides controls equivalent to that of the primary site."
        }

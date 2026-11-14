@@ -39,6 +39,11 @@
     {
      "id": "sa-8.11_obj",
      "label": "SA-08(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.11_odp} implement the security design principle of inverse modification threshold."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "sa-8.11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(11)_ODP"
     }
    }
   },

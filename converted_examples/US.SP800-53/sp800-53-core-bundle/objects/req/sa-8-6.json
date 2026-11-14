@@ -39,6 +39,11 @@
     {
      "id": "sa-8.6_obj",
      "label": "SA-08(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.06_odp} implement the security design principle of minimized sharing."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "sa-8.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(06)_ODP"
     }
    }
   },

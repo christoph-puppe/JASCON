@@ -38,6 +38,11 @@
     {
      "id": "au-3.3_obj",
      "label": "AU-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "personally identifiable information contained in audit records is limited to {param:au-03.03_odp} identified in the privacy risk assessment."
      }
@@ -125,7 +130,8 @@
      ],
      "alt-identifiers": [
       "au-3.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-03(03)_ODP"
     }
    }
   }

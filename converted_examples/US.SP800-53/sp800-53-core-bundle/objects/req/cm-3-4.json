@@ -44,7 +44,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Information security and privacy representatives include system security officers, senior agency information security officers, senior agency officials for privacy, or system privacy officers. Representation by personnel with information security and privacy expertise is important because changes to system configurations can have unintended side effects, some of which may be security- or privacy-relevant. Detecting such changes early in the process can help avoid unintended, negative consequences that could ultimately affect the security and privacy posture of systems. The configuration change control element referred to in the second organization-defined parameter reflects the change control elements defined by organizations in CM-3g."
+     "en": "Information security and privacy representatives include system security officers, senior agency information security officers, senior agency officials for privacy, or system privacy officers. Representation by personnel with information security and privacy expertise is important because changes to system configurations can have unintended side effects, some of which may be security- or privacy-relevant. Detecting such changes early in the process can help avoid unintended, negative consequences that could ultimately affect the security and privacy posture of systems. The configuration change control element referred to in the second organization-defined parameter reflects the change control elements defined by organizations in [CM-3g](#cm-3_smt.g)."
     }
    ]
   },
@@ -53,10 +53,20 @@
     {
      "id": "cm-3.4_obj",
      "label": "CM-03(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-3.4_obj-1",
        "label": "CM-03(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:cm-03.04_odp.01} are required to be members of the {param:cm-03.04_odp.03};"
        }
@@ -64,6 +74,11 @@
       {
        "id": "cm-3.4_obj-2",
        "label": "CM-03(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:cm-03.04_odp.02} are required to be members of the {param:cm-03.04_odp.03}."
        }
@@ -135,14 +150,16 @@
       {
        "en": "security representatives required to be members of the change control element are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-03(04)_ODP[01]"
     },
     "cm-03.04_odp.02": {
      "guidelines": [
       {
        "en": "privacy representatives required to be members of the change control element are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-03(04)_ODP[02]"
     },
     "cm-03.04_odp.03": {
      "guidelines": [
@@ -152,7 +169,8 @@
      ],
      "alt-identifiers": [
       "cm-3.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(04)_ODP[03]"
     }
    }
   }

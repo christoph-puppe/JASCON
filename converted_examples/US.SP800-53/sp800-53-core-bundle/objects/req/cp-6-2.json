@@ -31,10 +31,20 @@
     {
      "id": "cp-6.2_obj",
      "label": "CP-06(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-6.2_obj-1",
        "label": "CP-06(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the alternate storage site is configured to facilitate recovery operations in accordance with recovery time objectives;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cp-6.2_obj-2",
        "label": "CP-06(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the alternate storage site is configured to facilitate recovery operations in accordance with recovery point objectives."
        }

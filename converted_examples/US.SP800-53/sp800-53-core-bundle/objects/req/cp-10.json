@@ -48,10 +48,20 @@
     {
      "id": "cp-10_obj",
      "label": "CP-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-10_obj-1",
        "label": "CP-10[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the recovery of the system to a known state is provided within {param:cp-10_odp.01} after a disruption, compromise, or failure;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "cp-10_obj-2",
        "label": "CP-10[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a reconstitution of the system to a known state is provided within {param:cp-10_odp.02} after a disruption, compromise, or failure."
        }
@@ -142,14 +157,16 @@
       {
        "en": "time period consistent with recovery time and recovery point objectives for the recovery of the system is determined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-10_ODP[01]"
     },
     "cp-10_odp.02": {
      "guidelines": [
       {
        "en": "time period consistent with recovery time and recovery point objectives for the reconstitution of the system is determined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-10_ODP[02]"
     }
    }
   }

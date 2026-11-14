@@ -38,6 +38,11 @@
     {
      "id": "sc-34.1_obj",
      "label": "SC-34(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-34.01_odp} are employed with no writeable storage that is persistent across component restart or power on/off."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "sc-34.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-34(01)_ODP"
     }
    }
   },

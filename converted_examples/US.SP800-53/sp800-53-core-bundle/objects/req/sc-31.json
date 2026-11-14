@@ -56,10 +56,20 @@
     {
      "id": "sc-31_obj",
      "label": "SC-31",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-31_obj.a",
        "label": "SC-31a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "a covert channel analysis is performed to identify those aspects of communications within the system that are potential avenues for covert {param:sc-31_odp} channels;"
        }
@@ -67,6 +77,11 @@
       {
        "id": "sc-31_obj.b",
        "label": "SC-31b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the maximum bandwidth of those channels is estimated."
        }
@@ -145,7 +160,8 @@
     "sc-31_odp": {
      "alt-identifiers": [
       "sc-31_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-31_ODP"
     }
    }
   },

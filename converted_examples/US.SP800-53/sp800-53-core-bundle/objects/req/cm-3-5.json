@@ -38,6 +38,11 @@
     {
      "id": "cm-3.5_obj",
      "label": "CM-03(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cm-03.05_odp} are automatically implemented if baseline configurations are changed in an unauthorized manner."
      }
@@ -125,7 +130,8 @@
      ],
      "alt-identifiers": [
       "cm-3.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(05)_ODP"
     }
    }
   }

@@ -31,10 +31,20 @@
     {
      "id": "sa-15.10_obj",
      "label": "SA-15(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-15.10_obj-1",
        "label": "SA-15(10)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to provide an incident response plan;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sa-15.10_obj-2",
        "label": "SA-15(10)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to implement an incident response plan;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "sa-15.10_obj-3",
        "label": "SA-15(10)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to test an incident response plan."
        }

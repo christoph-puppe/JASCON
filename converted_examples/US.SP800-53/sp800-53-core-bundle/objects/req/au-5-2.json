@@ -48,6 +48,11 @@
     {
      "id": "au-5.2_obj",
      "label": "AU-05(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an alert is provided within {param:au-05.02_odp.01} to {param:au-05.02_odp.02} when {param:au-05.02_odp.03} occur."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "au-5.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(02)_ODP[01]"
     },
     "au-05.02_odp.02": {
      "guidelines": [
@@ -124,7 +130,8 @@
      ],
      "alt-identifiers": [
       "au-5.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(02)_ODP[02]"
     },
     "au-05.02_odp.03": {
      "guidelines": [
@@ -134,7 +141,8 @@
      ],
      "alt-identifiers": [
       "au-5.2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(02)_ODP[03]"
     }
    }
   }

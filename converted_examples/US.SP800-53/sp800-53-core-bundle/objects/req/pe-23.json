@@ -32,7 +32,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Physical and environmental hazards include floods, fires, tornadoes, earthquakes, hurricanes, terrorism, vandalism, an electromagnetic pulse, electrical interference, and other forms of incoming electromagnetic radiation. The location of system components within the facility is addressed in PE-18."
+     "en": "Physical and environmental hazards include floods, fires, tornadoes, earthquakes, hurricanes, terrorism, vandalism, an electromagnetic pulse, electrical interference, and other forms of incoming electromagnetic radiation. The location of system components within the facility is addressed in [PE-18](#pe-18)."
     }
    ]
   },
@@ -41,10 +41,20 @@
     {
      "id": "pe-23_obj",
      "label": "PE-23",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-23_obj.a",
        "label": "PE-23a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the location or site of the facility where the system resides is planned considering physical and environmental hazards;"
        }
@@ -52,6 +62,11 @@
       {
        "id": "pe-23_obj.b",
        "label": "PE-23b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "for existing facilities, physical and environmental hazards are considered in the organizational risk management strategy."
        }
@@ -151,7 +166,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PE-18.1",
     "mode": "renamed",
-    "label": "PE-18(01)",
+    "label": "PE-18(1)",
     "title": "Facility Site"
    }
   ]

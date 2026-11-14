@@ -51,6 +51,11 @@
     {
      "id": "ac-4.25_obj",
      "label": "AC-04(25)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "when transferring information between different security domains, data is sanitized to minimize {param:ac-04.25_odp.01} in accordance with {param:ac-04.25_odp.02}."
      }
@@ -115,7 +120,8 @@
     "ac-04.25_odp.01": {
      "alt-identifiers": [
       "ac-4.25_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(25)_ODP[01]"
     },
     "ac-04.25_odp.02": {
      "guidelines": [
@@ -125,7 +131,8 @@
      ],
      "alt-identifiers": [
       "ac-4.25_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(25)_ODP[02]"
     }
    }
   }

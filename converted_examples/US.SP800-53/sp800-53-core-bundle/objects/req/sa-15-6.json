@@ -31,6 +31,11 @@
     {
      "id": "sa-15.6_obj",
      "label": "SA-15(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to implement an explicit process to continuously improve the development process."
      }

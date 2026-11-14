@@ -38,6 +38,11 @@
     {
      "id": "ac-6.8_obj",
      "label": "AC-06(08)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-06.08_odp} is prevented from executing at higher privilege levels than users executing the software."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ac-6.8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-06(08)_ODP"
     }
    }
   }

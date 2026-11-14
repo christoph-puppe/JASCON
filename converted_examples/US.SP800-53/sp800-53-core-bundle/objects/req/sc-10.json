@@ -38,6 +38,11 @@
     {
      "id": "sc-10_obj",
      "label": "SC-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the network connection associated with a communication session is terminated at the end of the session or after {param:sc-10_odp} of inactivity."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "sc-10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-10_ODP"
     }
    }
   }

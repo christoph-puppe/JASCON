@@ -38,6 +38,11 @@
     {
      "id": "sc-8.3_obj",
      "label": "SC-08(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cryptographic mechanisms are implemented to protect message externals unless otherwise protected by {param:sc-08.03_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "sc-8.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-08(03)_ODP"
     }
    }
   }

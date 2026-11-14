@@ -31,10 +31,20 @@
     {
      "id": "cm-8.6_obj",
      "label": "CM-08(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-8.6_obj-1",
        "label": "CM-08(06)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "assessed component configurations are included in the system component inventory;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cm-8.6_obj-2",
        "label": "CM-08(06)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "any approved deviations to current deployed configurations are included in the system component inventory."
        }

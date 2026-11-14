@@ -52,6 +52,11 @@
     {
      "id": "au-9.5_obj",
      "label": "AU-09(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "dual authorization is enforced for the {param:au-09.05_odp.01} of {param:au-09.05_odp.02}."
      }
@@ -125,7 +130,8 @@
     "au-09.05_odp.01": {
      "alt-identifiers": [
       "au-9.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-09(05)_ODP[01]"
     },
     "au-09.05_odp.02": {
      "guidelines": [
@@ -135,7 +141,8 @@
      ],
      "alt-identifiers": [
       "au-9.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-09(05)_ODP[02]"
     }
    }
   }

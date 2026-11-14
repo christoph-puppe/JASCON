@@ -38,6 +38,11 @@
     {
      "id": "ia-4.5_obj",
      "label": "IA-04(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "individual identifiers are dynamically managed in accordance with {param:ia-04.05_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ia-4.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-04(05)_ODP"
     }
    }
   }

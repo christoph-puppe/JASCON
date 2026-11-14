@@ -38,6 +38,11 @@
     {
      "id": "si-13.3_obj",
      "label": "SI-13(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "transfers are initiated manually between active and standby system components when the use of the active component reaches {param:si-13.03_odp} of the mean time to failure."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "si-13.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-13(03)_ODP"
     }
    }
   },

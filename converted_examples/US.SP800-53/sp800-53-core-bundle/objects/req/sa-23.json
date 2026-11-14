@@ -54,6 +54,11 @@
     {
      "id": "sa-23_obj",
      "label": "SA-23",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-23_odp.01} is employed on {param:sa-23_odp.02} supporting essential services or functions to increase the trustworthiness in those systems or components."
      }
@@ -121,7 +126,8 @@
     "sa-23_odp.01": {
      "alt-identifiers": [
       "sa-23_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-23_ODP[01]"
     },
     "sa-23_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "sa-23_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-23_ODP[02]"
     }
    }
   },

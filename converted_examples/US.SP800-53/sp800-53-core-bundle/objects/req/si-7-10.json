@@ -43,6 +43,11 @@
     {
      "id": "si-7.10_obj",
      "label": "SI-07(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-07.10_odp.01} are implemented to protect the integrity of boot firmware in {param:si-07.10_odp.02}."
      }
@@ -130,7 +135,8 @@
      ],
      "alt-identifiers": [
       "si-7.10_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(10)_ODP[01]"
     },
     "si-07.10_odp.02": {
      "guidelines": [
@@ -140,7 +146,8 @@
      ],
      "alt-identifiers": [
       "si-7.10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(10)_ODP[02]"
     }
    }
   },

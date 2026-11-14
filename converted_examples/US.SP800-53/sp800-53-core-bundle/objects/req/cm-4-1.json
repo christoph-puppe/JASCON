@@ -31,10 +31,20 @@
     {
      "id": "cm-4.1_obj",
      "label": "CM-04(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-4.1_obj-1",
        "label": "CM-04(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed in a separate test environment before implementation in an operational environment;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "cm-4.1_obj-2",
        "label": "CM-04(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed for security impacts due to flaws;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "cm-4.1_obj-3",
        "label": "CM-04(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed for privacy impacts due to flaws;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "cm-4.1_obj-4",
        "label": "CM-04(01)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed for security impacts due to weaknesses;"
        }
@@ -63,6 +88,11 @@
       {
        "id": "cm-4.1_obj-5",
        "label": "CM-04(01)[05]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed for privacy impacts due to weaknesses;"
        }
@@ -70,6 +100,11 @@
       {
        "id": "cm-4.1_obj-6",
        "label": "CM-04(01)[06]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed for security impacts due to incompatibility;"
        }
@@ -77,6 +112,11 @@
       {
        "id": "cm-4.1_obj-7",
        "label": "CM-04(01)[07]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed for privacy impacts due to incompatibility;"
        }
@@ -84,6 +124,11 @@
       {
        "id": "cm-4.1_obj-8",
        "label": "CM-04(01)[08]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed for security impacts due to intentional malice;"
        }
@@ -91,6 +136,11 @@
       {
        "id": "cm-4.1_obj-9",
        "label": "CM-04(01)[09]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "changes to the system are analyzed for privacy impacts due to intentional malice."
        }

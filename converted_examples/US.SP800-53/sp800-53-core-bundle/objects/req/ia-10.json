@@ -43,6 +43,11 @@
     {
      "id": "ia-10_obj",
      "label": "IA-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "individuals accessing the system are required to employ {param:ia-10_odp.01} under specific {param:ia-10_odp.02}."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "ia-10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-10_ODP[01]"
     },
     "ia-10_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "ia-10_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IA-10_ODP[02]"
     }
    }
   }

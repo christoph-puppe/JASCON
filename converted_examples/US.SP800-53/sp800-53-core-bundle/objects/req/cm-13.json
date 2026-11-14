@@ -31,6 +31,11 @@
     {
      "id": "cm-13_obj",
      "label": "CM-13",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a map of system data actions is developed and documented."
      }

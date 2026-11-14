@@ -32,6 +32,11 @@
     {
      "id": "ma-3.6_obj",
      "label": "MA-03(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "maintenance tools are inspected to ensure that the latest software updates and patches are installed."
      }

@@ -177,14 +177,29 @@
     {
      "id": "sc-1_obj",
      "label": "SC-01",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-1_obj.a",
        "label": "SC-01a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sc-1_obj.a-1",
          "label": "SC-01a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a system and communications protection policy is developed and documented;"
          }
@@ -192,6 +207,11 @@
         {
          "id": "sc-1_obj.a-2",
          "label": "SC-01a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the system and communications protection policy is disseminated to {param:sc-01_odp.01};"
          }
@@ -199,6 +219,11 @@
         {
          "id": "sc-1_obj.a-3",
          "label": "SC-01a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "system and communications protection procedures to facilitate the implementation of the system and communications protection policy and associated system and communications protection controls are developed and documented;"
          }
@@ -206,6 +231,11 @@
         {
          "id": "sc-1_obj.a-4",
          "label": "SC-01a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the system and communications protection procedures are disseminated to {param:sc-01_odp.02};"
          }
@@ -213,14 +243,29 @@
         {
          "id": "sc-1_obj.a.1",
          "label": "SC-01a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "sc-1_obj.a.1.a",
            "label": "SC-01a.01(a)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.a"
+            }
+           ],
            "children": [
             {
              "id": "sc-1_obj.a.1.a-1",
              "label": "SC-01a.01(a)[01]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sc-01_odp.03} system and communications protection policy addresses purpose;"
              }
@@ -228,6 +273,11 @@
             {
              "id": "sc-1_obj.a.1.a-2",
              "label": "SC-01a.01(a)[02]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sc-01_odp.03} system and communications protection policy addresses scope;"
              }
@@ -235,6 +285,11 @@
             {
              "id": "sc-1_obj.a.1.a-3",
              "label": "SC-01a.01(a)[03]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sc-01_odp.03} system and communications protection policy addresses roles;"
              }
@@ -242,6 +297,11 @@
             {
              "id": "sc-1_obj.a.1.a-4",
              "label": "SC-01a.01(a)[04]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sc-01_odp.03} system and communications protection policy addresses responsibilities;"
              }
@@ -249,6 +309,11 @@
             {
              "id": "sc-1_obj.a.1.a-5",
              "label": "SC-01a.01(a)[05]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sc-01_odp.03} system and communications protection policy addresses management commitment;"
              }
@@ -256,6 +321,11 @@
             {
              "id": "sc-1_obj.a.1.a-6",
              "label": "SC-01a.01(a)[06]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sc-01_odp.03} system and communications protection policy addresses coordination among organizational entities;"
              }
@@ -263,6 +333,11 @@
             {
              "id": "sc-1_obj.a.1.a-7",
              "label": "SC-01a.01(a)[07]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sc-01_odp.03} system and communications protection policy addresses compliance;"
              }
@@ -272,6 +347,11 @@
           {
            "id": "sc-1_obj.a.1.b",
            "label": "SC-01a.01(b)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.b"
+            }
+           ],
            "prose": {
             "en": "the {param:sc-01_odp.03} system and communications protection policy is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines;"
            }
@@ -283,6 +363,11 @@
       {
        "id": "sc-1_obj.b",
        "label": "SC-01b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the {param:sc-01_odp.04} is designated to manage the development, documentation, and dissemination of the system and communications protection policy and procedures;"
        }
@@ -290,14 +375,29 @@
       {
        "id": "sc-1_obj.c",
        "label": "SC-01c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sc-1_obj.c.1",
          "label": "SC-01c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "children": [
           {
            "id": "sc-1_obj.c.1-1",
            "label": "SC-01c.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current system and communications protection policy is reviewed and updated {param:sc-01_odp.05};"
            }
@@ -305,6 +405,11 @@
           {
            "id": "sc-1_obj.c.1-2",
            "label": "SC-01c.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current system and communications protection policy is reviewed and updated following {param:sc-01_odp.06};"
            }
@@ -314,10 +419,20 @@
         {
          "id": "sc-1_obj.c.2",
          "label": "SC-01c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "children": [
           {
            "id": "sc-1_obj.c.2-1",
            "label": "SC-01c.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current system and communications protection procedures are reviewed and updated {param:sc-01_odp.07};"
            }
@@ -325,6 +440,11 @@
           {
            "id": "sc-1_obj.c.2-2",
            "label": "SC-01c.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current system and communications protection procedures are reviewed and updated following {param:sc-01_odp.08}."
            }
@@ -391,19 +511,22 @@
       {
        "en": "personnel or roles to whom the system and communications protection policy is to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SC-01_ODP[01]"
     },
     "sc-01_odp.02": {
      "guidelines": [
       {
        "en": "personnel or roles to whom the system and communications protection procedures are to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SC-01_ODP[02]"
     },
     "sc-01_odp.03": {
      "alt-identifiers": [
       "sc-1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-01_ODP[03]"
     },
     "sc-01_odp.04": {
      "guidelines": [
@@ -413,7 +536,8 @@
      ],
      "alt-identifiers": [
       "sc-1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-01_ODP[04]"
     },
     "sc-01_odp.05": {
      "guidelines": [
@@ -423,7 +547,8 @@
      ],
      "alt-identifiers": [
       "sc-1_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SC-01_ODP[05]"
     },
     "sc-01_odp.06": {
      "guidelines": [
@@ -433,7 +558,8 @@
      ],
      "alt-identifiers": [
       "sc-1_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "SC-01_ODP[06]"
     },
     "sc-01_odp.07": {
      "guidelines": [
@@ -443,7 +569,8 @@
      ],
      "alt-identifiers": [
       "sc-1_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "SC-01_ODP[07]"
     },
     "sc-01_odp.08": {
      "guidelines": [
@@ -453,7 +580,8 @@
      ],
      "alt-identifiers": [
       "sc-1_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "SC-01_ODP[08]"
     }
    }
   },

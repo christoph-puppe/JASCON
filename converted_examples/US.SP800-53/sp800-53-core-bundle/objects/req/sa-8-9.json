@@ -39,6 +39,11 @@
     {
      "id": "sa-8.9_obj",
      "label": "SA-08(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.09_odp} implement the security design principle of trusted components."
      }
@@ -123,7 +128,8 @@
      ],
      "alt-identifiers": [
       "sa-8.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(09)_ODP"
     }
    }
   },

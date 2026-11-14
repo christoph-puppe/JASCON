@@ -38,6 +38,11 @@
     {
      "id": "pm-7.1_obj",
      "label": "PM-07(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pm-07.01_odp} are offloaded to other systems, system components, or an external provider."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "pm-7.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PM-07(01)_ODP"
     }
    }
   }

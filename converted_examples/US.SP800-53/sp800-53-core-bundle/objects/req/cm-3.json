@@ -121,7 +121,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Configuration change control for organizational systems involves the systematic proposal, justification, implementation, testing, review, and disposition of system changes, including system upgrades and modifications. Configuration change control includes changes to baseline configurations, configuration items of systems, operational procedures, configuration settings for system components, remediate vulnerabilities, and unscheduled or unauthorized changes. Processes for managing configuration changes to systems include Configuration Control Boards or Change Advisory Boards that review and approve proposed changes. For changes that impact privacy risk, the senior agency official for privacy updates privacy impact assessments and system of records notices. For new systems or major upgrades, organizations consider including representatives from the development organizations on the Configuration Control Boards or Change Advisory Boards. Auditing of changes includes activities before and after changes are made to systems and the auditing activities required to implement such changes. See also SA-10."
+     "en": "Configuration change control for organizational systems involves the systematic proposal, justification, implementation, testing, review, and disposition of system changes, including system upgrades and modifications. Configuration change control includes changes to baseline configurations, configuration items of systems, operational procedures, configuration settings for system components, remediate vulnerabilities, and unscheduled or unauthorized changes. Processes for managing configuration changes to systems include Configuration Control Boards or Change Advisory Boards that review and approve proposed changes. For changes that impact privacy risk, the senior agency official for privacy updates privacy impact assessments and system of records notices. For new systems or major upgrades, organizations consider including representatives from the development organizations on the Configuration Control Boards or Change Advisory Boards. Auditing of changes includes activities before and after changes are made to systems and the auditing activities required to implement such changes. See also [SA-10](#sa-10)."
     }
    ]
   },
@@ -130,10 +130,20 @@
     {
      "id": "cm-3_obj",
      "label": "CM-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-3_obj.a",
        "label": "CM-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the types of changes to the system that are configuration-controlled are determined and documented;"
        }
@@ -141,10 +151,20 @@
       {
        "id": "cm-3_obj.b",
        "label": "CM-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cm-3_obj.b-1",
          "label": "CM-03b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "proposed configuration-controlled changes to the system are reviewed;"
          }
@@ -152,6 +172,11 @@
         {
          "id": "cm-3_obj.b-2",
          "label": "CM-03b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "proposed configuration-controlled changes to the system are approved or disapproved with explicit consideration for security and privacy impact analyses;"
          }
@@ -161,6 +186,11 @@
       {
        "id": "cm-3_obj.c",
        "label": "CM-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "configuration change decisions associated with the system are documented;"
        }
@@ -168,6 +198,11 @@
       {
        "id": "cm-3_obj.d",
        "label": "CM-03d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "approved configuration-controlled changes to the system are implemented;"
        }
@@ -175,6 +210,11 @@
       {
        "id": "cm-3_obj.e",
        "label": "CM-03e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "records of configuration-controlled changes to the system are retained for {param:cm-03_odp.01};"
        }
@@ -182,10 +222,20 @@
       {
        "id": "cm-3_obj.f",
        "label": "CM-03f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "children": [
         {
          "id": "cm-3_obj.f-1",
          "label": "CM-03f.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "activities associated with configuration-controlled changes to the system are monitored;"
          }
@@ -193,6 +243,11 @@
         {
          "id": "cm-3_obj.f-2",
          "label": "CM-03f.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "activities associated with configuration-controlled changes to the system are reviewed;"
          }
@@ -202,10 +257,20 @@
       {
        "id": "cm-3_obj.g",
        "label": "CM-03g.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "children": [
         {
          "id": "cm-3_obj.g-1",
          "label": "CM-03g.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.g"
+          }
+         ],
          "prose": {
           "en": "configuration change control activities are coordinated and overseen by {param:cm-03_odp.02};"
          }
@@ -213,6 +278,11 @@
         {
          "id": "cm-3_obj.g-2",
          "label": "CM-03g.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.g"
+          }
+         ],
          "prose": {
           "en": "the configuration control element convenes {param:cm-03_odp.03}."
          }
@@ -310,7 +380,8 @@
      ],
      "alt-identifiers": [
       "cm-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-03_ODP[01]"
     },
     "cm-03_odp.02": {
      "guidelines": [
@@ -320,12 +391,14 @@
      ],
      "alt-identifiers": [
       "cm-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-03_ODP[02]"
     },
     "cm-03_odp.03": {
      "alt-identifiers": [
       "cm-3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CM-03_ODP[03]"
     },
     "cm-03_odp.04": {
      "guidelines": [
@@ -335,7 +408,8 @@
      ],
      "alt-identifiers": [
       "cm-3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "CM-03_ODP[04]"
     },
     "cm-03_odp.05": {
      "guidelines": [
@@ -345,7 +419,8 @@
      ],
      "alt-identifiers": [
       "cm-3_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "CM-03_ODP[05]"
     }
    }
   },

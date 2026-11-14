@@ -38,6 +38,11 @@
     {
      "id": "cm-2.3_obj",
      "label": "CM-02(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cm-02.03_odp} of previous baseline configuration version(s) of the system is/are retained to support rollback."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "cm-2.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-02(03)_ODP"
     }
    }
   },

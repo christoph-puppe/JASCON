@@ -38,6 +38,11 @@
     {
      "id": "sc-4.2_obj",
      "label": "SC-04(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "unauthorized information transfer via shared resources is prevented in accordance with {param:sc-04.02_odp} when system processing explicitly switches between different information classification levels or security categories."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "sc-4.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-04(02)_ODP"
     }
    }
   }

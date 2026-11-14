@@ -29,7 +29,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Attribute-based access control is an access control policy that restricts system access to authorized users based on specified organizational attributes (e.g., job function, identity), action attributes (e.g., read, write, delete), environmental attributes (e.g., time of day, location), and resource attributes (e.g., classification of a document). Organizations can create rules based on attributes and the authorizations (i.e., privileges) to perform needed operations on the systems associated with organization-defined attributes and rules. When users are assigned to attributes defined in attribute-based access control policies or rules, they can be provisioned to a system with the appropriate privileges or dynamically granted access to a protected resource. Attribute-based access control can be implemented as either a mandatory or discretionary form of access control. When implemented with mandatory access controls, the requirements in AC-3(3) define the scope of the subjects and objects covered by the policy."
+     "en": "Attribute-based access control is an access control policy that restricts system access to authorized users based on specified organizational attributes (e.g., job function, identity), action attributes (e.g., read, write, delete), environmental attributes (e.g., time of day, location), and resource attributes (e.g., classification of a document). Organizations can create rules based on attributes and the authorizations (i.e., privileges) to perform needed operations on the systems associated with organization-defined attributes and rules. When users are assigned to attributes defined in attribute-based access control policies or rules, they can be provisioned to a system with the appropriate privileges or dynamically granted access to a protected resource. Attribute-based access control can be implemented as either a mandatory or discretionary form of access control. When implemented with mandatory access controls, the requirements in [AC-3(3)](#ac-3.3) define the scope of the subjects and objects covered by the policy."
     }
    ]
   },
@@ -38,10 +38,20 @@
     {
      "id": "ac-3.13_obj",
      "label": "AC-03(13)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-3.13_obj-1",
        "label": "AC-03(13)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the attribute-based access control policy is enforced over defined subjects;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "ac-3.13_obj-2",
        "label": "AC-03(13)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the attribute-based access control policy is enforced over defined objects;"
        }
@@ -56,6 +71,11 @@
       {
        "id": "ac-3.13_obj-3",
        "label": "AC-03(13)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "access is controlled based on {param:ac-03.13_odp}."
        }
@@ -131,7 +151,8 @@
      "alt-identifiers": [
       "ac-3.13_prm_1"
      ],
-     "alt-label": "attributes to assume access permissions"
+     "alt-label": "attributes to assume access permissions",
+     "sp800-53a-label": "AC-03(13)_ODP"
     }
    }
   }

@@ -31,6 +31,11 @@
     {
      "id": "ia-6_obj",
      "label": "IA-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the feedback of authentication information is obscured during the authentication process to protect the information from possible exploitation and use by unauthorized individuals."
      }

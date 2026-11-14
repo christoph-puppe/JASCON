@@ -38,6 +38,11 @@
     {
      "id": "ia-4.6_obj",
      "label": "IA-04(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cross-organization management of identifiers is coordinated with {param:ia-04.06_odp}."
      }
@@ -98,7 +103,8 @@
      ],
      "alt-identifiers": [
       "ia-4.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-04(06)_ODP"
     }
    }
   }

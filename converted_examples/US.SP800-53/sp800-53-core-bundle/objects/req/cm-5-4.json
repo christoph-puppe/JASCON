@@ -49,10 +49,20 @@
     {
      "id": "cm-5.4_obj",
      "label": "CM-05(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-5.4_obj-1",
        "label": "CM-05(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "dual authorization for implementing changes to {param:cm-05.04_odp.01} is enforced;"
        }
@@ -60,6 +70,11 @@
       {
        "id": "cm-5.4_obj-2",
        "label": "CM-05(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "dual authorization for implementing changes to {param:cm-05.04_odp.02} is enforced."
        }
@@ -152,14 +167,16 @@
       {
        "en": "system components requiring dual authorization for changes are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-05(04)_ODP[01]"
     },
     "cm-05.04_odp.02": {
      "guidelines": [
       {
        "en": "system-level information requiring dual authorization for changes is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-05(04)_ODP[02]"
     }
    }
   }

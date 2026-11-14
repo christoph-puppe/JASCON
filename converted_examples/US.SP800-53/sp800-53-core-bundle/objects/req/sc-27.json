@@ -38,6 +38,11 @@
     {
      "id": "sc-27_obj",
      "label": "SC-27",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-27_odp} are included within organizational systems."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "sc-27_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-27_ODP"
     }
    }
   }

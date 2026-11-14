@@ -54,6 +54,11 @@
     {
      "id": "au-5.4_obj",
      "label": "AU-05(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:au-05.04_odp.01} is/are invoked in the event of {param:au-05.04_odp.02} , unless an alternate audit logging capability exists."
      }
@@ -124,7 +129,8 @@
     "au-05.04_odp.01": {
      "alt-identifiers": [
       "au-5.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(04)_ODP[01]"
     },
     "au-05.04_odp.02": {
      "guidelines": [
@@ -134,7 +140,8 @@
      ],
      "alt-identifiers": [
       "au-5.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-05(04)_ODP[02]"
     }
    }
   }
@@ -143,6 +150,10 @@
   {
    "type": "required",
    "ref": "https://ns.nist.gov/sp800-53/req/AU-5"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.nist.gov/sp800-53/req/AU-15"
   }
  ]
 }

@@ -31,6 +31,11 @@
     {
      "id": "sr-9_obj",
      "label": "SR-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a tamper protection program is implemented for the system, system component, or system service."
      }
@@ -182,7 +187,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-7.4",
     "mode": "merged-into",
-    "label": "SI-07(04)",
+    "label": "SI-7(4)",
     "title": "Tamper-evident Packaging"
    }
   ]

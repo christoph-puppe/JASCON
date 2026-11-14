@@ -39,6 +39,11 @@
     {
      "id": "ia-11_obj",
      "label": "IA-11",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "users are required to re-authenticate when {param:ia-11_odp}."
      }
@@ -118,7 +123,8 @@
      "alt-identifiers": [
       "ia-11_prm_1"
      ],
-     "alt-label": "circumstances or situations requiring re-authentication"
+     "alt-label": "circumstances or situations requiring re-authentication",
+     "sp800-53a-label": "IA-11_ODP"
     }
    }
   }

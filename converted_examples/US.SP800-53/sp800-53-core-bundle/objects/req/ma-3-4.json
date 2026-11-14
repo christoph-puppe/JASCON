@@ -32,6 +32,11 @@
     {
      "id": "ma-3.4_obj",
      "label": "MA-03(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the use of maintenance tools is restricted to authorized personnel only."
      }

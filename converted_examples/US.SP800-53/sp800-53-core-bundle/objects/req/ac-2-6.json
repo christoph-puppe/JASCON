@@ -38,6 +38,11 @@
     {
      "id": "ac-2.6_obj",
      "label": "AC-02(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-02.06_odp} are implemented."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ac-2.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(06)_ODP"
     }
    }
   }

@@ -31,6 +31,11 @@
     {
      "id": "sc-39_obj",
      "label": "SC-39",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a separate execution domain is maintained for each executing system process."
      }

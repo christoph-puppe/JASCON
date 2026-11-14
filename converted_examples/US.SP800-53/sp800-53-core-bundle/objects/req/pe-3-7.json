@@ -31,6 +31,11 @@
     {
      "id": "pe-3.7_obj",
      "label": "PE-03(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "physical barriers are used to limit access."
      }

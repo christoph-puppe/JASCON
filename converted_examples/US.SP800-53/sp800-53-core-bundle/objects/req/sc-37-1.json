@@ -48,6 +48,11 @@
     {
      "id": "sc-37.1_obj",
      "label": "SC-37(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-37.01_odp.01} are employed to ensure that only {param:sc-37.01_odp.02} receive {param:sc-37.01_odp.03}."
      }
@@ -147,7 +152,8 @@
      ],
      "alt-identifiers": [
       "sc-37.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-37(01)_ODP[01]"
     },
     "sc-37.01_odp.02": {
      "guidelines": [
@@ -157,7 +163,8 @@
      ],
      "alt-identifiers": [
       "sc-37.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-37(01)_ODP[02]"
     },
     "sc-37.01_odp.03": {
      "guidelines": [
@@ -167,7 +174,8 @@
      ],
      "alt-identifiers": [
       "sc-37.1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-37(01)_ODP[03]"
     }
    }
   },

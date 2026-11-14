@@ -75,14 +75,29 @@
     {
      "id": "mp-8_obj",
      "label": "MP-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-8_obj.a",
        "label": "MP-08a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "mp-8_obj.a-1",
          "label": "MP-08a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a {param:mp-08_odp.01} is established;"
          }
@@ -90,6 +105,11 @@
         {
          "id": "mp-8_obj.a-2",
          "label": "MP-08a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the {param:mp-08_odp.01} includes employing downgrading mechanisms with strength and integrity commensurate with the security category or classification of the information;"
          }
@@ -99,10 +119,20 @@
       {
        "id": "mp-8_obj.b",
        "label": "MP-08b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "mp-8_obj.b-1",
          "label": "MP-08b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "there is verification that the system media downgrading process is commensurate with the security category and/or classification level of the information to be removed;"
          }
@@ -110,6 +140,11 @@
         {
          "id": "mp-8_obj.b-2",
          "label": "MP-08b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "there is verification that the system media downgrading process is commensurate with the access authorizations of the potential recipients of the downgraded information;"
          }
@@ -119,6 +154,11 @@
       {
        "id": "mp-8_obj.c",
        "label": "MP-08c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "{param:mp-08_odp.02} is identified;"
        }
@@ -126,6 +166,11 @@
       {
        "id": "mp-8_obj.d",
        "label": "MP-08d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the identified system media is downgraded using the {param:mp-08_odp.01}."
        }
@@ -203,7 +248,8 @@
      ],
      "alt-identifiers": [
       "mp-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MP-08_ODP[01]"
     },
     "mp-08_odp.02": {
      "guidelines": [
@@ -213,7 +259,8 @@
      ],
      "alt-identifiers": [
       "mp-8_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "MP-08_ODP[02]"
     }
    }
   }

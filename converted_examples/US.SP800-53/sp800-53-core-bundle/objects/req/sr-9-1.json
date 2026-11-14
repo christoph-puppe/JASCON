@@ -31,6 +31,11 @@
     {
      "id": "sr-9.1_obj",
      "label": "SR-09(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "anti-tamper technologies, tools, and techniques are employed throughout the system development life cycle."
      }
@@ -148,7 +153,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-18.1",
     "mode": "renamed",
-    "label": "SA-18(01)",
+    "label": "SA-18(1)",
     "title": "Multiple Phases of System Development Life Cycle"
    }
   ]

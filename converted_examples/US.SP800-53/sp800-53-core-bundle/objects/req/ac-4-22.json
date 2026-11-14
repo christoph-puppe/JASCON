@@ -31,6 +31,11 @@
     {
      "id": "ac-4.22_obj",
      "label": "AC-04(22)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "access is provided from a single device to computing platforms, applications, or data that reside in multiple different security domains while preventing information flow between the different security domains."
      }

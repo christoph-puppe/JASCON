@@ -38,10 +38,20 @@
     {
      "id": "si-6.3_obj",
      "label": "SI-06(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-6.3_obj-1",
        "label": "SI-06(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the results of security function verification are reported to {param:si-06.03_odp};"
        }
@@ -49,6 +59,11 @@
       {
        "id": "si-6.3_obj-2",
        "label": "SI-06(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the results of privacy function verification are reported to {param:si-06.03_odp}."
        }
@@ -132,7 +147,8 @@
      ],
      "alt-identifiers": [
       "si-6.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-06(03)_ODP"
     }
    }
   }

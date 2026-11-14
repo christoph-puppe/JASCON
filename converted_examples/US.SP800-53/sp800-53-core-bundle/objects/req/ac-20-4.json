@@ -38,6 +38,11 @@
     {
      "id": "ac-20.4_obj",
      "label": "AC-20(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the use of {param:ac-20.04_odp} is prohibited in external systems."
      }
@@ -114,7 +119,8 @@
      "alt-identifiers": [
       "ac-20.4_prm_1"
      ],
-     "alt-label": "network accessible storage devices"
+     "alt-label": "network accessible storage devices",
+     "sp800-53a-label": "AC-20(04)_ODP"
     }
    }
   }

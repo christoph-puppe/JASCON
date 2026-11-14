@@ -48,10 +48,20 @@
     {
      "id": "sa-11.7_obj",
      "label": "SA-11(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-11.7_obj-1",
        "label": "SA-11(07)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to verify that the scope of testing and evaluation provides complete coverage of the required controls at {param:sa-11.07_odp.01};"
        }
@@ -59,6 +69,11 @@
       {
        "id": "sa-11.7_obj-2",
        "label": "SA-11(07)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to verify that the scope of testing and evaluation provides complete coverage of the required controls at {param:sa-11.07_odp.02}."
        }
@@ -151,14 +166,16 @@
       {
        "en": "the breadth of testing and evaluation of required controls is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-11(07)_ODP[01]"
     },
     "sa-11.07_odp.02": {
      "guidelines": [
       {
        "en": "the depth of testing and evaluation of required controls is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-11(07)_ODP[02]"
     }
    }
   },

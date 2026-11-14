@@ -43,6 +43,11 @@
     {
      "id": "ma-7_obj",
      "label": "MA-07",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "field maintenance on {param:ma-07_odp.01} are restricted or prohibited to {param:ma-07_odp.02}."
      }
@@ -124,7 +129,8 @@
      ],
      "alt-identifiers": [
       "ma-7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-07_ODP[01]"
     },
     "ma-07_odp.02": {
      "guidelines": [
@@ -134,7 +140,8 @@
      ],
      "alt-identifiers": [
       "ma-7_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "MA-07_ODP[02]"
     }
    }
   }

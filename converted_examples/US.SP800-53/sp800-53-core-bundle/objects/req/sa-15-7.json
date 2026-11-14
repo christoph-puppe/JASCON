@@ -92,10 +92,20 @@
     {
      "id": "sa-15.7_obj",
      "label": "SA-15(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-15.7_obj.a",
        "label": "SA-15(07)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to perform automated vulnerability analysis {param:sa-15.07_odp.01} using {param:sa-15.07_odp.02};"
        }
@@ -103,6 +113,11 @@
       {
        "id": "sa-15.7_obj.b",
        "label": "SA-15(07)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to determine the exploitation potential for discovered vulnerabilities {param:sa-15.07_odp.01};"
        }
@@ -110,6 +125,11 @@
       {
        "id": "sa-15.7_obj.c",
        "label": "SA-15(07)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to determine potential risk mitigations {param:sa-15.07_odp.01} for delivered vulnerabilities;"
        }
@@ -117,6 +137,11 @@
       {
        "id": "sa-15.7_obj.d",
        "label": "SA-15(07)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to deliver the outputs of the tools and results of the analysis {param:sa-15.07_odp.01} to {param:sa-15.07_odp.03}."
        }
@@ -212,7 +237,8 @@
      ],
      "alt-identifiers": [
       "sa-15.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-15(07)_ODP[01]"
     },
     "sa-15.07_odp.02": {
      "guidelines": [
@@ -222,7 +248,8 @@
      ],
      "alt-identifiers": [
       "sa-15.7_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-15(07)_ODP[02]"
     },
     "sa-15.07_odp.03": {
      "guidelines": [
@@ -232,7 +259,8 @@
      ],
      "alt-identifiers": [
       "sa-15.7_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SA-15(07)_ODP[03]"
     }
    }
   },

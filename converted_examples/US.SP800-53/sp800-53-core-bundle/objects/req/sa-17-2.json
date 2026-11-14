@@ -51,14 +51,29 @@
     {
      "id": "sa-17.2_obj",
      "label": "SA-17(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-17.2_obj.a",
        "label": "SA-17(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-17.2_obj.a-1",
          "label": "SA-17(02)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to define security-relevant hardware;"
          }
@@ -66,6 +81,11 @@
         {
          "id": "sa-17.2_obj.a-2",
          "label": "SA-17(02)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to define security-relevant software;"
          }
@@ -73,6 +93,11 @@
         {
          "id": "sa-17.2_obj.a-3",
          "label": "SA-17(02)(a)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the developer of the system, system component, or system service is required to define security-relevant firmware;"
          }
@@ -82,6 +107,11 @@
       {
        "id": "sa-17.2_obj.b",
        "label": "SA-17(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to provide a rationale that the definition for security-relevant hardware, software, and firmware is complete."
        }

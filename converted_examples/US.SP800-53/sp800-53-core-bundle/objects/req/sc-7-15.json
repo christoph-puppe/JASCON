@@ -31,10 +31,20 @@
     {
      "id": "sc-7.15_obj",
      "label": "SC-07(15)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-7.15_obj-1",
        "label": "SC-07(15)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "networked, privileged accesses are routed through a dedicated, managed interface for purposes of access control;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-7.15_obj-2",
        "label": "SC-07(15)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "networked, privileged accesses are routed through a dedicated, managed interface for purposes of auditing."
        }

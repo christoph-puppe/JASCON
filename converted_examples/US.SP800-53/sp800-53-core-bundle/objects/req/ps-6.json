@@ -85,10 +85,20 @@
     {
      "id": "ps-6_obj",
      "label": "PS-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ps-6_obj.a",
        "label": "PS-06a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "access agreements are developed and documented for organizational systems;"
        }
@@ -96,6 +106,11 @@
       {
        "id": "ps-6_obj.b",
        "label": "PS-06b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the access agreements are reviewed and updated {param:ps-06_odp.01};"
        }
@@ -103,10 +118,20 @@
       {
        "id": "ps-6_obj.c",
        "label": "PS-06c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "ps-6_obj.c.1",
          "label": "PS-06c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "prose": {
           "en": "individuals requiring access to organizational information and systems sign appropriate access agreements prior to being granted access;"
          }
@@ -114,6 +139,11 @@
         {
          "id": "ps-6_obj.c.2",
          "label": "PS-06c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "prose": {
           "en": "individuals requiring access to organizational information and systems re-sign access agreements to maintain access to organizational systems when access agreements have been updated or {param:ps-06_odp.02}."
          }
@@ -199,7 +229,8 @@
      ],
      "alt-identifiers": [
       "ps-6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PS-06_ODP[01]"
     },
     "ps-06_odp.02": {
      "guidelines": [
@@ -209,7 +240,8 @@
      ],
      "alt-identifiers": [
       "ps-6_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PS-06_ODP[02]"
     }
    }
   },

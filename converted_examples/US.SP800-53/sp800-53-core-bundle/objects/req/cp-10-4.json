@@ -38,6 +38,11 @@
     {
      "id": "cp-10.4_obj",
      "label": "CP-10(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the capability to restore system components within {param:cp-10.04_odp} from configuration-controlled and integrity-protected information representing a known, operational state for the components is provided."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "cp-10.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-10(04)_ODP"
     }
    }
   }

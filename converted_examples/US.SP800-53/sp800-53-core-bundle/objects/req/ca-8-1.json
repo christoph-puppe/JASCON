@@ -22,7 +22,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Independent penetration testing agents or teams are individuals or groups who conduct impartial penetration testing of organizational systems. Impartiality implies that penetration testing agents or teams are free from perceived or actual conflicts of interest with respect to the development, operation, or management of the systems that are the targets of the penetration testing. CA-2(1) provides additional information on independent assessments that can be applied to penetration testing."
+     "en": "Independent penetration testing agents or teams are individuals or groups who conduct impartial penetration testing of organizational systems. Impartiality implies that penetration testing agents or teams are free from perceived or actual conflicts of interest with respect to the development, operation, or management of the systems that are the targets of the penetration testing. [CA-2(1)](#ca-2.1) provides additional information on independent assessments that can be applied to penetration testing."
     }
    ]
   },
@@ -31,6 +31,11 @@
     {
      "id": "ca-8.1_obj",
      "label": "CA-08(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an independent penetration testing agent or team is employed to perform penetration testing on the system or system components."
      }

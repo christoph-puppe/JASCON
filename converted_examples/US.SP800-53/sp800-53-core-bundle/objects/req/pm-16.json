@@ -31,6 +31,11 @@
     {
      "id": "pm-16_obj",
      "label": "PM-16",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a threat awareness program that includes a cross-organization information-sharing capability for threat intelligence is implemented."
      }

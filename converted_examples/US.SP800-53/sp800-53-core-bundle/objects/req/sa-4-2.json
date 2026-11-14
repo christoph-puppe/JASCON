@@ -65,6 +65,11 @@
     {
      "id": "sa-4.2_obj",
      "label": "SA-04(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the developer of the system, system component, or system service is required to provide design and implementation information for the controls that includes using {param:sa-04.02_odp.01} at {param:sa-04.02_odp.03}."
      }
@@ -144,7 +149,8 @@
     "sa-04.02_odp.01": {
      "alt-identifiers": [
       "sa-4.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-04(02)_ODP[01]"
     },
     "sa-04.02_odp.02": {
      "guidelines": [
@@ -154,7 +160,8 @@
      ],
      "alt-identifiers": [
       "sa-4.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-04(02)_ODP[02]"
     },
     "sa-04.02_odp.03": {
      "guidelines": [
@@ -164,7 +171,8 @@
      ],
      "alt-identifiers": [
       "sa-4.2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SA-04(02)_ODP[03]"
     }
    }
   },
@@ -201,25 +209,25 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-5.2",
     "mode": "merged-into",
-    "label": "SA-05(02)",
+    "label": "SA-5(2)",
     "title": "Security-relevant External System Interfaces"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-5.3",
     "mode": "merged-into",
-    "label": "SA-05(03)",
+    "label": "SA-5(3)",
     "title": "High-level Design"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-5.4",
     "mode": "merged-into",
-    "label": "SA-05(04)",
+    "label": "SA-5(4)",
     "title": "Low-level Design"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-5.5",
     "mode": "merged-into",
-    "label": "SA-05(05)",
+    "label": "SA-5(5)",
     "title": "Source Code"
    }
   ]

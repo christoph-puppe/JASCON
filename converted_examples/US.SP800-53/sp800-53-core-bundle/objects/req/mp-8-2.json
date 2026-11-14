@@ -48,10 +48,20 @@
     {
      "id": "mp-8.2_obj",
      "label": "MP-08(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "mp-8.2_obj-1",
        "label": "MP-08(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "downgrading equipment is tested {param:mp-08.02_odp.01} to ensure that downgrading actions are being achieved;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "mp-8.2_obj-2",
        "label": "MP-08(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "downgrading procedures are tested {param:mp-08.02_odp.02} to ensure that downgrading actions are being achieved."
        }
@@ -136,14 +151,16 @@
       {
        "en": "the frequency with which to test downgrading equipment is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-08(02)_ODP[01]"
     },
     "mp-08.02_odp.02": {
      "guidelines": [
       {
        "en": "the frequency with which to test downgrading procedures is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-08(02)_ODP[02]"
     }
    }
   }

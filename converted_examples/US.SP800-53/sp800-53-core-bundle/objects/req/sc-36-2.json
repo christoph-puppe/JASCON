@@ -29,7 +29,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "SC-36 and CP-9(6) require the duplication of systems or system components in distributed locations. The synchronization of duplicated and redundant services and data helps to ensure that information contained in the distributed locations can be used in the mission or business functions of organizations, as needed."
+     "en": "[SC-36](#sc-36) and [CP-9(6)](#cp-9.6) require the duplication of systems or system components in distributed locations. The synchronization of duplicated and redundant services and data helps to ensure that information contained in the distributed locations can be used in the mission or business functions of organizations, as needed."
     }
    ]
   },
@@ -38,6 +38,11 @@
     {
      "id": "sc-36.2_obj",
      "label": "SC-36(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-36.02_odp} are synchronized."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "sc-36.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-36(02)_ODP"
     }
    }
   },

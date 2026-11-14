@@ -56,6 +56,11 @@
     {
      "id": "sc-41_obj",
      "label": "SC-41",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-41_odp.01} are {param:sc-41_odp.02} disabled or removed on {param:sc-41_odp.03}."
      }
@@ -134,12 +139,14 @@
      ],
      "alt-identifiers": [
       "sc-41_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-41_ODP[01]"
     },
     "sc-41_odp.02": {
      "alt-identifiers": [
       "sc-41_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-41_ODP[02]"
     },
     "sc-41_odp.03": {
      "guidelines": [
@@ -149,7 +156,8 @@
      ],
      "alt-identifiers": [
       "sc-41_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SC-41_ODP[03]"
     }
    }
   }

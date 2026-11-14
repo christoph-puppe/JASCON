@@ -31,6 +31,11 @@
     {
      "id": "ac-9_obj",
      "label": "AC-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the user is notified, upon successful logon to the system, of the date and time of the last logon."
      }

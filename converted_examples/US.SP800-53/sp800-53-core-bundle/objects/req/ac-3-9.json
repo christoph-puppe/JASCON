@@ -73,10 +73,20 @@
     {
      "id": "ac-3.9_obj",
      "label": "AC-03(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-3.9_obj.a",
        "label": "AC-03(09)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "information is released outside of the system only if the receiving {param:ac-03.09_odp.01} provides {param:ac-03.09_odp.02};"
        }
@@ -84,6 +94,11 @@
       {
        "id": "ac-3.9_obj.b",
        "label": "AC-03(09)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "information is released outside of the system only if {param:ac-03.09_odp.03} are used to validate the appropriateness of the information designated for release."
        }
@@ -185,7 +200,8 @@
      ],
      "alt-identifiers": [
       "ac-3.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-03(09)_ODP[01]"
     },
     "ac-03.09_odp.02": {
      "guidelines": [
@@ -195,7 +211,8 @@
      ],
      "alt-identifiers": [
       "ac-3.9_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-03(09)_ODP[02]"
     },
     "ac-03.09_odp.03": {
      "guidelines": [
@@ -205,7 +222,8 @@
      ],
      "alt-identifiers": [
       "ac-3.9_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-03(09)_ODP[03]"
     }
    }
   }

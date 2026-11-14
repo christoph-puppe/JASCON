@@ -38,6 +38,11 @@
     {
      "id": "au-9.2_obj",
      "label": "AU-09(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "audit records are stored {param:au-09.02_odp} in a repository that is part of a physically different system or system component than the system or component being audited."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "au-9.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-09(02)_ODP"
     }
    }
   }

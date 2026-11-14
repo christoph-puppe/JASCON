@@ -116,7 +116,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Organizations ensure that control assessors possess the required skills and technical expertise to develop effective assessment plans and to conduct assessments of system-specific, hybrid, common, and program management controls, as appropriate. The required skills include general knowledge of risk management concepts and approaches as well as comprehensive knowledge of and experience with the hardware, software, and firmware system components implemented.\n\nOrganizations assess controls in systems and the environments in which those systems operate as part of initial and ongoing authorizations, continuous monitoring, FISMA annual assessments, system design and development, systems security engineering, privacy engineering, and the system development life cycle. Assessments help to ensure that organizations meet information security and privacy requirements, identify weaknesses and deficiencies in the system design and development process, provide essential information needed to make risk-based decisions as part of authorization processes, and comply with vulnerability mitigation procedures. Organizations conduct assessments on the implemented controls as documented in security and privacy plans. Assessments can also be conducted throughout the system development life cycle as part of systems engineering and systems security engineering processes. The design for controls can be assessed as RFPs are developed, responses assessed, and design reviews conducted. If a design to implement controls and subsequent implementation in accordance with the design are assessed during development, the final control testing can be a simple confirmation utilizing previously completed control assessment and aggregating the outcomes.\n\nOrganizations may develop a single, consolidated security and privacy assessment plan for the system or maintain separate plans. A consolidated assessment plan clearly delineates the roles and responsibilities for control assessment. If multiple organizations participate in assessing a system, a coordinated approach can reduce redundancies and associated costs.\n\nOrganizations can use other types of assessment activities, such as vulnerability scanning and system monitoring, to maintain the security and privacy posture of systems during the system life cycle. Assessment reports document assessment results in sufficient detail, as deemed necessary by organizations, to determine the accuracy and completeness of the reports and whether the controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting requirements. Assessment results are provided to the individuals or roles appropriate for the types of assessments being conducted. For example, assessments conducted in support of authorization decisions are provided to authorizing officials, senior agency officials for privacy, senior agency information security officers, and authorizing official designated representatives.\n\nTo satisfy annual assessment requirements, organizations can use assessment results from the following sources: initial or ongoing system authorizations, continuous monitoring, systems engineering processes, or system development life cycle activities. Organizations ensure that assessment results are current, relevant to the determination of control effectiveness, and obtained with the appropriate level of assessor independence. Existing control assessment results can be reused to the extent that the results are still valid and can also be supplemented with additional assessments as needed. After the initial authorizations, organizations assess controls during continuous monitoring. Organizations also establish the frequency for ongoing assessments in accordance with organizational continuous monitoring strategies. External audits, including audits by external entities such as regulatory agencies, are outside of the scope of CA-2."
+     "en": "Organizations ensure that control assessors possess the required skills and technical expertise to develop effective assessment plans and to conduct assessments of system-specific, hybrid, common, and program management controls, as appropriate. The required skills include general knowledge of risk management concepts and approaches as well as comprehensive knowledge of and experience with the hardware, software, and firmware system components implemented.\n\nOrganizations assess controls in systems and the environments in which those systems operate as part of initial and ongoing authorizations, continuous monitoring, FISMA annual assessments, system design and development, systems security engineering, privacy engineering, and the system development life cycle. Assessments help to ensure that organizations meet information security and privacy requirements, identify weaknesses and deficiencies in the system design and development process, provide essential information needed to make risk-based decisions as part of authorization processes, and comply with vulnerability mitigation procedures. Organizations conduct assessments on the implemented controls as documented in security and privacy plans. Assessments can also be conducted throughout the system development life cycle as part of systems engineering and systems security engineering processes. The design for controls can be assessed as RFPs are developed, responses assessed, and design reviews conducted. If a design to implement controls and subsequent implementation in accordance with the design are assessed during development, the final control testing can be a simple confirmation utilizing previously completed control assessment and aggregating the outcomes.\n\nOrganizations may develop a single, consolidated security and privacy assessment plan for the system or maintain separate plans. A consolidated assessment plan clearly delineates the roles and responsibilities for control assessment. If multiple organizations participate in assessing a system, a coordinated approach can reduce redundancies and associated costs.\n\nOrganizations can use other types of assessment activities, such as vulnerability scanning and system monitoring, to maintain the security and privacy posture of systems during the system life cycle. Assessment reports document assessment results in sufficient detail, as deemed necessary by organizations, to determine the accuracy and completeness of the reports and whether the controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting requirements. Assessment results are provided to the individuals or roles appropriate for the types of assessments being conducted. For example, assessments conducted in support of authorization decisions are provided to authorizing officials, senior agency officials for privacy, senior agency information security officers, and authorizing official designated representatives.\n\nTo satisfy annual assessment requirements, organizations can use assessment results from the following sources: initial or ongoing system authorizations, continuous monitoring, systems engineering processes, or system development life cycle activities. Organizations ensure that assessment results are current, relevant to the determination of control effectiveness, and obtained with the appropriate level of assessor independence. Existing control assessment results can be reused to the extent that the results are still valid and can also be supplemented with additional assessments as needed. After the initial authorizations, organizations assess controls during continuous monitoring. Organizations also establish the frequency for ongoing assessments in accordance with organizational continuous monitoring strategies. External audits, including audits by external entities such as regulatory agencies, are outside of the scope of [CA-2](#ca-2)."
     }
    ]
   },
@@ -125,10 +125,20 @@
     {
      "id": "ca-2_obj",
      "label": "CA-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ca-2_obj.a",
        "label": "CA-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "an appropriate assessor or assessment team is selected for the type of assessment to be conducted;"
        }
@@ -136,10 +146,20 @@
       {
        "id": "ca-2_obj.b",
        "label": "CA-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ca-2_obj.b.1",
          "label": "CA-02b.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.1"
+          }
+         ],
          "prose": {
           "en": "a control assessment plan is developed that describes the scope of the assessment, including controls and control enhancements under assessment;"
          }
@@ -147,6 +167,11 @@
         {
          "id": "ca-2_obj.b.2",
          "label": "CA-02b.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.2"
+          }
+         ],
          "prose": {
           "en": "a control assessment plan is developed that describes the scope of the assessment, including assessment procedures to be used to determine control effectiveness;"
          }
@@ -154,10 +179,20 @@
         {
          "id": "ca-2_obj.b.3",
          "label": "CA-02b.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.3"
+          }
+         ],
          "children": [
           {
            "id": "ca-2_obj.b.3-1",
            "label": "CA-02b.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.3"
+            }
+           ],
            "prose": {
             "en": "a control assessment plan is developed that describes the scope of the assessment, including the assessment environment;"
            }
@@ -165,6 +200,11 @@
           {
            "id": "ca-2_obj.b.3-2",
            "label": "CA-02b.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.3"
+            }
+           ],
            "prose": {
             "en": "a control assessment plan is developed that describes the scope of the assessment, including the assessment team;"
            }
@@ -172,6 +212,11 @@
           {
            "id": "ca-2_obj.b.3-3",
            "label": "CA-02b.03[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.3"
+            }
+           ],
            "prose": {
             "en": "a control assessment plan is developed that describes the scope of the assessment, including assessment roles and responsibilities;"
            }
@@ -183,6 +228,11 @@
       {
        "id": "ca-2_obj.c",
        "label": "CA-02c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the control assessment plan is reviewed and approved by the authorizing official or designated representative prior to conducting the assessment;"
        }
@@ -190,10 +240,20 @@
       {
        "id": "ca-2_obj.d",
        "label": "CA-02d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "ca-2_obj.d-1",
          "label": "CA-02d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "controls are assessed in the system and its environment of operation {param:ca-02_odp.01} to determine the extent to which the controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting established security requirements;"
          }
@@ -201,6 +261,11 @@
         {
          "id": "ca-2_obj.d-2",
          "label": "CA-02d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "controls are assessed in the system and its environment of operation {param:ca-02_odp.01} to determine the extent to which the controls are implemented correctly, operating as intended, and producing the desired outcome with respect to meeting established privacy requirements;"
          }
@@ -210,6 +275,11 @@
       {
        "id": "ca-2_obj.e",
        "label": "CA-02e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "a control assessment report is produced that documents the results of the assessment;"
        }
@@ -217,6 +287,11 @@
       {
        "id": "ca-2_obj.f",
        "label": "CA-02f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "the results of the control assessment are provided to {param:ca-02_odp.02}."
        }
@@ -289,7 +364,8 @@
      "alt-identifiers": [
       "ca-2_prm_1"
      ],
-     "alt-label": "frequency"
+     "alt-label": "frequency",
+     "sp800-53a-label": "CA-02_ODP[01]"
     },
     "ca-02_odp.02": {
      "guidelines": [
@@ -299,7 +375,8 @@
      ],
      "alt-identifiers": [
       "ca-2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CA-02_ODP[02]"
     }
    }
   },
@@ -416,13 +493,13 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CA-4",
     "mode": "merged-into",
-    "label": "CA-04",
+    "label": "CA-4",
     "title": "Security Certification"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CA-7.2",
     "mode": "merged-into",
-    "label": "CA-07(02)",
+    "label": "CA-7(2)",
     "title": "Types of Assessments"
    }
   ]

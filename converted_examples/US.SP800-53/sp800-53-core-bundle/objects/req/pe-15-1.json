@@ -43,10 +43,20 @@
     {
      "id": "pe-15.1_obj",
      "label": "PE-15(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-15.1_obj-1",
        "label": "PE-15(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the presence of water near the system can be detected automatically;"
        }
@@ -54,6 +64,11 @@
       {
        "id": "pe-15.1_obj-2",
        "label": "PE-15(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:pe-15.01_odp.01} is/are alerted using {param:pe-15.01_odp.02}."
        }
@@ -125,7 +140,8 @@
      ],
      "alt-identifiers": [
       "pe-15.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-15(01)_ODP[01]"
     },
     "pe-15.01_odp.02": {
      "guidelines": [
@@ -135,7 +151,8 @@
      ],
      "alt-identifiers": [
       "pe-15.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-15(01)_ODP[02]"
     }
    }
   }

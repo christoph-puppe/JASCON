@@ -61,14 +61,29 @@
     {
      "id": "pt-7.1_obj",
      "label": "PT-07(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pt-7.1_obj.a",
        "label": "PT-07(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pt-7.1_obj.a-1",
          "label": "PT-07(01)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "when a system processes Social Security numbers, the unnecessary collection, maintenance, and use of Social Security numbers are eliminated;"
          }
@@ -76,6 +91,11 @@
         {
          "id": "pt-7.1_obj.a-2",
          "label": "PT-07(01)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "when a system processes Social Security numbers, alternatives to the use of Social Security Numbers as a personal identifier are explored;"
          }
@@ -85,6 +105,11 @@
       {
        "id": "pt-7.1_obj.b",
        "label": "PT-07(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "when a system processes Social Security numbers, individual rights, benefits, or privileges provided by law are not denied because of an individual’s refusal to disclose their Social Security number;"
        }
@@ -92,10 +117,20 @@
       {
        "id": "pt-7.1_obj.c",
        "label": "PT-07(01)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "pt-7.1_obj.c-1",
          "label": "PT-07(01)(c)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "when a system processes Social Security numbers, any individual who is asked to disclose their Social Security number is informed whether that disclosure is mandatory or voluntary, by what statutory or other authority such number is solicited, and what uses will be made of it;"
          }
@@ -103,6 +138,11 @@
         {
          "id": "pt-7.1_obj.c-2",
          "label": "PT-07(01)(c)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "when a system processes Social Security numbers, any individual who is asked to disclose their Social Security number is informed by what statutory or other authority the number is solicited;"
          }
@@ -110,6 +150,11 @@
         {
          "id": "pt-7.1_obj.c-3",
          "label": "PT-07(01)(c)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "when a system processes Social Security numbers, any individual who is asked to disclose their Social Security number is informed what uses will be made of it."
          }

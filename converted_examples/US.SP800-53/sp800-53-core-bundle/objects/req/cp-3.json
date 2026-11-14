@@ -97,14 +97,29 @@
     {
      "id": "cp-3_obj",
      "label": "CP-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cp-3_obj.a",
        "label": "CP-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cp-3_obj.a.1",
          "label": "CP-03a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "contingency training is provided to system users consistent with assigned roles and responsibilities within {param:cp-03_odp.01} of assuming a contingency role or responsibility;"
          }
@@ -112,6 +127,11 @@
         {
          "id": "cp-3_obj.a.2",
          "label": "CP-03a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "prose": {
           "en": "contingency training is provided to system users consistent with assigned roles and responsibilities when required by system changes;"
          }
@@ -119,6 +139,11 @@
         {
          "id": "cp-3_obj.a.3",
          "label": "CP-03a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "prose": {
           "en": "contingency training is provided to system users consistent with assigned roles and responsibilities {param:cp-03_odp.02} thereafter;"
          }
@@ -128,10 +153,20 @@
       {
        "id": "cp-3_obj.b",
        "label": "CP-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cp-3_obj.b-1",
          "label": "CP-03b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the contingency plan training content is reviewed and updated {param:cp-03_odp.03};"
          }
@@ -139,6 +174,11 @@
         {
          "id": "cp-3_obj.b-2",
          "label": "CP-03b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the contingency plan training content is reviewed and updated following {param:cp-03_odp.04}."
          }
@@ -212,7 +252,8 @@
      ],
      "alt-identifiers": [
       "cp-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-03_ODP[01]"
     },
     "cp-03_odp.02": {
      "guidelines": [
@@ -222,7 +263,8 @@
      ],
      "alt-identifiers": [
       "cp-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CP-03_ODP[02]"
     },
     "cp-03_odp.03": {
      "guidelines": [
@@ -232,7 +274,8 @@
      ],
      "alt-identifiers": [
       "cp-3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CP-03_ODP[03]"
     },
     "cp-03_odp.04": {
      "guidelines": [
@@ -242,7 +285,8 @@
      ],
      "alt-identifiers": [
       "cp-3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "CP-03_ODP[04]"
     }
    }
   },

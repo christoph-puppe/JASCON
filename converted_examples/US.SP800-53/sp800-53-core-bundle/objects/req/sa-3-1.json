@@ -31,6 +31,11 @@
     {
      "id": "sa-3.1_obj",
      "label": "SA-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "system pre-production environments are protected commensurate with risk throughout the system development life cycle for the system, system component, or system service."
      }

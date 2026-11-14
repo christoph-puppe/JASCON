@@ -31,6 +31,11 @@
     {
      "id": "ia-5.17_obj",
      "label": "IA-05(17)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "presentation attack detection mechanisms are employed for biometric-based authentication."
      }

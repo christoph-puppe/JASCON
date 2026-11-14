@@ -41,14 +41,29 @@
     {
      "id": "sc-18_obj",
      "label": "SC-18",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-18_obj.a",
        "label": "SC-18a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sc-18_obj.a-1",
          "label": "SC-18a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "acceptable mobile code is defined;"
          }
@@ -56,6 +71,11 @@
         {
          "id": "sc-18_obj.a-2",
          "label": "SC-18a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "unacceptable mobile code is defined;"
          }
@@ -63,6 +83,11 @@
         {
          "id": "sc-18_obj.a-3",
          "label": "SC-18a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "acceptable mobile code technologies are defined;"
          }
@@ -70,6 +95,11 @@
         {
          "id": "sc-18_obj.a-4",
          "label": "SC-18a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "unacceptable mobile code technologies are defined;"
          }
@@ -79,10 +109,20 @@
       {
        "id": "sc-18_obj.b",
        "label": "SC-18b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "sc-18_obj.b-1",
          "label": "SC-18b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the use of mobile code is authorized within the system;"
          }
@@ -90,6 +130,11 @@
         {
          "id": "sc-18_obj.b-2",
          "label": "SC-18b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the use of mobile code is monitored within the system;"
          }
@@ -97,6 +142,11 @@
         {
          "id": "sc-18_obj.b-3",
          "label": "SC-18b.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the use of mobile code is controlled within the system."
          }

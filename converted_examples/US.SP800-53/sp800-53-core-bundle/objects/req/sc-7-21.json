@@ -44,6 +44,11 @@
     {
      "id": "sc-7.21_obj",
      "label": "SC-07(21)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "boundary protection mechanisms are employed to isolate {param:sc-07.21_odp.01} supporting {param:sc-07.21_odp.02}."
      }
@@ -122,7 +127,8 @@
      ],
      "alt-identifiers": [
       "sc-7.21_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(21)_ODP[01]"
     },
     "sc-07.21_odp.02": {
      "guidelines": [
@@ -132,7 +138,8 @@
      ],
      "alt-identifiers": [
       "sc-7.21_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(21)_ODP[02]"
     }
    }
   },

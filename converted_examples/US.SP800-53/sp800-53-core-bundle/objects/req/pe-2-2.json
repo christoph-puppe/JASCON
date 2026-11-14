@@ -38,6 +38,11 @@
     {
      "id": "pe-2.2_obj",
      "label": "PE-02(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "two forms of identification are required from {param:pe-02.02_odp} for visitor access to the facility where the system resides."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "pe-2.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-02(02)_ODP"
     }
    }
   }

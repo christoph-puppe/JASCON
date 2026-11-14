@@ -44,6 +44,11 @@
     {
      "id": "ac-4.9_obj",
      "label": "AC-04(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "human reviews are used for {param:ac-04.09_odp.01} under {param:ac-04.09_odp.02}."
      }
@@ -131,7 +136,8 @@
      ],
      "alt-identifiers": [
       "ac-4.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(09)_ODP[01]"
     },
     "ac-04.09_odp.02": {
      "guidelines": [
@@ -141,7 +147,8 @@
      ],
      "alt-identifiers": [
       "ac-4.9_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(09)_ODP[02]"
     }
    }
   }

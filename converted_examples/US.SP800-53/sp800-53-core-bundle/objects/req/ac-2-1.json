@@ -38,6 +38,11 @@
     {
      "id": "ac-2.1_obj",
      "label": "AC-02(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the management of system accounts is supported using {param:ac-02.01_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ac-2.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(01)_ODP"
     }
    }
   }

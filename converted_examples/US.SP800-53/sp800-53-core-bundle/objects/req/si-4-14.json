@@ -31,10 +31,20 @@
     {
      "id": "si-4.14_obj",
      "label": "SI-04(14)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-4.14_obj-1",
        "label": "SI-04(14)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a wireless intrusion detection system is employed to identify rogue wireless devices;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "si-4.14_obj-2",
        "label": "SI-04(14)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a wireless intrusion detection system is employed to detect attack attempts on the system;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "si-4.14_obj-3",
        "label": "SI-04(14)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "a wireless intrusion detection system is employed to detect potential compromises or breaches to the system."
        }

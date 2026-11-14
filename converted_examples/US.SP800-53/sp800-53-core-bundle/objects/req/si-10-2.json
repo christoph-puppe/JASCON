@@ -39,7 +39,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Resolution of input validation errors includes correcting systemic causes of errors and resubmitting transactions with corrected input. Input validation errors are those related to the information inputs defined by the organization in the base control ( SI-10)."
+     "en": "Resolution of input validation errors includes correcting systemic causes of errors and resubmitting transactions with corrected input. Input validation errors are those related to the information inputs defined by the organization in the base control ( [SI-10](#si-10))."
     }
    ]
   },
@@ -48,10 +48,20 @@
     {
      "id": "si-10.2_obj",
      "label": "SI-10(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-10.2_obj-1",
        "label": "SI-10(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "input validation errors are reviewed within {param:si-10.02_odp.01};"
        }
@@ -59,6 +69,11 @@
       {
        "id": "si-10.2_obj-2",
        "label": "SI-10(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "input validation errors are resolved within {param:si-10.02_odp.02}."
        }
@@ -145,14 +160,16 @@
       {
        "en": "the time period within which input validation errors are to be reviewed is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SI-10(02)_ODP[01]"
     },
     "si-10.02_odp.02": {
      "guidelines": [
       {
        "en": "the time period within which input validation errors are to be resolved is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SI-10(02)_ODP[02]"
     }
    }
   },

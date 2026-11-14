@@ -48,10 +48,20 @@
     {
      "id": "si-2.3_obj",
      "label": "SI-02(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-2.3_obj.a",
        "label": "SI-02(03)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the time between flaw identification and flaw remediation is measured;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "si-2.3_obj.b",
        "label": "SI-02(03)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:si-02.03_odp} for taking corrective actions have been established."
        }
@@ -142,7 +157,8 @@
      ],
      "alt-identifiers": [
       "si-2.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-02(03)_ODP"
     }
    }
   }

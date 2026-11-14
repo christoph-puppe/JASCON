@@ -34,7 +34,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Personally identifiable information processing and transparency controls include the organization’s authority to process personally identifiable information and personally identifiable information processing purposes. Role-based training for federal agencies addresses the types of information that may constitute personally identifiable information and the risks, considerations, and obligations associated with its processing. Such training also considers the authority to process personally identifiable information documented in privacy policies and notices, system of records notices, computer matching agreements and notices, privacy impact assessments, PRIVACT statements, contracts, information sharing agreements, memoranda of understanding, and/or other documentation."
+     "en": "Personally identifiable information processing and transparency controls include the organization’s authority to process personally identifiable information and personally identifiable information processing purposes. Role-based training for federal agencies addresses the types of information that may constitute personally identifiable information and the risks, considerations, and obligations associated with its processing. Such training also considers the authority to process personally identifiable information documented in privacy policies and notices, system of records notices, computer matching agreements and notices, privacy impact assessments, [PRIVACT](#18e71fec-c6fd-475a-925a-5d8495cf8455) statements, contracts, information sharing agreements, memoranda of understanding, and/or other documentation."
     }
    ]
   },
@@ -43,6 +43,11 @@
     {
      "id": "at-3.5_obj",
      "label": "AT-03(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:at-03.05_odp.01} are provided with initial and refresher training {param:at-03.05_odp.02} in the employment and operation of personally identifiable information processing and transparency controls."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "at-3.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AT-03(05)_ODP[01]"
     },
     "at-03.05_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "at-3.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AT-03(05)_ODP[02]"
     }
    }
   },

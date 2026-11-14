@@ -38,6 +38,11 @@
     {
      "id": "ac-9.4_obj",
      "label": "AC-09(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the user is notified, upon successful logon, of {param:ac-09.04_odp}."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "ac-9.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-09(04)_ODP"
     }
    }
   }

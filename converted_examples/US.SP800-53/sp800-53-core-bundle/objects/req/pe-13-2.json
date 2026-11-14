@@ -53,14 +53,29 @@
     {
      "id": "pe-13.2_obj",
      "label": "PE-13(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-13.2_obj.a",
        "label": "PE-13(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pe-13.2_obj.a-1",
          "label": "PE-13(02)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "fire suppression systems that activate automatically are employed;"
          }
@@ -68,6 +83,11 @@
         {
          "id": "pe-13.2_obj.a-2",
          "label": "PE-13(02)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "fire suppression systems that notify {param:pe-13.02_odp.01} automatically are employed;"
          }
@@ -75,6 +95,11 @@
         {
          "id": "pe-13.2_obj.a-3",
          "label": "PE-13(02)(a)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "fire suppression systems that notify {param:pe-13.02_odp.02} automatically are employed;"
          }
@@ -84,6 +109,11 @@
       {
        "id": "pe-13.2_obj.b",
        "label": "PE-13(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "an automatic fire suppression capability is employed when the facility is not staffed on a continuous basis."
        }
@@ -164,7 +194,8 @@
      ],
      "alt-identifiers": [
       "pe-13.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-13(02)_ODP[01]"
     },
     "pe-13.02_odp.02": {
      "guidelines": [
@@ -174,7 +205,8 @@
      ],
      "alt-identifiers": [
       "pe-13.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PE-13(02)_ODP[02]"
     }
    }
   }
@@ -196,7 +228,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PE-13.3",
     "mode": "merged-into",
-    "label": "PE-13(03)",
+    "label": "PE-13(3)",
     "title": "Automatic Fire Suppression"
    }
   ]

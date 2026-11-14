@@ -38,6 +38,11 @@
     {
      "id": "sr-11.3_obj",
      "label": "SR-11(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "scanning for counterfeit system components is conducted {param:sr-11.03_odp}."
      }
@@ -131,7 +136,8 @@
      ],
      "alt-identifiers": [
       "sr-11.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-11(03)_ODP"
     }
    }
   },
@@ -160,7 +166,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SA-19.4",
     "mode": "renamed",
-    "label": "SA-19(04)",
+    "label": "SA-19(4)",
     "title": "Anti-counterfeit Scanning"
    }
   ]

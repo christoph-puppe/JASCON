@@ -42,7 +42,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Security categories describe the potential adverse impacts or negative consequences to organizational operations, organizational assets, and individuals if organizational information and systems are compromised through a loss of confidentiality, integrity, or availability. Security categorization is also a type of asset loss characterization in systems security engineering processes that is carried out throughout the system development life cycle. Organizations can use privacy risk assessments or privacy impact assessments to better understand the potential adverse effects on individuals. CNSSI 1253 provides additional guidance on categorization for national security systems.\n\nOrganizations conduct the security categorization process as an organization-wide activity with the direct involvement of chief information officers, senior agency information security officers, senior agency officials for privacy, system owners, mission and business owners, and information owners or stewards. Organizations consider the potential adverse impacts to other organizations and, in accordance with USA PATRIOT and Homeland Security Presidential Directives, potential national-level adverse impacts.\n\nSecurity categorization processes facilitate the development of inventories of information assets and, along with CM-8 , mappings to specific system components where information is processed, stored, or transmitted. The security categorization process is revisited throughout the system development life cycle to ensure that the security categories remain accurate and relevant."
+     "en": "Security categories describe the potential adverse impacts or negative consequences to organizational operations, organizational assets, and individuals if organizational information and systems are compromised through a loss of confidentiality, integrity, or availability. Security categorization is also a type of asset loss characterization in systems security engineering processes that is carried out throughout the system development life cycle. Organizations can use privacy risk assessments or privacy impact assessments to better understand the potential adverse effects on individuals. [CNSSI 1253](#4e4fbc93-333d-45e6-a875-de36b878b6b9) provides additional guidance on categorization for national security systems.\n\nOrganizations conduct the security categorization process as an organization-wide activity with the direct involvement of chief information officers, senior agency information security officers, senior agency officials for privacy, system owners, mission and business owners, and information owners or stewards. Organizations consider the potential adverse impacts to other organizations and, in accordance with [USA PATRIOT](#13f0c39d-eaf7-417a-baef-69a041878bb5) and Homeland Security Presidential Directives, potential national-level adverse impacts.\n\nSecurity categorization processes facilitate the development of inventories of information assets and, along with [CM-8](#cm-8) , mappings to specific system components where information is processed, stored, or transmitted. The security categorization process is revisited throughout the system development life cycle to ensure that the security categories remain accurate and relevant."
     }
    ]
   },
@@ -51,10 +51,20 @@
     {
      "id": "ra-2_obj",
      "label": "RA-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ra-2_obj.a",
        "label": "RA-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the system and the information it processes, stores, and transmits are categorized;"
        }
@@ -62,6 +72,11 @@
       {
        "id": "ra-2_obj.b",
        "label": "RA-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the security categorization results, including supporting rationale, are documented in the security plan for the system;"
        }
@@ -69,6 +84,11 @@
       {
        "id": "ra-2_obj.c",
        "label": "RA-02c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the authorizing official or authorizing official designated representative reviews and approves the security categorization decision."
        }

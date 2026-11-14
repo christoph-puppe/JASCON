@@ -68,10 +68,20 @@
     {
      "id": "cm-7.9_obj",
      "label": "CM-07(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-7.9_obj.a",
        "label": "CM-07(09)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:cm-07.09_odp.01} are identified;"
        }
@@ -79,6 +89,11 @@
       {
        "id": "cm-7.9_obj.b",
        "label": "CM-07(09)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the use or connection of unauthorized hardware components is prohibited;"
        }
@@ -86,6 +101,11 @@
       {
        "id": "cm-7.9_obj.c",
        "label": "CM-07(09)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the list of authorized hardware components is reviewed and updated {param:cm-07.09_odp.02}."
        }
@@ -167,7 +187,8 @@
      "alt-identifiers": [
       "cm-7.9_prm_1"
      ],
-     "alt-label": "hardware components authorized for system use"
+     "alt-label": "hardware components authorized for system use",
+     "sp800-53a-label": "CM-07(09)_ODP[01]"
     },
     "cm-07.09_odp.02": {
      "guidelines": [
@@ -177,7 +198,8 @@
      ],
      "alt-identifiers": [
       "cm-7.9_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-07(09)_ODP[02]"
     }
    }
   },

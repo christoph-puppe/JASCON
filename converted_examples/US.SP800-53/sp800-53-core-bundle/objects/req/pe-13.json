@@ -31,10 +31,20 @@
     {
      "id": "pe-13_obj",
      "label": "PE-13",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-13_obj-1",
        "label": "PE-13[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "fire detection systems are employed;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pe-13_obj-2",
        "label": "PE-13[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "employed fire detection systems are supported by an independent energy source;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "pe-13_obj-3",
        "label": "PE-13[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "employed fire detection systems are maintained;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "pe-13_obj-4",
        "label": "PE-13[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "fire suppression systems are employed;"
        }
@@ -63,6 +88,11 @@
       {
        "id": "pe-13_obj-5",
        "label": "PE-13[05]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "employed fire suppression systems are supported by an independent energy source;"
        }
@@ -70,6 +100,11 @@
       {
        "id": "pe-13_obj-6",
        "label": "PE-13[06]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "employed fire suppression systems are maintained."
        }

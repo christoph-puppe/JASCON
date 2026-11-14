@@ -31,6 +31,11 @@
     {
      "id": "ir-2.1_obj",
      "label": "IR-02(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "simulated events are incorporated into incident response training to facilitate the required response by personnel in crisis situations."
      }

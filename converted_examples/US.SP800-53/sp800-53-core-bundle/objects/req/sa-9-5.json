@@ -59,6 +59,11 @@
     {
      "id": "sa-9.5_obj",
      "label": "SA-09(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "based on {param:sa-09.05_odp.03}, {param:sa-09.05_odp.01} is/are restricted to {param:sa-09.05_odp.02}."
      }
@@ -147,7 +152,8 @@
     "sa-09.05_odp.01": {
      "alt-identifiers": [
       "sa-9.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-09(05)_ODP[01]"
     },
     "sa-09.05_odp.02": {
      "guidelines": [
@@ -157,7 +163,8 @@
      ],
      "alt-identifiers": [
       "sa-9.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-09(05)_ODP[02]"
     },
     "sa-09.05_odp.03": {
      "guidelines": [
@@ -168,7 +175,8 @@
      "alt-identifiers": [
       "sa-9.5_prm_3"
      ],
-     "alt-label": "requirements or conditions"
+     "alt-label": "requirements or conditions",
+     "sp800-53a-label": "SA-09(05)_ODP[03]"
     }
    }
   },

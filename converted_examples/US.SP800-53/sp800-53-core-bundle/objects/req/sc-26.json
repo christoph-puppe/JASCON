@@ -31,10 +31,20 @@
     {
      "id": "sc-26_obj",
      "label": "SC-26",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-26_obj-1",
        "label": "SC-26[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "components within organizational systems specifically designed to be the target of malicious attacks are included to detect such attacks;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-26_obj-2",
        "label": "SC-26[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "components within organizational systems specifically designed to be the target of malicious attacks are included to deflect such attacks;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "sc-26_obj-3",
        "label": "SC-26[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "components within organizational systems specifically designed to be the target of malicious attacks are included to analyze such attacks."
        }

@@ -233,7 +233,7 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "System security and privacy plans are scoped to the system and system components within the defined authorization boundary and contain an overview of the security and privacy requirements for the system and the controls selected to satisfy the requirements. The plans describe the intended application of each selected control in the context of the system with a sufficient level of detail to correctly implement the control and to subsequently assess the effectiveness of the control. The control documentation describes how system-specific and hybrid controls are implemented and the plans and expectations regarding the functionality of the system. System security and privacy plans can also be used in the design and development of systems in support of life cycle-based security and privacy engineering processes. System security and privacy plans are living documents that are updated and adapted throughout the system development life cycle (e.g., during capability determination, analysis of alternatives, requests for proposal, and design reviews). Section 2.1 describes the different types of requirements that are relevant to organizations during the system development life cycle and the relationship between requirements and controls.\n\nOrganizations may develop a single, integrated security and privacy plan or maintain separate plans. Security and privacy plans relate security and privacy requirements to a set of controls and control enhancements. The plans describe how the controls and control enhancements meet the security and privacy requirements but do not provide detailed, technical descriptions of the design or implementation of the controls and control enhancements. Security and privacy plans contain sufficient information (including specifications of control parameter values for selection and assignment operations explicitly or by reference) to enable a design and implementation that is unambiguously compliant with the intent of the plans and subsequent determinations of risk to organizational operations and assets, individuals, other organizations, and the Nation if the plan is implemented.\n\nSecurity and privacy plans need not be single documents. The plans can be a collection of various documents, including documents that already exist. Effective security and privacy plans make extensive use of references to policies, procedures, and additional documents, including design and implementation specifications where more detailed information can be obtained. The use of references helps reduce the documentation associated with security and privacy programs and maintains the security- and privacy-related information in other established management and operational areas, including enterprise architecture, system development life cycle, systems engineering, and acquisition. Security and privacy plans need not contain detailed contingency plan or incident response plan information but can instead provide—explicitly or by reference—sufficient information to define what needs to be accomplished by those plans.\n\nSecurity- and privacy-related activities that may require coordination and planning with other individuals or groups within the organization include assessments, audits, inspections, hardware and software maintenance, acquisition and supply chain risk management, patch management, and contingency plan testing. Planning and coordination include emergency and nonemergency (i.e., planned or non-urgent unplanned) situations. The process defined by organizations to plan and coordinate security- and privacy-related activities can also be included in other documents, as appropriate."
+     "en": "System security and privacy plans are scoped to the system and system components within the defined authorization boundary and contain an overview of the security and privacy requirements for the system and the controls selected to satisfy the requirements. The plans describe the intended application of each selected control in the context of the system with a sufficient level of detail to correctly implement the control and to subsequently assess the effectiveness of the control. The control documentation describes how system-specific and hybrid controls are implemented and the plans and expectations regarding the functionality of the system. System security and privacy plans can also be used in the design and development of systems in support of life cycle-based security and privacy engineering processes. System security and privacy plans are living documents that are updated and adapted throughout the system development life cycle (e.g., during capability determination, analysis of alternatives, requests for proposal, and design reviews). [Section 2.1](#c3397cc9-83c6-4459-adb2-836739dc1b94) describes the different types of requirements that are relevant to organizations during the system development life cycle and the relationship between requirements and controls.\n\nOrganizations may develop a single, integrated security and privacy plan or maintain separate plans. Security and privacy plans relate security and privacy requirements to a set of controls and control enhancements. The plans describe how the controls and control enhancements meet the security and privacy requirements but do not provide detailed, technical descriptions of the design or implementation of the controls and control enhancements. Security and privacy plans contain sufficient information (including specifications of control parameter values for selection and assignment operations explicitly or by reference) to enable a design and implementation that is unambiguously compliant with the intent of the plans and subsequent determinations of risk to organizational operations and assets, individuals, other organizations, and the Nation if the plan is implemented.\n\nSecurity and privacy plans need not be single documents. The plans can be a collection of various documents, including documents that already exist. Effective security and privacy plans make extensive use of references to policies, procedures, and additional documents, including design and implementation specifications where more detailed information can be obtained. The use of references helps reduce the documentation associated with security and privacy programs and maintains the security- and privacy-related information in other established management and operational areas, including enterprise architecture, system development life cycle, systems engineering, and acquisition. Security and privacy plans need not contain detailed contingency plan or incident response plan information but can instead provide—explicitly or by reference—sufficient information to define what needs to be accomplished by those plans.\n\nSecurity- and privacy-related activities that may require coordination and planning with other individuals or groups within the organization include assessments, audits, inspections, hardware and software maintenance, acquisition and supply chain risk management, patch management, and contingency plan testing. Planning and coordination include emergency and nonemergency (i.e., planned or non-urgent unplanned) situations. The process defined by organizations to plan and coordinate security- and privacy-related activities can also be included in other documents, as appropriate."
     }
    ]
   },
@@ -242,18 +242,38 @@
     {
      "id": "pl-2_obj",
      "label": "PL-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pl-2_obj.a",
        "label": "PL-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pl-2_obj.a.1",
          "label": "PL-02a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.1-1",
            "label": "PL-02a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that is consistent with the organization’s enterprise architecture;"
            }
@@ -261,6 +281,11 @@
           {
            "id": "pl-2_obj.a.1-2",
            "label": "PL-02a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that is consistent with the organization’s enterprise architecture;"
            }
@@ -270,10 +295,20 @@
         {
          "id": "pl-2_obj.a.2",
          "label": "PL-02a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.2-1",
            "label": "PL-02a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that explicitly defines the constituent system components;"
            }
@@ -281,6 +316,11 @@
           {
            "id": "pl-2_obj.a.2-2",
            "label": "PL-02a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that explicitly defines the constituent system components;"
            }
@@ -290,10 +330,20 @@
         {
          "id": "pl-2_obj.a.3",
          "label": "PL-02a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.3-1",
            "label": "PL-02a.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that describes the operational context of the system in terms of mission and business processes;"
            }
@@ -301,6 +351,11 @@
           {
            "id": "pl-2_obj.a.3-2",
            "label": "PL-02a.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.3"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that describes the operational context of the system in terms of mission and business processes;"
            }
@@ -310,10 +365,20 @@
         {
          "id": "pl-2_obj.a.4",
          "label": "PL-02a.04",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.4"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.4-1",
            "label": "PL-02a.04[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.4"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that identifies the individuals that fulfill system roles and responsibilities;"
            }
@@ -321,6 +386,11 @@
           {
            "id": "pl-2_obj.a.4-2",
            "label": "PL-02a.04[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.4"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that identifies the individuals that fulfill system roles and responsibilities;"
            }
@@ -330,10 +400,20 @@
         {
          "id": "pl-2_obj.a.5",
          "label": "PL-02a.05",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.5"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.5-1",
            "label": "PL-02a.05[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.5"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that identifies the information types processed, stored, and transmitted by the system;"
            }
@@ -341,6 +421,11 @@
           {
            "id": "pl-2_obj.a.5-2",
            "label": "PL-02a.05[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.5"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that identifies the information types processed, stored, and transmitted by the system;"
            }
@@ -350,10 +435,20 @@
         {
          "id": "pl-2_obj.a.6",
          "label": "PL-02a.06",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.6"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.6-1",
            "label": "PL-02a.06[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.6"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that provides the security categorization of the system, including supporting rationale;"
            }
@@ -361,6 +456,11 @@
           {
            "id": "pl-2_obj.a.6-2",
            "label": "PL-02a.06[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.6"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that provides the security categorization of the system, including supporting rationale;"
            }
@@ -370,10 +470,20 @@
         {
          "id": "pl-2_obj.a.7",
          "label": "PL-02a.07",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.7"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.7-1",
            "label": "PL-02a.07[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.7"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that describes any specific threats to the system that are of concern to the organization;"
            }
@@ -381,6 +491,11 @@
           {
            "id": "pl-2_obj.a.7-2",
            "label": "PL-02a.07[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.7"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that describes any specific threats to the system that are of concern to the organization;"
            }
@@ -390,10 +505,20 @@
         {
          "id": "pl-2_obj.a.8",
          "label": "PL-02a.08",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.8"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.8-1",
            "label": "PL-02a.08[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.8"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that provides the results of a privacy risk assessment for systems processing personally identifiable information;"
            }
@@ -401,6 +526,11 @@
           {
            "id": "pl-2_obj.a.8-2",
            "label": "PL-02a.08[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.8"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that provides the results of a privacy risk assessment for systems processing personally identifiable information;"
            }
@@ -410,10 +540,20 @@
         {
          "id": "pl-2_obj.a.9",
          "label": "PL-02a.09",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.9"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.9-1",
            "label": "PL-02a.09[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.9"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that describes the operational environment for the system and any dependencies on or connections to other systems or system components;"
            }
@@ -421,6 +561,11 @@
           {
            "id": "pl-2_obj.a.9-2",
            "label": "PL-02a.09[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.9"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that describes the operational environment for the system and any dependencies on or connections to other systems or system components;"
            }
@@ -430,10 +575,20 @@
         {
          "id": "pl-2_obj.a.10",
          "label": "PL-02a.10",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.10"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.10-1",
            "label": "PL-02a.10[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.10"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that provides an overview of the security requirements for the system;"
            }
@@ -441,6 +596,11 @@
           {
            "id": "pl-2_obj.a.10-2",
            "label": "PL-02a.10[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.10"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that provides an overview of the privacy requirements for the system;"
            }
@@ -450,10 +610,20 @@
         {
          "id": "pl-2_obj.a.11",
          "label": "PL-02a.11",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.11"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.11-1",
            "label": "PL-02a.11[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.11"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that identifies any relevant control baselines or overlays, if applicable;"
            }
@@ -461,6 +631,11 @@
           {
            "id": "pl-2_obj.a.11-2",
            "label": "PL-02a.11[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.11"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that identifies any relevant control baselines or overlays, if applicable;"
            }
@@ -470,10 +645,20 @@
         {
          "id": "pl-2_obj.a.12",
          "label": "PL-02a.12",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.12"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.12-1",
            "label": "PL-02a.12[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.12"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that describes the controls in place or planned for meeting the security requirements, including rationale for any tailoring decisions;"
            }
@@ -481,6 +666,11 @@
           {
            "id": "pl-2_obj.a.12-2",
            "label": "PL-02a.12[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.12"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that describes the controls in place or planned for meeting the privacy requirements, including rationale for any tailoring decisions;"
            }
@@ -490,10 +680,20 @@
         {
          "id": "pl-2_obj.a.13",
          "label": "PL-02a.13",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.13"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.13-1",
            "label": "PL-02a.13[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.13"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that includes risk determinations for security architecture and design decisions;"
            }
@@ -501,6 +701,11 @@
           {
            "id": "pl-2_obj.a.13-2",
            "label": "PL-02a.13[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.13"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that includes risk determinations for privacy architecture and design decisions;"
            }
@@ -510,10 +715,20 @@
         {
          "id": "pl-2_obj.a.14",
          "label": "PL-02a.14",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.14"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.14-1",
            "label": "PL-02a.14[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.14"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that includes security-related activities affecting the system that require planning and coordination with {param:pl-02_odp.01};"
            }
@@ -521,6 +736,11 @@
           {
            "id": "pl-2_obj.a.14-2",
            "label": "PL-02a.14[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.14"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that includes privacy-related activities affecting the system that require planning and coordination with {param:pl-02_odp.01};"
            }
@@ -530,10 +750,20 @@
         {
          "id": "pl-2_obj.a.15",
          "label": "PL-02a.15",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.15"
+          }
+         ],
          "children": [
           {
            "id": "pl-2_obj.a.15-1",
            "label": "PL-02a.15[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.15"
+            }
+           ],
            "prose": {
             "en": "a security plan for the system is developed that is reviewed and approved by the authorizing official or designated representative prior to plan implementation;"
            }
@@ -541,6 +771,11 @@
           {
            "id": "pl-2_obj.a.15-2",
            "label": "PL-02a.15[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.15"
+            }
+           ],
            "prose": {
             "en": "a privacy plan for the system is developed that is reviewed and approved by the authorizing official or designated representative prior to plan implementation."
            }
@@ -552,10 +787,20 @@
       {
        "id": "pl-2_obj.b",
        "label": "PL-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pl-2_obj.b-1",
          "label": "PL-02b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "copies of the plans are distributed to {param:pl-02_odp.02};"
          }
@@ -563,6 +808,11 @@
         {
          "id": "pl-2_obj.b-2",
          "label": "PL-02b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "subsequent changes to the plans are communicated to {param:pl-02_odp.02};"
          }
@@ -572,6 +822,11 @@
       {
        "id": "pl-2_obj.c",
        "label": "PL-02c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "plans are reviewed {param:pl-02_odp.03};"
        }
@@ -579,10 +834,20 @@
       {
        "id": "pl-2_obj.d",
        "label": "PL-02d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "pl-2_obj.d-1",
          "label": "PL-02d.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "plans are updated to address changes to the system and environment of operations;"
          }
@@ -590,6 +855,11 @@
         {
          "id": "pl-2_obj.d-2",
          "label": "PL-02d.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "plans are updated to address problems identified during the plan implementation;"
          }
@@ -597,6 +867,11 @@
         {
          "id": "pl-2_obj.d-3",
          "label": "PL-02d.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d"
+          }
+         ],
          "prose": {
           "en": "plans are updated to address problems identified during control assessments;"
          }
@@ -606,10 +881,20 @@
       {
        "id": "pl-2_obj.e",
        "label": "PL-02e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "children": [
         {
          "id": "pl-2_obj.e-1",
          "label": "PL-02e.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "plans are protected from unauthorized disclosure;"
          }
@@ -617,6 +902,11 @@
         {
          "id": "pl-2_obj.e-2",
          "label": "PL-02e.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.e"
+          }
+         ],
          "prose": {
           "en": "plans are protected from unauthorized modification."
          }
@@ -708,7 +998,8 @@
      ],
      "alt-identifiers": [
       "pl-2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PL-02_ODP[01]"
     },
     "pl-02_odp.02": {
      "guidelines": [
@@ -718,7 +1009,8 @@
      ],
      "alt-identifiers": [
       "pl-2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PL-02_ODP[02]"
     },
     "pl-02_odp.03": {
      "guidelines": [
@@ -728,7 +1020,8 @@
      ],
      "alt-identifiers": [
       "pl-2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PL-02_ODP[03]"
     }
    }
   },
@@ -925,19 +1218,19 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PL-2.3",
     "mode": "merged-into",
-    "label": "PL-02(03)",
+    "label": "PL-2(3)",
     "title": "Plan and Coordinate with Other Organizational Entities"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PL-3",
     "mode": "merged-into",
-    "label": "PL-03",
+    "label": "PL-3",
     "title": "System Security Plan Update"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/PL-6",
     "mode": "merged-into",
-    "label": "PL-06",
+    "label": "PL-6",
     "title": "Security-related Activity Planning"
    }
   ]

@@ -31,10 +31,20 @@
     {
      "id": "sa-11.9_obj",
      "label": "SA-11(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sa-11.9_obj-1",
        "label": "SA-11(09)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to employ interactive application security testing tools to identify flaws;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sa-11.9_obj-2",
        "label": "SA-11(09)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the developer of the system, system component, or system service is required to document the results of flaw identification."
        }

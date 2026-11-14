@@ -83,10 +83,20 @@
     {
      "id": "ac-16.4_obj",
      "label": "AC-16(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-16.4_obj-1",
        "label": "AC-16(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "authorized individuals (or processes acting on behalf of individuals) are provided with the capability to associate {param:ac-16.04_odp.01} with {param:ac-16.04_odp.05};"
        }
@@ -94,6 +104,11 @@
       {
        "id": "ac-16.4_obj-2",
        "label": "AC-16(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "authorized individuals (or processes acting on behalf of individuals) are provided with the capability to associate {param:ac-16.04_odp.02} with {param:ac-16.04_odp.06};"
        }
@@ -101,6 +116,11 @@
       {
        "id": "ac-16.4_obj-3",
        "label": "AC-16(04)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "authorized individuals (or processes acting on behalf of individuals) are provided with the capability to associate {param:ac-16.04_odp.03} with {param:ac-16.04_odp.07};"
        }
@@ -108,6 +128,11 @@
       {
        "id": "ac-16.4_obj-4",
        "label": "AC-16(04)[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "authorized individuals (or processes acting on behalf of individuals) are provided with the capability to associate {param:ac-16.04_odp.04} with {param:ac-16.04_odp.08}."
        }
@@ -201,56 +226,64 @@
       {
        "en": "security attributes to be associated with subjects by authorized individuals (or processes acting on behalf of individuals) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(04)_ODP[01]"
     },
     "ac-16.04_odp.02": {
      "guidelines": [
       {
        "en": "security attributes to be associated with objects by authorized individuals (or processes acting on behalf of individuals) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(04)_ODP[02]"
     },
     "ac-16.04_odp.03": {
      "guidelines": [
       {
        "en": "privacy attributes to be associated with subjects by authorized individuals (or processes acting on behalf of individuals) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(04)_ODP[03]"
     },
     "ac-16.04_odp.04": {
      "guidelines": [
       {
        "en": "privacy attributes to be associated with objects by authorized individuals (or processes acting on behalf of individuals) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(04)_ODP[04]"
     },
     "ac-16.04_odp.05": {
      "guidelines": [
       {
        "en": "subjects requiring the association of security attributes by authorized individuals (or processes acting on behalf of individuals) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(04)_ODP[05]"
     },
     "ac-16.04_odp.06": {
      "guidelines": [
       {
        "en": "objects requiring the association of security attributes by authorized individuals (or processes acting on behalf of individuals) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(04)_ODP[06]"
     },
     "ac-16.04_odp.07": {
      "guidelines": [
       {
        "en": "subjects requiring the association of privacy attributes by authorized individuals (or processes acting on behalf of individuals) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(04)_ODP[07]"
     },
     "ac-16.04_odp.08": {
      "guidelines": [
       {
        "en": "objects requiring the association of privacy attributes by authorized individuals (or processes acting on behalf of individuals) are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-16(04)_ODP[08]"
     }
    }
   }

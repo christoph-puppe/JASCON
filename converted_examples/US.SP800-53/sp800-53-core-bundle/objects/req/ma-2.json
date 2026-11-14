@@ -102,14 +102,29 @@
     {
      "id": "ma-2_obj",
      "label": "MA-02",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ma-2_obj.a",
        "label": "MA-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ma-2_obj.a-1",
          "label": "MA-02a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "maintenance, repair, and replacement of system components are scheduled in accordance with manufacturer or vendor specifications and/or organizational requirements;"
          }
@@ -117,6 +132,11 @@
         {
          "id": "ma-2_obj.a-2",
          "label": "MA-02a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "maintenance, repair, and replacement of system components are documented in accordance with manufacturer or vendor specifications and/or organizational requirements;"
          }
@@ -124,6 +144,11 @@
         {
          "id": "ma-2_obj.a-3",
          "label": "MA-02a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "records of maintenance, repair, and replacement of system components are reviewed in accordance with manufacturer or vendor specifications and/or organizational requirements;"
          }
@@ -133,10 +158,20 @@
       {
        "id": "ma-2_obj.b",
        "label": "MA-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ma-2_obj.b-1",
          "label": "MA-02b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "all maintenance activities, whether performed on site or remotely and whether the system or system components are serviced on site or removed to another location, are approved;"
          }
@@ -144,6 +179,11 @@
         {
          "id": "ma-2_obj.b-2",
          "label": "MA-02b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "all maintenance activities, whether performed on site or remotely and whether the system or system components are serviced on site or removed to another location, are monitored;"
          }
@@ -153,6 +193,11 @@
       {
        "id": "ma-2_obj.c",
        "label": "MA-02c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "{param:ma-02_odp.01} is/are required to explicitly approve the removal of the system or system components from organizational facilities for off-site maintenance, repair, or replacement;"
        }
@@ -160,6 +205,11 @@
       {
        "id": "ma-2_obj.d",
        "label": "MA-02d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "equipment is sanitized to remove {param:ma-02_odp.02} from associated media prior to removal from organizational facilities for off-site maintenance, repair, or replacement;"
        }
@@ -167,6 +217,11 @@
       {
        "id": "ma-2_obj.e",
        "label": "MA-02e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "all potentially impacted controls are checked to verify that the controls are still functioning properly following maintenance, repair, or replacement actions;"
        }
@@ -174,6 +229,11 @@
       {
        "id": "ma-2_obj.f",
        "label": "MA-02f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "{param:ma-02_odp.03} is included in organizational maintenance records."
        }
@@ -260,7 +320,8 @@
      ],
      "alt-identifiers": [
       "ma-2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-02_ODP[01]"
     },
     "ma-02_odp.02": {
      "guidelines": [
@@ -270,7 +331,8 @@
      ],
      "alt-identifiers": [
       "ma-2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "MA-02_ODP[02]"
     },
     "ma-02_odp.03": {
      "guidelines": [
@@ -280,7 +342,8 @@
      ],
      "alt-identifiers": [
       "ma-2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "MA-02_ODP[03]"
     }
    }
   }
@@ -354,7 +417,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/MA-2.1",
     "mode": "merged-into",
-    "label": "MA-02(01)",
+    "label": "MA-2(1)",
     "title": "Record Content"
    }
   ]

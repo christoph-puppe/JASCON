@@ -39,6 +39,11 @@
     {
      "id": "sa-8.31_obj",
      "label": "SA-08(31)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sa-08.31_odp} implement the security design principle of secure system modification."
      }
@@ -132,7 +137,8 @@
      ],
      "alt-identifiers": [
       "sa-8.31_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SA-08(31)_ODP"
     }
    }
   },

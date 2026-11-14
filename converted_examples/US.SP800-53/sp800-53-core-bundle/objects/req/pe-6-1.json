@@ -31,10 +31,20 @@
     {
      "id": "pe-6.1_obj",
      "label": "PE-06(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-6.1_obj-1",
        "label": "PE-06(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "physical access to the facility where the system resides is monitored using physical intrusion alarms;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pe-6.1_obj-2",
        "label": "PE-06(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "physical access to the facility where the system resides is monitored using physical surveillance equipment."
        }

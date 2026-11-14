@@ -31,10 +31,20 @@
     {
      "id": "au-12.4_obj",
      "label": "AU-12(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-12.4_obj-1",
        "label": "AU-12(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to audit the parameters of user query events for data sets containing personally identifiable information is provided;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "au-12.4_obj-2",
        "label": "AU-12(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to audit the parameters of user query events for data sets containing personally identifiable information is implemented."
        }

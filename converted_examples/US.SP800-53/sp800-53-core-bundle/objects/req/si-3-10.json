@@ -48,10 +48,20 @@
     {
      "id": "si-3.10_obj",
      "label": "SI-03(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-3.10_obj.a",
        "label": "SI-03(10)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:si-03.10_odp} are employed to analyze the characteristics and behavior of malicious code;"
        }
@@ -59,10 +69,20 @@
       {
        "id": "si-3.10_obj.b",
        "label": "SI-03(10)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "si-3.10_obj.b-1",
          "label": "SI-03(10)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the results from malicious code analysis are incorporated into organizational incident response processes;"
          }
@@ -70,6 +90,11 @@
         {
          "id": "si-3.10_obj.b-2",
          "label": "SI-03(10)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the results from malicious code analysis are incorporated into organizational flaw remediation processes."
          }
@@ -179,7 +204,8 @@
      ],
      "alt-identifiers": [
       "si-3.10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-03(10)_ODP"
     }
    }
   }

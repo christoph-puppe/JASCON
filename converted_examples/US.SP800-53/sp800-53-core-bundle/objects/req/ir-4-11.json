@@ -38,10 +38,20 @@
     {
      "id": "ir-4.11_obj",
      "label": "IR-04(11)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-4.11_obj-1",
        "label": "IR-04(11)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "an integrated incident response team is established and maintained;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "ir-4.11_obj-2",
        "label": "IR-04(11)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the integrated incident response team can be deployed to any location identified by the organization in {param:ir-04.11_odp}."
        }
@@ -111,7 +126,8 @@
      ],
      "alt-identifiers": [
       "ir-4.11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-04(11)_ODP"
     }
    }
   }

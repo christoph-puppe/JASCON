@@ -46,6 +46,11 @@
     {
      "id": "sc-8.1_obj",
      "label": "SC-08(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cryptographic mechanisms are implemented to {param:sc-08.01_odp} during transmission."
      }
@@ -116,7 +121,8 @@
     "sc-08.01_odp": {
      "alt-identifiers": [
       "sc-8.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-08(01)_ODP"
     }
    }
   }

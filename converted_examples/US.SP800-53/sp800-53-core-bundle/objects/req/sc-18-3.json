@@ -38,10 +38,20 @@
     {
      "id": "sc-18.3_obj",
      "label": "SC-18(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-18.3_obj-1",
        "label": "SC-18(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the download of {param:sc-18.03_odp} is prevented;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sc-18.3_obj-2",
        "label": "SC-18(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the execution of {param:sc-18.03_odp} is prevented."
        }
@@ -129,7 +144,8 @@
      ],
      "alt-identifiers": [
       "sc-18.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-18(03)_ODP"
     }
    }
   }

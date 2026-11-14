@@ -31,10 +31,20 @@
     {
      "id": "ac-4.24_obj",
      "label": "AC-04(24)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-4.24_obj-1",
        "label": "AC-04(24)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "when transferring information between different security domains, incoming data is parsed into an internal, normalized format;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "ac-4.24_obj-2",
        "label": "AC-04(24)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "when transferring information between different security domains, the data is regenerated to be consistent with its intended specification."
        }

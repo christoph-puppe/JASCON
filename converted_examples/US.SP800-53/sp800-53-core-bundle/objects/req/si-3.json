@@ -150,14 +150,29 @@
     {
      "id": "si-3_obj",
      "label": "SI-03",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "si-3_obj.a",
        "label": "SI-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "si-3_obj.a-1",
          "label": "SI-03a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:si-03_odp.01} malicious code protection mechanisms are implemented at system entry and exit points to detect malicious code;"
          }
@@ -165,6 +180,11 @@
         {
          "id": "si-3_obj.a-2",
          "label": "SI-03a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:si-03_odp.01} malicious code protection mechanisms are implemented at system entry and exit points to eradicate malicious code;"
          }
@@ -174,6 +194,11 @@
       {
        "id": "si-3_obj.b",
        "label": "SI-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "malicious code protection mechanisms are updated automatically as new releases are available in accordance with organizational configuration management policy and procedures;"
        }
@@ -181,14 +206,29 @@
       {
        "id": "si-3_obj.c",
        "label": "SI-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "si-3_obj.c.1",
          "label": "SI-03c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "children": [
           {
            "id": "si-3_obj.c.1-1",
            "label": "SI-03c.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "malicious code protection mechanisms are configured to perform periodic scans of the system {param:si-03_odp.02};"
            }
@@ -196,6 +236,11 @@
           {
            "id": "si-3_obj.c.1-2",
            "label": "SI-03c.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "malicious code protection mechanisms are configured to perform real-time scans of files from external sources at {param:si-03_odp.03} as the files are downloaded, opened, or executed in accordance with organizational policy;"
            }
@@ -205,10 +250,20 @@
         {
          "id": "si-3_obj.c.2",
          "label": "SI-03c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "children": [
           {
            "id": "si-3_obj.c.2-1",
            "label": "SI-03c.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "malicious code protection mechanisms are configured to {param:si-03_odp.04} in response to malicious code detection;"
            }
@@ -216,6 +271,11 @@
           {
            "id": "si-3_obj.c.2-2",
            "label": "SI-03c.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "malicious code protection mechanisms are configured to send alerts to {param:si-03_odp.06} in response to malicious code detection;"
            }
@@ -227,6 +287,11 @@
       {
        "id": "si-3_obj.d",
        "label": "SI-03d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the receipt of false positives during malicious code detection and eradication and the resulting potential impact on the availability of the system are addressed."
        }
@@ -326,7 +391,8 @@
     "si-03_odp.01": {
      "alt-identifiers": [
       "si-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-03_ODP[01]"
     },
     "si-03_odp.02": {
      "guidelines": [
@@ -336,17 +402,20 @@
      ],
      "alt-identifiers": [
       "si-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-03_ODP[02]"
     },
     "si-03_odp.03": {
      "alt-identifiers": [
       "si-3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-03_ODP[03]"
     },
     "si-03_odp.04": {
      "alt-identifiers": [
       "si-3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SI-03_ODP[04]"
     },
     "si-03_odp.05": {
      "guidelines": [
@@ -356,7 +425,8 @@
      ],
      "alt-identifiers": [
       "si-3_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "SI-03_ODP[05]"
     },
     "si-03_odp.06": {
      "guidelines": [
@@ -366,7 +436,8 @@
      ],
      "alt-identifiers": [
       "si-3_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "SI-03_ODP[06]"
     }
    }
   }
@@ -486,13 +557,13 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-3.2",
     "mode": "merged-into",
-    "label": "SI-03(02)",
+    "label": "SI-3(2)",
     "title": "Automatic Updates"
    },
    {
     "ref": "https://ns.nist.gov/sp800-53/req/SI-3.7",
     "mode": "merged-into",
-    "label": "SI-03(07)",
+    "label": "SI-3(7)",
     "title": "Nonsignature-based Detection"
    }
   ]

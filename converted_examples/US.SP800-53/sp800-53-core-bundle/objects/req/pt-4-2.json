@@ -48,6 +48,11 @@
     {
      "id": "pt-4.2_obj",
      "label": "PT-04(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:pt-04.02_odp.01} are presented to individuals {param:pt-04.02_odp.02} and in conjunction with {param:pt-04.02_odp.03}."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "pt-4.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-04(02)_ODP[01]"
     },
     "pt-04.02_odp.02": {
      "guidelines": [
@@ -124,7 +130,8 @@
      ],
      "alt-identifiers": [
       "pt-4.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "PT-04(02)_ODP[02]"
     },
     "pt-04.02_odp.03": {
      "guidelines": [
@@ -134,7 +141,8 @@
      ],
      "alt-identifiers": [
       "pt-4.2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "PT-04(02)_ODP[03]"
     }
    }
   }

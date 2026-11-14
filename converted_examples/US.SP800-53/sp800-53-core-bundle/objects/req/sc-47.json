@@ -39,6 +39,11 @@
     {
      "id": "sc-47_obj",
      "label": "SC-47",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sc-47_odp} are established for system operations and operational command and control."
      }
@@ -109,7 +114,8 @@
      "alt-identifiers": [
       "sc-47_prm_1"
      ],
-     "alt-label": "alternate communications paths"
+     "alt-label": "alternate communications paths",
+     "sp800-53a-label": "SC-47_ODP"
     }
    }
   }

@@ -63,10 +63,20 @@
     {
      "id": "ac-4.10_obj",
      "label": "AC-04(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-4.10_obj-1",
        "label": "AC-04(10)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "capability is provided for privileged administrators to enable and disable {param:ac-04.10_odp.01} under {param:ac-04.10_odp.03};"
        }
@@ -74,6 +84,11 @@
       {
        "id": "ac-4.10_obj-2",
        "label": "AC-04(10)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "capability is provided for privileged administrators to enable and disable {param:ac-04.10_odp.02} under {param:ac-04.10_odp.04}."
        }
@@ -175,28 +190,32 @@
       {
        "en": "security policy filters that privileged administrators have the capability to enable and disable are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(10)_ODP[01]"
     },
     "ac-04.10_odp.02": {
      "guidelines": [
       {
        "en": "privacy policy filters that privileged administrators have the capability to enable and disable are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(10)_ODP[02]"
     },
     "ac-04.10_odp.03": {
      "guidelines": [
       {
        "en": "conditions under which privileged administrators have the capability to enable and disable security policy filters are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(10)_ODP[03]"
     },
     "ac-04.10_odp.04": {
      "guidelines": [
       {
        "en": "conditions under which privileged administrators have the capability to enable and disable privacy policy filters are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-04(10)_ODP[04]"
     }
    }
   }

@@ -50,6 +50,11 @@
     {
      "id": "cp-2.3_obj",
      "label": "CP-02(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the resumption of {param:cp-02.03_odp.01} mission and business functions are planned for within {param:cp-02.03_odp.02} of contingency plan activation."
      }
@@ -120,7 +125,8 @@
     "cp-02.03_odp.01": {
      "alt-identifiers": [
       "cp-2.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-02(03)_ODP[01]"
     },
     "cp-02.03_odp.02": {
      "guidelines": [
@@ -130,7 +136,8 @@
      ],
      "alt-identifiers": [
       "cp-2.3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CP-02(03)_ODP[02]"
     }
    }
   }
@@ -152,7 +159,7 @@
    {
     "ref": "https://ns.nist.gov/sp800-53/req/CP-2.4",
     "mode": "merged-into",
-    "label": "CP-02(04)",
+    "label": "CP-2(4)",
     "title": "Resume All Mission and Business Functions"
    }
   ]

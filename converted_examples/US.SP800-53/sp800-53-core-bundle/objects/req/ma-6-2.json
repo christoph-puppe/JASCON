@@ -43,6 +43,11 @@
     {
      "id": "ma-6.2_obj",
      "label": "MA-06(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "predictive maintenance is performed on {param:ma-06.02_odp.01} at {param:ma-06.02_odp.02}."
      }
@@ -118,7 +123,8 @@
      ],
      "alt-identifiers": [
       "ma-6.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-06(02)_ODP[01]"
     },
     "ma-06.02_odp.02": {
      "guidelines": [
@@ -128,7 +134,8 @@
      ],
      "alt-identifiers": [
       "ma-6.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "MA-06(02)_ODP[02]"
     }
    }
   }

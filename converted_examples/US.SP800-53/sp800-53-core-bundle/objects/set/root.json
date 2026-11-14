@@ -93,7 +93,8 @@
     {
      "title": "32 CFR 2002",
      "citation": "Code of Federal Regulations, Title 32, *Controlled Unclassified Information* (32 C.F.R. 2002).",
-     "url": "https://www.federalregister.gov/documents/2016/09/14/2016-21665/controlled-unclassified-information"
+     "url": "https://www.federalregister.gov/documents/2016/09/14/2016-21665/controlled-unclassified-information",
+     "uuid": "91f992fb-f668-4c91-a50f-0f05b95ccee3"
     },
     {
      "title": "41 CFR 201",
@@ -123,7 +124,8 @@
     {
      "title": "CNSSI 1253",
      "citation": "Committee on National Security Systems Instruction No. 1253, *Security Categorization and Control Selection for National Security Systems* , March 2014.",
-     "url": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm"
+     "url": "https://www.cnss.gov/CNSS/issuances/Instructions.cfm",
+     "uuid": "4e4fbc93-333d-45e6-a875-de36b878b6b9"
     },
     {
      "title": "CNSSI 4009",
@@ -137,7 +139,8 @@
     },
     {
      "title": "Cybersecurity and Privacy Reference Tool: *Security and Privacy Controls for Information Systems and Organizations, 5.1.1*",
-     "url": "https://csrc.nist.gov/projects/cprt/catalog#/cprt/framework/version/SP_800_53_5_1_1/home"
+     "url": "https://csrc.nist.gov/projects/cprt/catalog#/cprt/framework/version/SP_800_53_5_1_1/home",
+     "uuid": "d68867c0-2f21-4193-bef8-300f32701016"
     },
     {
      "title": "DHS NIPP",
@@ -147,7 +150,8 @@
     {
      "title": "DHS TIC",
      "citation": "Department of Homeland Security, *Trusted Internet Connections (TIC)*.",
-     "url": "https://www.dhs.gov/trusted-internet-connections"
+     "url": "https://www.dhs.gov/trusted-internet-connections",
+     "uuid": "4f42ee6e-86cc-403b-a51f-76c2b4f81b54"
     },
     {
      "title": "DOD STIG",
@@ -172,7 +176,8 @@
     {
      "title": "EGOV",
      "citation": "E-Government Act [includes FISMA] (P.L. 107-347), December 2002. ",
-     "url": "https://www.congress.gov/107/plaws/publ347/PLAW-107publ347.pdf"
+     "url": "https://www.congress.gov/107/plaws/publ347/PLAW-107publ347.pdf",
+     "uuid": "7b0b9634-741a-4335-b6fa-161228c3a76e"
     },
     {
      "title": "EO 13526",
@@ -187,7 +192,8 @@
     {
      "title": "EO 13587",
      "citation": "Executive Order 13587, *Structural Reforms to Improve the Security of Classified Networks and the Responsible Sharing and Safeguarding of Classified Information* , October 2011.",
-     "url": "https://obamawhitehouse.archives.gov/the-press-office/2011/10/07/executive-order-13587-structural-reforms-improve-security-classified-net"
+     "url": "https://obamawhitehouse.archives.gov/the-press-office/2011/10/07/executive-order-13587-structural-reforms-improve-security-classified-net",
+     "uuid": "0af071a6-cf8e-48ee-8c82-fe91efa20f94"
     },
     {
      "title": "EO 13636",
@@ -207,7 +213,8 @@
     {
      "title": "EVIDACT",
      "citation": "Foundations for Evidence-Based Policymaking Act of 2018 (P.L. 115-435), January 2019.",
-     "url": "https://www.congress.gov/115/plaws/publ435/PLAW-115publ435.pdf"
+     "url": "https://www.congress.gov/115/plaws/publ435/PLAW-115publ435.pdf",
+     "uuid": "511da9ca-604d-43f7-be41-b862085420a9"
     },
     {
      "title": "FASC18",
@@ -252,12 +259,14 @@
     {
      "title": "FIPS 199",
      "citation": "National Institute of Standards and Technology (2004) Standards for Security Categorization of Federal Information and Information Systems. (U.S. Department of Commerce, Washington, D.C.), Federal Information Processing Standards Publication (FIPS) 199.",
-     "url": "https://doi.org/10.6028/NIST.FIPS.199"
+     "url": "https://doi.org/10.6028/NIST.FIPS.199",
+     "uuid": "628d22a1-6a11-4784-bc59-5cd9497b5445"
     },
     {
      "title": "FIPS 200",
      "citation": "National Institute of Standards and Technology (2006) Minimum Security Requirements for Federal Information and Information Systems. (U.S. Department of Commerce, Washington, D.C.), Federal Information Processing Standards Publication (FIPS) 200.",
-     "url": "https://doi.org/10.6028/NIST.FIPS.200"
+     "url": "https://doi.org/10.6028/NIST.FIPS.200",
+     "uuid": "599fb53d-5041-444e-a7fe-640d6d30ad05"
     },
     {
      "title": "FIPS 201-2",
@@ -272,7 +281,8 @@
     {
      "title": "FISMA",
      "citation": "Federal Information Security Modernization Act (P.L. 113-283), December 2014.",
-     "url": "https://www.congress.gov/113/plaws/publ283/PLAW-113publ283.pdf"
+     "url": "https://www.congress.gov/113/plaws/publ283/PLAW-113publ283.pdf",
+     "uuid": "0c67b2a9-bede-43d2-b86d-5f35b8be36e9"
     },
     {
      "title": "FISMA IMP",
@@ -287,7 +297,8 @@
     {
      "title": "HSPD 12",
      "citation": "Homeland Security Presidential Directive 12, Policy for a Common Identification Standard for Federal Employees and Contractors, August 2004.",
-     "url": "https://www.dhs.gov/homeland-security-presidential-directive-12"
+     "url": "https://www.dhs.gov/homeland-security-presidential-directive-12",
+     "uuid": "f16e438e-7114-4144-bfe2-2dfcad8cb2d0"
     },
     {
      "title": "HSPD 7",
@@ -422,17 +433,20 @@
     {
      "title": "ISO 15408-1",
      "citation": "International Organization for Standardization/International Electrotechnical Commission 15408-1:2009, *Information technology —Security techniques — Evaluation criteria for IT security — Part 1: Introduction and general model* , April 2017.",
-     "url": "https://www.commoncriteriaportal.org/files/ccfiles/CCPART1V3.1R5.pdf"
+     "url": "https://www.commoncriteriaportal.org/files/ccfiles/CCPART1V3.1R5.pdf",
+     "uuid": "6afc1b04-c9d6-4023-adbc-f8fbe33a3c73"
     },
     {
      "title": "ISO 15408-2",
      "citation": "International Organization for Standardization/International Electrotechnical Commission 15408-2:2008, *Information technology —Security techniques — Evaluation criteria for IT security — Part 2: Security functional requirements* , April 2017.",
-     "url": "https://www.commoncriteriaportal.org/files/ccfiles/CCPART2V3.1R5.pdf"
+     "url": "https://www.commoncriteriaportal.org/files/ccfiles/CCPART2V3.1R5.pdf",
+     "uuid": "87087451-2af5-43d4-88c1-d66ad850f614"
     },
     {
      "title": "ISO 15408-3",
      "citation": "International Organization for Standardization/International Electrotechnical Commission 15408-3:2008, *Information technology—Security techniques — Evaluation criteria for IT security — Part 3: Security assurance requirements* , April 2017.",
-     "url": "https://www.commoncriteriaportal.org/files/ccfiles/CCPART3V3.1R5.pdf"
+     "url": "https://www.commoncriteriaportal.org/files/ccfiles/CCPART3V3.1R5.pdf",
+     "uuid": "4452efc0-e79e-47b8-aa30-b54f3ef61c2f"
     },
     {
      "title": "ISO 20243",
@@ -467,7 +481,8 @@
     {
      "title": "LAMPSON73",
      "citation": "B. W. Lampson, *A Note on the Confinement Problem* , Communications of the ACM 16, 10, pp. 613-615, October 1973.",
-     "url": "https://dl.acm.org/doi/10.1145/362375.362389"
+     "url": "https://dl.acm.org/doi/10.1145/362375.362389",
+     "uuid": "d1cdab13-4218-400d-91a9-c3818dfa5ec8"
     },
     {
      "title": "NARA CUI",
@@ -487,17 +502,20 @@
     {
      "title": "NIAP CCEVS",
      "citation": "National Information Assurance Partnership, *Common Criteria Evaluation and Validation Scheme*.",
-     "url": "https://www.niap-ccevs.org"
+     "url": "https://www.niap-ccevs.org",
+     "uuid": "795aff72-3e6c-4b6b-a80a-b14d84b7f544"
     },
     {
      "title": "NIST CAVP",
      "citation": "National Institute of Standards and Technology (2020) *Cryptographic Algorithm Validation Program* . Available at",
-     "url": "https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program"
+     "url": "https://csrc.nist.gov/projects/cryptographic-algorithm-validation-program",
+     "uuid": "84dc1b0c-acb7-4269-84c4-00dbabacd78c"
     },
     {
      "title": "NIST CMVP",
      "citation": "National Institute of Standards and Technology (2020) *Cryptographic Module Validation Program* . Available at",
-     "url": "https://csrc.nist.gov/projects/cryptographic-module-validation-program"
+     "url": "https://csrc.nist.gov/projects/cryptographic-module-validation-program",
+     "uuid": "1acdc775-aafb-4d11-9341-dc6a822e9d38"
     },
     {
      "title": "NIST CSF",
@@ -511,35 +529,43 @@
     },
     {
      "title": "NIST SP 800-53 Rev 5.1.1 content (with minor errors fixed) and other OSCAL content examples",
-     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.2.1"
+     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.2.1",
+     "uuid": "9a0dc8cb-d398-4635-a7ec-dcbdef1d2113"
     },
     {
      "title": "NIST SP 800-53 Rev 5.1.1 content and other OSCAL content examples",
-     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.2.0"
+     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.2.0",
+     "uuid": "1f2fcda3-408f-422c-aecd-b1717c3f7843"
     },
     {
      "title": "NIST SP 800-53 Rev 5.1.1 content in OSCAL 1.1.2, labels restored and minor bug fixes",
-     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.3.0"
+     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.3.0",
+     "uuid": "9b0c9c43-2722-4bbb-b132-13d34fb94d45"
     },
     {
      "title": "NIST SP 800-53 Rev 5.1.1 content in OSCAL 1.1.2, with minor bug fixes",
-     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.3.0"
+     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.3.0",
+     "uuid": "cb35e1b6-0467-4234-96ba-224045914965"
     },
     {
      "title": "NIST SP 800-53 Rev 5.2.0 content in OSCAL 1.1.3, with minor bug fixes",
-     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.4.0"
+     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.4.0",
+     "uuid": "5ba2a3ba-1aa2-47d8-ad69-5beef7372b98"
     },
     {
      "title": "NIST SP 800-53 content and other OSCAL content examples",
-     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.1.0"
+     "url": "https://github.com/usnistgov/oscal-content/releases/tag/v1.1.0",
+     "uuid": "5a5ffcb9-2272-484e-8d47-4483a0585dec"
     },
     {
      "title": "NIST Special Publication 800-53, Revision 5: * Security and Privacy Controls for Information Systems and Organizations* (DOI link)",
-     "url": "https://doi.org/10.6028/NIST.SP.800-53r5"
+     "url": "https://doi.org/10.6028/NIST.SP.800-53r5",
+     "uuid": "f7cf488d-bc64-4a91-a994-810e153ee481"
     },
     {
      "title": "NIST Special Publication 800-53, Revision 5: * Security and Privacy Controls for Information Systems and Organizations* (PDF)",
-     "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf"
+     "url": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf",
+     "uuid": "c3397cc9-83c6-4459-adb2-836739dc1b94"
     },
     {
      "title": "NITP12",
@@ -549,7 +575,8 @@
     {
      "title": "NSA CSFC",
      "citation": "National Security Agency, *Commercial Solutions for Classified Program (CSfC)*.",
-     "url": "https://www.nsa.gov/resources/everyone/csfc"
+     "url": "https://www.nsa.gov/resources/everyone/csfc",
+     "uuid": "3d575737-98cb-459d-b41c-d7e82b73ad78"
     },
     {
      "title": "NSA MEDIA",
@@ -569,17 +596,20 @@
     {
      "title": "ODNI NITP",
      "citation": "Office of the Director National Intelligence, *National Insider Threat Policy* ",
-     "url": "https://www.dni.gov/files/NCSC/documents/nittf/National_Insider_Threat_Policy.pdf"
+     "url": "https://www.dni.gov/files/NCSC/documents/nittf/National_Insider_Threat_Policy.pdf",
+     "uuid": "06d74ea9-2178-449c-a9c5-b2980f804ac8"
     },
     {
      "title": "OMB A-108",
      "citation": "Office of Management and Budget Memorandum Circular A-108, *Federal Agency Responsibilities for Review, Reporting, and Publication under the Privacy Act* , December 2016.",
-     "url": "https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/circulars/A108/omb_circular_a-108.pdf"
+     "url": "https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/circulars/A108/omb_circular_a-108.pdf",
+     "uuid": "3671ff20-c17c-44d6-8a88-7de203fa74aa"
     },
     {
      "title": "OMB A-130",
      "citation": "Office of Management and Budget Memorandum Circular A-130, *Managing Information as a Strategic Resource* , July 2016.",
-     "url": "https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/circulars/A130/a130revised.pdf"
+     "url": "https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/circulars/A130/a130revised.pdf",
+     "uuid": "27847491-5ce1-4f6a-a1e4-9e483782f0ef"
     },
     {
      "title": "OMB M-03-22",
@@ -609,7 +639,8 @@
     {
      "title": "OMB M-19-03",
      "citation": "Office of Management and Budget Memorandum M-19-03, *Strengthening the Cybersecurity of Federal Agencies by Enhancing the High Value Asset Program* , December 2018.",
-     "url": "https://www.whitehouse.gov/wp-content/uploads/2018/12/M-19-03.pdf"
+     "url": "https://www.whitehouse.gov/wp-content/uploads/2018/12/M-19-03.pdf",
+     "uuid": "c5e11048-1d38-4af3-b00b-0d88dc26860c"
     },
     {
      "title": "OMB M-19-15",
@@ -619,22 +650,26 @@
     {
      "title": "OMB M-19-23",
      "citation": "Office of Management and Budget Memorandum M-19-23, *Phase 1 Implementation of the Foundations for Evidence-Based Policymaking Act of 2018: Learning Agendas, Personnel, and Planning Guidance* , July 2019.",
-     "url": "https://www.whitehouse.gov/wp-content/uploads/2019/07/M-19-23.pdf"
+     "url": "https://www.whitehouse.gov/wp-content/uploads/2019/07/M-19-23.pdf",
+     "uuid": "d886c141-c832-4ad7-ac6d-4b94f4b550d3"
     },
     {
      "title": "POPEK74",
      "citation": "G. Popek, *The Principle of Kernel Design* , in 1974 NCC, AFIPS Cong. Proc., Vol. 43, pp. 977-978.",
-     "url": "https://doi.org/10.1145/1500175.1500361"
+     "url": "https://doi.org/10.1145/1500175.1500361",
+     "uuid": "79453f84-26a4-4995-8257-d32d37aefea3"
     },
     {
      "title": "PRIVACT",
      "citation": "Privacy Act (P.L. 93-579), December 1974.",
-     "url": "https://www.govinfo.gov/content/pkg/STATUTE-88/pdf/STATUTE-88-Pg1896.pdf"
+     "url": "https://www.govinfo.gov/content/pkg/STATUTE-88/pdf/STATUTE-88-Pg1896.pdf",
+     "uuid": "18e71fec-c6fd-475a-925a-5d8495cf8455"
     },
     {
      "title": "SALTZER75",
      "citation": "J. Saltzer and M. Schroeder, *The Protection of Information in Computer Systems* , in Proceedings of the IEEE 63(9), September 1975, pp. 1278-1308.",
-     "url": "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1451869&tag=1"
+     "url": "https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=1451869&tag=1",
+     "uuid": "c9495d6e-ef64-4090-8509-e58c3b9009ff"
     },
     {
      "title": "SP 800-100",
@@ -744,7 +779,8 @@
     {
      "title": "SP 800-160-1",
      "citation": "Ross RS, Oren JC, McEvilley M (2016) Systems Security Engineering: Considerations for a Multidisciplinary Approach in the Engineering of Trustworthy Secure Systems. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-160, Vol. 1, Includes updates as of March 21, 2018.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-160v1"
+     "url": "https://doi.org/10.6028/NIST.SP.800-160v1",
+     "uuid": "e3cc0520-a366-4fc9-abc2-5272db7e3564"
     },
     {
      "title": "SP 800-160-2",
@@ -764,7 +800,8 @@
     {
      "title": "SP 800-166",
      "citation": "Cooper DA, Ferraiolo H, Chandramouli R, Ghadiali N, Mohler J, Brady S (2016) Derived PIV Application and Data Model Test Guidelines. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-166.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-166"
+     "url": "https://doi.org/10.6028/NIST.SP.800-166",
+     "uuid": "e8552d48-cf41-40aa-8b06-f45f7fb4706c"
     },
     {
      "title": "SP 800-167",
@@ -814,7 +851,8 @@
     {
      "title": "SP 800-189",
      "citation": "Sriram K, Montgomery D (2019) Resilient Interdomain Traffic Exchange: BGP Security and DDoS Mitigation. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-189.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-189"
+     "url": "https://doi.org/10.6028/NIST.SP.800-189",
+     "uuid": "f5edfe51-d1f2-422e-9b27-5d0e90b49c72"
     },
     {
      "title": "SP 800-192",
@@ -849,7 +887,8 @@
     {
      "title": "SP 800-37",
      "citation": "Joint Task Force (2018) Risk Management Framework for Information Systems and Organizations: A System Life Cycle Approach for Security and Privacy. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-37, Rev. 2.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-37r2"
+     "url": "https://doi.org/10.6028/NIST.SP.800-37r2",
+     "uuid": "482e4c99-9dc4-41ad-bba8-0f3f0032c1f8"
     },
     {
      "title": "SP 800-39",
@@ -899,12 +938,14 @@
     {
      "title": "SP 800-53A",
      "citation": "Joint Task Force Transformation Initiative (2014) Assessing Security and Privacy Controls in Federal Information Systems and Organizations: Building Effective Assessment Plans. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-53A, Rev. 4, Includes updates as of December 18, 2014.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-53Ar4"
+     "url": "https://doi.org/10.6028/NIST.SP.800-53Ar4",
+     "uuid": "a21aef46-7330-48a0-b2e1-c5bb8b2dd11d"
     },
     {
      "title": "SP 800-53B",
      "citation": "Joint Task Force (2020) Control Baselines and Tailoring Guidance for Federal Information Systems and Organizations. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-53B.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-53B"
+     "url": "https://doi.org/10.6028/NIST.SP.800-53B",
+     "uuid": "46d9e201-840e-440e-987c-2c773333c752"
     },
     {
      "title": "SP 800-55",
@@ -914,32 +955,38 @@
     {
      "title": "SP 800-56A",
      "citation": "Barker EB, Chen L, Roginsky A, Vassilev A, Davis R (2018) Recommendation for Pair-Wise Key-Establishment Schemes Using Discrete Logarithm Cryptography. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-56A, Rev. 3.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-56Ar3"
+     "url": "https://doi.org/10.6028/NIST.SP.800-56Ar3",
+     "uuid": "20957dbb-6a1e-40a2-b38a-66f67d33ac2e"
     },
     {
      "title": "SP 800-56B",
      "citation": "Barker EB, Chen L, Roginsky A, Vassilev A, Davis R, Simon S (2019) Recommendation for Pair-Wise Key-Establishment Using Integer Factorization Cryptography. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-56B, Rev. 2.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-56Br2"
+     "url": "https://doi.org/10.6028/NIST.SP.800-56Br2",
+     "uuid": "0d083d8a-5cc6-46f1-8d79-3081d42bcb75"
     },
     {
      "title": "SP 800-56C",
      "citation": "Barker EB, Chen L, Davis R (2020) Recommendation for Key-Derivation Methods in Key-Establishment Schemes. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-56C, Rev. 2.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-56Cr2"
+     "url": "https://doi.org/10.6028/NIST.SP.800-56Cr2",
+     "uuid": "eef62b16-c796-4554-955c-505824135b8a"
     },
     {
      "title": "SP 800-57-1",
      "citation": "Barker EB (2020) Recommendation for Key Management: Part 1 – General. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-57 Part 1, Rev. 5.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-57pt1r5"
+     "url": "https://doi.org/10.6028/NIST.SP.800-57pt1r5",
+     "uuid": "110e26af-4765-49e1-8740-6750f83fcda1"
     },
     {
      "title": "SP 800-57-2",
      "citation": "Barker EB, Barker WC (2019) Recommendation for Key Management: Part 2 – Best Practices for Key Management Organizations. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-57 Part 2, Rev. 1.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-57pt2r1"
+     "url": "https://doi.org/10.6028/NIST.SP.800-57pt2r1",
+     "uuid": "e7942589-e267-4a5a-a3d9-f39a7aae81f0"
     },
     {
      "title": "SP 800-57-3",
      "citation": "Barker EB, Dang QH (2015) Recommendation for Key Management, Part 3: Application-Specific Key Management Guidance. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-57 Part 3, Rev. 1.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-57pt3r1"
+     "url": "https://doi.org/10.6028/NIST.SP.800-57pt3r1",
+     "uuid": "8306620b-1920-4d73-8b21-12008528595f"
     },
     {
      "title": "SP 800-60-1",
@@ -959,17 +1006,20 @@
     {
      "title": "SP 800-63-3",
      "citation": "Grassi PA, Garcia ME, Fenton JL (2017) Digital Identity Guidelines. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-63-3, Includes updates as of March 2, 2020.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-63-3"
+     "url": "https://doi.org/10.6028/NIST.SP.800-63-3",
+     "uuid": "737513fa-6758-403f-831d-5ddab5e23cb3"
     },
     {
      "title": "SP 800-63A",
      "citation": "Grassi PA, Fenton JL, Lefkovitz NB, Danker JM, Choong Y-Y, Greene KK, Theofanos MF (2017) Digital Identity Guidelines: Enrollment and Identity Proofing. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-63A, Includes updates as of March 2, 2020.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-63a"
+     "url": "https://doi.org/10.6028/NIST.SP.800-63a",
+     "uuid": "9099ed2c-922a-493d-bcb4-d896192243ff"
     },
     {
      "title": "SP 800-63B",
      "citation": "Grassi PA, Fenton JL, Newton EM, Perlner RA, Regenscheid AR, Burr WE, Richer, JP, Lefkovitz NB, Danker JM, Choong Y-Y, Greene KK, Theofanos MF (2017) Digital Identity Guidelines: Authentication and Lifecycle Management. (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-63B, Includes updates as of March 2, 2020.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-63b"
+     "url": "https://doi.org/10.6028/NIST.SP.800-63b",
+     "uuid": "e59c5a7c-8b1f-49ca-8de0-6ee0882180ce"
     },
     {
      "title": "SP 800-70",
@@ -999,7 +1049,8 @@
     {
      "title": "SP 800-79-2",
      "citation": "Ferraiolo H, Chandramouli R, Ghadiali N, Mohler J, Shorter S (2015) Guidelines for the Authorization of Personal Identity Verification Card Issuers (PCI) and Derived PIV Credential Issuers (DPCI). (National Institute of Standards and Technology, Gaithersburg, MD), NIST Special Publication (SP) 800-79-2.",
-     "url": "https://doi.org/10.6028/NIST.SP.800-79-2"
+     "url": "https://doi.org/10.6028/NIST.SP.800-79-2",
+     "uuid": "10963761-58fc-4b20-b3d6-b44a54daba03"
     },
     {
      "title": "SP 800-81-2",
@@ -1054,7 +1105,8 @@
     {
      "title": "USA PATRIOT",
      "citation": "USA Patriot Act (P.L. 107-56), October 2001.",
-     "url": "https://www.congress.gov/107/plaws/publ56/PLAW-107publ56.pdf"
+     "url": "https://www.congress.gov/107/plaws/publ56/PLAW-107publ56.pdf",
+     "uuid": "13f0c39d-eaf7-417a-baef-69a041878bb5"
     },
     {
      "title": "USC 11101",
@@ -1084,9 +1136,218 @@
     {
      "title": "USGCB",
      "citation": "National Institute of Standards and Technology (2020) *United States Government Configuration Baseline* . Available at",
-     "url": "https://csrc.nist.gov/projects/united-states-government-configuration-baseline"
+     "url": "https://csrc.nist.gov/projects/united-states-government-configuration-baseline",
+     "uuid": "98498928-3ca3-44b3-8b1e-f48685373087"
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "metadata": {
+    "last-modified": "2026-05-11T16:01:09.00000-00:00",
+    "oscal-version": "1.2.2",
+    "revisions": [
+     {
+      "title": "Electronic Version of NIST SP 800-53 Rev 5 Controls and SP 800-53A Rev 5 Assessment Procedures",
+      "last-modified": "2023-10-12T00:00:00.000000-04:00",
+      "version": "5.1.1",
+      "oscal-version": "1.1.1",
+      "links": [
+       {
+        "href": "#5a5ffcb9-2272-484e-8d47-4483a0585dec",
+        "rel": "version-history"
+       }
+      ],
+      "remarks": "This OSCAL version of the SP 800-53 Revision 5.1.1 catalog restores the non-padded prop/@name=\\\"label\\\" for all controls, for backwards compatibility and adds prop/@name=\\\"label\\\" with class=\\\"zero-padded\\\" to support and encourage users' transission to zero-padded control IDs. This SP 800-53 Revision 5.1.1 catalog preserves all content changes of the previous 5.1.1+u3 release: one new control (IA-13), three control enhancements, minor grammatical edits/clarifications that do not impact the implementation or outcome of the controls and introduces “leading 0s” to the control identifiers."
+     },
+     {
+      "title": "Electronic Version of NIST SP 800-53 Rev 5.1.1 Controls and SP 800-53A Rev 5.1.1 Assessment Procedures",
+      "last-modified": "2023-11-14T00:00:00.000000-04:00",
+      "version": "5.1.1+u1",
+      "oscal-version": "1.1.1",
+      "links": [
+       {
+        "href": "#5a5ffcb9-2272-484e-8d47-4483a0585dec",
+        "rel": "version-history"
+       }
+      ],
+      "remarks": "This revision of the SP 800-53 Revision 5 Catalog is the finalized changes to NIST SP 800-53 Revision 5.1.1 on November, 7, 2023."
+     },
+     {
+      "title": "Electronic Version of NIST SP 800-53 Rev 5.1.1 Controls and SP 800-53A Rev 5.1.1 Assessment Procedures",
+      "last-modified": "2023-12-04T13:16:10.000000-04:00",
+      "version": "5.1.1+u2",
+      "oscal-version": "1.1.1",
+      "links": [
+       {
+        "href": "#1f2fcda3-408f-422c-aecd-b1717c3f7843",
+        "rel": "version-history"
+       }
+      ],
+      "remarks": "This revision of the OSCAL representation of the NIST SP 800-53 Revision 5.1.1 published on November, 7, 2023, provides enhancements to data representation per community's suggestions."
+     },
+     {
+      "title": "Electronic Version of NIST SP 800-53 Rev 5.1.1 Controls and SP 800-53A Rev 5.1.1 Assessment Procedures",
+      "last-modified": "2023-12-13T20:16:00.000000-00:00",
+      "version": "5.1.1+u3",
+      "oscal-version": "1.1.1",
+      "links": [
+       {
+        "href": "#9a0dc8cb-d398-4635-a7ec-dcbdef1d2113",
+        "rel": "version-history"
+       }
+      ],
+      "remarks": "This revision of the OSCAL representation of the NIST SP 800-53 Revision 5.1.1 published on November, 7, 2023, provides enhancements to data representation per community's suggestions."
+     },
+     {
+      "title": "Electronic Version of NIST SP 800-53 Rev 5.1.1 Controls and SP 800-53A Rev 5.1.1 Assessment Procedures",
+      "last-modified": "2024-02-04T23:16:00.000000-00:00",
+      "version": "5.1.1+u4",
+      "oscal-version": "1.1.2",
+      "links": [
+       {
+        "href": "#9b0c9c43-2722-4bbb-b132-13d34fb94d45",
+        "rel": "version-history"
+       }
+      ],
+      "remarks": "This revision of the OSCAL representation of the NIST SP 800-53 Revision 5.1.1 published on November, 7, 2023, provides a bug fix in SI-03(09) control lines 77352-77359."
+     },
+     {
+      "title": "Electronic (OSCAL) Version of NIST SP 800-53 Rev 5.1.1 Controls and SP 800-53A Rev 5.1.1 Assessment Procedures",
+      "last-modified": "2024-10-31T21:16:00.000000-00:00",
+      "version": "5.1.1+u5",
+      "oscal-version": "1.1.2",
+      "links": [
+       {
+        "href": "#cb35e1b6-0467-4234-96ba-224045914965",
+        "rel": "version-history"
+       }
+      ],
+      "remarks": "This revision of the OSCAL representation of the NIST SP 800-53 Revision 5.1.1 published on November, 7, 2023, provides bug fixes."
+     },
+     {
+      "title": "Electronic (OSCAL) Version of NIST SP 800-53 Rev 5.2.0 Controls and SP 800-53A Rev 5.2.0 Assessment Procedures",
+      "last-modified": "2025-08-26T14:33:16.00000-00:00",
+      "version": "5.2.0",
+      "oscal-version": "1.1.3",
+      "links": [
+       {
+        "href": "#5ba2a3ba-1aa2-47d8-ad69-5beef7372b98",
+        "rel": "version-history"
+       }
+      ],
+      "remarks": "This OSCAL representation of the NIST SP 800-53 Revision 5.2.0 provides updates to the 800-53 v5.1.1 which support users to “securely and reliably deploy patches and updates\\\"."
+     }
+    ],
+    "props": [
+     {
+      "name": "keywords",
+      "value": "Assessment, assessment plan, assurance, availability, computer security, confidentiality, control, control assessment, cybersecurity, FISMA, information security, information system, integrity, personally identifiable information, OSCAL, Open Security Controls Assessment Language, Privacy Act, privacy controls, privacy functions, privacy requirements, Risk Management Framework, security controls, security functions, security requirements, system, system security"
+     }
+    ],
+    "links": [
+     {
+      "href": "#c3397cc9-83c6-4459-adb2-836739dc1b94",
+      "rel": "alternate"
+     },
+     {
+      "href": "#f7cf488d-bc64-4a91-a994-810e153ee481",
+      "rel": "canonical"
+     },
+     {
+      "href": "#d68867c0-2f21-4193-bef8-300f32701016",
+      "rel": "cprt"
+     }
+    ],
+    "roles": [
+     {
+      "id": "creator",
+      "title": "OSCAL Version Creator"
+     },
+     {
+      "id": "contact-creator",
+      "title": "Contact"
+     },
+     {
+      "id": "publisher",
+      "title": "SP 800-53 Publisher"
+     },
+     {
+      "id": "contact-publisher",
+      "title": "Contact"
+     }
+    ],
+    "parties": [
+     {
+      "uuid": "41a93829-b76b-43ec-b9e7-250553511549",
+      "type": "organization",
+      "name": "Joint Task Force, Interagency Working Group",
+      "email-addresses": [
+       "sec-cert@nist.gov"
+      ],
+      "addresses": [
+       {
+        "addr-lines": [
+         "National Institute of Standards and Technology",
+         "Attn: Computer Security Division",
+         "Information Technology Laboratory",
+         "100 Bureau Drive (Mail Stop 8930)"
+        ],
+        "city": "Gaithersburg",
+        "state": "MD",
+        "postal-code": "20899-8930"
+       }
+      ]
+     },
+     {
+      "uuid": "98c78f9b-5d50-4b01-b47f-d16801e8d0ab",
+      "type": "organization",
+      "name": "OSCAL Program",
+      "short-name": "NIST",
+      "email-addresses": [
+       "oscal@nist.gov"
+      ],
+      "addresses": [
+       {
+        "addr-lines": [
+         "National Institute of Standards and Technology",
+         "Attn: Computer Security Division",
+         "Information Technology Laboratory",
+         "100 Bureau Drive (Mail Stop 2000)"
+        ],
+        "city": "Gaithersburg",
+        "state": "MD",
+        "postal-code": "20899-2000"
+       }
+      ]
+     }
+    ],
+    "responsible-parties": [
+     {
+      "role-id": "publisher",
+      "party-uuids": [
+       "41a93829-b76b-43ec-b9e7-250553511549"
+      ]
+     },
+     {
+      "role-id": "contact-publisher",
+      "party-uuids": [
+       "41a93829-b76b-43ec-b9e7-250553511549"
+      ]
+     },
+     {
+      "role-id": "creator",
+      "party-uuids": [
+       "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
+      ]
+     },
+     {
+      "role-id": "contact-creator",
+      "party-uuids": [
+       "98c78f9b-5d50-4b01-b47f-d16801e8d0ab"
+      ]
+     }
+    ]
+   }
   }
  }
 }
