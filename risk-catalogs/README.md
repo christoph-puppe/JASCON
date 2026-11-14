@@ -1,7 +1,7 @@
 # Risk catalogues — ready-made lists of risks (prototype)
 
-*State: 2026-11-10 · version 0.1.0 · lifecycle `draft` · outside the JASCON
-kernel, by decision (backlog #53, closed 2026-11-10).*
+*State: 2026-11-13 · version 0.1.0, released 2026-11-10 · lifecycle `draft` ·
+outside the JASCON kernel, by decision (backlog #53, closed 2026-11-10).*
 
 A risk register usually starts from an empty spreadsheet. This directory
 holds two published lists of typical risks and a tool that imports them into
@@ -39,6 +39,20 @@ belong to the organisation, and they are exactly what the kernel `Risk`
 requires, which is why an entry is not a `Risk`. The shape is
 [`schema/risk-catalog.draft.schema.json`](schema/risk-catalog.draft.schema.json).
 
+The catalogue itself (`catalog.json`) lists its entries and says who
+publishes it and, since 2026-11-13, on which day this version was
+published:
+
+```json
+{ "id": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it",
+  "version": "0.1.0", "released": "2026-11-10", "lifecycle": "draft",
+  "publisher-ref": "https://github.com/christoph-puppe", … }
+```
+
+`released` is optional and a date (`YYYY-MM-DD`). Both shipped catalogues
+state 2026-11-10, the day their header files were last changed. An import
+reads the two fields as the author and the day of what it writes (below).
+
 `suggested-treatments` name controls of NIST SP 800-53 Rev 5, because that
 catalogue ships in this repository under public-domain terms and every
 reference can be checked. All 105 distinct controls the two lists name
@@ -50,7 +64,8 @@ the controls that typically treat the scenario, chosen by the author.
 ```bash
 python3 risk-catalogs/tools/risk_catalog.py import risk-catalogs/office-it \
     --bundle <bundle-dir> --org https://your.example --owner https://your.example/party/ciso \
-    --out <dir> [--tailoring <tailoring-id>] [--not-applicable <file.json>]
+    --out <dir> [--tailoring <tailoring-id>] [--not-applicable <file.json>] \
+    [--author-ref <party-uri>] [--date <YYYY-MM-DD>]
 ```
 
 For every entry the tool writes one kernel `Risk`:
@@ -62,7 +77,26 @@ For every entry the tool writes one kernel `Risk`:
   others are dropped and listed in the import report;
 - with `tailoring-refs` naming that Tailoring;
 - with a `relations` entry pointing back at the catalogue entry, and the
-  catalogue version in `annotations`.
+  catalogue version in `annotations`;
+- with `provenance`, the kernel's field for who wrote a record and when
+  (specification D26): the catalogue's `publisher-ref` and its `released`.
+
+**Who and when can be overwritten.** `--author-ref` and `--date` replace
+what the catalogue states, each on its own: `--author-ref
+https://your.example/party/ciso` alone keeps the catalogue's day. An empty
+value says "nobody" or "no day" (`--author-ref ""`). A Risk gets
+`provenance` only when both an author and a day are known. Where one is
+missing nothing is made up for it: the Risks are written without, the tool
+prints how many, and the import report lists them under
+`without-provenance`. A `--date` that is not a date stops the import before
+anything is written. The report's `provenance` says what the catalogue
+stated, what was given, and how many Risks got their author from which.
+
+What the default means: an imported Risk names the catalogue's publisher as
+its author, because the scenario and the suggested controls are the
+publisher's text. The organisation has decided nothing yet. Once it
+assesses the risk it writes a new version, and that version is its own; the
+app's Risk page then writes the author on the Risk and on the rating.
 
 Nothing references an entry at run time. A new catalogue version cannot
 change a risk the organisation already owns; it can only be compared with
@@ -96,9 +130,10 @@ entry of the catalogue is reported too, since a misspelled id would
 otherwise pass in silence. The tool refuses a file that does not fit the
 schema and a file that decides one entry twice.
 
-The record has no `review-due` yet. How a date of review is evaluated is
-being decided for the kernel's Deviation (backlog #65); the record takes
-the field over once that rule exists.
+The record has no `review-due`. The kernel has one on a Deviation since
+release candidate 4, with the rule that reports a review date that has
+passed (specification D26, REVIEW-1; backlog #65, closed). The record has
+not taken the field over.
 
 ## The demo, measured
 
@@ -107,6 +142,13 @@ bundle, an organisation's Tailoring that selects the MODERATE baseline, the
 office-IT catalogue imported against it with one entry recorded as not
 applicable, and two risks assessed by hand to stand in for the
 organisation's work.
+
+Who decided what in the demo: the 21 risks that are only imported name the
+catalogue's publisher and 2026-11-10, as the import writes them. The
+Tailoring and the two assessed risks, with their ratings, name the
+organisation's CISO. The organisation, its CISO and the two days
+(2026-11-10 and 2026-11-12) are fixed in `build_demo.py` so that the demo
+is the same on every run; nobody assessed anything.
 
 ```bash
 python3 risk-catalogs/tools/build_demo.py /tmp/demo-bundle
@@ -123,6 +165,8 @@ the Tailoring, the not-applicable record and the import report.
 | Measured on the demo | |
 |---|---|
 | Reference validator on the bundle | 1,065 pass, 0 fail (1,014 requirements, 25 sets, 1 component, 1 Tailoring, 23 Risks) |
+| The same with `--require-authors --as-of 2026-11-13` | 1,065 pass, 0 fail: no AUTHOR line, no review date asked |
+| Risks by the author they name | 21 the catalogue's publisher, 2 the organisation's CISO, 0 nobody |
 | Catalogue entries | 24: 23 imported, 1 recorded as not applicable |
 | Suggested treatments dropped because MODERATE does not select them | 5, on 2 risks (`CM-14`; four privacy controls) |
 | Requirements selected by the Tailoring | 287 |

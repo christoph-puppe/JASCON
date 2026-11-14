@@ -53,5 +53,18 @@
   ]
  },
  "without-treatment": [],
- "selected-requirements-no-entry-suggests": 209
+ "selected-requirements-no-entry-suggests": 209,
+ "provenance": {
+  "stated": {
+   "author-ref": "https://github.com/christoph-puppe",
+   "date": "2026-11-10"
+  },
+  "given": {},
+  "records": {
+   "from-source": 23,
+   "from-caller": 0,
+   "none": 0
+  }
+ },
+ "without-provenance": []
 }
