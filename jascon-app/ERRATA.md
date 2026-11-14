@@ -244,3 +244,30 @@ surprise, blunder.
   marked ERRATA 2026-11-13: with the setting, the example check by secops
   opens with the setting's party and is saved under it with today's date;
   without the setting it opens with secops.
+
+## 2026-11-14 · build 0.9.9 · the author of a document whose party is defined twice: this file and the converters gave two answers
+
+- **Symptom.** `jscOscalAuthorParty` and `document_author()` of
+  `jascon/scripts/oscal_conv_lib.py` are written to one text. Put to 4,000
+  generated documents, they named a different author for 41. In every one
+  of them `metadata.parties` defined one uuid twice: this file answered
+  with that party, the converter library with nobody.
+- **Cause.** The text said "the one party the document defines" and did
+  not say what a party defined twice is. This file kept parties in a Map
+  built from pairs, which counts a uuid once and keeps its last
+  definition; the library counted list entries and looked a uuid up by its
+  first definition.
+- **Class.** Mismatch: one rule, two implementations, an input neither
+  author thought of.
+- **Why it was not caught.** Both sides had the same table of thirteen
+  cases, and none of them defined a party twice. Each side passed its own
+  tests.
+- **Fix.** In both: a party is an entry of `parties` with a uuid, and
+  where a uuid is defined twice its first definition is the party. An
+  entry without a uuid is no party. After it, 0 differences on the same
+  4,000 documents (author and day).
+- **Test.** `tests/oscal.test.mjs`, "the author of an OSCAL document: what
+  the table does not say", the four cases after the comment that names
+  this erratum's date; the same four in
+  `jascon/scripts/test_oscal_conv_lib.py`. The comparison itself was run
+  from scripts outside the repository.
