@@ -148,6 +148,64 @@ function jscOscalStated(doc, opts) {
   }
   return { applies: false, "author-ref": null, date: null, party: null };
 }
+/* ---------- whom a statement binds where the source does not say (backlog #74) ----------
+   The kernel requires `obligated-parties` on every statement, and a
+   catalogue seldom says whom its controls bind. So each preset for a
+   publisher's corpus names one party for it, as its converter does: BSI
+   the institution, a CIS Benchmark the system administrator, NIST the
+   organization where a control states no implementation level. That party
+   is the preset's reading of the framework and not a value of the source.
+   Until build 0.9.12 the presets wrote it without a word, and nothing could
+   put another in its place. The author decided on 2026-11-14 that it is an
+   argument with a named default (the converters got `--obligated-party`;
+   this is the same for the presets, after obligated_party of
+   oscal_conv_lib.py).
+
+   - jscOscalPartyDefault says what a preset would write for a document, so
+     that a page can show it before anything is imported and call it what
+     it is: the preset's default.
+   - opts.party puts the caller's party in its place. It is a URI as typed
+     and must be an http(s) URI, as for the converters: a preset's ids lie
+     under the publisher's namespace, and a short name would be minted
+     there, in a namespace that is not the user's. (The generic rules import
+     under a namespace of the user's choosing and do mint a short name.)
+   - Not given (undefined or null), the default is written, and the import
+     writes byte for byte what it wrote before. Given and empty, or given
+     and no http(s) URI, the import is refused: nothing is imported without
+     a party, an overwrite the caller asked for is never dropped, and the
+     default is a named value that is used only where nobody put another.
+   - Where a source names a party for a statement itself (an implementation
+     level in SP 800-53), that one is written, whatever the caller gave.
+   - The report says who chose: `obligated-party` with the party written,
+     `origin` ("converter-default" or "caller", the converters' two words),
+     the default, and where the source names parties itself, how. */
+const JSC_OSCAL_PARTY = {
+  "bsi-gspp": { word: "institution", why: "IT-Grundschutz addresses the institution that applies it" },
+  "nist-sp800-53": { word: "organization", why: "SP 800-53 addresses the organization where a control states no implementation level",
+    sourceStates: "as the implementation level of a control" },
+  "cis-benchmark": { word: "system-administrator", why: "a benchmark's rules are settings a system administrator applies" },
+};
+/* -> { default: URI, why, "source-states": phrase or null }, or null for the generic rules, which have no default */
+function jscOscalPartyDefault(doc, opts) {
+  const o = opts || {}, known = JSC_OSCAL_PARTY[o.preset], cat = doc && doc.catalog;
+  if (!known || !cat) return null;
+  const ns = o.preset === "bsi-gspp" ? JSC_BSI.ns : o.preset === "nist-sp800-53" ? JSC_NIST.ns : (o.ns || jscCisNamespace(cat));
+  return { default: `${String(ns).replace(/\/+$/, "")}/party/${known.word}`, why: known.why, "source-states": known.sourceStates || null };
+}
+const JSC_OSCAL_PARTY_URI = /^https?:\/\/[^\s]+$/;
+/* The party a preset writes and who chose it -> { value, origin, "converter-default", "source-states"? }.
+   Throws where the caller's is no party: the import must not run then. */
+function jscOscalPartyChoice(doc, opts) {
+  const d = jscOscalPartyDefault(doc, opts), given = opts ? opts.party : undefined;
+  let value = d.default, origin = "converter-default";
+  if (given !== undefined && given !== null) {
+    value = String(given).trim(); origin = "caller";
+    if (!value) throw new Error(`no party is named that the statements bind: the kernel requires obligated-parties on every statement. The preset's default is ${d.default}`);
+    if (!JSC_OSCAL_PARTY_URI.test(value)) throw new Error(`the obligated party ${JSON.stringify(value)} is not an http(s) URI of a party. The preset's default is ${d.default}`);
+  }
+  return { value, origin, "converter-default": d.default, ...(d["source-states"] ? { "source-states": d["source-states"] } : {}) };
+}
+
 /* The caller's two fields as jscImportProvenance takes them, and the part of
    an import report that says where `provenance` came from: what the source
    stated, what the caller gave, and of the `n` records that can carry it
@@ -186,7 +244,7 @@ const JSC_BSI = {
   MODAL: { "MUSS": "must", "SOLLTE": "should", "KANN": "may", "DARF NICHT": "must-not", "SOLLTE NICHT": "should-not", "DARF NUR": "may-only",
     "MÜSSEN": "must", "SOLLTEN": "should", "KÖNNEN": "may", "DÜRFEN NICHT": "must-not", "DÜRFEN NUR": "may-only" },
 };
-function jscImportBsi(cat) {
+function jscImportBsi(cat, party) {
   const B = JSC_BSI, ns = B.ns, version = cat.metadata.version, lang = B.lang;
   const objects = [], bm = jscBackMatter(cat), secValues = new Set(), baseline = new Map();
   const report = { preset: "bsi-gspp", controls: 0, statements: 0, "packed-list-values": [], "parameter-slots": 0, "parameter-slots-not-at-insert": [], "unknown-modal-verbs": {}, "parameters-unreferenced": 0 };
@@ -211,7 +269,7 @@ function jscImportBsi(cat) {
     }
     const mv = pp.modal_verb;
     if (mv !== undefined && !(mv in B.MODAL)) report["unknown-modal-verbs"][mv] = (report["unknown-modal-verbs"][mv] || 0) + 1;
-    const st = { id: sid, modality: B.MODAL[mv] || "unspecified", "obligated-parties": [`${ns}/party/institution`], prose: { [lang]: text } };
+    const st = { id: sid, modality: B.MODAL[mv] || "unspecified", "obligated-parties": [party], prose: { [lang]: text } };
     for (const pm of c.params || []) {
       const prm = { name: pm.id, type: "string" };
       if (pm.label) prm.label = pm.label;
@@ -335,7 +393,7 @@ function jscImportBsi(cat) {
    The baselines are profiles of their own and are imported as profiles;
    this preset makes no baseline Set. */
 const JSC_NIST = { ns: "https://ns.nist.gov/sp800-53", key: "sp800-53", lang: "en", rmf: "http://csrc.nist.gov/ns/rmf" };
-function jscImportNist(cat) {
+function jscImportNist(cat, party) {
   const NS = JSC_NIST.ns, version = cat.metadata.version;
   const F = { narr: `${NS}/facet/narrative@1`, a: `${NS}/facet/sp800-53a@1`, odp: `${NS}/facet/odp@1`, rmf: `${NS}/facet/rmf@1`, ref: `${NS}/facet/references@1` };
   const T = v => ({ en: v });
@@ -347,7 +405,7 @@ function jscImportNist(cat) {
     .replace(/\{\{\s*insert:\s*param,\s*([a-z0-9._-]+)\s*\}\}/g, (m, id) => { if (used) used.add(id); return `{param:${id}}`; })
     .replace(/\[([^\]]+)\]\(#[a-zA-Z0-9._-]+\)/g, "$1");
   const byCode = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
-  const report = { preset: "nist-sp800-53", controls: 0, statements: 0, "withdrawn-not-converted": 0, "parameters-from-another-control": [],
+  const report = { preset: "nist-sp800-53", controls: 0, statements: 0, "controls-without-a-stated-party": 0, "withdrawn-not-converted": 0, "parameters-from-another-control": [],
     "parameters-without-insertion": 0, "related-to-withdrawn-or-missing": 0, "references-unresolved": 0, "withdrawn-into-withdrawn": [], "withdrawn-target-missing": [] };
 
   const res = new Map((((cat["back-matter"] || {}).resources) || []).map(r => [r.uuid,
@@ -425,9 +483,11 @@ function jscImportNist(cat) {
   for (const { c } of live) {
     const cid = c.id, params = new Map((c.params || []).map(pm => [pm.id, pm]));
     const plain = ((c.props || []).find(p => p.name === "label" && !p.class) || { value: cid.toUpperCase() }).value;
-    let levels = props(c, "implementation-level", JSC_NIST.rmf);
-    if (!levels.length) levels = ["organization"];
-    const parties = levels.map(v => `${NS}/party/${v}`), stmts = [], declared = new Set();
+    /* a level the control states is the source's and stays; where it states none, the party of the import (the preset's
+       default, <ns>/party/organization, unless the caller named another) */
+    const levels = props(c, "implementation-level", JSC_NIST.rmf);
+    const parties = levels.length ? levels.map(v => `${NS}/party/${v}`) : [party], stmts = [], declared = new Set();
+    if (!levels.length) report["controls-without-a-stated-party"]++;
     for (const pt of flatStatements(c)) {
       const used = new Set(), prose = rewrite(pt.prose, used);
       let sid = pt.id === undefined ? `${cid}_smt` : pt.id;
@@ -666,7 +726,7 @@ function jscCisNamespace(cat) {
   const name = title.replace(/^CIS\s+/i, "").replace(/\s+Benchmark\b.*$/i, "").toLowerCase().replace(/[^a-z0-9.]+/g, "-").replace(/^-+|-+$/g, "");
   return "https://ns.cisecurity.org/benchmark/" + (name || "benchmark");
 }
-function jscImportCis(cat, opts) {
+function jscImportCis(cat, opts, party) {
   const C = JSC_CIS, version = cat.metadata.version, lang = C.lang;
   const ns = (opts && opts.ns) || jscCisNamespace(cat);
   const F_NARR = `${ns}/facet/narrative@1`, F_XREF = `${ns}/facet/external-references@1`;
@@ -700,7 +760,7 @@ function jscImportCis(cat, opts) {
     if (methodProp) report.methods[methodProp.value] = (report.methods[methodProp.value] || 0) + 1;
     report.controls++; report.statements++; report["minted-prose"]++;
     const req = { id: rid, version, label: labelProp ? labelProp.value : c.id, lifecycle: "active", title: L(c.title === undefined ? c.id : c.title),
-      statements: [{ id: "s1", modality: "unspecified", "obligated-parties": [`${ns}/party/system-administrator`],
+      statements: [{ id: "s1", modality: "unspecified", "obligated-parties": [party],
         prose: { [lang]: c.title === undefined ? "" : c.title } }] };
     if (aliases.length) req.aliases = aliases;
     const narr = {}, acrit = {}, xrefs = [];
@@ -815,8 +875,12 @@ function jscImportCis(cat, opts) {
 function jscOscalImportCatalog(doc, opts) {
   const cat = doc && doc.catalog;
   if (!cat || !cat.metadata) throw new Error("this is not an OSCAL catalog: no catalog.metadata");
-  if (opts.preset === "cis-benchmark") return jscImportCis(cat, opts);
-  const out = opts.preset === "bsi-gspp" ? jscImportBsi(cat) : opts.preset === "nist-sp800-53" ? jscImportNist(cat) : jscImportGeneric(cat, opts);
+  /* whom the statements bind, and who said so (backlog #74): a preset has a default the caller may replace; the
+     generic rules have none, so there the party is the caller's or the import is refused (#70) */
+  const choice = JSC_OSCAL_PARTY[opts.preset] ? jscOscalPartyChoice(doc, opts) : null;
+  if (opts.preset === "cis-benchmark") { const res = jscImportCis(cat, opts, choice.value); res.report["obligated-party"] = choice; return res; }
+  const out = opts.preset === "bsi-gspp" ? jscImportBsi(cat, choice.value) : opts.preset === "nist-sp800-53" ? jscImportNist(cat, choice.value) : jscImportGeneric(cat, opts);
+  out.report["obligated-party"] = choice || { value: jscOscalRules.jscPartyRef(opts.party, String(opts.ns).replace(/\/+$/, "")), origin: "caller", "converter-default": null };
   /* Requirements and Sets: no record of these imports can carry `provenance`, so none is counted, whatever the caller gave */
   out.report.provenance = jscOscalProvenanceReport({ "author-ref": null, date: null }, jscOscalGiven(opts), "none", 0);
   return out;
@@ -934,6 +998,6 @@ function jscOscalKind(doc) {
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { jscOscalSlug, jscOscalProse, jscOscalImportCatalog, jscOscalGuessPreset, jscOscalImportProfile, jscOscalKind, JSC_BSI, JSC_NIST,
+  module.exports = { jscOscalSlug, jscOscalProse, jscOscalImportCatalog, jscOscalGuessPreset, JSC_OSCAL_PARTY, jscOscalPartyDefault, jscOscalPartyChoice, jscOscalImportProfile, jscOscalKind, JSC_BSI, JSC_NIST,
     JSC_CIS, jscCisNamespace, jscOscalAuthorParty, jscOscalAuthorRef, jscOscalDate, jscOscalStated };
 }

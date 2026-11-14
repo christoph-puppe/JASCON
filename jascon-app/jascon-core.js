@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.11";
+const JSC_BUILD = "0.9.12";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -263,6 +263,14 @@ function jscClassifyFiles(files) {
     else if (scalePaths.has(f.path) || jscIsScale(json)) { rec.kind = "scale"; rec.id = json.id || null; }
     else if (type && type !== "manifest") { rec.kind = "object"; rec.type = type; rec.id = json.id || f.path; }
   }
+  /* MANIFEST-1: said when the files arrive. Nothing is changed: the set keeps the manifest as it came. */
+  const listedPaths = pinned("objects");
+  for (const rec of records) {
+    if (rec.kind === "object" && rec.type === "attestation" && listedPaths.has(rec.path)) {
+      problems.push(`${JSC_MANIFEST} lists an Attestation (${rec.path}), which no content manifest may (MANIFEST-1). The set is kept as it came and the Validate page reports it; ` +
+        "once the set is changed, an export writes a manifest that leaves the Attestation out and puts its file beside it");
+    }
+  }
   return { records, problems };
 }
 
@@ -350,8 +358,22 @@ function jscObjectPath(type, id, taken) {
    a bundle that has no manifest of its own (an imported catalog names its
    source, a resolved package the Tailoring it was resolved with).
    -> { files: [{path, text}], manifest, verbatim, problems } */
-/* An attestation is listed only if the manifest it came with listed it;
-   otherwise it travels beside the manifest (D3.1). */
+/* An Attestation lies beside the manifest and is not listed in it: it binds
+   the digest of the manifest's bytes, so a manifest that lists one cannot be
+   the manifest it binds (D3.1; MANIFEST-1, backlog #75). No manifest this
+   app writes lists one.
+   A manifest a set came with may list one, against that rule. Then two
+   things hold, and neither repairs anything in silence:
+   - A set nobody changed leaves as it came, with that manifest, byte for
+     byte: the export passes on what it was given, and the Validate page
+     reports the listing as the failure it is.
+   - Once the set was written to, the export writes a new manifest, and that
+     one leaves the Attestation out. Its file leaves beside the manifest,
+     moved there if it lay in a folder (the reference reads an unlisted
+     Attestation only beside the manifest), and the export says so
+     (`problems`).
+   jscBesideManifest: is this Attestation beside the manifest the set came
+   with? */
 const jscBesideManifest = r => r.type === "attestation" && !r.entry;
 /* An object the manifest of the set does not know yet: the app wrote it
    ("authored"), or it came with an advice pack ("pack") and is the vendor's
@@ -387,10 +409,13 @@ const jscKeptPacks = g => g.aux.filter(a => a.path.startsWith(JSC_PACK_STORE_DIR
   .map(a => [a.path.slice(JSC_PACK_STORE_DIR.length), a.text]);
 async function jscBuildBundle(g, provenance) {
   const problems = [];
-  const objects = [];
+  /* `objects`: the lines of the manifest as the set came, an Attestation it listed among them; this is compared with
+     the manifest the set came with. `leftOut`: the Attestations among them, which a manifest written here does not list. */
+  const objects = [], leftOut = [];
   for (const id of g.order) {
     const r = g.objects.get(id);
     if (jscBesideManifest(r)) continue;
+    if (r.type === "attestation") leftOut.push(r);
     objects.push({ id: r.obj.id, version: r.obj.version,
       "package-digest": await jscPackageDigest(r.text),
       "semantic-digest": await jscSemanticDigest(r.obj), path: r.path });
@@ -405,7 +430,10 @@ async function jscBuildBundle(g, provenance) {
   for (const x of g.scales.values()) { const p = await pinOf(x); if (p) { scalePins.push(p); shipped.push(x); } }
   const old = g.manifest || {};
   const kernel = jscNeedsKernel2(g) ? JSC_KERNEL : old["kernel-version"];
-  const said = m => JSON.stringify([m["kernel-version"] || null, m.objects || [], m["facet-schemas"] || [], m.scales || []]);
+  /* What a manifest says: the pin and its three lists, in canonical form. The order of the lines counts, the order of
+     the keys inside a line does not: until build 0.9.12 it did, and a manifest that another tool wrote with `path`
+     before the digests was replaced by a new one on export although nothing in the set had changed (ERRATA.md). */
+  const said = m => jscCanonical([m["kernel-version"] || null, m.objects || [], m["facet-schemas"] || [], m.scales || []]);
   const manifest = { "manifest-version": "1" };
   if (kernel) manifest["kernel-version"] = kernel;
   manifest.provenance = g.manifest
@@ -416,9 +444,25 @@ async function jscBuildBundle(g, provenance) {
   if (scalePins.length) manifest.scales = scalePins;
   if (old.renderings) manifest.renderings = old.renderings;
   const verbatim = !!g.manifest && said(old) === said(manifest);
+  /* a new manifest lists no Attestation; one that lay in a folder gets a place beside the manifest */
+  const moved = new Map();
+  if (!verbatim && leftOut.length) {
+    const out = new Set(leftOut.map(r => r.obj.id)), taken = new Set([JSC_MANIFEST, ...[...g.objects.values()].map(r => r.path), ...g.aux.map(a => a.path)]);
+    manifest.objects = objects.filter(e => !out.has(e.id));
+    for (const r of leftOut) {
+      if (r.path.includes("/")) {
+        const base = r.path.split("/").pop().replace(/\.json$/i, "");
+        let to = base + ".json";
+        for (let n = 2; taken.has(to); n++) to = `${base}-${n}.json`;
+        taken.add(to); moved.set(r.path, to);
+      }
+      problems.push(`${r.obj.id}: was listed in the manifest this set came with; a manifest written here lists no Attestation (MANIFEST-1), ` +
+        `so it leaves beside the manifest as ${moved.get(r.path) || r.path}`);
+    }
+  }
   const files = [
     { path: JSC_MANIFEST, text: verbatim ? g.manifestText : jscSerialize(manifest) },
-    ...g.order.map(id => ({ path: g.objects.get(id).path, text: g.objects.get(id).text })),
+    ...g.order.map(id => ({ path: moved.get(g.objects.get(id).path) || g.objects.get(id).path, text: g.objects.get(id).text })),
     ...shipped.map(x => ({ path: x.path, text: x.text })),
     ...g.aux,
   ];

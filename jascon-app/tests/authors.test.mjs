@@ -93,15 +93,21 @@ test("no page mints a party from a word of its own (backlog #70)", () => {
     /* 2. no template or string that ends a namespace with /party/<a fixed word> */
     for (const m of text.matchAll(/\/party\/([a-z][a-z-]*)[`"']/g)) found.push(`${f}: /party/${m[1]}`);
   }
-  const CONVERTERS = ["jascon-oscal.js: /party/institution", "jascon-oscal.js: /party/system-administrator", "jascon-oscal.js: /party/cis", "jascon-oscal.js: /party/cis"];
+  /* The one literal left is CIS as the author of its own cross-references, which the source states (it is the
+     publisher). The party a preset writes where the source names nobody is no literal in the code any more: since
+     build 0.9.12 it is a named default in one table, which a caller may replace (backlog #74), and the table is
+     listed below so that a new default is seen. */
+  const CONVERTERS = ["jascon-oscal.js: /party/cis", "jascon-oscal.js: /party/cis"];
   assert.deepEqual(found.sort(), CONVERTERS.sort(), "a party written from a word in the code");
   /* 3. a party made through a template: jscPartyRef, from the name that was typed, is the one place for the pages. The
-     OSCAL import has two more, both read from the source: the document's author, from the name of a party the document
-     defines, and the NIST preset's implementation levels. Where a control states no level that preset writes
-     "organization", as convert_nist.py does; it is listed here so that it is seen. */
+     OSCAL import has three more: the document's author, from the name of a party the document defines; the NIST
+     preset's implementation levels, which the source states; and the named default of a preset. */
   const templates = sources.flatMap(f => [...code(fs.readFileSync(path.join(APP, f), "utf8")).matchAll(/\/party\/\$\{([^}]*)\}/g)].map(m => `${f}: ${m[1]}`));
-  assert.deepEqual(templates, ["jascon-oscal.js: jscOscalSlug(party.name)", "jascon-oscal.js: v", "jascon-rules.js: slug"]);
-  assert.equal([...code(fs.readFileSync(path.join(APP, "jascon-oscal.js"), "utf8")).matchAll(/levels = \["organization"\]/g)].length, 1);
+  assert.deepEqual(templates, ["jascon-oscal.js: jscOscalSlug(party.name)", "jascon-oscal.js: known.word", "jascon-oscal.js: v", "jascon-rules.js: slug"]);
+  const oscalRules = require("../jascon-oscal.js");
+  assert.deepEqual(Object.fromEntries(Object.entries(oscalRules.JSC_OSCAL_PARTY).map(([preset, d]) => [preset, d.word])),
+    { "bsi-gspp": "institution", "nist-sp800-53": "organization", "cis-benchmark": "system-administrator" }, "the defaults of the presets, each named and replaceable");
+  assert.equal(/levels = \["organization"\]/.test(code(fs.readFileSync(path.join(APP, "jascon-oscal.js"), "utf8"))), false, "the NIST default is no longer written in passing");
   /* 4. no form starts a party field from a word: the drafts of the pages hold no such default */
   for (const [f, word] of [["assess.html", /performer:\s*"[a-z]/], ["browse.html", /party:\s*"[a-z]/], ["map.html", /author:\s*"[a-z]/], ["tailor.html", /devApprover\s*\|\|\s*"/]]) {
     assert.equal(word.test(fs.readFileSync(path.join(APP, f), "utf8")), false, `${f} starts a party field from a word`);

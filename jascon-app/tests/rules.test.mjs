@@ -610,6 +610,30 @@ test("attestation-binds: one line per Attestation in the order of the ids, in th
   assert.deepEqual(lines.filter(l => l.fails).map(l => l.id.split("/").pop()), ["d-changed", "f-empty"]);
 });
 
+/* MANIFEST-1 (D3.11; backlog #75): no content manifest lists an Attestation. The reference runner holds an
+   implementation to the number of failures and to the id each one starts with, and so does this test; the count
+   of the vectors is held too. */
+test("MANIFEST-1: all 8 vectors; one failure per Attestation among the objects a manifest lists, in the order of the ids", () => {
+  const v = vectors("attestation")["listed-vectors"];
+  assert.equal(v.length, 8);
+  let failures = 0;
+  for (const c of v) {
+    const objs = rules.jscTypedObjects(c.objects);
+    assert.equal(objs.size, c.objects.length, c.name + ": every object of the case types");
+    const errs = rules.jscListedAttestationErrors(objs);
+    assert.equal(errs.length, c["expected-fails"], c.name);
+    assert.deepEqual(errs.map(e => e.slice(0, e.indexOf(": an Attestation is listed"))), c["expected-ids"], c.name + ": each failure starts with the id, in the order of the ids");
+    assert.ok(errs.every(e => e.includes("(MANIFEST-1: ")), c.name);
+    failures += errs.length;
+  }
+  assert.equal(failures, 7, "seven listed Attestations in the eight cases");
+  /* the reference's sentence, written out once */
+  const att = { id: "https://a.example/attestation/x", version: "1", lifecycle: "withdrawn", "subject-semantic-digests": ["sha256:" + "0".repeat(64)],
+    "content-manifest-digest": "sha256:" + "1".repeat(64), signer: "https://a.example/p", timestamp: "2026-11-14T09:00:00Z" };
+  assert.deepEqual(rules.jscListedAttestationErrors(rules.jscTypedObjects([att])), ["https://a.example/attestation/x: an Attestation is listed in the content manifest " +
+    "(MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)"]);
+});
+
 /* The reference sees a bundle on disk. A set is a bundle that was loaded and may have been written to since, so
    jscSetBinds first decides which bundle the comparison is made against (its `basis`). Held here on the IFA
    bundle with files added the way the store holds them: `origin` says whether a file arrived or was written. */
@@ -677,6 +701,37 @@ test("attestation-binds on a set: as loaded it is held to the manifest it came w
   const scaleText = fs.readFileSync(path.join(EXAMPLES, "scale-bsi-200-3-schadenshoehe.json"), "utf8");
   const scaled = await binds([...arrived(), { path: "scales/schadenshoehe.json", text: scaleText, kind: "scale", type: null, id: JSON.parse(scaleText).id, origin: "authored" }]);
   assert.deepEqual([scaled.basis, said(scaled, AID)[1]], ["export", "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"]);
+
+  /* MANIFEST-1 on the two bases. A bundle whose manifest lists its Attestation, as the IFA bundle had it until 2026-11-13:
+     the file lies under objects/ and the manifest has a line for it with both digests */
+  const manifest = JSON.parse(loaded.g.manifestText), attText = loaded.g.objects.get(AID).text, attPath = "objects/attestation/attestation-ifa-ato.json";
+  manifest.objects.push({ id: AID, version: ifaAtt.version, path: attPath, "package-digest": await core.jscPackageDigest(attText), "semantic-digest": await core.jscSemanticDigest(ifaAtt) });
+  const listing = () => arrived().map(r => (r.kind === "manifest" ? { ...r, text: core.jscSerialize(manifest) } : r.id === AID ? { ...r, path: attPath } : r));
+  const MANIFEST_1 = `${AID}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - ` +
+    "an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)";
+  const refused = await binds(listing()), line = b => b.lines.find(l => l.id === AID);
+  assert.deepEqual([refused.basis, line(refused).listed, line(refused)["manifest-1"]], ["loaded", "refused", MANIFEST_1]);
+  assert.deepEqual(said(refused, AID), ["line", "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"],
+    "it is still held to what it binds: a manifest that lists it cannot be the one it binds");
+  const asCame = await core.jscBuildBundle(refused.g);
+  assert.deepEqual([asCame.verbatim, asCame.files[0].text === core.jscSerialize(manifest), asCame.problems], [true, true, []], "a set nobody changed leaves as it came, listing and all: nothing is repaired in silence");
+  const res = await rules.jscCheckGraph(refused.g, await core.jscVerify(refused.g));
+  assert.deepEqual(res.findings.filter(f => f.kind === "error").map(f => `${f.object}: ${f.message}`), [MANIFEST_1], "the whole-set check fails the set with the reference's sentence, and with nothing else");
+  /* the same set after something else in it was written here: the manifest in question is the export's, which lists no Attestation */
+  const risk = [...refused.g.objects.values()].find(r => r.type === "risk");
+  const after = await binds(listing().map(r => (r.path === risk.path ? { ...r, text: core.jscSerialize({ ...risk.obj, title: { en: "Reworded" } }), origin: "authored" } : r)));
+  assert.deepEqual([after.basis, line(after).listed, line(after)["manifest-1"]], ["export", "left-out", null]);
+  const rewritten = await core.jscBuildBundle(after.g);
+  assert.equal(rewritten.verbatim, false);
+  assert.deepEqual(rewritten.manifest.objects.filter(e => e.id === AID), [], "the manifest written here does not list the Attestation");
+  assert.equal(rewritten.manifest.objects.length, manifest.objects.length - 1, "and lists everything else");
+  assert.deepEqual(rewritten.files.filter(f => /attestation/.test(f.path)).map(f => [f.path, f.text === attText]), [["attestation-ifa-ato.json", true]], "its file leaves beside the manifest, unchanged");
+  assert.deepEqual(rewritten.problems, [`${AID}: was listed in the manifest this set came with; a manifest written here lists no Attestation (MANIFEST-1), so it leaves beside the manifest as attestation-ifa-ato.json`]);
+  assert.equal(after["manifest-digest"], await core.jscPackageDigest(rewritten.files[0].text), "and that manifest is the one the comparison names");
+  const res2 = await rules.jscCheckGraph(after.g, await core.jscVerify(after.g));
+  assert.deepEqual(res2.findings.filter(f => f.kind === "error"), []);
+  assert.deepEqual(res2.findings.filter(f => f.area === "manifest" && f.object === AID).map(f => [f.kind, f.message]),
+    [["note", "the manifest this set came with lists this Attestation, which MANIFEST-1 refuses; the manifest an export writes now does not list it, and the file leaves beside the manifest"]]);
 
   /* a set without a manifest: there is nothing it was loaded with, and the comparison is with what an export would write */
   const loose = await binds(arrived().filter(r => r.kind !== "manifest"));

@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.11";
+const JSC_BUILD = "0.9.12";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -387,6 +387,14 @@ function jscClassifyFiles(files) {
     else if (scalePaths.has(f.path) || jscIsScale(json)) { rec.kind = "scale"; rec.id = json.id || null; }
     else if (type && type !== "manifest") { rec.kind = "object"; rec.type = type; rec.id = json.id || f.path; }
   }
+  /* MANIFEST-1: said when the files arrive. Nothing is changed: the set keeps the manifest as it came. */
+  const listedPaths = pinned("objects");
+  for (const rec of records) {
+    if (rec.kind === "object" && rec.type === "attestation" && listedPaths.has(rec.path)) {
+      problems.push(`${JSC_MANIFEST} lists an Attestation (${rec.path}), which no content manifest may (MANIFEST-1). The set is kept as it came and the Validate page reports it; ` +
+        "once the set is changed, an export writes a manifest that leaves the Attestation out and puts its file beside it");
+    }
+  }
   return { records, problems };
 }
 
@@ -474,8 +482,22 @@ function jscObjectPath(type, id, taken) {
    a bundle that has no manifest of its own (an imported catalog names its
    source, a resolved package the Tailoring it was resolved with).
    -> { files: [{path, text}], manifest, verbatim, problems } */
-/* An attestation is listed only if the manifest it came with listed it;
-   otherwise it travels beside the manifest (D3.1). */
+/* An Attestation lies beside the manifest and is not listed in it: it binds
+   the digest of the manifest's bytes, so a manifest that lists one cannot be
+   the manifest it binds (D3.1; MANIFEST-1, backlog #75). No manifest this
+   app writes lists one.
+   A manifest a set came with may list one, against that rule. Then two
+   things hold, and neither repairs anything in silence:
+   - A set nobody changed leaves as it came, with that manifest, byte for
+     byte: the export passes on what it was given, and the Validate page
+     reports the listing as the failure it is.
+   - Once the set was written to, the export writes a new manifest, and that
+     one leaves the Attestation out. Its file leaves beside the manifest,
+     moved there if it lay in a folder (the reference reads an unlisted
+     Attestation only beside the manifest), and the export says so
+     (`problems`).
+   jscBesideManifest: is this Attestation beside the manifest the set came
+   with? */
 const jscBesideManifest = r => r.type === "attestation" && !r.entry;
 /* An object the manifest of the set does not know yet: the app wrote it
    ("authored"), or it came with an advice pack ("pack") and is the vendor's
@@ -511,10 +533,13 @@ const jscKeptPacks = g => g.aux.filter(a => a.path.startsWith(JSC_PACK_STORE_DIR
   .map(a => [a.path.slice(JSC_PACK_STORE_DIR.length), a.text]);
 async function jscBuildBundle(g, provenance) {
   const problems = [];
-  const objects = [];
+  /* `objects`: the lines of the manifest as the set came, an Attestation it listed among them; this is compared with
+     the manifest the set came with. `leftOut`: the Attestations among them, which a manifest written here does not list. */
+  const objects = [], leftOut = [];
   for (const id of g.order) {
     const r = g.objects.get(id);
     if (jscBesideManifest(r)) continue;
+    if (r.type === "attestation") leftOut.push(r);
     objects.push({ id: r.obj.id, version: r.obj.version,
       "package-digest": await jscPackageDigest(r.text),
       "semantic-digest": await jscSemanticDigest(r.obj), path: r.path });
@@ -529,7 +554,10 @@ async function jscBuildBundle(g, provenance) {
   for (const x of g.scales.values()) { const p = await pinOf(x); if (p) { scalePins.push(p); shipped.push(x); } }
   const old = g.manifest || {};
   const kernel = jscNeedsKernel2(g) ? JSC_KERNEL : old["kernel-version"];
-  const said = m => JSON.stringify([m["kernel-version"] || null, m.objects || [], m["facet-schemas"] || [], m.scales || []]);
+  /* What a manifest says: the pin and its three lists, in canonical form. The order of the lines counts, the order of
+     the keys inside a line does not: until build 0.9.12 it did, and a manifest that another tool wrote with `path`
+     before the digests was replaced by a new one on export although nothing in the set had changed (ERRATA.md). */
+  const said = m => jscCanonical([m["kernel-version"] || null, m.objects || [], m["facet-schemas"] || [], m.scales || []]);
   const manifest = { "manifest-version": "1" };
   if (kernel) manifest["kernel-version"] = kernel;
   manifest.provenance = g.manifest
@@ -540,9 +568,25 @@ async function jscBuildBundle(g, provenance) {
   if (scalePins.length) manifest.scales = scalePins;
   if (old.renderings) manifest.renderings = old.renderings;
   const verbatim = !!g.manifest && said(old) === said(manifest);
+  /* a new manifest lists no Attestation; one that lay in a folder gets a place beside the manifest */
+  const moved = new Map();
+  if (!verbatim && leftOut.length) {
+    const out = new Set(leftOut.map(r => r.obj.id)), taken = new Set([JSC_MANIFEST, ...[...g.objects.values()].map(r => r.path), ...g.aux.map(a => a.path)]);
+    manifest.objects = objects.filter(e => !out.has(e.id));
+    for (const r of leftOut) {
+      if (r.path.includes("/")) {
+        const base = r.path.split("/").pop().replace(/\.json$/i, "");
+        let to = base + ".json";
+        for (let n = 2; taken.has(to); n++) to = `${base}-${n}.json`;
+        taken.add(to); moved.set(r.path, to);
+      }
+      problems.push(`${r.obj.id}: was listed in the manifest this set came with; a manifest written here lists no Attestation (MANIFEST-1), ` +
+        `so it leaves beside the manifest as ${moved.get(r.path) || r.path}`);
+    }
+  }
   const files = [
     { path: JSC_MANIFEST, text: verbatim ? g.manifestText : jscSerialize(manifest) },
-    ...g.order.map(id => ({ path: g.objects.get(id).path, text: g.objects.get(id).text })),
+    ...g.order.map(id => ({ path: moved.get(g.objects.get(id).path) || g.objects.get(id).path, text: g.objects.get(id).text })),
     ...shipped.map(x => ({ path: x.path, text: x.text })),
     ...g.aux,
   ];
@@ -2308,6 +2352,25 @@ function jscBindsReport(atts, manifestDigest, delivered, keptPacks) {
   }
   return out;
 }
+/* MANIFEST-1 (D3.11; backlog #75, author decision of 2026-11-14: "refusal
+   in all"). Port of listed_attestation_errors of validate_core.py, held to
+   the `listed-vectors` of attestation-vectors.json.
+   An object a content manifest lists is no Attestation. D3.1 excludes
+   Attestations from the manifest by definition: an Attestation binds the
+   digest of the manifest's bytes, so a manifest that lists one cannot be
+   the manifest it binds. Until that day only a pack's manifest was held to
+   it (ADVICE-1), and an ordinary bundle that listed its own Attestation
+   passed. The rule is about where an Attestation lies and asks nothing else
+   of it: what it binds, whether it names an envelope and what its lifecycle
+   is change nothing. Its binding is still computed and reported.
+   objs: Map(id -> {type, obj}), the objects a manifest lists.
+   -> [error], one per listed Attestation, in the order of the ids */
+const JSC_MANIFEST_RULES = {
+  "MANIFEST-1": "Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest",
+};
+const jscListedAttestationErrors = objs => [...objs.keys()].sort().filter(id => objs.get(id).type === "attestation")
+  .map(id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: ${JSC_MANIFEST_RULES["MANIFEST-1"]})`);
+
 /* What the Attestations of a set bind: the primitive applied to the set a
    page holds (jscCheckGraph, and the Assess page for one Attestation).
 
@@ -2344,9 +2407,19 @@ function jscBindsReport(atts, manifestDigest, delivered, keptPacks) {
    trace in the set, so such a set is read as loaded as well; the missing
    object is an error of its own.
 
+   MANIFEST-1 follows the same two bases. As loaded, the manifest is the one
+   the set came with, and an Attestation it lists is the reference's failure
+   (`listed: "refused"` on its line, the failure in `manifest-1`). The
+   manifest an export writes never lists an Attestation (jscBuildBundle), so
+   on "export" there is no such failure; an Attestation the earlier manifest
+   listed is marked `listed: "left-out"`, so that a page can say that the
+   export leaves it out of the manifest and puts the file beside it. A set
+   is never repaired without that being said.
+
    g: the graph; objs: Map(id -> {type, obj}), the typed objects of the set.
    -> { basis, "manifest-digest", "loaded-manifest-digest" (or null),
-        "kept-packs": [digest], lines: jscBindsReport }
+        "kept-packs": [digest], lines: jscBindsReport, each with `listed`
+        (null | "refused" | "left-out") and `manifest-1` (the failure or null) }
       A set without an Attestation has basis null and no line: nothing was
       compared, and nothing is said. */
 async function jscSetBinds(g, objs) {
@@ -2360,12 +2433,17 @@ async function jscSetBinds(g, objs) {
   const written = [...g.objects.values()].some(r => jscRulesAdded(r) && !jscRulesBeside(r)) || [...g.scales.values(), ...g.facetSchemas].some(jscRulesAdded);
   const basis = g.manifest && (built.verbatim || !written) ? "loaded" : "export";
   const digest = basis === "loaded" ? loaded : await jscRulesPackageDigest(built.files[0].text);
-  /* the objects the manifest lists: on "loaded" those with a line in it, on "export" all but the Attestations beside it */
-  const isListed = r => !!r && (basis === "loaded" ? !!r.entry : !jscRulesBeside(r));
-  const listed = new Map([...objs].filter(([id]) => isListed(g.objects.get(id))));
+  /* the objects the manifest lists: on "loaded" those with a line in it; on "export" every object but the Attestations,
+     because a manifest written here lists none of them, wherever the manifest the set came with had them */
+  const isListed = (r, type) => !!r && (basis === "loaded" ? !!r.entry : type !== "attestation");
+  const listed = new Map([...objs].filter(([id, x]) => isListed(g.objects.get(id), x.type)));
   const kept = jscRulesKeptPacks(g).map(([name]) => "sha256:" + name);
-  return { basis, "manifest-digest": digest, "loaded-manifest-digest": loaded, "kept-packs": kept,
-    lines: jscBindsReport(atts, digest, await jscSemanticDigests(listed), kept) };
+  const refused = new Map(jscListedAttestationErrors(listed).map(m => [[...atts.keys()].find(id => m.startsWith(id + ": ")), m]));
+  const lines = jscBindsReport(atts, digest, await jscSemanticDigests(listed), kept).map(l => {
+    const cameListed = !!(g.objects.get(l.id) || {}).entry;
+    return { ...l, listed: refused.has(l.id) ? "refused" : cameListed && basis === "export" ? "left-out" : null, "manifest-1": refused.get(l.id) || null };
+  });
+  return { basis, "manifest-digest": digest, "loaded-manifest-digest": loaded, "kept-packs": kept, lines };
 }
 
 /* ====================================================================
@@ -3921,6 +3999,12 @@ async function jscCheckGraph(g, verified, opts) {
      manifest it binds. A line of the reference is a note; what the reference lists as a failure is an error. */
   const binds = await jscSetBinds(g, objs);
   for (const l of binds.lines) add(l.kind === "failure" ? "error" : "note", "attestation", l.id, l.kind === "failure" ? l.text : l.text.slice(`binds: ${l.id} = `.length));
+  /* MANIFEST-1: an Attestation the manifest lists, in the reference's words; where the set was written to since,
+     the manifest in question is the export's, which lists none, and that is said instead */
+  for (const l of binds.lines) {
+    if (l.listed === "refused") add("error", "manifest", l.id, strip(l["manifest-1"]));
+    else if (l.listed === "left-out") add("note", "manifest", l.id, "the manifest this set came with lists this Attestation, which MANIFEST-1 refuses; the manifest an export writes now does not list it, and the file leaves beside the manifest");
+  }
   const verify = trusted ? { envelopes, trusted } : null;
   pass("reference", "error")(jscClosureErrors(objs));
   const pinnedSchemas = new Map(), pinnedDecl = new Map();
@@ -4003,7 +4087,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict,
-    jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, jscSetBinds, jscCheckGraph,
+    jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, JSC_MANIFEST_RULES, jscListedAttestationErrors, jscSetBinds, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors,

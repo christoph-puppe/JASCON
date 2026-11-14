@@ -21,6 +21,7 @@ import { spawnSync } from "node:child_process";
 import crypto from "node:crypto";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { cisSynthetic } from "./cis-synthetic.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const APP = path.join(ROOT, "jascon-app");
@@ -134,7 +135,8 @@ async function attestationsShown(s) {
   return { basis: await box.count() ? await box.locator("[data-binds-basis]").getAttribute("data-binds-basis") : null,
     said: await box.count() ? await box.locator("[data-binds-basis]").innerText() : "",
     lines: await p.locator("#report-binds [data-binds]").evaluateAll(list => list.map(n => ({ kind: n.dataset.binds, verdict: n.dataset.verdict,
-      text: n.querySelector("[data-binds-text]").textContent, advice: (n.querySelector("[data-binds-advice]") || { textContent: "" }).textContent }))),
+      text: n.querySelector("[data-binds-text]").textContent, advice: (n.querySelector("[data-binds-advice]") || { textContent: "" }).textContent,
+      listed: n.querySelector("[data-manifest-1]") ? n.querySelector("[data-manifest-1]").getAttribute("data-manifest-1") : null, listedText: (n.querySelector("[data-manifest-1]") || { textContent: "" }).textContent }))),
     ...await p.evaluate(() => ({ types: last.types, objects: jscSet.graph.objects.size,
       dsse: last.findings.filter(f => f.area === "signature").map(f => `dsse: ${f.object} = ${f.message}`),
       errors: last.findings.filter(f => f.kind === "error").map(f => f.message),
@@ -458,6 +460,90 @@ test("Validate: what every Attestation binds is the reference's line for three f
       assert.deepEqual(s.errors, []);
     } finally { await s.close(); }
   }
+});
+
+/* MANIFEST-1 (D3.11; backlog #75): no content manifest lists an Attestation. The copies are built as the reference's
+   own test builds them (test_attestation_binds.py, c10-listed and c11-pack-listed): the Attestation is moved under
+   objects/ and entered in the manifest with both digests, so that nothing else is wrong with the bundle. */
+async function listedCopy(dir, attFile, tmp) {
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), "jascon-app-listed-")); tmp.push(out);
+  const copy = path.join(out, path.basename(dir)), rel = "objects/attestation/" + attFile;
+  fs.cpSync(dir, copy, { recursive: true });
+  const raw = fs.readFileSync(path.join(copy, attFile)), att = JSON.parse(raw.toString("utf8"));
+  fs.mkdirSync(path.join(copy, "objects/attestation"), { recursive: true });
+  fs.renameSync(path.join(copy, attFile), path.join(copy, rel));
+  const mp = path.join(copy, "content-manifest.json"), m = JSON.parse(fs.readFileSync(mp, "utf8"));
+  m.objects.push({ id: att.id, version: att.version, path: rel, "package-digest": "sha256:" + nodeSha256(raw), "semantic-digest": await core.jscSemanticDigest(att) });
+  fs.writeFileSync(mp, JSON.stringify(m, null, 1) + "\n");
+  return copy;
+}
+const MANIFEST_1 = id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - ` +
+  "an Attestation lies beside the manifest it binds, and a manifest that lists one cannot be that manifest)";
+
+test("MANIFEST-1: a set whose manifest lists an Attestation fails as the reference fails the folder, in a pack with ADVICE-1 beside it; unchanged it leaves as it came; changed, the export leaves the Attestation out and says so", { skip: needs }, async t => {
+  const tmp = [], rules = createRequire(import.meta.url)("../jascon-rules.js");
+  t.after(() => { for (const d of tmp) fs.rmSync(d, { recursive: true, force: true }); });
+  const graphOf = dir => core.jscGraphFrom(core.jscClassifyFiles(core.jscKeepFiles(tree(dir))).records);
+  /* 1. the rules on two changed copies, an ordinary bundle and a pack: the failures are the reference's, all of them */
+  const counted = {};
+  for (const [dir, file, id, name] of [[IFA, "attestation-ifa-ato.json", IFA_ATT, "ifa"], [PACK, "attestation-dbvendor-server-7-advice.json", VENDOR_ATT, "pack"]]) {
+    const copy = await listedCopy(dir, file, tmp), ref = referenceRun(copy, ["--as-of", AS_OF_46]);
+    const g = graphOf(copy), res = await rules.jscCheckGraph(g, await core.jscVerify(g), { asOf: AS_OF_46 });
+    const errors = res.findings.filter(f => f.kind === "error").map(f => (f.object && f.area === "manifest" ? `${f.object}: ${f.message}` : f.message));
+    assert.equal(ref.green, false, name);
+    assert.ok(ref.failures.includes(MANIFEST_1(id)), name + ": the reference lists MANIFEST-1: " + ref.failures.join(" | "));
+    assert.deepEqual([...errors].sort(), [...ref.failures].sort(), name + ": the errors of the check are the reference's failures");
+    assert.deepEqual(res.binds.lines.map(l => [l.kind, l.text]), asShown(ref), name + ": the Attestation is still held to what it binds");
+    assert.deepEqual(res.binds.lines.map(l => [l.listed, l["manifest-1"]]), [["refused", MANIFEST_1(id)]]);
+    counted[name] = [ref.pass, ref.failures.length, ref.binds[0].replace(/^binds: \S+ = /, "").split(" [")[0]];
+  }
+  t.diagnostic("validate_core.py on the two copies that list their Attestation, pass count, failures, verdict: " + JSON.stringify(counted));
+  assert.deepEqual(counted, { ifa: [18, 1, "SEMANTIC MATCH"], pack: [3, 2, "SEMANTIC MATCH"] });
+
+  /* 2. the pages, on the copy of the IFA bundle */
+  const copy = await listedCopy(IFA, "attestation-ifa-ato.json", tmp), ref = referenceRun(copy, ["--as-of", AS_OF_46]);
+  const s = await session(), p = s.page;
+  try {
+    await load(s, zipOf(copy, "ifa"));
+    assert.match(await p.locator("#home-log .l-warn").allInnerTexts().then(x => x.join(" | ")), /content-manifest\.json lists an Attestation \(objects\/attestation\/attestation-ifa-ato\.json\), which no content manifest may \(MANIFEST-1\)\. The set is kept as it came/,
+      "the hub says it when the bundle arrives, and changes nothing");
+    await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+    const refused = await attestationsShown(s);
+    assert.equal(refused.basis, "loaded");
+    assert.deepEqual(refused.lines.map(l => [l.kind, l.text]), asShown(ref), "the binding is still shown: a Semantic Match at best");
+    assert.deepEqual(refused.lines.map(l => [l.listed, l.listedText]), [["refused", "error: " + MANIFEST_1(IFA_ATT)]]);
+    assert.deepEqual(refused.errors.map(m => `${IFA_ATT}: ${m}`), ref.failures, "one error, the reference's");
+    /* the Assess page says the same about the Attestation */
+    await open(s, "assess.html", "board");
+    const card = p.locator(`[data-att-card="${IFA_ATT}"]`);
+    await card.locator("[data-att]").click();
+    assert.equal(await card.locator('[data-manifest-1="refused"]').innerText(), "error: " + MANIFEST_1(IFA_ATT));
+    /* nobody changed the set: it leaves as it came, with the manifest that lists the Attestation, and the reference refuses the export as it refuses the folder */
+    const same = await exported(s); tmp.push(same.out);
+    assert.equal(fs.readFileSync(path.join(same.dir, "content-manifest.json"), "utf8"), fs.readFileSync(path.join(copy, "content-manifest.json"), "utf8"), "nothing is repaired in silence");
+    assert.ok(fs.existsSync(path.join(same.dir, "objects/attestation/attestation-ifa-ato.json")));
+    assert.deepEqual(referenceRun(same.dir, ["--as-of", AS_OF_46]).failures, ref.failures);
+
+    /* something else in the set is changed: the manifest in question is now the one an export writes, and that lists no Attestation */
+    const risk = (await stored(s, "risk"))[0];
+    await p.evaluate(async ([id, title]) => { await jscSet.load(); await jscSet.saveObjects([{ ...jscSet.graph.objects.get(id).obj, title }]); }, [risk.id, { en: "Reworded" }]);
+    await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+    const after = await attestationsShown(s);
+    assert.equal(after.basis, "changed");
+    assert.deepEqual(after.lines.map(l => l.listed), ["left-out"]);
+    assert.match(after.lines[0].listedText, /^The manifest this set came with lists this Attestation, which MANIFEST-1 refuses\. The set was changed since, and the manifest an export writes now does not list it/);
+    assert.deepEqual(after.errors, [], "no failure: the bundle the page compares with lists no Attestation");
+    const next = await exported(s); tmp.push(next.out);
+    assert.match(await p.locator("#home-log .l-warn").allInnerTexts().then(x => x.join(" | ")), new RegExp(IFA_ATT.replace(/[.]/g, "\\.") + ": was listed in the manifest this set came with; a manifest written here lists no Attestation \\(MANIFEST-1\\), so it leaves beside the manifest as attestation-ifa-ato\\.json"),
+      "the export says what it did");
+    assert.deepEqual(next.manifest.objects.filter(e => /attestation/.test(e.id + e.path)), []);
+    assert.deepEqual([fs.existsSync(path.join(next.dir, "attestation-ifa-ato.json")), fs.existsSync(path.join(next.dir, "objects/attestation/attestation-ifa-ato.json"))], [true, false], "the file lies beside the manifest now");
+    const fixed = referenceRun(next.dir, ["--as-of", AS_OF_46]);
+    assert.ok(fixed.green, fixed.stdout.slice(-800));
+    assert.deepEqual(after.lines.map(l => [l.kind, l.text]), asShown(fixed), "what the page said before the export is what the reference says about the exported folder");
+    assert.equal(fixed.pass, 18);
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
 });
 
 test("a bundle from a URL: where the server lists the folder, the Attestations beside the manifest are read and held to what they bind; where it does not, the hub says that none was looked for", { skip: needs }, async () => {
@@ -1440,4 +1526,99 @@ test("Risk: an empty owner refuses the risk and the catalogue import; the approv
     for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
     await s.close();
   }
+});
+
+/* ====================================================================
+   Whom a statement binds where the source does not say (backlog #74)
+   ====================================================================
+   A preset names one party for its corpus. The Import page shows it before
+   anything is written and calls it what it is, the preset's default; the
+   user may put another in its place; without a party nothing is imported;
+   and what the page shows and what the set keeps say who chose. */
+test("Import: a preset's party is shown as its default before anything is written; left alone it is written and named as the default; another party takes its place and is named as entered; emptied or no URI, nothing is imported", { skip: needs }, async t => {
+  const DEF = "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/system-administrator", MINE = "https://org.example/party/operator";
+  const bound = async s => [...new Set((await stored(s, "requirement")).flatMap(r => r.statements.flatMap(st => st["obligated-parties"])))];
+  const manifestProvenance = s => s.page.evaluate(async () => JSON.parse((await jscStore.files(jscStore.activeSet())).find(r => r.kind === "manifest").text).provenance);
+  const pickCatalog = async (s, file) => { await s.page.goto(s.base + "import.html"); await s.page.locator("#pick").setInputFiles(file); await s.page.locator("#run").waitFor(); };
+  const tmp = [];
+  t.after(() => { for (const d of tmp) fs.rmSync(d, { recursive: true, force: true }); });
+
+  /* --- the default, left alone --- */
+  let s = await session(), p = s.page;
+  try {
+    await pickCatalog(s, jsonFile("cis.json", cisSynthetic()));
+    assert.equal(await p.locator("#o-preset").inputValue(), "cis-benchmark");
+    assert.deepEqual([await p.locator("#o-party").inputValue(), await p.locator("#o-party").getAttribute("data-party"), await p.locator("#o-party-default").count()], [DEF, "default", 0]);
+    assert.match(await p.locator("#o-party-hint").innerText(), new RegExp("^This is the preset's default and not a value of the source: " + DEF.replace(/[.]/g, "\\.") + "\\. A catalog seldom says whom it binds"));
+    await p.locator("#run").click();
+    await p.locator("#write").waitFor();
+    assert.deepEqual([await p.locator("[data-party-value]").innerText(), await p.locator("[data-party-origin]").getAttribute("data-party-origin"), await p.locator("[data-party-origin]").innerText()],
+      [DEF, "converter-default", "the preset's default, not a value of the source"]);
+    await p.locator("#write").click();
+    await p.locator("#log .l-ok", { hasText: "wrote" }).first().waitFor();
+    assert.equal(await p.locator("#log .l-info", { hasText: "the statements bind" }).first().innerText().then(x => x.replace(/^[\d:.]+/, "")), `the statements bind ${DEF}, the preset's default and not a value of the source`);
+    assert.deepEqual(await bound(s), [DEF]);
+    assert.equal("obligated-party" in await manifestProvenance(s), false, "with the default left alone the manifest says nothing about it, as before this build");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+
+  /* --- emptied, no URI, the default put back, another party --- */
+  s = await session(); p = s.page;
+  try {
+    await pickCatalog(s, jsonFile("cis.json", cisSynthetic()));
+    await type(p.locator("#o-party"), "");
+    assert.deepEqual([await p.locator("#o-party").inputValue(), await p.locator("#o-party").getAttribute("data-party"), await p.locator("#o-party-default").count()], ["", "entered", 1], "an emptied field stays empty; the default does not come back by itself");
+    await p.locator("#run").click();
+    assert.equal(await p.locator("#run-err").innerText(), "No party is named that the statements bind. The kernel requires obligated-parties on every statement, so the import did not run. " +
+      `The field “Who the statements bind” is empty. Name a party, an http(s) URI, or use the preset's default, ${DEF}.`);
+    assert.equal(await p.locator("#write").count(), 0, "nothing was imported");
+    await type(p.locator("#o-party"), "operator");
+    await p.locator("#run").click();
+    assert.match(await p.locator("#run-err").innerText(), /^“operator” is not an http\(s\) URI of a party, so the import did not run\. A preset writes under its publisher's namespace and does not make a party from a short name\./);
+    assert.equal(await p.locator("#write").count(), 0);
+    assert.equal(await p.locator("#o-party").inputValue(), "operator", "what was typed is not turned into something else");
+    await p.locator("#o-party-default").click();
+    assert.deepEqual([await p.locator("#o-party").inputValue(), await p.locator("#o-party").getAttribute("data-party")], [DEF, "default"]);
+    /* the party of one set of rules is not the party of another: the generic rules start empty, a preset from its default */
+    await type(p.locator("#o-party"), MINE);
+    await p.locator("#o-preset").selectOption("generic");
+    assert.equal(await p.locator("#o-party").inputValue(), "", "the generic rules have no default, and a preset's party is not theirs");
+    await p.locator("#o-preset").selectOption("cis-benchmark");
+    assert.deepEqual([await p.locator("#o-party").inputValue(), await p.locator("#o-party").getAttribute("data-party")], [DEF, "default"]);
+    await type(p.locator("#o-party"), MINE);
+    assert.match(await p.locator("#o-party-hint").innerText(), new RegExp("^Entered here, in the place of the preset's default " + DEF.replace(/[.]/g, "\\.") + "\\."));
+    await p.locator("#run").click();
+    await p.locator("#write").waitFor();
+    assert.deepEqual([await p.locator("[data-party-value]").innerText(), await p.locator("[data-party-origin]").getAttribute("data-party-origin"), await p.locator("[data-party-origin]").innerText()],
+      [MINE, "caller", `entered here, in the place of the preset's default ${DEF}`]);
+    await p.locator("#write").click();
+    await p.locator("#log .l-ok", { hasText: "wrote" }).first().waitFor();
+    assert.equal(await p.locator("#log .l-info", { hasText: "the statements bind" }).first().innerText().then(x => x.replace(/^[\d:.]+/, "")), `the statements bind ${MINE}, entered here`);
+    assert.deepEqual(await bound(s), [MINE], "every statement binds the party that was entered");
+    assert.deepEqual((await manifestProvenance(s))["obligated-party"], { value: MINE, origin: "caller", "converter-default": DEF }, "the set keeps who named the party");
+    const x = await exported(s); tmp.push(x.out);
+    const ref = reference(x.dir, ["--as-of", AS_OF_46], t, "a CIS-shaped catalog imported with a party entered on the page");
+    assert.ok(ref.green, ref.stdout.slice(-1200));
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+
+  /* --- a source that names parties itself for some statements: said before the import and in the report --- */
+  s = await session(); p = s.page;
+  try {
+    const rmf = "http://csrc.nist.gov/ns/rmf", NS = "https://ns.nist.gov/sp800-53";
+    const control = (id, label, props) => ({ id, title: label, props: [{ name: "label", value: label }, { name: "sort-id", value: id }, ...props], parts: [{ id: id + "_smt", name: "statement", prose: "Do it." }] });
+    await pickCatalog(s, jsonFile("nist.json", { catalog: { uuid: "n-1", metadata: { title: "Electronic (OSCAL) Version of NIST SP 800-53 Rev 5 test", version: "9.9", "oscal-version": "1.1.2", "last-modified": "2026-11-14T00:00:00Z" },
+      groups: [{ id: "ac", title: "Access Control", controls: [control("ac-1", "AC-1", [{ name: "implementation-level", ns: rmf, value: "system" }]), control("ac-2", "AC-2", [])] }] } }));
+    assert.equal(await p.locator("#o-preset").inputValue(), "nist-sp800-53");
+    assert.equal(await p.locator("#o-party").inputValue(), NS + "/party/organization");
+    assert.match(await p.locator("#o-party-hint").innerText(), /Where a control states an implementation level, the source names the party itself and that one is written, whatever stands here\.$/);
+    await type(p.locator("#o-party"), MINE);
+    await p.locator("#run").click();
+    await p.locator("#write").waitFor();
+    assert.equal(await p.locator("[data-party-origin]").innerText(), `entered here, in the place of the preset's default ${NS}/party/organization · 1 control(s) state no implementation level and bind this party; the others bind the level they state`);
+    await p.locator("#write").click();
+    await p.locator("#log .l-ok", { hasText: "wrote" }).first().waitFor();
+    assert.deepEqual(Object.fromEntries((await stored(s, "requirement")).map(r => [r.label, r.statements[0]["obligated-parties"]])), { "AC-1": [NS + "/party/system"], "AC-2": [MINE] }, "the level a control states stays the source's");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
 });

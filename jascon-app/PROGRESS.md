@@ -280,6 +280,79 @@ and in `readme.md`; this file says only what is done and what is next.
   thousand objects; any browser but Chromium. The four tests that need the
   BSI and NIST source files are skipped here, as before.
 
+- MANIFEST-1, and the obligated party of a preset (build 0.9.12; backlog
+  #75 and #74, both decided by the author on 2026-11-14):
+  - `jscListedAttestationErrors` in `jascon-rules.js`: one failure per
+    Attestation among the objects a manifest lists, in the reference's
+    words. `jscSetBinds` asks it of the manifest in question, which follows
+    the two bases of build 0.9.11. As loaded, a listed Attestation is the
+    failure. Written to since, the manifest in question is the export's,
+    which lists none; the Attestation is then marked as left out, and the
+    pages say so.
+  - The export (`jscBuildBundle`): no manifest written here lists an
+    Attestation. One that the earlier manifest listed leaves beside the
+    manifest, moved out of its folder, and the export's log says so. A set
+    nobody changed still leaves as it came, with the manifest that lists
+    the Attestation: nothing is repaired in silence, and the Validate page
+    reports the failure. The hub says it when such a bundle arrives.
+  - Whether a manifest "says the same" as the one a set came with is now
+    asked of its canonical form; the order of the keys in a line no longer
+    counts (`ERRATA.md`).
+  - `jscOscalPartyDefault` and `jscOscalPartyChoice` in `jascon-oscal.js`:
+    the party a preset writes where its source names none is a named
+    default (BSI the institution, CIS the system administrator, NIST the
+    organization), and `opts.party` puts an http(s) URI in its place.
+    Empty or no such URI, the import is refused. A level an SP 800-53
+    control states stays. The report carries the converters' record
+    (`obligated-party`: value, origin, converter-default).
+  - The Import page shows the default before the import and names it as
+    the preset's, takes another party, refuses in its own words, and keeps
+    an entered party in the manifest of the new set.
+
+  Measured for MANIFEST-1: the rule passes the 8 `listed-vectors` (7
+  failures among them), each by the number of failures and the id each
+  starts with. Two copies were built as the reference's own test builds
+  them, the IFA bundle and the worked pack with their Attestation moved
+  under `objects/` and entered in the manifest. For both the errors of the
+  whole-set check are the failures `validate_core.py --as-of 2026-11-14`
+  lists, all of them: one for the bundle (MANIFEST-1; 18 counted), two for
+  the pack (ADVICE-1 and MANIFEST-1; 3 counted), and the Attestation is a
+  Semantic Match in both. In headless Chromium, on the copy of the IFA
+  bundle: the hub says it when the bundle arrives; the Validate and the
+  Assess page show the reference's failure; the unchanged set exports with
+  the manifest it came with, text for text, and the reference fails the
+  export as it fails the folder; after another object was changed the page
+  shows no failure and says that the export leaves the Attestation out,
+  the export's log says the same, the file lies beside the manifest, and
+  the reference finds the exported folder green with the lines the page
+  showed (18 counted).
+
+  Measured for the obligated party: with the default left alone the three
+  presets write the objects build 0.9.11 wrote, by one SHA-256 over every
+  file of an import, taken before the change: 811 objects and 651
+  statements for the BSI catalog under `converted_examples`, 1,035 and
+  1,918 for the NIST catalog there, 17 and 5 for a catalog of a CIS
+  Benchmark's shape. With another party every statement binds it and
+  nothing else differs in any file. Empty, blank, a short name, a URN and a
+  URI with a blank are each refused. A level that an SP 800-53 control
+  states stays, on a catalog written for the test. The Import page was
+  driven in Chromium for all of it, and the set imported with an entered
+  party exports to a folder the reference finds green.
+
+  44 deliberate defects, 20 for MANIFEST-1 and 24 for the party, were each
+  tried on the final code and each turned a test red at once; a change that
+  breaks nothing stayed green. One of them, a preset's party carried over
+  when the rules are switched, would have passed unnoticed: no test
+  switched the rules, and a step was added before the defects were run.
+  The app's tests: 179, of which 175 pass and 4 are skipped for the BSI and
+  NIST source files. Read and not measured: the presets on the publishers'
+  own source files; any browser but Chromium. One test of the reader under
+  `one-page-apps/` fails on this branch (26 of 27 pass): the reader shows
+  no failure for a manifest that lists its Attestation, and the reference
+  now does. The reader, its test and the reference are not touched by this
+  build, so the failure does not come from it; that was read, the test was
+  not run on the branch without this build.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written
@@ -351,7 +424,8 @@ and in `readme.md`; this file says only what is done and what is next.
   - The NIST preset writes `…/party/organization` for a control that
     states no implementation level, as `convert_nist.py` does and counts
     in its report. By the rule of #70 that is a party the source did not
-    name. It is the converter's rule and was not changed here.
+    name. Decided on 2026-11-14 (backlog #74) and built in 0.9.12: the
+    party is a named default that the user may replace (see Done).
 - Found with build 0.9.11:
   - A bundle that keeps no pack does not bring its Attestation when it is
     loaded from a URL. A URL names files; the Attestation is named by
@@ -362,13 +436,11 @@ and in `readme.md`; this file says only what is done and what is next.
     Attestation was looked for. Whether every server should be asked is the
     author's to decide; it costs one request and, on a host that does not
     list folders, that console line.
-  - A manifest that lists an Attestation, against D3.1: the export keeps
-    the listing as it came, also where it writes a new manifest, and the
-    check holds such an Attestation to what it binds like any other. The
-    app never lists one itself. Taking it off the list would mean moving
-    the file beside the manifest, because the reference reads an unlisted
-    Attestation only there. Not done; no bundle of the repository lists
-    one, and the case was read, not tried.
+  - A manifest that lists an Attestation, against D3.1: the export kept
+    the listing as it came, also where it wrote a new manifest. Decided on
+    2026-11-14 (backlog #75, MANIFEST-1) and built in 0.9.12: such a
+    manifest is refused, and a manifest written here leaves the Attestation
+    out (see Done).
   - An object removed in the app leaves no trace in the set, so a set from
     which only something was removed is read as loaded: the comparison
     names the manifest the set came with, where the reference will say
@@ -376,6 +448,21 @@ and in `readme.md`; this file says only what is done and what is next.
     or out of one by this; the missing object is an error of its own.
   - *Verify* on the Assess page types every object of the set by schema
     before it answers. Not measured on a set of a thousand objects.
+- Found with build 0.9.12:
+  - `node one-page-apps/tools/sync-inlined.mjs --check` reports the pack
+    builder's inlined copy of the rules as out of date, because the rules
+    changed and `one-page-apps/` was not to be edited in this round. The
+    command without `--check` brings it up to date. No test of either
+    suite depends on it.
+  - A set nobody changed, whose manifest lists an Attestation, cannot be
+    put right in the app except by changing something else in it. The
+    export has no switch that writes a new manifest on request.
+  - The BSI and NIST source files the two presets were written against are
+    not in this checkout. The digests of the objects were taken on the
+    catalogs under `converted_examples/*/oscal-export/`, which the presets
+    read; none of those NIST controls states an implementation level, so
+    the case where the source names the party is held by a catalog written
+    for the test.
 
 ## Open
 

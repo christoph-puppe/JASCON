@@ -148,9 +148,26 @@ jscI18n.add("de", {
   "import failed: {msg}": "Import fehlgeschlagen: {msg}", "and {n} more": "und {n} weitere", "A namespace is an http(s) URI.": "Ein Namensraum ist eine http(s)-URI.",
   "{n} of {total} objects are not valid; nothing was written.": "{n} von {total} Objekten sind nicht gültig; nichts wurde geschrieben.",
   "Author (party URI)": "Autor (Party-URI)", "Day": "Tag", "Who decided, and when": "Wer entschieden hat, und wann",
-  "Who the statements bind (party)": "Wen die Statements binden (Partei)", "needed: a URI, or a short name": "nötig: eine URI oder ein Kurzname",
-  "The kernel requires on every statement who it binds, and OSCAL has no field for it. A short name becomes a party under the namespace above. Without a party the import does not run. The presets for a publisher's catalog take the party from their converter.":
-    "Der Kernel verlangt an jedem Statement, wen es bindet, und OSCAL hat dafür kein Feld. Ein Kurzname wird zu einer Partei unter dem Namensraum oben. Ohne Partei läuft der Import nicht. Die Voreinstellungen für den Katalog eines Herausgebers nehmen die Partei aus ihrem Konverter.",
+  "Who the statements bind (party)": "Wen die Statements binden (Partei)", "needed: an http(s) URI": "nötig: eine http(s)-URI",
+  "Use the preset's default": "Standard der Voreinstellung verwenden", "Whom the statements bind": "Wen die Statements binden",
+  "This is the preset's default and not a value of the source: {party}. A catalog seldom says whom it binds, so the preset names one party for it, as its converter does. Type another party, an http(s) URI, to put it in its place.":
+    "Das ist der Standard der Voreinstellung und kein Wert der Quelle: {party}. Ein Katalog sagt selten, wen er bindet; deshalb nennt die Voreinstellung dafür eine Partei, wie ihr Konverter. Eine andere Partei, eine http(s)-URI, eintippen, um sie an seine Stelle zu setzen.",
+  "Entered here, in the place of the preset's default {party}. The import report and the manifest of the set say that it was entered.":
+    "Hier eingetragen, an Stelle des Standards der Voreinstellung {party}. Der Importbericht und das Manifest des Sets sagen, dass sie eingetragen wurde.",
+  "Where a control states an implementation level, the source names the party itself and that one is written, whatever stands here.":
+    "Wo ein Control einen Implementation Level nennt, nennt die Quelle die Partei selbst, und diese wird geschrieben, was auch immer hier steht.",
+  "No party is named that the statements bind. The kernel requires obligated-parties on every statement, so the import did not run. The field “Who the statements bind” is empty. Name a party, an http(s) URI, or use the preset's default, {party}.":
+    "Es ist keine Partei genannt, die die Statements binden. Der Kernel verlangt obligated-parties an jedem Statement; deshalb lief der Import nicht. Das Feld „Wen die Statements binden“ ist leer. Eine Partei nennen, eine http(s)-URI, oder den Standard der Voreinstellung verwenden, {party}.",
+  "“{typed}” is not an http(s) URI of a party, so the import did not run. A preset writes under its publisher's namespace and does not make a party from a short name. Name a party by its URI, or use the preset's default, {party}.":
+    "„{typed}“ ist keine http(s)-URI einer Partei; deshalb lief der Import nicht. Eine Voreinstellung schreibt unter dem Namensraum ihres Herausgebers und macht aus einem Kurznamen keine Partei. Eine Partei mit ihrer URI nennen oder den Standard der Voreinstellung verwenden, {party}.",
+  "the preset's default, not a value of the source": "der Standard der Voreinstellung, kein Wert der Quelle",
+  "entered here, in the place of the preset's default {party}": "hier eingetragen, an Stelle des Standards der Voreinstellung {party}",
+  "entered here; these rules have no default": "hier eingetragen; diese Regeln haben keinen Standard",
+  "{n} control(s) state no implementation level and bind this party; the others bind the level they state": "{n} Control(s) nennen keinen Implementation Level und binden diese Partei; die anderen binden den Level, den sie nennen",
+  "the statements bind {party}, entered here": "die Statements binden {party}, hier eingetragen",
+  "the statements bind {party}, the preset's default and not a value of the source": "die Statements binden {party}, den Standard der Voreinstellung und keinen Wert der Quelle", "needed: a URI, or a short name": "nötig: eine URI oder ein Kurzname",
+  "The kernel requires on every statement who it binds, and OSCAL has no field for it. A short name becomes a party under the namespace above. Without a party the import does not run. The presets for a publisher's catalog have a default of their own, which you may replace.":
+    "Der Kernel verlangt an jedem Statement, wen es bindet, und OSCAL hat dafür kein Feld. Ein Kurzname wird zu einer Partei unter dem Namensraum oben. Ohne Partei läuft der Import nicht. Die Voreinstellungen für den Katalog eines Herausgebers haben einen eigenen Standard, den Sie ersetzen können.",
   "No party is named that the statements bind. The kernel requires obligated-parties on every statement and OSCAL has no field for it, so the import did not run. Name a party in the field “Who the statements bind”: a URI, or a short name, which becomes a party under the namespace of the import.":
     "Es ist keine Partei genannt, die die Statements binden. Der Kernel verlangt obligated-parties an jedem Statement, und OSCAL hat dafür kein Feld; deshalb lief der Import nicht. Im Feld „Wen die Statements binden“ eine Partei nennen: eine URI oder einen Kurznamen, der zu einer Partei unter dem Namensraum des Imports wird.",
   "From the source: the cross-references are CIS's own, dated with the day the catalog was last changed. Type over either field to overwrite it. A Mapping cannot be written without both.":
@@ -169,6 +186,9 @@ const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
 let G = jscSet.graph, doc = null, kind = null, fileName = "", result = null, opts = {};
 const KIND_LABEL = { catalog: N("Catalog"), profile: N("Profile") };
+const PARTY_ENTERED = N("the statements bind {party}, entered here"), PARTY_DEFAULT = N("the statements bind {party}, the preset's default and not a value of the source");
+const NO_PRESET_PARTY = N("No party is named that the statements bind. The kernel requires obligated-parties on every statement, so the import did not run. The field “Who the statements bind” is empty. Name a party, an http(s) URI, or use the preset's default, {party}.");
+const BAD_PRESET_PARTY = N("“{typed}” is not an http(s) URI of a party, so the import did not run. A preset writes under its publisher's namespace and does not make a party from a short name. Name a party by its URI, or use the preset's default, {party}.");
 const NO_OBLIGATED = N("No party is named that the statements bind. The kernel requires obligated-parties on every statement and OSCAL has no field for it, so the import did not run. Name a party in the field “Who the statements bind”: a URI, or a short name, which becomes a party under the namespace of the import.");
 const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
 const chip = (n, label) => `<span class="chip"><b>${esc(n)}</b>${esc(T(label))}</span>`;
@@ -193,6 +213,7 @@ async function read(file) {
         checks: false, runtime: "bash" }
     : { ns: jscCfg.get("org:ns").replace(/\/+$/, ""), lang: jscI18n.contentLang(), catalogSet: "" };
   if (opts.preset === "cis-benchmark") opts.ns = jscCisNamespace(doc.catalog);
+  if (k === "catalog" && opts.preset !== "generic") delete opts.party;   // a preset starts from its default; only the generic rules start empty
   render();
 }
 /* rules a CIS export marks automated: the ones a check can be drafted for */
@@ -214,6 +235,14 @@ function invalid(objects) {
     .map(x => `${x.o.obj.id}: ${(jscShapeErrors(x.o.obj.statements ? "requirement" : x.o.obj.selects ? "tailoring" : "requirementSet", x.o.obj)[0] || "matches no shape")}`);
 }
 const FIXED = { "bsi-gspp": JSC_BSI, "nist-sp800-53": JSC_NIST };
+/* Who chose the party the statements bind (backlog #74): the report says it in words, beside the party. */
+function partyRow(rec, r) {
+  if (!rec) return "";
+  const who = rec.origin !== "caller" ? T("the preset's default, not a value of the source")
+    : rec["converter-default"] ? T("entered here, in the place of the preset's default {party}", { party: rec["converter-default"] }) : T("entered here; these rules have no default");
+  const source = rec["source-states"] ? " · " + T("{n} control(s) state no implementation level and bind this party; the others bind the level they state", { n: r["controls-without-a-stated-party"] }) : "";
+  return `<span class="mono" data-party-value>${esc(rec.value)}</span> <span class="hint" data-party-origin="${esc(rec.origin)}">${esc(who + source)}</span>`;
+}
 function reportHtml() {
   if (!result) return "";
   const r = result.report, objs = result.objects, bad = result.invalid;
@@ -222,6 +251,7 @@ function reportHtml() {
   const maps = objs.filter(o => o.obj["source-ref"]).length;
   const body = kind === "catalog"
     ? `<div>${chip(n("requirement"), "requirements")}${chip(n("set"), "sets")}${maps ? chip(maps, "mappings") : ""}${chip(r.statements, "clauses")}${chip(result.facetSchemas.length, "pinned facet schemas")}</div><div class="kv">
+        ${row("Whom the statements bind", partyRow(r["obligated-party"], r))}
         ${row("rules by their marking (automated rules can get a check)", r.methods && Object.keys(r.methods).length ? counts(r.methods) : "")}
         ${row("CIS Controls cross-references, as Mappings (supports, draft)", r.mappings && (r.mappings.v7 + r.mappings.v8) ? counts({ v8: r.mappings.v8, v7: r.mappings.v7 }) : "")}
         ${row("profiles, as baseline Sets", r.profiles && Object.keys(r.profiles).length ? counts(r.profiles) : "")}
@@ -264,6 +294,10 @@ function render() {
     const c = countControls(doc.catalog), fixed = FIXED[opts.preset];   // a preset of the repository mints under its publisher's namespace
     head = kv("title", meta.title || "") + kv("version", meta.version || "") + kv("OSCAL version", meta["oscal-version"] || "") + kv("controls", String(c.controls)) + kv("groups", String(c.groups));
     const cis = opts.preset === "cis-benchmark", auto = cis ? countAutomated(doc.catalog) : 0;
+    /* Whom the statements bind where the source does not say (backlog #74). A preset has a default, shown before
+       anything is imported and named as the preset's own; `opts.party` undefined means it was left alone. The generic
+       rules have none: there the field starts empty and the import is refused without a party (#70). */
+    const presetParty = jscOscalPartyDefault(doc, opts);
     form = `<label for="o-preset">${esc(T("Rules"))}</label><div><select id="o-preset">${opt("generic", T("generic"), opts.preset)}${opt("bsi-gspp", T("BSI Grundschutz++ (the repository's converter)"), opts.preset)}${opt("nist-sp800-53", T("NIST SP 800-53 Rev 5 (the repository's converter)"), opts.preset)}${opt("cis-benchmark", T("CIS Benchmark (the repository's converter)"), opts.preset)}</select>
         ${fixed ? `<div class="hint">${esc(T("The preset mints ids under {ns} and reads the text as {lang}.", { ns: fixed.ns, lang: fixed.lang }))}</div>` : ""}</div>
       ${fixed ? "" : `<label for="o-ns">${esc(T("Namespace for the ids"))}</label><div><input type="url" id="o-ns" value="${esc(opts.ns)}">
@@ -271,7 +305,13 @@ function render() {
         ${cis ? "" : `<label for="o-lang">${esc(T("Language of the text"))}</label><div><input type="text" id="o-lang" value="${esc(opts.lang)}" style="max-width:90px"></div>
         <label for="o-key">${esc(T("Short name (used in file paths)"))}</label><div><input type="text" id="o-key" value="${esc(opts.key)}" style="max-width:260px"></div>
         <label for="o-party">${esc(T("Who the statements bind (party)"))}</label><div><input type="text" id="o-party" aria-required="true" value="${esc(jscPartyRef(opts.party, opts.ns))}" placeholder="${esc(T("needed: a URI, or a short name"))}">
-          <div class="hint">${esc(T("The kernel requires on every statement who it binds, and OSCAL has no field for it. A short name becomes a party under the namespace above. Without a party the import does not run. The presets for a publisher's catalog take the party from their converter."))}</div></div>`}`}
+          <div class="hint">${esc(T("The kernel requires on every statement who it binds, and OSCAL has no field for it. A short name becomes a party under the namespace above. Without a party the import does not run. The presets for a publisher's catalog have a default of their own, which you may replace."))}</div></div>`}`}
+      ${presetParty ? `<label for="o-party">${esc(T("Who the statements bind (party)"))}</label><div><input type="text" id="o-party" aria-required="true" data-party="${opts.party === undefined ? "default" : "entered"}" value="${esc(opts.party === undefined ? presetParty.default : opts.party)}" placeholder="${esc(T("needed: an http(s) URI"))}">
+          ${opts.party === undefined ? "" : `<button type="button" class="small" id="o-party-default">${esc(T("Use the preset's default"))}</button>`}
+          <div class="hint" id="o-party-hint">${esc(opts.party === undefined
+            ? T("This is the preset's default and not a value of the source: {party}. A catalog seldom says whom it binds, so the preset names one party for it, as its converter does. Type another party, an http(s) URI, to put it in its place.", { party: presetParty.default })
+            : T("Entered here, in the place of the preset's default {party}. The import report and the manifest of the set say that it was entered.", { party: presetParty.default }))}
+            ${presetParty["source-states"] ? esc(T("Where a control states an implementation level, the source names the party itself and that one is written, whatever stands here.")) : ""}</div></div>` : ""}
       ${cis ? `<label for="o-checks">${esc(T("Checks"))}</label><div><label><input type="checkbox" id="o-checks" ${opts.checks ? "checked" : ""}> ${esc(T("Afterwards, draft checks for the {n} automated rules with a model, in the Checks tool", { n: auto }))}</label>
           <select id="o-runtime" aria-label="${esc(T("Language of the collector code"))}">${JSC_CHECKS.RUNTIMES.map(x => opt(x, x, opts.runtime)).join("")}</select>
           <div class="hint">${esc(T("Nothing is sent now. After the write the Checks tool opens with these rules, shows what would be sent, and asks for a key and a click. Without this, every check can still be written by hand or drafted one by one there."))}</div></div>` : ""}
@@ -304,12 +344,17 @@ function render() {
     if (n) n.addEventListener("change", () => {
       const before = opts.preset;
       opts[key] = n.value.trim(); result = null;
+      /* the party of one set of rules is not the party of another: the generic rules start empty, a preset from its default */
+      if (key === "preset") { if (opts.preset === "generic") opts.party = ""; else delete opts.party; }
+      /* a preset's field left as the default is not given; one that was changed is, also when it is now empty */
+      if (key === "party" && opts.preset !== "generic" && (jscOscalPartyDefault(doc, opts) || {}).default === opts.party) delete opts.party;
       /* the CIS preset mints under the benchmark's namespace; leaving it gives the namespace of the other rules back */
       if (key === "preset" && opts.preset === "cis-benchmark") opts.ns = jscCisNamespace(doc.catalog);
       else if (key === "preset" && before === "cis-benchmark") opts.ns = jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + jscOscalSlug(doc.catalog.metadata.title || "catalog");
       render();
     });
   }
+  if ($("o-party-default")) $("o-party-default").addEventListener("click", () => { delete opts.party; result = null; render(); });
   /* a field left as the source states it is not given; one that was changed is, also when it is now empty */
   for (const [id, key, from] of [["o-author", "authorRef", stated["author-ref"]], ["o-date", "date", stated.date]]) {
     const n = $(id);
@@ -325,6 +370,13 @@ function run() {
   /* The generic rules write who the statements bind, which the kernel requires and OSCAL does not state: refused while
      nobody is named (backlog #70). The rules refuse too (jscImportGeneric); the page says it in the user's language first. */
   if (kind === "catalog" && opts.preset === "generic" && !jscPartyRef(opts.party, opts.ns)) { $("run-err").textContent = T(NO_OBLIGATED); return; }
+  /* A preset's party (backlog #74): the default unless the field was changed. Emptied, or changed to something that
+     is no http(s) URI, the import does not run; the default does not come back by itself. The rules refuse too. */
+  const presetParty = kind === "catalog" ? jscOscalPartyDefault(doc, opts) : null;
+  if (presetParty && opts.party !== undefined) {
+    if (!opts.party.trim()) { $("run-err").textContent = T(NO_PRESET_PARTY, { party: presetParty.default }); return; }
+    if (!/^https?:\/\/[^\s]+$/.test(opts.party.trim())) { $("run-err").textContent = T(BAD_PRESET_PARTY, { typed: opts.party.trim(), party: presetParty.default }); return; }
+  }
   try {
     result = kind === "catalog" ? jscOscalImportCatalog(doc, opts)
       : { ...jscOscalImportProfile(doc, { ...opts, catalogSet: opts.catalogSet || null, objs: G.objects }), facetSchemas: [] };
@@ -340,12 +392,17 @@ async function write() {
   const set = (opts.set || "catalog").slice(0, 60), held = (await jscStore.files(set)).length;
   if (held && !confirm(T("Set \"{set}\" holds {n} file(s). Replace them with this catalog?", { set, n: held }))) return;
   const files = [...result.objects.map(o => ({ path: o.path, text: jscSerialize(o.obj) })), ...result.facetSchemas.map(f => ({ path: f.path, text: jscSerialize(f.def) }))];
-  const provenance = { ...result.provenance, "source-file": fileName, ...(opts.licence ? { "source-licence": opts.licence } : {}) };
+  /* The manifest of the new set keeps who named the party where somebody did. With a preset's default left alone it
+     says nothing about it, as before this build, and the objects are byte for byte what they were (backlog #74). */
+  const party = result.report["obligated-party"], named = party && party.origin === "caller" ? { "obligated-party": party } : {};
+  const provenance = { ...result.provenance, "source-file": fileName, ...(opts.licence ? { "source-licence": opts.licence } : {}), ...named };
   const built = await jscBuildBundle(jscGraphFrom(jscClassifyFiles(files).records), provenance);
   built.problems.forEach(m => jscLog.warn(m));
   await jscSet.importFiles(set, built.files, { replace: true });
   jscStore.setActiveSet(set);
   jscLog.ok(T("wrote {n} object(s) and {s} pinned schema(s) to set \"{set}\"; it is now the active set", { n: result.objects.length, s: result.facetSchemas.length, set }));
+  const partyLine = party && party.origin === "caller" ? PARTY_ENTERED : PARTY_DEFAULT;
+  if (party) jscLog.info(T(partyLine, { party: party.value }));
   const handOver = opts.preset === "cis-benchmark" && opts.checks;
   if (handOver) localStorage.setItem(JSC_CHECKS.QUEUE, JSON.stringify({ set, runtime: opts.runtime, source: fileName, only: "automated", at: new Date().toISOString() }));
   result = null; doc = null;

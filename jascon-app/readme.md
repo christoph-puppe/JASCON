@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.11. This build has the frame (the hub, the settings page and
+State: build 0.9.12. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -18,7 +18,10 @@ shows where that is missing (see "Who decided, and when"). Since 0.9.10 no
 page writes a party that nobody named: where the kernel requires a party
 and the field is empty, the page refuses the save and says which field it
 is. Since 0.9.11 every Attestation of a set is held to what it binds, in the
-reference validator's words (see "What an Attestation binds").
+reference validator's words (see "What an Attestation binds"). Since 0.9.12
+a manifest that lists an Attestation is refused (MANIFEST-1), and the party
+a preset writes where its source names none is shown as the preset's
+default and can be replaced (see "Importing OSCAL").
 
 ## Start
 
@@ -133,6 +136,7 @@ objects were valid and named somebody nobody had named (author decision of
 | `performer-ref` of an Assessment | Assess | *Who am I* | the check is not written, and no Finding is |
 | `approver-ref` of a Deviation | Tailor | nothing, always | the operation is not added |
 | `obligated-parties` of a statement | Browse, and Import with the generic rules | nothing | the requirement is not added; the import does not run |
+| `obligated-parties` of a statement | Import with a preset | the preset's default, named as that | the import does not run; the default does not come back by itself |
 | `owner-ref` of a Risk | Risk | *Default risk owner* | the risk cannot be saved; nothing is imported from a catalogue; a model's draft is not taken |
 | `approver-ref` of a Risk's acceptance | Risk | nothing, always | the risk cannot be saved once an acceptance is begun |
 
@@ -382,14 +386,47 @@ The generic rules read the NIST catalog too (1,196 requirements, valid for
 the reference validator), with a different result: withdrawn controls are
 kept as requirements, and assessment objectives stay in the holding facet.
 
-The three presets for a publisher's corpus write the party the Python
-converter of that corpus writes, because their result is held equal to the
-converter's: BSI binds `…/party/institution`, a CIS Benchmark
-`…/party/system-administrator` with CIS (`…/party/cis`) as the author of
-its Mappings, and NIST the implementation levels a control states, or
-`…/party/organization` where it states none. These are the converters'
-readings of the source and not a user's choice; the forms have no field for
-them.
+**Whom the statements bind, with a preset.** A catalog seldom says whom its
+controls bind, and the kernel requires it on every statement. So each of
+the three presets names one party for its corpus, as the Python converter
+of that corpus does: BSI `…/party/institution`, a CIS Benchmark
+`…/party/system-administrator`, and NIST `…/party/organization` for a
+control that states no implementation level. That party is the preset's
+reading of the framework and not a value of the source. Until build 0.9.11
+the presets wrote it without a word. Since 0.9.12 it is an argument with a
+named default (author decision of 2026-11-14, backlog #74; the converters
+got `--obligated-party` for the same):
+
+- The form shows the party in the field *Who the statements bind* before
+  anything is imported, and says that it is the preset's default and not a
+  value of the source.
+- You may type another party in its place: an http(s) URI, written as
+  typed. A preset mints its ids under the publisher's namespace, so it does
+  not make a party out of a short name, as the generic rules do under a
+  namespace of yours.
+- An emptied field stays empty and the import does not run; something that
+  is no http(s) URI is refused in the same way. *Use the preset's default*
+  puts the default back. Nothing is imported without a party.
+- Where the source names a party itself, that one is written whatever the
+  field holds: a control of SP 800-53 that states an implementation level
+  binds that level.
+- The import report says who chose: the party, and either "the preset's
+  default, not a value of the source" or "entered here", with the default
+  beside it. Its record is the converters' (`obligated-party` with `value`,
+  `origin` `converter-default` or `caller`, and `converter-default`). A
+  party that was entered is also kept in the manifest of the new set, under
+  `provenance`. With the default left alone the manifest says nothing about
+  it, as before.
+
+With the default left as it is, an import writes the objects it wrote
+before, byte for byte. Measured: one SHA-256 over every file of an import,
+taken with build 0.9.11 and held by a test since, for the BSI catalog the
+repository carries (811 objects, 651 statements), the NIST catalog (1,035
+objects, 1,918 statements) and a catalog of a CIS Benchmark's shape written
+for the tests (17 objects). The manifest of the new set differs from an
+earlier build's in the line that names the tool and its build, as with
+every build. CIS as the author of its Mappings (`…/party/cis`) is another
+matter: the source states it, and the author fields above overwrite it.
 
 Choose the namespace with care. Ids under your own domain make you the
 claimed authority of the catalog in the tier rule, and a Tailoring of yours
@@ -658,6 +695,20 @@ The page shows one line per Attestation, in the order of the ids, and the
 line is the reference's, character for character; a failure is the
 reference's failure with `error:` before it.
 
+**MANIFEST-1.** No content manifest lists an Attestation, in any bundle
+(specification D3.11, backlog #75, since build 0.9.12; until then only a
+pack's manifest was held to it, by ADVICE-1). For a set whose manifest
+lists one the Validate page shows the reference's failure beside the
+Attestation's line, and the Assess page the same; the Attestation is still
+held to what it binds, which is a Semantic Match at best, because a
+manifest that lists it cannot be the one it binds. The app repairs nothing
+in silence. When such a bundle arrives the hub says so and keeps it as it
+came. What an export does with it is said under "Export". On the Validate
+page a set that listed an Attestation and was then changed is compared, as
+always after a change, with the bundle an export would write: that one
+lists no Attestation, so there is no failure, and a line says that the
+manifest the set came with listed it and that the export leaves it out.
+
 **Which bundle is meant.** The reference validator reads a folder. A set is
 a bundle that was loaded and may have been written to since, so the page
 says first what it compared with:
@@ -725,11 +776,15 @@ files and a `content-manifest.json`.
   selects, excludes or operations, on an Implementation or a Finding; a
   Deviation with `decided` or `review-due`; an authorization with a `date`).
   Its provenance gains the line `edited-with`.
-- An attestation the original manifest did not list stays beside the manifest
-  and is not added to it: it binds the digest of the manifest's bytes, so
-  the manifest cannot list it (D3.1). Its envelope travels with it. The app
-  never lists one of its own accord. Where the manifest a set came with
-  lists one, against that rule, the listing is kept as it came.
+- An attestation stays beside the manifest and is not added to it: it
+  binds the digest of the manifest's bytes, so the manifest cannot list it
+  (D3.1). Its envelope travels with it. No manifest the app writes lists
+  one. Where the manifest a set came with lists one, which MANIFEST-1
+  refuses, two things hold. A set nobody changed leaves as it came, with
+  that manifest: the export passes on what it was given, and the Validate
+  page reports the failure. Once the set was changed, the export writes a
+  new manifest, which leaves the Attestation out; its file leaves beside
+  the manifest, moved there if it lay in a folder, and the log says so.
 - After a change the manifest is a new one, so an Attestation that bound
   the old one is a Semantic Match for the reference while its subjects are
   unchanged, and a failure where a subject was changed (see "What an
@@ -788,8 +843,9 @@ text in that language, the English text is shown, then whatever is there.
   operation law), reference, lifecycle, kernel (with the typed dates and
   times, from `Finding.actions[].due` to `Attestation.timestamp`, named
   DATE-1 to DATE-5 when an object matches no type), facet, attestation (the
-  two digests of one object and, since build 0.9.11, attestation-binds on a
-  bundle with its nineteen vectors), risk,
+  two digests of one object; since build 0.9.11 attestation-binds on a
+  bundle with its nineteen vectors; since 0.9.12 MANIFEST-1 with its eight),
+  risk,
   scale, DSSE signatures, the composition of two bundles,
   conditional-apply, the Check type of `drafts/CP-CHECK-1.md`
   (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain),
@@ -829,6 +885,9 @@ text in that language, the English text is shown, then whatever is there.
   or withdraw a signed one. The envelope of every attestation of the set is
   looked at, beside the manifest or listed in it, and one that is named and
   not there is an error, as for the reference since 2026-11-14.
+- MANIFEST-1: a set nobody changed, whose manifest lists an Attestation,
+  cannot be put right in the app without changing something else in it;
+  the export has no switch for writing a new manifest on request.
 - What an Attestation binds: a set that was changed is compared with the
   bundle an export would write, which the page says. Two cases are read as
   "as loaded" although something happened: an object removed in the app
