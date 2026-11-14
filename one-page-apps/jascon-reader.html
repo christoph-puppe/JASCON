@@ -201,7 +201,7 @@ svg text{font-family:'JetBrains Mono',monospace}
     <div class="pill" id="pill-bundle">no bundle loaded</div>
     <div class="pill hidden" id="pill-verify"></div>
     <div style="flex:1"></div>
-    <div class="pill">v1.9.1 · build 2026-11-12</div>
+    <div class="pill" id="pill-version"></div>
   </div>
 
   <div id="mid">
@@ -247,6 +247,7 @@ svg text{font-family:'JetBrains Mono',monospace}
       <!-- OVERVIEW -->
       <div class="glass card" id="view-overview">
         <h2><span class="glyph">◐</span>Overview</h2>
+        <div id="ov-stop" class="hidden" style="max-width:80ch;margin-bottom:14px"></div>
         <div id="ov-empty">
           <p style="max-width:66ch;color:var(--text-secondary)">
             This is a reader for <b>JASCON bundles</b> — the file format in which
@@ -309,7 +310,7 @@ svg text{font-family:'JetBrains Mono',monospace}
         <h2><span class="glyph">⬡</span>How to read a JASCON object</h2>
         <div style="display:grid;grid-template-columns:1fr 300px;gap:20px">
           <div style="font-size:12.5px;color:var(--text-secondary);max-width:70ch">
-            <p><b>Three layers, strictly separated.</b> Every object is built from the same三 layers:</p>
+            <p><b>Three layers, strictly separated.</b> Every object is built from the same three layers:</p>
             <p style="margin-top:8px"><b>1 · Kernel</b> — the fields every framework was <i>measured</i> to need:
             identity (<span class="mono">id</span> — a global URI, compared as a string, never fetched),
             <span class="mono">version</span>, <span class="mono">lifecycle</span>, statements with a typed
@@ -433,7 +434,17 @@ const state = {
   search: "",
   selected: null,
   verify: null,            // id -> {pkg:bool, sem:bool}
+  stopped: null,           // the message of a kernel pin this page does not read (KERNEL-2): nothing of that bundle is shown
+  pinErrors: [],           // the loaded manifest's pin against the content it lists (KERNEL-1)
 };
+
+/* ==READER-PURE-START== */
+/* The part of this page that touches neither the document nor its state: type
+   inference, the kernel pin, who decided an entry, and what a workbench writes
+   about that. It stands between two markers so that
+   one-page-apps/tests/reader.test.mjs can read it out of this file and run it
+   in node against jascon/conformance/kernel-vectors.json. Nothing here is
+   generated, and the page needs no build step. */
 
 /* ---------- type inference (mirrors validate_core.py) ---------- */
 function inferType(o) {
@@ -452,6 +463,149 @@ function inferType(o) {
   if ("members" in o) return "requirementSet";
   return null;
 }
+
+/* ---------- the kernel pin (v1.11.0; KERNEL-1, KERNEL-2; backlog #44 and #69) ----------
+   A content manifest may carry `kernel-version`; absent means 1.0.0 content.
+   kernelNeeded is this page's port of kernel_needed in validate_core.py, reason
+   for reason: the export writes the pin from it, and a loaded bundle is held to
+   it. Until 1.10.0 the export had a test of its own, which knew no field of
+   CP-AUTHOR-1. The test file named above holds this port to the reference's pin
+   vectors and to one case per reason. */
+const KERNEL_VERSION = "2.0.0", KERNEL_READS = ["1.0.0", "2.0.0"];
+const KERNEL_PIN_SHAPE = /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$/;   // the manifest schema's pattern
+const isRecord = v => v !== null && typeof v === "object" && !Array.isArray(v);
+const records = v => (Array.isArray(v) ? v : []).filter(isRecord);
+/* The reference asks `o.get(k)`: a missing field, null, false, 0, an empty
+   text, an empty list and an empty object all count as not given. */
+const given = v => !(v === undefined || v === null || v === false || v === 0 || v === "" ||
+  (Array.isArray(v) && !v.length) || (isRecord(v) && !Object.keys(v).length));
+/* -> [[where, Deviation]]: every Deviation an object carries - in its
+   `deviations` list and, on a Tailoring, inline on an operation. */
+function deviationsOf(type, o) {
+  const out = [];
+  (Array.isArray(o.deviations) ? o.deviations : []).forEach((d, i) => { if (isRecord(d)) out.push([`deviations[${i}]`, d]); });
+  if (type === "tailoring") (Array.isArray(o.operations) ? o.operations : []).forEach((op, i) => {
+    if (isRecord(op) && isRecord(op.deviation)) out.push([`operations[${i}].deviation`, op.deviation]);
+  });
+  return out;
+}
+/* -> [the kernel version the content needs, why]. `objs` is a list of objects,
+   typed here by inferType; the first reason in the order of the ids is named.
+   2.0.0 added: pinned scale definitions and the pack header of a manifest; the
+   Risk and the Check type; Finding.risk-refs and .check-ref; Assessment
+   .check-results and .tailoring-ref; statement-ids on a capability and
+   product-version on a Component; and with CP-AUTHOR-1 `provenance` on a
+   Tailoring, on its selects, excludes and operations, on an Implementation and
+   a Finding, `decided` and `review-due` on a Deviation, `date` on an
+   authorization. A Mapping's `provenance` is 1.0.0 and needs nothing. */
+function kernelNeeded(objs, manifest) {
+  if (manifest && given(manifest.scales)) return ["2.0.0", "the manifest pins scale definitions"];
+  if (manifest && given(manifest.pack)) return ["2.0.0", "the manifest carries a pack header"];
+  const typed = (objs || []).filter(isRecord).map(o => [String(o.id), inferType(o), o])
+    .sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+  for (const [oid, t, o] of typed) {
+    if (t === "risk") return ["2.0.0", `${oid} is a Risk`];
+    if (t === "finding" && given(o["risk-refs"])) return ["2.0.0", `${oid} carries risk-refs`];
+    if (t === "check") return ["2.0.0", `${oid} is a Check`];
+    if (t === "assessment" && (given(o["check-results"]) || given(o["tailoring-ref"]))) return ["2.0.0", `${oid} carries check results`];
+    if (t === "finding" && given(o["check-ref"])) return ["2.0.0", `${oid} carries a check-ref`];
+    if (t === "component" && records(o.capabilities).some(c => given(c["statement-ids"]))) return ["2.0.0", `${oid} names clauses on a capability (statement-ids)`];
+    if (t === "component" && "product-version" in o) return ["2.0.0", `${oid} names the product version it describes (product-version)`];
+    if ((t === "tailoring" || t === "implementation" || t === "finding") && "provenance" in o) return ["2.0.0", `${oid} names its author (provenance)`];
+    if (t === "tailoring" && ["selects", "excludes", "operations"].some(k => records(o[k]).some(e => "provenance" in e)))
+      return ["2.0.0", `${oid} names the author of a select, an exclude or an operation (provenance)`];
+    if (deviationsOf(t, o).some(([, d]) => "decided" in d || "review-due" in d)) return ["2.0.0", `${oid} carries a Deviation with \`decided\` or \`review-due\``];
+    if (t === "component" && records(o.authorizations).some(a => "date" in a)) return ["2.0.0", `${oid} dates an authorization`];
+  }
+  return ["1.0.0", null];
+}
+/* -> message | null: a pin this page cannot read, judged before any object is
+   (KERNEL-2). A pin that is no MAJOR.MINOR.PATCH is refused by the manifest
+   schema; this page carries no schema and names that one case itself. */
+function kernelPinUnread(manifest) {
+  const pin = manifest ? manifest["kernel-version"] : undefined;
+  if (pin === undefined) return null;
+  if (typeof pin !== "string" || !KERNEL_PIN_SHAPE.test(pin))
+    return `manifest schema: kernel-version is ${JSON.stringify(pin)} - a kernel version is written MAJOR.MINOR.PATCH`;
+  if (!KERNEL_READS.includes(pin))
+    return `manifest pins kernel-version ${pin}; this reader implements ${KERNEL_VERSION} and reads ${KERNEL_READS.join(", ")} ` +
+      `(KERNEL-2: a tool stops at a kernel it does not implement, and says which)`;
+  return null;
+}
+/* -> [message] for the pin of a manifest: against this page (above), then
+   against the content the manifest lists (KERNEL-1). */
+function kernelPinErrors(manifest, objs) {
+  const unread = kernelPinUnread(manifest);
+  if (unread) return [unread];
+  const pin = manifest ? manifest["kernel-version"] : undefined;
+  const [need, why] = kernelNeeded(objs, manifest);
+  if (need !== "1.0.0" && pin !== need)
+    return [`${why}, which needs kernel ${need}, but the manifest ${pin ? "pins kernel-version " + pin : "pins no kernel-version"} ` +
+      `(KERNEL-1: content beyond 1.0.0 names its kernel, so that an older tool can say what it is missing)`];
+  return [];
+}
+
+/* ---------- who decided, and when (v1.11.0; D26, CP-AUTHOR-1) ----------
+   One spelling: `provenance: {author-ref, date}`. On a record it names who
+   wrote this version; on an entry inside a record (a select, an exclude or an
+   operation of a Tailoring, a rating of a Risk) who decided that entry. An
+   entry without one has its record's.
+   -> { ref, date, from } | null. `from` is "own" when `entry` carries the
+   `provenance` itself and "record" when it has none and `record` does. null:
+   neither names anybody. For a record itself, call it with the record alone. */
+function whoDecided(entry, record) {
+  const read = x => isRecord(x) && isRecord(x.provenance) ? x.provenance : null;
+  const own = read(entry), p = own || read(record);
+  return p ? { ref: p["author-ref"], date: p.date, from: own ? "own" : "record" } : null;
+}
+
+/* ---------- who decided, and when: what a workbench writes (v1.11.0; backlog #69) ----------
+   The rules are those the app writes by (jascon-rules.js, jscAuthorRecord and
+   jscAuthorTailoring), so that the two tools attribute alike:
+   - Nobody is invented. Without an author no `provenance` is written, and the
+     save goes ahead (author decision 2026-11-13: a missing author is a line
+     of a validator's report, not a failure).
+   - `provenance` on a record names who wrote this version. A record that is
+     written again unchanged is the version it was: it keeps the author and
+     the day it names.
+   - An entry of a Tailoring without `provenance` of its own has its
+     Tailoring's. When the Tailoring's changes, such an entry would change
+     hands without anybody having decided it again. So before the Tailoring
+     gets its new author, the old one is written onto every entry that is
+     unchanged.
+   `prov` is the {author-ref, date} of this save, or null; `prev` the stored
+   object of the same id, or nothing. Both functions return a copy. */
+/* one record or one entry, compared: the order of its keys does not count, and neither do the fields in `skip` */
+function contentKey(v, skip) {
+  const sort = x => Array.isArray(x) ? x.map(sort) : isRecord(x) ? Object.fromEntries(Object.keys(x).sort().map(k => [k, sort(x[k])])) : x;
+  return JSON.stringify(sort(Object.fromEntries(Object.entries(v).filter(([k]) => !skip.includes(k)))));
+}
+const sameProvenance = (a, b) => !!a && !!b && a["author-ref"] === b["author-ref"] && a.date === b.date;
+const setProvenance = (obj, prov) => { if (prov) obj.provenance = { ...prov }; else delete obj.provenance; return obj; };
+/* an Implementation, a Finding: unchanged, it keeps what it names; new or changed, it gets `prov` or none */
+function authorRecord(obj, prov, prev) {
+  const out = JSON.parse(JSON.stringify(obj));
+  if (isRecord(prev) && isRecord(prev.provenance) && contentKey(prev, ["provenance"]) === contentKey(out, ["provenance"])) return setProvenance(out, prev.provenance);
+  return setProvenance(out, prov);
+}
+/* A Tailoring: it gets `prov` or none. A select, an exclude or an operation that `prev` holds too keeps
+   who decided it: its own provenance or, where it had none and the Tailoring's author or day changes,
+   the old Tailoring's. A new or changed entry carries none and so has `prov`. An operation's inline
+   Deviation is not part of the comparison: who approves it stands on the Deviation. */
+function authorTailoring(next, prev, prov) {
+  const out = JSON.parse(JSON.stringify(next)), old = isRecord(prev) && isRecord(prev.provenance) ? prev.provenance : null;
+  for (const [list, skip] of [["selects", ["provenance"]], ["excludes", ["provenance"]], ["operations", ["provenance", "deviation"]]]) {
+    const was = new Map(records(isRecord(prev) ? prev[list] : null).map(e => [contentKey(e, skip), e]));
+    for (const e of records(out[list])) {
+      const before = was.get(contentKey(e, skip));
+      if (!before || isRecord(e.provenance)) continue;
+      if (isRecord(before.provenance)) e.provenance = { ...before.provenance };
+      else if (old && !sameProvenance(old, prov)) e.provenance = { ...old };
+    }
+  }
+  return setProvenance(out, prov);
+}
+/* ==READER-PURE-END== */
 
 /* ---------- canonical form + sha256 ---------- */
 function canonical(obj) {
@@ -508,7 +662,12 @@ function sha256Fallback(bytes) {
 }
 
 /* ---------- loading ---------- */
-const READER_ID = "jascon-reader.html v1.9.1";
+/* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
+   `converter` line of every manifest written here, and the first line of the console - and they had
+   come apart: 1.9.1, 1.9.1 and 1.10.0. */
+const READER_VERSION = "1.11.0", READER_BUILD = "2026-11-14";
+const READER_ID = "jascon-reader.html v" + READER_VERSION;
+$("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
    (e.g. `python -m http.server` from the repo root); file:// blocks fetch by design. */
 async function loadFromUrl(input) {
@@ -661,7 +820,7 @@ async function loadFileList(fileList) {
 function indexBundle() {
   state.objects.clear(); state.order = []; state.manifest = null;
   state.manifestByPath.clear(); state.verify = null; state.selected = null;
-  state.browserDims = {};
+  state.browserDims = {}; state.stopped = null; state.pinErrors = [];
   let manifestPath = null;
   for (const p of state.files.keys()) if (p.endsWith("content-manifest.json")) { manifestPath = p; break; }
   const prefix = manifestPath ? manifestPath.slice(0, -"content-manifest.json".length) : "";
@@ -674,6 +833,21 @@ function indexBundle() {
       l.ok(`manifest: ${state.manifest.objects?.length ?? 0} objects listed, ${state.manifest["facet-schemas"]?.length ?? 0} facet schemas pinned`);
     } catch (e) { l.err("manifest parse failed: " + e.message); }
   } else l.warn("no content-manifest.json found — loading loose objects without integrity data");
+  /* KERNEL-2 (v1.11.0): at a pin this page does not read, the load stops here. No object of the
+     bundle is indexed, because this page cannot know what it would be showing. */
+  state.stopped = kernelPinUnread(state.manifest);
+  if (state.stopped) {
+    l.err(state.stopped + " — nothing of this bundle is shown");
+    $("pill-bundle").textContent = "not read · kernel-version " + JSON.stringify(state.manifest["kernel-version"]);
+    $("pill-bundle").classList.remove("on"); $("pill-bundle").style.color = "var(--red)";
+    state.manifest = null; state.manifestBytes = null; state.manifestByPath.clear(); state.manifestHex = null;
+    state.evidence.clear(); state.packs.clear();
+    state.graphGen++;
+    $("btn-verify").disabled = true;
+    renderAll();
+    setView("overview");
+    return;
+  }
   let parsed = 0, failed = 0, unknown = 0;
   for (const [p, f] of state.files) {
     if (p.endsWith("content-manifest.json")) continue;
@@ -700,6 +874,12 @@ function indexBundle() {
   l.ok(`indexed ${parsed} objects (${failed} parse failures, ${unknown} non-kernel files skipped)`);
   const counts = typeCounts();
   l.info("types: " + Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(" · "));
+  /* KERNEL-1 (v1.11.0): the pin against the objects the manifest lists. Reported, and the bundle is
+     shown all the same: the duty is the bundle's, and a reader is how somebody finds out. */
+  if (state.manifest) {
+    state.pinErrors = kernelPinErrors(state.manifest, [...state.objects.values()].filter(r => r.entry).map(r => r.obj));
+    for (const e of state.pinErrors) l.err(e);
+  }
   for (const p of [...state.evidence.keys()]) if (!p.startsWith(prefix + "evidence/sha256/")) state.evidence.delete(p);   // only the store beside THIS manifest
   if (state.evidence.size) l.info(`evidence store: ${state.evidence.size} file(s) beside the manifest — content-addressed (evidence/sha256/<hex>), not manifest entries`);
   /* advice packs: the header of this bundle, and the pack manifests it keeps beside its own */
@@ -717,7 +897,7 @@ function indexBundle() {
   }
   const prov = state.manifest?.provenance || {};
   $("pill-bundle").textContent = (prov.source || prov.sources?.[0]?.title || "bundle") + " · " + parsed + " objects";
-  $("pill-bundle").classList.add("on");
+  $("pill-bundle").classList.add("on"); $("pill-bundle").style.color = "";
   $("btn-verify").disabled = !state.manifest || !state.objects.size;
   renderAll();
   setView("stages");
@@ -744,6 +924,10 @@ function typeCounts() {
 /* ---------- rendering: overview ---------- */
 function renderOverview() {
   const has = state.objects.size > 0;
+  $("ov-stop").classList.toggle("hidden", !state.stopped);
+  $("ov-stop").innerHTML = state.stopped ? `<p class="verdict-bad" style="font-weight:600">The last bundle was not read.</p>
+    <p style="margin-top:6px;color:var(--text-secondary)">${esc(state.stopped)}</p>
+    <p class="hint" style="margin-top:6px">Nothing of it is shown: a page that does not implement a kernel cannot know what it would be showing.</p>` : "";
   $("ov-empty").classList.toggle("hidden", has);
   $("ov-data").classList.toggle("hidden", !has);
   if (!has) return;
@@ -756,7 +940,10 @@ function renderOverview() {
   add("source oscal", p["source-oscal-version"]);
   add("converter", p.converter);
   add("namespace note", p["namespace-note"]);
-  add("kernel version", state.manifest?.["kernel-version"]);
+  /* the kernel pin: what the manifest says, and whether the content it lists needs more (KERNEL-1) */
+  if (state.manifest) rows.push(kvRow("kernel version", `<span id="ov-kernel">${state.manifest["kernel-version"] !== undefined
+      ? esc(state.manifest["kernel-version"]) : `<span class="hint">none pinned — absent means 1.0.0 content</span>`}</span>` +
+    state.pinErrors.map(e => `<div class="verdict-bad" data-pin-error>✗ ${esc(e)}</div>`).join("")));
   add("objects", String(state.objects.size));
   add("manifest entries", state.manifest ? String(state.manifest.objects.length) : "—");
   add("evidence store", state.evidence.size ? `${state.evidence.size} file(s) beside the manifest (not manifest entries)` : "");
@@ -892,6 +1079,96 @@ function modBadge(m) {
   const c = MODALITY_COLORS[m] || "var(--text-quiet)";
   return `<span class="badge" style="border-color:${c};color:${c}" title="${esc(MODALITY_EXPLAIN[m] || "")}">${esc(m)}</span>`;
 }
+/* ---------- who decided, and when: display (v1.11.0; D26, CP-AUTHOR-1) ----------
+   Shown as recorded. A Tailoring, a Risk, an Implementation and a Finding name who wrote this
+   version in `provenance`; an entry of a Tailoring and a rating of a Risk name their own or, marked
+   as inherited, have their record's; a Deviation says when it was decided and when it is due for
+   review; an authorization says on which day. Where a field is absent the line says so. Nothing is
+   filled in: no author is taken from an owner, an approver or a performer, no day from a version.
+   This page prints no AUTHOR line and judges no review date; validate_core.py does both
+   (AUTHOR-1 to AUTHOR-4, REVIEW-1). The data-who* attributes are what the tests read.
+   opt.of: the place inside the object ("operations[0]", "rating"; default "record");
+   opt.noun: what the record is called; opt.short: the last path segment, the URI in the title. */
+const WHO_NOUN = { tailoring: "Tailoring", risk: "Risk", implementation: "Implementation", finding: "Finding" };
+function whoHtml(entry, record, opt = {}) {
+  const w = whoDecided(entry, record), of = esc(opt.of || "record"), noun = opt.noun || "record";
+  if (!w) return `<span class="hint" data-who="none" data-who-of="${of}">nobody is named` + (opt.short ? ""
+    : record ? ` — neither this entry nor its ${esc(noun)} carries provenance` : ` — this ${esc(noun)} does not say who wrote it and when`) + `</span>`;
+  const ref = typeof w.ref === "string" && w.ref
+    ? (opt.short ? `<span title="${esc(w.ref)}">${esc(w.ref.split("/").filter(Boolean).pop())}</span>` : `<span style="word-break:break-all">${esc(w.ref)}</span>`)
+    : `<span class="hint">no author-ref</span>`;
+  const date = typeof w.date === "string" && w.date ? esc(w.date) : `<span class="hint">no date</span>`;
+  const mark = w.from !== "record" ? ""
+    : ` <span class="badge" data-inherited title="this entry carries no provenance of its own; an entry without one has its ${esc(noun)}'s (D26)">${opt.short ? "inherited" : "inherited from the " + esc(noun)}</span>`;
+  return `<span data-who="${w.from}" data-who-of="${of}">${ref} · ${date}${mark}</span>`;
+}
+/* a record's own line */
+function whoRecordHtml(r) {
+  return `<div class="nano sectionlabel">Who wrote this version, and when</div><div class="v">${whoHtml(r.obj, null, { noun: WHO_NOUN[r.type] })}</div>`;
+}
+/* `due` (a review date, a deadline): a date, a date-time, an elapsed duration or a calendar period
+   with its calendar. Written out; nothing is computed from it. */
+function dueHtml(due) {
+  if (!isRecord(due)) return prettyVal(due, 1);
+  if (due.type === "date" || due.type === "datetime") return esc(due.value);
+  if (due.type === "elapsed-duration") return `${esc(due.num)} ${esc(due.unit)} <span class="hint">(elapsed)</span>`;
+  if (due.type === "calendar-period") return `${esc(due.num)} ${esc(due.unit)} <span class="hint">(calendar ${esc(due["calendar-ref"])})</span>`;
+  return prettyVal(due, 1);
+}
+/* A Deviation: who approves, when it was asked for (`opened`), when it was decided (`decided`) and
+   when it is due for review (`review-due`). The last two are optional; an approved or withdrawn
+   Deviation without `decided` is what AUTHOR-3 reports. */
+const deviationSettled = d => d.state === "approved" || d.state === "withdrawn";
+function deviationHtml(d, of) {
+  if (!isRecord(d)) return prettyVal(d, 1);
+  const decided = "decided" in d ? `<span data-decided="stated">${esc(d.decided)}</span>`
+    : deviationSettled(d) ? `<span class="hint" data-decided="none">not stated — the Deviation is ${esc(d.state)} and does not say on which day</span>`
+    : `<span class="hint" data-decided="open">not decided — state ${esc(d.state)}</span>`;
+  const review = "review-due" in d
+    ? `<span data-review="stated">${dueHtml(d["review-due"])}</span>` + (isRecord(d["review-due"]) && /duration|period/.test(d["review-due"].type) ? ` <span class="hint">— counted from \`decided\`, else from \`opened\`</span>` : "")
+    : `<span class="hint" data-review="none">not stated — the Deviation names no day on which it is looked at again</span>`;
+  const known = ["type", "state", "rationale", "approver-ref", "opened", "decided", "review-due", "refs"];
+  const rest = Object.fromEntries(Object.entries(d).filter(([k]) => !known.includes(k)));
+  return `<div class="devbox" data-deviation="${esc(of || "")}">
+    <span class="badge" style="border-color:var(--amber);color:var(--amber)">⚑ Deviation</span><span class="badge" title="type">${esc(d.type)}</span><span class="badge" title="state">${esc(d.state)}</span>
+    <div class="kv" style="margin-top:8px">
+      ${kvRow("rationale", prettyVal(d.rationale, 1))}
+      ${kvRow("approver-ref", `<span style="word-break:break-all">${esc(d["approver-ref"])}</span>`)}
+      ${kvRow("opened", `${esc(d.opened)} <span class="hint">— the day it was asked for</span>`)}
+      ${kvRow("decided", decided)}
+      ${kvRow("review-due", review)}
+      ${Array.isArray(d.refs) ? kvRow("refs", d.refs.map(x => refLink(x)).join("<br>")) : ""}
+    </div>${Object.keys(rest).length ? prettyVal(rest, 1) : ""}</div>`;
+}
+/* the same in one line, where there is no room for the box */
+function deviationLine(d) {
+  if (!isRecord(d)) return "";
+  return `<span data-deviation-line>⚑ Deviation: ${esc(d.type)} · ${esc(d.state)} · ` +
+    ("decided" in d ? `decided ${esc(d.decided)}` : deviationSettled(d) ? "no day decided is stated" : "not decided") + ` · ` +
+    ("review-due" in d ? `review due ${dueHtml(d["review-due"])}` : "no review date is stated") + `</span>`;
+}
+/* the `deviations` list any object may carry */
+function deviationsHtml(o) {
+  const list = Array.isArray(o.deviations) ? o.deviations : [];
+  if (!list.length) return "";
+  return `<div class="nano sectionlabel">Deviations (${list.length}) — as recorded; whether a review is overdue is not judged here (validate_core.py reports it, REVIEW-1)</div>` +
+    list.map((d, i) => deviationHtml(d, `deviations[${i}]`)).join("");
+}
+/* A Component's authorizations: who authorized, what, and on which day (`date`, optional; one
+   without is what AUTHOR-4 reports). */
+function authorizationsHtml(o) {
+  const list = records(o.authorizations);
+  if (!list.length) return "";
+  return `<div class="nano sectionlabel">Authorizations (${list.length}) — an inherited Implementation names one as its basis</div>` +
+    list.map(a => `<div class="stmt" data-authorization="${esc(a.id)}">
+      <span class="badge" style="border-color:var(--green);color:var(--green)">✦ ${esc(a.id)}</span>${a["scope-label"] ? `<span>${esc(a["scope-label"])}</span>` : ""}
+      <div class="kv" style="margin-top:8px">
+        ${kvRow("authority-ref", `<span style="word-break:break-all">${esc(a["authority-ref"])}</span>`)}
+        ${kvRow("date", "date" in a ? `<span data-auth-date="stated">${esc(a.date)}</span>`
+          : `<span class="hint" data-auth-date="none">not stated — the authorization carries no \`date\`: it names the authority and not the day</span>`)}
+        ${Array.isArray(a.includes) ? kvRow("includes", a.includes.map(x => refLink(x)).join("<br>")) : ""}
+      </div></div>`).join("");
+}
 function digestRow(r) {
   if (!r.entry) return "";
   const v = state.verify?.get(r.obj.id);
@@ -960,7 +1237,7 @@ function renderRequirement(r) {
         ${params}</div>
       ${langBlocks(s.prose, "prose")}
     </div>`;
-  }).join("") + (o.deviations ? `<div class="nano sectionlabel">Deviations</div>${prettyVal(o.deviations)}` : "");
+  }).join("") + deviationsHtml(o);
 }
 function renderSet(r) {
   const mem = r.obj.members || [];
@@ -974,20 +1251,30 @@ function renderSet(r) {
   }).join("");
   return `<div class="nano sectionlabel">Members (${mem.length})${mem.length > 300 ? " — first 300 shown" : ""}</div>${rows || '<div class="hint">empty (structurally required, may legally be empty)</div>'}`;
 }
+/* Tailoring (v1.11.0): every select, exclude and operation says who decided it and when - its own
+   `provenance` or, marked as inherited, the Tailoring's - and an inline Deviation is shown in full. */
 function renderTailoring(r) {
   const o = r.obj;
-  const sel = (o.selects || []).map(s => s["set-ref"] ? refLink(s["set-ref"]) : `<span class="mono">${esc(JSON.stringify(s.predicate))}</span>`).join("<br>");
-  const ops = (o.operations || []).map(op => `<div class="stmt">
+  const who = (e, of) => `<div class="kv" style="margin-top:5px;grid-template-columns:90px 1fr">${kvRow("decided by", whoHtml(e, o, { of, noun: "Tailoring" }))}</div>`;
+  const sel = (o.selects || []).map((s, i) => `<div class="stmt" style="margin:6px 0">
+      ${s["set-ref"] ? refLink(s["set-ref"]) : `<span class="mono">${esc(JSON.stringify(s.predicate))}</span>`}${who(s, `selects[${i}]`)}</div>`).join("");
+  const exc = (Array.isArray(o.excludes) ? o.excludes : []).map((e, i) => `<div class="stmt" style="margin:6px 0">
+      ${refLink(e.ref)}${e.rationale ? `<div class="hint" style="margin-top:4px">${esc(tt(e.rationale))}</div>` : ""}${who(e, `excludes[${i}]`)}</div>`).join("");
+  const ops = (o.operations || []).map((op, i) => `<div class="stmt">
       <span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(op.op)}</span>
       ${op["statement-id"] ? `<span class="badge">stmt ${esc(op["statement-id"])}</span>` : ""}
       ${op.modality ? modBadge(op.modality) : ""}
       ${op.parameter ? `<span class="badge">⚙ ${esc(op.parameter)} = ${esc(JSON.stringify(op.value))}</span>` : ""}
       ${op.deviation ? `<span class="badge" style="border-color:var(--red);color:var(--red)">carries Deviation</span>` : ""}
-      <div style="margin-top:5px">${refLink(op["requirement-ref"])}</div>
+      ${op["deviation-ref"] ? `<span class="badge" title="deviation-ref">Deviation ${esc(op["deviation-ref"])}</span>` : ""}
+      <div style="margin-top:5px">${refLink(op["requirement-ref"])}</div>${who(op, `operations[${i}]`)}
+      ${op.deviation ? deviationHtml(op.deviation, `operations[${i}].deviation`) : ""}
     </div>`).join("");
-  return `<div class="nano sectionlabel">Selects</div><div class="v">${sel || "—"}</div>
-    ${o.excludes ? `<div class="nano sectionlabel">Excludes (selection — never a weakening)</div>${prettyVal(o.excludes)}` : ""}
-    <div class="nano sectionlabel">Operations (${(o.operations || []).length}) — ordered, identity-addressed</div>${ops || '<div class="hint">none</div>'}`;
+  return whoRecordHtml(r) +
+    `<div class="nano sectionlabel">Selects (${(o.selects || []).length})</div>${sel || '<div class="hint">none</div>'}
+    ${exc ? `<div class="nano sectionlabel">Excludes (${o.excludes.length}) — selection, never a weakening</div>${exc}` : ""}
+    <div class="nano sectionlabel">Operations (${(o.operations || []).length}) — ordered, identity-addressed</div>${ops || '<div class="hint">none</div>'}` +
+    deviationsHtml(o);
 }
 function renderMapping(r) {
   const o = r.obj;
@@ -1018,12 +1305,29 @@ function renderComponent(r) {
       ${o["product-version"] !== undefined ? kvRow("product-version", `<span class="mono">${esc(o["product-version"])}</span> <span class="hint">— the version of the product this Component describes; opaque text, nothing is ordered from it</span>`) : ""}
       ${about.map(x => kvRow("describes", refLink(x.ref) + ` <span class="hint">— the product this Component is about (a third party's advice names the vendor's Component)</span>`)).join("")}</div>` +
     (caps ? `<div class="nano sectionlabel">Capabilities (${o.capabilities.length}) — claims, adopted by an Implementation that cites &lt;component-id&gt;#&lt;capability-id&gt;</div>${caps}` : "") +
-    renderGeneric(r, ["kind", "product-version", "capabilities"]);
+    authorizationsHtml(o) +
+    renderGeneric(r, ["kind", "product-version", "capabilities", ...(records(o.authorizations).length ? ["authorizations"] : [])]);
 }
+/* the fields no renderer of its own shows; a `deviations` list is shown as Deviations, on any type */
 function renderGeneric(r, omit = []) {
   const skip = new Set(["id","version","label","title","lifecycle","aliases","relations","facets","annotations","statements","members", ...omit]);
-  const rest = Object.fromEntries(Object.entries(r.obj).filter(([k]) => !skip.has(k)));
-  return Object.keys(rest).length ? `<div class="nano sectionlabel">Fields</div>${prettyVal(rest)}` : "";
+  const list = Array.isArray(r.obj.deviations) && r.obj.deviations.length;
+  const rest = Object.fromEntries(Object.entries(r.obj).filter(([k]) => !skip.has(k) && !(list && k === "deviations")));
+  return (Object.keys(rest).length ? `<div class="nano sectionlabel">Fields</div>${prettyVal(rest)}` : "") + deviationsHtml(r.obj);
+}
+/* Risk (v1.11.0): who wrote this version, and who decided each rating - the rating's own
+   `provenance` or, marked as inherited, the Risk's. The other fields as before. */
+function renderRisk(r) {
+  const o = r.obj;
+  const rating = k => !isRecord(o[k]) ? "" : kvRow(k, `<span class="badge" title="level">${esc(o[k].level)}</span>${whoHtml(o[k], o, { of: k, noun: "Risk" })}`);
+  const bare = { ...o };   // the Fields below do not repeat the ratings' provenance
+  for (const k of ["rating", "residual-rating"]) if (isRecord(o[k]) && "provenance" in o[k]) { bare[k] = { ...o[k] }; delete bare[k].provenance; }
+  return `<div class="nano sectionlabel">Who decided, and when</div><div class="kv" style="grid-template-columns:150px 1fr">
+      ${kvRow("this version", whoHtml(o, null, { noun: "Risk" }))}${rating("rating")}${rating("residual-rating")}</div>` +
+    renderGeneric({ obj: bare, type: r.type }, ["provenance"]);
+}
+function renderImplementation(r) {
+  return whoRecordHtml(r) + renderGeneric(r, ["provenance"]);
 }
 
 /* ---------- Check (v1.8.0 · kernel 2.0.0, CP-CHECK-1) ----------
@@ -1161,9 +1465,9 @@ function renderAssessment(r) {
     (o["tailoring-ref"] ? `<div class="nano sectionlabel">Tailoring — whose bound parameter values the run used</div><div class="v">${refOrOutside(o["tailoring-ref"])}</div>` : "") +
     checkResultsHtml(o);
 }
-function renderFinding(r) {   // generic fields as before; check-ref (CP-CHECK-1) becomes a link
+function renderFinding(r) {   // who wrote it (v1.11.0); generic fields as before; check-ref (CP-CHECK-1) becomes a link
   const ref = r.obj["check-ref"];
-  return renderGeneric(r, ["check-ref"]) +
+  return whoRecordHtml(r) + renderGeneric(r, ["check-ref", "provenance"]) +
     (ref ? `<div class="nano sectionlabel">Raised by check</div><div class="v">${refOrOutside(ref)}</div>` : "");
 }
 function openObject(id) {
@@ -1180,6 +1484,8 @@ function openObject(id) {
   else if (r.type === "component") body += renderComponent(r);
   else if (r.type === "assessment") body += renderAssessment(r);
   else if (r.type === "finding") body += renderFinding(r);
+  else if (r.type === "risk") body += renderRisk(r);
+  else if (r.type === "implementation") body += renderImplementation(r);
   else body += renderGeneric(r);
   body += aliasesHtml(r.obj) + relationsHtml(r.obj) + facetsHtml(r.obj) + annotationsHtml(r.obj) + digestRow(r);
   body += `<details style="margin-top:12px"><summary>raw JSON</summary><pre class="raw">${esc(JSON.stringify(r.obj, null, 1))}</pre></details>`;
@@ -1452,7 +1758,7 @@ function renderStageTailor() {
   const predN = (o.selects || []).filter(s => s.predicate).length;
   for (const ex of o.excludes || []) selected.delete(ex.ref);
   const targets = new Map(); const conflicts = [];
-  const rows = (o.operations || []).map(op => {
+  const rows = (o.operations || []).map((op, i) => {
     const key = [op["requirement-ref"], op["statement-id"], op.parameter, op.field, op.facet].join("|");
     if (targets.has(key)) conflicts.push(key); targets.set(key, true);
     const req = state.objects.get(op["requirement-ref"]);
@@ -1470,13 +1776,15 @@ function renderStageTailor() {
       after = `<span class="mono" style="font-size:11px">${esc(JSON.stringify(op.value))}</span>`;
       verdict = p?.tightening ? `<span class="hint">tightening: ${esc(p.tightening)}</span>` : "";
     } else { after = `<span class="mono" style="font-size:11px">${esc(JSON.stringify(op.value ?? op.prose ?? op.relation ?? op.payload ?? ""))}</span>`; }
+    if (op.deviation) verdict += `<div class="hint verdict-warn" style="margin-top:3px">${deviationLine(op.deviation)}</div>`;   // when it was decided, when it is reviewed - or that neither is stated
     const inScope = selected.has(op["requirement-ref"]);
     return `<tr><td><span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(op.op)}</span></td>
       <td>${req ? `<a class="reflink" data-ref="${esc(op["requirement-ref"])}">${esc(req.obj.label || op["requirement-ref"])}</a>` : esc(op["requirement-ref"])}
           ${op["statement-id"] ? `<span class="badge">stmt ${esc(op["statement-id"])}</span>` : ""}
           ${inScope ? "" : ` <span class="verdict-warn" title="operation targets a requirement outside the selection">⚠ out of scope</span>`}</td>
       <td><div class="diffrow"><div>${before}</div><div style="text-align:center;color:var(--text-quiet)">▶</div><div>${after}</div></div></td>
-      <td>${verdict}</td></tr>`;
+      <td>${verdict}</td>
+      <td>${whoHtml(op, o, { of: `operations[${i}]`, noun: "Tailoring", short: true })}</td></tr>`;
   }).join("");
   const easings = (o.operations || []).filter(op => {
     if (op.op !== "set-modality") return false;
@@ -1487,13 +1795,14 @@ function renderStageTailor() {
   return stageHead("tailor") + wbTailorHtml() + picker +
     `<div style="margin:6px 0 10px">
       <div class="chip" title="layered anchor (#19): id-origin match = authority-claimed; the authority's Attestation over this Tailoring would prove it (signature not evaluated in-app); mixed/predicate selection = consumer">tier: <b style="color:${tier==="consumer"?"var(--amber)":"var(--green)"}">${tier}</b></div>
+      <div class="chip" title="the Tailoring's provenance: who wrote this version, and when. A select, an exclude or an operation without provenance of its own has this one (D26)">author: ${whoHtml(o, null, { noun: "Tailoring", short: true })}</div>
       <div class="chip"><b>${selected.size}</b> requirements selected${predN ? ` <span class="hint">(+${predN} predicate selects, not evaluated here)</span>` : ""}</div>
       <div class="chip"><b>${(o.excludes || []).length}</b> excluded <span class="hint">— selection, never weakening</span></div>
       <div class="chip"><b>${(o.operations || []).length}</b> operations</div>
       <div class="chip ${conflicts.length ? "verdict-bad" : ""}"><b>${conflicts.length}</b> same-target conflicts ${conflicts.length ? "— VALIDATION ERROR (overrides only by chaining)" : "✓"}</div>
       <div class="chip ${easings ? "verdict-warn" : ""}"><b>${easings}</b> non-monotone moves</div>
      </div>
-     <table class="flat"><tr><th>op</th><th>target</th><th>before ▶ after</th><th>lattice verdict</th></tr>${rows || "<tr><td colspan=4 class='hint'>no operations</td></tr>"}</table>
+     <table class="flat"><tr><th>op</th><th>target</th><th>before ▶ after</th><th>lattice verdict</th><th style="white-space:nowrap">decided by · when</th></tr>${rows || "<tr><td colspan=5 class='hint'>no operations</td></tr>"}</table>
      <p class="hint" style="margin-top:10px">Resolution per spec Appendix B: expand selects through nested Sets, apply excludes, then apply operations in list order to deep copies. Two operations on one target in one Tailoring = error. Weakening needs an attached Deviation at consumer tier; an authority publishing its own variants owes none (D13 rev).</p>` +
      resolvedPreviewHtml(o);
 }
@@ -1548,7 +1857,8 @@ function renderStageImplement() {
     ${c.obj["product-version"] !== undefined ? `<span class="badge" title="product-version: the version of the product this Component describes">product ${esc(c.obj["product-version"])}</span>` : ""}
     ${(c.obj.capabilities || []).map(cap => `<span class="badge" title="${esc(tt(cap.description))}">⚙ ${esc(cap.id)}</span>`).join("")}
     ${(c.obj.relations || []).filter(x => x.type === DESCRIBES).map(x => `<div class="leaf" style="margin-top:4px">describes ${refLink(x.ref)}</div>`).join("")}
-    ${(c.obj.authorizations || []).map(a => `<span class="badge" style="border-color:var(--green);color:var(--green)" title="authority: ${esc(a["authority-ref"])}">✦ ${esc(a.id)}${a["scope-label"] ? " · " + esc(a["scope-label"]) : ""}</span>`).join("")}
+    ${(c.obj.authorizations || []).map(a => `<span class="badge" style="border-color:var(--green);color:var(--green)" title="authority: ${esc(a["authority-ref"])}">✦ ${esc(a.id)}${a["scope-label"] ? " · " + esc(a["scope-label"]) : ""} · ${
+      "date" in a ? `<span data-auth-date="stated">${esc(a.date)}</span>` : `<span data-auth-date="none" style="color:var(--text-quiet)">no date field</span>`}</span>`).join("")}
     ${(c.obj.members || []).map(m => `<div class="leaf" style="margin-top:4px">↳ ${refLink(m["component-ref"])} ${m.context ? `<span class="hint">(${esc(m.context)})</span>` : ""}</div>`).join("")}
   </div>`).join("");
   const implRows = impls.map(i => {
@@ -1566,12 +1876,13 @@ function renderStageImplement() {
       <td><span class="badge">${esc(o.responsibility)}</span></td>
       <td>${sat}</td>
       <td><span class="badge">${esc(o.status)}</span></td>
+      <td>${whoHtml(o, null, { noun: "Implementation", short: true })}</td>
       <td><a class="reflink" data-ref="${esc(o.id)}">⋯</a></td></tr>`;
   }).join("");
   return stageHead("implement") + wbImplementHtml() +
     `<div class="nano sectionlabel">Components (${comps.length})</div>${compCards || '<span class="hint">none</span>'}
      <div class="nano sectionlabel">Implementation edges (${impls.length}) — every inherited edge must name its authorization basis (D5); ✓/✗ shows whether the basis resolves in this bundle</div>
-     ${impls.length ? `<table class="flat"><tr><th>component</th><th>requirement · clause</th><th>responsibility</th><th>satisfied by</th><th>status</th><th></th></tr>${implRows}</table>` : '<span class="hint">none</span>'}`;
+     ${impls.length ? `<table class="flat"><tr><th>component</th><th>requirement · clause</th><th>responsibility</th><th>satisfied by</th><th>status</th><th style="white-space:nowrap">written by · when</th><th></th></tr>${implRows}</table>` : '<span class="hint">none</span>'}`;
 }
 
 /* S5 · Assess & Attest: results board + bi-modal verification */
@@ -1635,9 +1946,10 @@ function renderStageAssess() {
       fs.map(f => `<div class="stmt" style="margin:6px 0">
         <a class="reflink" data-ref="${esc(f.obj.id)}"><b>${esc(f.obj.label || f.obj.id.split("/").pop())}</b></a>
         <div class="hint">against ${refLink(f.obj["requirement-ref"])}${f.obj["statement-ref"] ? ` <span class="badge">stmt ${esc(f.obj["statement-ref"])}</span>` : ""}</div>
+        <div class="hint">author: ${whoHtml(f.obj, null, { noun: "Finding", short: true })}</div>
         ${f.obj["check-ref"] ? `<div class="hint">raised by check ${refOrOutside(f.obj["check-ref"])}</div>` : ""}
         ${(f.obj.actions || []).map(ac => `<div class="hint">▸ ${esc(tt(ac.description))} ${ac.due ? `<span class="badge" title="deadline">${esc(JSON.stringify(ac.due))}</span>` : ""} <span class="badge">${esc(ac.status)}</span></div>`).join("")}
-        ${(f.obj.deviations || []).map(d => `<div class="hint verdict-warn">⚑ Deviation: ${esc(d.type)} · ${esc(d.state)}</div>`).join("")}
+        ${(f.obj.deviations || []).map(d => `<div class="hint verdict-warn">${deviationLine(d)}</div>`).join("")}
       </div>`).join("") + `</div>`).join("") + `</div>`;
   const attCards = atts.map(a => `<div class="stmt">
     <span class="badge" style="border-color:${TYPES.attestation.color}">✦ attestation</span>
@@ -1700,7 +2012,43 @@ work._draft = work._draft || {};
 function saveWork() { const d = work._draft; work._draft = {}; localStorage.setItem("scr-work", JSON.stringify(work)); work._draft = d; }
 function mintId(kind, name) { return work.ns.replace(/\/$/, "") + "/" + kind + "/" + slug(name); }
 function today() { return new Date().toISOString().slice(0, 10); }
+/* The author of what the workbenches write (v1.11.0; D26, CP-AUTHOR-1): one optional setting, shown
+   in the Tailor, the Implement and the Assess workbench. A party URI is taken as typed; a plain name
+   becomes a party under the namespace, as the approver and the performer do. With an author, a
+   Tailoring, an Implementation and a Finding written here carry `provenance`: that author and
+   today's date (UTC). Without one they are written without it, and nothing is refused: a validator
+   reports a missing author as a line (AUTHOR-1, AUTHOR-2) and fails only where its caller asks for
+   that. What a save leaves unchanged keeps who decided it (authorRecord and authorTailoring, in the
+   pure part above). `stored` is the object of that id in the graph, which is what a save replaces. */
+function authorRef() {
+  const v = String(work.who || "").trim();
+  if (!v) return "";
+  return /^[a-z][a-z0-9+.-]*:/i.test(v) ? v : work.ns.replace(/\/$/, "") + "/party/" + slug(v);
+}
+function provenanceNow() { const a = authorRef(); return a ? { "author-ref": a, date: today() } : null; }
+const stored = id => state.objects.get(id)?.obj;
+const AUTHOR_KEPT = { "a Tailoring": "an entry it held before keeps who decided it",
+  "an Implementation": "one that is unchanged keeps what it names", "a Finding": "one that is unchanged keeps what it names" };
+function authorNoteHtml(what) {
+  const a = authorRef();
+  return a ? `${esc(what)} written here names <span class="mono">${esc(a)}</span> · ${today()} as its provenance; ${esc(AUTHOR_KEPT[what])}`
+    : `optional — without an author ${esc(what)} is written without provenance; a validator reports that as a line, it is not a failure`;
+}
+function authorFieldHtml(id, what) {
+  return `<div class="wbrow"><label>author</label><input type="text" id="${id}" data-what="${esc(what)}" placeholder="party URI — optional" value="${esc(work.who || "")}" style="min-width:250px">
+    <span class="hint" data-who-note>${authorNoteHtml(what)}</span></div>`;
+}
+/* The note beside the field is rewritten in place. A re-render of the workbench on `change` would
+   replace the button a person is pressing at that moment - the field loses the focus to it - and the
+   click would be lost. */
+function wireAuthorField(el, id) {
+  const x = el.querySelector("#" + id);
+  if (x) x.onchange = () => { work.who = x.value.trim(); saveWork(); x.parentElement.querySelector("[data-who-note]").innerHTML = authorNoteHtml(x.dataset.what); };
+}
 function download(name, obj) {
+  /* textifyJs (v1.11.0): one object leaves as the bundle export writes it, its texts language-tagged.
+     Until 1.10.0 a downloaded object kept its title as plain text, which the kernel refuses. */
+  obj = textifyJs(JSON.parse(JSON.stringify(obj)));
   const a = document.createElement("a");
   a.href = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 1) + "\n"], { type: "application/json" }));
   a.download = name; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
@@ -1736,17 +2084,30 @@ function workspaceObjects() {
 }
 async function buildWorkspaceBundleFiles(objs, provenance) {
   const enc = new TextEncoder();
-  // backlog #44 / KERNEL-1: content beyond the 1.0.0 kernel (a Risk, or a
-  // Finding with risk-refs) names its kernel in the manifest
-  const needs2 = objs.some(o => (o && o.scenario && o["owner-ref"]) || (o && Array.isArray(o["risk-refs"]) && o["risk-refs"].length) ||
-    (o && ((o.observes && o.criteria) || o["check-results"] || o["tailoring-ref"] || o["check-ref"])) ||   // CP-CHECK-1 content is kernel 2.0.0 too
-    (o && o.kind && ("product-version" in o || (o.capabilities || []).some(c => (c["statement-ids"] || []).length))));   // and so are product-version and a capability's statement-ids
+  /* KERNEL-1 (backlog #44, #69): content beyond the 1.0.0 kernel names its kernel in the manifest, and
+     1.0.0 content names none. kernelNeeded is the port of the reference's test; the manifest written
+     here pins no scales and carries no pack header, so the objects decide. */
+  const [kernel, why] = kernelNeeded(objs, null);
+  l.info(kernel === "1.0.0" ? "manifest: no kernel-version is pinned — the content is 1.0.0 content"
+    : `manifest: pins kernel-version ${kernel} — ${why}`);
   const files = []; const manifest = { "manifest-version": "1",
-    ...(needs2 ? { "kernel-version": "2.0.0" } : {}), provenance,
+    ...(kernel === "1.0.0" ? {} : { "kernel-version": kernel }), provenance,
     objects: [], "facet-schemas": [] };
   const DIR = { requirement: "req", requirementSet: "set", tailoring: "tailoring",
     mapping: "map", component: "comp", implementation: "impl",
     assessment: "asmt", finding: "finding", attestation: "att", risk: "risk", check: "check" };
+  /* Facet schemas (v1.11.0): an object that leaves with a registered facet needs that facet's schema
+     pinned beside it, or a validator refuses the facet as unregistered (D10). The pin and the schema
+     file are those of the loaded bundle, unchanged. Until 1.10.0 no export pinned one, so the
+     resolved package of a Tailoring over such requirements did not validate. */
+  const facetsUsed = new Set(objs.flatMap(o => Object.keys(o.facets || {})).map(k => k.replace(/@[^@]*$/, "")));
+  for (const pin of state.manifest?.["facet-schemas"] || []) {
+    if (!facetsUsed.has(pin.id)) continue;
+    const f = state.files.get((state.prefix || "") + pin.path);
+    if (!f) { l.warn(`facet schema ${pin.id} is pinned by the loaded bundle, but its file ${pin.path} is not loaded — the export cannot pin it, and a validator will refuse the facet`); continue; }
+    manifest["facet-schemas"].push(pin);
+    files.push({ name: pin.path, bytes: f.bytes });
+  }
   for (const o of objs) {
     const t = inferType(o);
     const rel = `objects/${DIR[t] || "obj"}/${slug(o.id.split("/").slice(-2).join("-"))}.json`;
@@ -1774,17 +2135,21 @@ async function exportWorkspaceBundle() {
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   l.ok(`workspace bundle exported: ${objs.length} objects + content-manifest with both digests (${(zip.length / 1024).toFixed(1)} kB zip) — loads back into this reader and passes validate_core.py`);
 }
+/* The approver the form shows is the approver written (v1.11.0). Until 1.10.0 the field showed "ciso"
+   and, left as it was, the Deviation named the party "approver". */
+const DEV_APPROVER = "ciso";
 function deviationFromDraft(d) {
   return { type: d.devType || "risk-adjustment", state: "pending", rationale: d.devRationale,
-           "approver-ref": work.ns.replace(/\/$/, "") + "/party/" + slug(d.devApprover || "approver"), opened: today() };
+           "approver-ref": work.ns.replace(/\/$/, "") + "/party/" + slug(d.devApprover || DEV_APPROVER), opened: today() };
 }
 function buildTailoringObject() {
   const t = work.tailor;
-  return { id: mintId("tailoring", t.label || "my-tailoring"), version: "1", label: t.label,
+  const built = { id: mintId("tailoring", t.label || "my-tailoring"), version: "1", label: t.label,
     lifecycle: "draft", title: t.label,
     selects: t.selects.map(s => ({ "set-ref": s })),
     ...(t.excludes.length ? { excludes: t.excludes.map(e => ({ ref: e })) } : {}),
     operations: t.operations.map(o => JSON.parse(JSON.stringify(o))) };
+  return authorTailoring(built, stored(built.id), provenanceNow());
 }
 function paramVerdict(p, value) {   // mirrors the conformance parameter law
   if (!p) return { v: "invalid", why: "no parameter selected" };
@@ -1878,7 +2243,7 @@ function wbTailorHtml() {
   }
   const devUi = needDev ? `<div class="devbox"><span class="nano" style="color:var(--amber)">Deviation required — the audited weakening channel</span>
       <div class="wbrow"><label>type</label><select id="wb-t-devtype">${["risk-adjustment","operational-requirement","false-positive","vendor-dependency","derogation"].map(x => `<option ${d.devType === x ? "selected" : ""}>${x}</option>`).join("")}</select>
-      <label>approver</label><input type="text" id="wb-t-devappr" value="${esc(d.devApprover || "ciso")}" style="width:110px">
+      <label>approver</label><input type="text" id="wb-t-devappr" value="${esc(d.devApprover || DEV_APPROVER)}" style="width:110px">
       <input type="text" id="wb-t-devrat" placeholder="rationale (required)" value="${esc(d.devRationale || "")}" style="flex:1;min-width:200px"></div></div>` : "";
   const opsList = t.operations.map((o, i) => `<div class="wbchip">
       <span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(o.op)}</span>
@@ -1889,6 +2254,7 @@ function wbTailorHtml() {
   return `<div class="wb"><div class="nano" style="margin-bottom:8px">Workbench — author a Tailoring</div>
     <div class="wbrow"><label>namespace</label><input type="text" id="wb-ns" value="${esc(work.ns)}" style="min-width:230px">
       <label>label</label><input type="text" id="wb-t-label" value="${esc(t.label)}" style="width:150px"></div>
+    ${authorFieldHtml("wb-t-who", "a Tailoring")}
     <div class="wbrow"><label>select set</label>${pickerHtml("wb-t-selpick", "type to add a Set to selects…")}
       <span class="chip"><b>${scope.size}</b> requirements in scope</span></div>
     <div>${t.selects.map(s => `<span class="wbchip">▣ ${esc(tt(state.objects.get(s)?.obj.title) || s)}<span class="x" data-delsel="${esc(s)}">✕</span></span>`).join("") || '<span class="hint">no selects yet — pick a Set (a baseline, a chapter, the root)</span>'}</div>
@@ -1913,6 +2279,7 @@ function wireTailorWb(el) {
   const binput = (id, fn) => { const x = el.querySelector("#" + id); if (x) x.onchange = () => { fn(x.value); saveWork(); }; };
   binput("wb-ns", v => work.ns = v.trim() || work.ns);
   binput("wb-t-label", v => work.tailor.label = v.trim() || work.tailor.label);
+  wireAuthorField(el, "wb-t-who");
   wirePicker(el, "wb-t-selpick", ["requirementSet"], id => { if (!work.tailor.selects.includes(id)) work.tailor.selects.push(id); rerender(); });
   wirePicker(el, "wb-t-expick", ["requirement"], id => { if (!work.tailor.excludes.includes(id)) work.tailor.excludes.push(id); rerender(); });
   wirePicker(el, "wb-t-reqpick", ["requirement"], id => { d.opReq = id; d.opStmt = null; rerender(); });
@@ -2167,6 +2534,7 @@ function wbImplementHtml() {
       <label>new asset</label><input type="text" id="wb-i-ctitle" placeholder="asset title…" value="${esc(d.cTitle || "")}" style="min-width:160px">
       <select id="wb-i-ckind">${KINDS.map(k => `<option ${d.cKind === k ? "selected" : ""}>${k}</option>`).join("")}</select>
       <button class="primary" id="wb-i-addcomp">＋ Add asset</button></div>
+    ${authorFieldHtml("wb-i-who", "an Implementation")}
     ${comps || '<span class="hint">no assets yet — add a server, a service, a policy…</span>'}
     <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px">
       <span class="chip"><b>${s.components.length}</b> assets</span>
@@ -2195,15 +2563,16 @@ function buildSystemObjects() {
     });
     return { id: c.id, version: "1", lifecycle: "draft", title: c.title, kind: c.kind, ...(caps.length ? { capabilities: caps } : {}) };
   });
-  const impls = s.implementations.map(e => ({ id: e.id, version: "1", lifecycle: "draft",
+  const impls = s.implementations.map(e => authorRecord({ id: e.id, version: "1", lifecycle: "draft",
     "component-ref": e["component-ref"], "requirement-ref": e["requirement-ref"],
-    responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": capOf.get(e) }], status: e.status }));
+    responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": capOf.get(e) }], status: e.status }, provenanceNow(), stored(e.id)));
   return [...comps, ...impls, sysSet];
 }
 function wireImplementWb(el) {
   const d = work._draft;
   const rerender = () => { saveWork(); renderStageFn("implement"); };
   const ti = el.querySelector("#wb-i-title"); if (ti) ti.onchange = () => { work.system.title = ti.value; saveWork(); };
+  wireAuthorField(el, "wb-i-who");
   const ct = el.querySelector("#wb-i-ctitle"); if (ct) ct.onchange = () => { d.cTitle = ct.value; saveWork(); };
   const ck = el.querySelector("#wb-i-ckind"); if (ck) ck.onchange = () => { d.cKind = ck.value; saveWork(); };
   const ac = el.querySelector("#wb-i-addcomp");
@@ -2294,6 +2663,7 @@ function wbAssessHtml() {
     <div class="wbrow"><label>scope</label><select id="wb-a-scope" style="max-width:420px">${scopes.map(s => `<option value="${esc(s.key)}" ${s.key === cur.key ? "selected" : ""}>${esc(s.label)}</option>`).join("")}</select>
       <label>performer</label><input type="text" id="wb-a-perf" value="${esc(a.performer)}" style="width:120px">
       <input type="text" id="wb-a-q" placeholder="filter…" value="${esc(d.azq || "")}" style="width:140px"></div>
+    ${authorFieldHtml("wb-a-who", "a Finding")}
     <div class="wbrow">
       <span class="chip"><b>${answered}</b>/<b>${reqs.length}</b> checked</span>
       <span class="chip" style="color:var(--green)"><b>${counts.satisfied}</b> satisfied</span>
@@ -2321,10 +2691,13 @@ function buildAssessObjects() {
     "subject-refs": reqs, method: { kind: "manual-check", note: "authored in JASCON Bundle Reader workbench" },
     "performer-ref": work.ns.replace(/\/$/, "") + "/party/" + slug(a.performer || "assessor"),
     time: new Date().toISOString(), result: agg };
-  const findings = reqs.filter(id => a.results[id]?.result === "not-satisfied").map((id, i) => ({
-    id: mintId("finding", "f-" + today() + "-" + (i + 1)), version: "1", label: "F-" + (i + 1), lifecycle: "draft",
-    "assessment-ref": asmtId, "requirement-ref": id, state: "open",
-    actions: [{ description: "Remediate: " + (tt(state.objects.get(id)?.obj.title) || id) + (a.results[id]?.note ? " — " + a.results[id].note : ""), status: "planned" }] }));
+  const findings = reqs.filter(id => a.results[id]?.result === "not-satisfied").map((id, i) => {
+    const fid = mintId("finding", "f-" + today() + "-" + (i + 1));
+    return authorRecord({ id: fid, version: "1", label: "F-" + (i + 1), lifecycle: "draft",
+      "assessment-ref": asmtId, "requirement-ref": id, state: "open",
+      actions: [{ description: "Remediate: " + (tt(state.objects.get(id)?.obj.title) || id) + (a.results[id]?.note ? " — " + a.results[id].note : ""), status: "planned" }] },
+      provenanceNow(), stored(fid));
+  });
   return [asmt, ...findings];
 }
 function wireAssessWb(el) {
@@ -2332,6 +2705,7 @@ function wireAssessWb(el) {
   const rerender = () => { saveWork(); renderStageFn("assess"); };
   const sc = el.querySelector("#wb-a-scope"); if (sc) sc.onchange = () => { work.assess.scopeKey = sc.value; rerender(); };
   const pf = el.querySelector("#wb-a-perf"); if (pf) pf.onchange = () => { work.assess.performer = pf.value; saveWork(); };
+  wireAuthorField(el, "wb-a-who");
   const qq = el.querySelector("#wb-a-q"); if (qq) qq.oninput = () => { d.azq = qq.value; clearTimeout(state._azT); state._azT = setTimeout(rerender, 300); };
   el.querySelectorAll("[data-az]").forEach(b => b.onclick = () => {
     const [id, res] = b.dataset.az.split("|");
@@ -2496,8 +2870,10 @@ function resolveTailoring(tObj) {
 async function exportResolved(tObj) {
   const { scope, resolved, errors } = resolveTailoring(tObj);
   if (errors.length) { l.err("cannot export: resolution has errors — " + errors[0]); return; }
+  /* textifyJs (v1.11.0): a Requirement authored in the workbench holds its title as plain text in the
+     graph; until 1.10.0 it left in a resolved package that way, and the kernel refuses it. */
   const objs = [...scope].map(id => resolved.get(id) || state.objects.get(id)?.obj).filter(Boolean)
-    .map(o => JSON.parse(JSON.stringify(o)));
+    .map(o => textifyJs(JSON.parse(JSON.stringify(o))));
   const files = await buildWorkspaceBundleFiles(objs, {
     source: "resolved package", tailoring: tObj.id, "tailoring-version": tObj.version,
     converter: READER_ID, created: new Date().toISOString() });
@@ -2655,7 +3031,7 @@ renderLattice();
 restoreWorkspaceObjects();
 renderStages();
 setView("overview");
-l.info("JASCON Bundle Reader v1.10.0 · build 2026-11-13 — everything runs locally, nothing leaves this page");
+l.info(`JASCON Bundle Reader v${READER_VERSION} · build ${READER_BUILD} — everything runs locally, nothing leaves this page`);
 l.info("open a bundle folder (contains content-manifest.json + objects/) or drop it here — or serve the repo over http and deep-link: #load=<bundle-url>&view=stage:tailor");
 
 /* deep links: #load=<bundle-url>&view=<view> — shareable when served over http(s) */
@@ -2663,6 +3039,7 @@ l.info("open a bundle folder (contains content-manifest.json + objects/) or drop
   const frag = new URLSearchParams(location.hash.slice(1));
   const wantView = frag.get("view");
   const applyView = () => {
+    if (state.stopped) return;   // a bundle that was not read (KERNEL-2) leaves the overview up, which says why
     if (wantView && document.querySelector(`.navitem[data-view="${CSS.escape(wantView)}"]`)) setView(wantView);
     else if (wantView) l.warn("unknown view in #fragment: " + wantView);
   };
