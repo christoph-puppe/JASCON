@@ -2124,6 +2124,21 @@ of Check and of advice packs:
    the five bundles, the worked pack and the example folder, every
    count and each of the 15 AUTHOR and REVIEW lines equal to the Python
    reference's, ALL GREEN in 213 s (`https://github.com/christoph-puppe/JASCON/actions/runs/43504417645`).)*
+   *(After rc.4: at commit `8e75213a`, with the 22 vectors of D3.10, the
+   twin ran on Windows PowerShell 5.1 on 665 / 665, ALL GREEN in 73 s
+   (`https://github.com/christoph-puppe/JASCON/actions/runs/43525817858`).
+   At commit `42197369`, the state after phase C — the regenerated IFA
+   bundle, the app 0.9.9 and the reader 1.11.0 in the tree — the same
+   665 / 665, the five bundles, the worked pack and the example folder,
+   ALL GREEN in 217 s, with the 12 AUTHOR and REVIEW lines the Python
+   reference prints (compared line by line on one machine; the runner's
+   log shows the twin's); the reference, the library's 35 tests, the IFA
+   conversion reproduced from its pinned sources, the app's port and the
+   browser tests of the pages, the pack builder and the reader green in
+   the same run (`https://github.com/christoph-puppe/JASCON/actions/runs/43538983821`). The run before it, on the merged state, was
+   red in the browser job: the reader showed another Tailoring first on
+   the runner than on the machine its test was written on (register,
+   "Phase C").)*
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or

@@ -3580,6 +3580,15 @@ object's `version` on a save. The agents' deliberate defects were not
 repeated here. The Hindi, Japanese and Chinese sentences of the website
 were written in this session and have had no second reader.
 
+**The whole state, run by the workflow.** At commit `42197369`, with
+everything above in the tree: the reference ALL GREEN, the library
+tests, the IFA conversion reproduced from its pinned sources, the app's
+tests, the browser tests of the pages, the pack builder and the reader,
+and the twin on Windows PowerShell 5.1 — the lint, 665 vectors in 18
+families, the bundles, the pack and the example folder, ALL GREEN in
+217 s (**read** from the logs of run 43538983821; its 12 report lines are
+the reference's, compared line by line on this machine).
+
 **Scored.** *Customer:* an auditor who opens a bundle made with the app
 sees who decided each entry of a Tailoring, also after a second person
 edited it, and sees which exceptions are overdue on the page where the

@@ -137,7 +137,9 @@ backlog #71.)*
 >   it ran green on all 574 vectors that day
 >   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43492500585)),
 >   and on all 643 of rc.4 later the same day
->   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43504417645)). A
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43504417645)),
+>   and on the 665 after phase C on 2026-11-14
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43538983821)). A
 >   [workflow](.github/workflows/validators.yml) now runs both validators
 >   and the app's port on every change.
 > - **Not there:** a pack published by a vendor; a converter from OSCAL
