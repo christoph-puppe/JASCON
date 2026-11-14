@@ -1,0 +1,10 @@
+{
+ "id": "https://ns.nist.gov/csf/set/category/pr-ip",
+ "version": "2.0",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Information Protection Processes and Procedures"
+ },
+ "label": "Information Protection Processes and Procedures (PR.IP)",
+ "members": []
+}

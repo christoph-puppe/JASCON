@@ -61,8 +61,14 @@
   },
   "https://ns.nist.gov/csf/facet/csf@1": {
    "risk-party": {
-    "value": "1st",
-    "remark": "1st Party Risk"
+    "value": [
+     "1st",
+     "3rd"
+    ],
+    "remark": [
+     "1st Party Risk",
+     "3rd Party Risk"
+    ]
    }
   }
  },

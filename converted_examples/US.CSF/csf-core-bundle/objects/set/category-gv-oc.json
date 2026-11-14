@@ -39,14 +39,14 @@
  },
  "replaces": [
   {
-   "ref": "https://ns.nist.gov/csf/req/ID.BE",
+   "ref": "https://ns.nist.gov/csf/set/category/id-be",
    "mode": "merged-into"
   }
  ],
  "annotations": {
   "nist-withdrawal": [
    {
-    "ref": "https://ns.nist.gov/csf/req/ID.BE",
+    "ref": "https://ns.nist.gov/csf/set/category/id-be",
     "mode": "merged-into",
     "label": "Business Environment (ID.BE)",
     "title": "Business Environment"

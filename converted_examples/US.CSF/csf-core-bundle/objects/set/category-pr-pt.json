@@ -1,0 +1,10 @@
+{
+ "id": "https://ns.nist.gov/csf/set/category/pr-pt",
+ "version": "2.0",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Protective Technology"
+ },
+ "label": "Protective Technology (PR.PT)",
+ "members": []
+}

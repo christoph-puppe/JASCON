@@ -12,16 +12,20 @@
    "sequence": 10
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/rs-an",
+   "ref": "https://ns.nist.gov/csf/set/category/rs-rp",
    "sequence": 20
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/rs-co",
+   "ref": "https://ns.nist.gov/csf/set/category/rs-an",
    "sequence": 30
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/rs-mi",
+   "ref": "https://ns.nist.gov/csf/set/category/rs-co",
    "sequence": 40
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/rs-mi",
+   "sequence": 50
   }
  ],
  "facets": {
