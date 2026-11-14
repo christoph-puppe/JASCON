@@ -14,10 +14,12 @@ no, so they are taken here:
     a control;
   - a run ends with an error when a claim of the ledger does not hold in
     the written files, when a value is dropped where the path map does not
-    say so, when a drop is declared on a row that is carried, and when the
-    record on disk is not the record of the run.
-The last four change a copy of the converter's text. Each change names the
-line it replaces and fails loudly if that line is no longer there.
+    say so, when a drop is of neither of the two cases, when a drop is
+    declared for a whole path on which other values are carried or on a
+    row that is carried, and when the record on disk is not the record of
+    the run.
+These change a copy of the converter's text. Each change names the line it
+replaces and fails loudly if that line is no longer there.
 
 Standard library only."""
 import copy, json, os, shutil, subprocess, sys, tempfile, unittest
@@ -217,6 +219,22 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         self.assertIn("dropped where the path map does not call the path absorbed or a declared drop", r["done"].stderr)
         self.assertEqual(r["ledger"]["totals"]["unaccounted"], 0)
         self.assertEqual(r["report"]["ledger"]["declared-drops"]["not-declared-by-the-path-map"], self.plain["ledger"]["totals"]["unaccounted"])
+
+    def test_backlog_41_a_drop_for_a_whole_path_on_which_other_values_are_carried_ends_the_run(self):
+        # the titles of the chapters are declared a drop: `Guidelines` is carried, and `Front matter`, which is
+        # lost, would read as dropped on purpose
+        r = self.convert(catalogue(), [('# controls -> Requirements (controls appear at group depth 1 and 2)\n',
+                                        'dest("catalog.groups[].title", "declared-drop", "not carried", DROP_UUID)\n')])
+        self.assertNotEqual(r["done"].returncode, 0)
+        self.assertIn("the drop declared for the path catalog.groups[].title covers values of a path on which others are carried",
+                      r["done"].stderr)
+        self.assertEqual(r["report"]["ledger"]["declared-drops"]["not-declared-by-the-path-map"], 0, "the row says drop: only this check sees it")
+
+    def test_backlog_41_a_drop_of_neither_case_ends_the_run(self):
+        r = self.convert(catalogue(), [('    led.drop("^" + re.escape(f"{TAG}.{_path}") + "$", _reason)',
+                                        '    led.drop("^" + re.escape(f"{TAG}.{_path}") + "$", "because")')])
+        self.assertNotEqual(r["done"].returncode, 0)
+        self.assertIn("a declared drop is neither stated by the path map nor of a class decided for IFA", r["done"].stderr)
 
     def test_backlog_41_a_drop_declared_on_a_row_that_is_carried_stops_the_run_before_it_writes(self):
         r = self.convert(catalogue(), [('    dest(base + ".title", "L1", "Requirement title")',

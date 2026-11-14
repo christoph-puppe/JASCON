@@ -517,9 +517,14 @@ for e in LEDGER_FULL["entries"]:
         disagree.setdefault((row, level, e["outcome"]), [0, e["source"]])[0] += 1
         if e["outcome"] == "intentionally-dropped": UNDECLARED_DROPS.append(e["source"])
 RULES_USED = [{"rule": r, "source-values": len(v[0]), "destinations": v[1]} for r, v in sorted(rule_use.items())]
-DROPS = [{"case": DROP_CASE[r], "reason": r, "values": n}
-         for r, n in sorted(drop_use.items(), key=lambda x: (DROP_CASE[x[0]] != "path-map", x[0]))]
+DROPS = [{"case": DROP_CASE.get(r, "neither"), "reason": r, "values": n}
+         for r, n in sorted(drop_use.items(), key=lambda x: (DROP_CASE.get(x[0]) != "path-map", x[0]))]
 DROP_TOTAL = {case: sum(d["values"] for d in DROPS if d["case"] == case) for case in ("path-map", "ifa")}
+# A drop for a whole path is declared only where nothing of the path is
+# carried. On a path with carried values it would report a value that is
+# lost there as dropped on purpose; such a drop is declared value by value.
+MIXED_DROPS = sorted(p for p in DROP_BY_PATH if by_path[p].get("intentionally-dropped")
+                     and (by_path[p].get("copied") or by_path[p].get("transformed")))
 DISAGREE = [{"path": row, "level": level or "none", "ledger": outcome, "values": n, "first": first}
             for (row, level, outcome), (n, first) in sorted(disagree.items(), key=lambda x: (x[0][0], x[0][2]))]
 LOST_TITLES = [e["source"] for e in LEDGER_FULL["entries"] if e["outcome"] == "unaccounted"
@@ -711,8 +716,9 @@ md.append(f"A drop is declared in two cases only. **Path map**: this converter's
           f"path. Values dropped where the path map does not call the path absorbed or a declared drop: "
           f"{len(UNDECLARED_DROPS)} (a run that has one ends with an error).\n")
 md.append("| case | values | reason |\n|---|---:|---|")
+CASE_WORDS = {"path-map": "path map", "ifa": "as decided for IFA"}
 for d in DROPS:
-    md.append(f"| {'path map' if d['case'] == 'path-map' else 'as decided for IFA'} | {d['values']:,} | {d['reason']} |")
+    md.append(f"| {CASE_WORDS.get(d['case'], 'NEITHER')} | {d['values']:,} | {d['reason']} |")
 md.append("\n### Where the path map and the ledger disagree\n")
 md.append("Computed for every value: the level its row of the path map gives it (for the name and the value of a "
           "control's prop, the row of that prop) against the outcome the ledger found. L1 and L2 agree with copied "
@@ -799,9 +805,21 @@ print(f"ledger: copied {LT['copied']:,}, transformed {LT['transformed']:,}, inte
       f"{LT['intentionally-dropped']:,}, unaccounted {LT['unaccounted']:,}; failed checks {len(LEDGER['verification-failures'])}")
 # What ends the run with an error, after everything is written so that it
 # can be read: a claim of the ledger that does not hold in the written
-# files; a drop the path map does not declare; a record on disk that is not
-# the record of this run. Unaccounted values do not: they are counted above.
+# files; a drop the path map does not declare, or that is of neither case,
+# or that is declared for a whole path on which other values are carried; a
+# ledger that read another number of values than the path map; a record on
+# disk that is not the record of this run. Unaccounted values do not: they
+# are counted above. Each of these checks answers a change that was made to
+# a copy of this script on purpose and that ended with 0 before the check
+# existed, here or in convert_csf.py.
 wrong = []
+if DROP_TOTAL["path-map"] + DROP_TOTAL["ifa"] != LT["intentionally-dropped"]:
+    wrong.append("a declared drop is neither stated by the path map nor of a class decided for IFA")
+for p in MIXED_DROPS:
+    wrong.append(f"the drop declared for the path {p} covers values of a path on which others are carried; a value "
+                 f"lost there would read as dropped on purpose")
+if total != LEDGER["leaf-values"]:
+    wrong.append(f"the path map counts {total} source leaf values and the ledger {LEDGER['leaf-values']}")
 if LEDGER["verification-failures"]:
     for f in LEDGER["verification-failures"][:20]: print("  FAILED CHECK", json.dumps(f, ensure_ascii=False))
     wrong.append(f"{len(LEDGER['verification-failures'])} claim(s) of the ledger do not hold in the written files")
