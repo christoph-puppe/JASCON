@@ -79,8 +79,14 @@
   },
   "https://ns.nist.gov/csf/facet/csf@1": {
    "risk-party": {
-    "value": "1st",
-    "remark": "1st Party Risk"
+    "value": [
+     "1st",
+     "3rd"
+    ],
+    "remark": [
+     "1st Party Risk",
+     "3rd Party Risk"
+    ]
    }
   }
  },
@@ -98,7 +104,7 @@
    "mode": "merged-into"
   },
   {
-   "ref": "https://ns.nist.gov/csf/req/PR.MA",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ma",
    "mode": "merged-into"
   },
   {
@@ -134,7 +140,7 @@
     "prose": "Data is destroyed according to policy"
    },
    {
-    "ref": "https://ns.nist.gov/csf/req/PR.MA",
+    "ref": "https://ns.nist.gov/csf/set/category/pr-ma",
     "mode": "merged-into",
     "label": "Maintenance (PR.MA)",
     "title": "Maintenance"

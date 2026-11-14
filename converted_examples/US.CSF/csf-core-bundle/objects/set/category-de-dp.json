@@ -1,0 +1,10 @@
+{
+ "id": "https://ns.nist.gov/csf/set/category/de-dp",
+ "version": "2.0",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Detection Processes"
+ },
+ "label": "Detection Processes (DE.DP)",
+ "members": []
+}

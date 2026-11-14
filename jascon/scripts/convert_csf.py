@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """NIST CSF 2.0 (OSCAL catalog) -> Semantic Core bundle.
-Census: drafts/gate-3-census.md §3/§6 (2026-07-22). 6 functions + 34
+Census: drafts/gate-3-census.md §3/§6 (2026-07-22). Functions and
 categories -> Sets (the C5 rule: membership decides granularity; category
-statement prose -> narrative facet on the Set); 94 live subcategories ->
+statement prose -> narrative facet on the Set); subcategories ->
 Requirements (outcome prose, modality `unspecified` - sixth-corpus
-confirmation of the declarative pattern); 91 withdrawn (1.1->2.0
-restructuring) dropped, lineage inverted onto successor `replaces[]`;
-implementation examples -> examples@1; risk-party -> csf@1.
-Coverage target: 0.
+confirmation of the declarative pattern); a withdrawn item that names a
+successor (1.1->2.0 restructuring) is no object, its lineage is inverted
+onto the successor's `replaces[]`; a withdrawn item that names none is an
+object with lifecycle `withdrawn`; implementation examples -> examples@1;
+risk-party -> csf@1; the document metadata -> the compat facet on the root
+Set. The counts are in the coverage report.
 
     convert_csf.py [--obligated-party URI] [--out DIR]
 
@@ -23,16 +25,21 @@ ledger somewhere else, which is where a run with another party belongs.
 The conversion ledger (backlog #41). The path map of the coverage report
 counts source PATHS with a declared destination. The ledger follows every
 source VALUE into the written bundle and says what became of it: copied,
-transformed by a named rule, dropped for a declared reason, or unaccounted.
-Its record is `csf-conversion-ledger.json`, one row per source path and
-outcome. A claim of the ledger that does not hold on the written files, or
-a declared drop that reaches further than it says, ends the run with a
-non-zero exit. Unaccounted values are counted and listed, and the run
-exits 0: they are the queue of decisions, not a failure of the run."""
+transformed by a named rule, no content by a rule the ledger checks (a name
+that selects a field, a namespace, an id that is rebuilt exactly), dropped
+for a declared reason, or unaccounted. Its record is
+`csf-conversion-ledger.json`, one row per source path and outcome.
+
+Content is never dropped (author, 2026-11-14). What this mapping has no
+rule for is carried as the source has it, in the compat facet of the
+object it belongs to. A run with an unaccounted value, with a claim that
+does not hold on the written files, or with a declared drop that reaches
+further than it says ends with a non-zero exit, after the bundle, the
+reports and the record are written."""
 import json, os, re, sys, collections
-from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, walk_controls
+from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
-from oscal_conv_lib import Ledger, ledger_by_path
+from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, props_by_name, LEDGER_OUTCOMES
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "nist", "NIST_CSF_v2.0_catalog.json")
@@ -48,22 +55,26 @@ F_NARR = f"{NS}/facet/narrative@1"
 F_EX = f"{NS}/facet/examples@1"
 F_CSF = f"{NS}/facet/csf@1"
 F_REF = f"{NS}/facet/references@1"
+# What the kernel and the standard facets have no place for is carried here,
+# as the source has it: `metadata` (the document metadata, on the root Set)
+# and `unmapped` (what this mapping does not know of an element, on the
+# object the element becomes).
+COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
+CSF_NS = "https://csrc.nist.gov/ns/csf"      # the namespace of the CSF's own names, `risk-party` and `example`
 LEDGER_FILE = "csf-conversion-ledger.json"
 
 lang_wraps = collections.Counter()
 T = make_T("en", lang_wraps)
 
-# The conversion ledger (oscal_conv_lib.Ledger): every string and integer of
-# the source carries its origin from here on. A value handed on unchanged is
-# recorded as a copy when the bundle is accounted for at the end. A value
-# this script computes is stated where it is computed, with D(rule, function,
+# The conversion ledger (oscal_conv_lib.Ledger): every scalar of the source
+# carries its origin from here on. A value handed on unchanged is recorded
+# as a copy when the bundle is accounted for at the end. A value this script
+# computes is stated where it is computed, with D(rule, function,
 # inputs...): the function is pure, so the ledger applies it to the source
-# again and compares the result with the written file. Nothing here changes
-# what is written: the bundle is byte for byte the one this script wrote
-# before the ledger existed.
+# again and compares the result with the written file.
 led = Ledger()
 D = led.derive
-cat = led.source("csf", {"catalog": json.load(open(SRC, encoding="utf-8"))["catalog"]})["catalog"]
+cat = led.source("csf", {"catalog": json.load(open(SRC, encoding="utf-8"))["catalog"]}, typed=True)["catalog"]
 VER = "2.0"          # framework version; the OSCAL rendition's doc version rides provenance
 
 def norm(p):
@@ -73,10 +84,6 @@ def norm(p):
 
 paths = collections.Counter()
 inventory({"catalog": cat}, "csf", paths, normalize=norm)
-
-def prop(c, name, all_=False):
-    out = [p for p in c.get("props", []) or [] if p.get("name") == name]
-    return out if all_ else (out[0] if out else None)
 
 # ---------- the rules: every value this script computes from source values ----------
 # Each function is pure. The names are what the ledger's record shows.
@@ -115,128 +122,238 @@ MODE = {"incorporated_into": "merged-into", "moved_to": "renamed"}
 def lineage_mode(rel):
     return MODE[rel]
 
-def withdrawn_ref(wid, status, href, successor):
-    """Four source values meet here: the id of the withdrawn item, its status,
-    the address its link gives and the id of the object the entry is written
-    on. The rule gives no value - and the run stops - unless the item is
-    withdrawn and the link names that object."""
-    return mint(wid) if status == "withdrawn" and href.lstrip("#") == successor else None
+def withdrawn_ref(uri):
+    """-> the rule that writes the `ref` of a lineage entry. Four source
+    values meet in it: the id of the withdrawn item, its status, the address
+    its link gives and the id of the object the entry is written on. It
+    gives no value - and the run stops - unless the item is withdrawn and
+    the link names that object. `uri`: the rule that mints the URI an item
+    of that level has, so that a withdrawn category is named as a category
+    Set is, and a withdrawn subcategory as a Requirement is."""
+    def ref(wid, status, href, successor):
+        return uri(wid) if status == "withdrawn" and href.lstrip("#") == successor else None
+    return ref
+LINEAGE_REF = {"category": withdrawn_ref(category_uri), "subcategory": withdrawn_ref(mint)}
 
-controls = list(walk_controls(cat))
-by_id = {c["id"]: c for c, _, _ in controls}
-withdrawn = {c["id"] for c, _, _ in controls
-             if prop(c, "status") and prop(c, "status")["value"] == "withdrawn"}
+# ---------- what is no content: three kinds of rule, each checked by the ledger ----------
+# A name that only selects the field its value is written to, the namespace
+# of such a name, an id that another value gives exactly (author,
+# 2026-11-14). Each is stated where the element is read (take(), below). A
+# rule that does not hold for a value is not stated for it: that value is
+# carried as the source has it, in `unmapped`.
+N_CLASS = ("the class of an element says on which level it stands (function, category, subcategory); the level is "
+           "what makes it a function Set, a category Set or a Requirement")
+N_PROP = "the name of a prop selects the field its value is written to (label, sort-id, status)"
+N_PART = "the name of a part selects the member its prose is written to (statement, example, overview)"
+N_NS = f"the namespace of the CSF's own names `risk-party` and `example` ({CSF_NS})"
+N_PART_ID = {"statement": "the id of a statement part is the id of its item and `_statement`",
+             "overview": "the id of an overview part is the id of its function and `_overview`"}
+def statement_part_id(eid): return f"{eid}_statement"
+def overview_part_id(eid): return f"{eid}_overview"
+PART_ID = {"statement": statement_part_id, "overview": overview_part_id}
+
+# What this mapping knows of an element, by the level it stands on, and the
+# members of a prop or part that it reads. Whatever else an element holds is
+# carried whole, as the source has it.
+KNOWN_PROPS = {"function": ("label", "sort-id", "status"), "category": ("label", "sort-id", "status", "risk-party"),
+               "subcategory": ("label", "sort-id", "status", "risk-party")}
+PROP_MEMBERS = {"label": {"name", "value"}, "sort-id": {"name", "value"}, "status": {"name", "value"},
+                "risk-party": {"name", "ns", "value", "remarks"}}
+KNOWN_PARTS = {"function": ("overview",), "category": ("statement", "example"), "subcategory": ("statement", "example")}
+PART_MEMBERS = {"overview": {"id", "name", "prose"}, "statement": {"id", "name", "prose"},
+                "example": {"id", "name", "ns", "prose"}}
+ELEMENT_MEMBERS = ("id", "class", "title", "props", "parts", "links", "controls", "groups")
+
+# ---------- the elements: functions, categories, subcategories ----------
+ELEMENTS = []           # (element, its level, its parent) in document order
+for g in cat.get("groups", []) or []:
+    ELEMENTS.append((g, "function", None))
+    for c in g.get("controls", []) or []:
+        ELEMENTS.append((c, "category", g))
+        for s in c.get("controls", []) or []:
+            ELEMENTS.append((s, "subcategory", c))
+LEVEL = {id(e): level for e, level, _ in ELEMENTS}
+groups_by_id = {e["id"]: e for e, level, _ in ELEMENTS if level == "function"}
+by_id = {e["id"]: e for e, level, _ in ELEMENTS if level != "function"}
+
+def status_prop(e):
+    """-> the first prop that states a status of the element, or None"""
+    return next((p for p in e.get("props", []) or [] if p.get("name") == "status" and "value" in p), None)
+# A withdrawn category or subcategory has a lineage. A function is an object whatever its status says.
+withdrawn = {e["id"] for e, level, _ in ELEMENTS if level != "function" and (status_prop(e) or {}).get("value") == "withdrawn"}
 
 # ---------- withdrawal inversion (underscore rels - the census 7.1 finding) ----------
-# A withdrawn item is not emitted. What the bundle carries of it is its
-# lineage, written on the successor each of its links names: its id (as the
-# `ref` of the entry), the link's relation (as `mode`), and its label, title
-# and statement prose in the annotation. An entry is built where it is
-# written (lineage(), below), because the rule for `ref` takes the id of the
-# object that carries it.
-groups_by_id = {g["id"]: g for g in cat.get("groups", []) or []}
-succ_replaces = collections.defaultdict(list)   # successor id -> [(withdrawn item, link, {label, title, prose?})]
+# A withdrawn item that names a successor is not emitted. What the bundle
+# carries of it is its lineage, written on the successor each of its links
+# names: its id (as the `ref` of the entry), the link's relation (as `mode`),
+# and its label, title and statement prose in the annotation. A withdrawn
+# item that no link gives a successor has nowhere to be written but as an
+# object of its own: a Set or a Requirement with lifecycle `withdrawn`.
+succ_replaces = collections.defaultdict(list)   # successor id -> [(withdrawn item, link)]
 fn_replaces = collections.defaultdict(list)     # function-level successor (ID.GV -> GV)
+lineage_links = collections.defaultdict(list)   # id(withdrawn item) -> the links that are written as lineage
 wd_chain, wd_dangling = [], []
-wd_placed = set()                               # withdrawn items that have an entry on a successor
 n_hashless = n_lineage_links = 0
-for c, _, _ in controls:
-    if c["id"] not in withdrawn: continue
-    for l in c.get("links", []) or []:
+for e, level, _ in ELEMENTS:
+    if e["id"] not in withdrawn: continue
+    for l in e.get("links", []) or []:
         rel, href = l.get("rel"), (l.get("href") or "")
         if rel not in MODE: continue
         n_lineage_links += 1
         if not href.startswith("#"): n_hashless += 1   # fragment marker missing (source finding)
         href = href.lstrip("#")
-        lab = prop(c, "label")
-        st = next((p for p in c.get("parts", []) or [] if p.get("name") == "statement"), {})
-        rest = {"label": lab["value"] if lab else c["id"], "title": c.get("title", "")}
-        if st.get("prose"):        # CSF tombstones keep their 1.1 outcome prose - carry it
-            rest["prose"] = st["prose"]
         if href in withdrawn:
-            wd_chain.append((c["id"], href)); continue
+            wd_chain.append((e["id"], href)); continue
         if href in by_id:
-            succ_replaces[href].append((c, l, rest)); wd_placed.add(c["id"])
+            succ_replaces[href].append((e, l)); lineage_links[id(e)].append(l)
         elif href in groups_by_id:
-            fn_replaces[href].append((c, l, rest)); wd_placed.add(c["id"])
+            fn_replaces[href].append((e, l)); lineage_links[id(e)].append(l)
         else:
-            wd_dangling.append((c["id"], href))
-wd_no_successor = [c["id"] for c, _, _ in controls if c["id"] in withdrawn and c["id"] not in wd_placed]
+            wd_dangling.append((e["id"], href))
+
+def is_object(e):
+    """A function, a live item, and a withdrawn item that names no successor."""
+    return e["id"] not in withdrawn or id(e) not in lineage_links
+wd_objects = [e for e, _, _ in ELEMENTS if e["id"] in withdrawn and is_object(e)]
+
+# ---------- reading an element ----------
+def take(e, level):
+    """Reads the element `e` as this mapping knows it, and states for the
+    ledger what of it is no content. -> {label, sort, status, risk: the props
+    read; statement, examples, overviews: the parts read; unmapped: what the
+    mapping does not know of the element, in the source's own shape}."""
+    eid, rest = e["id"], {}
+    if "class" in e:
+        if e["class"] == level: led.selector(e["class"], N_CLASS, [eid, e.get("title")], among=(level,))
+        else: rest["class"] = e["class"]
+    # props: the first of a name the level knows, and every risk-party in the CSF's namespace
+    props, names = e.get("props", []) or [], KNOWN_PROPS[level]
+    def first(name):
+        return next((p for p in props if name in names and p.get("name") == name and "value" in p), None)
+    t = {"label": first("label"), "sort": first("sort-id"), "status": first("status"),
+         "risk": [p for p in props if "risk-party" in names and p.get("name") == "risk-party" and "value" in p
+                  and p.get("ns", CSF_NS) == CSF_NS]}
+    read = [p for p in (t["label"], t["sort"], t["status"]) if p is not None]
+    for p in read: led.selector(p["name"], N_PROP, p["value"], among=names)
+    for p in t["risk"]:                                # its name is the key under which csf@1 holds the value
+        if "ns" in p: led.namespace(p["ns"], N_NS, (CSF_NS,), p["name"])
+    read += t["risk"]
+    for p in props:
+        if not any(p is r for r in read) or set(p) - PROP_MEMBERS[p["name"]]: rest.setdefault("props", []).append(p)
+    # parts: the first statement, every example in the CSF's namespace, every overview of a function
+    parts, names = e.get("parts", []) or [], KNOWN_PARTS[level]
+    def named(name):
+        return [p for p in parts if name in names and p.get("name") == name and ("id" in p or "prose" in p)]
+    stmts = named("statement")[:1]
+    t["statement"] = stmts[0] if stmts else None
+    t["examples"] = [p for p in named("example") if p.get("ns", CSF_NS) == CSF_NS]
+    t["overviews"] = named("overview")
+    read = stmts + t["examples"] + t["overviews"]
+    for p in parts:
+        whole = not any(p is r for r in read)          # a part the mapping does not read is carried whole
+        if not whole:
+            name, whole = p["name"], bool(set(p) - PART_MEMBERS[p["name"]])      # and so is one with a member it does not know
+            led.selector(p["name"], N_PART, [p[k] for k in ("id", "prose") if k in p], among=names)
+            if "ns" in p and name == "example": led.namespace(p["ns"], N_NS, (CSF_NS,), p["name"])
+            # the id of a statement or an overview part: written (the statement of a subcategory that is an
+            # object), else rebuilt exactly from the id of its element, else carried with the part
+            if name in PART_ID and "id" in p and not (level == "subcategory" and is_object(e)):
+                if p["id"] == PART_ID[name](eid): led.rebuilt(p["id"], N_PART_ID[name], PART_ID[name], eid)
+                else: whole = True
+        if whole: rest.setdefault("parts", []).append(p)
+    # links: the mapping knows the lineage of a withdrawn item and no other link
+    for l in e.get("links", []) or []:
+        if not any(l is u for u in lineage_links.get(id(e), ())) or set(l) - {"href", "rel"}:
+            rest.setdefault("links", []).append(l)
+    for k, v in e.items():                             # a member this mapping has no rule for
+        if k not in ELEMENT_MEMBERS: rest[k] = v
+    t["unmapped"] = rest
+    return t
+TAKEN = {id(e): take(e, level) for e, level, _ in ELEMENTS}
+def taken(e): return TAKEN[id(e)]
 
 def lineage(obj, entries, own_id):
     """Writes the inverted lineage on the successor `obj`, whose source id is
     `own_id`: `replaces[]`, and the same entries with label, title and prose
-    as the `nist-withdrawal` annotation."""
-    built = [{"ref": D(R_REF, withdrawn_ref, c["id"], prop(c, "status")["value"], l["href"], own_id),
-              "mode": D(R_MODE, lineage_mode, l["rel"]), **rest} for c, l, rest in entries]
+    as the `nist-withdrawal` annotation. An entry is built where it is
+    written, because the rule for `ref` takes the id of the object that
+    carries it."""
+    built = []
+    for w, l in entries:
+        t = taken(w)
+        entry = {"ref": D(R_REF, LINEAGE_REF[LEVEL[id(w)]], w["id"], t["status"]["value"], l["href"], own_id),
+                 "mode": D(R_MODE, lineage_mode, l["rel"]),
+                 "label": t["label"]["value"] if t["label"] else w["id"], "title": w.get("title", "")}
+        if t["statement"] is not None and t["statement"].get("prose"):   # CSF tombstones keep their 1.1 outcome prose - carry it
+            entry["prose"] = t["statement"]["prose"]
+        built.append(entry)
     obj["replaces"] = [{"ref": e["ref"], "mode": e["mode"]} for e in built]
     obj["annotations"] = {"nist-withdrawal": [dict(e) for e in built]}
 
-# Declared drop, case (a): the path map itself says a withdrawn item is not
-# carried. Declared value by value and not by path, because on every one of
-# these paths the values of the live items ARE carried or are open: a drop
-# by path would hide a live value that is lost. Named here is only what no
-# withdrawn item carries. Its id, label, title, statement prose and links
-# are what the lineage carries: where one of those has no destination (a
-# withdrawn item that no link gives a successor) it stays unaccounted.
-DROP_WITHDRAWN = ("stated by the path map (`withdrawn: dropped, lineage inverted`; `status->tombstone drop`): a withdrawn "
-                  "item is not emitted; the bundle carries its lineage on its successor - id, label, title, statement "
-                  "prose and each link - and this value is none of those: ")
-W_CLASS, W_PROP_NAME, W_PART_ID, W_PART_NAME = "its class", "the name of one of its props", "the id of its statement part", "the name of its statement part"
-W_SORT_ID = "its sort-id (a withdrawn item is a member of no Set; among live siblings its place stays empty in their sequence)"
-W_STATUS = "its status, where no link names a successor"
-WITHDRAWN_DROPS = {W_CLASS: ".class", W_PROP_NAME: ".props[].name", W_SORT_ID: ".props[].value", W_STATUS: ".props[].value",
-                   W_PART_ID: ".parts[].id", W_PART_NAME: ".parts[].name"}       # what is dropped -> the end of the path it stands on
-for c, _, _ in controls:
-    if c["id"] not in withdrawn: continue
-    if "class" in c: led.drop_value(c["class"], DROP_WITHDRAWN + W_CLASS)
-    for p in c.get("props", []) or []:
-        if p.get("name") in ("sort-id", "label", "status"): led.drop_value(p["name"], DROP_WITHDRAWN + W_PROP_NAME)
-        if p.get("name") == "sort-id": led.drop_value(p["value"], DROP_WITHDRAWN + W_SORT_ID)
-        # the status is dropped only where no link names a successor: elsewhere it is an input of the rule for `ref`
-        if p.get("name") == "status": led.drop_value(p["value"], DROP_WITHDRAWN + W_STATUS)
-    for p in c.get("parts", []) or []:
-        if p.get("name") != "statement": continue
-        if "id" in p: led.drop_value(p["id"], DROP_WITHDRAWN + W_PART_ID)
-        led.drop_value(p["name"], DROP_WITHDRAWN + W_PART_NAME)
+# A declared drop that remains (it is listed in the report for the author to
+# decide, with the reading of this converter): the sort-id of a withdrawn
+# item that names a successor. Such an item is a member of no Set, so its
+# place among its siblings has no destination. Declared value by value: on
+# the same path the sort-ids of the objects are carried.
+DROP_SORT = ("a withdrawn item that names a successor is not emitted; the bundle carries its lineage on the successor - "
+             "id, label, title, statement prose and each link. Its sort-id, the place among its siblings, is none of "
+             "those: a withdrawn item of this kind is a member of no Set")
+for e, _, _ in ELEMENTS:
+    if e["id"] in withdrawn and not is_object(e) and taken(e)["sort"] is not None:
+        led.drop_value(taken(e)["sort"]["value"], DROP_SORT)
 
 # ---------- convert ----------
 bundle = Bundle(os.path.join(OUTDIR, "csf-core-bundle"))
 mod_count = collections.Counter()
 req_ids = {}
-n_examples = n_riskparty = n_riskparty_more = 0
+n_examples = n_riskparty = n_riskparty_values = n_riskparty_unpaired = n_unmapped = 0
 
-def statement_prose(c):
-    """-> (the prose of the statement part, its id or None where it has none)"""
-    st = next((p for p in c.get("parts", []) or [] if p.get("name") == "statement"), {})
-    return st.get("prose", ""), st.get("id")
-
-def facets_of(c):
-    global n_examples, n_riskparty, n_riskparty_more
-    f = {}
-    ex = [{"id": p.get("id"), "prose": T(p.get("prose", ""), "example")}
-          for p in c.get("parts", []) or [] if p.get("name") == "example"]
+def facets_of(e):
+    """examples@1 and csf@1 of a category or subcategory, and what the mapping does not know of it"""
+    global n_examples, n_riskparty, n_riskparty_values, n_riskparty_unpaired
+    t, f = taken(e), {}
+    ex = [{"id": p.get("id"), "prose": T(p.get("prose", ""), "example")} for p in t["examples"]]
     if ex:
         f[F_EX] = {"examples": ex}; n_examples += len(ex)
-    rp = prop(c, "risk-party")
-    if rp:
-        f[F_CSF] = {"risk-party": {"value": rp["value"],
-                                   **({"remark": rp["remarks"]} if rp.get("remarks") else {})}}
-        n_riskparty += 1
-        # found by the ledger, not fixed here (the fix changes the bundle): csf@1 holds one
-        # risk-party, and a subcategory may carry two. The others are counted for the report.
-        n_riskparty_more += len(prop(c, "risk-party", all_=True)) - 1
-    return f
+    if t["risk"]:
+        # a subcategory may be a risk of the first AND of the third party: two props of one name. One value
+        # is written as it is, several as a list in source order, under the name of the prop (props_by_name).
+        values, remarks = props_by_name(t["risk"], led), props_by_name(t["risk"], field="remarks")
+        f[F_CSF] = {name: {"value": v, **({"remark": remarks[name]} if name in remarks else {})} for name, v in values.items()}
+        n_riskparty += 1; n_riskparty_values += len(t["risk"])
+        if len(t["risk"]) > 1 and len([p for p in t["risk"] if "remarks" in p]) not in (0, len(t["risk"])):
+            n_riskparty_unpaired += 1          # a remark for some of the values only: the two lists do not pair
+    return with_unmapped(e, f)
+
+def with_unmapped(e, facets):
+    global n_unmapped
+    if taken(e)["unmapped"]:
+        facets[COMPAT] = {"unmapped": taken(e)["unmapped"]}; n_unmapped += 1
+    return facets
+
+LIFECYCLE = ("draft", "active", "deprecated", "withdrawn")       # the words the kernel knows
+def lifecycle_of(e):
+    """The status the source states is written as it is where it is a word of the kernel's lifecycle
+    (`withdrawn` is the only one the CSF uses). An element without a status prop is `active` by this
+    converter's word: the source states no status for it. A word the kernel does not know is given no
+    meaning here: the run stops and says which."""
+    status = taken(e)["status"]
+    if status is None: return "active"
+    if status["value"] not in LIFECYCLE:
+        raise SystemExit(f"convert_csf.py: the source states the status `{status['value']}` for {e['id']}; the kernel's lifecycle "
+                         f"knows {', '.join(LIFECYCLE)}, and this converter has no rule that maps another word onto one of them")
+    return status["value"]
 
 def convert_subcat(c):
-    prose, sid = statement_prose(c)
+    t = taken(c)
+    st = t["statement"] or {}
+    prose, sid = st.get("prose", ""), st.get("id")
     rid = D(R_REQ, mint, c["id"])
-    lab = prop(c, "label")
     if sid is None: stmt = "statement"                                  # no id on the part: the converter's own word
     elif sid.startswith(c["id"] + "_"): stmt = D(R_STMT, statement_id, sid, c["id"])
     else: stmt = sid
-    req = {"id": rid, "version": VER, "label": lab["value"] if lab else c["id"],
-           "lifecycle": "active", "title": c.get("title", c["id"]),
+    req = {"id": rid, "version": VER, "label": t["label"]["value"] if t["label"] else c["id"],
+           "lifecycle": lifecycle_of(c), "title": c.get("title", c["id"]),
            "statements": [{"id": stmt,
                            "modality": "unspecified",
                            "obligated-parties": [PARTY],
@@ -251,7 +368,7 @@ def convert_subcat(c):
     return rid
 
 def sortkey(x):
-    sk = prop(x, "sort-id")
+    sk = taken(x)["sort"]
     return sk["value"] if sk else x["id"]
 
 sort_ties = []       # (the Set, the sort key, the members that share it)
@@ -266,31 +383,29 @@ def in_order(owner, items):
 
 root_members = []
 cat_sets = 0
-wd_categories = [c["id"] for g in cat.get("groups", []) or []
-                 for c in g.get("controls", []) or [] if c["id"] in withdrawn]
-wd_subcats = [s["id"] for g in cat.get("groups", []) or [] for c in g.get("controls", []) or []
-              for s in c.get("controls", []) or [] if s["id"] in withdrawn]
+wd_categories = [e["id"] for e, level, _ in ELEMENTS if level == "category" and e["id"] in withdrawn]
+wd_subcats = [e["id"] for e, level, _ in ELEMENTS if level == "subcategory" and e["id"] in withdrawn]
 group_keys, groups_in_order = in_order("root", cat.get("groups", []) or [])
 for gi, g in groups_in_order:
     fn_members = []
-    for c in (c for c in g.get("controls", []) or [] if c["id"] in withdrawn):
-        # withdrawn category: dropped, lineage inverted like any tombstone
+    for c in (c for c in g.get("controls", []) or [] if not is_object(c)):
+        # withdrawn category with a successor: no object, lineage inverted like any tombstone
         orphans = [s["id"] for s in c.get("controls", []) or [] if s["id"] not in withdrawn]
         if orphans:               # live subcats under a withdrawn category would be data loss - guard
             raise SystemExit(f"live subcategories under withdrawn category {c['id']}: {orphans}")
-    # a function's members are its live categories; their sequence counts those only
-    live_keys, live_in_order = in_order(g["id"], [c for c in g.get("controls", []) or [] if c["id"] not in withdrawn])
-    for ci, c in live_in_order:
+    # a function's members are its categories that are objects; their sequence counts those only
+    member_keys, members_in_order = in_order(g["id"], [c for c in g.get("controls", []) or [] if is_object(c)])
+    for ci, c in members_in_order:
         # category: a Set; its statement prose -> narrative facet on the Set
-        prose, _ = statement_prose(c)
+        t = taken(c)
+        prose = (t["statement"] or {}).get("prose", "")
         suri = D(R_CAT, category_uri, c["id"])
-        # withdrawn subcats: lineage already inverted; dropped from membership, but counted in the sequence
+        # a subcategory that is no object: lineage already inverted; no member, but counted in the sequence
         sub_keys, subs_in_order = in_order(c["id"], c.get("controls", []) or [])
         members = [{"ref": convert_subcat(s), "sequence": D(R_SEQ_SUB, place, sortkey(s), sub_keys, si)}
-                   for si, s in subs_in_order if s["id"] not in withdrawn]
-        lab = prop(c, "label")
-        sobj = {"id": suri, "version": VER, "lifecycle": "active",
-                "title": c.get("title", c["id"]), "label": lab["value"] if lab else c["id"],
+                   for si, s in subs_in_order if is_object(s)]
+        sobj = {"id": suri, "version": VER, "lifecycle": lifecycle_of(c),
+                "title": c.get("title", c["id"]), "label": t["label"]["value"] if t["label"] else c["id"],
                 "members": members}
         fx = {}
         if prose: fx[F_NARR] = {"guidance": [T(prose, "category-statement")]}
@@ -300,67 +415,82 @@ for gi, g in groups_in_order:
             lineage(sobj, succ_replaces[c["id"]], c["id"])
         bundle.add(D(R_PATH, lambda i: f"objects/set/category-{slug(i)}.json", c["id"]), sobj)
         cat_sets += 1
-        fn_members.append({"ref": suri, "sequence": D(R_SEQ, place, sortkey(c), live_keys, ci)})
+        fn_members.append({"ref": suri, "sequence": D(R_SEQ, place, sortkey(c), member_keys, ci)})
+    t = taken(g)
     furi = D(R_FN, function_uri, g["id"])
-    lab = prop(g, "label")
-    fobj = {"id": furi, "version": VER, "lifecycle": "active",
-            "title": g.get("title", g["id"]), "label": lab["value"] if lab else g["id"],
+    fobj = {"id": furi, "version": VER, "lifecycle": lifecycle_of(g),
+            "title": g.get("title", g["id"]), "label": t["label"]["value"] if t["label"] else g["id"],
             "members": fn_members}
-    over = [p for p in g.get("parts", []) or [] if p.get("name") == "overview"]
-    if over:
-        fobj["facets"] = {F_NARR: {"guidance": [T(p.get("prose", ""), "overview") for p in over]}}
-    if fn_replaces.get(g["id"]):                 # ID.GV "moved to GV": function-level successor
+    fx = {}
+    if t["overviews"]:
+        fx[F_NARR] = {"guidance": [T(p.get("prose", ""), "overview") for p in t["overviews"]]}
+    with_unmapped(g, fx)
+    if fx: fobj["facets"] = fx
+    if fn_replaces.get(g["id"]):                 # ID.GV, incorporated into GV: function-level successor
         lineage(fobj, fn_replaces[g["id"]], g["id"])
     bundle.add(D(R_PATH, lambda i: f"objects/set/function-{slug(i)}.json", g["id"]), fobj)
     root_members.append({"ref": furi, "sequence": D(R_SEQ, place, sortkey(g), group_keys, gi)})
 
+# The root Set stands for the document. Its title is the document's; version,
+# OSCAL version and the date of publication are written to the manifest's
+# provenance. Every other member of the document metadata has no kernel
+# member and no standard facet: it stands in the compat facet, under
+# `metadata`, in the source's own shape and with the source's own values.
+METADATA_ELSEWHERE = ("title", "version", "oscal-version", "published")
+metadata_rest = {k: v for k, v in cat["metadata"].items() if k not in METADATA_ELSEWHERE}
 RES = [{"title": r.get("title", ""), "url": (r.get("rlinks") or [{}])[0].get("href", "")}
        for r in cat.get("back-matter", {}).get("resources", []) or []]
+root_facets = {F_REF: {"resources": RES}}
+if metadata_rest: root_facets[COMPAT] = {"metadata": metadata_rest}
 bundle.add("objects/set/root.json",
            {"id": f"{NS}/set/root", "version": VER, "lifecycle": "active",
             "title": cat["metadata"]["title"], "members": root_members,
-            "facets": {F_REF: {"resources": RES}}})
+            "facets": root_facets})
 
 bundle.stub("csf-narrative-stub.json", F_NARR.split("@")[0], [], {"guidance": {"type": "array"}})
 bundle.stub("csf-examples-stub.json", F_EX.split("@")[0], [], {"examples": {"type": "array"}})
 bundle.stub("csf-stub.json", F_CSF.split("@")[0], [], {"risk-party": {"type": "object"}})
 bundle.stub("csf-references-stub.json", F_REF.split("@")[0], [], {"resources": {"type": "array"}})
+bundle.stub("oscal-1x-compat-stub.json", COMPAT.split("@")[0], [], {"metadata": {"type": "object"}, "unmapped": {"type": "object"}})
+led.resolve(bundle.objects)          # a boolean of the source is written as the plain boolean, and its place is kept
 manifest = bundle.write({"source": cat["metadata"]["title"], "source-version": VER,
                          "source-doc-version": cat["metadata"]["version"],
                          "source-oscal-version": cat["metadata"]["oscal-version"],
                          "published": cat["metadata"].get("published"),
-                         "converter": "convert_csf.py v0.1",
+                         "converter": "convert_csf.py v0.2",
                          "namespace-note": "https://ns.nist.gov/csf minted by converter (no version in the URI; "
                                            "lineage is D2's job) pending a NIST-published URI"})
 
 # ---------- the ledger: every source value, checked against the files just written ----------
-# Declared drops, case (b): the classes the author decided for the IFA corpus
-# on 2026-11-13 (register, "Amendments - the value-level check of the
-# converters"). Each pattern names paths on which this converter carries
-# nothing, so none of them can hide a value that is lost beside carried ones;
-# the run checks that below. Everything else without a destination stays
-# unaccounted until somebody decides it.
+# The drops that the first ledger of this converter declared (commit
+# 20eec54b) and that are not decided yet. No drop is added. Each pattern
+# names one path on which this converter carries nothing, so none of them
+# can hide a value that is lost beside carried ones; the run checks that
+# below. `reading`: what this converter makes of the value under the author's
+# rule (content is never dropped; no content is a name that selects, a
+# namespace, an id that is rebuilt exactly). The author decides; the report
+# lists them.
 AS_FOR_IFA = "as decided for IFA on 2026-11-13: "
 DROP_UUID = AS_FOR_IFA + ("the uuid of a source element identifies it inside the source document only; JASCON objects "
                           "get URIs minted from the ids of the source, and the uuid itself is not carried")
-DROP_REVISIONS = AS_FOR_IFA + "revision history of the source document: bookkeeping of the source, not content of the framework"
-DROP_DIRECTORY = AS_FOR_IFA + ("the source's directory of parties and roles: a party is a landmark URI and there is no "
-                               "party object (register, backlog #16); the bundle names none of these parties")
 DROP_BACK_MATTER = AS_FOR_IFA + ("a back-matter resource is a link to another rendition of the source; its title and "
                                  "address are carried in references@1, the media type of the link is not")
-DROP_CLASS = AS_FOR_IFA + ("a type tag of a structural element, the class of a function, category or subcategory: "
-                           "the bundle says by its shape (the type of the object and its URI) what kind of thing the element is")
-DROP_PART_NAME = AS_FOR_IFA + ("a type tag of a structural element, the name of a part (statement, example, overview): "
-                               "the bundle says by its shape (where the prose stands) what kind of part it was")
-PATH_DROPS = [          # (pattern over the source path, the class as the report counts it, the reason)
- (r"\.uuid$", "uuids of the source document", DROP_UUID),
- (r"^csf\.catalog\.metadata\.revisions\[\]\.", "revision history", DROP_REVISIONS),
- (r"^csf\.catalog\.metadata\.(parties|roles)\[\]\.", "directory of parties and roles", DROP_DIRECTORY),
- (r"^csf\.catalog\.back-matter\.resources\[\]\.rlinks\[\]\.media-type$", "back-matter resources", DROP_BACK_MATTER),
- (r"^csf\.catalog\.groups\[\](\.controls\[\])*\.class$", "type tags, the class of an element", DROP_CLASS),
- (r"^csf\.catalog\.groups\[\](\.controls\[\])*\.parts\[\]\.name$", "type tags, the name of a part", DROP_PART_NAME),
+PATH_DROPS = [          # (the source path, the reason, the reading)
+ ("csf.catalog.uuid", DROP_UUID,
+  "content: it identifies the source document, and nothing in the bundle lets a reader rebuild it"),
+ ("csf.catalog.back-matter.resources[].uuid", DROP_UUID,
+  "content: the links of the document metadata, carried in the compat facet, name a resource by this uuid; "
+  "without it a reader cannot tell which resource is the canonical and which an alternate one"),
+ ("csf.catalog.back-matter.resources[].rlinks[].media-type", DROP_BACK_MATTER,
+  "content: it says what the address leads to (a PDF, a web page)"),
 ]
-for pattern, _, reason in PATH_DROPS: led.drop(pattern, reason)
+READING = {(path, reason): reading for path, reason, reading in PATH_DROPS}       # (the path as the path map has it, the reason)
+READING["csf.catalog.groups[].controls[].props[].value", DROP_SORT] = (
+    "content: the order of the withdrawn items among their siblings. Where the siblings are members of a Set the place "
+    "stays empty in their sequence; of a withdrawn item under a withdrawn category nothing in the bundle shows it")
+READING["csf.catalog.groups[].controls[].props[].name", f"{N_PROP} - of a value that is dropped: {DROP_SORT}"] = (
+    "not content, because the name `sort-id` only selects the value beside it; it shares the fate of that value")
+for path, reason, _ in PATH_DROPS: led.drop("^" + re.escape(path) + "$", reason)
 LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": manifest})
 LT = LEDGER["totals"]
 BY_PATH = ledger_by_path(LEDGER)
@@ -368,39 +498,48 @@ with open(os.path.join(OUTDIR, LEDGER_FILE), "w", encoding="utf-8") as f:
     json.dump(BY_PATH, f, indent=1, ensure_ascii=False); f.write("\n")
 
 # what the entries say, counted for the report
-drops = collections.Counter(e["reason"] for e in LEDGER["entries"] if e["outcome"] == "intentionally-dropped")
-drops_a = {r[len(DROP_WITHDRAWN):]: n for r, n in sorted(drops.items()) if r.startswith(DROP_WITHDRAWN)}
-drops_b = {label: drops[reason] for _, label, reason in PATH_DROPS if drops[reason]}
+def source_value(pointer):
+    node = led.docs["csf"]
+    for x in pointer.split("#", 1)[1].split("/")[1:]:
+        x = x.replace("~1", "/").replace("~0", "~")
+        node = node[int(x)] if isinstance(node, list) else node[x]
+    return node
+not_content = collections.Counter((e["kind"], e["rule"]) for e in LEDGER["entries"] if e["outcome"] == "not-content")
+drops = collections.OrderedDict()          # (path as the path map has it, reason) -> [count, the first value]
+for e in LEDGER["entries"]:
+    if e["outcome"] != "intentionally-dropped": continue
+    row = drops.setdefault((norm(e["path"]), e["reason"]), [0, source_value(e["source"])])
+    row[0] += 1
 rules_used = collections.Counter(rule for rule, _, _ in {(d["rule"], d["object"], d["pointer"])       # rule -> the values it wrote
                                                          for e in LEDGER["entries"] for d in e.get("destinations", []) if "rule" in d})
 
-# Wiring checks. The ledger checks every claim of a destination; it cannot
-# check a declaration that is too wide, or a record that is not this run's.
-# Each of the checks below answers a defect that was put into a copy of this
-# script on purpose and passed with exit code 0 before the check existed.
-# A check that fails stops the run with a non-zero exit, after the reports
-# are written.
+# Wiring checks. The ledger checks every claim of a destination and every
+# rule of what is no content; it cannot check a declared drop that is too
+# wide, or a record that is not this run's. Each of the checks below answers
+# a defect that was put into a copy of this script on purpose and passed
+# before the check existed. A check that fails ends the run with a non-zero
+# exit, after the reports are written.
 wiring = []
-# every declared drop is of kind (a) or (b)
-if sum(drops_a.values()) + sum(drops_b.values()) != LT["intentionally-dropped"]:
-    wiring.append("a declared drop is neither stated by the path map nor a class decided for IFA")
-# a drop by path is declared only for paths on which nothing is carried: on a
+# every declared drop is one of those listed above: none is added
+for (path, reason), (n, _) in drops.items():
+    if (path, reason) not in READING:
+        wiring.append(f"{n} value(s) under {path} are dropped, and no declared drop of this converter covers that path "
+                      f"with this reason: {reason}")
+# a drop by path is declared only for a path on which nothing is carried: on a
 # path with carried values it would report a lost value as dropped on purpose
 carried_paths = {e["path"] for e in LEDGER["entries"] if e["outcome"] in ("copied", "transformed")}
-by_pattern = {reason for _, _, reason in PATH_DROPS}
+by_pattern = {reason for _, reason, _ in PATH_DROPS}
 for p in sorted({e["path"] for e in LEDGER["entries"] if e.get("reason") in by_pattern} & carried_paths):
     wiring.append(f"a drop declared by path covers {p}, on which other values are carried: a value lost there would "
-                  f"read as dropped on purpose; declare such a drop value by value")
-# the drop of a withdrawn item reaches the values it names and no others
-for what, p in sorted({(e["reason"][len(DROP_WITHDRAWN):], e["path"]) for e in LEDGER["entries"]
-                       if e.get("reason", "").startswith(DROP_WITHDRAWN)}):
-    if what not in WITHDRAWN_DROPS or not p.endswith(WITHDRAWN_DROPS[what]):
-        wiring.append(f"the drop declared for a withdrawn item as `{what}` covers {p}, where no such value stands: the "
-                      f"declaration covers more than it names (what the lineage carries of a withdrawn item - id, label, "
-                      f"title, statement prose, links - is never dropped by it)")
+                  f"read as dropped on purpose")
+# the drop of a withdrawn item's sort-id reaches the value of a prop and nothing else
+for p in sorted({e["path"] for e in LEDGER["entries"] if e.get("reason") == DROP_SORT and not e["path"].endswith(".props[].value")}):
+    wiring.append(f"the drop declared for the sort-id of a withdrawn item covers {p}, where no sort-id stands")
 # the file on disk is the record of this run, not one left by an earlier run or written from an earlier accounting
-with open(os.path.join(OUTDIR, LEDGER_FILE), encoding="utf-8") as f:
-    if json.load(f) != json.loads(json.dumps(BY_PATH)): wiring.append(f"{LEDGER_FILE} on disk is not the record of this run")
+if not os.path.exists(os.path.join(OUTDIR, LEDGER_FILE)): wiring.append(f"{LEDGER_FILE} was not written")
+else:
+    with open(os.path.join(OUTDIR, LEDGER_FILE), encoding="utf-8") as f:
+        if json.load(f) != json.loads(json.dumps(BY_PATH)): wiring.append(f"{LEDGER_FILE} on disk is not the record of this run")
 
 def without_a_source(result, objects):
     """The other direction, which the ledger does not take: the leaf values
@@ -424,125 +563,130 @@ def without_a_source(result, objects):
 OUT_LEAVES, OWN = without_a_source(LEDGER, bundle.objects)
 
 # ---------- coverage ----------
-# The path map says where each source path is MEANT to go. Until the ledger
-# existed it claimed a destination for every path. The sentences below say
-# what the ledger found: where a value is not carried, the row says so.
+# The path map says where each source path is MEANT to go, for any catalogue
+# of this shape. What the ledger found for this run stands behind each
+# sentence, counted (`[ledger: ...]`), so that no sentence names a
+# destination the ledger does not confirm.
 CTL = r"^csf\.catalog\.groups\[\]\.controls\[\]\."
+ELSE = "; what the mapping does not know is carried as it is in the compat facet (`unmapped`)"
 RULES = [
  (r"^csf\.catalog\.metadata\.(title|version|oscal-version|published)$", "L1",
   "bundle manifest provenance (`source`, `source-doc-version`, `source-oscal-version`, `published`); the title "
   "is the title of the root Set as well"),
- (r"^csf\.catalog\.uuid$", "L1", "not carried: the uuid of the source document (declared drop in the ledger)"),
- (r"^csf\.catalog\.metadata\.revisions\[\]\.", "L1",
-  "not carried: revision history of the source document (declared drop in the ledger)"),
- (r"^csf\.catalog\.metadata\.(parties|roles)\[\]\.", "L1",
-  "not carried: the source's directory of parties and roles (declared drop in the ledger)"),
- (r"^csf\.catalog\.metadata\.", "L1",
-  "not carried and not decided (unaccounted in the ledger): `last-modified`, the props of the document, its links "
-  "to the back-matter resources, and who is its publisher, contact and author"),
+ (r"^csf\.catalog\.uuid$", "L1", "declared drop, not decided: the uuid of the source document"),
+ (r"^csf\.catalog\.metadata\.", "L2",
+  "compat facet on the root Set, member `metadata`, in the source's own shape and with its own values "
+  "(`last-modified`, revisions, props, links, roles, parties, responsible-parties)"),
  (r"^csf\.catalog\.back-matter\.resources\[\]\.(title|rlinks\[\]\.href)$", "L1",
   "references@1 facet on the root Set (title; the address of the first link as url)"),
  (r"^csf\.catalog\.back-matter\.", "L1",
-  "not carried: the uuid of a resource and the media type of its link (declared drops in the ledger)"),
+  "declared drops, not decided: the uuid of a resource and the media type of its link"),
  (r"^csf\.catalog\.groups\[\]\.id$", "L1", "function Set id (URI mint)"),
  (r"^csf\.catalog\.groups\[\]\.title$", "L1", "function Set title"),
  (r"^csf\.catalog\.groups\[\]\.class$", "L1",
-  "not carried: `function` is a type tag, the Set says it by its URI (declared drop in the ledger)"),
+  "no content: `function` says on which level the element stands, and the Set says it by its URI (a rule the "
+  "ledger checks)" + ELSE),
  (r"^csf\.catalog\.groups\[\]\.props\[\]\.value$", "L1",
-  "label -> function Set label; sort-id -> the sequence of the function in the root Set"),
+  "label -> function Set label; sort-id -> the sequence of the function in the root Set" + ELSE),
  (r"^csf\.catalog\.groups\[\]\.props\[\]\.name$", "L1",
-  "not carried: the name selects the prop (`label`, `sort-id`); unaccounted in the ledger"),
+  "no content: the name selects the field its value is written to (`label`, `sort-id`; a rule the ledger checks)" + ELSE),
  (r"^csf\.catalog\.groups\[\]\.parts\[\]\.prose$", "L2",
-  "function overview -> narrative@1 guidance on the function Set (language-tagged)"),
+  "function overview -> narrative@1 guidance on the function Set (language-tagged)" + ELSE),
  (r"^csf\.catalog\.groups\[\]\.parts\[\]\.name$", "L2",
-  "not carried: `overview` is a type tag of the part (declared drop in the ledger)"),
+  "no content: `overview` selects the member its prose is written to (a rule the ledger checks)" + ELSE),
  (r"^csf\.catalog\.groups\[\]\.parts\[\]\.id$", "L2",
-  "not carried: the id of the overview part; unaccounted in the ledger"),
+  "no content: rebuilt exactly, the id of the function and `_overview` (a rule the ledger checks)" + ELSE),
  (CTL + r"id$", "L1",
-  "category Set / subcategory Requirement id (URI mint); withdrawn: dropped, lineage inverted - the id is the `ref` "
-  "of the entry in the replaces[] and the nist-withdrawal annotation of each successor, and where no link gives a "
-  "successor nothing of the item is carried"),
+  "category Set / subcategory Requirement id (URI mint); withdrawn with a successor: the `ref` of the entry in "
+  "the replaces[] and the nist-withdrawal annotation of each successor; withdrawn without one: the id of a Set "
+  "or Requirement with lifecycle `withdrawn`"),
  (CTL + r"title$", "L1",
-  "category Set / subcategory Requirement title; withdrawn: dropped, lineage inverted - the title stands in the "
-  "nist-withdrawal annotation of each successor, and nowhere where no link gives a successor"),
+  "category Set / subcategory Requirement title; withdrawn with a successor: `title` in the nist-withdrawal "
+  "annotation of each successor"),
  (CTL + r"class$", "L1",
-  "not carried: `category` / `subcategory` is a type tag, the object says it by its type and URI (declared drop "
-  "in the ledger)"),
+  "no content: `category` / `subcategory` says on which level the element stands, and the object says it by its "
+  "type and URI (a rule the ledger checks)" + ELSE),
  (CTL + r"props\[\]\.value$", "L1",
-  "label->label (withdrawn: `label` in the successor's annotation); sort-id->Set sequence (withdrawn: not "
-  "carried); risk-party->csf@1, the FIRST risk-party prop of a subcategory only - a second one is not carried; "
-  "status->tombstone drop + successor replaces[] (a withdrawn item is not emitted, its links become entries on "
-  "its successors)"),
+  "label->label (withdrawn with a successor: `label` in the successor's annotation); sort-id->Set sequence "
+  "(withdrawn with a successor: a declared drop, not decided); risk-party->csf@1, every value, a list where an "
+  "item has two; status `withdrawn`->lifecycle `withdrawn` of the object, and for an item with a successor an "
+  "input of the rule that writes its entry on the successor" + ELSE),
  (CTL + r"props\[\]\.name$", "L1",
-  "not carried: the name selects the prop (`label`, `sort-id`, `risk-party`, `status`); unaccounted in the "
-  "ledger, on a withdrawn item a declared drop"),
+  "risk-party: the key under which csf@1 holds the value; label, sort-id, status: no content, the name selects "
+  "the field its value is written to (a rule the ledger checks); the name of a sort-id that is dropped is "
+  "dropped with it" + ELSE),
  (CTL + r"props\[\]\.ns$", "L1",
-  "not carried: the namespace of the `risk-party` prop name; unaccounted in the ledger"),
+  "no content: the CSF's own namespace of the `risk-party` prop name (a rule the ledger checks)" + ELSE),
  (CTL + r"props\[\]\.remarks$", "L2",
-  "risk-party remark -> csf@1 (carried verbatim), of the FIRST risk-party prop only; the remark of a second one "
-  "is not carried"),
+  "risk-party remark -> csf@1 (carried verbatim), one for every value" + ELSE),
  (CTL + r"links\[\]\.rel$", "L1",
   "incorporated_into/moved_to (UNDERSCORE spelling - source finding) -> `mode` (merged-into/renamed) of the entry "
-  "in the successor's replaces[] + nist-withdrawal annotation"),
+  "in the successor's replaces[] + nist-withdrawal annotation" + ELSE),
  (CTL + r"links\[\]\.href$", "L1",
   "names the successor: the entry stands on the Requirement or Set with that id, and its `ref` is written by a "
-  "rule that holds only if the address names that object"),
+  "rule that holds only if the address names that object" + ELSE),
  (CTL + r"parts\[\]\.prose$", "L1",
   "subcategory statement -> statements[0] (modality unspecified); category statement -> narrative@1 on "
-  "the Set; example parts -> examples@1 (language-tagged); withdrawn: statement prose -> `prose` in the "
-  "nist-withdrawal annotation of each successor"),
+  "the Set; example parts -> examples@1 (language-tagged); withdrawn with a successor: statement prose -> `prose` "
+  "in the nist-withdrawal annotation of each successor" + ELSE),
  (CTL + r"parts\[\]\.id$", "L1",
-  "subcategory statement id -> statements[0].id, without the control prefix; example id -> examples@1; not "
-  "carried: the id of a category's statement part (unaccounted in the ledger) and of a withdrawn item's (declared drop)"),
+  "subcategory statement id -> statements[0].id, without the control prefix; example id -> examples@1; the id of a "
+  "category's statement part and of the statement part of a withdrawn item with a successor: no content, rebuilt "
+  "exactly, the id of the item and `_statement` (a rule the ledger checks)" + ELSE),
  (CTL + r"parts\[\]\.name$", "L1",
-  "not carried: `statement` / `example` is a type tag of the part, the bundle says it by where the prose stands "
-  "(declared drop in the ledger)"),
+  "no content: `statement` / `example` selects the member the prose is written to (a rule the ledger checks)" + ELSE),
  (CTL + r"parts\[\]\.ns$", "L1",
-  "not carried: the namespace of the `example` part name; unaccounted in the ledger"),
+  "no content: the CSF's own namespace of the `example` part name (a rule the ledger checks)" + ELSE),
 ]
 rows, unmapped = coverage(paths, RULES)
+WORDS = {"copied": "copied", "transformed": "transformed", "not-content": "no content", "intentionally-dropped": "dropped",
+         "unaccounted": "UNACCOUNTED"}
+found = collections.defaultdict(collections.Counter)          # path as the path map has it -> what became of its values
+for e in LEDGER["entries"]: found[norm(e["path"])][e["outcome"]] += 1
+rows = [(p, n, l, f"{t} [ledger: " + ", ".join(f"{found[p][k]:,} {WORDS[k]}" for k in LEDGER_OUTCOMES if found[p][k]) + "]")
+        for p, n, l, t in rows]
 
 nset = sum(1 for rel in bundle.objects if "/set/" in rel)
+n_withdrawn_objects = collections.Counter(LEVEL[id(e)] for e in wd_objects)
 own_fields = ", ".join(f"`{p}` x{n}" for p, n in sorted(OWN.items()))
 ledger_lines = [
      f"- **Conversion ledger (measured per source value; backlog #41)**: each of the {LEDGER['leaf-values']:,} source leaf "
      f"values was followed into the written bundle. **{LT['copied']:,} copied** (the value stands, with its type, at the "
      f"destination named, read back from the written file), **{LT['transformed']:,} transformed** (one of "
      f"{len(rules_used)} named rules made the destination from it; the rule was applied to the source again and "
-     f"compared), **{LT['intentionally-dropped']:,} intentionally dropped** (a declared reason), "
-     f"**{LT['unaccounted']:,} unaccounted** (no destination and no declared reason). Checks that failed: "
-     f"{len(LEDGER['verification-failures'])}. The path map below reads {sum(paths.values()):,} of "
-     f"{sum(paths.values()):,} for the same conversion: it counts paths with a declared destination, the ledger counts "
-     f"values that arrived. The record is `{LEDGER_FILE}`: one row per source path and outcome, with its count, an "
-     f"example and the destinations or the reasons. The entry of each single value is not committed; every row is a "
-     f"count over entries that were checked in the run that wrote it.",
-     f"- **Declared drops, two kinds** (the reasons and their counts are listed near the end of this report). "
-     f"(a) **{sum(drops_a.values()):,}** stated by the converter's own path map: a withdrawn item is not emitted, and "
-     f"of it the bundle carries the lineage on its successor - id, label, title, statement prose and links. Dropped "
-     f"with it: " + ("; ".join(f"{k} x{n}" for k, n in drops_a.items()) or "nothing, the source has no withdrawn item") + ". "
-     f"(b) **{sum(drops_b.values()):,}** in the classes decided for the IFA corpus on 2026-11-13: " +
-     "; ".join(f"{k} x{n}" for k, n in drops_b.items()) +
-     f". Nothing else is declared: a value without a destination that is in neither kind is unaccounted and listed by "
-     f"path at the end of this report.",
+     f"compared), **{LT['not-content']:,} no content** (a name that only selects a field, a namespace, an id that "
+     f"another value gives exactly - each by a rule the ledger checked on the value; the rules are listed near the end "
+     f"of this report), **{LT['intentionally-dropped']:,} dropped for a reason the first ledger declared** (not "
+     f"decided: listed near the end of this report with what this converter makes of each), "
+     f"**{LT['unaccounted']:,} unaccounted**. Checks that failed: {len(LEDGER['verification-failures'])}. The path map "
+     f"below reads {sum(paths.values()):,} of {sum(paths.values()):,} for the same conversion: it counts paths with a "
+     f"declared destination, the ledger counts values. The record is `{LEDGER_FILE}`: one row per source path and "
+     f"outcome, with its count, an example and the destinations, the rules or the reasons. A run with an unaccounted "
+     f"value or a failed check ends with a non-zero exit.",
+     f"- **What the kernel and the standard facets have no place for** (carried all the same, in a facet this "
+     f"converter pins): the document metadata beyond title, version, OSCAL version and date of publication - "
+     f"`{COMPAT}`, member `metadata`, on the root Set; the first-party / third-party class of a subcategory "
+     f"(`risk-party`, x{n_riskparty_values}) and its remark - csf@1; the examples of a subcategory - examples@1; what "
+     f"this mapping does not know of an element - `{COMPAT}`, member `unmapped`, on x{n_unmapped} objects of this run.",
      f"- **What the ledger cannot see**: it follows source values into the bundle, not the other way. Counted the "
      f"other way for this run: of the {OUT_LEAVES:,} leaf values of the {len(bundle.objects)} objects, "
      f"{OUT_LEAVES - sum(OWN.values()):,} are a source value or made from one by a rule; the other "
      f"{sum(OWN.values()):,} are written by the converter with no source value behind them: {own_fields} (the "
-     f"version `{VER}`, the lifecycle `active`, the modality `unspecified`, the obligated party `{PARTY}` and the id "
-     f"of the root Set). The namespace `{NS}` in every minted URI, the facet names and the manifest's own fields "
-     f"(`source-version`, `converter`, `namespace-note`, the digests) are the converter's as well."]
-if n_riskparty_more:
+     f"version `{VER}`; the lifecycle `active` of every item that carries no status prop - the source states none "
+     f"for it; the modality `unspecified`; the obligated party `{PARTY}`; the id of the root Set). The namespace "
+     f"`{NS}` in every minted URI, the facet names and the manifest's own fields (`source-version`, `converter`, "
+     f"`namespace-note`, the digests) are the converter's as well."]
+if n_riskparty_unpaired:
     ledger_lines.append(
-     f"- **A second risk-party is not carried x{n_riskparty_more}** (found by the ledger; a loss, not fixed here "
-     f"because the fix changes the bundle): the converter reads the first `risk-party` prop of an item, and csf@1 holds "
-     f"one value. Where a subcategory carries two (in the CSF: `1st` and `3rd`), the second value and its remark reach "
-     f"no object. The ledger lists them as unaccounted under `...props[].value` and `...props[].remarks`.")
-if wd_no_successor:
+     f"- **Risk-party remarks that do not pair x{n_riskparty_unpaired}**: an item carries several `risk-party` props "
+     f"and a remark on some of them only. Values and remarks are carried, each list in source order; which remark "
+     f"belongs to which value is not said by the lists.")
+shared_uuid = [r.get("title", "") for r in cat.get("back-matter", {}).get("resources", []) or [] if "uuid" in cat and r.get("uuid") == cat["uuid"]]
+if shared_uuid:
     ledger_lines.append(
-     f"- **Withdrawn without a successor x{len(wd_no_successor)}** (found by the ledger): no `incorporated_into` or "
-     f"`moved_to` link names a successor in the catalogue for {', '.join(wd_no_successor)}, so there is no object to "
-     f"write the lineage on. Nothing of such an item reaches the bundle: its id, title, label and, where it has one, "
-     f"its statement prose are unaccounted. Every other withdrawn item has an entry on at least one successor.")
+     f"- **The document and one of its resources share a uuid x{len(shared_uuid)}** (source finding): `catalog.uuid` is "
+     f"`{cat['uuid']}`, and so is the uuid of the back-matter resource `{shared_uuid[0]}`. A link that names this "
+     f"uuid names both.")
 if sort_ties:
     ledger_lines.append(
      f"- **Sort-id shared by siblings x{len(sort_ties)}** (source finding): " +
@@ -556,7 +700,8 @@ j = report(
     f"{cat['metadata']['version']}, OSCAL {cat['metadata']['oscal-version']}). "
     f"Census: `drafts/gate-3-census.md` §3/§6.",
     [f"- Objects emitted: **{len(req_ids)} Requirements** (subcategories), **{nset} Sets** "
-     f"(6 functions + {cat_sets} categories + root), manifest with both digests."],
+     f"({len(groups_by_id)} functions + {cat_sets} categories, {n_withdrawn_objects['category']} of them with lifecycle "
+     f"`withdrawn`, + root), manifest with both digests."],
     [f"- **Functions and categories are Sets, subcategories are Requirements** - the C5 rule "
      f"(membership decides granularity), D21 taxonomy nesting at 3 levels.",
      f"- **Category statement prose -> narrative@1 on the category Set** - summary prose, not an "
@@ -564,17 +709,20 @@ j = report(
      f"- **Modality `unspecified` x{mod_count['unspecified']}**: CSF outcomes are declarative "
      f"('Outcomes ... are understood and communicated') - sixth-corpus confirmation of the national "
      f"declarative pattern; force rides adoption, not mood.",
-     f"- **Withdrawn tombstones dropped, lineage inverted**: {len(withdrawn)} withdrawn "
+     f"- **Withdrawn items: lineage inverted, or an object with lifecycle `withdrawn`**: {len(withdrawn)} withdrawn "
      f"({len(wd_categories)} categories + {len(wd_subcats)} subcategories - the 1.1->2.0 restructuring "
-     f"cut at BOTH levels), {sum(len(v) for v in succ_replaces.values())} successor edges on "
-     f"Requirements/Sets + {sum(len(v) for v in fn_replaces.values())} on function Sets (ID.GV 'moved to "
-     f"GV' - the sa-12->SR pattern) (incorporated_into->merged-into, moved_to->renamed); tombstone 1.1 "
-     f"outcome prose carried in the annotation (CSF titles are bare ids - the prose IS the content); "
-     f"chains x{len(wd_chain)}, dangling x{len(wd_dangling)}, without a successor link x{len(wd_no_successor)}; "
-     f"no live subcategory sits under a withdrawn category (asserted).",
+     f"cut at BOTH levels). {len(withdrawn) - len(wd_objects)} name a successor and are no objects: "
+     f"{sum(len(v) for v in succ_replaces.values())} successor edges on "
+     f"Requirements/Sets + {sum(len(v) for v in fn_replaces.values())} on function Sets (ID.GV, incorporated into "
+     f"the function GV - the sa-12->SR pattern) (incorporated_into->merged-into, moved_to->renamed); tombstone 1.1 "
+     f"outcome prose carried in the annotation (CSF titles are bare ids - the prose IS the content). "
+     f"{len(wd_objects)} name none and are objects with lifecycle `withdrawn`, members of the Set of their parent "
+     f"({n_withdrawn_objects['category']} category Sets: {', '.join(e['id'] for e in wd_objects if LEVEL[id(e)] == 'category') or 'none'}; "
+     f"{n_withdrawn_objects['subcategory']} Requirements). Chains x{len(wd_chain)}, dangling x{len(wd_dangling)}; "
+     f"no live subcategory sits under a withdrawn category that is no object (asserted).",
      f"- **Implementation examples -> examples@1** x{n_examples} (ids kept - the CSF example numbering "
-     f"is citable); **risk-party -> csf@1** x{n_riskparty} (remarks carried; the first risk-party prop of a "
-     f"subcategory only).",
+     f"is citable); **risk-party -> csf@1** x{n_riskparty_values} values on x{n_riskparty} items (remarks carried; "
+     f"an item that is a risk of the first and of the third party carries both, as a list).",
      obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, PARTY_WHY),
      f"- **Payload free text language-tagged**: " + ", ".join(f"{k} x{v}" for k, v in sorted(lang_wraps.items())) + "."],
     [f"- **Rel-code spelling divergence (source finding)**: CSF 2.0 uses `incorporated_into`/`moved_to` "
@@ -586,7 +734,7 @@ j = report(
       if n_hashless and n_hashless == n_lineage_links else
       f"DE.DP-04's successor href is `DE.AE-06` (a relative URI reference) where every sibling writes `#DE.AE-06`") +
      f" - resolves only by lenient parsing. REPORTED upstream.",
-     f"- **{len(withdrawn)} of 219 controls are withdrawn tombstones** ({len(wd_categories)} categories, "
+     f"- **{len(withdrawn)} of {len(by_id)} controls are withdrawn** ({len(wd_categories)} categories, "
      f"{len(wd_subcats)} subcategories) - the catalog carries its 1.1-restructuring residue in-band; the "
      f"successor graph (`replaces[]`) carries the migration map of every withdrawn item that names a successor.",
      f"- Declarative corpus #6: unspecified x{mod_count['unspecified']} of {len(req_ids)} - CSF states "
@@ -600,30 +748,34 @@ j = report(
                    "successor-edges": sum(len(v) for v in succ_replaces.values()),
                    "function-set-edges": sum(len(v) for v in fn_replaces.values()),
                    "hashless-hrefs": n_hashless,
-                   "chains": wd_chain, "dangling": wd_dangling, "without-successor": wd_no_successor},
-     "modality": dict(mod_count), "examples": n_examples, "risk-party": n_riskparty,
-     "risk-party-not-carried": n_riskparty_more,
+                   "chains": wd_chain, "dangling": wd_dangling,
+                   "objects-with-lifecycle-withdrawn": [e["id"] for e in wd_objects]},
+     "modality": dict(mod_count), "examples": n_examples,
+     "risk-party": n_riskparty, "risk-party-values": n_riskparty_values,
      "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      "lang-wraps": dict(lang_wraps),
      "ledger": {"file": LEDGER_FILE, "leaf-values": LEDGER["leaf-values"], "totals": LT,
                 "verification-failures": len(LEDGER["verification-failures"]),
                 "rules": dict(sorted(rules_used.items())),
-                "declared-drops": {"stated-by-the-path-map": {"count": sum(drops_a.values()), "withdrawn-item": drops_a},
-                                   "as-decided-for-ifa-2026-11-13": {"count": sum(drops_b.values()), "classes": drops_b}},
+                "not-content": [{"kind": kind, "rule": rule, "count": n} for (kind, rule), n in sorted(not_content.items())],
+                "declared-drops": [{"path": path, "count": n, "reason": reason, "example": value, "reading": READING.get((path, reason), "")}
+                                   for (path, reason), (n, value) in drops.items()],
                 "written-without-a-source": {"object-leaf-values": OUT_LEAVES, "count": sum(OWN.values()),
                                              "by-pointer": dict(sorted(OWN.items()))}}})
 with open(os.path.join(OUTDIR, "csf-coverage-report.md"), "a", encoding="utf-8") as f:
-    f.write("\n## Declared drops (conversion ledger)\n\n"
-            "No destination, and a declared reason. (a) is stated by the converter's own path map: a withdrawn item is "
-            "not emitted; the bundle carries its lineage on its successor (id, label, title, statement prose, links) and "
-            "drops the rest of it. (b) is a class the author decided for the IFA corpus on 2026-11-13. The reason of "
-            f"every row, in full, is in `{LEDGER_FILE}`.\n\n"
-            "| kind | what is dropped, and why | count |\n|---|---|---:|\n" +
-            "".join(f"| (a) | of a withdrawn item: {what} | {n:,} |\n" for what, n in drops_a.items()) +
-            "".join(f"| (b) | {reason[len(AS_FOR_IFA):]} | {drops[reason]:,} |\n" for _, _, reason in PATH_DROPS if drops[reason]) +
+    f.write("\n## What is no content (conversion ledger)\n\n"
+            "A name that only selects a field, a namespace, an id that another value gives exactly. Each rule was "
+            "checked on every value it is stated for, and a value shares the fate of what it rests on.\n\n"
+            "| kind | rule | count |\n|---|---|---:|\n" +
+            ("".join(f"| {kind} | {rule} | {n:,} |\n" for (kind, rule), n in sorted(not_content.items())) or "| | *(none)* | 0 |\n") +
+            "\n## Declared drops that remain (conversion ledger)\n\n"
+            "Declared when the ledger was first wired, before the rule that content is never dropped, and not decided since. No drop was added. `reading` is what this converter makes "
+            "of the value under the rule that content is never dropped; the decision is the author's.\n\n" +
+            ("| source path | count | declared reason | example | reading |\n|---|---:|---|---|---|\n" +
+             "".join(f"| `{path}` | {n:,} | {reason} | `{value}` | {READING.get((path, reason), '')} |\n" for (path, reason), (n, value) in drops.items())
+             if drops else "*(none)*\n") +
             "\n## Unaccounted source values (conversion ledger)\n\n"
-            "No destination and no declared reason. Each is either a value the converter loses, or one it leaves out "
-            f"without a decision. The count of every path and outcome is in `{LEDGER_FILE}`.\n\n" +
+            "No destination, no rule and no declared reason. A run that lists a value here ends with a non-zero exit.\n\n" +
             ("| path | count | first value |\n|---|---:|---|\n" +
              "".join(f"| `{u['path']}` | {u['count']:,} | `{u['pointers'][0]}` |\n" for u in BY_PATH["unaccounted-paths"])
              if BY_PATH["unaccounted-paths"] else "*(none)*\n"))
@@ -632,14 +784,15 @@ if j["totals"]["leaf-values"] != LEDGER["leaf-values"]:        # the path map an
 print(f"reqs: {len(req_ids)}  sets: {nset}  leaves: {j['totals']['leaf-values']:,}  "
       f"mapped: {j['totals']['mapped']:,}  UNMAPPED: {j['totals']['unmapped']}")
 print(f"withdrawn: {len(withdrawn)}  edges: {sum(len(v) for v in succ_replaces.values())}  "
-      f"chains: {len(wd_chain)}  dangling: {len(wd_dangling)}")
-print(f"ledger: copied {LT['copied']}, transformed {LT['transformed']}, intentionally dropped "
-      f"{LT['intentionally-dropped']} ({sum(drops_a.values())} stated by the path map, {sum(drops_b.values())} as decided "
-      f"for IFA), unaccounted {LT['unaccounted']}; failed checks {len(LEDGER['verification-failures'])}")
+      f"objects: {len(wd_objects)}  chains: {len(wd_chain)}  dangling: {len(wd_dangling)}")
+print(f"ledger: copied {LT['copied']}, transformed {LT['transformed']}, no content {LT['not-content']}, dropped "
+      f"{LT['intentionally-dropped']} (declared by the first ledger, not decided), unaccounted {LT['unaccounted']}; "
+      f"failed checks {len(LEDGER['verification-failures'])}")
 if unmapped:
     for p, n in unmapped[:30]: print("  UNMAPPED", p, "x", n)
-if LEDGER["verification-failures"] or wiring:
-    for x in LEDGER["verification-failures"][:20]: print("  LEDGER CHECK FAILED", json.dumps(x, ensure_ascii=False), file=sys.stderr)
-    for x in wiring: print("  LEDGER WIRING", x, file=sys.stderr)
-    raise SystemExit(f"convert_csf.py: {len(LEDGER['verification-failures'])} claim(s) of the conversion ledger do not hold "
-                     f"on the written files, {len(wiring)} wiring check(s) failed")
+for x in LEDGER["verification-failures"][:20]: print("  LEDGER CHECK FAILED", json.dumps(x, ensure_ascii=False), file=sys.stderr)
+for u in BY_PATH["unaccounted-paths"][:20]: print(f"  UNACCOUNTED {u['path']} x{u['count']}, first {u['pointers'][0]}", file=sys.stderr)
+for x in wiring: print("  LEDGER WIRING", x, file=sys.stderr)
+if wiring:
+    raise SystemExit(f"convert_csf.py: {len(wiring)} wiring check(s) of the conversion ledger failed")
+ledger_gate(LEDGER, "convert_csf.py")

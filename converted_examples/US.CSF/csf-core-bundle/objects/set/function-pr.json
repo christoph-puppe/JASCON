@@ -20,12 +20,20 @@
    "sequence": 30
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/pr-ps",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ip",
    "sequence": 40
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/pr-ir",
+   "ref": "https://ns.nist.gov/csf/set/category/pr-pt",
    "sequence": 50
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ps",
+   "sequence": 60
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/pr-ir",
+   "sequence": 70
   }
  ],
  "facets": {

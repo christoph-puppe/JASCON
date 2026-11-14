@@ -43,11 +43,11 @@
    "mode": "merged-into"
   },
   {
-   "ref": "https://ns.nist.gov/csf/req/RS.IM",
+   "ref": "https://ns.nist.gov/csf/set/category/rs-im",
    "mode": "merged-into"
   },
   {
-   "ref": "https://ns.nist.gov/csf/req/RC.IM",
+   "ref": "https://ns.nist.gov/csf/set/category/rc-im",
    "mode": "merged-into"
   }
  ],
@@ -68,13 +68,13 @@
     "prose": "Detection processes are continuously improved"
    },
    {
-    "ref": "https://ns.nist.gov/csf/req/RS.IM",
+    "ref": "https://ns.nist.gov/csf/set/category/rs-im",
     "mode": "merged-into",
     "label": "Improvements (RS.IM)",
     "title": "Improvements"
    },
    {
-    "ref": "https://ns.nist.gov/csf/req/RC.IM",
+    "ref": "https://ns.nist.gov/csf/set/category/rc-im",
     "mode": "merged-into",
     "label": "Improvements (RC.IM)",
     "title": "Improvements"
