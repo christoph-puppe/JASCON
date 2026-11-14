@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.12. This build has the frame (the hub, the settings page and
+State: build 0.9.13. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -21,7 +21,9 @@ is. Since 0.9.11 every Attestation of a set is held to what it binds, in the
 reference validator's words (see "What an Attestation binds"). Since 0.9.12
 a manifest that lists an Attestation is refused (MANIFEST-1), and the party
 a preset writes where its source names none is shown as the preset's
-default and can be replaced (see "Importing OSCAL").
+default and can be replaced (see "Importing OSCAL"). Since 0.9.13 the method
+of an Assessment is held to its facet, and the Assess page writes one that
+is (see "The method of an Assessment").
 
 ## Start
 
@@ -667,6 +669,47 @@ manifest describes.
 A pack manifest the set keeps under `packs/sha256/` is named by the SHA-256
 of its bytes; the same button checks each one against its name, and the
 Validate page reports a mismatch as ADVICE-8.
+
+## The method of an Assessment
+
+An Assessment says how it was done in `method`, and a method is a facet
+payload: each of its keys is a facet id, of the standard library, of a
+schema the bundle pins, or `private:`, and each payload is held to that
+facet's schema. Since build 0.9.13 the Validate page checks this, as the
+reference validator does since 2026-11-14 (backlog #55). Until then neither
+read `method` at all; the kernel schema says only that it is an object.
+
+**What the app writes.** One page writes an Assessment: the Assess page,
+for a check a person did. Its method is the standard facet
+`https://ns.jascon.net/stdlib/facet/assessment-criteria@1` with `method:
+"manual"`. The name of the app is not written into the Assessment. A method
+says how something was assessed, and which program recorded the answer is
+no part of that; the manifest of an exported bundle names the tool that
+wrote it. No import writes an Assessment (OSCAL catalogs and profiles, risk
+catalogues, advice packs), and the Checks page writes Checks, not runs of
+them.
+
+**Assessments that exist already.** Until build 0.9.13 the Assess page
+wrote `method: {kind: "manual-check", tool: "JASCON-App …"}`. Neither key
+is a facet, so such an Assessment fails now, in a set a browser stored and
+in a bundle an earlier build exported: two errors, one for each key. The
+app does not rewrite it when a set is loaded, checked or looked at. The
+Validate page reports the errors and says what can be done. The Assess page
+shows them at the Assessment and offers *Write its method as the standard
+facet (manual)*, for this shape only, because only there does the app know
+what was meant. The rewrite changes the object and so its semantic digest:
+an Attestation that names the Assessment no longer binds afterwards. A
+method of any other making that fails is reported and left alone; it is put
+right where the Assessment comes from.
+
+Measured for this build: a set with one Assessment of each kind, exported,
+gets from `validate_core.py` exactly the three failures the Validate page
+shows after the folder is loaded again (two for the app's old method, one
+for a method under a facet nobody registered); the stored Assessment is the
+same text after loading, checking and opening the Assess page; after the
+rewrite was asked for, one failure is left on the page and in the
+reference, the one that is not the app's to change. A check done on the
+Assess page exports to a folder the reference accepts.
 
 ## What an Attestation binds
 

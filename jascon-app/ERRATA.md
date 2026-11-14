@@ -427,3 +427,37 @@ surprise, blunder.
   obligated party of": the bytes of build 0.9.11 with the default left
   alone, the caller's party and the refusals, and the NIST level that
   stays. `tests/pages.test.mjs`, "Import: a preset's party …".
+
+## 2026-11-14 · build 0.9.13 · the Assess page wrote a method that names no facet
+
+- **Symptom.** Every Assessment the Assess page wrote carried `method:
+  {kind: "manual-check", tool: "JASCON-App <build>"}`. A method is a facet
+  payload (handbook 10.1), and neither `kind` nor `tool` is a facet. With
+  the reference of 2026-11-14 an exported set that holds such an Assessment
+  fails twice per Assessment ("method 'kind' is no registered facet",
+  "method 'tool' …"). Measured by the coordinator on this app's own tests:
+  three of them exported a set after a check on the Assess page and turned
+  red against the new reference.
+- **Cause.** The kernel schema says of `method` only that it is an object.
+  The page was written to the schema, the validators read the member in no
+  rule, and so two plain keys looked as good as a facet id. The name of
+  the tool went there because the page had no other place in mind for it.
+- **Class.** A member typed by convention and held by nothing: the schema
+  allows anything, the rule lived in the handbook, and every tool was
+  open. The same class as the Attestation nothing checked (backlog #46).
+- **Why it was not caught.** No vector had an Assessment's method in it
+  until 2026-11-14. The app's tests handed their exports to the reference,
+  which accepted them, and the app's own check is a port of the reference.
+- **Fix.** The page writes the standard facet `assessment-criteria@1`
+  with `method: "manual"`, and the tool is not written into the object.
+  The rule is ported (`jscFacetErrors`) and held to the twelve
+  `method-vectors`. An Assessment written before this build is not
+  rewritten by itself: the Validate page fails it and says what can be
+  done, and the Assess page rewrites the method when asked, for the shape
+  this app wrote and for no other.
+- **Test.** `tests/rules.test.mjs`, "facets: an Assessment's method is held
+  to its facet, all 12 vectors …". `tests/pages.test.mjs`, "an Assessment
+  with the method this app wrote before build 0.9.13: …", and the
+  assertion on the method in "Assess: an empty performer …"; the three
+  tests that were red export their sets to the reference as before.
+
