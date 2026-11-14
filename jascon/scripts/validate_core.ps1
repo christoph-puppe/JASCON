@@ -199,6 +199,16 @@ over eleven copies, two of which list their Attestation: 14 tests, two
 skipped by design, in 54 s. Not exercised on Windows PowerShell 5.1: the
 example folder with an Attestation entered in its manifest (run under
 PowerShell 7.4 on Linux: 27 pass, 1 fail, as validate_core.py).
+CHANGED 2026-11-14 (backlog #55, phase E): an Assessment's `method` is a
+facet payload. Its keys are facet ids, resolved as the keys of `facets` are
+(the standard library, the schemas the bundle pins, `private:`, else an
+error), and each payload is held to its schema (Facet-Errors). Until that
+day `method` was not read here or in validate_core.py. Twelve
+`method-vectors` came with it: facet: 19, 704 in all; seven of them failed
+in validate_core.py before the change. A key of `method` may lack the '@'
+that the schema requires of a key of `facets`; Facet-Base reads both. Run
+under PowerShell 7.4 on Linux; the workflow runs it on Windows PowerShell
+5.1.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors
@@ -1016,23 +1026,55 @@ function Closure-Errors($objs) {
 }
 
 # ---------------- facet enforcement (#17) ----------------
+function Facet-Base([string]$key) {
+    # The facet id without its version: what stands before the last '@'. A
+    # key without one is its own base, as key.rsplit("@", 1)[0] gives it in
+    # validate_core.py. A key of `facets` always has one: the kernel schema
+    # holds those keys to a pattern, and an object that breaks it matches no
+    # type and does not come this far (measured). The keys of an
+    # Assessment's `method` are held to nothing by the schema, so `kind`
+    # arrives here, and Substring(0, LastIndexOf('@')) would throw on it.
+    $at = $key.LastIndexOf('@')
+    if ($at -lt 0) { return $key }
+    return $key.Substring(0, $at)
+}
 function Facet-Errors($pairs, $pinned) {
+    # An Assessment's `method` is a facet payload too (handbook 10.1,
+    # appendix A.7; backlog #55): its keys are facet ids, resolved as the
+    # keys of `facets` are, and each payload is held to its schema. Of the
+    # eleven kernel types only the Assessment has a member `method`.
     $errs = New-Object System.Collections.ArrayList
     foreach ($pair in $pairs) {
         $pth = $pair[0]; $obj = $pair[1]
         $facets = $obj['facets']
-        if ($null -eq $facets) { continue }
-        foreach ($key in $facets.Keys) {
-            $base = $key.Substring(0, $key.LastIndexOf('@'))
-            if ($key.StartsWith('private:') -or $base.StartsWith('private:')) { continue }
-            $sch = $STDLIB[$base]
-            if ($null -eq $sch) { $sch = $pinned[$base] }
-            if ($null -eq $sch) {
-                [void]$errs.Add("${pth}: unregistered facet '$key' - not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)")
-                continue
+        if ($null -ne $facets) {
+            foreach ($key in $facets.Keys) {
+                $base = Facet-Base $key
+                if ($key.StartsWith('private:', $ORD) -or $base.StartsWith('private:', $ORD)) { continue }
+                $sch = $STDLIB[$base]
+                if ($null -eq $sch) { $sch = $pinned[$base] }
+                if ($null -eq $sch) {
+                    [void]$errs.Add("${pth}: unregistered facet '$key' - not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)")
+                    continue
+                }
+                if (-not (Test-Schema $sch $facets[$key])) {
+                    [void]$errs.Add("${pth}: facet '$key' payload violates its schema") }
             }
-            if (-not (Test-Schema $sch $facets[$key])) {
-                [void]$errs.Add("${pth}: facet '$key' payload violates its schema") }
+        }
+        $method = $obj['method']
+        if (Is-Map $method) {
+            foreach ($key in $method.Keys) {
+                $base = Facet-Base $key
+                if ($key.StartsWith('private:', $ORD) -or $base.StartsWith('private:', $ORD)) { continue }
+                $sch = $STDLIB[$base]
+                if ($null -eq $sch) { $sch = $pinned[$base] }
+                if ($null -eq $sch) {
+                    [void]$errs.Add("${pth}: method '$key' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)")
+                    continue
+                }
+                if (-not (Test-Schema $sch $method[$key])) {
+                    [void]$errs.Add("${pth}: method '$key' payload violates its schema") }
+            }
         }
     }
     return ,$errs
@@ -1315,7 +1357,7 @@ function Compose($aObjs, $aPins, $bObjs, $bPins) {
                     $o = $pair[1]
                     if ($null -eq $o['facets']) { continue }
                     foreach ($key in $o['facets'].Keys) {
-                        $base = $key.Substring(0, $key.LastIndexOf('@'))
+                        $base = Facet-Base $key
                         if (-not (Str-Eq $base $fid)) { continue }
                         if (-not (Test-Schema $sch $o['facets'][$key])) {
                             [void]$errors.Add("${fid}: $($side[0]) $($pair[0]): payload fails re-validation under the resolved $($win['version'])") } } } }
@@ -2077,13 +2119,34 @@ function Run-Attestation {
     }
 }
 function Run-Facets {
-    foreach ($case in (Load-Vectors 'facet-vectors.json')['vectors']) {
+    $v = Load-Vectors 'facet-vectors.json'
+    foreach ($case in $v['vectors']) {
         $pinned = (New-Map)
         if ($case.Contains('pinned') -and $null -ne $case['pinned']) {
             foreach ($k in $case['pinned'].Keys) { $pinned[$k] = $case['pinned'][$k] } }
         $errs = Facet-Errors @(,@($case['name'], $case['object'])) $pinned
         $got = 'valid'; if (@($errs).Count -gt 0) { $got = 'invalid' }
         if (Str-Eq $got $case['expected']) { OK 'facet' } else { FAIL 'facet' "$($case['name']): expected $($case['expected']), got $got" }
+    }
+    # an Assessment's `method` is a facet payload (backlog #55): the number
+    # of errors, and a fragment of each
+    if (Is-List $v['method-vectors']) {
+        foreach ($case in $v['method-vectors']) {
+            $pinned = (New-Map)
+            if ($case.Contains('pinned') -and $null -ne $case['pinned']) {
+                foreach ($k in $case['pinned'].Keys) { $pinned[$k] = $case['pinned'][$k] } }
+            $errs = Facet-Errors @(,@($case['name'], $case['object'])) $pinned
+            $n = @($errs).Count
+            $got = 'valid'; if ($n -gt 0) { $got = 'invalid' }
+            $same = ($n -eq [int]$case['expected-errors']) -and (Str-Eq $got $case['expected'])
+            foreach ($frag in @($case['expected-frags'])) {
+                $hit = $false
+                foreach ($e in @($errs)) { if (([string]$e).IndexOf([string]$frag, $ORD) -ge 0) { $hit = $true } }
+                if (-not $hit) { $same = $false }
+            }
+            if ($same) { OK 'facet' }
+            else { FAIL 'facet' "method $($case['name']): expected $($case['expected-errors']) error(s), got [$(@($errs) -join ' | ')]" }
+        }
     }
 }
 function Run-References {

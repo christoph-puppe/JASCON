@@ -62,6 +62,11 @@ Runs, in order:
    that listed its own Attestation passed. One failure per listed
    Attestation, in every bundle and in the example folder, whatever the
    Attestation binds and whatever its lifecycle.
+9. AN ASSESSMENT'S METHOD IS A FACET PAYLOAD (backlog #55): the keys of
+   `method` are facet ids, resolved as the keys of `facets` are (the
+   standard library, the schemas the bundle pins, `private:`, else an
+   error), and each payload is held to its schema. Until 2026-11-14
+   `method` was not read.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
@@ -289,7 +294,16 @@ def closure_errors(objs):
 def facet_errors(objs_or_obj, pinned, path="?"):
     """Validate facet payloads (backlog #17): stdlib facets against the
     normative descriptors, others against the bundle-pinned schemas;
-    private: is ignored by definition; anything else is unregistered."""
+    private: is ignored by definition; anything else is unregistered.
+
+    An Assessment's `method` is a facet payload too (handbook 10.1, appendix
+    A.7; backlog #55): its keys are facet ids and are resolved as the keys
+    of `facets` are, and each payload is held to its schema. Until
+    2026-11-14 `method` was not read at all - the kernel schema says only
+    that it is an object - so a method under a key nobody registered, or a
+    payload its own facet refuses, passed. Of the eleven kernel types only
+    the Assessment has a member `method`; a `method` inside a facet payload
+    is that facet's business."""
     errs = []
     items = objs_or_obj if isinstance(objs_or_obj, list) else [(path, objs_or_obj)]
     for pth, obj in items:
@@ -304,6 +318,19 @@ def facet_errors(objs_or_obj, pinned, path="?"):
             err = next(iter(v.iter_errors(payload)), None)
             if err:
                 errs.append(f"{pth}: facet '{key}' payload violates its schema: {err.message[:110]} @ {'/'.join(map(str, err.absolute_path))}")
+        method = obj.get("method")
+        for key, payload in (method.items() if isinstance(method, dict) else ()):
+            base = key.rsplit("@", 1)[0]
+            if key.startswith("private:") or base.startswith("private:"):
+                continue
+            v = STDLIB.get(base) or pinned.get(base)
+            if v is None:
+                errs.append(f"{pth}: method '{key}' is no registered facet - not stdlib, not pinned in the manifest, not private: "
+                            f"(an Assessment's method is a facet payload and fails closed, D10)")
+                continue
+            err = next(iter(v.iter_errors(payload)), None)
+            if err:
+                errs.append(f"{pth}: method '{key}' payload violates its schema: {err.message[:110]} @ {'/'.join(map(str, err.absolute_path))}")
     return errs
 
 # tier anchor (backlog #19, layered - D13 rev 2): id-prefix derivation gives
@@ -1010,6 +1037,15 @@ def run_facets():
         got = "invalid" if errs else "valid"
         if got == case["expected"]: ok("facet")
         else: fail("facet", f"{case['name']}: expected {case['expected']}, got {got} ({errs[:1]})")
+    # an Assessment's `method` is a facet payload (backlog #55): the number of
+    # errors, and a fragment of each
+    for case in v.get("method-vectors", []):
+        pinned = {k: REGISTRY(s) for k, s in (case.get("pinned") or {}).items()}
+        errs = facet_errors(case["object"], pinned, case["name"])
+        okc = (len(errs) == case["expected-errors"] and ("invalid" if errs else "valid") == case["expected"]
+               and all(any(frag in e for e in errs) for frag in case["expected-frags"]))
+        if okc: ok("facet")
+        else: fail("facet", f"method {case['name']}: expected {case['expected-errors']} {case['expected-frags']}, got {errs}")
 
 def run_references():
     v = json.load(open(os.path.join(CONF, "reference-vectors.json"), encoding="utf-8"))

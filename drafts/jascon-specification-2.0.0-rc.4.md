@@ -724,6 +724,25 @@ validation error (checkable by every Portable tool, no facet knowledge
 required). Converter-established across 1,015 statements' payloads in six
 facets; normative so that a second independent producer cannot legally
 invent a divergent keying and fracture per-clause alignment.
+
+**An Assessment's `method` is a facet payload *(2.0.0 — backlog #55,
+2026-11-14)*.** The kernel schema says of `method` only that it is an
+object; what it holds is the method of the assessment under the contract
+of a facet. Its keys are facet ids and are resolved as the keys of
+`facets` are: a facet of the standard library is held to its normative
+descriptor, any other to the schema the bundle pins, a `private:` key is
+kept and ignored, and anything else is a validation error. Until that
+day no implementation read `method`: a method under a key that no facet
+registers passed, and so did a payload that its own facet refuses, and a
+tool that reads an Assessment's `result` without knowing by what method
+it was reached is the half-understanding this decision exists to stop.
+No payload shipped in the repository had to change (measured: all three
+passed their schemas). Two tools of the repository wrote a method under
+plain keys from their own forms, the app's Assess page and the reader's
+workbench (measured: their exports fail the reference with this rule).
+A bundle that passed can fail: one whose
+Assessment states its method under a key no facet registers, or with a
+payload its facet refuses. Twelve vectors (`method-vectors`).
 **Rejected.** Uniform fail-closed including `private:` (kills the valve);
 uniform trust-the-publisher default (props with extra steps).
 
@@ -2169,6 +2188,10 @@ of Check and of advice packs:
    24 → 32: **692 vectors**. Written before the rule. Ten deliberate
    defects in the reference each turn a vector or the end-to-end test
    red.)*
+   *(2026-11-14, phase E: 12 vectors for an Assessment's `method`
+   (D10 as amended) — `facet` 7 → 19: **704 vectors**. Seven of them
+   failed in the reference before the change. Eight deliberate defects
+   in the reference each turn a vector or the end-to-end test red.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2313,6 +2336,7 @@ history. The compact line:
 | No tool invents a party | 2026-11-14 | Backlog #70, decided by the author: "refuse if no party is named". Where the kernel requires a party (a Mapping's and a Check's author, an Assessment's performer, a Deviation's approver, the obligated party of a statement) and the user named none, the app and the reader wrote one made from a word. They refuse the save now and say which field is missing. No kernel shape and no rule changes | same section |
 | No manifest lists an Attestation | 2026-11-14 | Backlog #75, decided by the author: "refusal in all". D3.1 excluded Attestations from the content manifest "by definition", and a tool refused a listed one in a pack only (ADVICE-1); an ordinary bundle that listed its own passed in both validators. D3 item 11: **MANIFEST-1**, one failure per Attestation among the objects a manifest lists, in every bundle, whatever it binds and whatever its lifecycle. `attestation` 24 → 32 vectors, 692 in all. Applied by `validate_core.py`, by `validate_core.ps1`, by the app (0.9.12) and by the reader (1.14.0). A listed Attestation is still held to what it binds: never a Full Match of the manifest that lists it, and for one that binds a kept pack manifest a Full Match of that. No shape changes; a bundle whose manifest lists an Attestation fails where it passed | "After phase D — a listed Attestation is refused; the party a converter writes is an argument" |
 | Whom a converted statement binds is an argument | 2026-11-14 | Backlog #74, decided by the author (the recommended option). The kernel requires `obligated-parties`; a catalogue seldom names whom it binds, so a converter writes one party of its own. `--obligated-party URI` on the ten converters replaces that default, and each coverage report says who chose the party; the app's import presets do the same. With it, the five shipped conversions are held to pinned sources by the workflow, and the CR26 converter covers its publisher's current publication again (#73). No kernel shape and no rule changes | same section |
+| An Assessment's method is held to its facet | 2026-11-14 | Backlog #55, phase E. The kernel schema says of `method` only that it is an object, and the facet check read `facets` only: no implementation held a method to anything. D10 amended: the keys of `method` are facet ids, resolved as the keys of `facets` are, and each payload is held to its schema. `facet` 7 → 19 vectors, 704 in all. No shape changes and no shipped payload had to change; a bundle whose Assessment states its method under a key no facet registers, or with a payload its facet refuses, fails where it passed | "Phase E" |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2334,7 +2358,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   modality 21 · parameter 19 · tailoring 19 · attestation 5 · facet 7 ·
   reference 13 · lifecycle 38 · tier 9 · dsse 5 · composition 7 ·
   conditional 8 · risk 73 · kernel 25 · scale 18 · check 188 · advice
-  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203; and with the vectors of D3.10 after rc.4, **665**: `kernel` 71, `parameter` 22, `check` 205, `composition` 9; and with the vectors of D7 as amended on 2026-11-14, **684**: `attestation` 24; and with those of D3.11 the same day, **692**: `attestation` 32). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
+  74; with the amendments after rc.3 in IV.6 and the vectors of rc.4, **643 in 18 families**: `author` 40, `kernel` 54, `reference` 18, `tier` 10, `jcs` 22, `parameter` 21, `check` 203; and with the vectors of D3.10 after rc.4, **665**: `kernel` 71, `parameter` 22, `check` 205, `composition` 9; and with the vectors of D7 as amended on 2026-11-14, **684**: `attestation` 24; and with those of D3.11 the same day, **692**: `attestation` 32; and with those of D10 as amended in phase E, **704**: `facet` 19). In `risk-vectors.json`, `expected-rule` is the portable assertion; in `author-vectors.json`, the rule, the object and the count of each report line;
   in `check-vectors.json` and `advice-vectors.json`, the outcome and the
   named rules.
 - **A worked advice pack** under `jascon/example-packs/`, and the example
