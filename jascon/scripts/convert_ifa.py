@@ -41,15 +41,14 @@ import json, os, re, sys, collections, hashlib
 import jsonschema
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence, Ledger, props_by_name, response_treatment
 from oscal_conv_lib import document_author, document_day, is_day, provenance, provenance_override, textify
+from oscal_conv_lib import known_arguments, out_dir
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRCDIR = os.path.join(ROOT, "sources", "nist")
-OUTDIR = os.path.join(ROOT, "converted_examples", "US.IFA-GoodRead")
 ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--author-ref", "--date", "--out"))      # a misspelled argument stops the run; until 2026-11-14 it was ignored
 OVERRIDE = provenance_override(ARGV)        # (author, date) the caller wants on every record, or (None, None)
-if "--out" in ARGV:
-    if ARGV.index("--out") + 1 >= len(ARGV): raise SystemExit("--out needs a directory")
-    OUTDIR = os.path.abspath(ARGV[ARGV.index("--out") + 1])
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "US.IFA-GoodRead"))
 NISTB = os.path.join(ROOT, "converted_examples", "US.SP800-53", "sp800-53-core-bundle")
 NS = "https://ifa.gov/goodread"          # the source's own (fictional) agency domain
 F_SYS = f"{NS}/facet/system@1"
