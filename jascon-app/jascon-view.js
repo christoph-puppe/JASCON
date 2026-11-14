@@ -84,6 +84,10 @@ jscI18n.add("de", {
   "Deviation": "Deviation", "decided on {date}": "entschieden am {date}", "decided on": "entschieden am", "move to": "verschieben nach",
   "(leave as it is)": "(so lassen)", "no date": "kein Termin", "on a date": "an einem Datum", "every": "alle", "Calendar (URI)": "Kalender (URI)",
   "Record the decision": "Entscheidung festhalten", "who decided": "wer entschieden hat",
+  "empty: the kernel requires an author here, so nothing can be saved without one. The setting “Who am I” prefills this field.":
+    "leer: Der Kernel verlangt hier einen Autor; ohne ihn lässt sich nichts speichern. Die Einstellung „Wer bin ich“ belegt dieses Feld vor.",
+  "Name a party: a URI, or a short name, which becomes a party under your namespace.":
+    "Eine Partei nennen: eine URI oder einen Kurznamen, der zu einer Partei unter Ihrem Namensraum wird.",
 });
 
 const esc = jscEsc;
@@ -480,24 +484,63 @@ function draft(tool, initial) {
    is allowed: then no author is written and the save goes ahead, because a
    missing author is a line of the report on the Validate page and never a
    refusal. The date written is today's, in UTC (jscToday).
-   A page with more than one form shows the same author in each. */
+   A page with more than one form shows the same author in each.
+
+   The same field serves the two types whose author the kernel REQUIRES, a
+   Mapping and a Check (authorInput(id, true)). There an empty field writes
+   nothing at all: the page refuses the save and says that the kernel
+   requires the author (backlog #70). The field and what was typed are the
+   same; what an empty field means is the page's to enforce, and the hint
+   beside the field says which of the two it is. See jscPartyRef in
+   jascon-rules.js for why the two differ.
+
+   What is typed is read by jscPartyRef: a URI as it is, a short name as a
+   party under the namespace of the set. The field then shows the URI that
+   will be written. */
+const partyRef = typed => jscPartyRef(typed, jscCfg.get("org:ns"));
 let authorTyped = null;
-const author = () => (authorTyped === null ? jscWhoAmI() : authorTyped);
+const author = () => partyRef(authorTyped === null ? jscWhoAmI() : authorTyped);
 /* what a save writes now: {author-ref, date}, or null when no author is known */
 const provenance = () => jscProvenance(author(), jscToday());
-const authorHint = () => (author() ? T("written as the author, dated {date}", { date: jscToday() })
+const authorHint = required => (author() ? T("written as the author, dated {date}", { date: jscToday() })
+  : required ? T("empty: the kernel requires an author here, so nothing can be saved without one. The setting “Who am I” prefills this field.")
   : T("empty: no author is written, and saving works all the same. The setting “Who am I” prefills this field."));
 const authorLabel = id => `<label for="${id}">${esc(T("Author (party URI)"))}</label>`;
-const authorInput = id => `<input type="url" id="${id}" data-author value="${esc(author())}" placeholder="https://your.example/party/…" style="min-width:260px;max-width:420px">
-  <span class="hint" data-author-hint>${esc(authorHint())}</span>`;
+const authorInput = (id, required) => `<input type="text" id="${id}" data-author${required ? ' aria-required="true"' : ""} value="${esc(author())}" placeholder="https://your.example/party/…" style="min-width:260px;max-width:420px">
+  <span class="hint" data-author-hint="${required ? "required" : "optional"}">${esc(authorHint(required))}</span>`;
 function wireAuthor(root, onChange) {
   root.querySelectorAll("[data-author]").forEach(n => n.addEventListener("change", () => {
     authorTyped = n.value.trim();
-    document.querySelectorAll("[data-author]").forEach(m => { if (m !== n) m.value = authorTyped; });
-    document.querySelectorAll("[data-author-hint]").forEach(h => { h.textContent = authorHint(); });
+    document.querySelectorAll("[data-author]").forEach(m => { m.value = author(); });
+    document.querySelectorAll("[data-author-hint]").forEach(h => { h.textContent = authorHint(h.dataset.authorHint === "required"); });
     if (onChange) onChange();
   }));
 }
+
+/* ---------- a party the kernel requires ----------
+   One field of a page for a party an object is not valid without: the
+   performer of an Assessment, say. `start` gives where the field starts
+   while nothing was typed (the setting "Who am I" for a performer; nothing
+   for an approver, see the Tailor page). What is typed holds while the page
+   is open; an emptied field stays empty and is never filled again behind
+   the user's back. The page asks ref() when it saves and refuses where it
+   is "": no page writes a party nobody named (backlog #70).
+   -> { ref(): the party URI or "", html(id, style), wire(root, id, onChange) } */
+function requiredParty(start) {
+  let typed = null;
+  const ref = () => partyRef(typed === null ? (start ? start() : "") : typed);
+  return { ref,
+    html: (id, style) => `<input type="text" id="${id}" aria-required="true" value="${esc(ref())}" placeholder="https://your.example/party/…" style="${style || "min-width:240px;max-width:420px"}">`,
+    wire(root, id, onChange) {
+      const n = root.querySelector("#" + id);
+      if (n) n.addEventListener("change", () => { typed = n.value.trim(); n.value = ref(); if (onChange) onChange(); });
+    } };
+}
+/* A refusal for a missing party: the page's own sentence, which names the
+   field and what the kernel requires, and one sentence on how to name a
+   party that is the same everywhere. */
+const HOW_TO_NAME = N("Name a party: a URI, or a short name, which becomes a party under your namespace.");
+const missingParty = sentence => `${T(sentence)} ${T(HOW_TO_NAME)}`;
 
 /* ---------- a Deviation and its decision ----------
    Shows one Deviation and, where the kernel's state machine has a next
@@ -574,6 +617,7 @@ window.jscView = {
   last, labelOf, titleOf, typeGlyph, typeBadge, badge, modBadge, refLink, wireRefs, prose, langBlocks, kv, prettyVal, section,
   objectHtml, capabilityHtml, pickerHtml, wirePicker, donut, hbars, dimIndex, dimOptLabel, reqMatches, draft,
   author, provenance, authorLabel, authorInput, wireAuthor, deviationHtml, wireDeviations,
+  partyRef, requiredParty, missingParty,
 };
 
 })();

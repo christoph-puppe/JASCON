@@ -52,7 +52,9 @@ jscI18n.add("de", {
   "Targets outside this set": "Ziele außerhalb dieses Sets",
   "type to choose the source requirement": "tippen, um die Quell-Anforderung zu wählen", "whole requirement": "ganze Anforderung",
   "Scope": "Geltung", "choose from the set, or paste a URI and press Enter": "aus dem Set wählen oder eine URI einfügen und Enter drücken",
-  "Rationale: why does this relationship hold?": "Begründung: Warum gilt diese Beziehung?", "Author (party URI)": "Autor (Party-URI)",
+  "Rationale: why does this relationship hold?": "Begründung: Warum gilt diese Beziehung?",
+  "No author is named. The kernel requires provenance.author-ref on a Mapping, so nothing was saved. The field “Author” is empty.":
+    "Es ist kein Autor genannt. Der Kernel verlangt provenance.author-ref an einem Mapping; deshalb wurde nichts gespeichert. Das Feld „Autor“ ist leer.",
   "Add the mapping": "Mapping hinzufügen", "Choose a source requirement.": "Eine Quell-Anforderung wählen.",
   "Choose a target, or paste a URI and press Enter.": "Ein Ziel wählen oder eine URI einfügen und Enter drücken.",
   "A mapping with the id {id} exists already.": "Ein Mapping mit der Id {id} gibt es schon.",
@@ -67,20 +69,18 @@ const RELATIONSHIPS = ["supports", "equal", "subset-of", "superset-of", "interse
 const REL_HINT = { equal: N("The strongest claim. Use it only when the two say the same."),
   supplements: N("An attachment: the source adds to the target. It does not chain."),
   supports: N("The honest weak claim: the source helps to meet the target.") };
-const draft = V.draft("map", () => ({ source: null, scope: "", target: null, relationship: "supports", confidence: "draft", rationale: "", author: "author" }));
+const draft = V.draft("map", () => ({ source: null, scope: "", target: null, relationship: "supports", confidence: "draft", rationale: "" }));
 const filter = { rel: "", q: "" };
 let G = jscSet.graph;
-/* The author of a mapping, as the URI that is written. The kernel requires
-   `provenance` on a Mapping, so this page cannot save one without an author.
-   What was typed in the field wins: a URI as it is, a short name as a party
-   under the namespace of the set. Otherwise the setting "Who am I". Only
-   where that is not set either, the page falls back to the party it always
-   wrote, <namespace>/party/author; the field shows it before it is saved. */
-function authorRef() {
-  const d = draft.data, typed = (d.authorRef || "").trim();
-  if (typed) return /^[a-z][a-z0-9+.-]*:/i.test(typed) ? typed : jscSet.mintId("party", typed);
-  return jscWhoAmI() || jscSet.mintId("party", d.author || "author");
-}
+/* The author of a mapping. The kernel requires `provenance` on a Mapping:
+   one without an author is not a Mapping. The field is the shared author
+   field (jscView.authorInput), which starts from the setting "Who am I" and
+   takes a URI or a short name. Where it is empty the page refuses to add
+   the mapping and says so; it does not write a party of its own. Until
+   build 0.9.10 it wrote <namespace>/party/author in that case, a party
+   nobody had named (backlog #70; ERRATA.md). A draft stored by an earlier
+   build may still hold that word; it is not read any more. */
+const NO_AUTHOR = N("No author is named. The kernel requires provenance.author-ref on a Mapping, so nothing was saved. The field “Author” is empty.");
 
 function renderTable() {
   const all = [...G.objects.values()].filter(r => r.type === "mapping");
@@ -125,7 +125,7 @@ function renderWrite() {
     <div class="wbrow"><label>${esc(T("Target"))}</label>${V.pickerHtml("m-tgt", T("choose from the set, or paste a URI and press Enter"))}
       ${d.target ? `<span class="wbchip">${esc(tgt ? V.labelOf(tgt) : d.target)}${tgt ? "" : " " + V.badge(T("external"))}<span class="x" id="m-cleartgt" role="button" tabindex="0" aria-label="✕">✕</span></span>` : ""}</div>
     <div class="wbrow"><label for="m-conf">${esc(T("Confidence"))}</label>${sel("m-conf", ["draft", "reviewed", "authoritative"], d.confidence)}
-      <label for="m-author">${esc(T("Author (party URI)"))}</label><input type="url" id="m-author" value="${esc(authorRef())}" style="min-width:260px">
+      ${V.authorLabel("m-author")}${V.authorInput("m-author", true)}
       <input type="text" id="m-rat" placeholder="${esc(T("Rationale: why does this relationship hold?"))}" aria-label="${esc(T("Rationale: why does this relationship hold?"))}" value="${esc(d.rationale)}" style="flex:1;min-width:240px"></div>
     <div class="wbrow"><button type="button" class="primary" id="m-add">${esc(T("Add the mapping"))}</button><span class="verdict-bad" id="m-err" role="alert"></span></div></div>`;
   const again = () => { draft.save(); renderWrite(); };
@@ -140,19 +140,21 @@ function renderWrite() {
     const n = el.querySelector("#" + id);
     if (n) n.addEventListener("change", () => { d[key] = n.value; draft.save(); if (rerender) renderWrite(); });
   }
-  /* an emptied author field goes back to what the page would write on its own */
-  el.querySelector("#m-author").addEventListener("change", e => { const v = e.target.value.trim(); if (v) d.authorRef = v; else delete d.authorRef; draft.save(); renderWrite(); });
+  V.wireAuthor(el);   // an emptied author field stays empty, and then the mapping is refused
   el.querySelector("#m-add").addEventListener("click", async () => {
     const err = el.querySelector("#m-err");
     if (!d.source) { err.textContent = T("Choose a source requirement."); return; }
     if (!d.target) { err.textContent = T("Choose a target, or paste a URI and press Enter."); return; }
     const id = jscSet.mintId("map", V.last(d.source) + "--" + V.last(d.target));
     if (G.objects.has(id)) { err.textContent = T("A mapping with the id {id} exists already.", { id }); return; }
+    /* required by the kernel: refused while nobody is named, and nothing is written (backlog #70) */
+    const author = V.author();
+    if (!author) { err.textContent = V.missingParty(NO_AUTHOR); return; }
     const m = { id, version: "1", lifecycle: "draft", "source-ref": d.source, "target-ref": d.target,
       relationship: d.relationship, direction: "source-to-target", confidence: d.confidence };
     if (d.scope) m["source-scope"] = ["statement:" + d.scope];
     if (d.rationale.trim()) m.rationale = { [jscI18n.contentLang()]: d.rationale.trim() };
-    m.provenance = { "author-ref": authorRef(), date: jscToday() };
+    m.provenance = { "author-ref": author, date: jscToday() };
     await jscSet.saveObjects([m]);
     Object.assign(d, { source: null, scope: "", target: null, rationale: "" });
     draft.save();

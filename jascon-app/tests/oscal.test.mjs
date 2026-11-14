@@ -65,7 +65,7 @@ test("BSI preset: every object has the semantic digest of the shipped DE.BSI bun
 test("generic rules: NIST SP 800-53 becomes valid kernel objects whose references close", { skip: missing(NIST_SRC) }, () => {
   const src = json(NIST_SRC);
   assert.equal(oscal.jscOscalGuessPreset(src), "nist-sp800-53", "the catalog has a preset of its own; the generic rules are run here on purpose");
-  const out = oscal.jscOscalImportCatalog(src, { preset: "generic", ns: "https://example.org/fw/sp800-53", lang: "en", key: "sp800-53" });
+  const out = oscal.jscOscalImportCatalog(src, { preset: "generic", ns: "https://example.org/fw/sp800-53", lang: "en", key: "sp800-53", party: "organization" });
   let controls = 0;
   const walk = n => { for (const c of n.controls || []) { controls++; walk(c); } for (const g of n.groups || []) walk(g); };
   walk(src.catalog);
@@ -85,6 +85,30 @@ test("generic rules: NIST SP 800-53 becomes valid kernel objects whose reference
   }
   assert.equal(out.facetSchemas.length, 1, "one pinned schema for the holding facet");
   assert.ok(out.report["props-held"].label === undefined && Object.keys(out.report["props-held"]).length > 0, "props are held and counted");
+});
+
+/* Backlog #70. The kernel requires on every statement who it binds (`obligated-parties`), and OSCAL has no field
+   for it. Until build 0.9.10 the generic rules wrote <namespace>/party/organization on every clause: a party nobody
+   had named. Now the caller names it, and without one the import does not run. Needs no source file. */
+test("generic rules: the party the statements bind is the caller's; without one the import is refused, and no party is made up", () => {
+  const src = cisSynthetic(), base = { preset: "generic", ns: "https://org.example/fw/x", lang: "en", key: "x" };
+  const parties = out => [...new Set(out.objects.filter(o => o.obj.statements).flatMap(o => o.obj.statements.flatMap(s => s["obligated-parties"])))];
+  /* a URI is written as it is, on every clause */
+  const named = oscal.jscOscalImportCatalog(src, { ...base, party: "https://publisher.example/party/operator" });
+  assert.deepEqual(parties(named), ["https://publisher.example/party/operator"]);
+  assert.equal(named.objects.filter(o => o.obj.statements).length, 5);
+  assert.equal(rules.jscTypedObjects(named.objects.map(o => o.obj)).size, named.objects.length, "every object is one kernel type");
+  /* a short name becomes a party under the namespace of the import, by the rule every page uses */
+  assert.deepEqual(parties(oscal.jscOscalImportCatalog(src, { ...base, party: "System Administrator" })), ["https://org.example/fw/x/party/system-administrator"]);
+  /* nothing named: refused with the reason, whatever "nothing" looks like */
+  for (const nothing of [undefined, null, "", "   ", "!!!"]) {
+    assert.throws(() => oscal.jscOscalImportCatalog(src, { ...base, party: nothing }), /names no party the statements bind.*the kernel requires obligated-parties/, JSON.stringify(nothing));
+  }
+  /* the word the rules used to supply is gone: it appears only when the caller types it */
+  assert.equal(JSON.stringify(named.objects).includes("/party/organization"), false);
+  /* the presets for a publisher's corpus follow their converters and take no party from the caller */
+  const cis = oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark", party: "https://publisher.example/party/operator" });
+  assert.deepEqual(parties(cis), ["https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/system-administrator"]);
 });
 
 test("profile: NIST MODERATE selects the members of the shipped MODERATE baseline", { skip: missing(NIST_MOD) }, () => {
@@ -282,7 +306,7 @@ test("CIS preset: a Mapping keeps the author and day it had; the caller may repl
   assert.throws(() => oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark", authorRef: "" }), /a Mapping needs its author/);
   assert.throws(() => oscal.jscOscalImportCatalog(src, { preset: "cis-benchmark", date: "" }), /last-modified does not begin with a date|a Mapping needs its author/);
   /* the other catalog rules write no record that can carry provenance, and say so */
-  const generic = oscal.jscOscalImportCatalog(src, { preset: "generic", ns: "https://org.example/fw/x", lang: "en", key: "x", authorRef: ME, date: "2026-11-13" });
+  const generic = oscal.jscOscalImportCatalog(src, { preset: "generic", ns: "https://org.example/fw/x", lang: "en", key: "x", party: "https://org.example/party/operator", authorRef: ME, date: "2026-11-13" });
   assert.deepEqual(generic.report.provenance.records, { "from-source": 0, "from-caller": 0, none: 0 });
   assert.ok(generic.objects.every(o => !("provenance" in o.obj)));
   assert.equal(oscal.jscOscalStated(src, { preset: "generic", ns: "https://org.example/fw/x" }).applies, false);

@@ -159,6 +159,13 @@ jscI18n.add("de", {
     "Ein Katalogeintrag ist ein vorgefertigtes Szenario mit den Anforderungen, die es typischerweise behandeln. Der Import kopiert ihn in ein eigenes Risiko: Zustand identified, Lifecycle draft, Ihr Eigner. Ein importiertes Risiko begründet nichts, bis Sie es bewerten und eine Option wählen.",
   "The suggestions of this catalogue name requirements of: {source}. Suggestions the selection does not contain are dropped.": "Die Vorschläge dieses Katalogs nennen Anforderungen aus: {source}. Vorschläge, die die Auswahl nicht enthält, entfallen.",
   "Set a default risk owner in the settings, or enter one here.": "In den Einstellungen einen Standard-Risikoeigner setzen oder hier einen eintragen.",
+  "who accepts the risk? (needed for an acceptance)": "wer akzeptiert das Risiko? (nötig für eine Akzeptanz)",
+  "No owner is named. The kernel requires owner-ref on a Risk, so the risk cannot be saved. The field “Owner” is empty.":
+    "Es ist kein Eigner genannt. Der Kernel verlangt owner-ref an einem Risiko; deshalb lässt sich das Risiko nicht speichern. Das Feld „Eigner“ ist leer.",
+  "No owner is named. The kernel requires owner-ref on a Risk, so nothing was imported. The field “Owner” is empty.":
+    "Es ist kein Eigner genannt. Der Kernel verlangt owner-ref an einem Risiko; deshalb wurde nichts importiert. Das Feld „Eigner“ ist leer.",
+  "No approver is named. The kernel requires approver-ref on the acceptance of a Risk, so the risk cannot be saved. The field “Approver” is empty.":
+    "Es ist niemand genannt, der genehmigt. Der Kernel verlangt approver-ref an der Akzeptanz eines Risikos; deshalb lässt sich das Risiko nicht speichern. Das Feld „Genehmigt von“ ist leer.",
   "Entry": "Eintrag", "Category": "Kategorie", "Suggested": "Vorgeschlagen", "Status": "Status", "{k} of {n} in the selection": "{k} von {n} in der Auswahl",
   "imported": "importiert", "not applicable": "nicht anwendbar", "gap": "Lücke", "Import": "Importieren", "why does it not apply?": "warum trifft es nicht zu?",
   "Record as not applicable": "Als nicht anwendbar festhalten", "undo": "zurücknehmen", "no author recorded": "kein Urheber festgehalten", "Import every gap": "Alle Lücken importieren",
@@ -212,6 +219,34 @@ const ui = V.draft("risk", () => ({ requireBasis: false, heatScale: "", heatWhic
 let G = jscSet.graph, SCALES = new Map(), E = null, editingExisting = false, editScale = null, cellFilter = null, listFilter = { state: "", q: "" }, naWhy = {};
 /* what the user typed over the author and the day a catalogue states, per catalogue: only the fields that were changed */
 const catGiven = {};
+/* The parties the kernel requires of a Risk: its `owner-ref`, and the
+   `approver-ref` of its acceptance once an acceptance is recorded. This page
+   never wrote a party of its own for either, but it said that one is missing
+   in the words of the schema ("/owner-ref: is too short"). It now says it as
+   every page does: which field is empty and that the kernel requires it
+   (backlog #70). The save was and is refused, and nothing is written.
+   Where the fields start: the owner from the setting "Default risk owner",
+   which the user set; an emptied owner field stays empty. The approver of an
+   acceptance starts EMPTY, always: who accepts a risk is not the person
+   typing unless they say so, and nothing here fills that field.
+   What is typed is read as everywhere (jscPartyRef): a URI as it is, a short
+   name as a party under the namespace.
+   The author field of the form is another matter: the optional `provenance`
+   of the Risk, where an empty field writes none and stops nothing. */
+const NO_OWNER = N("No owner is named. The kernel requires owner-ref on a Risk, so the risk cannot be saved. The field “Owner” is empty.");
+const NO_OWNER_TO_IMPORT = N("No owner is named. The kernel requires owner-ref on a Risk, so nothing was imported. The field “Owner” is empty.");
+const NO_ACCEPTANCE_APPROVER = N("No approver is named. The kernel requires approver-ref on the acceptance of a Risk, so the risk cannot be saved. The field “Approver” is empty.");
+function partyErrors(o) {
+  const out = [];
+  if (!o["owner-ref"]) out.push(V.missingParty(NO_OWNER));
+  if (o.acceptance && !o.acceptance["approver-ref"]) out.push(V.missingParty(NO_ACCEPTANCE_APPROVER));
+  return out;
+}
+/* the lines of the rules and of the schema that say the same in their own words; they are not said twice */
+const SAID_AS_PARTY = /'owner-ref' is a required property|^\/owner-ref: is too short|^\/acceptance: 'approver-ref' is a required property|^\/acceptance\/approver-ref: is too short/;
+/* the owner fields of the two views that make risks in numbers: they start from the setting, and what is typed holds */
+const CAT_OWNER = V.requiredParty(() => ui.data.owner || jscCfg.get("org:owner"));
+const AI_OWNER = V.requiredParty(() => AIS().owner || jscCfg.get("org:owner"));
 const risks = () => [...G.objects.values()].filter(r => r.type === "risk");
 const scaleTitle = sd => TT(sd.title) || V.last(sd.id);
 const levelLabel = (sd, code) => { const l = sd && sd.levels.find(x => x.level === code); return l ? (TT(l.label) || l.level) : code; };
@@ -300,7 +335,7 @@ function renderRegister() {
 
 /* ====================== one risk ====================== */
 function newRisk() {
-  E = { id: "", version: "1", lifecycle: "draft", label: "", title: {}, scenario: {}, "owner-ref": jscCfg.get("org:owner"), state: "identified" };
+  E = { id: "", version: "1", lifecycle: "draft", label: "", title: {}, scenario: {}, "owner-ref": V.partyRef(jscCfg.get("org:owner")), state: "identified" };
   editingExisting = false;
   renderEdit(); jscPage.show("edit");
 }
@@ -353,8 +388,9 @@ async function problemsOf(o) {
   if (old && old.obj.state !== o.state && !jscCanMove("risk", old.obj.state, o.state)) push("error", T("state {from} may not move to {to}", { from: old.obj.state, to: o.state }));
   const named = jscRiskRuleViolations(o);
   named.forEach(([rule, what]) => push("error", `${rule}: ${what}. ${JSC_RISK_RULES[rule]}`));
+  partyErrors(o).forEach(m => push("error", m));   // a party the kernel requires and nobody named, in the page's words
   // the schema says the rest; a missing required field that a rule already named is not said twice
-  jscShapeErrors("risk", o).filter(m => !(named.length && /is a required property/.test(m))).forEach(m => push("error", m));
+  jscShapeErrors("risk", o).filter(m => !SAID_AS_PARTY.test(m) && !(named.length && /is a required property/.test(m))).forEach(m => push("error", m));
   const objs = new Map(G.objects); objs.set(o.id, { type: "risk", obj: o });
   const mine = m => m.startsWith(o.id + ":");
   jscClosureErrors(objs).filter(mine).forEach(m => push("error", m));
@@ -406,7 +442,7 @@ async function renderEdit() {
       <label for="r-lang">${esc(T("Language of the text"))}</label><input type="text" id="r-lang" value="${esc(L)}" style="width:60px;min-width:60px"></div>
     <label for="r-title">${esc(T("Title"))}</label><div><input type="text" id="r-title" value="${esc((E.title || {})[L] || "")}"></div>
     <label for="r-scenario">${esc(T("Scenario"))}</label><div><textarea id="r-scenario" placeholder="${esc(T("What could happen, to what, with which consequence."))}">${esc((E.scenario || {})[L] || "")}</textarea></div>
-    <label for="r-owner">${esc(T("Owner (party URI)"))}</label><div><input type="url" id="r-owner" value="${esc(E["owner-ref"] || "")}"></div>
+    <label for="r-owner">${esc(T("Owner (party URI)"))}</label><div><input type="text" id="r-owner" aria-required="true" value="${esc(E["owner-ref"] || "")}" placeholder="https://your.example/party/…"></div>
     <label for="r-threats">${esc(T("Threats (one URI per line)"))}</label><div><textarea id="r-threats" style="min-height:48px">${esc((E["threat-refs"] || []).join("\n"))}</textarea></div>
     <label>${esc(T("Components at risk"))}</label><div>${V.pickerHtml("r-comp", T("type to add a component"))}<div>${(E["component-refs"] || []).map(c => `<span class="wbchip">⬡ ${esc(name(c))}${x("data-delcomp", c)}</span>`).join("")}</div></div>
     ${tailorings.length ? `<label>${esc(T("Belongs to"))}</label><div>${tailorings.map(t => `<label style="margin-right:12px"><input type="checkbox" data-tref="${esc(t.obj.id)}" ${(E["tailoring-refs"] || []).includes(t.obj.id) ? "checked" : ""}> ${esc(V.labelOf(t))}</label>`).join("")}
@@ -422,9 +458,9 @@ async function renderEdit() {
         return `<div class="stmt" style="margin:6px 0">◇ ${V.refLink(t["requirement-ref"], name(t["requirement-ref"]))} ${x("data-deltreat", ti)}
           <div>${req && req.type === "requirement" ? req.obj.statements.map(s => `<label style="margin-right:10px"><input type="checkbox" data-treat="${ti}" data-stmt="${esc(s.id)}" ${(t["statement-ids"] || []).includes(s.id) ? "checked" : ""}> ${esc(s.id)}</label>`).join("") : ""}
           ${(t["statement-ids"] || []).length ? "" : `<span class="hint">${esc(T("whole requirement"))}</span>`}</div></div>`; }).join("")}</div>
-    ${E.treatment === "share" ? `<label for="r-shared">${esc(T("Shared with (party URI)"))}</label><div><input type="url" id="r-shared" value="${esc(E["shared-with-ref"] || "")}"></div>` : ""}
+    ${E.treatment === "share" ? `<label for="r-shared">${esc(T("Shared with (party URI)"))}</label><div><input type="text" id="r-shared" value="${esc(E["shared-with-ref"] || "")}" placeholder="https://your.example/party/…"></div>` : ""}
     <div class="nano wide sectionlabel">${esc(T("Acceptance"))}</div>
-    <label for="r-approver">${esc(T("Approver (party URI)"))}</label><div><input type="url" id="r-approver" value="${esc((E.acceptance || {})["approver-ref"] || "")}"></div>
+    <label for="r-approver">${esc(T("Approver (party URI)"))}</label><div><input type="text" id="r-approver" value="${esc((E.acceptance || {})["approver-ref"] || "")}" placeholder="${esc(T("who accepts the risk? (needed for an acceptance)"))}"></div>
     <label for="r-accdate">${esc(T("Date"))}</label><div><input type="date" id="r-accdate" value="${esc((E.acceptance || {}).date || "")}"></div>
     <label for="r-accwhy">${esc(T("Rationale"))}</label><div><input type="text" id="r-accwhy" value="${esc(jscText((E.acceptance || {}).rationale, L))}"></div>
     <label for="r-due">${esc(T("Review due"))}</label><div class="wbrow" style="margin:0"><select id="r-due">${opt("", T("no date"), due.type || "")}${opt("date", T("on a date"), due.type)}${opt("calendar-period", T("every"), due.type)}</select>
@@ -450,7 +486,7 @@ async function renderEdit() {
   on("#r-lang", "change", n => { E._lang = n.value.trim() || jscI18n.contentLang(); });
   on("#r-title", "change", n => text("title", n.value));
   on("#r-scenario", "change", n => text("scenario", n.value));
-  on("#r-owner", "change", n => { E["owner-ref"] = n.value.trim(); });
+  on("#r-owner", "change", n => { E["owner-ref"] = V.partyRef(n.value); });   // a URI as it is, a short name as a party under the namespace; emptied, it stays empty
   on("#r-threats", "change", n => { E["threat-refs"] = n.value.split(/\s+/).filter(Boolean); });
   V.wirePicker(el, "r-comp", ["component"], id => { E["component-refs"] = [...new Set([...(E["component-refs"] || []), id])]; again(); });
   on("[data-delcomp]", "click", n => { E["component-refs"] = E["component-refs"].filter(c => c !== n.dataset.delcomp); });
@@ -474,9 +510,9 @@ async function renderEdit() {
   V.wirePicker(el, "r-treat", ["requirement"], id => { E.treatments = E.treatments || []; if (!E.treatments.some(t => t["requirement-ref"] === id)) E.treatments.push({ "requirement-ref": id }); again(); });
   on("[data-deltreat]", "click", n => { E.treatments.splice(+n.dataset.deltreat, 1); });
   on("[data-treat]", "change", n => { const t = E.treatments[+n.dataset.treat], s = new Set(t["statement-ids"] || []); n.checked ? s.add(n.dataset.stmt) : s.delete(n.dataset.stmt); t["statement-ids"] = [...s]; });
-  on("#r-shared", "change", n => { E["shared-with-ref"] = n.value.trim(); });
+  on("#r-shared", "change", n => { E["shared-with-ref"] = V.partyRef(n.value); });
   const acc = () => (E.acceptance = E.acceptance || {});
-  on("#r-approver", "change", n => { acc()["approver-ref"] = n.value.trim(); });
+  on("#r-approver", "change", n => { acc()["approver-ref"] = V.partyRef(n.value); });
   on("#r-accdate", "change", n => { acc().date = n.value; });
   on("#r-accwhy", "change", n => { acc().rationale = n.value.trim() ? { ...(acc().rationale || {}), [L]: n.value.trim() } : undefined; });
   on("#r-due", "change", n => { E["review-due"] = n.value === "date" ? { type: "date", value: "" } : n.value ? { type: "calendar-period", num: 12, unit: "months", "calendar-ref": "" } : undefined; });
@@ -674,7 +710,7 @@ function renderCatalogue() {
   const cat = JSC_PRESETS.catalogs.find(c => c.catalog.id === d.catalog) || JSC_PRESETS.catalogs[0];
   const tailorings = [...G.objects.values()].filter(r => r.type === "tailoring" && r.obj.lifecycle !== "withdrawn");
   const tid = tailorings.some(t => t.obj.id === d.catTailoring) ? d.catTailoring : (tailorings[0] ? tailorings[0].obj.id : "");
-  const owner = d.owner || jscCfg.get("org:owner"), na = notApplicable();
+  const na = notApplicable();
   /* who and when, as the catalogue states it; a field the user changed replaces it (also with nothing) */
   const stated = { "author-ref": cat.catalog["publisher-ref"] || "", date: jscIsDate(cat.catalog.released) ? cat.catalog.released : "" };
   const given = (catGiven[cat.catalog.id] = catGiven[cat.catalog.id] || {}), shown = k => (k in given ? given[k] : stated[k]);
@@ -684,7 +720,7 @@ function renderCatalogue() {
   el.innerHTML = `<p class="hint" style="max-width:86ch;margin-bottom:10px">${esc(T("A catalogue entry is a ready-made scenario with the requirements that typically treat it. Importing copies it into a risk of your own: state identified, lifecycle draft, your owner. An imported risk justifies nothing until you assess it and choose an option."))}</p>
     <div class="wbrow"><label for="c-cat">${esc(T("Catalogue"))}</label><select id="c-cat">${JSC_PRESETS.catalogs.map(c => opt(c.catalog.id, `${TT(c.catalog.title)} (${c.catalog.version})`, cat.catalog.id)).join("")}</select>
       ${tailorings.length ? `<label for="c-tail">${esc(T("Tailoring the imported risks belong to"))}</label><select id="c-tail">${tailorings.map(t => opt(t.obj.id, V.labelOf(t), tid)).join("")}</select>` : ""}
-      <label for="c-owner">${esc(T("Owner (party URI)"))}</label><input type="url" id="c-owner" value="${esc(owner)}" style="min-width:280px"></div>
+      <label for="c-owner">${esc(T("Owner (party URI)"))}</label>${CAT_OWNER.html("c-owner", "min-width:280px")}</div>
     <div class="wbrow"><label for="c-author">${esc(T("Author of the imported risks (party URI)"))}</label><input type="url" id="c-author" value="${esc(shown("author-ref"))}" style="min-width:280px">
       <label for="c-date">${esc(T("Day"))}</label><input type="date" id="c-date" value="${esc(shown("date"))}"></div>
     <p class="hint">${esc(stated.date ? T("From the catalogue: its publisher and the day this version was released. Change either field to overwrite it. With one of them empty an imported risk names no author.")
@@ -707,12 +743,13 @@ function renderCatalogue() {
   const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
   on("#c-cat", "change", n => { d.catalog = n.value; ui.save(); renderCatalogue(); });
   on("#c-tail", "change", n => { d.catTailoring = n.value; ui.save(); renderCatalogue(); });
-  on("#c-owner", "change", n => { d.owner = n.value.trim(); ui.save(); });
+  CAT_OWNER.wire(el, "c-owner", () => { d.owner = CAT_OWNER.ref(); ui.save(); });
   for (const [id, k] of [["c-author", "author-ref"], ["c-date", "date"]]) on("#" + id, "change", n => { const v = n.value.trim(); if (v === stated[k]) delete given[k]; else given[k] = v; });
   on("[data-why]", "change", n => { naWhy[n.dataset.why] = n.value; });
   const doImport = async only => {
-    const ownerNow = $("c-owner").value.trim();
-    if (!/^https?:\/\/./.test(ownerNow)) { $("c-err").textContent = T("Set a default risk owner in the settings, or enter one here."); return; }
+    /* required by the kernel: refused while nobody is named, and nothing is imported (backlog #70) */
+    const ownerNow = CAT_OWNER.ref();
+    if (!ownerNow) { $("c-err").textContent = V.missingParty(NO_OWNER_TO_IMPORT); return; }
     const res = jscCatalogImport(cat.catalog, cat.entries, G.objects, { org: jscCfg.get("org:ns"), owner: ownerNow, tailoring: tid || null, notApplicable: na, only,
       authorRef: given["author-ref"], date: given.date });
     if (res.error) { jscLog.err(T("import failed: {msg}", { msg: res.error })); return; }
@@ -727,7 +764,7 @@ function renderCatalogue() {
   on("#c-all", "click", () => doImport(new Set(rows.filter(r => r.status === "gap").map(r => r.entry.id))));
   const saveNa = async next => { await jscSet.saveAux(NA_PATH, Object.keys(next).length ? jscSerialize(jscNaWrite(next)) : ""); await jscPage.refresh(); };
   on("[data-na]", "click", n => {
-    const id = n.dataset.na, why = (naWhy[id] || "").trim(), who = $("c-owner").value.trim();
+    const id = n.dataset.na, why = (naWhy[id] || "").trim(), who = CAT_OWNER.ref();
     if (!why) { $("c-err").textContent = T("A reason is needed to record an entry as not applicable."); return; }
     if (!/^https?:\/\/./.test(who)) { $("c-err").textContent = T("Set a default risk owner in the settings, or enter one here."); return; }
     delete naWhy[id];
@@ -783,7 +820,7 @@ function endRun(est) { RUN.which = null; if (jscAi.usage.calls) jscLog.info(usag
 async function errorsOf(o) {
   const objs = new Map(G.objects); objs.set(o.id, { type: "risk", obj: o });
   const mine = m => m.startsWith(o.id + ":");
-  return [...jscRiskRuleViolations(o).map(([rule, what]) => `${rule}: ${what}`), ...jscShapeErrors("risk", o), ...jscClosureErrors(objs).filter(mine),
+  return [...partyErrors(o), ...jscRiskRuleViolations(o).map(([rule, what]) => `${rule}: ${what}`), ...jscShapeErrors("risk", o).filter(m => !SAID_AS_PARTY.test(m)), ...jscClosureErrors(objs).filter(mine),
     ...jscScaleErrors(SCALES, new Map([[o.id, { type: "risk", obj: o }]])).errors, ...(await jscRiskCoverage(objs)).errors.filter(mine)];
 }
 
@@ -802,7 +839,7 @@ function riskFromDraft(dr, run) {
   let label = jscSlug(dr.title).slice(0, 48), n = 1;
   while (G.objects.has(jscSet.mintId("risk", label))) label = jscSlug(dr.title).slice(0, 44) + "-" + (++n);
   const o = { id: "", version: "1", lifecycle: "draft", label, title: { [run.lang]: dr.title }, scenario: { [run.lang]: dr.scenario },
-    "owner-ref": AIS().owner || jscCfg.get("org:owner"), state: "identified" };
+    "owner-ref": AI_OWNER.ref(), state: "identified" };
   const comps = dr.components.filter(id => G.objects.has(id));
   if (comps.length) o["component-refs"] = comps;
   const sd = SCALES.get(run.scale), cell = sd && dr.likelihood && dr.impact ? jscMatrixCell(sd, dr.likelihood, dr.impact) : undefined;
@@ -845,7 +882,7 @@ function renderA() {
       <label for="ai-count">${esc(T("At most"))}</label><div class="wbrow" style="margin:0"><input type="number" id="ai-count" min="1" max="30" value="${esc(clampInt(d.count, 1, 30, 8))}" style="width:80px;min-width:80px"> <span class="hint">${esc(T("risks"))}</span>
         ${inp.withMatrix.length ? `<label for="ai-scale">${esc(T("rated on"))}</label><select id="ai-scale">${inp.withMatrix.map(x => opt(x.id, scaleTitle(x), inp.sd.id)).join("")}</select>`
           : `<span class="hint">${esc(T("No level scale with a matrix is pinned; the drafts carry no rating."))}</span>`}
-        <label for="ai-owner">${esc(T("Owner (party URI)"))}</label><input type="url" id="ai-owner" value="${esc(d.owner || jscCfg.get("org:owner"))}" style="min-width:260px"></div>
+        <label for="ai-owner">${esc(T("Owner (party URI)"))}</label>${AI_OWNER.html("ai-owner", "min-width:260px")}</div>
       ${V.authorLabel("ai-author")}<div>${V.authorInput("ai-author")}</div></div>
     ${runRow("a", est, why)}${sentBox("a")}
     ${run && run.error ? `<p class="verdict-bad" role="alert">✗ ${esc(run.error)}</p>` : ""}
@@ -866,7 +903,7 @@ function renderA() {
   on("#ai-context", "change", () => renderA());
   on("#ai-count", "change", n => { d.count = clampInt(n.value, 1, 30, 8); ui.save(); renderA(); });
   on("#ai-scale", "change", n => { d.scale = n.value; ui.save(); renderA(); });
-  on("#ai-owner", "change", n => { d.owner = n.value.trim(); ui.save(); });
+  AI_OWNER.wire($("ai-a"), "ai-owner", () => { d.owner = AI_OWNER.ref(); ui.save(); });
   wireRun("a", () => aInput().prompt, runA);
   on("[data-ai-drop]", "click", n => { run.risks.splice(+n.dataset.aiDrop, 1); ui.save(); renderA(); });
   on("[data-ai-form]", "click", n => {

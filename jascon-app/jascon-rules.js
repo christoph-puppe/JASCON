@@ -986,6 +986,41 @@ function jscAuthorReviewLines(authors, review, asOf, requireAuthors) {
      hands without anybody having decided it again. So before the record
      gets its new author, the old one is written onto every such decision
      that is unchanged. */
+/* ---------- a party the user names (backlog #70) ----------
+   The app writes a party in two kinds of field, and they are kept apart on
+   purpose, because the kernel treats them differently:
+
+   - A party the kernel REQUIRES: the `provenance.author-ref` of a Mapping
+     and of a Check, the `performer-ref` of an Assessment, the
+     `approver-ref` of a Deviation, the `obligated-parties` of a statement.
+     The object is not valid without it. Where the user named nobody, the
+     page refuses the save, says which field the kernel requires, and
+     changes nothing (author decision of 2026-11-14: "refuse if no party is
+     named"). Until build 0.9.10 the pages wrote a party made from a word
+     of their own instead (`…/party/author`, `…/party/ciso`): an object
+     that validated and named somebody nobody had named.
+   - A party the kernel leaves OPTIONAL: the `provenance` of a Tailoring, a
+     Risk, an Implementation and a Finding. Where the user named nobody,
+     nothing is written and the save goes ahead; what is missing is a line
+     of the report (AUTHOR-1..4), never a refusal (author decision of
+     2026-11-13). See jscProvenance below.
+
+   Both read what was typed through this one function, so that a typed
+   party means the same in every field: a URI is taken as it is; a short
+   name is the user's word for a party of their own and becomes
+   <namespace>/party/<slug of the name>, the way the app mints every id;
+   nothing typed, or nothing a name could be made of, is no party. The
+   function has no default. A name the user typed is a party the user
+   named; a word the page supplies is not.
+   -> the party URI, or "" */
+function jscPartyRef(typed, ns) {
+  const v = typeof typed === "string" ? typed.trim() : "";
+  if (/^[a-z][a-z0-9+.-]*:\S*$/i.test(v)) return v;                 // a URI: a scheme, and no blank anywhere
+  const slug = v.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+  const base = typeof ns === "string" ? ns.trim().replace(/\/+$/, "") : "";
+  return slug && base ? `${base}/party/${slug}` : "";
+}
+
 const JSC_DATE_PATTERN = jscRegex(jscRulesSchema.JSC_SCHEMA.$defs.date.pattern);   // the kernel's own: YYYY-MM-DD
 const jscIsDate = v => typeof v === "string" && JSC_DATE_PATTERN.test(v);
 /* -> {author-ref, date}, or null when either is not known */
@@ -3104,7 +3139,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
     jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
-    jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
+    jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,

@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.9";
+const JSC_BUILD = "0.9.10";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -73,7 +73,7 @@ const JSC_CFG = [
   { key: "org:owner", def: "", choices: null,
     label: N("Default risk owner"), help: N("A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created.") },
   { key: "org:me", def: "", choices: null,
-    label: N("Who am I"), help: N("Your own party URI, for example https://your.example/party/jane-doe. Prefilled as the author of what you write: a Tailoring, a Risk, an Implementation, a Finding, a Mapping, a Check. Each form shows it and lets you change it. Empty: a page names no author unless you type one, and saves all the same.") },
+    label: N("Who am I"), help: N("Your own party URI, for example https://your.example/party/jane-doe. Prefilled as the author of what you write (a Tailoring, a Risk, an Implementation, a Finding, a Mapping, a Check) and as the performer of a check you run. Each form shows it and lets you change it. Empty: a page names nobody unless you type a party. Where the kernel requires the party (the author of a Mapping or a Check, the performer of an Assessment) nothing is saved without one; elsewhere the page saves all the same and names no author.") },
   /* Model access (jascon-ai.js). The key of a service is not a setting: it
      is typed on the page that calls the model and held in memory only. */
   { key: "ai:backend", def: "gemini", choices: ["gemini", "openrouter", "openai"],

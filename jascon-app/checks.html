@@ -80,13 +80,22 @@ let G = jscSet.graph;
 const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
 const chip = (n, label, cls) => `<span class="chip"><b class="${cls || ""}">${esc(n)}</b>${esc(T(label))}</span>`;
 const orgNs = () => jscCfg.get("org:ns").replace(/\/+$/, "") || "https://example.org/my";
-/* The author a new check starts with: the setting "Who am I". The kernel
-   requires `provenance` on a Check, so a check cannot be saved without an
-   author; only where the setting is empty the page falls back to the party
-   it always wrote, <namespace>/party/check-author. The form shows the
-   author before a check is saved, and a draft a model wrote names the same
-   party: whoever takes the draft answers for it. */
-const defaultAuthor = () => jscWhoAmI() || orgNs() + "/party/check-author";
+/* The author of a check. The kernel requires `provenance` on a Check: one
+   without an author is not a Check, so the page refuses to save it and says
+   that the author is missing. It does not write a party of its own; until
+   build 0.9.10 it wrote <namespace>/party/check-author where nobody was
+   named (backlog #70; ERRATA.md).
+   Who is offered: what was typed into the editor's field; else the page's
+   author (jscView.author: the setting "Who am I", or what was typed into
+   the author field of the drafting view); else, for a check that is in the
+   set, the author it names. A new check with none of these has an empty
+   field. A field the user emptied stays empty.
+   A draft a model wrote names nobody of its own: whoever takes it answers
+   for it, and is written with the day it is taken. */
+const NO_AUTHOR = N("No author is named. The kernel requires provenance.author-ref on a Check, so the check cannot be saved. The field “Author” is empty.");
+const NO_AUTHOR_TO_DRAFT = N("No author is named. The kernel requires provenance.author-ref on a Check, so a draft could not be saved, and nothing is sent. The field “Author” is empty.");
+const namedBy = id => { const r = id ? G.objects.get(id) : null; return ((r && r.obj.provenance) || {})["author-ref"] || ""; };
+const authorOf = E => V.partyRef(E.authorTyped ? E.authorRef : (V.author() || namedBy(E.existing)));
 const reqOf = id => { const r = G.objects.get(id); return r && r.type === "requirement" ? r.obj : null; };
 const lang = () => jscI18n.contentLang();
 
@@ -150,6 +159,10 @@ jscI18n.add("de", {
   "Save the ticked": "Angekreuzte speichern", "tick all that pass": "alle ankreuzen, die bestehen", "Open in the editor": "Im Editor öffnen", "Discard the drafts": "Entwürfe verwerfen",
   "saved {n} check(s)": "{n} Prüfung(en) gespeichert", "Nothing to draft: every offered rule is resolved without a model.": "Nichts zu entwerfen: Jede angebotene Regel ist ohne Modell entschieden.",
   "Prompt": "Prompt", "cancelled": "abgebrochen", "draft checks": "Prüfungen entwerfen",
+  "No author is named. The kernel requires provenance.author-ref on a Check, so the check cannot be saved. The field “Author” is empty.":
+    "Es ist kein Autor genannt. Der Kernel verlangt provenance.author-ref an einer Prüfung; deshalb lässt sich die Prüfung nicht speichern. Das Feld „Autor“ ist leer.",
+  "No author is named. The kernel requires provenance.author-ref on a Check, so a draft could not be saved, and nothing is sent. The field “Author” is empty.":
+    "Es ist kein Autor genannt. Der Kernel verlangt provenance.author-ref an einer Prüfung; ein Entwurf ließe sich nicht speichern, deshalb wird nichts gesendet. Das Feld „Autor“ ist leer.",
 });
 
 /* ====================== rules and checks ====================== */
@@ -191,8 +204,8 @@ function startEdit(checkId, reqId) {
   if (checkId) {
     const c = G.objects.get(checkId).obj, cols = ((c.facets || {})[JSC_CHECKS.COLLECTOR] || {}).collectors || [];
     ui.data.edit = { existing: checkId, reqId: c["requirement-ref"], statementIds: [...(c["statement-ids"] || [])], platform: c.platform,
-      /* a save writes today's date, so the author offered is who edits now; without the setting, the author the check names */
-      confidence: c.confidence, lifecycle: c.lifecycle, authorRef: jscWhoAmI() || (c.provenance || {})["author-ref"] || "",
+      /* a save writes today's date, so the author offered is who edits now; without the setting, the author the check names (authorOf) */
+      confidence: c.confidence, lifecycle: c.lifecycle, authorRef: "", authorTyped: false,
       observes: c.observes.map(f => ({ name: f.name, type: f.type, cardinality: f.cardinality || "one", description: TT(f.description) })),
       criteria: c.criteria.map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) })),
       applies: (c["applies-when"] || []).map(a => ({ fact: a.fact, op: a.op, expected: a.expected === undefined ? "" : JSON.stringify(a.expected) })),
@@ -204,7 +217,7 @@ function startEdit(checkId, reqId) {
   } else {
     const req = reqOf(reqId);
     ui.data.edit = { existing: null, reqId: reqId || "", statementIds: [], platform: req ? jscChecksPlatform(req.id, orgNs()) : "",
-      confidence: "draft", lifecycle: "draft", authorRef: defaultAuthor(),
+      confidence: "draft", lifecycle: "draft", authorRef: "", authorTyped: false,
       observes: [{ name: "", type: "string", cardinality: "one", description: "" }], criteria: [{ fact: "", op: "equals", expected: "" }], applies: [],
       each: { on: false, resource: "", allowEmpty: false }, validity: { on: false, num: 24, unit: "hours" },
       collectors: [blankCollector("bash")], keep: {}, description: "", runtime: "bash", ai: null, tester: { observation: "", params: "", tailoring: "" } };
@@ -241,7 +254,10 @@ function build(E) {
   if (E.each.on) obj.each = { resource: E.each.resource, "allow-empty": !!E.each.allowEmpty };
   if (E.validity.on) obj.validity = { num: parseInt(E.validity.num, 10) || 1, unit: E.validity.unit };
   obj.confidence = E.confidence;
-  obj.provenance = { ...((E.keep && E.keep.provenance) || {}), "author-ref": E.authorRef, date: jscToday() };
+  /* required by the kernel: with no author named the form is no Check, and it is said in words before the schema says it in its own */
+  const author = authorOf(E);
+  if (!author) errors.push(V.missingParty(NO_AUTHOR));
+  obj.provenance = { ...((E.keep && E.keep.provenance) || {}), "author-ref": author, date: jscToday() };
   const cols = E.collectors.filter(c => c.source.trim()).map(c => {
     const x = { id: c.id, runtime: c.runtime, source: c.source.endsWith("\n") ? c.source : c.source + "\n" };
     if (c.privileges) x.privileges = c.privileges;
@@ -306,7 +322,7 @@ function renderEdit() {
       <div class="k">${esc(T("Platform under test"))}</div><div class="v"><input type="url" id="e-platform" value="${esc(E.platform)}"><div class="hint">${esc(T("An opaque URI for the kind of system the collector runs on."))}</div></div>
       <div class="k">${esc(T("Confidence"))}</div><div class="v wbrow" style="margin:0"><select id="e-confidence">${JSC_SCHEMA.$defs.confidence.enum.map(x => opt(x, x, E.confidence)).join("")}</select>
         <label for="e-lifecycle">${esc(T("Lifecycle"))}</label><select id="e-lifecycle">${JSC_SCHEMA.$defs.lifecycle.enum.map(x => opt(x, x, E.lifecycle)).join("")}</select></div>
-      <div class="k">${esc(T("Author (party)"))}</div><div class="v"><input type="url" id="e-author" value="${esc(E.authorRef)}"></div>
+      <div class="k">${esc(T("Author (party)"))}</div><div class="v"><input type="text" id="e-author" aria-required="true" value="${esc(authorOf(E))}" placeholder="https://your.example/party/…"></div>
     </div>
     <div class="nano sectionlabel">${esc(T("Facts the collector reports"))}</div>
     ${E.observes.map((f, i) => `<div class="wbrow" data-row="observes" data-i="${i}"><input type="text" data-k="name" value="${esc(f.name)}" placeholder="${esc(T("name"))}" style="max-width:220px;font-family:var(--mono)">
@@ -352,7 +368,7 @@ function wireEdit(E) {
   field("e-platform", n => { E.platform = n.value.trim(); });
   field("e-confidence", n => { E.confidence = n.value; });
   field("e-lifecycle", n => { E.lifecycle = n.value; });
-  field("e-author", n => { E.authorRef = n.value.trim(); });
+  field("e-author", n => { E.authorRef = n.value.trim(); E.authorTyped = true; });   // typed, also when it is now empty: an emptied field stays empty
   field("e-each", n => { E.each.on = n.checked; });
   field("e-each-res", n => { E.each.resource = n.value.trim(); });
   field("e-each-empty", n => { E.each.allowEmpty = n.checked; });
@@ -432,7 +448,7 @@ async function askOne(req, rule, statementIds, runtime, platform, description, c
   const src = auditText(rule) || description || "";
   const derivedFrom = src ? { ref: req.id, digest: "sha256:" + await jscSha256(src) } : null;
   const built = jscChecksFromAnswer(got.answer, { req, statementIds, platform, runtime, lang: lang(), date: jscToday(),
-    id: jscChecksMintId(orgNs(), req, runtime, taken), authorRef: defaultAuthor(), drafter: `${cfg.backend}/${cfg.model}`, derivedFrom });
+    id: jscChecksMintId(orgNs(), req, runtime, taken), authorRef: V.author(), drafter: `${cfg.backend}/${cfg.model}`, derivedFrom });
   taken.add(built.check ? built.check.id : "");
   return { ...built, cached: got.cached, errors: built.check ? judge(built.check) : [] };
 }
@@ -538,7 +554,8 @@ function renderDraft() {
     $("d-prompt").addEventListener("jsc:prompt", () => { if (!RUN.which) renderDraft(); });
   }
   const B = ui.data.batch, inp = batchInput(), mine = RUN.which === "batch", busy = !!RUN.which;
-  const why = jscAi.missing() || (!inp.send.length ? T("Nothing to draft: every offered rule is resolved without a model.") : "");
+  /* a draft is a Check, and a Check needs its author: asked before anything is sent, so that no call is spent on drafts nobody could save */
+  const why = jscAi.missing() || (!inp.send.length ? T("Nothing to draft: every offered rule is resolved without a model.") : !V.author() ? V.missingParty(NO_AUTHOR_TO_DRAFT) : "");
   const Q = ui.data.queue;
   const rows = Object.entries(B.rows).filter(([id]) => G.objects.has(id));
   const stateBadge = row => row.state === "pending" ? V.badge(T("pending")) : row.state === "notfit" ? `<span class="verdict-warn">${esc(T("does not fit a check"))}</span>`
@@ -548,13 +565,14 @@ function renderDraft() {
     <div class="wbrow"><label for="d-runtime">${esc(T("Collector language"))}</label><select id="d-runtime" ${busy ? "disabled" : ""}>${JSC_CHECKS.RUNTIMES.map(x => opt(x, x, B.runtime)).join("")}</select>
       <span class="seg"><button type="button" data-scope="automated" class="${B.scope !== "all" ? "on-inc" : ""}" aria-pressed="${B.scope !== "all"}">${esc(T("rules marked automated"))}</button><button type="button" data-scope="all" class="${B.scope === "all" ? "on-inc" : ""}" aria-pressed="${B.scope === "all"}">${esc(T("every rule with audit text"))}</button></span></div>
     <div class="wbrow">${chip(inp.send.length, "to draft")}${chip(inp.manual.length, "marked manual")}${chip(inp.noAudit.length, "without audit text")}${chip(inp.done.length, "have a check in this language")}</div>
+    <div class="wbrow">${V.authorLabel("d-author")}${V.authorInput("d-author", true)}</div>
     <div class="wbrow"><button type="button" class="primary" id="d-run" ${busy || why ? "disabled" : ""}>${esc(T("Ask the model"))}</button>
       ${mine ? `<button type="button" class="danger" id="d-cancel">■ ${esc(T("cancel"))}</button><progress max="${RUN.total}" value="${RUN.done}"></progress><span class="hint">${RUN.done}/${RUN.total}</span>` : ""}
       <span class="hint">${esc(T("{calls} call(s), about {tokens} tokens, to {service}", { calls: inp.est.calls, tokens: inp.est.tokens, service: jscAi.label() + (jscAi.model() ? " / " + jscAi.model() : "") }))}</span>
       <label><input type="checkbox" id="d-fresh" ${B.fresh ? "checked" : ""}> ${esc(T("ask again, do not use kept answers"))}</label></div>
     ${why ? `<p class="hint verdict-warn">${esc(why)}</p>` : ""}
     <details id="d-sent"><summary>${esc(T("What is sent"))}</summary><pre class="raw" style="white-space:pre-wrap"></pre></details>
-    ${rows.length ? `<div class="wbrow"><button type="button" class="small primary" id="d-save">${esc(T("Save the ticked"))}</button><button type="button" class="small" id="d-tick">${esc(T("tick all that pass"))}</button><button type="button" class="small" id="d-clear">${esc(T("Discard the drafts"))}</button></div>` : ""}
+    ${rows.length ? `<div class="wbrow"><button type="button" class="small primary" id="d-save">${esc(T("Save the ticked"))}</button><button type="button" class="small" id="d-tick">${esc(T("tick all that pass"))}</button><button type="button" class="small" id="d-clear">${esc(T("Discard the drafts"))}</button><span class="verdict-bad" id="d-err" role="alert"></span></div>` : ""}
     ${rows.map(([id, row]) => {
       const req = reqOf(id), c = row.check, ok = row.state === "ok" && !(row.errors || []).length;
       const lint = c ? jscCollectorLint(row.runtime, c.facets[JSC_CHECKS.COLLECTOR].collectors[0].source) : [];
@@ -593,11 +611,17 @@ function renderDraft() {
       collectors: [{ id: col.id, runtime: col.runtime, privileges: "", source: col.source }], keep: { provenance: c.provenance, annotations: c.annotations } });
     ui.save(); renderEdit(); jscPage.show("edit");
   });
+  V.wireAuthor($("d-body"), () => { if (!RUN.which) { renderDraft(); if (ui.data.edit) renderEdit(); } });
   on("#d-save", "click", async () => {
-    const picked = Object.entries(B.rows).filter(([, r]) => r.pick && r.state === "ok" && r.check);
-    const fine = picked.filter(([, r]) => !judge(r.check).length);   // judged again: the set may have changed since the draft
+    /* Whoever takes a draft answers for it: the author of this page, with the day it is taken. The model stays named in
+       the annotations. A draft kept from an earlier build may still name the party that build made up; it is not written. */
+    const who = V.author();
+    if (!who) { $("d-err").textContent = V.missingParty(NO_AUTHOR); return; }
+    const taken = c => ({ ...c, provenance: { ...c.provenance, "author-ref": who, date: jscToday() } });
+    const picked = Object.entries(B.rows).filter(([, r]) => r.pick && r.state === "ok" && r.check).map(([id, r]) => [id, taken(r.check)]);
+    const fine = picked.filter(([, c]) => !judge(c).length);   // judged again: the set may have changed since the draft
     if (!fine.length) return;
-    await jscSet.saveObjects(fine.map(([, r]) => r.check));
+    await jscSet.saveObjects(fine.map(([, c]) => c));
     for (const [id] of fine) delete B.rows[id];
     jscLog.ok(T("saved {n} check(s)", { n: fine.length }));
     ui.save();

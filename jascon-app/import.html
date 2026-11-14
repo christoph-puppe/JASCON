@@ -148,6 +148,11 @@ jscI18n.add("de", {
   "import failed: {msg}": "Import fehlgeschlagen: {msg}", "and {n} more": "und {n} weitere", "A namespace is an http(s) URI.": "Ein Namensraum ist eine http(s)-URI.",
   "{n} of {total} objects are not valid; nothing was written.": "{n} von {total} Objekten sind nicht gültig; nichts wurde geschrieben.",
   "Author (party URI)": "Autor (Party-URI)", "Day": "Tag", "Who decided, and when": "Wer entschieden hat, und wann",
+  "Who the statements bind (party)": "Wen die Statements binden (Partei)", "needed: a URI, or a short name": "nötig: eine URI oder ein Kurzname",
+  "The kernel requires on every statement who it binds, and OSCAL has no field for it. A short name becomes a party under the namespace above. Without a party the import does not run. The presets for a publisher's catalog take the party from their converter.":
+    "Der Kernel verlangt an jedem Statement, wen es bindet, und OSCAL hat dafür kein Feld. Ein Kurzname wird zu einer Partei unter dem Namensraum oben. Ohne Partei läuft der Import nicht. Die Voreinstellungen für den Katalog eines Herausgebers nehmen die Partei aus ihrem Konverter.",
+  "No party is named that the statements bind. The kernel requires obligated-parties on every statement and OSCAL has no field for it, so the import did not run. Name a party in the field “Who the statements bind”: a URI, or a short name, which becomes a party under the namespace of the import.":
+    "Es ist keine Partei genannt, die die Statements binden. Der Kernel verlangt obligated-parties an jedem Statement, und OSCAL hat dafür kein Feld; deshalb lief der Import nicht. Im Feld „Wen die Statements binden“ eine Partei nennen: eine URI oder einen Kurznamen, der zu einer Partei unter dem Namensraum des Imports wird.",
   "From the source: the cross-references are CIS's own, dated with the day the catalog was last changed. Type over either field to overwrite it. A Mapping cannot be written without both.":
     "Aus der Quelle: Die Querverweise stammen von CIS selbst, datiert mit dem Tag der letzten Änderung des Katalogs. Jedes der beiden Felder lässt sich überschreiben. Ohne beide kann ein Mapping nicht geschrieben werden.",
   "From the source: {party} is the author by the roles and parties of the document's metadata; the day is that of its last change. Type over either field to overwrite it. With one of them empty the Tailoring names no author.":
@@ -164,6 +169,7 @@ const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
 let G = jscSet.graph, doc = null, kind = null, fileName = "", result = null, opts = {};
 const KIND_LABEL = { catalog: N("Catalog"), profile: N("Profile") };
+const NO_OBLIGATED = N("No party is named that the statements bind. The kernel requires obligated-parties on every statement and OSCAL has no field for it, so the import did not run. Name a party in the field “Who the statements bind”: a URI, or a short name, which becomes a party under the namespace of the import.");
 const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
 const chip = (n, label) => `<span class="chip"><b>${esc(n)}</b>${esc(T(label))}</span>`;
 const capped = (list, n = 12) => list.slice(0, n).map(x => V.badge(typeof x === "string" ? x : JSON.stringify(x))).join(" ") + (list.length > n ? ` <span class="hint">${esc(T("and {n} more", { n: list.length - n }))}</span>` : "");
@@ -183,7 +189,7 @@ async function read(file) {
   doc = parsed; kind = k;
   const meta = doc[k].metadata || {}, slug = jscOscalSlug(meta.title || file.name.replace(/\.json$/i, ""));
   opts = k === "catalog"
-    ? { preset: jscOscalGuessPreset(doc), ns: jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + slug, lang: jscI18n.contentLang(), key: slug.slice(0, 24), licence: "", set: slug.slice(0, 40),
+    ? { preset: jscOscalGuessPreset(doc), ns: jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + slug, lang: jscI18n.contentLang(), key: slug.slice(0, 24), party: "", licence: "", set: slug.slice(0, 40),
         checks: false, runtime: "bash" }
     : { ns: jscCfg.get("org:ns").replace(/\/+$/, ""), lang: jscI18n.contentLang(), catalogSet: "" };
   if (opts.preset === "cis-benchmark") opts.ns = jscCisNamespace(doc.catalog);
@@ -263,7 +269,9 @@ function render() {
       ${fixed ? "" : `<label for="o-ns">${esc(T("Namespace for the ids"))}</label><div><input type="url" id="o-ns" value="${esc(opts.ns)}">
           <div class="hint">${esc(cis ? T("The repository's converter mints this namespace for the CIS Ubuntu 24.04 Benchmark and derives it from the title for any other, pending a namespace CIS publishes.") : T("Use the publisher's namespace if it has one. Ids under your own domain make you the claimed authority of this catalog: a Tailoring of yours may then weaken it without a Deviation."))}</div></div>
         ${cis ? "" : `<label for="o-lang">${esc(T("Language of the text"))}</label><div><input type="text" id="o-lang" value="${esc(opts.lang)}" style="max-width:90px"></div>
-        <label for="o-key">${esc(T("Short name (used in file paths)"))}</label><div><input type="text" id="o-key" value="${esc(opts.key)}" style="max-width:260px"></div>`}`}
+        <label for="o-key">${esc(T("Short name (used in file paths)"))}</label><div><input type="text" id="o-key" value="${esc(opts.key)}" style="max-width:260px"></div>
+        <label for="o-party">${esc(T("Who the statements bind (party)"))}</label><div><input type="text" id="o-party" aria-required="true" value="${esc(jscPartyRef(opts.party, opts.ns))}" placeholder="${esc(T("needed: a URI, or a short name"))}">
+          <div class="hint">${esc(T("The kernel requires on every statement who it binds, and OSCAL has no field for it. A short name becomes a party under the namespace above. Without a party the import does not run. The presets for a publisher's catalog take the party from their converter."))}</div></div>`}`}
       ${cis ? `<label for="o-checks">${esc(T("Checks"))}</label><div><label><input type="checkbox" id="o-checks" ${opts.checks ? "checked" : ""}> ${esc(T("Afterwards, draft checks for the {n} automated rules with a model, in the Checks tool", { n: auto }))}</label>
           <select id="o-runtime" aria-label="${esc(T("Language of the collector code"))}">${JSC_CHECKS.RUNTIMES.map(x => opt(x, x, opts.runtime)).join("")}</select>
           <div class="hint">${esc(T("Nothing is sent now. After the write the Checks tool opens with these rules, shows what would be sent, and asks for a key and a click. Without this, every check can still be written by hand or drafted one by one there."))}</div></div>` : ""}
@@ -291,7 +299,7 @@ function render() {
     <div class="kv" style="margin-bottom:12px">${head}</div>
     <div class="form">${form}<div class="wide wbrow"><button type="button" class="primary" id="run">${esc(T("Run the import"))}</button><span class="verdict-bad" id="run-err" role="alert"></span></div></div>
     ${reportHtml()}`;
-  for (const [id, key] of [["o-preset", "preset"], ["o-ns", "ns"], ["o-lang", "lang"], ["o-key", "key"], ["o-licence", "licence"], ["o-set", "set"], ["o-catset", "catalogSet"], ["o-runtime", "runtime"]]) {
+  for (const [id, key] of [["o-preset", "preset"], ["o-ns", "ns"], ["o-lang", "lang"], ["o-key", "key"], ["o-party", "party"], ["o-licence", "licence"], ["o-set", "set"], ["o-catset", "catalogSet"], ["o-runtime", "runtime"]]) {
     const n = $(id);
     if (n) n.addEventListener("change", () => {
       const before = opts.preset;
@@ -314,6 +322,9 @@ function render() {
 function run() {
   const needsNs = kind === "profile" || !FIXED[opts.preset];
   if (needsNs && !/^https?:\/\/./.test(opts.ns)) { $("run-err").textContent = T("A namespace is an http(s) URI."); return; }
+  /* The generic rules write who the statements bind, which the kernel requires and OSCAL does not state: refused while
+     nobody is named (backlog #70). The rules refuse too (jscImportGeneric); the page says it in the user's language first. */
+  if (kind === "catalog" && opts.preset === "generic" && !jscPartyRef(opts.party, opts.ns)) { $("run-err").textContent = T(NO_OBLIGATED); return; }
   try {
     result = kind === "catalog" ? jscOscalImportCatalog(doc, opts)
       : { ...jscOscalImportProfile(doc, { ...opts, catalogSet: opts.catalogSet || null, objs: G.objects }), facetSchemas: [] };
