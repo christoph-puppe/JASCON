@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-8a91675",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Authorise the system"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Authorise the system",
+     "name": "overview",
+     "prose": {
+      "en": "**Authorise the system to operate based on the acceptance of the security risks associated with its operation.**\n\nBefore a system can be granted an authorisation to operate, sufficient information should be provided to the authorising officer for them to make an informed decision as to whether to accept the security risks associated with its operation or not. This information should take the form of an authorisation package that includes the system’s system security plan, cyber security incident response plan, change and configuration management plan, continuous monitoring plan, security assessment report, and plan of action and milestones.\n\nIn some cases, the security risks associated with a system’s operation will be acceptable and it will be granted an ongoing authorisation to operate. However, in other cases the security risks associated with the operation of a system may be unacceptable. In such cases, the authorising officer may request further work be undertaken by the system owner. In the intervening time, the authorising officer may choose to grant an authorisation to operate but with constraints placed on the system’s use, such as limiting the system’s functionality or specifying an expiration date for an authorisation to operate. Finally, if the authorising officer deems the security risks to be unacceptable, regardless of any potential constraints placed on the system’s use, they may deny an authorisation to operate until such time that sufficient remediation actions, if possible, have been completed to an acceptable standard.\n\nFor non-classified, OFFICIAL: Sensitive, PROTECTED and SECRET systems, the authorising officer is an organisation’s CISO (or their delegate). For TOP SECRET systems, including sensitive compartmented information systems, the authorising officer is Director-General ASD (or their delegate).\n\nFor commercial providers providing services to an organisation, the authorising officer is the CISO of the supported organisation (or their delegate).\n\nFor multinational, multi-organisation and multi-stakeholder systems, a single authorising officer may be identified and assigned, via a formal agreement, to consider whether to accept the security risks associated with a system’s operation and, if so, grant a traditional authorisation to operate. Alternatively, it may be more appropriate for multiple authorising officers to consider jointly whether to accept the security risks associated with a system’s operation and, if so, grant a joint authorisation to operate.\n\nIn all cases, the authorising officer should have an appropriate level of seniority and understanding of security risks they are accepting. In cases where an organisation does not have a CISO, the authorising officer could be a chief security officer, a chief information officer or other senior executive within the organisation."
+     }
+    }
+   ]
+  }
+ }
+}

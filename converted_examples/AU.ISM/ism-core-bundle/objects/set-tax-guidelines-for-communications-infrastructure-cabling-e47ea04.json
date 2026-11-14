@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1820",
-   "sequence": 3620
+   "sequence": 3790
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-0926",
-   "sequence": 3630
+   "sequence": 3800
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1718",
-   "sequence": 3640
+   "sequence": 3810
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1719",
-   "sequence": 3650
+   "sequence": 3820
   }
  ],
  "facets": {

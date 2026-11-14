@@ -17,5 +17,21 @@
     "en": "At the conclusion of a security assessment for a system, a security assessment report is produced by the assessor and covers:\n\n- the scope of the security assessment\n- the system’s strengths and weaknesses\n- security risks associated with the operation of the system\n- the effectiveness of the implementation of controls\n- any recommended remediation actions."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "1"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-22"
+    }
+   ]
+  }
+ }
 }

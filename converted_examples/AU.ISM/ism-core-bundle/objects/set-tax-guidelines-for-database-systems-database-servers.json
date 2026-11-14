@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-database-servers-fun-5e937c4",
-   "sequence": 12710
+   "sequence": 12880
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-database-servers-com-b4ff45f",
-   "sequence": 12730
+   "sequence": 12900
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-database-servers-net-2c9e994",
-   "sequence": 12770
+   "sequence": 12940
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-database-systems-database-servers-seg-31dbea7",
-   "sequence": 12790
+   "sequence": 12960
   }
  ],
  "facets": {

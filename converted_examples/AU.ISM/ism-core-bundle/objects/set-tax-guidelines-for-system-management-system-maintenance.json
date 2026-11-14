@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-maintenance-062f3fd",
-   "sequence": 10310
+   "sequence": 10480
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-maintenance-b1baaaa",
-   "sequence": 10500
+   "sequence": 10670
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-maintenance-b2f918e",
-   "sequence": 10590
+   "sequence": 10760
   }
  ],
  "facets": {

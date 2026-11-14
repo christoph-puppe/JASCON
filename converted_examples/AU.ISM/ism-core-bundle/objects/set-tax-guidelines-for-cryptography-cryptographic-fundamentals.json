@@ -8,35 +8,35 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamenta-a9b5b56",
-   "sequence": 14570
+   "sequence": 14740
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamenta-d17d67e",
-   "sequence": 14590
+   "sequence": 14760
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamenta-eed2d6a",
-   "sequence": 14610
+   "sequence": 14780
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamenta-a94ed3b",
-   "sequence": 14660
+   "sequence": 14830
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamenta-c50db7a",
-   "sequence": 14680
+   "sequence": 14850
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamenta-e14101c",
-   "sequence": 14700
+   "sequence": 14870
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamenta-b9b12e8",
-   "sequence": 14720
+   "sequence": 14890
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamenta-470e5f1",
-   "sequence": 14750
+   "sequence": 14920
   }
  ],
  "facets": {

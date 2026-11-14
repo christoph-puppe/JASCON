@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-principles-the-cyber-security-princip-909b842",
-   "sequence": 150
+   "sequence": 320
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-principles-the-cyber-security-princip-3b32eff",
-   "sequence": 220
+   "sequence": 390
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-principles-the-cyber-security-princip-04b586b",
-   "sequence": 400
+   "sequence": 570
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-principles-the-cyber-security-princip-c29ec7c",
-   "sequence": 460
+   "sequence": 630
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-principles-the-cyber-security-princip-85369cb",
-   "sequence": 520
+   "sequence": 690
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-principles-the-cyber-security-princip-489ed06",
-   "sequence": 550
+   "sequence": 720
   }
  ],
  "facets": {

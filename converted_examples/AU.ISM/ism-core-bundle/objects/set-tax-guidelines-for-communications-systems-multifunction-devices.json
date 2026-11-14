@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-multifunction-8179fca",
-   "sequence": 4760
+   "sequence": 4930
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-multifunction-6907647",
-   "sequence": 4780
+   "sequence": 4950
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-multifunction-103c314",
-   "sequence": 4810
+   "sequence": 4980
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-multifunction-ae8125a",
-   "sequence": 4830
+   "sequence": 5000
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-multifunction-6a99cec",
-   "sequence": 4850
+   "sequence": 5020
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-multifunction-d668d59",
-   "sequence": 4870
+   "sequence": 5040
   }
  ],
  "facets": {

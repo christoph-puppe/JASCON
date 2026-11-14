@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-cdadd57",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Cyber security principles"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Cyber security principles",
+     "name": "overview",
+     "prose": {
+      "en": "The purpose of the cyber security principles within the ISM is to provide strategic guidance on how an organisation can protect their IT and OT systems from cyber threats. These cyber security principles are grouped into six functions: govern, identify, protect, detect, respond and recover. An organisation should be able to demonstrate that the cyber security principles are being adhered to within their organisation."
+     }
+    }
+   ]
+  }
+ }
+}

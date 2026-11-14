@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-cross-domain-solutions-imple-19cd9d6",
-   "sequence": 16040
+   "sequence": 16210
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-cross-domain-solutions-consu-8913f03",
-   "sequence": 16060
+   "sequence": 16230
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-cross-domain-solutions-separ-f42a5bc",
-   "sequence": 16100
+   "sequence": 16270
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-cross-domain-solutions-cross-cd3e455",
-   "sequence": 16130
+   "sequence": 16300
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-cross-domain-solutions-user-training",
-   "sequence": 16150
+   "sequence": 16320
   }
  ],
  "facets": {

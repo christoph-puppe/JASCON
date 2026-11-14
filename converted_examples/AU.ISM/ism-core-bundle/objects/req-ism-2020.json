@@ -17,5 +17,21 @@
     "en": "The CISO ensures sufficient cyber security personnel, with the right skills and experience, are acquired to support cyber security activities within their organisation."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "1"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-25"
+    }
+   ]
+  }
+ }
 }

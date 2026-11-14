@@ -8,55 +8,55 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-5e2fb65",
-   "sequence": 7340
+   "sequence": 7510
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-d73c7c5",
-   "sequence": 7370
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-492340c",
-   "sequence": 7410
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-eb480a6",
    "sequence": 7540
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-4aa24f4",
-   "sequence": 7570
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-492340c",
+   "sequence": 7580
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-e9f02b8",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-eb480a6",
+   "sequence": 7710
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-4aa24f4",
    "sequence": 7740
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-e9f02b8",
+   "sequence": 7910
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-978d897",
-   "sequence": 7760
+   "sequence": 7930
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-4e0a453",
-   "sequence": 7810
+   "sequence": 7980
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-eafa0e9",
-   "sequence": 7840
+   "sequence": 8010
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-726701c",
-   "sequence": 7860
+   "sequence": 8030
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-35923f3",
-   "sequence": 7880
+   "sequence": 8050
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-ba6b245",
-   "sequence": 7920
+   "sequence": 8090
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-operating-system-har-f79344e",
-   "sequence": 7960
+   "sequence": 8130
   }
  ],
  "facets": {

@@ -17,5 +17,21 @@
     "en": "When using logins without a password for SSH connections, the following are disabled:\n\n- access from IP addresses that do not require access\n- port forwarding\n- agent credential forwarding\n- X11 forwarding\n- console access."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-25"
+    }
+   ]
+  }
+ }
 }

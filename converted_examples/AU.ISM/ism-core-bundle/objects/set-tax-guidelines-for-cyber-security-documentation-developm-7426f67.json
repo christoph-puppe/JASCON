@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-documentation-developm-37f005b",
-   "sequence": 2100
+   "sequence": 2270
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-documentation-developm-8636b08",
-   "sequence": 2130
+   "sequence": 2300
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-documentation-developm-696b8ca",
-   "sequence": 2150
+   "sequence": 2320
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-documentation-developm-70adaa4",
-   "sequence": 2170
+   "sequence": 2340
   }
  ],
  "facets": {

@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-administrati-66a8868",
-   "sequence": 10110
+   "sequence": 10280
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-administrati-81eb1f2",
-   "sequence": 10180
+   "sequence": 10350
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-administrati-11194c2",
-   "sequence": 10240
+   "sequence": 10410
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-management-system-administrati-12c9895",
-   "sequence": 10270
+   "sequence": 10440
   }
  ],
  "facets": {

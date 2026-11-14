@@ -17,5 +17,21 @@
     "en": "Cyber security documentation is reviewed at least annually and includes a ‘current as at \\[date\\]’ or equivalent statement."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "7"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Dec-25"
+    }
+   ]
+  }
+ }
 }

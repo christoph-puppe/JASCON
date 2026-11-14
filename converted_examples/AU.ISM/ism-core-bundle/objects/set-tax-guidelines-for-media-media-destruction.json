@@ -8,39 +8,39 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-media-destruc-8be4990",
-   "sequence": 6940
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-media-that-ca-2be1550",
-   "sequence": 6960
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-media-destruc-0bb17f6",
-   "sequence": 6990
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-media-destruc-aad11a5",
-   "sequence": 7080
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-treatment-of-ef89832",
    "sequence": 7110
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-media-that-ca-2be1550",
+   "sequence": 7130
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-media-destruc-0bb17f6",
+   "sequence": 7160
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-media-destruc-aad11a5",
+   "sequence": 7250
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-treatment-of-ef89832",
+   "sequence": 7280
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-degaussing-ma-9d6e657",
-   "sequence": 7150
+   "sequence": 7320
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-supervision-o-05a9878",
-   "sequence": 7180
+   "sequence": 7350
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-supervision-o-7267b78",
-   "sequence": 7210
+   "sequence": 7380
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-destruction-outsourcing-m-b8a8aa3",
-   "sequence": 7240
+   "sequence": 7410
   }
  ],
  "facets": {

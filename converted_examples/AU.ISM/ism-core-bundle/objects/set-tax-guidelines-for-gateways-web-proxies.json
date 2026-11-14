@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-web-proxies-using-web-proxies",
-   "sequence": 16310
+   "sequence": 16480
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-web-proxies-web-proxy-event-logging",
-   "sequence": 16330
+   "sequence": 16500
   }
  ],
  "facets": {

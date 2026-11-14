@@ -8,39 +8,39 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-gateways",
-   "sequence": 16020
+   "sequence": 16190
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-cross-domain-solutions",
-   "sequence": 16160
+   "sequence": 16330
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-firewalls",
-   "sequence": 16200
+   "sequence": 16370
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-web-application-firewalls",
-   "sequence": 16230
+   "sequence": 16400
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-diodes",
-   "sequence": 16290
+   "sequence": 16460
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-web-proxies",
-   "sequence": 16340
+   "sequence": 16510
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-web-content-filters",
-   "sequence": 16450
+   "sequence": 16620
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-content-filtering",
-   "sequence": 16720
+   "sequence": 16890
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-peripheral-switches",
-   "sequence": 16770
+   "sequence": 16940
   }
  ]
 }

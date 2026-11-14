@@ -17,5 +17,21 @@
     "en": "A managed service register contains the following for each managed service:\n\n- managed service provider’s name\n- managed service’s name\n- purpose for using the managed service\n- sensitivity or classification of data involved\n- due date for the next security assessment of the managed service\n- contractual arrangements for the managed service\n- point of contact for users of the managed service\n- 24/7 contact details for the managed service provider."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "1"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-22"
+    }
+   ]
+  }
+ }
 }

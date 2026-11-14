@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-0635",
-   "sequence": 16070
+   "sequence": 16240
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1522",
-   "sequence": 16080
+   "sequence": 16250
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1521",
-   "sequence": 16090
+   "sequence": 16260
   }
  ],
  "facets": {

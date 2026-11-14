@@ -17,5 +17,21 @@
     "en": "The board of directors or executive committee understands the business criticality of their organisation’s systems, including at least a basic understanding of what systems exist, their value, where they reside, who has access, who might seek access, how they are protected, and how that protection is verified."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "2"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-26"
+    }
+   ]
+  }
+ }
 }

@@ -17,5 +17,21 @@
     "en": "Cyber security awareness training is undertaken annually by all personnel and covers:\n\n- the purpose of the cyber security awareness training\n- security appointments and contacts\n- authorised use of systems and their resources\n- protection of systems and their resources\n- reporting of cyber security incidents and suspected compromises of systems and their resources."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "7"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-22"
+    }
+   ]
+  }
+ }
 }

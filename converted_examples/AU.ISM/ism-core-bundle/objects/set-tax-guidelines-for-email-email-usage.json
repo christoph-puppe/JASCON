@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-usage-email-usage-policy",
-   "sequence": 12960
+   "sequence": 13130
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-usage-webmail-services",
-   "sequence": 12980
+   "sequence": 13150
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-usage-protective-markings-b3e72ba",
-   "sequence": 13000
+   "sequence": 13170
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-usage-protective-marking-tools",
-   "sequence": 13040
+   "sequence": 13210
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-usage-handling-emails-wit-460cd78",
-   "sequence": 13070
+   "sequence": 13240
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-usage-email-distribution-lists",
-   "sequence": 13090
+   "sequence": 13260
   }
  ],
  "facets": {

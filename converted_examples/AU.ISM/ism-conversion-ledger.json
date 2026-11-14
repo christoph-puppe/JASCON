@@ -2,163 +2,83 @@
  "measures": "one row per source path and outcome; every source leaf value was traced and checked against the written files in the run that wrote this record, and is counted in one row",
  "leaf-values": 36161,
  "totals": {
-  "copied": 3947,
-  "transformed": 14662,
-  "intentionally-dropped": 13130,
-  "unaccounted": 4422
+  "copied": 11400,
+  "transformed": 14564,
+  "not-content": 10196,
+  "intentionally-dropped": 1,
+  "unaccounted": 0
  },
  "verification-failures": [],
- "unaccounted-paths": [
-  {
-   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].name",
-   "count": 2202,
-   "pointers": [
-    "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/1/name",
-    "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/2/name",
-    "ism#/catalog/groups/2/groups/0/groups/0/controls/1/props/1/name"
-   ]
-  },
-  {
-   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].value",
-   "count": 2202,
-   "pointers": [
-    "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/1/value",
-    "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/2/value",
-    "ism#/catalog/groups/2/groups/0/groups/0/controls/1/props/1/value"
-   ]
-  },
-  {
-   "path": "ism.catalog.groups[].groups[].title",
-   "count": 2,
-   "pointers": [
-    "ism#/catalog/groups/0/groups/0/title",
-    "ism#/catalog/groups/0/groups/1/title"
-   ]
-  },
-  {
-   "path": "ism.catalog.groups[].title",
-   "count": 2,
-   "pointers": [
-    "ism#/catalog/groups/0/title",
-    "ism#/catalog/groups/24/title"
-   ]
-  },
-  {
-   "path": "ism.catalog.metadata.last-modified",
-   "count": 1,
-   "pointers": [
-    "ism#/catalog/metadata/last-modified"
-   ]
-  },
-  {
-   "path": "ism.catalog.metadata.links[].href",
-   "count": 5,
-   "pointers": [
-    "ism#/catalog/metadata/links/0/href",
-    "ism#/catalog/metadata/links/1/href",
-    "ism#/catalog/metadata/links/2/href"
-   ]
-  },
-  {
-   "path": "ism.catalog.metadata.links[].rel",
-   "count": 5,
-   "pointers": [
-    "ism#/catalog/metadata/links/0/rel",
-    "ism#/catalog/metadata/links/1/rel",
-    "ism#/catalog/metadata/links/2/rel"
-   ]
-  },
-  {
-   "path": "ism.catalog.metadata.published",
-   "count": 1,
-   "pointers": [
-    "ism#/catalog/metadata/published"
-   ]
-  },
-  {
-   "path": "ism.catalog.metadata.responsible-parties[].party-uuids[]",
-   "count": 1,
-   "pointers": [
-    "ism#/catalog/metadata/responsible-parties/0/party-uuids/0"
-   ]
-  },
-  {
-   "path": "ism.catalog.metadata.responsible-parties[].role-id",
-   "count": 1,
-   "pointers": [
-    "ism#/catalog/metadata/responsible-parties/0/role-id"
-   ]
-  }
- ],
+ "unaccounted-paths": [],
  "paths": [
   {
    "path": "ism.catalog.back-matter.resources[].props[].name",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 2,
    "example": "ism#/catalog/back-matter/resources/236/props/0/name",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map, declared drop: source-document references (guideline PDFs/links) - not requirement data",
+     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/props/[]/name",
      "count": 2
     }
    ]
   },
   {
    "path": "ism.catalog.back-matter.resources[].props[].value",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 2,
    "example": "ism#/catalog/back-matter/resources/236/props/0/value",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map, declared drop: source-document references (guideline PDFs/links) - not requirement data",
+     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/props/[]/value",
      "count": 2
     }
    ]
   },
   {
    "path": "ism.catalog.back-matter.resources[].rlinks[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 254,
    "example": "ism#/catalog/back-matter/resources/0/rlinks/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map, declared drop: source-document references (guideline PDFs/links) - not requirement data",
+     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/rlinks/[]/href",
      "count": 254
     }
    ]
   },
   {
    "path": "ism.catalog.back-matter.resources[].rlinks[].media-type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 13,
    "example": "ism#/catalog/back-matter/resources/25/rlinks/0/media-type",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map, declared drop: source-document references (guideline PDFs/links) - not requirement data",
+     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/rlinks/[]/media-type",
      "count": 13
     }
    ]
   },
   {
    "path": "ism.catalog.back-matter.resources[].title",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 246,
    "example": "ism#/catalog/back-matter/resources/0/title",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map, declared drop: source-document references (guideline PDFs/links) - not requirement data",
+     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/title",
      "count": 246
     }
    ]
   },
   {
    "path": "ism.catalog.back-matter.resources[].uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 246,
    "example": "ism#/catalog/back-matter/resources/0/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "path map, declared drop: source-document references (guideline PDFs/links) - not requirement data",
+     "pointer": "/facets/https:~1~1ns.cyber.gov.au~1ism~1facet~1references@1/resources/[]/uuid",
      "count": 246
     }
    ]
@@ -278,12 +198,13 @@
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].parts[].name",
-   "outcome": "intentionally-dropped",
+   "outcome": "not-content",
    "count": 1150,
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/parts/0/name",
-   "reasons": [
+   "rules": [
     {
-     "reason": "as decided for IFA on 2026-11-13: a type tag of a structural element: the bundle says by its shape what kind of thing the element is (the part named `statement` is the entry of `statements`)",
+     "kind": "selector",
+     "rule": "the name `statement` of a control's part selects the member `statements` for its prose",
      "count": 1150
     }
    ]
@@ -307,21 +228,34 @@
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].name",
-   "outcome": "intentionally-dropped",
-   "count": 1150,
-   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/0/name",
-   "reasons": [
+   "outcome": "copied",
+   "count": 2202,
+   "example": "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/1/name",
+   "to": [
     {
-     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
-     "count": 1150
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/props/[]/name",
+     "count": 2202
+    }
+   ]
+  },
+  {
+   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].name",
+   "outcome": "not-content",
+   "count": 1199,
+   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/0/name",
+   "rules": [
+    {
+     "kind": "selector",
+     "rule": "the name of a prop selects the member its value is written to, or the rule that reads it",
+     "count": 1199
     }
    ]
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].name",
    "outcome": "transformed",
-   "count": 5606,
-   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/1/name",
+   "count": 5557,
+   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/2/name",
    "to": [
     {
      "pointer": "/id",
@@ -333,11 +267,6 @@
      "count": 5549,
      "rule": "baseline Set id from the prop name (its kind) and the marker",
      "via": "every control that carries the marker names the same Set; the Set is written once"
-    },
-    {
-     "pointer": "/label",
-     "count": 49,
-     "rule": "label: the value of the prop that is named `label`, unchanged"
     },
     {
      "pointer": "/members/[]/ref",
@@ -378,33 +307,57 @@
      "via": "every control that carries the marker names the same Set; the Set is written once"
     }
    ]
-  },
-  {
-   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].name",
-   "outcome": "unaccounted",
-   "count": 2202,
-   "example": "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/1/name"
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].ns",
-   "outcome": "intentionally-dropped",
-   "count": 7759,
-   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/2/ns",
-   "reasons": [
+   "outcome": "copied",
+   "count": 2202,
+   "example": "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/1/ns",
+   "to": [
     {
-     "reason": "path map, absorbed: the namespace of a prop; kernel fields need none",
-     "count": 7759
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/props/[]/ns",
+     "count": 2202
+    }
+   ]
+  },
+  {
+   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].ns",
+   "outcome": "not-content",
+   "count": 5557,
+   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/2/ns",
+   "rules": [
+    {
+     "kind": "namespace",
+     "rule": "the namespace of a prop: the one this mapping reads the prop's name in",
+     "count": 5557
     }
    ]
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].value",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
+   "count": 2251,
+   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/1/value",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/props/[]/value",
+     "count": 2202
+    },
+    {
+     "pointer": "/label",
+     "count": 49
+    }
+   ]
+  },
+  {
+   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].value",
+   "outcome": "not-content",
    "count": 1150,
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/0/value",
-   "reasons": [
+   "rules": [
     {
-     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
+     "kind": "rebuilt-id",
+     "rule": "a sort-id is its parent's sort-id, the kind of the element and its position among its siblings, written with as many digits as their number has",
      "count": 1150
     }
    ]
@@ -412,8 +365,8 @@
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].value",
    "outcome": "transformed",
-   "count": 5606,
-   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/1/value",
+   "count": 5557,
+   "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/2/value",
    "to": [
     {
      "pointer": "/id",
@@ -425,11 +378,6 @@
      "count": 5549,
      "rule": "baseline Set id from the prop name (its kind) and the marker",
      "via": "every control that carries the marker names the same Set; the Set is written once"
-    },
-    {
-     "pointer": "/label",
-     "count": 49,
-     "rule": "label: the value of the prop that is named `label`, unchanged"
     },
     {
      "pointer": "/members/[]/ref",
@@ -470,12 +418,6 @@
      "via": "every control that carries the marker names the same Set; the Set is written once"
     }
    ]
-  },
-  {
-   "path": "ism.catalog.groups[].groups[].groups[].controls[].props[].value",
-   "outcome": "unaccounted",
-   "count": 2202,
-   "example": "ism#/catalog/groups/2/groups/0/groups/0/controls/0/props/1/value"
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].controls[].title",
@@ -515,24 +457,26 @@
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].props[].name",
-   "outcome": "intentionally-dropped",
+   "outcome": "not-content",
    "count": 470,
    "example": "ism#/catalog/groups/0/groups/0/groups/0/props/0/name",
-   "reasons": [
+   "rules": [
     {
-     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
+     "kind": "selector",
+     "rule": "the name of a prop selects the member its value is written to, or the rule that reads it",
      "count": 470
     }
    ]
   },
   {
    "path": "ism.catalog.groups[].groups[].groups[].props[].value",
-   "outcome": "intentionally-dropped",
+   "outcome": "not-content",
    "count": 470,
    "example": "ism#/catalog/groups/0/groups/0/groups/0/props/0/value",
-   "reasons": [
+   "rules": [
     {
-     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
+     "kind": "rebuilt-id",
+     "rule": "a sort-id is its parent's sort-id, the kind of the element and its position among its siblings, written with as many digits as their number has",
      "count": 470
     }
    ]
@@ -549,27 +493,27 @@
     },
     {
      "pointer": "/id",
-     "count": 456,
+     "count": 470,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 456,
+     "count": 470,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 456,
+     "count": 470,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/objects/[]/path",
-     "count": 456,
+     "count": 470,
      "rule": "file name of the taxonomy Set from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/title/en",
-     "count": 456
+     "count": 470
     }
    ]
   },
@@ -599,24 +543,26 @@
   },
   {
    "path": "ism.catalog.groups[].groups[].props[].name",
-   "outcome": "intentionally-dropped",
+   "outcome": "not-content",
    "count": 75,
    "example": "ism#/catalog/groups/0/groups/0/props/0/name",
-   "reasons": [
+   "rules": [
     {
-     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
+     "kind": "selector",
+     "rule": "the name of a prop selects the member its value is written to, or the rule that reads it",
      "count": 75
     }
    ]
   },
   {
    "path": "ism.catalog.groups[].groups[].props[].value",
-   "outcome": "intentionally-dropped",
+   "outcome": "not-content",
    "count": 75,
    "example": "ism#/catalog/groups/0/groups/0/props/0/value",
-   "reasons": [
+   "rules": [
     {
-     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
+     "kind": "rebuilt-id",
+     "rule": "a sort-id is its parent's sort-id, the kind of the element and its position among its siblings, written with as many digits as their number has",
      "count": 75
     }
    ]
@@ -624,8 +570,8 @@
   {
    "path": "ism.catalog.groups[].groups[].title",
    "outcome": "copied",
-   "count": 73,
-   "example": "ism#/catalog/groups/1/groups/0/title",
+   "count": 75,
+   "example": "ism#/catalog/groups/0/groups/0/title",
    "to": [
     {
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/group-parts/[]/group",
@@ -633,56 +579,52 @@
     },
     {
      "pointer": "/id",
-     "count": 527,
+     "count": 545,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 527,
+     "count": 545,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 527,
+     "count": 545,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/objects/[]/path",
-     "count": 527,
+     "count": 545,
      "rule": "file name of the taxonomy Set from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/title/en",
-     "count": 71
+     "count": 75
     }
    ]
   },
   {
-   "path": "ism.catalog.groups[].groups[].title",
-   "outcome": "unaccounted",
-   "count": 2,
-   "example": "ism#/catalog/groups/0/groups/0/title"
-  },
-  {
    "path": "ism.catalog.groups[].props[].name",
-   "outcome": "intentionally-dropped",
+   "outcome": "not-content",
    "count": 25,
    "example": "ism#/catalog/groups/0/props/0/name",
-   "reasons": [
+   "rules": [
     {
-     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
+     "kind": "selector",
+     "rule": "the name of a prop selects the member its value is written to, or the rule that reads it",
      "count": 25
     }
    ]
   },
   {
    "path": "ism.catalog.groups[].props[].value",
-   "outcome": "intentionally-dropped",
+   "outcome": "not-content",
    "count": 25,
    "example": "ism#/catalog/groups/0/props/0/value",
-   "reasons": [
+   "rules": [
     {
-     "reason": "path map, absorbed by document order -> members[].sequence: this sort-id is its parent's sort-id and the element's position among its siblings (checked for this value)",
+     "kind": "rebuilt-id",
+     "rule": "a sort-id is its parent's sort-id, the kind of the element and its position among its siblings, written with as many digits as their number has",
      "count": 25
     }
    ]
@@ -690,58 +632,75 @@
   {
    "path": "ism.catalog.groups[].title",
    "outcome": "copied",
-   "count": 23,
-   "example": "ism#/catalog/groups/1/title",
+   "count": 25,
+   "example": "ism#/catalog/groups/0/title",
    "to": [
     {
      "pointer": "/id",
-     "count": 550,
+     "count": 570,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/members/[]/ref",
-     "count": 550,
+     "count": 570,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/objects/[]/id",
-     "count": 550,
+     "count": 570,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/objects/[]/path",
-     "count": 550,
+     "count": 570,
      "rule": "file name of the taxonomy Set from the titles of the group and of the groups above it"
     },
     {
      "pointer": "/title/en",
-     "count": 23
+     "count": 25
     }
    ]
   },
   {
-   "path": "ism.catalog.groups[].title",
-   "outcome": "unaccounted",
-   "count": 2,
-   "example": "ism#/catalog/groups/0/title"
-  },
-  {
    "path": "ism.catalog.metadata.last-modified",
-   "outcome": "unaccounted",
+   "outcome": "copied",
    "count": 1,
-   "example": "ism#/catalog/metadata/last-modified"
+   "example": "ism#/catalog/metadata/last-modified",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/last-modified",
+     "count": 1
+    },
+    {
+     "pointer": "/provenance/date",
+     "count": 1,
+     "rule": "date of the source: the day of the document's last-modified"
+    }
+   ]
   },
   {
    "path": "ism.catalog.metadata.links[].href",
-   "outcome": "unaccounted",
+   "outcome": "copied",
    "count": 5,
-   "example": "ism#/catalog/metadata/links/0/href"
+   "example": "ism#/catalog/metadata/links/0/href",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/href",
+     "count": 5
+    }
+   ]
   },
   {
    "path": "ism.catalog.metadata.links[].rel",
-   "outcome": "unaccounted",
+   "outcome": "copied",
    "count": 5,
-   "example": "ism#/catalog/metadata/links/0/rel"
+   "example": "ism#/catalog/metadata/links/0/rel",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/rel",
+     "count": 5
+    }
+   ]
   },
   {
    "path": "ism.catalog.metadata.oscal-version",
@@ -750,6 +709,10 @@
    "example": "ism#/catalog/metadata/oscal-version",
    "to": [
     {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/oscal-version",
+     "count": 1
+    },
+    {
      "pointer": "/provenance/source-oscal-version",
      "count": 1
     }
@@ -757,198 +720,221 @@
   },
   {
    "path": "ism.catalog.metadata.parties[].addresses[].addr-lines[]",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 3,
    "example": "ism#/catalog/metadata/parties/0/addresses/0/addr-lines/0",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/addr-lines/[]",
      "count": 3
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].addresses[].city",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/addresses/0/city",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/city",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].addresses[].country",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/addresses/0/country",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/country",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].addresses[].postal-code",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/addresses/0/postal-code",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/postal-code",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].addresses[].state",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/addresses/0/state",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/state",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].addresses[].type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/addresses/0/type",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/type",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].email-addresses[]",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/email-addresses/0",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/email-addresses/[]",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].links[].href",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/links/0/href",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/links/[]/href",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].links[].rel",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/links/0/rel",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/links/[]/rel",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].name",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/name",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/name",
      "count": 1
+    },
+    {
+     "pointer": "/provenance/author-ref",
+     "count": 1,
+     "rule": "author of the source: the party its document names as its author (the role `creator`, else `prepared-by`, else the one party it names); a landmark URI from the party's name"
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].short-name",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/short-name",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/short-name",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].type",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/type",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/type",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.parties[].uuid",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/parties/0/uuid",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/uuid",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.published",
-   "outcome": "unaccounted",
+   "outcome": "copied",
    "count": 1,
-   "example": "ism#/catalog/metadata/published"
+   "example": "ism#/catalog/metadata/published",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/published",
+     "count": 1
+    }
+   ]
   },
   {
    "path": "ism.catalog.metadata.responsible-parties[].party-uuids[]",
-   "outcome": "unaccounted",
+   "outcome": "copied",
    "count": 1,
-   "example": "ism#/catalog/metadata/responsible-parties/0/party-uuids/0"
+   "example": "ism#/catalog/metadata/responsible-parties/0/party-uuids/0",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/responsible-parties/[]/party-uuids/[]",
+     "count": 1
+    }
+   ]
   },
   {
    "path": "ism.catalog.metadata.responsible-parties[].role-id",
-   "outcome": "unaccounted",
+   "outcome": "copied",
    "count": 1,
-   "example": "ism#/catalog/metadata/responsible-parties/0/role-id"
+   "example": "ism#/catalog/metadata/responsible-parties/0/role-id",
+   "to": [
+    {
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/responsible-parties/[]/role-id",
+     "count": 1
+    }
+   ]
   },
   {
    "path": "ism.catalog.metadata.roles[].id",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/roles/0/id",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/roles/[]/id",
      "count": 1
     }
    ]
   },
   {
    "path": "ism.catalog.metadata.roles[].title",
-   "outcome": "intentionally-dropped",
+   "outcome": "copied",
    "count": 1,
    "example": "ism#/catalog/metadata/roles/0/title",
-   "reasons": [
+   "to": [
     {
-     "reason": "as decided for IFA on 2026-11-13: the source's directory of parties and roles: a party is a landmark URI and there is no party object (register, backlog #16)",
+     "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/roles/[]/title",
      "count": 1
     }
    ]
@@ -973,7 +959,7 @@
    "to": [
     {
      "pointer": "/objects/[]/version",
-     "count": 1711
+     "count": 1731
     },
     {
      "pointer": "/provenance/source-version",
@@ -981,7 +967,7 @@
     },
     {
      "pointer": "/version",
-     "count": 1711
+     "count": 1731
     }
    ]
   },

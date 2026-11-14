@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-a6e744a",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Cyber security guidelines"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Cyber security guidelines",
+     "name": "overview",
+     "prose": {
+      "en": "The purpose of the cyber security guidelines within the ISM is to support the cyber security principles by providing practical guidance on how an organisation can protect their IT and OT systems from cyber threats. An organisation should consider the cyber security guidelines that are relevant to each of the systems they operate."
+     }
+    }
+   ]
+  }
+ }
+}

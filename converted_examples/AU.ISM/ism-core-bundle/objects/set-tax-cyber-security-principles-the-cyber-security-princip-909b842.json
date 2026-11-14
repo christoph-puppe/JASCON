@@ -8,59 +8,59 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-01",
-   "sequence": 10
+   "sequence": 180
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-08",
-   "sequence": 20
+   "sequence": 190
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-02",
-   "sequence": 30
+   "sequence": 200
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-04",
-   "sequence": 40
+   "sequence": 210
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-09",
-   "sequence": 50
+   "sequence": 220
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-03",
-   "sequence": 60
+   "sequence": 230
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-05",
-   "sequence": 70
+   "sequence": 240
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-06",
-   "sequence": 80
+   "sequence": 250
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-10",
-   "sequence": 90
+   "sequence": 260
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-11",
-   "sequence": 100
+   "sequence": 270
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-12",
-   "sequence": 110
+   "sequence": 280
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-13",
-   "sequence": 120
+   "sequence": 290
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-14",
-   "sequence": 130
+   "sequence": 300
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-gov-07",
-   "sequence": 140
+   "sequence": 310
   }
  ],
  "facets": {

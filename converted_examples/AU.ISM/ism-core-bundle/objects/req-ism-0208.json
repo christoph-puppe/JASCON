@@ -17,5 +17,21 @@
     "en": "A cable register contains the following for each cable:\n\n- cable identifier\n- cable colour\n- sensitivity/classification\n- source\n- destination\n- location\n- seal numbers (if applicable)."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "6"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Jun-21"
+    }
+   ]
+  }
+ }
 }

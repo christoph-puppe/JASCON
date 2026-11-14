@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-a81e865",
-   "sequence": 5950
+   "sequence": 6120
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-e71bdec",
-   "sequence": 6060
+   "sequence": 6230
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-4c0a22a",
-   "sequence": 6310
+   "sequence": 6480
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-information-technology-equipment-it-e-9254d8d",
-   "sequence": 6380
+   "sequence": 6550
   }
  ]
 }

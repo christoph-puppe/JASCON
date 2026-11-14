@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-det-01",
-   "sequence": 410
+   "sequence": 580
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-det-04",
-   "sequence": 420
+   "sequence": 590
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-det-02",
-   "sequence": 430
+   "sequence": 600
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-det-03",
-   "sequence": 440
+   "sequence": 610
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-det-05",
-   "sequence": 450
+   "sequence": 620
   }
  ],
  "facets": {

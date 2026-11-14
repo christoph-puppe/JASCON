@@ -28,6 +28,46 @@
       }
      }
     }
+   },
+   "props": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "name",
+      "value"
+     ],
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "uuid": {
+       "type": "string"
+      },
+      "ns": {
+       "type": "string"
+      },
+      "value": {
+       "type": "string"
+      },
+      "class": {
+       "type": "string"
+      },
+      "group": {
+       "type": "string"
+      },
+      "remarks": {
+       "type": "string"
+      }
+     }
+    }
+   },
+   "nested-in": {
+    "type": "string"
+   },
+   "metadata": {
+    "type": "object"
    }
   }
  }

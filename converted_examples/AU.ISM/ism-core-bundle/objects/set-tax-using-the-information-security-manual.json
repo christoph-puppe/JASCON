@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Using the Information security manual"
+ },
+ "members": [
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summary",
+   "sequence": 70
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-253804e",
+   "sequence": 160
+  }
+ ]
+}

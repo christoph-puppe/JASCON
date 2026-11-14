@@ -17,5 +17,21 @@
     "en": "Unprivileged users are prevented from running script execution engines, including:\n\n- Windows Script Host (cscript.exe and wscript.exe)\n- PowerShell (powershell.exe, powershell_ise.exe and pwsh.exe)\n- Command Prompt (cmd.exe)\n- Windows Management Instrumentation (wmic.exe)\n- Microsoft Hypertext Markup Language (HTML) Application Host (mshta.exe)."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "3"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Mar-22"
+    }
+   ]
+  }
+ }
 }

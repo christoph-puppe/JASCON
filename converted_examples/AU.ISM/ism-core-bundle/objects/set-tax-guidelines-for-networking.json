@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configuration",
-   "sequence": 14000
+   "sequence": 14170
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-wireless-networks",
-   "sequence": 14400
+   "sequence": 14570
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-service-continuity-for-onl-8dbe171",
-   "sequence": 14540
+   "sequence": 14710
   }
  ]
 }

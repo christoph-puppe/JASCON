@@ -17,5 +17,21 @@
     "en": "At least three pages of random text with no blank areas are printed on each colour printer cartridge or MFD print drum."
    }
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "props": [
+    {
+     "name": "revision",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "3"
+    },
+    {
+     "name": "updated",
+     "ns": "https://cyber.gov.au/ns/ism/oscal/3.0",
+     "value": "Sep-18"
+    }
+   ]
+  }
+ }
 }

@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-48f2bfd",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Intended audience"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Intended audience",
+     "name": "overview",
+     "prose": {
+      "en": "The ISM is intended for chief information security officers (CISOs), chief information officers, cyber security professionals, and IT and OT managers."
+     }
+    }
+   ]
+  }
+ }
+}

@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-system-owners-sy-276f9e6",
-   "sequence": 1060
+   "sequence": 1230
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-system-owners-pr-c37cb34",
-   "sequence": 1180
+   "sequence": 1350
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-roles-system-owners-an-d8c5236",
-   "sequence": 1200
+   "sequence": 1370
   }
  ],
  "facets": {
