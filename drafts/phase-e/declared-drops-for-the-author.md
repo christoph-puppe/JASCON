@@ -19,7 +19,9 @@ a namespace, an id rebuilt exactly). Those are counted in each ledger
 record under `not-content`, with the rule.
 
 Status: IFA, ISM, CSF and Grundschutz++ are final on the session
-branch. SP 800-53 and CR26 follow when their reworks are merged.
+branch. CR26 is verified by an agent and not merged yet (it is merged and
+converted again after SP 800-53, whose bundle it reads); its rows are
+the agent's counts. SP 800-53 follows when its rework is merged.
 
 ## Summary
 
@@ -30,7 +32,7 @@ branch. SP 800-53 and CR26 follow when their reworks are merged.
 | US.CSF | 4,726 | 182 | 95, and the 87 names that go with 87 of them |
 | DE.BSI | 49,431 | 6 | 6 |
 | US.SP800-53 | 115,680 | *pending* | |
-| FedRAMP-CR26 | 7,532 | *pending* | |
+| FedRAMP-CR26 | 7,532 | 992 | 992 |
 
 Three classes recur across corpora, so one decision may settle several
 rows:
@@ -86,8 +88,15 @@ rows:
 | 1 | `gspp.catalog.uuid` | the uuid of the catalogue document (as decided for IFA) | `73f2d8f6-...` | content: identifies this document; nothing in the bundle rebuilds it | |
 | 5 | `gspp.catalog.back-matter.resources[]` (`uuid`, `title`, `rlinks[].href`, `rlinks[].hashes[].algorithm`, `rlinks[].hashes[].value`) | a back-matter resource that no link of a control names (as decided for IFA) | `BSI IT-Grundschutz Edition 2023` | content: the root Set now carries the metadata link `#bf7510ca-...`, which names nothing without this resource | |
 
-## US.SP800-53 and FedRAMP-CR26
+## FedRAMP-CR26 (7,532 values; 992 declared drops)
 
-Pending: the reworks are being finished. The two rows of CR26 that its
-earlier agent reported are the update history of an entry (957 values)
-and the process-flow diagrams (35); its reading of both was "content".
+Counts by the agent that verified the rework (not merged yet).
+
+| Values | Paths | Declared reason | Example | Reading (agent) | Decision |
+|---:|---|---|---|---|---|
+| 957 (475 entries) | `FRD.data.all.*.updated[]` (date 85, comment 85, issue 1), `FRR.*.data.*.*.*.updated[]` (date 303, comment 303, issue 5), `KSI.*.indicators.*.updated[]` (date 87, comment 87, issue 1) | update history of the entry; carried in no object and not in the manifest | `cr26#/FRD/data/all/FRD-ACV/updated/0/date` = `2026-06-24` | content: on which day an entry changed and why, some with an issue number; the bundle holds only the publication's day. The one entry of the CTL overlay that has a history (IA-05, 2 values) is carried, so the same kind of value is carried in one place and dropped in three | |
+| 35 (one flow, family IEC) | `FRR.*.info.flows[]` (activity 1, description 1, nodes 8, steps' description 7, from 9, to 9) | process-flow diagrams: linked resources, not requirement data (D17) | `cr26#/FRR/IEC/info/flows/0/steps/0/to` = `IEC-CSO-EFR` | content: the diagram is written out in the source (activity, nodes, steps that name rules in order), not linked, so the declared reason does not fit | |
+
+## US.SP800-53
+
+Pending: the rework is being finished.

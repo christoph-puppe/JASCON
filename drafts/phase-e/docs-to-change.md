@@ -50,7 +50,21 @@ SP 800-53 and CR26 land, so totals are written only at the end.
     CR26 has 3);
   - nothing says what a Set stands for (Grundschutz++: a group and a
     control with nested controls both give `/set/tax/<slug>`);
-  - the mapping of CR26's status `placeholder` to `draft`.
+  - the mapping of CR26's status `placeholder` to `draft` (the
+    converter's own; family AGU, 28 objects). AGU's effectivity reads
+    `required` like the stable families, the handbook defines draft as
+    "must not be cited by anything claiming conformance" (ch03 §3.6),
+    and seven `active` Sets hold AGU's draft Sets as members, which the
+    validator passes;
+  - no kernel place for a source's own status word (CR26 keeps it in
+    `narrative@1`, 27 values); a facet has no lifecycle, so a glossary
+    whose source is not stable could not say so (CR26 `terminology@1`);
+  - no convention for alias schemes (`bsi-uuid`, `fedramp-cr26:KSI.id`);
+  - the ledger checks that a rule was applied, not that the rule is
+    right: mapping `placeholder` to `active` in the converter's table
+    passes the ledger and only the converter's test catches it. The
+    CR26 agent suggests a library check that each destination a
+    path-map row names is reached.
 
 ## 2. README.md
 
@@ -62,7 +76,8 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | 261 | "6,916 objects in eleven bundles": ISM +20, CSF +4, Grundschutz++ +474, SP 800-53 and CR26 pending | reported |
 | 397-399 | totals over the bundles (6,914 objects, 4,583 Requirements, 1,066 Sets) | reported |
 | 407 | "ISM −29 %" against the source: the ISM bundle's objects grew from 2,124,074 to 2,564,741 bytes; not re-measured by that sentence's method | reported |
-| 276-279 | the ledger sentences (four outcomes; "unaccounted" values) | reported |
+| 276-279 | the ledger sentences (four outcomes; "unaccounted" values; "the other ten corpora have no ledger") | reported |
+| 408 | "CR26 +55 %": the source is now 588,800 bytes and the bundle changed; not re-measured by that sentence's method. Wrong before phase E | reported |
 | the paragraph on value arrival | to say: 0 unaccounted in every corpus with a ledger, the three no-content rules, the gate | (to write) |
 
 ## 3. Specification (drafts/jascon-specification-2.0.0-rc.4.md)
@@ -74,6 +89,8 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | 756, 1797 | "ISM = zero facets", if meant of the conversion: every ISM Requirement now carries the compat facet | reported |
 | 2002 | "ISM −29 %" | reported |
 | 2390 | "3,714 manifest-listed objects" | reported |
+| 2003 | "CR26 +55 %" (as README 408). Wrong before phase E | reported |
+| 2276-2277, 2401-2402 | "two reports": the CR26 step compares three files, the two reports and the ledger record. Wrong before phase E | reported |
 | IV.5b, IV.6, IV.7, IV.9 | the phase E state: the ledger, the gate, R16 "converted losslessly", the twin's runs on Windows PowerShell 5.1 for #55 | (to write) |
 | older versions (`jascon-specification-1.0.0.md:125`, `jascon-v0.5-specification.md:90, 821`) | the same clause-granularity row; "106 Requirements + 29 Sets". Historical documents: the author decides whether they change | reported |
 
@@ -91,12 +108,17 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | appendix-e-worked-corpora.md:17, 51 | the MS-TLS example: nested controls as clauses (`statement-id: "KONF.14.1.1"`) | read |
 | appendix-e-worked-corpora.md:116-134 (E.3) | ISM-1997 "converting with zero facets": it carries the compat facet now (revision, updated) | reported |
 | appendix-f-objections.md:167 | "convert at Core tier with zero facets" | reported |
+| appendix-f-objections.md:374 | "CR26 +55 %". Wrong before phase E | reported |
+| ch14-migration-playbooks.md §14.4 (298-318) | CR26: no word on status → lifecycle or on the KSI category ids; line 307 "`updated[]` → L0 versions plus manifest release notes" is wrong (the history is a declared drop); line 313 "`do_not_link` → annotations" is wrong (it goes to `terminology@1`) | reported |
+| appendix-a-shapes.md:20, 27 (and 21, 23) | 20: CR26 `updated[]` "absorbed" by `version`: it is dropped (475 entries, 957 values); 27: `do_not_link` cited as an annotation; 21 (aliases) and 23 (lifecycle) could cite the new CR26 cases | reported |
+| appendix-d-stdlib-catalog.md:222 | the CTL overlay "parked until...": drained into operations since gate 3. Wrong before phase E | reported |
 
 ## 5. Website (website/)
 
 | Where | What is wrong | Source |
 |---|---|---|
 | build.py `ledger_counts()`, `ledger_rows()` | four outcomes; the fifth, `not-content`, is in no cell (Grundschutz++ alone has 15,004) | read |
+| src/evidence.html:85 | "CR26 +55 %". Wrong before phase E | reported |
 | src/evidence.html:154-159 and the four translations | the ledger sentence ("the ledgers found values that are lost all the same", "unaccounted, with no destination") and the table header need the fifth outcome and the new state | read |
 | src/index.html:144 and the four translations | the stats note on the ledger | read |
 | src/model.html:26 and the four translations | "Grundschutz++ contains 347 nested pseudo-controls that exist only to make clauses addressable" (see section 1) | read |
@@ -106,6 +128,7 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 
 | Where | What is wrong | Source |
 |---|---|---|
+| .github/workflows/validators.yml:194-196 | the CR26 step's comment names four ledger outcomes; `not-content` is missing | reported |
 | jascon/SKILL.md:168 | convert_bsi.py "Handles nested pseudo-controls, splitting them into statements" | read |
 | SKILL_jascon.zip | stale against the converters and tests | read |
 | drafts/gate-4-measurement.md:14 | "ISM round-trips 1,711/1,711": now 1,731/1,731 (measured, c310ab37) | reported (new count measured) |
