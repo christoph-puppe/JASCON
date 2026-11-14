@@ -176,4 +176,6 @@ SP 800-53 and CR26 land, so totals are written only at the end.
 | drafts/jascon-decision-rationale-register.md:144; backlog row #41 | nested controls as statements; the BSI figures | reported |
 | DEEP_RESEARCH_REVIEW.md:90, 97 | nested controls as statements | reported |
 | jascon-app/readme.md:361-367, 426-427 | withdrawn controls not converted; "1,035 objects equal"; 1,035 objects, 1,918 statements (the SP 800-53 preset) | reported |
-| jascon-app: jascon-oscal.js:9-14, 376; readme.md:344; import.html:45, 93; PROGRESS.md:30; tests/oscal.test.mjs | the app's Grundschutz++ preset and its texts: being brought in line with the converter (author, 2026-11-14: "A. Bring both presets in line with the Python converters"); the SP 800-53 preset follows after that converter's rework | reported |
+| jascon-app (Grundschutz++ preset) | done in build 0.9.14 (merged): the preset, its texts, ERRATA and tests. The SP 800-53 preset follows | read |
+| website/src/start.html:108 | "what OSCAL cannot hold returns on import": if it means the app's Import page, it was wrong before phase E too (the presets carry those props in the compat facet, they do not read them back) | reported |
+| jascon/scripts/convert_bsi.py | a converter defect, found by the app's agent: on a catalogue with an empty parameter label (not the pinned one) it writes the bundle and then ends with 1 on a wiring check, because the path map does not name `param-extras/{param}/label` for `params[].label`; the app's comparison test accepts that one failure | reported |
