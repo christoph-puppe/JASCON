@@ -47,12 +47,26 @@
    In node as well: a name becomes a party, an empty field names nobody, and
    the page mints a party in one place only.
 
-   Needs Playwright with Chromium for 4 to 10 and python3 with jsonschema for
+  11. What an Attestation binds of a bundle (backlog #46; Appendix B.1.7). In
+      node: the 19 binds vectors of conformance/attestation-vectors.json give
+      the reference's verdict, manifest, subjects and failure; the line the
+      page prints is the one binds_report prints, for every vector; an
+      envelope is read as the keyless part of verify_envelope reads it, and
+      is never called valid. In Chromium: jascon/examples, the IFA bundle and
+      the worked advice pack, loaded as they lie, show for every Attestation
+      the line the reference prints, and so do changed copies of them; the
+      Attestations beside a manifest are found from a folder, from files and
+      from a URL (a listing, names in the link, or neither, which the page
+      says); they are counted apart from the objects the manifest lists; an
+      export never lists one.
+
+   Needs Playwright with Chromium for 4 to 11 and python3 with jsonschema for
    the runs of the reference; where one is missing, that part is skipped and
    says so. Needs no network: the one thing the page asks the web for, its
    font stylesheet, is answered here with an empty one. */
 import test from "node:test";
 import assert from "node:assert/strict";
+import crypto from "node:crypto";
 import fs from "node:fs";
 import http from "node:http";
 import os from "node:os";
@@ -77,7 +91,8 @@ const HTML = fs.readFileSync(READER, "utf8");
 const P = (() => {
   const a = HTML.indexOf("/* ==READER-PURE-START== */"), b = HTML.indexOf("/* ==READER-PURE-END== */");
   assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
-  return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty };`)();
+  return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty,
+    canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState };`)();
 })();
 
 /* ---------- 1. the pin vectors ---------- */
@@ -281,22 +296,38 @@ async function open() {
   const context = await browser.newContext({ acceptDownloads: true, viewport: { width: 1500, height: 1100 } });
   await context.route(/^https:/, route => route.fulfill({ status: 200, contentType: "text/css", body: "" }));   // the font stylesheet; a test does not wait on the web
   const page = await context.newPage();
-  const errors = [], answers = [];
-  /* a script error on any page of the test is held against it; prompt() takes the next answer a test queued */
+  const errors = [], answers = [], quiet = [];
+  /* a script error on any page of the test is held against it; prompt() takes the next answer a test queued.
+     `quiet`: URLs a test expects the server to refuse (a folder on a server that lists none): the browser writes
+     such a refusal to its console as an error, and only for these it is not one of the page's. */
   const watch = p => {
     p.on("pageerror", e => errors.push("pageerror: " + e.message));
-    p.on("console", m => { if (m.type() === "error") errors.push("console: " + m.text()); });
+    p.on("console", m => { if (m.type() === "error" && !(/\b404\b/.test(m.text()) && quiet.some(re => re.test(m.location().url)))) errors.push(`console: ${m.text()} ${m.location().url}`); });
     p.on("dialog", d => d.type() === "prompt" ? d.accept(answers.length ? answers.shift() : "") : d.accept());
     return p;
   };
   watch(page);
   await page.goto(pathToFileURL(READER).href);
-  /* a folder, opened as the button does; done when the page has indexed it (or has stopped at it) */
-  const load = async dir => {
+  /* a folder, opened as the button does (or files, as "Open JSON file(s)" does); done when the page has indexed
+     it (or has stopped at it) and has held every Attestation to it */
+  const load = async (dir, pick = "#folderpick") => {
     const lines = await page.locator("#log > div").count();
-    await page.setInputFiles("#folderpick", dir);
+    await page.setInputFiles(pick, dir);
     await page.waitForFunction(n => [...document.querySelectorAll("#log > div")].slice(n)
-      .some(x => /indexed \d+ objects|nothing of this bundle is shown/.test(x.textContent)), lines);
+      .some(x => /indexed \d+ objects|nothing of this bundle is shown/.test(x.textContent)) && document.body.dataset.binds === "done", lines);
+  };
+  /* What stage 5 says about every Attestation, in the order shown: the verdict and what it means for the bundle,
+     the line, every subject, the manifest bound, the envelope. */
+  const attested = async (p = page) => {
+    await p.click('.navitem[data-view="stage:assess"]');
+    return p.locator("#view-stagefn [data-attestation]").evaluateAll(cards => cards.map(x => ({
+      id: x.dataset.attestation, verdict: x.dataset.binds, manifest: x.dataset.bindsManifest ?? null, fails: x.dataset.bindsFails ?? null,
+      word: x.querySelector("[data-binds-word]")?.textContent ?? null, shownAs: x.querySelector("[data-binds-word]")?.className ?? null,
+      line: x.querySelector("[data-binds-line]")?.textContent ?? null,
+      subjects: [...x.querySelectorAll("[data-subject]")].map(tr => ({ status: tr.dataset.subject, id: tr.querySelector(".reflink")?.textContent ?? null,
+        signed: tr.querySelector("[data-signed]").textContent, delivered: tr.querySelector("[data-delivered]").textContent })),
+      envelope: x.querySelector("[data-envelope]").dataset.envelope, envelopeText: x.querySelector("[data-envelope]").textContent,
+      todo: x.querySelector("[data-binds-todo]")?.textContent ?? null })));
   };
   const view = async v => { await page.click(`.navitem[data-view="${v}"]`); };
   /* an object, opened from the list of the object browser */
@@ -326,7 +357,7 @@ async function open() {
     }
     return n;
   };
-  return { page, tmp, load, view, detail, text, who, log, download, finish, shutdown, watch, answers, sweep };
+  return { page, tmp, load, view, detail, text, who, log, download, finish, shutdown, watch, answers, sweep, quiet, attested };
 }
 /* The browser is closed whether the test passes or fails. */
 async function withReader(fn) {
@@ -360,6 +391,29 @@ function reference(dir, ...flags) {
   const lines = run.stdout.split("\n"), from = lines.indexOf("== bundles =="), at = lines.findIndex(l => l.includes(path.basename(path.dirname(dir)) + "/" + path.basename(dir) + ":"));
   assert.ok(from >= 0 && at > from, "the reference reports the bundle: " + run.stdout.slice(-1500));
   return { ok: run.status === 0 && /^ALL GREEN$/m.test(run.stdout), line: lines[at], notes: lines.slice(from + 1, at), out: run.stdout };
+}
+
+/* The repository (under /repo/) and the test's temporary folder (under /tmp/) over http. `folders` says what a
+   request for a folder gets: "listing", a page of links as python's http.server and a static site's index.html give
+   it; "page", some other page (a site that answers every unknown address with its start page); or nothing, a 404. */
+async function serve(R, folders) {
+  const server = http.createServer((req, res) => {
+    const u = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+    const file = u.startsWith("/repo/") ? path.join(ROOT, u.slice(6)) : u.startsWith("/tmp/") ? path.join(R.tmp, u.slice(5)) : "";
+    const html = body => { res.writeHead(200, { "content-type": "text/html; charset=utf-8" }); res.end(body); };
+    if (file && folders && fs.existsSync(file) && fs.statSync(file).isDirectory()) {
+      return html(folders === "page" ? '<!doctype html><title>Home</title><a href="about.html">About</a> <a href="notes.json">Notes</a>'
+        : "<ul>" + fs.readdirSync(file).sort().map(n => `<li><a href="${encodeURIComponent(n)}${fs.statSync(path.join(file, n)).isDirectory() ? "/" : ""}">${n}</a></li>`).join("") + "</ul>");
+    }
+    if (!file || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
+    res.writeHead(200, { "content-type": file.endsWith(".html") ? "text/html; charset=utf-8" : "application/json" });
+    res.end(fs.readFileSync(file));
+  });
+  await new Promise(done => server.listen(0, "127.0.0.1", done));
+  const at = `http://127.0.0.1:${server.address().port}`;
+  /* the address under which this server has a folder of the repository or of the temporary folder */
+  const url = dir => `${at}/${dir.startsWith(R.tmp) ? "tmp/" + path.relative(R.tmp, dir) : "repo/" + path.relative(ROOT, dir)}`.split(path.sep).join("/") + "/";
+  return { at, url, reader: `${at}/repo/one-page-apps/jascon-reader.html`, close: () => server.close() };
 }
 
 /* One object against the kernel schema, as the reference builds its validator per type. -> [what is wrong] */
@@ -720,19 +774,12 @@ test("the workbenches: no author refuses nothing and writes none; with an author
 
     /* the same two bundles from a URL, with a deep link to the Tailor stage: the first opens there and
        shows who decided; the second stays on the overview, which says why nothing is shown */
-    const server = http.createServer((req, res) => {
-      const u = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
-      const file = u.startsWith("/repo/") ? path.join(ROOT, u.slice(6)) : u.startsWith("/tmp/") ? path.join(R.tmp, u.slice(5)) : "";
-      if (!file || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
-      res.writeHead(200, { "content-type": file.endsWith(".html") ? "text/html; charset=utf-8" : "application/json" });
-      res.end(fs.readFileSync(file));
-    });
-    await new Promise(done => server.listen(0, "127.0.0.1", done));
+    const server = await serve(R, "listing");
     try {
-      const at = `http://127.0.0.1:${server.address().port}`, web = R.watch(await page.context().newPage());
+      const web = R.watch(await page.context().newPage());
       const linked = async bundle => {
         await web.goto("about:blank");
-        await web.goto(`${at}/repo/one-page-apps/jascon-reader.html#load=${at}/tmp/${path.relative(R.tmp, bundle).split(path.sep).join("/")}/&view=stage:tailor`);
+        await web.goto(`${server.reader}#load=${server.url(bundle)}&view=stage:tailor`);
         await web.waitForFunction(() => /indexed \d+ objects|nothing of this bundle is shown/.test(document.getElementById("log").textContent));
         await web.waitForFunction(() => document.querySelector(".navitem.active")?.dataset.view !== "stages");   // the load leaves the Stages view: for the linked view, or for the overview
       };
@@ -1004,3 +1051,543 @@ test("pasted objects: Deviations in every state with review dates of every shape
     "⚑ Deviation: operational-requirement · approved · decided 2026-11-03 · review due 6 months (calendar https://org.example/calendar/isms)",
     "⚑ Deviation: operational-requirement · approved · no day decided is stated · review due 2027-05-12T09:00:00Z"]);
 }));
+
+/* ---------- 11. what an Attestation binds of a bundle (backlog #46; Appendix B.1.7) ---------- */
+const BINDS = json("jascon/conformance/attestation-vectors.json")["binds-vectors"];
+const PACK = path.join(ROOT, "jascon/example-packs/dbvendor-server-7-advice");
+const sha256 = bytes => "sha256:" + crypto.createHash("sha256").update(bytes).digest("hex");
+const byId = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+const deliveredOf = async objs => new Map(await Promise.all(objs.map(async o => [o.id, await P.semanticDigest(o)])));
+const judged = async c => P.attestationBinds(c.attestation, c["manifest-digest"], await deliveredOf(c.objects), c["kept-packs"] || []);
+
+test("attestation-binds: each of the 19 binds vectors gets the reference's verdict, manifest, subjects and failure from the page's own function", async () => {
+  assert.equal(BINDS.length, 19);   // a vector added to the family is looked at here before this number moves
+  const seen = new Set();
+  for (const c of BINDS) {
+    for (const o of c.objects) assert.ok(![null, "manifest"].includes(P.inferType(o)), `${c.name}: ${o.id} is typed`);
+    const r = await judged(c);
+    assert.deepEqual([r.verdict, r.manifest, r.subjects.map(s => s.status), r.fails],
+      [c.expected, c["expected-manifest"], c["expected-subjects"], c["expected-failure"]], c.name);
+    for (const x of [r.verdict, r.manifest, ...r.subjects.map(s => s.status), "fails " + r.fails, "lifecycle " + c.attestation.lifecycle]) seen.add(x);
+  }
+  /* what the deliberate defects need a vector for */
+  for (const x of ["full-match", "semantic-match", "fail", "this", "kept-pack", "other", "match", "differs", "absent", "fails true", "fails false",
+    "lifecycle active", "lifecycle draft", "lifecycle deprecated", "lifecycle withdrawn"]) assert.ok(seen.has(x), `a vector holds a case of '${x}'`);
+  /* no vector holds an Attestation without a subject (the kernel schema refuses one): it binds nothing */
+  for (const [lifecycle, fails] of [["active", true], ["draft", false]]) {
+    const r = await judged({ ...BINDS[0], attestation: { ...BINDS[0].attestation, lifecycle, "subject-semantic-digests": [] } });
+    assert.deepEqual([r.verdict, r.manifest, r.subjects, r.fails], ["fail", "this", [], fails], `no subject, ${lifecycle}`);
+  }
+});
+
+/* binds_report of the reference, run by Python on cases typed by the page (its source is taken out of
+   validate_core.py by name, as for kernel_needed). -> per case, what it prints and what it records as failed */
+function referenceBindsLines(cases) {
+  const py = `
+import ast, contextlib, copy, hashlib, io, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+said = []
+ns = {"json": json, "copy": copy, "hashlib": hashlib, "fail": lambda section, msg: said.append(msg)}
+names = ("_canon", "canonical", "sdig", "by_code_unit", "attestation_binds", "binds_report")
+for node in ast.parse(src).body:
+    wanted = isinstance(node, ast.FunctionDef) and node.name in names
+    if wanted or (isinstance(node, ast.Assign) and getattr(node.targets[0], "id", "") == "BINDS_MANIFEST"):
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+out = []
+for c in json.load(sys.stdin):
+    del said[:]
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        ns["binds_report"]("s", {c["attestation"]["id"]: c["attestation"]}, c["manifest"], {i: (t, o) for i, t, o in c["objs"]}, [(k[len("sha256:"):], b"") for k in c["kept"]])
+    out.append([l.strip() for l in buf.getvalue().splitlines()] + said)
+print(json.dumps(out))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+
+test("attestation-binds: the line the page prints about an Attestation is the one the reference's binds_report prints, for every vector and for an Attestation without subjects",
+  { skip: !PYTHON && "python3 is not installed" }, async () => {
+    const first = BINDS[0], none = lifecycle => ({ ...first, name: `no subject, ${lifecycle}`, attestation: { ...first.attestation, lifecycle, "subject-semantic-digests": [] } });
+    const cases = [...BINDS, none("active"), none("draft")];
+    const ref = referenceBindsLines(cases.map(c => ({ attestation: c.attestation, manifest: c["manifest-digest"], objs: typed(c.objects), kept: c["kept-packs"] || [] })));
+    const lines = [];
+    for (const [i, c] of cases.entries()) {
+      const line = P.bindsLine(c.attestation, await judged(c));
+      assert.deepEqual([line], ref[i], c.name);
+      lines.push(line);
+    }
+    for (const kind of [/^binds: \S+ = FULL MATCH \[\d+ subject\(s\) of this bundle; this manifest\]$/, /= FULL MATCH \[1 subject\(s\) of this bundle; a pack manifest this bundle keeps\]$/,
+      /= SEMANTIC MATCH \[\d+ subject\(s\) of this bundle; another manifest: the content is proven, the packaging was altered\]$/,
+      /= DOES NOT BIND \[lifecycle withdrawn: reported, not a failure\] subject \S+: recomputed semantic digest sha256:[0-9a-f]{64}, signed sha256:[0-9a-f]{64} - this manifest$/,
+      /= DOES NOT BIND \[lifecycle draft: reported, not a failure\] subject \S+: not an object of this bundle - this manifest$/, /= DOES NOT BIND \[lifecycle draft: reported, not a failure\] it names no subject - /,
+      /^\[attestation-binds\] \S+: subject sha256:[0-9a-f]{64}: no object of this bundle carries it - this manifest \(B\.1\.7: /, /^\[attestation-binds\] \S+: it names no subject - /])
+      assert.ok(lines.some(l => kind.test(l)), `a line of the kind ${kind}`);
+  });
+
+/* verify_envelope of the reference, with no trusted key: -> per case [status, detail] */
+function referenceEnvelopes(cases) {
+  const py = `
+import ast, base64, copy, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+ns = {"json": json, "copy": copy, "base64": base64}
+for node in ast.parse(src).body:
+    wanted = isinstance(node, ast.FunctionDef) and node.name in ("_canon", "canonical", "verify_envelope")
+    if wanted or (isinstance(node, ast.Assign) and getattr(node.targets[0], "id", "") == "DSSE_PAYLOAD_TYPE"):
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+print(json.dumps([list(ns["verify_envelope"](c["envelope"], c["attestation"], None)) for c in json.load(sys.stdin)]))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+const ENVELOPE = fs.readFileSync(path.join(ROOT, "jascon/examples/attestation-acme-2026.dsse"), "utf8");
+const NOT_ITS_ENVELOPE = "payload != the Attestation's canonical form (attestation-binds)";
+const UNVERIFIED = "signature UNVERIFIED - this page takes no key and verifies no signature";
+
+test("the envelope of an Attestation, read without a key: this Attestation's or not, as the reference reads it, and never valid", () => {
+  const env = JSON.parse(ENVELOPE), said = (att, text) => { const e = P.envelopeState(att, text); return [e.state, e.detail]; };
+  /* [what, the Attestation, its envelope, what the page says] */
+  const cases = [
+    ["as it lies in the example folder", ATTESTATION, env, ["unverified", UNVERIFIED]],
+    ["an annotation was added: annotations are outside the canonical form", { ...ATTESTATION, annotations: { note: "read on 2026-11-14" } }, env, ["unverified", UNVERIFIED]],
+    ["no signature in the envelope: this page reads none either way", ATTESTATION, { ...env, signatures: [] }, ["unverified", UNVERIFIED]],
+    ["the lifecycle was edited after signing", { ...ATTESTATION, lifecycle: "withdrawn" }, env, ["fail", NOT_ITS_ENVELOPE]],
+    ["a subject was edited after signing", { ...ATTESTATION, "subject-semantic-digests": ATTESTATION["subject-semantic-digests"].slice(1) }, env, ["fail", NOT_ITS_ENVELOPE]],
+    ["an empty payload", ATTESTATION, { ...env, payload: "" }, ["fail", NOT_ITS_ENVELOPE]],
+    ["a payload that goes on after the Attestation's text", ATTESTATION, { ...env, payload: Buffer.concat([Buffer.from(env.payload, "base64"), Buffer.from(" ")]).toString("base64") }, ["fail", NOT_ITS_ENVELOPE]],
+    ["a payload that stops before its end", ATTESTATION, { ...env, payload: Buffer.from(env.payload, "base64").subarray(0, -1).toString("base64") }, ["fail", NOT_ITS_ENVELOPE]],
+    ["another payload type", ATTESTATION, { ...env, payloadType: "application/json" }, ["fail", "wrong payloadType"]],
+    ["a payload that is no base64", ATTESTATION, { ...env, payload: env.payload.slice(0, -4) + "*==" + "=" }, ["fail", "payload is not valid base64"]],
+    ["a payload with a wrong padding", ATTESTATION, { ...env, payload: env.payload.replace(/=*$/, "") + "A" }, ["fail", "payload is not valid base64"]],
+    ["a payload that is no text", ATTESTATION, { ...env, payload: 7 }, ["fail", "payload is not valid base64"]],
+    ["an envelope that is a list", ATTESTATION, [], ["fail", "envelope unreadable"]]];
+  for (const [what, att, envelope, want] of cases) assert.deepEqual(said(att, JSON.stringify(envelope)), want, what);
+  if (PYTHON) {
+    /* the reference says `error` where the page says `fail`, with the same reason; without a key both say unverified */
+    const ref = referenceEnvelopes(cases.map(([, attestation, envelope]) => ({ attestation, envelope })));
+    cases.forEach(([what, , , want], i) => assert.deepEqual(want[0] === "fail" ? ["error", want[1]] : ["unverified", "no trusted key supplied for the signer"], ref[i], what));
+  }
+  /* what the reference decides before it reads an envelope */
+  const { "envelope-ref": ref, ...unsigned } = ATTESTATION;
+  assert.equal(ref, "attestation-acme-2026.dsse");
+  assert.deepEqual(said(unsigned, ENVELOPE), ["none", "no envelope (unsigned attestation)"]);
+  assert.deepEqual(said(ATTESTATION, undefined), ["missing", "envelope-ref 'attestation-acme-2026.dsse' does not resolve beside the manifest"]);
+  assert.deepEqual(said(ATTESTATION, "{"), ["fail", "envelope unreadable"]);
+  /* the page has no state and no word for a signature that holds: it verifies none */
+  const pure = HTML.slice(HTML.indexOf("/* ==READER-PURE-START== */"), HTML.indexOf("/* ==READER-PURE-END== */"));
+  assert.deepEqual([...new Set([...pure.slice(pure.indexOf("function envelopeState(")).matchAll(/state: "([^"]+)"/g)].map(m => m[1]))].sort(), ["fail", "missing", "none", "unverified"]);
+});
+
+test("the digest: the page's own SHA-256, used where the browser offers none, gives node's for every length of padding", () => {
+  for (const n of [0, 1, 55, 56, 63, 64, 65, 119, 120, 1000]) {
+    const bytes = Uint8Array.from({ length: n }, (_, i) => (i * 31 + 7) & 255);
+    assert.equal(P.sha256Fallback(bytes), crypto.createHash("sha256").update(bytes).digest("hex"), `${n} bytes`);
+  }
+});
+
+/* What the reference says about the Attestations it reads with one bundle folder.
+   -> { ok, binds: [[id, line]], envelopes: [[id, state, detail]] }, each in the order of the ids */
+function referenceAttested(dir) {
+  const ref = reference(dir, "--as-of", "2026-11-14"), binds = [], envelopes = [];
+  for (const l of ref.notes.map(x => x.trim())) {
+    let m;
+    if ((m = /^binds: (\S+) = /.exec(l))) binds.push([m[1], l]);
+    else if ((m = /^dsse: (\S+) = (.*)$/.exec(l)))
+      envelopes.push([m[1], ...(m[2] === "no envelope (unsigned attestation)" ? ["none", m[2]] : m[2].startsWith("signature UNVERIFIED - ") ? ["unverified", "signature UNVERIFIED"]
+        : m[2].startsWith("FAIL - ") ? ["fail", m[2].slice(7)] : ["not read by this test", m[2]])]);
+  }
+  for (const l of ref.out.split("\n")) {   // what failed the bundle is listed at the end, under the bundle's name
+    const at = l.indexOf("[attestation-binds] ");
+    let m;
+    if (at >= 0 && (m = /^\[attestation-binds\] (\S+): /.exec(l.slice(at)))) binds.push([m[1], l.slice(at)]);
+    else if ((m = /\] (\S+): (envelope-ref '.*' does not resolve beside the manifest)$/.exec(l))) envelopes.push([m[1], "missing", m[2]]);
+  }
+  const order = (a, b) => byId(a[0], b[0]);
+  return { ok: ref.ok, line: ref.line, binds: binds.sort(order), envelopes: envelopes.sort(order) };
+}
+const WORD = { "full-match": "FULL MATCH", "semantic-match": "SEMANTIC MATCH", fail: "DOES NOT BIND" };
+/* What the page says about the Attestations of one bundle folder, held to itself and to the reference: the word
+   and its colour follow the verdict; a failure is shown exactly where the line is the reference's failure; every
+   line and every envelope is read as the reference reads it; the page shows a failure exactly when the reference
+   fails the bundle. `shown`: what R.attested() gave for the folder. */
+function asTheReference(shown, dir, what) {
+  for (const a of shown) {
+    assert.equal(a.word, WORD[a.verdict], `${what}: ${a.id}`);
+    assert.equal(a.fails, String(a.line.startsWith("[attestation-binds] ")), `${what}: ${a.id} is shown as a failure exactly where the line is one`);
+    assert.equal(a.shownAs, a.verdict === "full-match" ? "verdict-ok" : a.fails === "true" ? "verdict-bad" : "verdict-warn", `${what}: ${a.id}`);
+    assert.ok(["none", "missing", "fail", "unverified"].includes(a.envelope), `${what}: ${a.id}: ${a.envelope}`);
+    if (a.envelope === "unverified") assert.equal(a.envelopeText, UNVERIFIED);
+  }
+  if (!REFERENCE) return;
+  const ref = referenceAttested(dir);
+  assert.deepEqual(shown.map(a => [a.id, a.line]), ref.binds, `${what}: the line of every Attestation is the reference's`);
+  assert.deepEqual(shown.map(a => [a.id, a.envelope, a.envelope === "unverified" ? "signature UNVERIFIED" : a.envelopeText.replace(/^FAIL - /, "")]), ref.envelopes, `${what}: every envelope is read as the reference reads it`);
+  assert.equal(shown.some(a => a.fails === "true" || a.envelope === "fail" || a.envelope === "missing"), !ref.ok, `${what}: the page shows a failure exactly when the reference fails the bundle — ${ref.line}`);
+}
+/* the Attestations beside a manifest by the reference's rule: a .json of the manifest's folder that the manifest does not list and that types as one */
+function besideOf(dir) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8"));
+  return fs.readdirSync(dir).filter(n => n.endsWith(".json") && n !== "content-manifest.json" && !manifest.objects.some(e => e.path === n))
+    .map(n => [n, JSON.parse(fs.readFileSync(path.join(dir, n), "utf8"))]).filter(([, o]) => P.inferType(o) === "attestation").sort((a, b) => byId(a[1].id, b[1].id));
+}
+
+test("the Attestations beside a manifest: the example folder, the IFA bundle and the worked pack, loaded as they lie, show the reference's verdict for each, every subject with both digests, and how many of each there are",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const asFolder = new Map();   // what each folder says when the button opens it
+    for (const dir of [EXAMPLES, IFA, PACK]) {
+      const what = path.relative(ROOT, dir), manifestBytes = fs.readFileSync(path.join(dir, "content-manifest.json")), manifest = JSON.parse(manifestBytes);
+      const listed = new Map(manifest.objects.map(e => [e.id, e["semantic-digest"]])), beside = besideOf(dir);
+      assert.ok(beside.length >= 1, `${what} has an Attestation beside its manifest`);
+      await R.load(dir);
+      const shown = await R.attested();
+      asTheReference(shown, dir, what);
+      assert.deepEqual(shown.map(a => a.id), beside.map(([, a]) => a.id), `${what}: every Attestation beside the manifest is shown, in the order of the ids`);
+      /* the verdicts arrive after the bundle is shown: stage 5, when it is up, is drawn again with them */
+      await page.evaluate(async () => { for (const x of document.querySelectorAll("#view-stagefn [data-attestation]")) x.dataset.binds = "drawn before"; await judgeAttestations(); });
+      assert.deepEqual(await page.locator("#view-stagefn [data-attestation]").evaluateAll(l => l.map(x => x.dataset.binds)), shown.map(a => a.verdict), what);
+      for (const [i, a] of shown.entries()) {
+        /* Worked out here from the files, without the page's code: which manifest is bound, and per subject which
+           object, the signed digest, and the digest the manifest records for the object as delivered. */
+        const att = beside[i][1], bound = att["content-manifest-digest"];
+        const manifestBound = bound === sha256(manifestBytes) ? "this" : fs.existsSync(path.join(dir, "packs/sha256", bound.slice(7))) ? "kept-pack" : "other";
+        const subjects = att["subject-semantic-digests"].map(sj => ({ status: listed.get(sj.id) === sj["semantic-digest"] ? "match" : listed.has(sj.id) ? "differs" : "absent",
+          id: sj.id, signed: sj["semantic-digest"], delivered: listed.get(sj.id) ?? "not an object the manifest lists" }));
+        assert.equal(a.manifest, manifestBound, a.id);
+        assert.deepEqual(a.subjects, subjects, a.id);
+        assert.equal(a.verdict, subjects.some(sj => sj.status !== "match") ? "fail" : manifestBound === "other" ? "semantic-match" : "full-match", a.id);
+        assert.equal(a.envelope, att["envelope-ref"] ? (fs.existsSync(path.join(dir, att["envelope-ref"])) ? "unverified" : "missing") : "none", a.id);
+      }
+      /* how many of each: the objects the manifest lists, and the Attestations beside it, which are not among them */
+      await R.view("overview");
+      assert.equal(await R.text(page.locator("#ov-listed")), String(manifest.objects.length), what);
+      assert.equal(await R.text(page.locator("#ov-beside")), String(beside.length), what);
+      assert.equal(await page.locator("#ov-other").count(), 0, what);
+      assert.equal(await page.locator("[data-beside]").count(), 0, `${what}: a folder was looked into; nothing is said about how`);
+      assert.deepEqual(await page.locator("[data-ov-binds]").evaluateAll(l => l.map(x => [x.dataset.ovBinds, x.className, x.querySelector("a").textContent])), shown.map(a => [a.verdict, a.shownAs, a.id]), what);
+      const pill = await page.locator("#pill-bundle").getAttribute("title");
+      assert.ok(pill.startsWith(`${manifest.objects.length} object${manifest.objects.length === 1 ? "" : "s"} · ${beside.length} attestation${beside.length > 1 ? "s" : ""} beside the manifest · `), pill);
+      assert.match(await R.log(), new RegExp(` — ${manifest.objects.length} the manifest lists, ${beside.length} Attestation\\(s\\) beside the manifest$`, "m"), what);
+      assert.equal(await page.evaluate(() => document.getElementById("app").scrollWidth <= innerWidth), true, `${what}: the page is no wider than the window, however long the bundle's name is`);
+      /* in a narrow window the numbers are still read: the tagline gives way first, then the name */
+      await page.setViewportSize({ width: 1000, height: 1100 });
+      assert.equal(await page.evaluate(() => { const range = document.createRange(), pill = document.getElementById("pill-bundle"), text = pill.firstChild;
+        range.setStart(text, 0); range.setEnd(text, text.data.indexOf("beside the manifest") + "beside the manifest".length);
+        return range.getBoundingClientRect().right <= pill.getBoundingClientRect().right - 10 && document.getElementById("app").scrollWidth <= innerWidth; }), true, `${what}: at 1000 px the pill shows how many of each`);
+      await page.setViewportSize({ width: 1500, height: 1100 });
+      /* the object browser lists them too, with where each lies and what it binds; the detail says what stage 5 says */
+      await R.view("browser");
+      assert.equal(await page.locator(".objrow").count(), manifest.objects.length + beside.length, what);
+      for (const [i, a] of shown.entries()) {
+        assert.equal(await R.text(page.locator(`.objrow[data-id="${a.id}"] [data-list-binds="${a.verdict}"]`)), "beside the manifest · " + a.word, a.id);
+        assert.equal(await page.locator(`.objrow[data-id="${a.id}"] [data-list-binds]`).evaluate(x => { const text = document.createRange(); text.selectNodeContents(x);
+          return text.getBoundingClientRect().right <= x.closest(".objrow").getBoundingClientRect().right - 10; }), true, `${a.id}: the line is not cut, however long the id is`);
+        const d = await R.detail(a.id);
+        assert.equal(await d.locator("[data-binds-line]").evaluate(x => x.textContent), a.line, a.id);
+        assert.equal(await d.locator("[data-subject]").count(), a.subjects.length, a.id);
+        assert.match(await R.text(d), new RegExp(`where it lies beside the manifest, as ${beside[i][0].replace(/\./g, "\\.")} — not listed`), a.id);
+      }
+      /* the same files in reverse order say the same: nothing shown depends on the order in which files arrive */
+      await page.evaluate(async () => { await loadFileList([...document.getElementById("folderpick").files].reverse()); });
+      await page.waitForFunction(() => document.body.dataset.binds === "done");
+      assert.deepEqual(await R.attested(), shown, `${what}: in reverse order`);
+      asFolder.set(dir, shown);
+    }
+
+    /* A folder dropped on the page goes the way of the button, the envelope included: until 1.12.0 a drop handed
+       on its .json files only, so the envelope of a dropped bundle did not resolve. The drop is made here of the
+       entries a browser hands over, with the files' own bytes. */
+    const tree = dir => fs.readdirSync(dir, { withFileTypes: true }).map(e => e.isDirectory() ? { name: e.name, children: tree(path.join(dir, e.name)) }
+      : { name: e.name, base64: fs.readFileSync(path.join(dir, e.name)).toString("base64") });
+    const lines = await page.locator("#log > div").count();
+    await page.evaluate(root => {
+      const entry = (node, parent) => node.children
+        ? { isDirectory: true, createReader() { let sent = false; return { readEntries: done => { done(sent ? [] : node.children.map(c => entry(c, parent + "/" + node.name))); sent = true; } }; } }
+        : { isFile: true, fullPath: parent + "/" + node.name, file: done => done(new File([Uint8Array.from(atob(node.base64), ch => ch.charCodeAt(0))], node.name)) };
+      document.body.dispatchEvent(Object.assign(new Event("drop", { bubbles: true }), { dataTransfer: { items: [{ webkitGetAsEntry: () => entry(root, "") }] } }));
+    }, { name: "dropped", children: tree(PACK) });
+    await page.waitForFunction(n => [...document.querySelectorAll("#log > div")].slice(n).some(x => /indexed \d+ objects/.test(x.textContent)) && document.body.dataset.binds === "done", lines);
+    assert.deepEqual(await R.attested(), asFolder.get(PACK), "a dropped folder: as the button");
+
+    /* The example folder opened as files ("Open JSON file(s)…"). Files come without their folders: the Attestations
+       among them are found and held to the manifest, an envelope is read where it was opened along, and a pack
+       manifest the bundle keeps cannot be among them - which the page says where it matters. */
+    const files = ext => fs.readdirSync(EXAMPLES).filter(n => ext.some(e => n.endsWith(e))).map(n => path.join(EXAMPLES, n));
+    await R.load(files([".json", ".dsse"]), "#filepick");
+    let shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.id.split("/").pop(), a.verdict, a.manifest, a.envelope]), [["acme-2026", "full-match", "this", "unverified"], ["server-7-hardening-3", "semantic-match", "other", "unverified"]]);
+    assert.equal(await page.locator("#view-stagefn [data-binds-caveat]").count(), 1, "the one that binds another manifest says that no kept pack manifest was looked for");
+    await R.view("overview");
+    assert.equal(await page.locator("[data-beside]").getAttribute("data-beside"), "files");
+    assert.equal(await R.text(page.locator("#ov-beside")), "2");
+    await R.load(files([".json"]), "#filepick");
+    shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.envelope, a.envelopeText]), ["acme-2026", "dbvendor-server-7-advice"].map(n => ["missing", `FAIL - envelope-ref 'attestation-${n}.dsse' does not resolve beside the manifest`]),
+      "an envelope that was not opened along does not resolve, and is not passed over");
+  }));
+
+test("changed copies: a changed subject fails an active Attestation and is only reported for a withdrawn one; another manifest is a Semantic Match; an edited signed Attestation no longer matches its envelope - each as the reference says",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const A = "attestation-ifa-ato.json", PA = "attestation-dbvendor-server-7-advice.json", ZERO = "sha256:" + "0".repeat(64);
+    let n = 0;
+    const copy = (src, name, change, remove = []) => {
+      const dir = path.join(R.tmp, "changed-" + ++n, "bundle");
+      fs.cpSync(src, dir, { recursive: true });
+      const att = JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"));
+      change(att);
+      fs.writeFileSync(path.join(dir, name), JSON.stringify(att, null, 1) + "\n");
+      for (const r of remove) fs.rmSync(path.join(dir, r));
+      return dir;
+    };
+    const subject = a => { a["subject-semantic-digests"][0]["semantic-digest"] = ZERO; };
+    const ISSUE_AGAIN = "What can be done: the signer issues the Attestation again (a new version, signed again), or it is taken out of the bundle. ";
+    const UNSIGNED_WAY = ISSUE_AGAIN + "This one names no envelope, so setting its lifecycle to withdrawn is a way out as well: it is then reported and fails nothing.";
+    const SIGNED_NO_WAY = ISSUE_AGAIN + "Setting its lifecycle to withdrawn is no way out for this one: it names an envelope, and an Attestation that was edited no longer matches its envelope.";
+    /* [what, the folder, the file, the change, files removed, then: verdict, shown as a failure, first subject, envelope, what can be done] */
+    const cases = [
+      ["a subject's digest changed in an active Attestation", IFA, A, subject, [], "fail", "true", "differs", "none", UNSIGNED_WAY],
+      ["a subject the bundle does not hold", IFA, A, a => { a["subject-semantic-digests"][0].id += "-not-delivered"; }, [], "fail", "true", "absent", "none", UNSIGNED_WAY],
+      ["the manifest digest changed", IFA, A, a => { a["content-manifest-digest"] = "sha256:" + "b".repeat(64); }, [], "semantic-match", "false", "match", "none", null],
+      ...["withdrawn", "deprecated", "draft"].map(lc => [`${lc}, with a changed subject`, IFA, A, a => { subject(a); a.lifecycle = lc; }, [], "fail", "false", "differs", "none", null]),
+      ["withdrawn, and it still binds", IFA, A, a => { a.lifecycle = "withdrawn"; }, [], "full-match", "false", "match", "none", null],
+      ["signed, the lifecycle edited to withdrawn", PACK, PA, a => { a.lifecycle = "withdrawn"; }, [], "full-match", "false", "match", "fail", null],
+      ["signed, a subject's digest changed", PACK, PA, subject, [], "fail", "true", "differs", "fail", SIGNED_NO_WAY],
+      ["signed, the envelope taken away", PACK, PA, () => {}, [PA.replace(/json$/, "dsse")], "full-match", "false", "match", "missing", null],
+      ["the envelope reference removed and the lifecycle withdrawn: an unsigned record", PACK, PA, a => { a.lifecycle = "withdrawn"; delete a["envelope-ref"]; }, [], "full-match", "false", "match", "none", null]];
+    for (const [what, src, name, change, remove, verdict, fails, first, envelope, todo] of cases) {
+      const dir = copy(src, name, change, remove);
+      await R.load(dir);
+      const shown = await R.attested();
+      assert.equal(shown.length, 1, what);
+      const [a] = shown;
+      assert.deepEqual([a.verdict, a.fails, a.subjects[0]?.status, a.envelope, a.todo], [verdict, fails, first, envelope, todo], what);
+      asTheReference(shown, dir, what);
+      if (a.envelope === "fail") assert.equal(a.envelopeText, "FAIL - " + NOT_ITS_ENVELOPE, what);
+      assert.deepEqual(await page.locator("#view-stagefn [data-binds-envelope]").evaluateAll(l => l.map(x => [x.className, x.textContent])),
+        ["fail", "missing"].includes(envelope) ? [["verdict-bad", "· ✗ and its envelope fails (below)"]] : [], `${what}: the card names a failing envelope beside the verdict, which is about digests`);
+      if (first === "differs") {
+        const delivered = JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8")).objects.find(e => e.id === a.subjects[0].id)["semantic-digest"];
+        assert.deepEqual([a.subjects[0].signed, a.subjects[0].delivered], [ZERO, delivered], `${what}: the signed digest beside the delivered one`);
+      }
+      if (first === "absent") assert.equal(a.subjects[0].delivered, "not an object the manifest lists", what);
+      /* the overview says it in a line: a failure in red, what is only reported not */
+      await R.view("overview");
+      const line = page.locator("[data-ov-binds]");
+      assert.equal(await line.getAttribute("class"), verdict === "full-match" ? "verdict-ok" : fails === "true" ? "verdict-bad" : "verdict-warn", what);
+      assert.ok((await R.text(line)).startsWith(verdict !== "fail" ? `${WORD[verdict]} (` : fails === "true" ? "✗ DOES NOT BIND — a failure · " : "DOES NOT BIND — reported, not a failure · "), `${what}: ${await R.text(line)}`);
+      /* an envelope that fails is named there too, beside whatever the digests say */
+      assert.deepEqual(await line.locator("[data-ov-envelope]").evaluateAll(l => l.map(x => [x.className, x.textContent])),
+        ["fail", "missing"].includes(envelope) ? [["verdict-bad", "✗ its envelope: " + a.envelopeText]] : [], what);
+    }
+
+    /* Attestations are shown in the order of their ids, as the reference reports them, not in that of their files */
+    const renamed = path.join(R.tmp, "renamed", "examples");
+    fs.cpSync(EXAMPLES, renamed, { recursive: true });
+    fs.renameSync(path.join(renamed, "attestation-acme-2026.json"), path.join(renamed, "z-attestation-acme-2026.json"));
+    await R.load(renamed);
+    const inOrder = await R.attested();
+    assert.deepEqual(inOrder.map(x => [x.id, x.verdict]), [["https://agency-x.example/attestation/acme-2026", "full-match"], ["https://dbvendor.example/attestation/server-7-hardening-3", "full-match"]]);
+    asTheReference(inOrder, renamed, "the example folder with an Attestation's file renamed");
+
+    /* Two manifests in what was opened: the one highest up is the bundle's, whichever file arrives first. An
+       Attestation in a folder below it does not lie beside it: it is held to the bundle all the same and fails
+       nothing, and its subjects are compared with the objects the manifest lists, not with every object loaded. */
+    const outer = path.join(R.tmp, "nested", "pack");
+    fs.cpSync(PACK, outer, { recursive: true });
+    fs.cpSync(IFA, path.join(outer, "below"), { recursive: true });
+    await R.load(outer);
+    const both = await R.attested();
+    assert.deepEqual(both.map(x => [x.id.split("/").pop(), x.verdict, x.fails, x.manifest, x.subjects.map(sj => sj.status).join()]),
+      [["server-7-hardening-3", "full-match", "false", "this", "match"], ["ifa-ato", "fail", "false", "other", "absent,absent,absent"]]);
+    const below = page.locator('#view-stagefn [data-attestation="https://ifa.gov/goodread/attestation/ifa-ato"]');
+    assert.match(await R.text(below), /DOES NOT BIND — the Attestation is active; it was not read with this bundle, so it fails none /);
+    assert.match(await R.text(below), /where it lies a file the manifest does not list and that does not lie beside it \(below\/attestation-ifa-ato\.json\) — not read with the bundle/);
+    await R.view("overview");
+    assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside")), await R.text(page.locator("#ov-other"))], ["1", "1", "17"]);
+    await page.evaluate(async () => { await loadFileList([...document.getElementById("folderpick").files].reverse()); });
+    await page.waitForFunction(() => document.body.dataset.binds === "done");
+    assert.deepEqual(await R.attested(), both, "the same files in reverse order: the same manifest, the same verdicts");
+    if (REFERENCE) {
+      const ref = referenceAttested(outer);
+      assert.deepEqual([ref.ok, ref.binds.map(b => b[0])], [true, ["https://dbvendor.example/attestation/server-7-hardening-3"]], "the reference reads the one beside the manifest: " + ref.line);
+    }
+
+    /* Where the page and the reference differ, measured and not hidden. The page reads an object by its fields and
+       checks no schema; the reference reads a file beside the manifest as an Attestation only when the kernel schema
+       accepts it. An "Attestation" without a subject is none to the kernel (minItems 1): the reference does not read
+       the file and says nothing about it; the page shows it, as what the primitive makes of it, and says under which
+       proviso a validator fails the bundle. */
+    const dir = copy(IFA, A, a => { a["subject-semantic-digests"] = []; });
+    await R.load(dir);
+    const [a] = await R.attested();
+    assert.deepEqual([a.verdict, a.fails, a.subjects.length, a.line.replace(/^\S+ \S+ /, "").replace(/ \(B\.1\.7.*$/, "")], ["fail", "true", 0, "it names no subject - this manifest"]);
+    assert.match(await R.text(page.locator("#view-stagefn [data-attestation]")), /DOES NOT BIND — a failure: the Attestation is active, and validate_core\.py fails the bundle for it — provided the kernel schema accepts the file as an Attestation, which this page does not check/);
+    if (REFERENCE) {
+      const ref = referenceAttested(dir);
+      assert.deepEqual([ref.ok, ref.binds, ref.envelopes], [true, [], []], "the reference does not read a file the kernel schema refuses: " + ref.line);
+    }
+  }));
+
+test("from a URL: the Attestations beside a manifest are found through the server's listing of the folder or by the names the link gives; with neither the page says that it did not look",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const folder = new Map();   // what each folder says when it is opened as a folder
+    for (const dir of [EXAMPLES, IFA, PACK]) { await R.load(dir); folder.set(dir, await R.attested()); }
+    const names = dir => besideOf(dir).map(([name]) => name).sort();   // the test knows the names; the page lists the folder or is given them
+    const web = R.watch(await page.context().newPage());
+    const overview = async () => {
+      await web.click('.navitem[data-view="overview"]');
+      return [await web.locator("[data-beside]").getAttribute("data-beside"), await web.locator("#ov-beside").innerText(), await web.locator("#pill-bundle").getAttribute("title")];
+    };
+    const loaded = () => web.waitForFunction(n => [...document.querySelectorAll("#log > div")].slice(n).some(x => /indexed \d+ objects/.test(x.textContent)) && document.body.dataset.binds === "done", 0);
+    const linked = async (server, dir, more = "") => { await web.goto("about:blank"); await web.goto(`${server.reader}#load=${server.url(dir)}${more}`); await loaded(); return overview(); };
+    const lists = await serve(R, "listing"), silent = await serve(R, null), other = await serve(R, "page");
+    R.quiet.push(new RegExp(`^${silent.at}/.*/$`), new RegExp(`^${silent.at}/.*/(packs/sha256/[0-9a-f]{64}|not-there\\.json)$`));   // a folder, a pack manifest that is not kept, a file the link names and the server does not have
+    try {
+      for (const dir of [EXAMPLES, IFA, PACK]) {
+        const what = path.relative(ROOT, dir), count = String(folder.get(dir).length);
+        /* a server that lists its folders: as the folder */
+        let [how, beside, pill] = await linked(lists, dir);
+        assert.deepEqual([how, beside], ["listing", count], what);
+        assert.deepEqual(await R.attested(web), folder.get(dir), `${what}, listed by the server: as the folder`);
+        /* a server that lists none, and a link that names nothing: none is found, and the page says that it did not look */
+        for (const [server, why] of [[silent, "refuses the folder"], [other, "answers the folder with another page"]]) {
+          [how, beside, pill] = await linked(server, dir);
+          assert.deepEqual([how, beside], ["no-listing", "0"], `${what}: the server ${why}`);
+          assert.match(pill, /^(1 object|(?!1 )\d+ objects) · attestations beside the manifest not looked for · /, what);
+          assert.match(await R.text(web.locator("[data-beside]")), /^— not looked for: this server lists no folders, and nothing was named\. Add &attestation=<file name> to the link, or open the folder$/);
+          assert.match(await web.locator("#log").innerText(), /this server lists no folders: an Attestation beside the manifest cannot be found from a URL/);
+          assert.deepEqual(await R.attested(web), [], what);
+        }
+        /* the same server, and a link that names them: as the folder - also the one that binds a pack manifest the
+           bundle keeps, which is asked for under the name its digest gives it */
+        [how, beside] = await linked(silent, dir, "&attestation=" + names(dir).join(","));
+        assert.deepEqual([how, beside], ["named", count], what);
+        assert.deepEqual(await R.attested(web), folder.get(dir), `${what}, named in the link: as the folder`);
+        assert.equal(await web.locator("[data-beside-refused]").count(), 0, what);
+      }
+      /* names that give no Attestation are said, each with its reason, and none of them is shown as one */
+      const [how, beside] = await linked(silent, EXAMPLES, "&attestation=attestation-acme-2026.json,not-there.json,authorization-summary.md,req-konf-14-1.json,packs/x.json");
+      assert.deepEqual([how, beside], ["named", "1"]);
+      assert.deepEqual(await web.locator("[data-beside-refused]").evaluateAll(l => l.map(x => x.textContent)), [
+        "✗ not-there.json: not fetched (HTTP 404)", "✗ authorization-summary.md: the file is no Attestation",
+        "✗ req-konf-14-1.json: the manifest lists this file, so it does not lie beside it", "✗ packs/x.json: an Attestation beside the manifest is named by its file name, without a folder"]);
+      assert.deepEqual((await R.attested(web)).map(a => a.id), ["https://agency-x.example/attestation/acme-2026"]);
+      /* the button asks for the address and then for the names */
+      R.answers.push(silent.url(PACK), " " + names(PACK).join(" , "));
+      await web.click("#btn-url");
+      await web.waitForFunction(() => document.getElementById("pill-bundle").title.startsWith("1 object · 1 attestation beside the manifest") && document.body.dataset.binds === "done");
+      assert.deepEqual(await R.attested(web), folder.get(PACK), "by the button, with a name");
+      R.answers.push(silent.url(IFA));   // and no name
+      await web.click("#btn-url");
+      await web.waitForFunction(() => document.getElementById("pill-bundle").title.startsWith("16 objects · attestations beside the manifest not looked for"));
+    } finally { lists.close(); silent.close(); other.close(); }
+  }));
+
+test("an export never lists an Attestation: it is written beside the manifest, and the reference reads it there; a pasted Attestation fails no bundle",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const stored = created => ({ v: 2, ns: "https://example.org/my", tailor: { label: "my-tailoring", selects: [], excludes: [], operations: [] },
+      system: { title: "My System", components: [], implementations: [] }, assess: { scopeKey: "", performer: "", results: {} }, created });
+    const exported = async (created, name) => {
+      await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), stored(created));
+      await page.reload();
+      const dir = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, name));
+      return { dir, manifest: JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8")), log: await R.log() };
+    };
+
+    /* a workspace that holds an unsigned Attestation and its three subjects (the first binds vector) */
+    const c = BINDS[0], att = c.attestation;
+    let x = await exported([...c.objects, att], "unsigned");
+    let shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.id, a.verdict, a.envelope]), [[att.id, "not-judged", "none"]], "without a bundle an Attestation is held to none");
+    assert.deepEqual(x.manifest.objects.map(e => e.id), c.objects.map(o => o.id), "the manifest lists the three objects and no Attestation");
+    for (const e of x.manifest.objects) assert.notEqual(P.inferType(JSON.parse(fs.readFileSync(path.join(x.dir, e.path), "utf8"))), "attestation", e.path);
+    assert.deepEqual(fs.readdirSync(x.dir).sort(), ["attestation-ato.json", "content-manifest.json", "objects"], "the Attestation lies beside the manifest");
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(x.dir, "attestation-ato.json"), "utf8")), att, "as it was held");
+    /* the manifest is new, so what bound another one with unchanged subjects is a Semantic Match: the page says so when it writes, and the reference says the same of the export */
+    const SEMANTIC = `binds: ${att.id} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`;
+    assert.ok(x.log.includes("in this export — " + SEMANTIC + "\n"), x.log.slice(-900));
+    assert.match(x.log, /workspace bundle exported: 3 objects \+ content-manifest with both digests \+ 1 Attestation\(s\) beside the manifest, not listed \(D3\.1\) \([\d.]+ kB zip\) — loads back into this reader and passes validate_core\.py$/m);
+    await R.load(x.dir);
+    shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest, a.line]), [["semantic-match", "false", "other", SEMANTIC]]);
+    asTheReference(shown, x.dir, "the export, loaded again");
+    assert.ok((await page.locator("#pill-bundle").getAttribute("title")).startsWith("3 objects · 1 attestation beside the manifest · "));
+
+    /* A manifest that lists its Attestation, as reader 1.12.0 wrote it: D3.1 excludes that, and the reference reads
+       the Attestation all the same. So does the page: it is held to its subjects like any other, counted among the
+       objects the manifest lists, and the page says where it lies. */
+    const moved = "objects/att/attestation-ato.json", unsigned = x;
+    const listedBy = async (name, listedAtt) => {
+      const dir = path.join(R.tmp, name, "bundle"), bytes = Buffer.from(JSON.stringify(listedAtt, null, 1) + "\n");
+      fs.cpSync(unsigned.dir, dir, { recursive: true });
+      fs.rmSync(path.join(dir, "attestation-ato.json"));
+      fs.mkdirSync(path.join(dir, "objects/att"));
+      fs.writeFileSync(path.join(dir, moved), bytes);
+      fs.writeFileSync(path.join(dir, "content-manifest.json"), JSON.stringify({ ...unsigned.manifest, objects: [...unsigned.manifest.objects,
+        { id: listedAtt.id, version: listedAtt.version, "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(listedAtt), path: moved }] }, null, 1) + "\n");
+      return dir;
+    };
+    /* one whose subject was changed after signing: listed or not, an active Attestation that does not bind fails the bundle */
+    const changed = await listedBy("listed-changed", { ...att, "subject-semantic-digests": att["subject-semantic-digests"].map((sj, i) => i ? sj : { ...sj, "semantic-digest": "sha256:" + "0".repeat(64) }) });
+    await R.load(changed);
+    shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.subjects.map(sj => sj.status).join()]), [["fail", "true", "differs,match,match"]]);
+    asTheReference(shown, changed, "a manifest that lists an Attestation that does not bind");
+    const listing = await listedBy("listed", att);
+    await R.load(listing);
+    shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest]), [["semantic-match", "false", "other"]]);
+    asTheReference(shown, listing, "a manifest that lists its Attestation");
+    assert.match(await R.text(page.locator("#view-stagefn [data-attestation]")), /where it lies listed by the manifest, as objects\/att\/attestation-ato\.json — D3\.1 puts an Attestation beside the manifest; it is held to what it binds all the same/);
+    await R.view("overview");
+    assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside"))], ["4", "0"]);
+    assert.match(await R.text(page.locator("[data-ov-binds]")), /^SEMANTIC MATCH \(another manifest\) · \S+ \(listed by the manifest\)$/);
+
+    /* a signed Attestation in a workspace: the workspace holds objects and no envelope files, so it leaves without
+       its envelope - not listed either, and the page says that a validator fails the export for it */
+    const packAtt = besideOf(PACK)[0][1], packManifest = json("jascon/example-packs/dbvendor-server-7-advice/content-manifest.json");
+    const subjectOfPack = JSON.parse(fs.readFileSync(path.join(PACK, packManifest.objects[0].path), "utf8"));
+    x = await exported([subjectOfPack, packAtt], "signed");
+    assert.deepEqual(x.manifest.objects.map(e => e.id), [subjectOfPack.id]);
+    assert.deepEqual(fs.readdirSync(x.dir).sort(), ["attestation-server-7-hardening-3.json", "content-manifest.json", "objects"]);
+    const UNRESOLVED = `envelope-ref '${packAtt["envelope-ref"]}' does not resolve beside the manifest`;
+    assert.ok(x.log.includes(`in this export — dsse: ${packAtt.id} = FAIL - ${UNRESOLVED} (the workspace holds no envelope files)\n`), x.log.slice(-900));
+    assert.match(x.log, /— loads back into this reader and validate_core\.py fails it: 1 line\(s\) above say why$/m);
+    if (REFERENCE) {
+      const ref = referenceAttested(x.dir);
+      assert.equal(ref.ok, false, ref.line);
+      assert.deepEqual(ref.envelopes, [[packAtt.id, "missing", UNRESOLVED]]);
+      assert.deepEqual(ref.binds, [[packAtt.id, `binds: ${packAtt.id} = SEMANTIC MATCH [1 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`]]);
+    }
+
+    /* An Attestation leaves as it is held, whatever is in it. An object written in a workbench has its plain-text
+       title written as a language map on the way out; an Attestation is somebody's statement and is not rewritten. */
+    const plain = { ...att, title: "Authorization, as somebody typed it" };
+    x = await exported([...c.objects, plain], "plain");
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(x.dir, "attestation-ato.json"), "utf8")), plain);
+
+    /* an export of what was written here does not carry the Attestations of the loaded bundle: they bind that delivery */
+    await page.evaluate(() => localStorage.removeItem("scr-work"));
+    await page.reload();
+    await R.load(EXAMPLES);
+    await R.view("stage:tailor");
+    const resolved = unzipTo(await R.download("#wb-t-export-resolved"), path.join(R.tmp, "resolved"));
+    assert.deepEqual(fs.readdirSync(resolved).sort(), ["content-manifest.json", "objects"]);
+    assert.match(await R.log(), /resolved package exported: .* — the 2 Attestation\(s\) of the loaded bundle are not carried: they bind that delivery, and this export delivers other objects$/m);
+
+    /* an Attestation pasted beside a loaded bundle is held to it all the same, and fails nothing: it did not come with it */
+    R.answers.push(JSON.stringify(att));
+    await page.click("#btn-paste");
+    await page.waitForFunction(() => document.body.dataset.binds === "done");
+    const pasted = page.locator("#detail [data-attestation]");
+    assert.deepEqual([await pasted.getAttribute("data-binds"), await pasted.getAttribute("data-binds-fails"), await pasted.locator("[data-binds-word]").getAttribute("class")], ["fail", "false", "verdict-warn"]);
+    assert.match(await R.text(pasted), /^DOES NOT BIND — the Attestation is active; it was not read with this bundle, so it fails none /);
+    assert.match(await R.text(pasted), /where it lies pasted — it did not come with the loaded bundle/);
+    assert.equal(await pasted.locator("[data-binds-todo]").count(), 0, "what can be done is said where a bundle fails");
+    await R.view("overview");
+    assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside")), await R.text(page.locator("#ov-other"))], ["24", "2", "1"]);
+    assert.equal(await page.locator("[data-ov-binds]").count(), 2, "the overview lists the two that came with the bundle");
+  }));
