@@ -3598,3 +3598,303 @@ and one day on the Validate page. *Complexity:* the pre-fill is a
 convention about OSCAL metadata that OSCAL does not make, and it can be
 wrong about a document; the overwrite is the answer to that, and it
 depends on somebody using it.
+
+
+## Phase D — an Attestation is held to what it binds; no tool invents a party *(2026-11-14; closes #46 and #70; files #73, #74 and #75; no new candidate)*
+
+**Author decisions, in the author's words.** "#70 refuse if no party is
+named". On the removed corpora, whose converters this session had not
+been able to run: "we used to have them in the repo, but they are not
+open source. for running the tests, we could download them". Then:
+"phase D".
+
+### #46 — `attestation-binds`, applied
+
+**What was there.** Appendix B.1.7 defines the primitive: (attestation,
+bundle) → Full Match | Semantic Match | fail. Five vectors exercised the
+two digests of one object. No tool applied it to a bundle. A bundle's
+Attestation was read for its envelope, for a Tailoring's tier and for a
+pack's publisher; nothing recomputed a subject. An Attestation beside a
+manifest, where D3.1 puts it, was read only when the bundle was a pack.
+
+**What that had let through (measured).** The example folder's
+Attestation, from before 1.0.0: three subject digests that no object
+carries, a manifest digest that is no manifest's, an `envelope-ref` to a
+file that was never there. With the check in place and the Attestation
+as it was shipped, the reference fails the example folder twice. The IFA
+bundle's, until phase C: one of three subject digests matched nothing.
+
+**How the primitive is applied (argued where marked).** Each subject is
+judged against the objects the manifest lists: *match*, *differs* (the
+object of that id carries another digest) or *absent*. A bare digest
+matches when any listed object carries it; a subject with an id is
+compared with the object of that id and with no other. The manifest
+bound is this one (the digest of its bytes as delivered), a pack
+manifest the bundle keeps (D25), or another. Full Match and Semantic
+Match are D7's. Three points are this session's reading and not the
+primitive's text:
+
+1. *An absent subject fails.* What is not delivered cannot be
+   recomputed. The handbook already said "missing subjects" fail (11.5);
+   the primitive says "anything else".
+2. *A kept pack manifest counts as the manifest delivered.* A vendor's
+   Attestation in a consumer's bundle binds the vendor's manifest, which
+   the consumer keeps byte for byte. Without this the vendor's
+   Attestation in the example folder would be a Semantic Match at best,
+   and the publisher rule of D25 already treats that digest as the
+   pack's.
+3. *Lifecycle.* A failing Attestation fails the bundle while it is
+   `active`. A draft, a deprecated or a withdrawn one is reported with
+   its verdict and fails nothing. Without this, a bundle whose attested
+   object was changed could never validate again, however openly the
+   Attestation was withdrawn. Who can use it was **measured**: for a
+   signed Attestation, nobody but the signer. The envelope signs the
+   canonical form, lifecycle included, so setting a signed Attestation
+   to `withdrawn` breaks its envelope and the bundle fails on that, with
+   or without trusted keys. Take the envelope reference out as well and
+   it is an unsigned, withdrawn record that fails nothing and proves
+   nothing. An unsigned Attestation can be withdrawn by whoever holds
+   the file; it never proved who issued it.
+
+**Built in the reference.** `attestation_binds`, `binds_report`,
+Attestations beside the manifest read with every bundle (typed, counted,
+held to their envelope, handed to the tier derivation), the example
+folder held to envelope and binding. Nineteen `binds-vectors`, their
+expectations written before the code; one mistake found by the first
+run was in a vector's fixture (an Implementation the kernel does not
+type), not in an expectation. `test_attestation_binds.py` validates nine
+copies of the IFA bundle and the worked pack, eight of them changed, in
+one run of a validator, because a vector cannot show that an
+Attestation beside a manifest is found at all, nor what a tool prints
+about it.
+
+**The example made real.** Three subjects by id and semantic digest (the
+Acme SaaS Component, its Implementation of KONF.14.1, the 2026 Q3
+Assessment: what the rendering is about), the digest of the example
+manifest, a DSSE envelope signed with the corpus fixture key.
+`drafts/phase-d/attest_example.py` issues it and checks it; the workflow
+runs the check. The plan had named the Tailoring as a subject; the
+Tailoring that selects KONF.14.1 is the BSI's, not Acme's, so the
+Component stands in its place.
+
+| What | Measured |
+|---|---|
+| Vectors | `attestation` 5 → 24; 684 in 18 families |
+| Reference | ALL GREEN; the example folder: its own Attestation FULL MATCH against this manifest, the vendor's FULL MATCH against the kept pack manifest; the IFA bundle's FULL MATCH, and the bundle counts 18 again; the worked pack 3 |
+| Verification mode | with `conformance/fixture-trusted-keys.json`: both signatures of the example folder VERIFIED, the pack's publisher PROVEN, ALL GREEN |
+| Deliberate defects | 16 in the reference, each caught by a vector or by the end-to-end test; the last one (the example folder not held to its Attestations) was caught by nothing until a test was added for it |
+| The app's and the reader's tests against the new reference | unchanged and green: no export of theirs carried an active Attestation that did not bind |
+
+### #46 — the ports
+
+**The twin**, by an agent in a worktree, merged and run here.
+`Attestation-Binds`, `Binds-Report`, `Beside-Attestation-Files`, the 19
+vectors, the example folder held to envelope and binding. Where the
+reference sorts by code point (the files beside a manifest, a bundle's
+dsse lines) the twin does now; its dsse lines had been in the order of a
+culture.
+
+| What | Measured |
+|---|---|
+| Twin under PowerShell 7.4 on Linux, here | the lint; 684 vectors; in the default run and with the fixture keys the reference's counts for every bundle and the same 20 attestation, author and review lines |
+| Twin on Windows PowerShell 5.1 | run 43550048312 at `57c3e235`: the lint, 684 vectors in 18 families (`attestation: 24`), the five bundles, the pack and the example folder, the four binds lines FULL MATCH, ALL GREEN in 220 s; then the end-to-end test with the twin, 11 tests, one skipped by design, in 81 s (**read** from the log) |
+| Deliberate defects in the twin | **reported by the agent, not repeated here**: 33; 31 change a vector or a line of a changed bundle; two change nothing and cannot be reached in the reference either (an Attestation without a subject, which the schema keeps out of a bundle and no vector has; a vector case with an object that does not type) |
+
+**What the end-to-end test found in the twin, both older than the
+port.** Every bundle of the repository is a Full Match. The twin's lines
+for a Semantic Match, for an Attestation that does not bind and for the
+failure would never have been printed on Windows PowerShell 5.1; the
+vectors hold the verdict, not the words. So the test that drives the
+reference was made to drive the twin too, on Windows, in the workflow.
+It found nothing wrong with those lines and two defects that have
+nothing to do with an Attestation:
+
+1. *The twin took one bundle folder.* Its parameters were bound by
+   position, so in `validate_core.ps1 a b` the folder `b` was taken for
+   the file of trusted keys, and the run stopped trying to read it.
+   Every argument without a name is a bundle folder now.
+2. *A bundle was another bundle when its folder was spelled another
+   way.* The first run on Windows (43549065626) was red in every copy:
+   16 failures each, one per object, "on disk but not in manifest". The
+   twin cut a file's relative path at the length of the folder's name as
+   the caller had spelled it; the runner's temporary folder has a short
+   (8.3) name, which Windows spells out when it lists files.
+   **Reproduced** here with a trailing separator, fixed (the paths come
+   from .NET's enumeration of the bundle's `objects` folder), and the
+   test names one of its nine folders with a trailing separator, so the
+   class is held on every platform. No caller had named a bundle by a
+   short path before; the main step of that run was green.
+
+**The app** (build 0.9.11), by an agent, merged and run here. The
+primitive in `jascon-rules.js`, held to the 19 vectors, and a check of
+the whole set that first settles which bundle is meant: a set as it was
+loaded is held to the manifest it came with; a set written to since is
+held to the manifest an export would write now, so that the page's
+answer is the reference's answer for the exported folder. The Validate
+page shows the reference's lines. The Assess page had a verdict of its
+own, and it was wrong: with one of an Attestation's three subjects
+removed it said "Full Match" (**measured** by the agent on 0.9.10;
+`jascon-app/ERRATA.md`). It shows the Validate page's result now and
+says what can be done: issued again by the signer, taken out of the set,
+or, for an unsigned one only, set to withdrawn.
+
+**Measured here after the merge:** 173 tests (169 pass, 4 skipped for
+sources the repository does not carry), 19 of 19 browser tests of the
+pack builder and the reader, the five generated-file checks; the
+workflow's app and browser jobs green in run 43550048312. **Reported by
+the agent and not repeated here:** for the example folder, the IFA
+bundle and the worked pack the page's binds and dsse lines are the
+reference's, with and without the fixture keys; 41 deliberate defects,
+all red. **Left open by the agent:** a bundle loaded from a URL that
+keeps no pack is not asked for a folder listing, so its Attestation
+does not arrive.
+
+**The reader** (1.13.0), by an agent, merged and run here. The same
+function in the page's pure part, held to the 19 vectors, and the line
+shown is the one the reference prints. Until 1.12.0 the reader judged an
+Attestation only when a button was pressed, by a rule of its own: a
+subject was compared with any object of the graph, one that was not
+there was "unknown", and a pack manifest the bundle keeps was another
+manifest. Every way of loading now reads the Attestations beside a
+manifest: a folder, a dropped folder, loose files, and a URL, where the
+server is asked once for a listing of the folder or the link names the
+files; with neither the page says that it did not look, and no file name
+is guessed. An Attestation is counted apart from the objects the
+manifest lists. An export writes it beside the manifest and never lists
+it; until 1.12.0 the reader wrote it under `objects/att/` and listed it.
+The page takes no key and has no word for a signature that holds.
+
+| What | Measured |
+|---|---|
+| Browser tests after the merge, here | 44 of 44, none skipped: 17 for the app's pages, 7 for the pack builder, 20 for the reader (12 before) |
+| The reader against the reference, here, by a comparison that is not the agent's | ten folders (the nine copies of the end-to-end test and the example folder) loaded into both: binds lines, failures and envelope statements the same for each |
+| Deliberate defects in the reader, here | nine of my own, each red in the reader's tests |
+| Reported by the agent, not repeated here | 16 changed copies against the reference; 83 deliberate defects, three red only after a test was tightened; the 125 of #69 and #70 still red |
+| The built site, served as a static host serves it | all seven served folders load in the reader without a 404; the IFA bundle shows its Attestation, FULL MATCH |
+
+**What the ports found beyond their brief.**
+
+1. *D3.1 is held in a pack only (#75).* "Attestations and signature
+   envelopes are excluded from the content manifest by definition." The
+   reader's agent asked what the reference does with a bundle that lists
+   its Attestation, and **measured** it; repeated here on a copy of the
+   IFA bundle: 18 pass, 0 fail, ALL GREEN, in the reference and in the
+   twin. Only ADVICE-1 refuses it, where the manifest has a pack header.
+   The one trace is the verdict, a Semantic Match, because a manifest
+   that lists an Attestation cannot be the one it binds. This is how the
+   IFA bundle listed its own until phase C. Filed for the author with a
+   recommendation: refuse it in every bundle, and before the tag, since
+   the rule fails bundles that pass today.
+2. *The website would have counted an Attestation as an object with two
+   digests.* Once the reference counted the Attestation beside the IFA
+   manifest, `website/build.py` read 17 objects for that bundle and the
+   evidence page would have said "both digests of 3,715 objects" for
+   3,714 manifest entries. The build counts a bundle's objects as its
+   manifest lists them now and stops when manifest and report disagree
+   (tried with a report one object off). Found here when the facts were
+   measured again, by reading the diff of `facts.json`, not by a test.
+3. *The site listed no folder of a converted bundle.* The reader would
+   have said of the IFA bundle that it did not look. Every served
+   bundle folder has a listing now (**measured** before and after).
+4. *The app does not ask.* From a URL it asks a server for a folder
+   only where a bundle keeps a pack, so the IFA Attestation does not
+   arrive behind the site's "Open in the app", and the hub says that it
+   was not looked for (**measured** on the built site). Not changed:
+   #71, item 8.
+5. *The reader reads by fields, the reference by schema.* A file beside
+   a manifest that looks like an Attestation and has no subject is
+   shown by the reader as one that does not bind and is not read by the
+   reference at all. Stated in a test of the reader, and in #71, item 9.
+
+
+**A remedy that does not exist, written into two briefs.** The briefs
+for the app's and the reader's port said a user could "withdraw the
+Attestation" to make a failing set validate. Measured afterwards (point
+3 above): for a signed one, editing it breaks the envelope. Both agents
+were told while they worked, and both pages say it as it is.
+
+
+### #70 — no tool invents a party
+
+The decision asked for a refusal. The two agents were told to look for
+more than the four places the row named, and found them: seven in the
+app, among them the obligated party of every clause of a generic OSCAL
+import and the publisher of a pack, and five in the reader, among them
+`…/party/x` for a name without a letter or digit. An approver starts
+empty in both, always: a pre-filled approver records self-approval by
+default. A URI typed as a party is taken as typed; the reader had cut it
+into a name under the user's namespace.
+
+**Measured here after both merges:** the app's 167 tests (163 pass, 4
+skipped for sources the repository does not carry) and 33 of 33 browser
+tests (14 for the app's pages, 7 for the pack builder, 12 for the
+reader).
+**Reported by the agents and not repeated here:** 57 and 125 deliberate
+defects, all red in the end, three of them only after a test was added.
+
+**What it does not reach.** Objects written by earlier versions keep the
+made-up parties, and nothing marks them. And the converters: ten of
+them write an obligated party that no source states (#74, the author's
+to decide).
+
+### The CR26 converter, run for the first time since its bundle left
+
+The source was downloaded from its publisher (`github.com/FedRAMP/rules`,
+`2026.11.02.01`; SHA-256 `782faeca…64c4e3`) and the converter run. What
+this session had flagged as not run, the overwrite of #69, works. What it
+had not asked about was worse: FedRAMP has published a new version since
+the measurement in the repository, 108 of 7,532 source leaves are
+unmapped in five path kinds, and the reference refuses the bundle with
+six failures (a fraction written as a JSON number, empty containers, a
+member the standard reporting facet does not know). The converter prints
+`UNMAPPED: 108` and exits 0. Nothing had run it since 2026-11-10, so
+nothing had noticed. Filed as #73 with a proposal: bring the converter
+to the publication, make the exit code say what the gate says, and run
+it in the workflow against a pinned download, committing nothing.
+
+### Three sentences in commit messages that are wrong
+
+Commits on this branch are not rewritten, so they are corrected here.
+`2b312ad6` gives the split of the browser tests after #70 as "9 pages,
+12 pack builder, 12 reader"; it was 14, 7 and 12. `a9657dc1`'s docstring
+in `website/build.py` said a listed Attestation fails the validator's
+run, which holds for a pack only; `9a137805` corrects the docstring and
+then says that the message of `a9657dc1` repeats the sentence, which it
+does not. Each was written from memory and not from the thing it
+describes.
+
+### The whole state, run by the workflow
+
+At commit `dadb7055`, with everything above in the tree (run
+43556089767, **read** from its logs): the reference ALL GREEN, the
+library tests, the end-to-end test, the check of the example
+Attestation and the IFA conversion reproduced from its pinned sources;
+the app's tests; the browser tests of the pages, the pack builder and
+the reader; and the twin on Windows PowerShell 5.1 — the lint, 684
+vectors in 18 families, the five bundles, the worked pack and the
+example folder, ALL GREEN in 130 s, then the end-to-end test with the
+twin, 11 tests, one skipped by design, in 50 s. The run at `57c3e235`,
+71 minutes earlier and without the reader's port, took 220 s and 81 s
+for the same two steps on the same twin but for its header; the
+difference is the runner's.
+
+### Found and not fixed
+
+#71 (two items added) and #72, as before. #73, #74 and #75 (above). The
+app's presets write what their converters write. The reader does not
+show Risks on stage 5. `template-ref.digest` of the example Attestation
+is still a marked placeholder. The deliberate defects of the twin's and
+the app's agents were not repeated here; of the reader's, nine of my
+own were run. The reader's time on a large bundle whose Attestation
+names bare digests, where every listed object is digested, was not
+measured.
+
+**Scored.** *Customer:* an auditor who is handed a bundle with an
+Attestation is told by the validator, without keys, whether it binds
+what was delivered, and with keys whether the named party signed it; and
+a record no longer names an approver nobody chose. *Simplicity:* no new
+rule id and no shape: a primitive that existed is run, and a form field
+that was filled is left empty. *Complexity:* a bundle that passed can
+fail (an active Attestation that does not bind), every implementation
+reads files beside the manifest that it used to ignore, and the
+lifecycle clause is a judgement that somebody may want made otherwise.

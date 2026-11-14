@@ -1,6 +1,6 @@
 # Plan — the open backlog before 2.0.0
 
-### 2026-11-14 · branch `claude/sleepy-planck-g6w3h3` · phases A, B and C are built (§8, §10, §11); D and E are a plan; §9 says what another session's work on main changed in it
+### 2026-11-14 · branch `claude/sleepy-planck-g6w3h3` · phases A, B, C and D are built (§8, §10, §11, §12); E is a plan; §9 says what another session's work on main changed in it
 
 Input: the ten open rows of `jascon-v0.6-spec-feedback-backlog.md` and the
 residue of #45, with the author's dispositions of 2026-11-13. Every
@@ -543,3 +543,53 @@ What phase C showed for what is left:
   kernel requires one), #71 and #72 are work.
 
 Open after phase C: #41, #46, #55, #62, #70, #71, #72.
+
+## 12. Phase D as built (2026-11-14)
+
+The author: "#70 refuse if no party is named", "then phase D", and of
+the corpora that left the repository: "for running the tests, we could
+download them". The register entry "Phase D — an Attestation is held to
+what it binds; no tool invents a party" holds the measurements. Against
+this plan:
+
+| Plan | Built |
+|---|---|
+| §5.1 item 1: the subjects are the Tailoring, the Implementation and the Assessment of the ACME case | The Component, the Implementation and the Assessment. The Tailoring that selects KONF.14.1 is the BSI's and not Acme's to attest |
+| §5.1 items 2 and 3: the manifest digest, the fixture key, the envelope | As planned. `drafts/phase-d/attest_example.py` issues the Attestation and checks it, and the workflow runs the check |
+| §5.1 item 4: hold every Attestation beside the example manifest to what it binds, in the reference, the twin and the app | One primitive, `attestation-binds` (Appendix B.1.7), applied to every Attestation read with any bundle, in the reference, the twin, the app (0.9.11) and the reader (1.13.0), each held to the same 19 vectors. D7 is amended to say how the two states are computed on a bundle |
+| §11: "Phase D got larger by one sentence" | Done: an Attestation beside a manifest is read with every bundle and no longer with a pack only |
+| not in the plan | #70, decided and closed in the app (0.9.10) and the reader (1.12.0) |
+| not in the plan | The CR26 converter run on its downloaded source: #73 |
+
+Three things the built check decides that neither this plan nor the
+primitive's text did, each **argued** in the register and the author's
+to overturn: a subject the bundle does not hold fails; a pack manifest
+the bundle keeps counts as a manifest delivered; a failing Attestation
+fails the bundle only while its lifecycle is `active`.
+
+What phase D showed for what is left:
+
+- **Run the tool as its user would, on the platform it is for.** The
+  vectors hold verdicts. The end-to-end test, driven against the twin
+  on Windows PowerShell 5.1, found two defects that no vector could:
+  the twin took one bundle folder, and a folder named by a short path
+  made every object look unlisted. Neither has to do with an
+  Attestation.
+- **A converter nothing runs goes stale without a sound.** #73: bring
+  the CR26 converter to the current publication, make its exit code say
+  what its gate says, and run it in the workflow against a pinned
+  download. The same holds for the other five corpora that left.
+- **#74 needs the author**: ten converters write an obligated party
+  their source does not state.
+- **#75 needs the author, and before the tag rather than after**: D3.1
+  excludes an Attestation from a manifest "by definition", and the
+  validators refuse a listed one in a pack only (**measured**: the
+  reference and the twin pass an IFA copy that lists its own). The
+  plan's §5.1 item 5 moved the IFA Attestation out of its manifest; it
+  did not ask what keeps the next one out.
+- **A port is a second reading of the reference.** #75 was found by the
+  agent that ported the check to the reader, by asking what the
+  reference does with a case the brief had not named.
+- **Phase E is unchanged**: #41 and the validator half of #55.
+
+Open after phase D: #41, #55, #62, #71, #72, #73, #74, #75.

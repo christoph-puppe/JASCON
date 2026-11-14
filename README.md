@@ -38,25 +38,30 @@ something you can click.
 > under `https://ns.jascon.net/`, the attestation media type
 > `application/vnd.jascon.attestation+json`, and the schema filenames.
 
-![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — the check workbench that mints real Assessment and Finding objects, with its optional author field, above the Assessment the bundle holds.](docs/img/reader-assess.png)
+![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): the end of stage 5, Assess and Attest — the Attestation of the authorization to operate, held to the bundle: FULL MATCH, each of its three subjects with the signed and the delivered semantic digest, the manifest it binds, its envelope and where its file lies.](docs/img/reader-assess.png)
 
 *Above: the reader on the IFA GoodRead lifecycle corpus — an OSCAL SSP,
 assessment plan, assessment results and POA&M converted to typed objects.
-Stage 5 shows the Assessment and its two Findings; the workbench above
-them runs a check against the bundle's requirements and mints real
-objects. (Reader 1.11.0, 2026-11-14. The bundle lists 16 objects: the
-Attestation of the ATO lies beside the manifest, where D3.1 puts it, and
-the reader does not read it there yet. The stage names Risk in its
+Stage 5 ends with the Attestation of the authorization to operate. It
+lies beside the manifest, where D3.1 puts it; the reader recomputes the
+semantic digest of each of its three subjects and the digest of the
+manifest's bytes, and says what the reference validator says: FULL MATCH.
+The Attestation is unsigned (the converter models it from the
+authorization date of the SSP), and the page says that too; it takes no
+key and has no word for a signature that holds. (Reader 1.13.0,
+2026-11-14, loaded from `python -m http.server`, which lists the folder.
+The bundle's manifest lists 16 objects. The stage names Risk in its
 heading and lists none; the two Risk objects are in the object browser —
 backlog #71.)*
 
 ## Unreleased: JASCON 2.0.0 — Risk, Check and advice packs
 
-> **State 2026-11-13 — release candidate 2.0.0-rc.4; not tagged.**
+> **State 2026-11-14 — release candidate 2.0.0-rc.4; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
 > candidate adds two kernel types, Risk and Check, and advice packs.
-> Both reference validators are green on it, and nothing is left to
-> decide: the tag is the author's call.
+> Both reference validators are green on it. Two questions wait for the
+> author (backlog #74 and #75, the second cheaper to answer before the
+> tag than after it); the tag is the author's call.
 >
 > **Who decided, and when** ([CP-AUTHOR-1](drafts/CP-AUTHOR-1.md),
 > decided by the author on 2026-11-13; release candidate 4): a
@@ -81,7 +86,7 @@ backlog #71.)*
 > - **Written by the tools** (backlog #69, 2026-11-14): the app has one
 >   setting, *Who am I*; its Tailor, Risk, Implement and Assess pages
 >   write `provenance` with it, and its Validate page shows both reports.
->   The reader (1.11.0) shows who decided each entry, marks what an
+>   The reader (since 1.11.0) shows who decided each entry, marks what an
 >   entry inherits from its record, and pins the kernel by the
 >   validator's own reasons.
 >   Converters and imports pre-fill who and when from the source, and
@@ -101,6 +106,23 @@ backlog #71.)*
 >   is missing; an approver always starts empty. Objects written before
 >   keep the made-up parties, and ten converters still write an
 >   obligated party their source does not state (backlog #74, open).
+> - **An Attestation is held to what it binds** (backlog #46, closed
+>   2026-11-14): the primitive `attestation-binds` was defined and
+>   applied by no tool to a bundle, and the example folder's Attestation
+>   had bound nothing since before 1.0.0. Every Attestation read with a
+>   bundle — beside its manifest, where D3.1 puts it — is now judged
+>   subject by subject and against the manifest it binds: Full Match,
+>   Semantic Match, or it fails the bundle while it is `active`. The
+>   reference, the PowerShell twin, the app (0.9.11) and the reader
+>   (1.13.0) do it, each held to the same 19 vectors (684 in all), and
+>   the example Attestation is real and signed with the public fixture
+>   key. A signed Attestation cannot be withdrawn by editing it: its
+>   envelope signs the canonical form, lifecycle included. Three
+>   readings are this project's and not the primitive's text — a subject
+>   the bundle does not hold fails, a pack manifest the bundle keeps
+>   counts as delivered, a withdrawn Attestation fails nothing — and no
+>   validator yet refuses an Attestation that an ordinary bundle's
+>   manifest lists (backlog #75, open).
 > - **One value, one spelling, once more** (backlog #68, 2026-11-13): a
 >   date, a digest or a decimal that ends in a line break was accepted
 >   by two of the three implementations, because Python and .NET read
@@ -146,7 +168,10 @@ backlog #71.)*
 >   and on all 643 of rc.4 later the same day
 >   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43504417645)),
 >   and on the 665 after phase C on 2026-11-14
->   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43538983821)). A
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43538983821)),
+>   and on the 684 after phase D the same day, where a test also drives
+>   it over changed copies of a bundle
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43556089767)). A
 >   [workflow](.github/workflows/validators.yml) now runs both validators
 >   and the app's port on every change.
 > - **Not there:** a pack published by a vendor; a converter from OSCAL
@@ -482,8 +507,11 @@ the five stages of the compliance graph *functional*, not diagrammatic:
   facets alike, auto-populated; free text is excluded by measurement (values
   that never repeat), and the log names what was excluded and why.
 - **Verify** — one click recomputes both SHA-256 digests of every object
-  against the manifest, entirely client-side; attestations get the bi-modal
-  verdict (Full Match / Semantic Match / Tamper).
+  against the manifest, entirely client-side. An Attestation beside the
+  manifest is held to the bundle when it is loaded, in the reference
+  validator's words: Full Match, Semantic Match, or it does not bind
+  (since reader 1.13.0; until then a button gave "Full Match / Semantic
+  Match / Tamper" by a rule of the reader's own).
 - **Tailor** — build a Tailoring against the loaded corpus with the weakening
   law enforced live: easings demand a Deviation, unit-class crossings are
   blocked, same-target conflicts refused, and the authority tier is derived

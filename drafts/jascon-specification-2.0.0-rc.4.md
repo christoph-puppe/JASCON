@@ -2193,7 +2193,15 @@ of Check and of advice packs:
    against `validate_core.py` (`https://github.com/christoph-puppe/JASCON/actions/runs/43550048312`). The run before it was
    red in that step: the twin called every object of a bundle "on disk
    but not in manifest" when the bundle's folder was named by a short
-   path, a defect older than the port (register, "Phase D").)*
+   path, a defect older than the port (register, "Phase D").
+   At commit `dadb7055`, the state after phase D — the app 0.9.11 and
+   the reader 1.13.0 in the tree — the same 684 / 684, the five bundles,
+   the worked pack and the example folder, ALL GREEN in 130 s, and the
+   end-to-end test with the twin in 50 s; the reference with its
+   library tests, its end-to-end test, the check of the example
+   Attestation and the IFA conversion reproduced from its pinned
+   sources, the app's port and the browser tests of the pages, the pack
+   builder and the reader green in the same run (`https://github.com/christoph-puppe/JASCON/actions/runs/43556089767`).)*
 4. **Corpus.** ◐ Risk: one, IFA, two Risk objects — enough to exercise
    the record's sourced half and to measure what the source lacks; not
    enough to exercise `rating`, `acceptance`, the later states, or
@@ -2253,7 +2261,7 @@ history. The compact line:
 | Code points in the twin · the open backlog | 2026-11-13 | The PowerShell twin compared strings with PowerShell's operators, which fold case and compare under a culture; a Tailoring whose id differed from its content's origin by one U+00AD was read as the authority's own. No operator compares two strings there any more, and a lint that parses the twin keeps it so (#58 closed, with the residue of #45). `reference` 13 → 18 vectors, `tier` 9 → 10; 574 in all. No shape and no rule changed. The same day: the record of catalogue entries that do not apply got a schema, outside the kernel (#54 closed); the two OSCAL response types without a treatment code stay without one (#47b closed, C.10); #65 and #66 accepted for 2.0.0 and not yet landed. After rc.3 | D2 · C.10 · "Amendments — the open backlog before 2.0.0" |
 | A value that ends in a line break | 2026-11-13 | Found by the app's port of D26 and decided by the author ("refuse"): a `pattern` is an ECMA-262 expression, and Python's `re` and .NET's `Regex` read `$` and `.` differently, so the reference and the twin accepted a date, a digest, a decimal and five more values with a line break at the end. **D3.10 new**; both validators translate the two constructs and tighten their own expressions; `kernel` 54 → 71, `parameter` 21 → 22, `check` 203 → 205, `composition` 7 → 9 vectors, 665 in all. No shipped value changes. After rc.4; the counts in the Status are those of rc.4 | "Phase C — the tools write who decided; a line break ends no value" |
 | The tools write who decided | 2026-11-13 | Author: "all converters should pre-fill that data from the source corpus but import tool should be able to overwrite it." One rule for the author of an OSCAL document, in the converter library and in the app's importer; the day of `last-modified` as the date; an overwrite, field by field. The IFA conversion is regenerated: one of seven records gets an author from its source, the two authorizations their date, and the Attestation of the ATO lies beside the manifest and binds its digest (the IFA half of backlog #46). The app's pages write `provenance`, its Validate page shows the two reports, the reader shows the fields. No kernel shape and no rule changes (backlog #69) | same section |
-| An Attestation is held to what it binds | 2026-11-14 | Backlog #46, phase D. `attestation-binds` (B.1.7) was defined and applied by no tool to a bundle; the example folder's Attestation bound nothing from before 1.0.0. D7 amended: every Attestation read with a bundle is judged subject by subject and against the manifest it binds, and a failing one fails the bundle while it is `active`. Attestations beside a manifest (D3.1) are read with every bundle, not only with a pack. `attestation` 5 → 24 vectors, 684 in all. The example Attestation is real and signed with the public fixture key. No shape changes; a bundle with an active Attestation that does not bind fails where it passed | "Phase D — an Attestation is held to what it binds; no tool invents a party" |
+| An Attestation is held to what it binds | 2026-11-14 | Backlog #46, phase D. `attestation-binds` (B.1.7) was defined and applied by no tool to a bundle; the example folder's Attestation bound nothing from before 1.0.0. D7 amended: every Attestation read with a bundle is judged subject by subject and against the manifest it binds, and a failing one fails the bundle while it is `active`. Attestations beside a manifest (D3.1) are read with every bundle, not only with a pack. `attestation` 5 → 24 vectors, 684 in all. Applied by `validate_core.py`, by `validate_core.ps1` (run on Windows PowerShell 5.1), by the app (0.9.11) and by the reader (1.13.0), each held to those vectors. The example Attestation is real and signed with the public fixture key. No shape changes; a bundle with an active Attestation that does not bind fails where it passed | "Phase D — an Attestation is held to what it binds; no tool invents a party" |
 | No tool invents a party | 2026-11-14 | Backlog #70, decided by the author: "refuse if no party is named". Where the kernel requires a party (a Mapping's and a Check's author, an Assessment's performer, a Deviation's approver, the obligated party of a statement) and the user named none, the app and the reader wrote one made from a word. They refuse the save now and say which field is missing. No kernel shape and no rule changes | same section |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
@@ -2401,6 +2409,13 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    records and decisions that named no author may name one (#65, #66;
    D26; author, 2026-11-13). **Nothing is left to decide before the
    tag.**
+   *(2026-11-14: that sentence was true when it was written. Two
+   questions have come up since and are not decided: ten converters
+   write an obligated party their source does not state (#74), and an
+   Attestation that an ordinary bundle's manifest lists is refused by
+   no validator, although D3.1 excludes it "by definition" (#75). The
+   second, if it becomes a rule, fails bundles that pass today, which is
+   cheaper before the tag than after it.)*
 6. **Work, not decisions** — ✓ the implemented I-Regexp grammar was
    compared with the published text of RFC 9485 on 2026-11-12 (#61,
    closed); ☐ a ledger of source occurrences per converter, and the
@@ -2410,8 +2425,10 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    IFA converter is wired; ✓ its unaccounted values were decided class by
    class on 2026-11-13, none of its 835 source values is unaccounted,
    and the three references that name nothing their source defines are
-   declared as defects of the source; ☐ the other ten converters); ☐ a real
-   attestation in the example bundle (#46); ☐ `Assessment.method`
+   declared as defects of the source; ☐ the other ten converters); ✓ a real
+   attestation in the example bundle, and every Attestation read with a
+   bundle held to what it binds by both validators, the app and the
+   reader (#46, closed 2026-11-14; D7 as amended); ☐ `Assessment.method`
    payloads held to their pinned schema (#55); ☐ a second Risk corpus
    (IV.5b item 4).
 7. **Not part of this candidate, named so that nobody reads it as more
