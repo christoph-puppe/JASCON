@@ -2,7 +2,7 @@
 title: Das Modell: elf Objekttypen | JASCON
 description: Der JASCON-Kern auf einer Seite. Elf flache Objekttypen, die Ordnung der Modalverben, typisierte Parameter, Facetten mit Vertrag, zwei Digests je Objekt, drei Konformitätsstufen und wo jedes Konstrukt aus OSCAL 1.x geblieben ist.
 nav: model
-source: 9695f690a766
+source: 3632a143f8f5
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -216,7 +216,7 @@ source: 9695f690a766
             <tbody>
               <tr><th scope="row">Full Match</th><td class="yes">gleich</td><td class="yes">gleich</td><td>Genau das Paket, das attestiert wurde.</td></tr>
               <tr><th scope="row">Semantic Match</th><td class="no">abweichend</td><td class="yes">gleich</td><td>Der freigegebene Inhalt, neu verpackt. Die Verifikation weist darauf hin.</td></tr>
-              <tr><th scope="row">Tamper</th><td class="no">beliebig</td><td class="no">abweichend</td><td>Der Inhalt ist nicht der, der freigegeben wurde.</td></tr>
+              <tr><th scope="row">Bindet nicht</th><td class="no">beliebig</td><td class="no">abweichend oder nicht vorhanden</td><td>Ein Fehler, kein dritter Zustand. Der Inhalt ist nicht der, der freigegeben wurde, oder das Bundle enthält ihn nicht. Das Bundle fällt daran durch, solange die Attestierung <code>active</code> ist; ein Entwurf, eine abgekündigte oder eine zurückgezogene wird gemeldet und lässt nichts durchfallen.</td></tr>
             </tbody>
           </table>
         </div>

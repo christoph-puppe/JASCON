@@ -2,7 +2,7 @@
 title: 模型：十一种对象类型 | JASCON
 description: 一页看懂 JASCON 内核：十一种浅层对象类型、情态动词的次序、类型化参数、带契约的分面（facet）、每个对象的两个摘要、三个一致性等级，以及每个 OSCAL 1.x 构造的去向。
 nav: model
-source: 9695f690a766
+source: 3632a143f8f5
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -216,7 +216,7 @@ source: 9695f690a766
             <tbody>
               <tr><th scope="row">Full Match</th><td class="yes">相同</td><td class="yes">相同</td><td>正是当初被证明的那个包。</td></tr>
               <tr><th scope="row">Semantic Match</th><td class="no">不同</td><td class="yes">相同</td><td>已批准的内容，经过了重新打包。验证方会如实指出这一点。</td></tr>
-              <tr><th scope="row">Tamper</th><td class="no">任意</td><td class="no">不同</td><td>内容不是当初批准的内容。</td></tr>
+              <tr><th scope="row">不绑定</th><td class="no">任意</td><td class="no">不同或缺失</td><td>这是失败，而不是第三种状态。内容不是当初批准的内容，或者捆绑包中没有该内容。只要证明处于 <code>active</code> 状态，捆绑包就因此验证失败；处于草稿、已弃用或已撤回状态的证明只会被报告，不会使任何东西失败。</td></tr>
             </tbody>
           </table>
         </div>

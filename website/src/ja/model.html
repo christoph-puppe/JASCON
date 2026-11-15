@@ -2,7 +2,7 @@
 title: モデル：11 のオブジェクト型 | JASCON
 description: JASCON のカーネルを 1 ページで説明します。入れ子の浅い 11 のオブジェクト型、法助動詞の順序、型付きパラメータ、契約を伴うファセット、オブジェクトごとの 2 つのダイジェスト、3 つの適合性ティア、そして OSCAL 1.x の各構成要素の移行先です。
 nav: model
-source: 9695f690a766
+source: 3632a143f8f5
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -216,7 +216,7 @@ source: 9695f690a766
             <tbody>
               <tr><th scope="row">Full Match</th><td class="yes">一致</td><td class="yes">一致</td><td>証明されたパッケージそのもの。</td></tr>
               <tr><th scope="row">Semantic Match</th><td class="no">不一致</td><td class="yes">一致</td><td>承認された内容を再パッケージしたもの。検証者はその旨を報告する。</td></tr>
-              <tr><th scope="row">Tamper</th><td class="no">任意</td><td class="no">不一致</td><td>内容が承認されたものと異なる。</td></tr>
+              <tr><th scope="row">結び付かない</th><td class="no">任意</td><td class="no">不一致または欠落</td><td>失敗であり、第三の状態ではない。内容が承認されたものと異なるか、バンドルに含まれていない。証明が <code>active</code> である間は、バンドルを不合格にする。草案、非推奨、または取り下げられた証明は報告されるだけで、何も不合格にしない。</td></tr>
             </tbody>
           </table>
         </div>

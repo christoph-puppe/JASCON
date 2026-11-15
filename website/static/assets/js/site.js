@@ -212,7 +212,7 @@
           out.sem.textContent = sem;
           mark(out.semState, sem === expect.semantic);
           if (sem !== expect.semantic) {
-            show("tamper", t("tamper_title", "Tamper"), t("tamper_text", "The meaning changed. The semantic digest no longer equals the one the attestation names, so the attestation does not cover this object."));
+            show("tamper", t("tamper_title", "Does not bind"), t("tamper_text", "The meaning changed. The semantic digest no longer equals the one the attestation names, so the attestation does not bind this object. That is a failure, not a third state."));
           } else if (pkg !== expect.package) {
             show("semantic", t("semantic_title", "Semantic Match"), t("semantic_text", "The bytes changed, the meaning did not. The attestation still covers the object; the verifier reports that the packaging was altered."));
           } else {

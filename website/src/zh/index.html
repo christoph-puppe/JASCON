@@ -2,7 +2,7 @@
 title: JASCON：GRC 工程的数据层
 description: JASCON 是一种面向合规数据的开放表示法。标准、裁剪、风险、实施、评估和证明构成一张由类型化、内容寻址的 JSON 对象组成的图，程序可以对其进行校验、比对差异、计算和签名。
 nav: home
-source: b00ce90fa6e1
+source: 860e936a7c76
 ---
 <section class="hero">
   <div class="wrap hero-grid">
@@ -292,7 +292,7 @@ source: b00ce90fa6e1
       <article class="card">
         <div class="card-top"><span class="card-no">Attestation</span><span class="tier tier-measured">实测</span></div>
         <h3>重新打包后依然有效的签名</h3>
-        <p>证明绑定的是语义摘要。重新缩进文件或添加跟踪系统 ID，判定为 Semantic Match；修改一个情态动词，判定则为 Tamper。</p>
+        <p>证明绑定的是语义摘要。重新缩进文件或添加跟踪系统 ID，判定为 Semantic Match；修改一个情态动词，证明就不再绑定：这是失败。</p>
         <p class="how"><b>机制：</b>包摘要基于字节计算，语义摘要基于规范化内容计算；DSSE 信封，Ed25519。<a href="#try">请在下方亲自试试。</a></p>
       </article>
       <article class="card">

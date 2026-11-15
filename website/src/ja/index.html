@@ -2,7 +2,7 @@
 title: JASCON：GRC エンジニアリングのためのデータレイヤー
 description: JASCON はコンプライアンスデータのためのオープンな記法です。標準、テーラリング、リスク、実装、評価、証明が、型付きでコンテンツアドレス方式の JSON オブジェクトからなる 1 つのグラフになり、プログラムで検証、差分比較、計算、署名ができるようになります。
 nav: home
-source: b00ce90fa6e1
+source: 860e936a7c76
 ---
 <section class="hero">
   <div class="wrap hero-grid">
@@ -292,7 +292,7 @@ source: b00ce90fa6e1
       <article class="card">
         <div class="card-top"><span class="card-no">Attestation</span><span class="tier tier-measured">実測</span></div>
         <h3>再パッケージ後も有効な署名</h3>
-        <p>証明が結び付けるのは、セマンティックダイジェストです。ファイルのインデントを変えたり、トラッカーの ID を追加したりしても、判定は Semantic Match です。法助動詞を変えると、判定は Tamper になります。</p>
+        <p>証明が結び付けるのは、セマンティックダイジェストです。ファイルのインデントを変えたり、トラッカーの ID を追加したりしても、判定は Semantic Match です。法助動詞を変えると、証明は結び付かなくなります。これは失敗です。</p>
         <p class="how"><b>仕組み：</b>バイト列に対するパッケージダイジェストと、正規化したコンテンツに対するセマンティックダイジェスト。DSSE エンベロープ、Ed25519。<a href="#try">下で試せます。</a></p>
       </article>
       <article class="card">

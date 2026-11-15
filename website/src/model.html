@@ -215,7 +215,7 @@ nav: model
             <tbody>
               <tr><th scope="row">Full Match</th><td class="yes">equal</td><td class="yes">equal</td><td>The exact package that was attested.</td></tr>
               <tr><th scope="row">Semantic Match</th><td class="no">differs</td><td class="yes">equal</td><td>The approved content, repackaged. The verifier says so.</td></tr>
-              <tr><th scope="row">Tamper</th><td class="no">any</td><td class="no">differs</td><td>The content is not what was approved.</td></tr>
+              <tr><th scope="row">Does not bind</th><td class="no">any</td><td class="no">differs, or absent</td><td>A failure, not a third state. The content is not what was approved, or the bundle does not hold it. It fails the bundle while the attestation is <code>active</code>; a draft, a deprecated or a withdrawn one is reported and fails nothing.</td></tr>
             </tbody>
           </table>
         </div>
