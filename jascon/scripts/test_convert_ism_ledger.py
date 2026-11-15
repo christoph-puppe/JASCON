@@ -379,14 +379,18 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
 
     def test_backlog_89_a_value_that_stands_where_the_path_map_does_not_say_ends_the_run(self):
         # the table says the title of a control stands elsewhere than the converter writes it
-        r = self.broken([('(C + r"\\.title$", None, (r"/title/en",)),', '(C + r"\\.title$", None, (r"/titel/en",)),')],
-                        "2 value(s) of ism.catalog.groups[].groups[].groups[].controls[].title stand at /title/en, a place the path map does not name for that path")
+        stands = ("2 value(s) of ism.catalog.groups[].groups[].groups[].controls[].title stand at /title/en (object type requirement), "
+                  "a place the path map does not name for that path")
+        r = self.broken([('(C + r"\\.title$", None, on(REQ, r"/title/en")),', '(C + r"\\.title$", None, on(REQ, r"/titel/en")),')], stands)
         self.assertEqual(r["ledger"]["totals"]["unaccounted"], 0, "the ledger alone lets it through: the value is carried")
+        # backlog #97 (5): the table names the right pointer in an object of the wrong type, the title of a Set.
+        # Until 2026-11-15 a place was the pointer alone, and this table passed.
+        r = self.broken([('(C + r"\\.title$", None, on(REQ, r"/title/en")),', '(C + r"\\.title$", None, on(SET, r"/title/en")),')], stands)
         # a rule that writes to a place the row does not name: the statement's prose under another language tag
-        r = self.broken([('(r"/statements/\\[\\]/modality", r"/statements/\\[\\]/prose/en")', '(r"/statements/\\[\\]/modality", r"/statements/\\[\\]/prose/de")')],
+        r = self.broken([('on(REQ, r"/statements/\\[\\]/modality", r"/statements/\\[\\]/prose/en")', 'on(REQ, r"/statements/\\[\\]/modality", r"/statements/\\[\\]/prose/de")')],
                         "a place the path map does not name for that path")
         # a row taken out of the table: the rows below it would be held to the places of the wrong row
-        r = self.broken([(' (C + r"\\.title$", None, (r"/title/en",)),\n', '')],
+        r = self.broken([(' (C + r"\\.title$", None, on(REQ, r"/title/en")),\n', '')],
                         "the table of outcomes and places (HELD) has 19 row(s) and the path map 20; they differ first at row 14")
 
     def test_backlog_41_a_record_on_disk_that_is_not_the_record_of_the_run_ends_the_run(self):

@@ -10,7 +10,7 @@ in the GitHub tracker of the repository, 2026-11-13). Until that day the
 function was `value_arrival`: it joined every output key and scalar into one
 string and tested substring membership, so the six cases of issue 32 gave
 five false arrivals and one false absence. Standard library only."""
-import copy, json, os, sys, tempfile, unittest
+import copy, json, os, re, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPONSE_TREATMENT, response_treatment
 from oscal_conv_lib import document_author, document_day, provenance, provenance_override, needs_kernel_2
@@ -19,7 +19,7 @@ from oscal_conv_lib import obligated_party, obligated_party_line, obligated_part
 from oscal_conv_lib import ledger_by_path, ledger_gate, Bundle, COMPAT, COMPAT_ID, COMPAT_FILE
 from oscal_conv_lib import kernel_type, KERNEL_TYPE_BY_MEMBER, NO_KERNEL_TYPE
 from oscal_conv_lib import lifecycle_default_record, lifecycle_default_line
-from oscal_conv_lib import path_map_check, path_map_measured, held_row, held_rows_match
+from oscal_conv_lib import path_map_check, path_map_measured, held_row, held_rows_match, on, place
 
 
 def measure(source, output):
@@ -914,21 +914,23 @@ class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
     asked by path_map_check on the record by path."""
     RECORD = [
         {"path": "src.catalog.title", "outcome": "copied", "count": 1, "example": "A title",
-         "to": [{"pointer": "/title/en", "count": 1}]},
+         "to": [{"object-type": "requirementSet", "pointer": "/title/en", "count": 1}]},
         {"path": "src.catalog.controls[].id", "outcome": "transformed", "count": 3, "example": "ac-1",
-         "to": [{"pointer": "/id", "count": 3, "rule": "URI from the id"}, {"pointer": "/members/[]/ref", "count": 3, "rule": "URI from the id"}]},
+         "to": [{"object-type": "requirement", "pointer": "/id", "count": 3, "rule": "URI from the id"},
+                {"object-type": "requirementSet", "pointer": "/members/[]/ref", "count": 3, "rule": "URI from the id"}]},
         {"path": "src.catalog.controls[].class", "outcome": "intentionally-dropped", "count": 2, "example": "x",
          "reasons": [{"reason": "not needed", "count": 2}]},
         {"path": "src.catalog.controls[].ns", "outcome": "not-content", "count": 3, "example": "http://x"},
         {"path": "src.catalog.controls[].odd", "outcome": "unaccounted", "count": 1, "example": "?"},
-        {"path": "src.catalog.unmapped", "outcome": "copied", "count": 1, "example": "u", "to": [{"pointer": "/anywhere", "count": 1}]}]
+        {"path": "src.catalog.unmapped", "outcome": "copied", "count": 1, "example": "u",
+         "to": [{"object-type": "requirement", "pointer": "/anywhere", "count": 1}]}]
     CARRIED = ("copied", "transformed")
     def rows(self, **change):
-        table = {"src.catalog.title": (self.CARRIED, r"^/title/en$"),
-                 "src.catalog.controls[].id": (self.CARRIED, r"^(/id|/members/\[\]/ref)$"),
+        table = {"src.catalog.title": (self.CARRIED, r"^requirementSet/title/en$"),
+                 "src.catalog.controls[].id": (self.CARRIED, r"^(requirement/id|requirementSet/members/\[\]/ref)$"),
                  "src.catalog.controls[].class": (("intentionally-dropped",), None),
                  "src.catalog.controls[].ns": (("not-content",), None),
-                 "src.catalog.controls[].odd": (self.CARRIED, r"^/odd$")}
+                 "src.catalog.controls[].odd": (self.CARRIED, r"^requirement/odd$")}
         table.update(change)
         return table.get
 
@@ -937,9 +939,11 @@ class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
         self.assertEqual(held, {"disagree": [], "elsewhere": [], "sentences": []})
 
     def test_a_value_at_a_place_its_row_does_not_name(self):
-        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].id": (self.CARRIED, r"^/id$")}))
-        self.assertEqual(held["elsewhere"], [{"path": "src.catalog.controls[].id", "pointer": "/members/[]/ref", "count": 3}])
-        self.assertEqual(held["sentences"], ["3 value(s) of src.catalog.controls[].id stand at /members/[]/ref, a place the path map does not name for that path"])
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].id": (self.CARRIED, r"^requirement/id$")}))
+        self.assertEqual(held["elsewhere"], [{"path": "src.catalog.controls[].id", "object-type": "requirementSet",
+                                              "pointer": "/members/[]/ref", "count": 3}])
+        self.assertEqual(held["sentences"], ["3 value(s) of src.catalog.controls[].id stand at /members/[]/ref (object type requirementSet), "
+                                             "a place the path map does not name for that path"])
         # a row that names no place at all has every place against it
         held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (self.CARRIED, None)}))
         self.assertEqual([e["pointer"] for e in held["elsewhere"]], ["/title/en"])
@@ -951,7 +955,7 @@ class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
         self.assertEqual(held["sentences"], ["2 value(s) of src.catalog.controls[].class are intentionally-dropped, and the path map "
                                              "allows copied or transformed there (first x)"])
         # a sentence that says "not carried" of a value that is
-        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (("not-content",), r"^/title/en$")}))
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (("not-content",), r"^requirementSet/title/en$")}))
         self.assertEqual([(d["path"], d["outcome"]) for d in held["disagree"]], [("src.catalog.title", "copied")])
 
     def test_an_unaccounted_value_is_the_gates_and_a_path_without_a_row_the_coverages(self):
@@ -961,18 +965,19 @@ class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
 
     def test_the_outcomes_are_asked_before_the_places_and_both_in_the_order_of_the_record(self):
         held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (("not-content",), None),
-                                                        "src.catalog.controls[].id": (("not-content",), r"^/id$")}))
+                                                        "src.catalog.controls[].id": (("not-content",), r"^requirement/id$")}))
         self.assertEqual([s.split(" value(s) of ")[1].split(" ")[0] + (" at" if " stand at " in s else " is") for s in held["sentences"]],
                          ["src.catalog.title is", "src.catalog.controls[].id is", "src.catalog.title at", "src.catalog.controls[].id at"])
 
     def test_a_converter_that_holds_its_outcomes_itself_asks_for_the_places_only(self):
-        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].class": (None, None), "src.catalog.title": (None, r"^/title$")}))
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].class": (None, None), "src.catalog.title": (None, r"^requirementSet/title$")}))
         self.assertEqual(held["disagree"], [])
         self.assertEqual([e["pointer"] for e in held["elsewhere"]], ["/title/en"])
 
     def test_a_table_beside_the_path_map_row_for_row(self):
-        HELD = [(r"^a$", ("copied",), (r"/x", r"/y/\[\]/z")), (r"^b$", None, ()), (r"^c$", ("not-content",), ())]
-        self.assertEqual(held_row(HELD, 0), (("copied",), r"^(/x|/y/\[\]/z)$"))
+        HELD = [(r"^a$", ("copied",), on("requirement", r"/x") + on("requirement|requirementSet", r"/y/\[\]/z")), (r"^b$", None, ()),
+                (r"^c$", ("not-content",), ())]
+        self.assertEqual(held_row(HELD, 0), (("copied",), r"^((requirement)/x|(requirement|requirementSet)/y/\[\]/z)$"))
         self.assertEqual(held_row(HELD, 1), (None, None))
         self.assertIsNone(held_row(HELD, None))
         self.assertIsNone(held_rows_match(HELD, [r"^a$", r"^b$", r"^c$"]))
@@ -983,8 +988,64 @@ class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
     def test_what_a_record_measured_for_each_row(self):
         got = path_map_measured(self.RECORD, lambda p: None if p.endswith("unmapped") else p.rsplit(".", 1)[1])
         self.assertEqual(sorted(got), ["class", "id", "ns", "odd", "title"])
-        self.assertEqual((dict(got["id"]["outcomes"]), dict(got["id"]["places"])), ({"transformed": 3}, {"/id": 3, "/members/[]/ref": 3}))
+        self.assertEqual((dict(got["id"]["outcomes"]), dict(got["id"]["places"])), ({"transformed": 3}, {"requirement/id": 3, "requirementSet/members/[]/ref": 3}))
         self.assertEqual((dict(got["class"]["outcomes"]), dict(got["class"]["places"])), ({"intentionally-dropped": 2}, {}))
+
+
+class Backlog97APlaceNamesTheTypeOfItsObject(unittest.TestCase):
+    """backlog #97 (5): a record by path names the type of the object a value
+    went to (#91, point 5), and until 2026-11-15 path_map_check read the
+    pointer alone. A path map that put the title of a control on a Set
+    passed, because a Set has a title too. A place is the type and the
+    pointer now, and a table HELD names both (on())."""
+    RECORD = [
+        {"path": "src.catalog.groups[].title", "outcome": "copied", "count": 2, "example": "A group",
+         "to": [{"object-type": "requirementSet", "pointer": "/title/en", "count": 2}]},
+        {"path": "src.catalog.groups[].controls[].title", "outcome": "copied", "count": 5, "example": "A control",
+         "to": [{"object-type": "requirement", "pointer": "/title/en", "count": 5}]},
+        {"path": "src.catalog.version", "outcome": "copied", "count": 1, "example": "7",
+         "to": [{"object-type": "manifest", "pointer": "/provenance/sources/[]/version", "count": 1},
+                {"object-type": "requirement", "pointer": "/version", "count": 5},
+                {"object-type": "requirementSet", "pointer": "/version", "count": 2}]}]
+    RULES = [r"groups\[\]\.title$", r"controls\[\]\.title$", r"version$"]
+    HELD = [(RULES[0], ("copied",), on("requirementSet", r"/title/en")),
+            (RULES[1], ("copied",), on("requirement", r"/title/en")),
+            (RULES[2], ("copied",), on("manifest", r"/provenance/sources/\[\]/version") + on("requirement|requirementSet", r"/version"))]
+
+    def check(self, held):
+        return path_map_check(self.RECORD, lambda path: held_row(held, next(i for i, rx in enumerate(self.RULES) if re.search(rx, path))))
+
+    def changed(self, index, places):
+        return [(h[0], h[1], places) if i == index else h for i, h in enumerate(self.HELD)]
+
+    def test_backlog_97_a_table_that_names_the_types_the_record_has_gives_no_sentence(self):
+        self.assertEqual(self.check(self.HELD), {"disagree": [], "elsewhere": [], "sentences": []})
+
+    def test_backlog_97_the_right_pointer_in_an_object_of_the_wrong_type_is_a_place_the_map_does_not_name(self):
+        # the title of a control on a Set: the pointer is right, the object is not
+        held = self.check(self.changed(1, on("requirementSet", r"/title/en")))
+        self.assertEqual(held["elsewhere"], [{"path": "src.catalog.groups[].controls[].title", "object-type": "requirement",
+                                              "pointer": "/title/en", "count": 5}])
+        self.assertEqual(held["sentences"], ["5 value(s) of src.catalog.groups[].controls[].title stand at /title/en (object type "
+                                             "requirement), a place the path map does not name for that path"])
+        # and the title of a group on a Requirement
+        held = self.check(self.changed(0, on("requirement", r"/title/en")))
+        self.assertEqual([(e["path"], e["object-type"]) for e in held["elsewhere"]], [("src.catalog.groups[].title", "requirementSet")])
+
+    def test_backlog_97_a_place_in_objects_of_two_types_names_both(self):
+        # the version stands on Requirements and on Sets; a table that names one of the two is held to the other
+        held = self.check(self.changed(2, on("manifest", r"/provenance/sources/\[\]/version") + on("requirement", r"/version")))
+        self.assertEqual([(e["object-type"], e["pointer"], e["count"]) for e in held["elsewhere"]], [("requirementSet", "/version", 2)])
+
+    def test_backlog_97_a_place_without_a_type_names_no_place(self):
+        # a table as it was written until 2026-11-15, the pointer alone: nothing of the record stands there
+        held = self.check(self.changed(1, (r"/title/en",)))
+        self.assertEqual([e["pointer"] for e in held["elsewhere"]], ["/title/en"])
+        self.assertEqual(place({"object-type": "requirementSet", "pointer": "/members/[]/ref", "count": 1}), "requirementSet/members/[]/ref")
+        self.assertEqual(on("requirementSet", r"/id", r"/label"), ("(requirementSet)/id", "(requirementSet)/label"))
+        # a type is a whole word, `requirement` does not name a `requirementSet`: a pointer pattern begins with `/`
+        with self.assertRaises(ValueError): on("requirement", r"Set/title/en")
+        with self.assertRaises(ValueError): on("requirement", r".*")
 
 
 class Backlog91TheObjectOfADestination(unittest.TestCase):

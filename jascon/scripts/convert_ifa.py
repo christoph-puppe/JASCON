@@ -40,7 +40,7 @@ place of the manifest."""
 import json, os, re, sys, collections, hashlib
 import jsonschema
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, semantic_digest, global_occurrence, Ledger, props_by_name, response_treatment
-from oscal_conv_lib import ledger_gate, ledger_by_path, path_map_check, held_row, held_rows_match
+from oscal_conv_lib import ledger_gate, ledger_by_path, path_map_check, held_row, held_rows_match, on
 from oscal_conv_lib import document_author, document_day, is_day, provenance, provenance_override, textify
 from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import COMPAT, referred_to, lifecycle_default_record, lifecycle_default_line
@@ -1409,14 +1409,19 @@ RULES = [
 # What the ledger may find for the values of each row (backlog #89): one
 # entry per row of RULES, in its order - the row's pattern, the outcomes the
 # record measured for it, and the places its values stand at, as the record
-# by path writes them (a JSON Pointer into the object, array positions as
-# `[]`). After the account the record is held against this table, and a value
-# with another outcome or at another place ends the run (path_map_check). The
-# rows of this map are wide, a subtree of a document each, and so are their
-# entries: they are what the record of the pinned documents measured, a
-# member that holds four places or more written as the member and all below
-# it.
+# by path writes them: the type of the object and a JSON Pointer into it,
+# array positions as `[]` (on(type, pointers)). After the account the record
+# is held against this table, and a value with another outcome or at another
+# place ends the run (path_map_check). The rows of this map are wide, a
+# subtree of a document each, and so are their entries: they are what the
+# record of the pinned documents measured, a member that holds four places or
+# more written as the member and all below it.
+# Since 2026-11-15 a place names the type of its object (backlog #97, point
+# 5), as the record measured it: until then `/title/en` of a Finding passed
+# for the title of a Risk.
 CARRIED = ("copied", "transformed"); NO_CONTENT = ("not-content",)
+COMPONENT, IMPLEMENTATION, ASSESSMENT, FINDING, RISK = "component", "implementation", "assessment", "finding", "risk"
+ATTESTATION, MANIFEST = "attestation", "manifest"
 _COMP = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1component@1"
 _COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
 _IMPL = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1implementation@1"
@@ -1427,213 +1432,113 @@ _SYS = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1system@1"
 _TARGET = r"/facets/https:~1~1ifa\.gov~1goodread~1facet~1finding-target@1"
 HELD = [
  (r"^(ssp|ap|ar|poam|lev|lvg|cdef)\.[a-z-]+\.(uuid$|metadata\.|import-profile|import-ssp|import-ap|back-matter\.)", CARRIED + NO_CONTENT,
-  (r"/evidence-refs/\[\]",
-   _COMP + r"/control-implementations/\[\]/source",
-   _COMP + r"/responsible-roles/\[\]/parties/\[\]",
-   _SYS + r"/responsible-roles/\[\]/parties/\[\]",
-   _SYS + r"/responsible-roles/\[\]/role",
-   r"/method/https:~1~1ifa\.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/\[\]/parties/\[\]",
-   r"/method/https:~1~1ifa\.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/\[\]/role",
-   r"/objects/\[\]/version",
-   r"/owner-ref",
-   r"/performer-ref",
-   r"/provenance(/.*)?",
-   r"/title/en",
-   r"/version")),
+  on(IMPLEMENTATION, r"/evidence-refs/\[\]")
+  + on(COMPONENT, _COMP + r"/control-implementations/\[\]/source", _COMP + r"/responsible-roles/\[\]/parties/\[\]",
+     _SYS + r"/responsible-roles/\[\]/parties/\[\]", _SYS + r"/responsible-roles/\[\]/role", r"/title/en")
+  + on(ASSESSMENT, r"/method/https:~1~1ifa\.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/\[\]/parties/\[\]",
+     r"/method/https:~1~1ifa\.gov~1goodread~1facet~1assessment-plan@1/responsible-roles/\[\]/role", r"/performer-ref")
+  + on(MANIFEST, r"/objects/\[\]/version")
+  + on(RISK, r"/owner-ref")
+  + on(f"{IMPLEMENTATION}|{MANIFEST}", r"/provenance(/.*)?")
+  + on(f"{ASSESSMENT}|{ATTESTATION}|{COMPONENT}|{FINDING}|{IMPLEMENTATION}|{RISK}", r"/version")),
  (r"^ssp\.system-security-plan\.system-characteristics\.", CARRIED,
-  (r"/authorizations/\[\]/date",
-   r"/authorizations/\[\]/scope-label",
-   _SYS + r"/boundary/en",
-   _SYS + r"/data-flow/en",
-   _SYS + r"/date-authorized",
-   _SYS + r"/description/en",
-   _SYS + r"/impact(/.*)?",
-   _SYS + r"/network-architecture/en",
-   _SYS + r"/sensitivity",
-   _SYS + r"/status",
-   _SYS + r"/system-ids/\[\]/id",
-   _SYS + r"/system-ids/\[\]/identifier-type",
-   r"/label",
-   r"/timestamp",
-   r"/title/en")),
- (r"^ssp\.system-security-plan\.system-implementation\.users\[\]\.", CARRIED, (_COMP + r"/responsible-roles/\[\]/role", _SYS + r"/users(/.*)?")),
- (r"^ssp\.system-security-plan\.system-implementation\.inventory-items\[\]\.", CARRIED, (_SYS + r"/inventory-items(/.*)?",)),
+  on(COMPONENT, r"/authorizations/\[\]/date", r"/authorizations/\[\]/scope-label", _SYS + r"/boundary/en", _SYS + r"/data-flow/en",
+     _SYS + r"/date-authorized", _SYS + r"/description/en", _SYS + r"/impact(/.*)?", _SYS + r"/network-architecture/en", _SYS + r"/sensitivity",
+     _SYS + r"/status", _SYS + r"/system-ids/\[\]/id", _SYS + r"/system-ids/\[\]/identifier-type", r"/label")
+  + on(ATTESTATION, r"/timestamp", r"/title/en")),
+ (r"^ssp\.system-security-plan\.system-implementation\.users\[\]\.", CARRIED,
+  on(COMPONENT, _COMP + r"/responsible-roles/\[\]/role", _SYS + r"/users(/.*)?")),
+ (r"^ssp\.system-security-plan\.system-implementation\.inventory-items\[\]\.", CARRIED, on(COMPONENT, _SYS + r"/inventory-items(/.*)?")),
  (r"^ssp\.system-security-plan\.system-implementation\.components\[\]\.", CARRIED,
-  (r"/component-ref",
-   _COMP + r"/description/en",
-   _COMP + r"/responsible-roles/\[\]/parties/\[\]",
-   _COMP + r"/responsible-roles/\[\]/role",
-   _COMP + r"/status",
-   _OBS + r"/observations/\[\]/subjects/\[\]",
-   _COMPAT + r"/uuid",
-   r"/kind",
-   r"/title/en")),
+  on(IMPLEMENTATION, r"/component-ref")
+  + on(COMPONENT, _COMP + r"/description/en", _COMP + r"/responsible-roles/\[\]/parties/\[\]", _COMP + r"/responsible-roles/\[\]/role",
+     _COMP + r"/status", _COMPAT + r"/uuid", r"/kind", r"/title/en")
+  + on(ASSESSMENT, _OBS + r"/observations/\[\]/subjects/\[\]")),
  (r"^ssp\.system-security-plan\.control-implementation\.", CARRIED,
-  (r"/capabilities/\[\]/description/en",
-   r"/capabilities/\[\]/requirement-ref",
-   r"/component-ref",
-   _COMP + r"/capabilities/\[\]/uuid",
-   _IMPL + r"/description/en",
-   _COMPAT + r"/uuid",
-   r"/parameter-bindings(/.*)?",
-   r"/requirement-ref",
-   r"/status")),
+  on(COMPONENT, r"/capabilities/\[\]/description/en", r"/capabilities/\[\]/requirement-ref", _COMP + r"/capabilities/\[\]/uuid")
+  + on(IMPLEMENTATION, r"/component-ref", _IMPL + r"/description/en", _COMPAT + r"/uuid", r"/parameter-bindings(/.*)?", r"/requirement-ref",
+     r"/status")),
  (r"^ap\.assessment-plan\.(local-definitions|tasks|assessment-subjects|reviewed-controls)", CARRIED,
-  (r"/method(/.*)?",
-   r"/provenance/sources/\[\]/metadata/responsible-parties/\[\]/role-id")),
+  on(ASSESSMENT, r"/method(/.*)?")
+  + on(MANIFEST, r"/provenance/sources/\[\]/metadata/responsible-parties/\[\]/role-id")),
  (r"^ar\.assessment-results\.results\[\]\.(uuid|title|description|start|end)$", CARRIED,
-  (_OBS + r"/description/en",
-   _OBS + r"/end",
-   _COMPAT + r"/uuid",
-   r"/time",
-   r"/title/en")),
- (r"^ar\.assessment-results\.results\[\]\.reviewed-controls\.", CARRIED, (r"/subject-refs/\[\]",)),
+  on(ASSESSMENT, _OBS + r"/description/en", _OBS + r"/end", _COMPAT + r"/uuid", r"/time", r"/title/en")),
+ (r"^ar\.assessment-results\.results\[\]\.reviewed-controls\.", CARRIED, on(ASSESSMENT, r"/subject-refs/\[\]")),
  (r"^ar\.assessment-results\.results\[\]\.observations\[\]\.", CARRIED + NO_CONTENT,
-  (r"/evidence-refs/\[\]",
-   _TARGET + r"/observations/\[\]",
-   _OBS + r"/observations(/.*)?")),
+  on(ASSESSMENT, r"/evidence-refs/\[\]", _OBS + r"/observations(/.*)?")
+  + on(FINDING, _TARGET + r"/observations/\[\]")),
  (r"^ar\.assessment-results\.results\[\]\.findings\[\]\.", CARRIED,
-  (_TARGET + r"/description/en",
-   _TARGET + r"/implementation-statement-uuid",
-   _TARGET + r"/observations/\[\]",
-   _TARGET + r"/target-description/en",
-   _TARGET + r"/target-objective-id",
-   _TARGET + r"/target-type",
-   _COMPAT + r"/uuid",
-   r"/result",
-   r"/risk-refs/\[\]",
-   r"/title/en")),
+  on(FINDING, _TARGET + r"/description/en", _TARGET + r"/implementation-statement-uuid", _TARGET + r"/observations/\[\]",
+     _TARGET + r"/target-description/en", _TARGET + r"/target-objective-id", _TARGET + r"/target-type", _COMPAT + r"/uuid", r"/risk-refs/\[\]",
+     r"/title/en")
+  + on(ASSESSMENT, r"/result")),
  (r"^ar\.assessment-results\.results\[\]\.(risks|local-definitions)", CARRIED,
-  (_RISKA + r"/assessment-results-state/statement",
-   _RISKA + r"/assessment-results-state/status",
-   _RISKA + r"/assessment-results-state/title",
-   _RISKA + r"/description/en",
-   r"/method(/.*)?",
-   r"/risk-refs/\[\]")),
+  on(RISK, _RISKA + r"/assessment-results-state/statement", _RISKA + r"/assessment-results-state/status",
+     _RISKA + r"/assessment-results-state/title", _RISKA + r"/description/en")
+  + on(ASSESSMENT, r"/method(/.*)?")
+  + on(FINDING, r"/risk-refs/\[\]")),
  (r"^ar\.assessment-results\.local-definitions\.", CARRIED,
-  (r"/method(/.*)?",
-   r"/provenance/sources/\[\]/metadata/responsible-parties/\[\]/role-id")),
- (r"^poam\.plan-of-action-and-milestones\.(uuid$|system-id)", CARRIED + NO_CONTENT, (r"/component-refs/\[\]",)),
+  on(ASSESSMENT, r"/method(/.*)?")
+  + on(MANIFEST, r"/provenance/sources/\[\]/metadata/responsible-parties/\[\]/role-id")),
+ (r"^poam\.plan-of-action-and-milestones\.(uuid$|system-id)", CARRIED + NO_CONTENT, on(RISK, r"/component-refs/\[\]")),
  (r"^poam\.plan-of-action-and-milestones\.observations\[\]\.", CARRIED + NO_CONTENT,
-  (r"/deviations/\[\]/opened",
-   r"/deviations/\[\]/refs/\[\]",
-   r"/evidence-refs/\[\]",
-   _TARGET + r"/poam-item/observations/\[\]",
-   _OBS + r"/observations(/.*)?",
-   _RISKA + r"/observations/\[\]")),
+  on(FINDING, r"/deviations/\[\]/opened", r"/deviations/\[\]/refs/\[\]", _TARGET + r"/poam-item/observations/\[\]")
+  + on(ASSESSMENT, r"/evidence-refs/\[\]", _OBS + r"/observations(/.*)?")
+  + on(RISK, _RISKA + r"/observations/\[\]")),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(uuid|title|statement|status|deadline)$", CARRIED,
-  (_TARGET + r"/poam-item/risks/\[\]",
-   _RISKA + r"/risk-status",
-   _COMPAT + r"/uuid",
-   r"/review-due/value",
-   r"/scenario/en",
-   r"/state",
-   r"/title/en")),
- (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.description$", CARRIED, (_RISKA + r"/description/en", r"/risk-refs/\[\]")),
+  on(FINDING, _TARGET + r"/poam-item/risks/\[\]")
+  + on(RISK, _RISKA + r"/risk-status", _COMPAT + r"/uuid", r"/review-due/value", r"/scenario/en", r"/state")
+  + on(f"{FINDING}|{RISK}", r"/title/en")),
+ (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.description$", CARRIED, on(RISK, _RISKA + r"/description/en") + on(FINDING, r"/risk-refs/\[\]")),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.characterizations\[\]\.", CARRIED,
-  (r"/deviations/\[\]/approver-ref",
-   _RISKA + r"/characterizations(/.*)?")),
+  on(FINDING, r"/deviations/\[\]/approver-ref")
+  + on(RISK, _RISKA + r"/characterizations(/.*)?")),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.props\[\]\.", CARRIED + NO_CONTENT,
-  (_RISKA + r"/responses/\[\]/type",
-   r"/treatment")),
+  on(RISK, _RISKA + r"/responses/\[\]/type", r"/treatment")),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.(lifecycle|title|description)$", CARRIED,
-  (r"/actions/\[\]/description/en",
-   r"/actions/\[\]/status",
-   _RISKA + r"/responses/\[\]/description/en",
-   _RISKA + r"/responses/\[\]/lifecycle",
-   _RISKA + r"/responses/\[\]/title")),
+  on(FINDING, r"/actions/\[\]/description/en", r"/actions/\[\]/status")
+  + on(RISK, _RISKA + r"/responses/\[\]/description/en", _RISKA + r"/responses/\[\]/lifecycle", _RISKA + r"/responses/\[\]/title")),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.remediations\[\]\.", CARRIED,
-  (r"/actions/\[\]/description/en",
-   r"/actions/\[\]/due/value",
-   _RISKA + r"/responses(/.*)?")),
+  on(FINDING, r"/actions/\[\]/description/en", r"/actions/\[\]/due/value")
+  + on(RISK, _RISKA + r"/responses(/.*)?")),
  (r"^poam\.plan-of-action-and-milestones\.risks\[\]\.(mitigating-factors|related-observations)\[?\]?\.", CARRIED,
-  (r"/deviations/\[\]/rationale/en",
-   r"/deviations/\[\]/refs/\[\]",
-   _RISKA + r"/mitigating-factors/\[\]/description/en",
-   _RISKA + r"/mitigating-factors/\[\]/uuid",
-   _RISKA + r"/observations/\[\]")),
- (r"^poam\.plan-of-action-and-milestones\.poam-items\[\]\.", CARRIED, (_TARGET + r"/poam-item(/.*)?",)),
+  on(FINDING, r"/deviations/\[\]/rationale/en", r"/deviations/\[\]/refs/\[\]")
+  + on(RISK, _RISKA + r"/mitigating-factors/\[\]/description/en", _RISKA + r"/mitigating-factors/\[\]/uuid", _RISKA + r"/observations/\[\]")),
+ (r"^poam\.plan-of-action-and-milestones\.poam-items\[\]\.", CARRIED, on(FINDING, _TARGET + r"/poam-item(/.*)?")),
  (r"^(lev|lvg)\.system-security-plan\.system-characteristics\.", CARRIED,
-  (_SYS + r"/boundary/en",
-   _SYS + r"/description/en",
-   _SYS + r"/impact(/.*)?",
-   _SYS + r"/remarks/en",
-   _SYS + r"/sensitivity",
-   _SYS + r"/status",
-   _SYS + r"/system-ids/\[\]/id",
-   r"/label")),
+  on(COMPONENT, _SYS + r"/boundary/en", _SYS + r"/description/en", _SYS + r"/impact(/.*)?", _SYS + r"/remarks/en", _SYS + r"/sensitivity",
+     _SYS + r"/status", _SYS + r"/system-ids/\[\]/id", r"/label")),
  (r"^(lev|lvg)\.system-security-plan\.system-implementation\.components\[\]\.", CARRIED,
-  (_COMP + r"/description/en",
-   _COMP + r"/listed-by-leveraging-plan(/.*)?",
-   _COMP + r"/props/implementation-point",
-   _COMP + r"/props/virtual",
-   _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]",
-   _COMP + r"/responsible-roles/\[\]/role",
-   _COMP + r"/status",
-   _COMP + r"/title",
-   _IMPL + r"/statements/\[\]/responses/\[\]/component",
-   _COMPAT + r"/uuid",
-   r"/kind",
-   r"/label",
-   r"/title/en")),
+  on(COMPONENT, _COMP + r"/description/en", _COMP + r"/listed-by-leveraging-plan(/.*)?", _COMP + r"/props/implementation-point",
+     _COMP + r"/props/virtual", _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]", _COMP + r"/responsible-roles/\[\]/role", _COMP + r"/status",
+     _COMP + r"/title", _COMPAT + r"/uuid", r"/kind", r"/label", r"/title/en")
+  + on(IMPLEMENTATION, _IMPL + r"/statements/\[\]/responses/\[\]/component")),
  (r"^lvg\.system-security-plan\.system-implementation\.(users|leveraged-authorizations)\[\]\.", CARRIED,
-  (r"/authorizations/\[\]/date",
-   r"/authorizations/\[\]/scope-label",
-   _COMP + r"/authorizations(/.*)?",
-   _COMP + r"/responsible-roles/\[\]/role",
-   _SYS + r"/users/\[\]/privileges/\[\]/functions/\[\]",
-   _SYS + r"/users/\[\]/privileges/\[\]/title",
-   _SYS + r"/users/\[\]/uuid")),
+  on(COMPONENT, r"/authorizations/\[\]/date", r"/authorizations/\[\]/scope-label", _COMP + r"/authorizations(/.*)?",
+     _COMP + r"/responsible-roles/\[\]/role", _SYS + r"/users/\[\]/privileges/\[\]/functions/\[\]", _SYS + r"/users/\[\]/privileges/\[\]/title",
+     _SYS + r"/users/\[\]/uuid")),
  (r"^lev\.system-security-plan\.system-implementation\.users\[\]\.", CARRIED,
-  (_COMP + r"/responsible-roles/\[\]/role",
-   _SYS + r"/users/\[\]/privileges/\[\]/functions/\[\]",
-   _SYS + r"/users/\[\]/privileges/\[\]/title",
-   _SYS + r"/users/\[\]/uuid")),
+  on(COMPONENT, _COMP + r"/responsible-roles/\[\]/role", _SYS + r"/users/\[\]/privileges/\[\]/functions/\[\]",
+     _SYS + r"/users/\[\]/privileges/\[\]/title", _SYS + r"/users/\[\]/uuid")),
  (r"^lev\.system-security-plan\.control-implementation\.", CARRIED,
-  (r"/capabilities/\[\]/description/en",
-   _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]",
-   _COMP + r"/responsible-roles/\[\]/role",
-   _IMPL + r"/description/en",
-   _IMPL + r"/remarks/en",
-   _IMPL + r"/statements(/.*)?",
-   _SYS + r"/customer-responsibilities/\[\]/capability",
-   _SYS + r"/customer-responsibilities/\[\]/description",
-   _SYS + r"/customer-responsibilities/\[\]/uuid",
-   _COMPAT + r"/uuid",
-   r"/parameter-bindings/ac-2_prm_1",
-   r"/satisfied-by/\[\]/inherited-from/component-ref",
-   r"/statement-refs/\[\]")),
+  on(COMPONENT, r"/capabilities/\[\]/description/en", _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]", _COMP + r"/responsible-roles/\[\]/role",
+     _SYS + r"/customer-responsibilities/\[\]/capability", _SYS + r"/customer-responsibilities/\[\]/description",
+     _SYS + r"/customer-responsibilities/\[\]/uuid")
+  + on(IMPLEMENTATION, _IMPL + r"/description/en", _IMPL + r"/remarks/en", _IMPL + r"/statements(/.*)?", _COMPAT + r"/uuid",
+     r"/parameter-bindings/ac-2_prm_1", r"/satisfied-by/\[\]/inherited-from/component-ref", r"/statement-refs/\[\]")),
  (r"^lvg\.system-security-plan\.control-implementation\.", CARRIED,
-  (r"/capabilities/\[\]/description/en",
-   _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]",
-   _COMP + r"/responsible-roles/\[\]/role",
-   _IMPL + r"/description/en",
-   _IMPL + r"/remarks/en",
-   _IMPL + r"/statements(/.*)?",
-   _COMPAT + r"/uuid",
-   r"/parameter-bindings/ac-2_prm_1",
-   r"/satisfied-by/\[\]/inherited-from/component-ref",
-   r"/statement-refs/\[\]")),
- (r"^cdef\.component-definition\.components\[\]\.protocols\[\]\.", CARRIED, (_PROT + r"/protocols(/.*)?",)),
+  on(COMPONENT, r"/capabilities/\[\]/description/en", _COMP + r"/responsible-roles/\[\]/party-uuids/\[\]", _COMP + r"/responsible-roles/\[\]/role")
+  + on(IMPLEMENTATION, _IMPL + r"/description/en", _IMPL + r"/remarks/en", _IMPL + r"/statements(/.*)?", _COMPAT + r"/uuid",
+     r"/parameter-bindings/ac-2_prm_1", r"/satisfied-by/\[\]/inherited-from/component-ref", r"/statement-refs/\[\]")),
+ (r"^cdef\.component-definition\.components\[\]\.protocols\[\]\.", CARRIED, on(COMPONENT, _PROT + r"/protocols(/.*)?")),
  (r"^cdef\.component-definition\.components\[\]\.responsible-roles\[\]\.", CARRIED,
-  (_COMP + r"/responsible-roles/\[\]/parties/\[\]",
-   _COMP + r"/responsible-roles/\[\]/role")),
+  on(COMPONENT, _COMP + r"/responsible-roles/\[\]/parties/\[\]", _COMP + r"/responsible-roles/\[\]/role")),
  (r"^cdef\.component-definition\.components\[\]\.control-implementations\[\]\.", CARRIED,
-  (r"/capabilities(/.*)?",
-   _COMP + r"/capabilities(/.*)?",
-   _COMP + r"/control-implementations/\[\]/description/en",
-   _COMP + r"/control-implementations/\[\]/source",
-   _COMP + r"/control-implementations/\[\]/uuid",
-   _COMP + r"/responsible-roles/\[\]/role")),
+  on(COMPONENT, r"/capabilities(/.*)?", _COMP + r"/capabilities(/.*)?", _COMP + r"/control-implementations/\[\]/description/en",
+     _COMP + r"/control-implementations/\[\]/source", _COMP + r"/control-implementations/\[\]/uuid", _COMP + r"/responsible-roles/\[\]/role")),
  (r"^cdef\.component-definition\.components\[\]\.(uuid|type|title|description|purpose)$", CARRIED,
-  (_COMP + r"/description/en",
-   _COMP + r"/purpose/en",
-   _COMPAT + r"/uuid",
-   r"/id",
-   r"/kind",
-   r"/label",
-   r"/objects/\[\]/id",
-   r"/title/en")),
+  on(COMPONENT, _COMP + r"/description/en", _COMP + r"/purpose/en", _COMPAT + r"/uuid", r"/id", r"/kind", r"/label", r"/title/en")
+  + on(MANIFEST, r"/objects/\[\]/id")),
 ]
 _misaligned = held_rows_match(HELD, [r[0] for r in RULES])
 def _held_row(path): return held_row(HELD, next((i for i, r in enumerate(RULES) if re.search(r[0], path)), None))

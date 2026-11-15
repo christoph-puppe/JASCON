@@ -958,8 +958,9 @@ def path_map_check(paths, row_of):
     here so that every converter with a record by path has it.
 
     paths: the rows of ledger_by_path(...)["paths"], one per source path and
-    outcome, each with `to`, the places its values stand at (a JSON Pointer
-    into the object, array positions as `[]`).
+    outcome, each with `to`, the places its values stand at: the type of the
+    object (`object-type`) and a JSON Pointer into it, array positions as
+    `[]`.
     row_of(path) -> None where the map has no row for the path, else
     (outcomes, places): the outcomes the row allows (names of
     LEDGER_OUTCOMES), or None where the converter holds the outcomes of its
@@ -967,8 +968,14 @@ def path_map_check(paths, row_of):
     pattern over the places, read with re.search, or None for a row whose
     values stand nowhere.
 
+    A place is the type of the object and the pointer, written as one word
+    (place()): `requirementSet/members/[]/ref`, `manifest/objects/[]/id`.
+    Until 2026-11-15 a place was the pointer alone (backlog #97, point 5): a
+    map that put the title of a control on a Set passed wherever a Set has a
+    title of its own, and the record has named the type since #91 (5).
+
     -> {"disagree": [{path, outcome, count, example, allowed}],
-        "elsewhere": [{path, pointer, count}],
+        "elsewhere": [{path, object-type, pointer, count}],
         "sentences": [one for each entry of the two lists, in that order]},
     in the order of the record. `disagree`: a path and outcome its row does
     not allow. `elsewhere`: a place values stand at that their row does not
@@ -985,19 +992,38 @@ def path_map_check(paths, row_of):
             disagree.append({"path": row["path"], "outcome": row["outcome"], "count": row["count"],
                              "example": row["example"], "allowed": list(allowed)})
         for t in row.get("to", []):
-            if places is None or not re.search(places, t["pointer"]):
-                elsewhere.append({"path": row["path"], "pointer": t["pointer"], "count": t["count"]})
+            if places is None or not re.search(places, place(t)):
+                elsewhere.append({"path": row["path"], "object-type": t["object-type"], "pointer": t["pointer"],
+                                  "count": t["count"]})
     return {"disagree": disagree, "elsewhere": elsewhere,
             "sentences": [f"{d['count']:,} value(s) of {d['path']} are {d['outcome']}, and the path map allows "
                           f"{' or '.join(d['allowed'])} there (first {d['example']})" for d in disagree]
-                       + [f"{e['count']:,} value(s) of {e['path']} stand at {e['pointer']}, "
-                          f"a place the path map does not name for that path" for e in elsewhere]}
+                       + [f"{e['count']:,} value(s) of {e['path']} stand at {e['pointer']} (object type "
+                          f"{e['object-type']}), a place the path map does not name for that path" for e in elsewhere]}
+
+def place(destination):
+    """-> a destination of a record by path as a path map names it: the type
+    of the object, then the pointer into it (`requirement/statements/[]/id`)."""
+    return destination["object-type"] + destination["pointer"]
+
+def on(types, *pointers):
+    """-> the places of a table HELD that are the `pointers` (patterns, each
+    for one whole pointer) into an object of `types`: one type as
+    kernel_type() names it, or several joined with `|` where the value
+    stands at that pointer in objects of each. on("requirementSet", r"/id")
+    is the place `requirementSet/id`. A pointer begins with `/`: a pattern
+    that did not could run into the type before it, and `requirement` would
+    name a `requirementSet`."""
+    for p in pointers:
+        if not p.startswith("/"): raise ValueError(f"on({types!r}, ...): the pointer pattern {p!r} does not begin with `/`")
+    return tuple(f"({types}){p}" for p in pointers)
 
 def held_row(held, index):
     """(outcomes, places) for path_map_check from a converter's table HELD,
     whose entries are (the row's pattern, outcomes or None, places): the
-    places a tuple of patterns, each for one whole pointer. -> None for a
-    path without a row (index None)."""
+    places a tuple of patterns, each for one whole place, the type of the
+    object and the pointer (place()). -> None for a path without a row
+    (index None)."""
     if index is None: return None
     _, outcomes, places = held[index]
     return outcomes, ("^(" + "|".join(places) + ")$" if places else None)
@@ -1019,14 +1045,15 @@ def path_map_measured(paths, row_key):
     material a converter's author reads against the row's sentence when the
     outcomes and the places of a row are written down or changed.
     row_key(path) -> a hashable name of the row, or None.
-    -> {row key: {"outcomes": {outcome: values}, "places": {pointer: values}}}"""
+    -> {row key: {"outcomes": {outcome: values}, "places": {place: values}}},
+    a place as place() writes it."""
     out = {}
     for row in paths:
         k = row_key(row["path"])
         if k is None: continue
         m = out.setdefault(k, {"outcomes": collections.Counter(), "places": collections.Counter()})
         m["outcomes"][row["outcome"]] += row["count"]
-        for t in row.get("to", []): m["places"][t["pointer"]] += t["count"]
+        for t in row.get("to", []): m["places"][place(t)] += t["count"]
     return out
 
 def props_by_name(props, ledger=None, field="value"):

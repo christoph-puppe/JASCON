@@ -469,8 +469,16 @@ class TheGrundschutzConverter(unittest.TestCase):
         self.assertEqual(run["ledger"]["totals"]["unaccounted"], 0, "the gate alone would have let it through")
 
     def test_defect_a_value_that_stands_where_the_path_map_does_not_say_ends_the_run(self):
-        self.refused([('CARRIED, at(TAX_AT+r"/class")),', 'CARRIED, at(TAX_AT+r"/klasse")),')],
-                     "a place the path map does not name for that path")
+        self.refused([('CARRIED, at(on(REQ,TAX_AT+r"/class"))),', 'CARRIED, at(on(REQ,TAX_AT+r"/klasse"))),')],
+                     "(object type requirement), a place the path map does not name for that path")
+        # backlog #97 (5): the right pointer in an object of the wrong type, the taxonomy facet of a Set. Until
+        # 2026-11-15 a place was the pointer alone and this map passed.
+        self.refused([('CARRIED, at(on(REQ,TAX_AT+r"/class"))),', 'CARRIED, at(on(SET,TAX_AT+r"/class"))),')],
+                     "(object type requirement), a place the path map does not name for that path")
+        # the title of a group stands on its Set; a map that puts it on a Requirement is refused
+        self.refused([('"taxonomy Set of the group: its title", CARRIED, at(on(SET,r"/title/de"))),',
+                       '"taxonomy Set of the group: its title", CARRIED, at(on(REQ,r"/title/de"))),')],
+                     "stand at /title/de (object type requirementSet), a place the path map does not name for that path")
 
     def test_defect_a_record_that_is_not_this_runs_ends_the_run(self):
         stale = json.dumps(self.plain["ledger"])

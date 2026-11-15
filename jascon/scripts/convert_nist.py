@@ -62,7 +62,7 @@ import json, os, re, sys, time, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report, walk_controls
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, document_author, document_day
-from oscal_conv_lib import path_map_check, held_row, held_rows_match
+from oscal_conv_lib import path_map_check, held_row, held_rows_match, on
 from oscal_conv_lib import COMPAT, COMPAT_PROPERTIES, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import REFERENCES, REFERENCES_FILE, ASSESSMENT_CRITERIA, ASSESSMENT_CRITERIA_FILE, resource_entry
 
@@ -1019,12 +1019,16 @@ RULES = [
 # Where the values of each row stand in the written bundle (backlog #89): one
 # entry per row of RULES, in its order - the row's pattern, None (what
 # becomes of a value is held by the fourth member of the row, below), and the
-# places as the record writes them: a JSON Pointer into the object, array
-# positions as `[]`, the payload of a parameter under `{parameter id}`. After
-# the account the record is held against this table, and a value that stands
-# anywhere else ends the run (path_map_check). The places are those the
-# record of the pinned sources measured, and those the tests' catalogues
-# reach beyond them.
+# places as the record writes them: the type of the object and a JSON Pointer
+# into it (on(type, pointers)), array positions as `[]`, the payload of a
+# parameter under `{parameter id}`. After the account the record is held
+# against this table, and a value that stands anywhere else ends the run
+# (path_map_check). The places are those the record of the pinned sources
+# measured, and those the tests' catalogues reach beyond them.
+# Since 2026-11-15 a place names the type of its object (backlog #97, point
+# 5). A group and a baseline are Sets and a control is a Requirement. One
+# entry of `replaces` stands on a Set: SA-12 was incorporated into a family.
+REQ, SET, MAN = "requirement", "requirementSet", "manifest"
 _ACRIT = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1assessment-criteria@1"
 _COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
 _NARR = r"/facets/https:~1~1ns\.nist\.gov~1sp800-53~1facet~1narrative@1"
@@ -1033,87 +1037,70 @@ _REFS = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1references@1"
 _RMF = r"/facets/https:~1~1ns\.nist\.gov~1sp800-53~1facet~1rmf@1"
 _SOURCE = r"/provenance/sources/\[\]"
 HELD = [
- (r"^nist\.catalog\.metadata\.title$", None, (_SOURCE + r"/title", r"/title/en")),
- (r"^nist\.catalog\.metadata\.version$", None, (r"/objects/\[\]/version", _SOURCE + r"/version", r"/version")),
- (r"^nist\.catalog\.metadata\.", None, (_COMPAT + r"/metadata(/.*)?", _SOURCE + r"/author-ref", _SOURCE + r"/date", _SOURCE + r"/format-version")),
- (r"^nist\.catalog\.uuid$", None, (_SOURCE + r"/uuid",)),
- (r"^nist\.catalog\.back-matter\.resources\[\]\.", None, (_REFS + r"/resources(/.*)?", r"/relations/\[\]/ref")),
- (r"^nist\.catalog\.groups\[\]\.id$", None, (r"/id", r"/members/\[\]/ref", r"/objects/\[\]/id", r"/replaces/\[\]/ref")),
- (r"^nist\.catalog\.groups\[\]\.title$", None, (r"/title/en",)),
+ (r"^nist\.catalog\.metadata\.title$", None, on(MAN, _SOURCE + r"/title") + on(SET, r"/title/en")),
+ (r"^nist\.catalog\.metadata\.version$", None, on(MAN, r"/objects/\[\]/version", _SOURCE + r"/version") + on(f"{REQ}|{SET}", r"/version")),
+ (r"^nist\.catalog\.metadata\.", None,
+  on(SET, _COMPAT + r"/metadata(/.*)?") + on(MAN, _SOURCE + r"/author-ref", _SOURCE + r"/date", _SOURCE + r"/format-version")),
+ (r"^nist\.catalog\.uuid$", None, on(MAN, _SOURCE + r"/uuid")),
+ (r"^nist\.catalog\.back-matter\.resources\[\]\.", None, on(SET, _REFS + r"/resources(/.*)?") + on(REQ, r"/relations/\[\]/ref")),
+ (r"^nist\.catalog\.groups\[\]\.id$", None, on(SET, r"/id", r"/members/\[\]/ref", r"/replaces/\[\]/ref") + on(MAN, r"/objects/\[\]/id")),
+ (r"^nist\.catalog\.groups\[\]\.title$", None, on(SET, r"/title/en")),
  (r"^nist\.catalog\.groups\[\]\.class$", None, ()),
- (r"^nist\.catalog\.groups\[\]\.props\[\]\.value$", None, (r"/label",)),
+ (r"^nist\.catalog\.groups\[\]\.props\[\]\.value$", None, on(SET, r"/label")),
  (r"^nist\.catalog\.groups\[\]\.props\[\]\.name$", None, ()),
- (r"^nist\.catalog\.groups\[\]\.parts\[\]\.(prose|title)$", None, (_NARR + r"/overview/\[\]/prose/en", _NARR + r"/overview/\[\]/title/en")),
+ (r"^nist\.catalog\.groups\[\]\.parts\[\]\.(prose|title)$", None,
+  on(SET, _NARR + r"/overview/\[\]/prose/en", _NARR + r"/overview/\[\]/title/en")),
  (r"^nist\.catalog\.groups\[\]\.parts\[\]\.name$", None, ()),
  (r"^nist\.catalog\.groups\[\]\.parts\[\]\.id$", None, ()),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.id$", None,
-  (r"/id",
-   r"/members/\[\]/ref",
-   r"/objects/\[\]/id",
-   r"/replaces/\[\]/ref",
-   r"/statements/\[\]/id",
-   r"/members/\[\]/sequence")),                     # a control without a sort-id: its id is what it is ordered by
- (r"^nist\.catalog\.groups\[\]\.controls\[\]\.title$", None, (r"/title/en",)),
- (r"^nist\.catalog\.groups\[\]\.controls\[\]\.class$", None, (_COMPAT + r"/class",)),     # a class the rule does not give
+  on(REQ, r"/id", r"/statements/\[\]/id")
+  + on(SET, r"/members/\[\]/ref")
+  + on(MAN, r"/objects/\[\]/id")
+  + on(f"{REQ}|{SET}", r"/replaces/\[\]/ref")
+  + on(SET, r"/members/\[\]/sequence")),            # a control without a sort-id: its id is what it is ordered by
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.title$", None, on(REQ, r"/title/en")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.class$", None, on(REQ, _COMPAT + r"/class")),     # a class the rule does not give
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.props\[\]\.value$", None,
-  (_RMF + r"/contributes-to-assurance",
-   r"/label",
-   r"/lifecycle",
-   r"/members/\[\]/sequence",
-   r"/statements/\[\]/obligated-parties/\[\]")),
+  on(REQ, _RMF + r"/contributes-to-assurance", r"/label", r"/lifecycle", r"/statements/\[\]/obligated-parties/\[\]")
+  + on(SET, r"/members/\[\]/sequence")),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.props\[\]\.(name|ns|class)$", None, ()),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.links\[\]\.href$", None,
-  (r"/relations/\[\]/ref", r"/replaces/\[\]/ref", r"/statements/\[\]/prose/en",
-   _COMPAT + r"/links/\[\]/href")),                 # a link to a resource that gives no address (E14), as it stands
+  on(REQ, r"/relations/\[\]/ref", r"/statements/\[\]/prose/en")
+  + on(f"{REQ}|{SET}", r"/replaces/\[\]/ref")
+  + on(REQ, _COMPAT + r"/links/\[\]/href")),        # a link to a resource that gives no address (E14), as it stands
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.links\[\]\.rel$", None,
-  (r"/relations/\[\]/type",
-   r"/replaces/\[\]/mode",
-   r"/statements/\[\]/prose/en",
-   _COMPAT + r"/links/\[\]/rel")),
+  on(REQ, r"/relations/\[\]/type", r"/statements/\[\]/prose/en")
+  + on(f"{REQ}|{SET}", r"/replaces/\[\]/mode")
+  + on(REQ, _COMPAT + r"/links/\[\]/rel")),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.(id|label)$", None,
-  (_ODP,
-   r"/statements/\[\]/parameters/\[\]/label",
-   r"/statements/\[\]/parameters/\[\]/name")),
- (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.select\.choice\[\]$", None, (r"/statements/\[\]/parameters/\[\]/choices/\[\]/value",)),
- (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.select\.how-many$", None, (r"/statements/\[\]/parameters/\[\]/cardinality",)),
- (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.guidelines\[\]\.prose$", None, (_ODP + r"/guidelines/\[\]/en",)),
+  on(REQ, _ODP, r"/statements/\[\]/parameters/\[\]/label", r"/statements/\[\]/parameters/\[\]/name")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.select\.choice\[\]$", None, on(REQ, r"/statements/\[\]/parameters/\[\]/choices/\[\]/value")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.select\.how-many$", None, on(REQ, r"/statements/\[\]/parameters/\[\]/cardinality")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.guidelines\[\]\.prose$", None, on(REQ, _ODP + r"/guidelines/\[\]/en")),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.props\[\]\.value$", None,
-  (_ODP + r"/aggregates/\[\]",
-   _ODP + r"/alt-identifiers/\[\]",
-   _ODP + r"/alt-label",
-   _ODP + r"/sp800-53a-label")),
+  on(REQ, _ODP + r"/aggregates/\[\]", _ODP + r"/alt-identifiers/\[\]", _ODP + r"/alt-label", _ODP + r"/sp800-53a-label")),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.params\[\]\.props\[\]\.(name|ns|class)$", None, ()),
- (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.id$", None, (_ACRIT + r"/objectives(/.*)?", r"/statements/\[\]/id")),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.id$", None, on(REQ, _ACRIT + r"/objectives(/.*)?", r"/statements/\[\]/id")),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.name$", None, ()),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.prose$", None,
-  (_ACRIT + r"/methods/\[\]/objects/\[\]/en",
-   _ACRIT + r"/objectives(/.*)?",
-   _NARR + r"/guidance/\[\]/en",
-   r"/statements/\[\]/prose/en")),
+  on(REQ, _ACRIT + r"/methods/\[\]/objects/\[\]/en", _ACRIT + r"/objectives(/.*)?", _NARR + r"/guidance/\[\]/en", r"/statements/\[\]/prose/en")),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.props\[\]\.value$", None,
-  (_ACRIT + r"/methods/\[\]/label",
-   _ACRIT + r"/methods/\[\]/method",
-   _ACRIT + r"/objectives(/.*)?",
-   r"/statements/\[\]/label")),
+  on(REQ, _ACRIT + r"/methods/\[\]/label", _ACRIT + r"/methods/\[\]/method", _ACRIT + r"/objectives(/.*)?", r"/statements/\[\]/label")),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.props\[\]\.(name|ns|class)$", None, ()),
- (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.links\[\]\.href$", None, (_ACRIT + r"/objectives(/.*)?",)),
+ (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.links\[\]\.href$", None, on(REQ, _ACRIT + r"/objectives(/.*)?")),
  (r"^nist\.catalog\.groups\[\]\.controls\[\]\.parts\[\]\.links\[\]\.rel$", None, ()),
- (r"^(low|moderate|high|privacy)\.profile\.imports\[\]\.include-controls\[\]\.with-ids\[\]$", None, (r"/members/\[\]/ref",)),
- (r"^(low|moderate|high|privacy)\.profile\.metadata\.title$", None, (_SOURCE + r"/title", r"/title/en")),
- (r"^(low|moderate|high|privacy)\.profile\.metadata\.version$", None, (r"/objects/\[\]/version", _SOURCE + r"/version", r"/version")),
+ (r"^(low|moderate|high|privacy)\.profile\.imports\[\]\.include-controls\[\]\.with-ids\[\]$", None, on(SET, r"/members/\[\]/ref")),
+ (r"^(low|moderate|high|privacy)\.profile\.metadata\.title$", None, on(MAN, _SOURCE + r"/title") + on(SET, r"/title/en")),
+ (r"^(low|moderate|high|privacy)\.profile\.metadata\.version$", None,
+  on(MAN, r"/objects/\[\]/version", _SOURCE + r"/version") + on(SET, r"/version")),
  (r"^(low|moderate|high|privacy)\.profile\.metadata\.", None,
-  (_COMPAT + r"/metadata(/.*)?",
-   _SOURCE + r"/author-ref",
-   _SOURCE + r"/date",
-   _SOURCE + r"/format-version")),
- (r"^(low|moderate|high|privacy)\.profile\.merge\.", None, (_COMPAT + r"/merge/as-is",)),
- (r"^(low|moderate|high|privacy)\.profile\.uuid$", None, (_SOURCE + r"/uuid",)),
- (r"^(low|moderate|high|privacy)\.profile\.imports\[\]\.href$", None, (_COMPAT + r"/imports/\[\]/href",)),
+  on(SET, _COMPAT + r"/metadata(/.*)?") + on(MAN, _SOURCE + r"/author-ref", _SOURCE + r"/date", _SOURCE + r"/format-version")),
+ (r"^(low|moderate|high|privacy)\.profile\.merge\.", None, on(SET, _COMPAT + r"/merge/as-is")),
+ (r"^(low|moderate|high|privacy)\.profile\.uuid$", None, on(MAN, _SOURCE + r"/uuid")),
+ (r"^(low|moderate|high|privacy)\.profile\.imports\[\]\.href$", None, on(SET, _COMPAT + r"/imports/\[\]/href")),
  (r"^(low|moderate|high|privacy)\.profile\.back-matter\.", None,
-  (_REFS + r"/resources/\[\]/description",
-   _REFS + r"/resources/\[\]/id",
-   _REFS + r"/resources/\[\]/rlinks/\[\]/href",
-   _REFS + r"/resources/\[\]/rlinks/\[\]/media-type")),
+  on(SET, _REFS + r"/resources/\[\]/description", _REFS + r"/resources/\[\]/id", _REFS + r"/resources/\[\]/rlinks/\[\]/href",
+     _REFS + r"/resources/\[\]/rlinks/\[\]/media-type")),
 ]
 _misaligned = held_rows_match(HELD, [r[0] for r in RULES])
 if _misaligned: wiring.append(_misaligned)
