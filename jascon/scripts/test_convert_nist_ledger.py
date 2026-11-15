@@ -777,6 +777,85 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
             self.assertIn("wiring check(s) of the conversion ledger failed", done.stderr, name)
 
 
+CITING = ("AU.ISM/ism-core-bundle", "DE.BSI/bsi-core-bundle", "US.CSF/csf-core-bundle", "US.IFA-GoodRead/ifa-core-bundle")
+CITATION = re.compile(r'"https://ns\.nist\.gov/sp800-53/req/([A-Za-z0-9.()-]+)"')
+
+def citations_in(bundle):
+    """-> the citations of SP 800-53 controls in the objects the manifest of
+    a bundle lists, a carried copy of a control left out: the labels cited,
+    one per citation. Counted on the files, with no code of the converter."""
+    with open(os.path.join(bundle, "content-manifest.json"), encoding="utf-8") as f: listed = json.load(f)["objects"]
+    labels = []
+    for e in listed:
+        if e["id"].startswith(NS + "/"): continue
+        with open(os.path.join(bundle, *e["path"].split("/")), encoding="utf-8") as f: labels += CITATION.findall(f.read())
+    return len([e for e in listed if not e["id"].startswith(NS + "/")]), labels
+
+
+class Backlog79TheCitationsAreCountedInTheCorporaNamed(unittest.TestCase):
+    """backlog #79 (6): the report counts the citations of SP 800-53 controls
+    in other corpora. Until 2026-11-15 it read every .json file under
+    converted_examples/, so the count followed whatever lay there: a bundle
+    a run had left, a coverage report, a manifest and an Attestation that
+    list the carried copies of a control. It reads the objects the manifests
+    of four named bundles list, and says which."""
+    def plant(self, tree, rel, doc):
+        path = os.path.join(tree.tmp, "converted_examples", *rel.split("/"))
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f: json.dump(doc, f, indent=1)
+
+    def bundle(self, tree, rel, objects, **more):
+        """a bundle under converted_examples/: its objects, and a manifest that lists them"""
+        for path, obj in objects.items(): self.plant(tree, f"{rel}/{path}", obj)
+        self.plant(tree, f"{rel}/content-manifest.json",
+                   {"manifest-version": "1", "objects": [{"id": o["id"], "path": p} for p, o in objects.items()], **more})
+
+    def crosscheck(self, tree, name):
+        done, out, _ = tree.run("convert_nist.py", name)
+        self.assertEqual(done.returncode, 0, done.stderr[-600:])
+        with open(os.path.join(out, "sp800-53-coverage-report.json"), encoding="utf-8") as f: report = json.load(f)
+        with open(os.path.join(out, "sp800-53-coverage-report.md"), encoding="utf-8") as f:
+            line = next(l for l in f.read().split("\n") if l.startswith("- **Corpus mapping endpoints vs minted ids**"))
+        return report["endpoint-crosscheck"], line
+
+    def test_backlog_79_the_count_is_the_named_bundles_listed_objects_whatever_else_lies_in_the_folder(self):
+        c1, c2, c11 = (f"{NS}/req/{x}" for x in ("C-1", "C-2", "C-1.1"))
+        tree = Tree()
+        try:
+            # with no bundle there, every named bundle is said to be missing and nothing is counted
+            got, line = self.crosscheck(tree, "nothing-there")
+            self.assertEqual(got["corpora"], [{"bundle": b, "found": False} for b in CITING])
+            self.assertEqual((got["resolved"], got["distinct"], got["unknown"]), (0, 0, {}))
+            for b in CITING: self.assertIn(f"`{b}` is not there", line)
+            # two of the four named bundles: 2 + 3 citations in their listed objects
+            self.bundle(tree, "US.IFA-GoodRead/ifa-core-bundle",
+                        {"objects/impl/a.json": {"id": "https://x.example/impl/a", "requirement-ref": c1, "also": [c2]},
+                         "objects/req/c-1.json": {"id": c1, "relations": [{"type": "related", "ref": c2}]}},      # a carried copy
+                        **{"carried-requirements": [c1]})
+            self.bundle(tree, "AU.ISM/ism-core-bundle",
+                        {"objects/map/m.json": {"id": "https://x.example/map/m", "target-ref": c11, "others": [c1, f"{NS}/req/Z-9"]}})
+            got, line = self.crosscheck(tree, "two-bundles")
+            want = [{"bundle": CITING[0], "found": True, "objects": 1, "citations": 3}, {"bundle": CITING[1], "found": False},
+                    {"bundle": CITING[2], "found": False}, {"bundle": CITING[3], "found": True, "objects": 1, "citations": 2}]
+            self.assertEqual(got["corpora"], want)
+            self.assertEqual((got["resolved"], got["distinct"], got["unknown"]), (4, 3, {"Z-9": 1}))
+            self.assertIn("4 citations resolve (3 distinct); 1 cite unknown labels (['Z-9'])", line)
+            self.assertIn(f"`{CITING[0]}` x3 in 1 object(s); `{CITING[1]}` is not there; `{CITING[2]}` is not there; "
+                          f"`{CITING[3]}` x2 in 1 object(s)", line)
+            # what else may lie in the folder, each of it citing a control: a bundle a run left that nobody names, a
+            # report and an Attestation beside a named bundle, a file in a named bundle that its manifest does not
+            # list, a file of nobody's
+            self.bundle(tree, "FedRAMP-CR26/cr26-core-bundle", {"objects/map/k.json": {"id": "https://y.example/map/k", "target-ref": c1}})
+            self.plant(tree, "US.IFA-GoodRead/ifa-coverage-report.json", {"carried-requirements": [c1, c2]})
+            self.plant(tree, "US.IFA-GoodRead/ifa-core-bundle/attestation.json", {"subject-semantic-digests": [{"id": c1}]})
+            self.plant(tree, "US.IFA-GoodRead/ifa-core-bundle/objects/impl/unlisted.json", {"id": "https://x.example/impl/u", "ref": c1})
+            self.plant(tree, "notes.json", {"see": [c1, c2, c11]})
+            again, line_again = self.crosscheck(tree, "with-strays")
+            self.assertEqual((again, line_again), (got, line), "a file no named manifest lists changed the count")
+        finally:
+            tree.remove()
+
+
 class Backlog41TheCommittedConversion(unittest.TestCase):
     """The conversion in converted_examples/US.SP800-53, as it is committed.
     The Validators workflow holds its bytes against the pinned source; here
@@ -803,6 +882,22 @@ class Backlog41TheCommittedConversion(unittest.TestCase):
         self.assertEqual((record["totals"]["intentionally-dropped"], report["ledger"]["declared-drops"]), (0, []))
         self.assertEqual(report["lifecycle-default"], {"value": "active", "origin": "converter-default", "objects": 1039,
                                                         "source-states": 182})
+
+    def test_backlog_79_the_committed_report_counts_the_citations_of_the_four_committed_bundles(self):
+        """the committed count against the committed bundles it names, counted here from their files"""
+        with open(os.path.join(self.CORPUS, "sp800-53-coverage-report.json"), encoding="utf-8") as f:
+            got = json.load(f)["endpoint-crosscheck"]
+        self.assertEqual([c["bundle"] for c in got["corpora"]], list(CITING))
+        labels = []
+        for c in got["corpora"]:
+            bundle = os.path.join(ROOT, "converted_examples", *c["bundle"].split("/"))
+            if not os.path.isdir(bundle): self.skipTest(f"no converted_examples/{c['bundle']} beside jascon/")
+            n, cited = citations_in(bundle)
+            self.assertEqual(c, {"bundle": c["bundle"], "found": True, "objects": n, "citations": len(cited)})
+            labels += cited
+        self.assertGreater(len(labels), 0, "no committed bundle cites a control: nothing was counted")
+        self.assertEqual(got["resolved"] + sum(got["withdrawn-hits"].values()) + sum(got["unknown"].values()), len(labels))
+        self.assertEqual((got["distinct"], got["unknown"]), (len(set(labels)), {}))
 
     def test_backlog_41_the_committed_bundle_holds_what_the_authors_list_names(self):
         """Counted from the committed files alone (measured on SP 800-53

@@ -222,7 +222,7 @@ class Backlog41TheLedgerOfTheIsmConverter(unittest.TestCase):
         self.assertEqual(self.plain["ledger"]["totals"]["intentionally-dropped"], 0)
         uuid = [r for r in self.plain["ledger"]["paths"] if r["path"] == "ism.catalog.uuid"]
         self.assertEqual([(r["outcome"], r["count"], r["to"]) for r in uuid],
-                         [("copied", 1, [{"pointer": "/provenance/sources/[]/uuid", "count": 1}])],
+                         [("copied", 1, [{"object-type": "manifest", "pointer": "/provenance/sources/[]/uuid", "count": 1}])],
                          "in the manifest's provenance.sources since 2026-11-14 (backlog #80); on the root Set until then")
         self.assertEqual(self.plain["report"]["lifecycle-default"]["origin"], "converter-default")
         with open(os.path.join(self.plain["out"], "ism-coverage-report.md"), encoding="utf-8") as f: text = f.read()

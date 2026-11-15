@@ -185,7 +185,40 @@
  "bundle": {
   "content-manifest-digest": "sha256:0e2f976ed9323083d438cb6f9758159309a55df0933ab7c2f64e54455809b6dc",
   "objects": 1054,
-  "facet-schemas": 10
+  "facet-schemas": 10,
+  "facet-schemas-by-origin": {
+   "stdlib": 4,
+   "own": 2,
+   "compat": 1,
+   "carried": 3
+  }
+ },
+ "ctl-overlay": {
+  "entries": 79,
+  "odp-assignments": [
+   {
+    "stated-by": "class variant",
+    "outcome": "parked",
+    "count": 5
+   },
+   {
+    "stated-by": "entry",
+    "outcome": "drained",
+    "count": 16
+   }
+  ],
+  "other-values": [
+   {
+    "member": "guidance",
+    "outcome": "parked",
+    "count": 73
+   },
+   {
+    "member": "update history",
+    "outcome": "parked",
+    "count": 2
+   }
+  ]
  },
  "modality(rule-level)": {
   "must": 136,

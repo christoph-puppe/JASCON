@@ -1650,12 +1650,13 @@ VA = global_occurrence(list(led.docs.items()), list(bundle.objects.values()))
 # drop the first ledger declared is carried now, or is no content by a rule
 # the ledger checks - an orphaned back-matter resource, a type tag rebuilt
 # from what its reference resolves to, a value equal to one that is kept).
-LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": manifest, ATTESTATION_FILE: attestation})
+ACCOUNTED_FILES = {**bundle.objects, "content-manifest.json": manifest, ATTESTATION_FILE: attestation}
+LEDGER = led.account(bundle.out, ACCOUNTED_FILES)
 with open(os.path.join(OUTDIR, "ifa-conversion-ledger.json"), "w", encoding="utf-8") as f:
     json.dump(LEDGER, f, indent=1, ensure_ascii=False); f.write("\n")
 LT = LEDGER["totals"]
 # the path map held against the record by path, which is made for this check and not written
-MAP_NOT_HELD = [_misaligned] if _misaligned else path_map_check(ledger_by_path(LEDGER)["paths"], _held_row)["sentences"]
+MAP_NOT_HELD = [_misaligned] if _misaligned else path_map_check(ledger_by_path(LEDGER, ACCOUNTED_FILES)["paths"], _held_row)["sentences"]
 
 types = collections.Counter(rel.split("/")[1] for rel in bundle.objects)
 j = report(

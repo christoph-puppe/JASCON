@@ -18,6 +18,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/algorithm",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/hashes/[]/algorithm",
      "count": 1
     }
@@ -30,6 +31,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/hashes/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/hashes/[]/value",
      "count": 1
     }
@@ -42,6 +44,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/href",
      "count": 1
     }
@@ -54,6 +57,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/title",
      "count": 1
     }
@@ -66,6 +70,7 @@
    "example": "gspp#/catalog/back-matter/resources/0/uuid",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/id",
      "count": 1
     }
@@ -78,6 +83,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/class",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/class",
      "count": 652
     }
@@ -90,6 +96,7 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/class",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/class",
      "count": 327
     }
@@ -102,6 +109,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/class",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/class",
      "count": 19
     }
@@ -114,6 +122,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/class",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/class",
      "count": 2
     }
@@ -126,25 +135,30 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/id",
      "count": 2,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "requirement",
      "pointer": "/label",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 4,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 2,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 2,
      "rule": "file path of a Requirement from the control id"
@@ -176,6 +190,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/1/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance",
      "count": 2,
      "as": "key"
@@ -202,6 +217,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
      "count": 2,
      "as": "key"
@@ -215,18 +231,21 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/1/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation",
      "count": 1,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
      "count": 2,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 2,
      "as": "key",
@@ -254,14 +273,17 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation/[]",
      "count": 1
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
      "count": 2
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
      "count": 2
     }
@@ -274,6 +296,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/props/2/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 2,
      "rule": "modality code from the modal verb (MODAL)"
@@ -287,10 +310,12 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance/de",
      "count": 2
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/de",
      "count": 2
     }
@@ -303,17 +328,20 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/aliases/[]/scheme",
      "count": 2,
      "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
      "count": 2,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
      "count": 2,
      "as": "key",
@@ -341,32 +369,38 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/aliases/[]/value",
      "count": 2
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 2,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 2,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 2,
      "rule": "file path of a baseline Set from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 2,
      "rule": "baseline Set title from the sec_level of a control",
@@ -381,6 +415,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/props/2/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
      "count": 2,
      "rule": "effort level as an integer"
@@ -394,6 +429,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/controls/0/title",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/title/de",
      "count": 2
     }
@@ -406,45 +442,54 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/id",
    "to": [
     {
-     "pointer": "/id",
-     "count": 1,
-     "rule": "URI of the Set that stands for a control with nested controls, from the control id"
-    },
-    {
+     "object-type": "requirement",
      "pointer": "/id",
      "count": 19,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "requirementSet",
+     "pointer": "/id",
+     "count": 1,
+     "rule": "URI of the Set that stands for a control with nested controls, from the control id"
+    },
+    {
+     "object-type": "requirement",
      "pointer": "/label",
      "count": 19
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 1,
      "rule": "URI of the Set that stands for a control with nested controls, from the control id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 38,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 1,
      "rule": "URI of the Set that stands for a control with nested controls, from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 19,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 19,
      "rule": "file path of a Requirement from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 1,
      "rule": "file path of the Set that stands for a control with nested controls, from the control id"
@@ -458,6 +503,7 @@
    "example": "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/0/href",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/ref",
      "count": 8,
      "rule": "requirement URI from a link to a control (#id)"
@@ -471,6 +517,7 @@
    "example": "gspp#/catalog/groups/1/groups/1/controls/0/controls/3/controls/0/links/0/rel",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/type",
      "count": 8
     }
@@ -483,11 +530,13 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/params/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}",
      "count": 4,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/name",
      "count": 4
     }
@@ -500,6 +549,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/params/0/label",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/label",
      "count": 4
     }
@@ -512,6 +562,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/params/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
      "count": 4,
      "as": "key"
@@ -525,6 +576,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/params/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
      "count": 4
     }
@@ -555,6 +607,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/1/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance",
      "count": 18,
      "as": "key"
@@ -581,6 +634,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/1/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
      "count": 19,
      "as": "key"
@@ -594,30 +648,35 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation",
      "count": 18,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
      "count": 19,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
      "count": 10,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories",
      "count": 10,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 19,
      "as": "key",
@@ -645,22 +704,27 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation/[]",
      "count": 18
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
      "count": 19
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
      "count": 19
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
      "count": 10
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories/[]",
      "count": 10
     }
@@ -673,6 +737,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/props/4/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 19,
      "rule": "modality code from the modal verb (MODAL)"
@@ -686,10 +751,12 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/1/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance/de",
      "count": 18
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/de",
      "count": 15
     }
@@ -702,6 +769,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/de",
      "count": 4,
      "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}"
@@ -715,26 +783,31 @@
    "example": "gspp#/catalog/groups/6/groups/1/controls/2/controls/1/controls/0/props/3/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags",
      "count": 9,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
      "count": 13,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
      "count": 13,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
      "count": 13,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
      "count": 13,
      "as": "key"
@@ -748,23 +821,27 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/aliases/[]/scheme",
      "count": 19,
      "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
      "count": 19,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
      "count": 19,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs",
      "count": 13,
      "as": "key",
@@ -792,72 +869,87 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/aliases/[]/value",
      "count": 19
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
      "count": 19
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
      "count": 8
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
      "count": 13
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
      "count": 13
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
      "count": 13
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
      "count": 13
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 1,
      "rule": "baseline Set URI from the sec_level of a control"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 18,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 1,
      "rule": "baseline Set URI from the sec_level of a control"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 18,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 1,
      "rule": "file path of a baseline Set from the sec_level of a control"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 18,
      "rule": "file path of a baseline Set from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 1,
      "rule": "baseline Set title from the sec_level of a control"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 18,
      "rule": "baseline Set title from the sec_level of a control",
@@ -872,16 +964,19 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/props/2/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
      "count": 19,
      "rule": "effort level as an integer"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
      "count": 2,
      "rule": "one term of a list packed into one string (split on commas, trimmed)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs/[]",
      "count": 29,
      "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)"
@@ -895,8 +990,14 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/controls/0/title",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/title/de",
-     "count": 20
+     "count": 19
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/title/de",
+     "count": 1
     }
    ]
   },
@@ -907,45 +1008,54 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/id",
    "to": [
     {
-     "pointer": "/id",
-     "count": 10,
-     "rule": "URI of the Set that stands for a control with nested controls, from the control id"
-    },
-    {
+     "object-type": "requirement",
      "pointer": "/id",
      "count": 327,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "requirementSet",
+     "pointer": "/id",
+     "count": 10,
+     "rule": "URI of the Set that stands for a control with nested controls, from the control id"
+    },
+    {
+     "object-type": "requirement",
      "pointer": "/label",
      "count": 327
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 10,
      "rule": "URI of the Set that stands for a control with nested controls, from the control id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 654,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 10,
      "rule": "URI of the Set that stands for a control with nested controls, from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 327,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 327,
      "rule": "file path of a Requirement from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 10,
      "rule": "file path of the Set that stands for a control with nested controls, from the control id"
@@ -959,6 +1069,7 @@
    "example": "gspp#/catalog/groups/0/groups/4/controls/0/controls/3/links/0/href",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/ref",
      "count": 71,
      "rule": "requirement URI from a link to a control (#id)"
@@ -972,6 +1083,7 @@
    "example": "gspp#/catalog/groups/0/groups/4/controls/0/controls/3/links/0/rel",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/type",
      "count": 71
     }
@@ -984,11 +1096,13 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/params/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}",
      "count": 73,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/name",
      "count": 73
     }
@@ -1001,6 +1115,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/params/0/label",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/label",
      "count": 73
     }
@@ -1013,6 +1128,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/params/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
      "count": 73,
      "as": "key"
@@ -1026,6 +1142,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/params/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
      "count": 73
     }
@@ -1038,6 +1155,7 @@
    "example": "gspp#/catalog/groups/15/groups/0/controls/0/controls/3/params/1/values/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/default",
      "count": 1
     }
@@ -1068,6 +1186,7 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/1/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance",
      "count": 326,
      "as": "key"
@@ -1094,6 +1213,7 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/1/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
      "count": 327,
      "as": "key"
@@ -1107,30 +1227,35 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation",
      "count": 321,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
      "count": 327,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
      "count": 138,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories",
      "count": 192,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 327,
      "as": "key",
@@ -1158,22 +1283,27 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation/[]",
      "count": 321
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
      "count": 327
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
      "count": 327
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
      "count": 138
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories/[]",
      "count": 192
     }
@@ -1186,6 +1316,7 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/props/3/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 327,
      "rule": "modality code from the modal verb (MODAL)"
@@ -1199,10 +1330,12 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance/de",
      "count": 326
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/de",
      "count": 261
     }
@@ -1215,6 +1348,7 @@
    "example": "gspp#/catalog/groups/0/groups/8/controls/0/controls/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/de",
      "count": 66,
      "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}"
@@ -1228,26 +1362,31 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/3/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags",
      "count": 148,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
      "count": 292,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
      "count": 292,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
      "count": 292,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
      "count": 292,
      "as": "key"
@@ -1261,23 +1400,27 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/aliases/[]/scheme",
      "count": 327,
      "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
      "count": 327,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
      "count": 327,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs",
      "count": 292,
      "as": "key",
@@ -1305,52 +1448,63 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/aliases/[]/value",
      "count": 327
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
      "count": 327
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
      "count": 114
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
      "count": 292
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
      "count": 292
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
      "count": 292
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
      "count": 292
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 327,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 327,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 327,
      "rule": "file path of a baseline Set from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 327,
      "rule": "baseline Set title from the sec_level of a control",
@@ -1365,16 +1519,19 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/props/2/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
      "count": 327,
      "rule": "effort level as an integer"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
      "count": 73,
      "rule": "one term of a list packed into one string (split on commas, trimmed)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs/[]",
      "count": 664,
      "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)"
@@ -1388,8 +1545,14 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/controls/0/title",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/title/de",
-     "count": 337
+     "count": 327
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/title/de",
+     "count": 10
     }
    ]
   },
@@ -1400,45 +1563,54 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/id",
    "to": [
     {
-     "pointer": "/id",
-     "count": 115,
-     "rule": "URI of the Set that stands for a control with nested controls, from the control id"
-    },
-    {
+     "object-type": "requirement",
      "pointer": "/id",
      "count": 652,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "requirementSet",
+     "pointer": "/id",
+     "count": 115,
+     "rule": "URI of the Set that stands for a control with nested controls, from the control id"
+    },
+    {
+     "object-type": "requirement",
      "pointer": "/label",
      "count": 652
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 115,
      "rule": "URI of the Set that stands for a control with nested controls, from the control id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 1304,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 115,
      "rule": "URI of the Set that stands for a control with nested controls, from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 652,
      "rule": "requirement URI from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 652,
      "rule": "file path of a Requirement from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 115,
      "rule": "file path of the Set that stands for a control with nested controls, from the control id"
@@ -1452,6 +1624,7 @@
    "example": "gspp#/catalog/groups/0/groups/1/controls/0/links/0/href",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/ref",
      "count": 198,
      "rule": "requirement URI from a link to a control (#id)"
@@ -1465,6 +1638,7 @@
    "example": "gspp#/catalog/groups/0/groups/1/controls/0/links/0/rel",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/type",
      "count": 198
     }
@@ -1477,11 +1651,13 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}",
      "count": 147,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/name",
      "count": 147
     }
@@ -1494,6 +1670,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/label",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/label",
      "count": 147
     }
@@ -1506,6 +1683,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
      "count": 147,
      "as": "key"
@@ -1519,6 +1697,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/param-extras/{param}/alt-identifier",
      "count": 147
     }
@@ -1531,6 +1710,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/params/0/values/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/default",
      "count": 1
     }
@@ -1561,6 +1741,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/1/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance",
      "count": 652,
      "as": "key"
@@ -1587,6 +1768,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/1/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
      "count": 652,
      "as": "key"
@@ -1600,30 +1782,35 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation",
      "count": 621,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
      "count": 652,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
      "count": 303,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories",
      "count": 434,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 652,
      "as": "key",
@@ -1651,22 +1838,27 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/by-statement/smt/required-documentation/[]",
      "count": 621
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/action",
      "count": 652
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result",
      "count": 652
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/result-specification",
      "count": 303
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories/[]",
      "count": 395
     }
@@ -1679,11 +1871,13 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/props/4/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1statement-grammar@1/by-statement/smt/target-object-categories/[]",
      "count": 78,
      "rule": "one term of a list packed into one string (split on commas, trimmed)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 652,
      "rule": "modality code from the modal verb (MODAL)"
@@ -1697,10 +1891,12 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/1/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/by-statement/smt/guidance/de",
      "count": 652
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/de",
      "count": 511
     }
@@ -1713,6 +1909,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/de",
      "count": 141,
      "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}"
@@ -1726,26 +1923,31 @@
    "example": "gspp#/catalog/groups/0/groups/2/controls/0/props/3/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags",
      "count": 313,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
      "count": 595,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
      "count": 596,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
      "count": 596,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
      "count": 596,
      "as": "key"
@@ -1759,23 +1961,27 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/aliases/[]/scheme",
      "count": 652,
      "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
      "count": 652,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
      "count": 652,
      "as": "key",
      "rule": "field name from the prop name (FIELD)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs",
      "count": 596,
      "as": "key",
@@ -1803,72 +2009,87 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/aliases/[]/value",
      "count": 652
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/sec-level",
      "count": 652
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
      "count": 223
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/authenticity",
      "count": 595
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/availability",
      "count": 596
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/confidentiality",
      "count": 596
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/integrity",
      "count": 596
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 1,
      "rule": "baseline Set URI from the sec_level of a control"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 651,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 1,
      "rule": "baseline Set URI from the sec_level of a control"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 651,
      "rule": "baseline Set URI from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 1,
      "rule": "file path of a baseline Set from the sec_level of a control"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 651,
      "rule": "file path of a baseline Set from the sec_level of a control",
      "via": "the controls of one sec_level name one baseline Set, written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 1,
      "rule": "baseline Set title from the sec_level of a control"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 651,
      "rule": "baseline Set title from the sec_level of a control",
@@ -1883,16 +2104,19 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/props/2/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/effort",
      "count": 652,
      "rule": "effort level as an integer"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-taxonomy@1/by-statement/smt/tags/[]",
      "count": 202,
      "rule": "one term of a list packed into one string (split on commas, trimmed)"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1security-objectives@1/by-statement/smt/threat-refs/[]",
      "count": 1316,
      "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)"
@@ -1906,8 +2130,14 @@
    "example": "gspp#/catalog/groups/0/groups/0/controls/0/title",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/title/de",
-     "count": 767
+     "count": 652
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/title/de",
+     "count": 115
     }
    ]
   },
@@ -1918,21 +2148,25 @@
    "example": "gspp#/catalog/groups/0/groups/0/id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 140,
      "rule": "taxonomy Set URI from the group id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 140,
      "rule": "taxonomy Set URI from the group id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 140,
      "rule": "taxonomy Set URI from the group id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 140,
      "rule": "file path of a taxonomy Set from the group id"
@@ -1946,6 +2180,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/props/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/label",
      "count": 140,
      "as": "key"
@@ -1959,6 +2194,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/props/1/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/aliases/[]/scheme",
      "count": 140,
      "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
@@ -1972,10 +2208,12 @@
    "example": "gspp#/catalog/groups/0/groups/0/props/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/aliases/[]/value",
      "count": 140
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/label",
      "count": 140
     }
@@ -1988,6 +2226,7 @@
    "example": "gspp#/catalog/groups/0/groups/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 140
     }
@@ -2000,21 +2239,25 @@
    "example": "gspp#/catalog/groups/0/id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 20,
      "rule": "taxonomy Set URI from the group id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 20,
      "rule": "taxonomy Set URI from the group id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 20,
      "rule": "taxonomy Set URI from the group id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 20,
      "rule": "file path of a taxonomy Set from the group id"
@@ -2028,6 +2271,7 @@
    "example": "gspp#/catalog/groups/0/props/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/label",
      "count": 20,
      "as": "key"
@@ -2041,6 +2285,7 @@
    "example": "gspp#/catalog/groups/0/props/1/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/aliases/[]/scheme",
      "count": 20,
      "rule": "alias scheme from the prop name (ALIAS_SCHEME)"
@@ -2054,6 +2299,7 @@
    "example": "gspp#/catalog/groups/0/props/0/remarks",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.bsi.bund.de~1facet~1gspp-narrative@1/description/de",
      "count": 20
     }
@@ -2066,10 +2312,12 @@
    "example": "gspp#/catalog/groups/0/props/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/aliases/[]/value",
      "count": 20
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/label",
      "count": 20
     }
@@ -2082,6 +2330,7 @@
    "example": "gspp#/catalog/groups/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 20
     }
@@ -2094,6 +2343,7 @@
    "example": "gspp#/catalog/metadata/document-ids/0/identifier",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/document-ids/[]/identifier",
      "count": 1
     }
@@ -2106,6 +2356,7 @@
    "example": "gspp#/catalog/metadata/document-ids/0/scheme",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/document-ids/[]/scheme",
      "count": 1
     }
@@ -2118,10 +2369,12 @@
    "example": "gspp#/catalog/metadata/last-modified",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/last-modified",
      "count": 1
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/date",
      "count": 1,
      "rule": "date of the document: the day of its last-modified"
@@ -2135,6 +2388,7 @@
    "example": "gspp#/catalog/metadata/links/0/href",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/href",
      "count": 1
     }
@@ -2147,6 +2401,7 @@
    "example": "gspp#/catalog/metadata/links/0/rel",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/rel",
      "count": 1
     }
@@ -2159,6 +2414,7 @@
    "example": "gspp#/catalog/metadata/links/0/text",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/text",
      "count": 1
     }
@@ -2171,10 +2427,12 @@
    "example": "gspp#/catalog/metadata/oscal-version",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/oscal-version",
      "count": 1
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/format-version",
      "count": 1
     }
@@ -2187,6 +2445,7 @@
    "example": "gspp#/catalog/metadata/parties/0/email-addresses/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/email-addresses/[]",
      "count": 1
     }
@@ -2199,10 +2458,12 @@
    "example": "gspp#/catalog/metadata/parties/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/name",
      "count": 1
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/author-ref",
      "count": 1,
      "rule": "author of the document: the one party its metadata names for it (as creator, else as prepared-by, else the one party it names), as a landmark URI from the party's name"
@@ -2216,6 +2477,7 @@
    "example": "gspp#/catalog/metadata/parties/0/type",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/type",
      "count": 1
     }
@@ -2228,6 +2490,7 @@
    "example": "gspp#/catalog/metadata/parties/0/uuid",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/uuid",
      "count": 1
     }
@@ -2240,6 +2503,7 @@
    "example": "gspp#/catalog/metadata/props/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/name",
      "count": 2
     }
@@ -2252,6 +2516,7 @@
    "example": "gspp#/catalog/metadata/props/0/ns",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/ns",
      "count": 1
     }
@@ -2264,6 +2529,7 @@
    "example": "gspp#/catalog/metadata/props/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/value",
      "count": 2
     }
@@ -2276,6 +2542,7 @@
    "example": "gspp#/catalog/metadata/remarks",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/remarks",
      "count": 1
     }
@@ -2288,6 +2555,7 @@
    "example": "gspp#/catalog/metadata/responsible-parties/0/party-uuids/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/responsible-parties/[]/party-uuids/[]",
      "count": 1
     }
@@ -2300,6 +2568,7 @@
    "example": "gspp#/catalog/metadata/responsible-parties/0/role-id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/responsible-parties/[]/role-id",
      "count": 1
     }
@@ -2312,6 +2581,7 @@
    "example": "gspp#/catalog/metadata/roles/0/id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/roles/[]/id",
      "count": 1
     }
@@ -2324,6 +2594,7 @@
    "example": "gspp#/catalog/metadata/roles/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/roles/[]/title",
      "count": 1
     }
@@ -2336,10 +2607,12 @@
    "example": "gspp#/catalog/metadata/title",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/title",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/de",
      "count": 1
     }
@@ -2352,16 +2625,24 @@
    "example": "gspp#/catalog/metadata/version",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/version",
      "count": 1289
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/version",
      "count": 1
     },
     {
+     "object-type": "requirement",
      "pointer": "/version",
-     "count": 1289
+     "count": 1000
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/version",
+     "count": 289
     }
    ]
   },
@@ -2372,6 +2653,7 @@
    "example": "gspp#/catalog/uuid",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/uuid",
      "count": 1
     }

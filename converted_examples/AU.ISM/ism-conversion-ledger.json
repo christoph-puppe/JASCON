@@ -18,6 +18,7 @@
    "example": "ism#/catalog/back-matter/resources/236/props/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/props/[]/name",
      "count": 2
     }
@@ -30,6 +31,7 @@
    "example": "ism#/catalog/back-matter/resources/236/props/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/props/[]/value",
      "count": 2
     }
@@ -42,6 +44,7 @@
    "example": "ism#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/href",
      "count": 254
     }
@@ -54,6 +57,7 @@
    "example": "ism#/catalog/back-matter/resources/25/rlinks/0/media-type",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/media-type",
      "count": 13
     }
@@ -66,6 +70,7 @@
    "example": "ism#/catalog/back-matter/resources/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/title",
      "count": 246
     }
@@ -78,6 +83,7 @@
    "example": "ism#/catalog/back-matter/resources/0/uuid",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/id",
      "count": 246
     }
@@ -90,49 +96,58 @@
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/class",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 2,
      "rule": "category Set id from the class"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 1148,
      "rule": "category Set id from the class",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 1150,
      "rule": "entry in the category Set that the control's class names: the Requirement of the control"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 2,
      "rule": "category Set id from the class"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 1148,
      "rule": "category Set id from the class",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 2,
      "rule": "file name of the category Set from the class"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 1148,
      "rule": "file name of the category Set from the class",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 2,
      "rule": "category Set title from the class"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 1148,
      "rule": "category Set title from the class",
@@ -147,36 +162,43 @@
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/id",
      "count": 1150,
      "rule": "Requirement id from the control id"
     },
     {
+     "object-type": "requirement",
      "pointer": "/label",
      "count": 1101,
      "rule": "label from the control id (ism-1234 -> ISM-1234; an id of another form as it is)"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 1150,
      "rule": "Requirement id from the control id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 5557,
      "rule": "entry in the baseline Set that the control's marker names: the Requirement of the control"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 1150,
      "rule": "entry in the category Set that the control's class names: the Requirement of the control"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 1150,
      "rule": "Requirement id from the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 1150,
      "rule": "file name of the Requirement from the control id"
@@ -190,6 +212,7 @@
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/parts/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/id",
      "count": 1150,
      "rule": "statement id: the part id after its last underscore"
@@ -216,11 +239,13 @@
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 1150,
      "rule": "modality word-rule over the statement prose"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/en",
      "count": 1150
     }
@@ -246,49 +271,58 @@
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/2/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 8,
      "rule": "baseline Set id from the prop name (its kind) and the marker"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 5549,
      "rule": "baseline Set id from the prop name (its kind) and the marker",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 5557,
      "rule": "entry in the baseline Set that the control's marker names: the Requirement of the control"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 8,
      "rule": "baseline Set id from the prop name (its kind) and the marker"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 5549,
      "rule": "baseline Set id from the prop name (its kind) and the marker",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 8,
      "rule": "file name of the baseline Set from the prop name (its kind) and the marker"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 5549,
      "rule": "file name of the baseline Set from the prop name (its kind) and the marker",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 8,
      "rule": "baseline Set title from the prop name (its kind) and the marker"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 5549,
      "rule": "baseline Set title from the prop name (its kind) and the marker",
@@ -316,14 +350,17 @@
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/1/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/label",
      "count": 49
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/version",
      "count": 1101
     },
     {
+     "object-type": "requirement",
      "pointer": "/version",
      "count": 1101
     }
@@ -349,54 +386,64 @@
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/props/2/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/history/[]/date",
      "count": 1101,
      "rule": "month of a control's last change: Mon-YY as the source prints it, written YYYY-MM (the century is 20)"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 8,
      "rule": "baseline Set id from the prop name (its kind) and the marker"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 5549,
      "rule": "baseline Set id from the prop name (its kind) and the marker",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 5557,
      "rule": "entry in the baseline Set that the control's marker names: the Requirement of the control"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 8,
      "rule": "baseline Set id from the prop name (its kind) and the marker"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 5549,
      "rule": "baseline Set id from the prop name (its kind) and the marker",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 8,
      "rule": "file name of the baseline Set from the prop name (its kind) and the marker"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 5549,
      "rule": "file name of the baseline Set from the prop name (its kind) and the marker",
      "via": "every control that carries the marker names the same Set; the Set is written once"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 8,
      "rule": "baseline Set title from the prop name (its kind) and the marker"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 5549,
      "rule": "baseline Set title from the prop name (its kind) and the marker",
@@ -411,6 +458,7 @@
    "example": "ism#/catalog/groups/1/groups/0/groups/0/controls/0/title",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/title/en",
      "count": 1150
     }
@@ -423,6 +471,7 @@
    "example": "ism#/catalog/groups/0/groups/0/groups/0/parts/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/group-parts/[]/name",
      "count": 470
     }
@@ -435,6 +484,7 @@
    "example": "ism#/catalog/groups/0/groups/0/groups/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/group-parts/[]/prose/en",
      "count": 470
     }
@@ -473,30 +523,36 @@
    "example": "ism#/catalog/groups/0/groups/0/groups/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/group-parts/[]/group",
      "count": 470
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 470,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 470,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 470,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 470,
      "rule": "file name of the taxonomy Set from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 470
     }
@@ -509,6 +565,7 @@
    "example": "ism#/catalog/groups/1/groups/0/parts/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/group-parts/[]/name",
      "count": 69
     }
@@ -521,6 +578,7 @@
    "example": "ism#/catalog/groups/1/groups/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/group-parts/[]/prose/en",
      "count": 69
     }
@@ -559,30 +617,36 @@
    "example": "ism#/catalog/groups/0/groups/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/group-parts/[]/group",
      "count": 69
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 545,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 545,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 545,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 545,
      "rule": "file name of the taxonomy Set from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 75
     }
@@ -621,26 +685,31 @@
    "example": "ism#/catalog/groups/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 570,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 570,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 570,
      "rule": "taxonomy Set id from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 570,
      "rule": "file name of the taxonomy Set from the titles of the group and of the groups above it"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 25
     }
@@ -653,10 +722,12 @@
    "example": "ism#/catalog/metadata/last-modified",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/last-modified",
      "count": 1
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/date",
      "count": 1,
      "rule": "date of the source: the day of the document's last-modified"
@@ -670,6 +741,7 @@
    "example": "ism#/catalog/metadata/links/0/href",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/href",
      "count": 5
     }
@@ -682,6 +754,7 @@
    "example": "ism#/catalog/metadata/links/0/rel",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/rel",
      "count": 5
     }
@@ -694,10 +767,12 @@
    "example": "ism#/catalog/metadata/oscal-version",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/oscal-version",
      "count": 1
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/format-version",
      "count": 1
     }
@@ -710,6 +785,7 @@
    "example": "ism#/catalog/metadata/parties/0/addresses/0/addr-lines/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/addr-lines/[]",
      "count": 3
     }
@@ -722,6 +798,7 @@
    "example": "ism#/catalog/metadata/parties/0/addresses/0/city",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/city",
      "count": 1
     }
@@ -734,6 +811,7 @@
    "example": "ism#/catalog/metadata/parties/0/addresses/0/country",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/country",
      "count": 1
     }
@@ -746,6 +824,7 @@
    "example": "ism#/catalog/metadata/parties/0/addresses/0/postal-code",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/postal-code",
      "count": 1
     }
@@ -758,6 +837,7 @@
    "example": "ism#/catalog/metadata/parties/0/addresses/0/state",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/state",
      "count": 1
     }
@@ -770,6 +850,7 @@
    "example": "ism#/catalog/metadata/parties/0/addresses/0/type",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/type",
      "count": 1
     }
@@ -782,6 +863,7 @@
    "example": "ism#/catalog/metadata/parties/0/email-addresses/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/email-addresses/[]",
      "count": 1
     }
@@ -794,6 +876,7 @@
    "example": "ism#/catalog/metadata/parties/0/links/0/href",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/links/[]/href",
      "count": 1
     }
@@ -806,6 +889,7 @@
    "example": "ism#/catalog/metadata/parties/0/links/0/rel",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/links/[]/rel",
      "count": 1
     }
@@ -818,10 +902,12 @@
    "example": "ism#/catalog/metadata/parties/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/name",
      "count": 1
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/author-ref",
      "count": 1,
      "rule": "author of the source: the party its document names as its author (the role `creator`, else `prepared-by`, else the one party it names); a landmark URI from the party's name"
@@ -835,6 +921,7 @@
    "example": "ism#/catalog/metadata/parties/0/short-name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/short-name",
      "count": 1
     }
@@ -847,6 +934,7 @@
    "example": "ism#/catalog/metadata/parties/0/type",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/type",
      "count": 1
     }
@@ -859,6 +947,7 @@
    "example": "ism#/catalog/metadata/parties/0/uuid",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/uuid",
      "count": 1
     }
@@ -871,6 +960,7 @@
    "example": "ism#/catalog/metadata/published",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/published",
      "count": 1
     }
@@ -883,6 +973,7 @@
    "example": "ism#/catalog/metadata/responsible-parties/0/party-uuids/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/responsible-parties/[]/party-uuids/[]",
      "count": 1
     }
@@ -895,6 +986,7 @@
    "example": "ism#/catalog/metadata/responsible-parties/0/role-id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/responsible-parties/[]/role-id",
      "count": 1
     }
@@ -907,6 +999,7 @@
    "example": "ism#/catalog/metadata/roles/0/id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/roles/[]/id",
      "count": 1
     }
@@ -919,6 +1012,7 @@
    "example": "ism#/catalog/metadata/roles/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/roles/[]/title",
      "count": 1
     }
@@ -931,10 +1025,12 @@
    "example": "ism#/catalog/metadata/title",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/title",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 1
     }
@@ -947,16 +1043,24 @@
    "example": "ism#/catalog/metadata/version",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/version",
      "count": 630
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/version",
      "count": 1
     },
     {
+     "object-type": "requirement",
      "pointer": "/version",
-     "count": 630
+     "count": 49
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/version",
+     "count": 581
     }
    ]
   },
@@ -967,6 +1071,7 @@
    "example": "ism#/catalog/uuid",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/uuid",
      "count": 1
     }

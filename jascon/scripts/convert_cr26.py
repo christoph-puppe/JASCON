@@ -475,10 +475,19 @@ R_KSI_PROSE="base prose of an indicator that states its text by class only, from
 R_TRACK_TITLE="title of one track's share of a subset, from the subset's name"
 
 # The status of a document, and the kernel's lifecycle. The publisher gives a
-# family, the glossary and a KSI theme a status of three words (its schema:
-# `document_status`: stable, placeholder, empty; its AGENTS.md: "FRD and FRR
-# status is under their document info.status; KSI status is
-# KSI.<theme>.status", read 2026-11-14 at the publication's tag). The kernel's
+# family, the glossary and a KSI theme a status of three words. Its schema
+# says so (checked 2026-11-15, backlog #91 point 3; until then the words
+# stood here unchecked): schemas/fedramp-consolidated-rules.schema.json at
+# the publication's tag 2026.11.02.01 (sha256 2fb59963b5b9161acb1354a2b76fda8b
+# 8a832275e1ac1ad93315c031ca350f8d; the file is not among the pinned sources)
+# defines `$defs/document_status` as the enum stable, placeholder, empty and
+# nothing else, requires `status` and types it by that definition at three
+# places: `info` of the glossary (frd_document_info), `info` of a family
+# (frr_document_info) and a KSI theme. The map below carries those three
+# words and no other. `empty` does not occur in publication 2026.11.02.01
+# (the report counts the words it met). The publisher's AGENTS.md: "FRD and
+# FRR status is under their document info.status; KSI status is
+# KSI.<theme>.status" (read 2026-11-14 at the publication's tag). The kernel's
 # lifecycle knows draft, active, deprecated, withdrawn. Until 2026-11-14 the
 # converter read no status and wrote `active` on everything, a family the
 # source marks `placeholder` and its rules among them.
@@ -950,6 +959,18 @@ for _cid,_robj in sorted(ctl_carried.items()):
         with open(os.path.join(NISTB,*_nist_pins[_fid]["path"].split("/")),encoding="utf-8") as _f: carried_pins[_fid]=(_nist_pins[_fid]["path"],json.load(_f))
 
 pinned=[]              # the schema files this run writes, for the manifest and the cleanup
+# Where each pinned schema comes from, for the report (backlog #79, point 4).
+# Until 2026-11-15 the report counted them all as "pinned stubs": the
+# descriptors of the standard library, which are pinned verbatim, the compat
+# schema and the pins of the SP 800-53 bundle among them. A stub is a closed
+# schema this converter writes from its own text.
+PIN_ORIGINS=(("stdlib","descriptors of the standard library, verbatim"),
+             ("own","closed stubs of this converter"),
+             ("compat","the compat schema of the repository's converters"),
+             ("carried","as the SP 800-53 bundle pins them, for the carried Rev 5 Requirements"))
+pin_origin={}          # path of a schema file this run writes -> a key of PIN_ORIGINS
+def pin(path,origin):
+    pinned.append(path); pin_origin[path]=origin
 def stub(path,fid,mods,props,version="1.0.0"):
     # 26 delivered: pins are the normative payload contract, fail-closed
     if fid in carried_pins:
@@ -962,13 +983,13 @@ def stub(path,fid,mods,props,version="1.0.0"):
         "note":"NORMATIVE pinned payload schema (backlog 26): closed shape - unknown keys are rejected, never smuggled",
         "schema":{"$schema":"https://json-schema.org/draft/2020-12/schema","type":"object","properties":props,
                   "additionalProperties":False}})
-    pinned.append(path)
+    pin(path,"own")
 def pin_stdlib(fn):
     src=os.path.join(ROOT,"jascon","schemas","stdlib",fn)
     with open(src,encoding="utf-8") as f: desc=json.load(f)
     carried_pins.pop(desc["id"],None)        # the standard library's descriptor is the pin, whoever uses the facet
     w(f"schemas/{fn}",desc)
-    pinned.append(f"schemas/{fn}")
+    pin(f"schemas/{fn}","stdlib")
 pin_stdlib("terminology-1.0.0.json")   # 26: stdlib pins are VERBATIM
 pin_stdlib("reporting-obligation-1.0.0.json")
 pin_stdlib("effectivity-1.0.0.json")
@@ -999,11 +1020,11 @@ _theirs=carried_pins.pop(F_COMPAT.split("@")[0],None)     # a carried Requiremen
 if _theirs is not None and _theirs[1]!=compat_schema():
     raise SystemExit("the SP 800-53 bundle pins a compat schema that is not the one schema of this repository's converters "
                      "(oscal_conv_lib.compat_schema): a carried Requirement would be held to two schemas of one id")
-w("schemas/"+COMPAT_FILE,compat_schema()); pinned.append("schemas/"+COMPAT_FILE)
+w("schemas/"+COMPAT_FILE,compat_schema()); pin("schemas/"+COMPAT_FILE,"compat")
 # the pins the carried Rev 5 Requirements bring, as the SP 800-53 bundle holds them
 for _fid,(_path,_desc) in sorted(carried_pins.items()):
     if _path in pinned: raise SystemExit(f"two pinned schemas would be written to {_path}")
-    w(_path,_desc); pinned.append(_path)
+    w(_path,_desc); pin(_path,"carried")
 
 # stale-file cleanup (files only, never rmdir): everything not re-emitted goes
 want={os.path.normpath(r) for r in objects}|{"content-manifest.json"}|{os.path.normpath(p) for p in pinned}
@@ -1045,6 +1066,8 @@ w("content-manifest.json",manifest)
 # run that reproduces the committed reports has reproduced the bundle, and a
 # change that alters one object alters the reports.
 MANIFEST_DIGEST=shaf("content-manifest.json")
+# the pins the manifest lists, by origin: counted on the manifest, so that the parts add up to what it lists
+pins_by_origin=collections.Counter(pin_origin.get(_s["path"],"other") for _s in manifest["facet-schemas"])
 
 # ---------------- the ledger: every source value, checked against the files just written ----------------
 # A drop is declared for exactly the paths the path map says are not carried,
@@ -1054,7 +1077,8 @@ MANIFEST_DIGEST=shaf("content-manifest.json")
 # last statement of this script).
 for _pat,_level,_why in RULES:
     if _level==DROP: led.drop(_pat,_why)
-LEDGER=led.account(OUT,{**objects,"content-manifest.json":manifest})
+ACCOUNTED_FILES={**objects,"content-manifest.json":manifest}
+LEDGER=led.account(OUT,ACCOUNTED_FILES)
 LT=LEDGER["totals"]; LFAIL=LEDGER["verification-failures"]
 
 # The ledger follows strings, numbers and flags. A null of the source states
@@ -1096,6 +1120,44 @@ for _p,_c in sorted(by_path.items()):
         claims.append({"path":_p,"level":_level,"values":sum(_c.values()),"written-all-the-same":_c["copied"]+_c["transformed"]})
     if _level=="L1" and _c["copied"]+_c["transformed"] and not outside_parked[_p]:
         claims.append({"path":_p,"level":_level,"values":sum(_c.values()),"only-in-the-parked-payload":_c["copied"]+_c["transformed"]})
+
+# The CTL overlay by what became of it, counted on the ledger (backlog #79,
+# point 4). Until 2026-11-15 two lines of the report said in typed words what
+# of the overlay is parked and what is drained, and the one denied what the
+# other and the path map said: an ODP assignment that a class variant states
+# stays in the parked payload, and a line said that no assignment is parked.
+# Both lines are printed from this one count now. An ODP assignment is an
+# entry of a `parameters` list, its parameterId and its value. It is drained
+# when both stand in an operation of the rev5-odp-overlay Tailoring and
+# nowhere else, parked when both stand in the compat payload of the overlay
+# Set and nowhere else, and counted as neither otherwise. Every other value
+# of the overlay is counted under the member it belongs to.
+_T_ODP=f"{NS}/tailoring/rev5-odp-overlay"; _S_CTL=f"{NS}/set/ctl-overlay"
+CTL_MEMBERS={"guidance":"guidance","updated":"update history"}      # a member of an entry -> its name in the report
+def _ctl_places(e):
+    return {("drained" if _d["object"]==_T_ODP and _d["pointer"].startswith("/operations/") else
+             "parked" if _d["object"]==_S_CTL and _d["pointer"].startswith(_parked+"ctl/") else "elsewhere")
+            for _d in e.get("destinations",[])} or {"nowhere"}
+_assignment=collections.defaultdict(set)     # (who states it, pointer of the entry of `parameters`) -> where its two values stand
+ctl_values=collections.Counter()             # (member, parked | not parked) -> values
+for _e in LEDGER["entries"]:
+    _m=re.match(r"cr26#/CTL/[^/]+/[^/]+(/varies_by_class/[^/]+)?/([^/]+)(/[0-9]+)?",_e["source"])
+    if not _m: continue
+    if _m.group(2)=="parameters":
+        _assignment[("class variant" if _m.group(1) else "entry",_m.group(0))]|=_ctl_places(_e)
+    else:
+        ctl_values[(CTL_MEMBERS.get(_m.group(2),_m.group(2)),"parked" if _ctl_places(_e)=={"parked"} else "not parked")]+=1
+ctl_odp=collections.Counter()                # (who states it, drained | parked | neither) -> assignments
+for (_who,_),_places in _assignment.items():
+    ctl_odp[(_who,next(iter(_places)) if _places in ({"drained"},{"parked"}) else "neither")]+=1
+def _odp(what):
+    """-> how many ODP assignments are `what` (drained, parked, neither) and who states them, as the report prints it"""
+    n=sum(v for (_who,_w),v in ctl_odp.items() if _w==what)
+    return f"x{n}"+(" ("+", ".join(f"x{v} stated by {'an' if _who=='entry' else 'a'} {_who}"
+                                    for (_who,_w),v in sorted(ctl_odp.items(),reverse=True) if _w==what)+")" if n else "")
+CTL_COUNT={"entries":sum(len(v) for v in d["CTL"].values()),
+           "odp-assignments":[{"stated-by":_who,"outcome":_what,"count":n} for (_who,_what),n in sorted(ctl_odp.items())],
+           "other-values":[{"member":_member,"outcome":_what,"count":n} for (_member,_what),n in sorted(ctl_values.items())]}
 def _no_phrase(pointer):
     """A pointer segment with a space in it is a key of the source that is a
     phrase of the publication (two nodes of a flow diagram). The reports and
@@ -1155,7 +1217,7 @@ _own(manifest,"content-manifest.json","manifest",[])
 # control of the overlay, a class) is one row and not one per id. The one
 # thing done to the library's result here: no pointer prints a phrase.
 def _facet(f): return "/facets/"+re.escape(f.replace("~","~0").replace("/","~1"))
-LEDGER_RECORD=ledger_by_path(LEDGER,collapse=[
+LEDGER_RECORD=ledger_by_path(LEDGER,ACCOUNTED_FILES,collapse=[
     (rf"^({_facet(F_TERM)}/terms)/[^/]+",r"\1/{term-id}"),
     (rf"^({_facet(F_NARR)}/ignore-in-terms)/[^/]+",r"\1/{term-id}"),
     (rf"^({_facet(F_COMPAT)}/ctl)/[^/]+/[^/]+",r"\1/{control-family}/{control}"),
@@ -1231,7 +1293,9 @@ j={"source":d["info"]["title"],"version":VER,
                 "rule":dict(STATUS_LIFECYCLE),
                 "objects":[{"lifecycle":l,"origin":o,"count":n} for (o,l),n in sorted(lifecycle_by_origin.items())]},
    "bundle":{"content-manifest-digest":MANIFEST_DIGEST,"objects":len(manifest["objects"]),
-             "facet-schemas":len(manifest["facet-schemas"])},
+             "facet-schemas":len(manifest["facet-schemas"]),
+             "facet-schemas-by-origin":{k:pins_by_origin[k] for k in [o for o,_ in PIN_ORIGINS]+["other"] if pins_by_origin[k]}},
+   "ctl-overlay":CTL_COUNT,
    "modality(rule-level)":dict(mod_hist),
    "tailoring-ops":dict(ops_emitted),"converter-deviations(easings)":dev_records,
    "counters":dict(counters),"lang-wraps":dict(lang_wraps),
@@ -1263,7 +1327,8 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"{nset-sum(set_kinds[k] for k in ('tax','subset','class','type','ksi'))}: the root, the CTL overlay, the Set of the "
  f"carried Rev 5 Requirements), "
  f"**{ntail} Tailorings** ({nclass} class variants and the Rev 5 ODP overlay), manifest with both digests, "
- f"{len(manifest['facet-schemas'])} pinned stubs.",
+ f"{sum(pins_by_origin.values())} pinned facet schemas: "
+ +"; ".join(f"{pins_by_origin[k]} {text}" for k,text in PIN_ORIGINS+(("other","that this run did not write"),) if pins_by_origin[k])+".",
  f"- The bundle as written: `content-manifest.json` is `{MANIFEST_DIGEST}`. The manifest lists both digests of "
  f"each of its {len(manifest['objects']):,} objects ({nreq} Requirements of the publication, "
  f"{counters.get('ctl-carried-reqs',0)} carried Rev 5 Requirements, the Mappings, Sets and Tailorings) and the digest "
@@ -1332,11 +1397,14 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"without alternatives gets no `aliases` (an empty container is left out). **ignore_in_terms** "
  f"(x{len(ignore_in_terms)}) has no member in terminology@1, which knows `do-not-link` only; it is carried in "
  f"narrative@1 on the same Set as `ignore-in-terms`, by term id, with the value the source wrote.",
- f"- **CTL ODP assignments DRAINED (backlog #10, gate 3)**: {counters.get('ctl-odp-ops',0)} set-parameter ops on the "
+ f"- **CTL ODP assignments (backlog #10, gate 3)**: the source states x{sum(ctl_odp.values())}. **Drained "
+ f"{_odp('drained')}**: {counters.get('ctl-odp-ops',0)} set-parameter ops on the "
  f"`rev5-odp-overlay` Tailoring, each addressed (requirement-ref, statement-id, parameter) via the DECLARING "
  f"statement of the Rev 5.2.0 ODP (measured: no ODP is declared in two statements); {counters.get('ctl-carried-reqs',0)} "
  f"tailored Rev 5 Requirements carried in-bundle as byte-identical copies (closure; the authorization-package "
- f"pattern). CTL guidance entries stay parked L2 - supplemental prose on external controls is D20 supplements "
+ f"pattern). **Parked {_odp('parked')}** L2 on /set/ctl-overlay, as the source has them. **Neither drained nor "
+ f"parked {_odp('neither')}**. CTL guidance stays parked L2 (the line on the overlay below) - supplemental prose on "
+ f"external controls is D20 supplements "
  f"territory, not ODP addressing. Multi-select serialization normalized x{counters.get('ctl-multiselect-normalized',0)} "
  f"(FedRAMP flattens many-cardinality selections into prose strings 'a; b' / 'a, b and c'; every part matches a "
  f"declared NIST choice -> list value; REPORTED upstream). Residual choice conflicts: {ctl_choice_conflicts or 'none'}.",
@@ -1352,10 +1420,15 @@ md=[f"# CR26 -> Semantic Core: Coverage Report (computed)\n",
  f"but an entry of terminology@1 on the corpus root Set, and `history` is a member of an object: the history of a "
  f"term stands there in narrative@1 under `term-updated`, by term id, each entry as the source writes it. Until "
  f"2026-11-14 the update history was a declared drop; the author decided that it is carried.",
- f"- **CTL Rev5 overlay ({counters.get('ctl-overlays',0)} entries)**: the guidance and the update history of an entry "
- f"are parked L2 on /set/ctl-overlay. Its ODP assignments are not parked: they are the operations of the "
- f"`rev5-odp-overlay` Tailoring (the line on the drained assignments above). Until 2026-11-14 this line read as if "
- f"the assignments were parked too and waited for gate item 3; the ledger finds each of them in an operation.",
+ f"- **CTL Rev5 overlay ({CTL_COUNT['entries']} entries)**, counted on the ledger. Parked L2 on /set/ctl-overlay: "
+ +", ".join([f"{_member} x{n} value(s)" for (_member,_what),n in sorted(ctl_values.items()) if _what=="parked"]
+            +[f"ODP assignments {_odp('parked')}"])
+ +". Not parked: "
+ +", ".join([f"{_member} x{n} value(s)" for (_member,_what),n in sorted(ctl_values.items()) if _what!="parked"]
+            +[f"ODP assignments drained to the `rev5-odp-overlay` Tailoring {_odp('drained')}",
+              f"ODP assignments neither drained nor parked {_odp('neither')}"])
+ +". This line and the line on the ODP assignments above print one count. Until 2026-11-15 the two were typed, and "
+ f"this one said that no assignment is parked.",
  f"- **flows** x{counters.get('flows',0)}: a process flow the source writes out (activity, nodes, steps) stands on "
  f"its family's Set, in the compat facet under `flows`, as the source writes it (until 2026-11-14 a declared drop, "
  f"by D17); dangling related refs x{dangling_related}.",

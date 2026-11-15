@@ -1101,10 +1101,36 @@
   "multi-declared": []
  },
  "endpoint-crosscheck": {
-  "resolved": 21,
+  "resolved": 14,
   "distinct": 5,
   "withdrawn-hits": {},
-  "unknown": {}
+  "unknown": {},
+  "corpora": [
+   {
+    "bundle": "AU.ISM/ism-core-bundle",
+    "found": true,
+    "objects": 1731,
+    "citations": 0
+   },
+   {
+    "bundle": "DE.BSI/bsi-core-bundle",
+    "found": true,
+    "objects": 1289,
+    "citations": 0
+   },
+   {
+    "bundle": "US.CSF/csf-core-bundle",
+    "found": true,
+    "objects": 226,
+    "citations": 0
+   },
+   {
+    "bundle": "US.IFA-GoodRead/ifa-core-bundle",
+    "found": true,
+    "objects": 14,
+    "citations": 14
+   }
+  ]
  },
  "baseline-missing": {},
  "lang-wraps": {

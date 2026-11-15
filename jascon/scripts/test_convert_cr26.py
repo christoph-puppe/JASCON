@@ -440,6 +440,22 @@ class TheLedger(Converted):
         self.assertEqual(self.report["ledger"]["path-map-rows-the-ledger-contradicts"], [])
         self.assertIn("path-map rows contradicted 0", self.stdout)
 
+    def test_a_destination_of_the_record_names_the_type_of_its_object(self):
+        """backlog #91 (5): until 2026-11-15 a destination was its pointer
+        alone, and `/lifecycle` of a rule, of a Mapping of its control links
+        and of a subset Set were one destination of a family's status."""
+        row = next(r for r in self.rows if r["path"] == "cr26.FRR.*.info.status")
+        got = collections.Counter()
+        for d in row["to"]:
+            if d["pointer"] == "/lifecycle": got[d["object-type"]] += d["count"]
+        of_rules = [i for i in self.objs if i.startswith(f"{NS}/req/")]
+        their_mappings = [i for i, o in self.objs.items() if o.get("source-ref", "").startswith(f"{NS}/req/")]
+        self.assertGreater(len(their_mappings), 0)
+        self.assertEqual((got["requirement"], got["mapping"]), (len(of_rules), len(their_mappings)))
+        self.assertGreater(got["requirementSet"], 0)
+        self.assertEqual({d.get("object-type") for r in self.rows for d in r.get("to", [])},
+                         {"requirement", "requirementSet", "mapping", "tailoring", "manifest"})
+
     def test_nothing_is_unaccounted_and_nothing_is_called_no_content(self):
         t = self.ledger["totals"]
         self.assertEqual(list(t), ["copied", "transformed", "not-content", "intentionally-dropped", "unaccounted"])
@@ -644,6 +660,86 @@ class CarriedRequirements(Converted):
                     self.assertEqual(a.read(), b.read(), f"{fid}: the pin is not the SP 800-53 bundle's")
 
 
+def overlay_in_the_source(src):
+    """-> what the CTL overlay of a source states: the ODP assignments of an
+    entry and of a class variant, and its guidance values (entry and class
+    variant together). Counted on the source, with no code of the converter."""
+    entries = [e for family in src["CTL"].values() for e in family.values()]
+    variants = [v for e in entries for v in (e.get("varies_by_class") or {}).values()]
+    return {"entry": sum(len(e.get("parameters", [])) for e in entries),
+            "class variant": sum(len(v.get("parameters", [])) for v in variants),
+            "guidance": sum(len(x.get("guidance", [])) for x in entries + variants)}
+
+def overlay_in_the_bundle(objs):
+    """-> (the ODP assignments that are operations of the rev5-odp-overlay
+    Tailoring, the ODP assignments in the parked payload of the overlay Set),
+    counted on the written objects."""
+    def parked(node):
+        if isinstance(node, dict): return len(node.get("parameters", [])) + sum(parked(v) for k, v in node.items() if k != "parameters")
+        if isinstance(node, list): return sum(parked(v) for v in node)
+        return 0
+    ops = objs[f"{NS}/tailoring/rev5-odp-overlay"]["operations"]
+    return len(ops), parked(objs[f"{NS}/set/ctl-overlay"]["facets"][COMPAT]["ctl"])
+
+def overlay_lines(md):
+    """-> the two lines of the report that say what of the overlay is parked and what is drained"""
+    rule = [l for l in md.split("\n") if l.startswith("- **CTL ODP assignments")]
+    overlay = [l for l in md.split("\n") if l.startswith("- **CTL Rev5 overlay")]
+    assert len(rule) == 1 and len(overlay) == 1, "the report has not one line on the ODP assignments and one on the overlay"
+    return rule[0], overlay[0]
+
+
+class TheReportsProseIsItsCounters(Converted):
+    """backlog #79 (4): until 2026-11-15 the report said in one typed line
+    that the ODP assignments of the Rev 5 overlay are drained and in another
+    that none is parked, while those a class variant states stood in the
+    parked payload; and it counted every pinned schema as a "pinned stub"."""
+    NIST_BUNDLE = os.path.join(ROOT, "converted_examples", "US.SP800-53", "sp800-53-core-bundle")
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        with open(os.path.join(cls.out, "cr26-coverage-report.md"), encoding="utf-8") as f: cls.md = f.read()
+
+    def test_the_two_lines_on_the_overlay_say_what_stands_in_the_bundle(self):
+        stated = overlay_in_the_source(self.src)
+        drained, parked = overlay_in_the_bundle(self.objs)
+        self.assertGreater(drained, 0); self.assertGreater(parked, 0, "no assignment is parked: the two lines were not told apart")
+        self.assertEqual(drained + parked, stated["entry"] + stated["class variant"], "an assignment of the source is in neither place")
+        counted = collections.Counter()
+        for x in self.report["ctl-overlay"]["odp-assignments"]: counted[x["outcome"]] += x["count"]
+        self.assertEqual(dict(counted), {"drained": drained, "parked": parked})
+        self.assertEqual(self.report["ctl-overlay"]["other-values"][0], {"member": "guidance", "outcome": "parked", "count": stated["guidance"]})
+        rule, overlay = overlay_lines(self.md)
+        self.assertIn(f"the source states x{drained + parked}.", rule)
+        self.assertIn(f"**Drained x{drained} (", rule); self.assertIn(f"**Parked x{parked} (", rule)
+        self.assertIn("**Neither drained nor parked x0**", rule)
+        self.assertIn(f"ODP assignments x{parked} (", overlay.split(". Not parked: ")[0])
+        self.assertIn(f"Tailoring x{drained} (", overlay.split(". Not parked: ")[1])
+        self.assertIn(f"guidance x{stated['guidance']} value(s)", overlay.split(". Not parked: ")[0])
+        # the sentence of 2026-11-14, which the bundle contradicted, is in neither line
+        self.assertNotIn("Its ODP assignments are not parked", self.md)
+
+    def test_the_pinned_schemas_are_counted_by_where_they_come_from(self):
+        mine = read_json(os.path.join(self.bundle, "content-manifest.json"))["facet-schemas"]
+        theirs = {s["path"] for s in read_json(os.path.join(self.NIST_BUNDLE, "content-manifest.json"))["facet-schemas"]}
+        counted = collections.Counter()
+        for s in mine:
+            pin = read_json(os.path.join(self.bundle, *s["path"].split("/")))
+            stdlib = os.path.join(ROOT, "jascon", "schemas", "stdlib", os.path.basename(s["path"]))
+            if os.path.isfile(stdlib) and read_json(stdlib) == pin: counted["stdlib"] += 1
+            elif s["id"] + "@1" == COMPAT: counted["compat"] += 1
+            elif s["path"] in theirs and read_json(os.path.join(self.NIST_BUNDLE, *s["path"].split("/"))) == pin: counted["carried"] += 1
+            else: counted["own"] += 1
+        self.assertEqual(self.report["bundle"]["facet-schemas-by-origin"], dict(counted))
+        self.assertEqual(sum(counted.values()), self.report["bundle"]["facet-schemas"])
+        self.assertGreater(counted["stdlib"], 0); self.assertGreater(counted["own"], 0)
+        line = next(l for l in self.md.split("\n") if l.startswith("- Emitted:"))
+        self.assertIn(f"{len(mine)} pinned facet schemas: {counted['stdlib']} descriptors of the standard library, verbatim; "
+                      f"{counted['own']} closed stubs of this converter; ", line)
+        self.assertNotIn("pinned stubs", self.md)
+
+
 class Arguments(unittest.TestCase):
     """An argument the converter cannot honour stops the run before anything is written."""
     def test_a_run_that_cannot_be_honoured_writes_nothing(self):
@@ -744,6 +840,29 @@ class ChangedSource(unittest.TestCase):
         self.assertEqual(code, 0, err[-400:])
         _, as_published, _, _ = self.run_on(lambda src: None)
         self.assertEqual(unspecified(out), unspecified(as_published) + 1, "one rule more without a force than the publication has")
+
+    def test_an_assignment_moved_into_a_class_variant_is_parked_in_both_lines_of_the_report(self):
+        """backlog #79 (4): the two lines on the overlay are printed from one
+        count of the ledger. One ODP assignment of an entry is given to a class
+        variant of the same entry: one fewer is drained, one more is parked,
+        and both lines say so."""
+        def change(src):
+            e = next(e for family in src["CTL"].values() for e in family.values() if len(e.get("parameters", [])) > 1)
+            e.setdefault("varies_by_class", {}).setdefault("a", {}).setdefault("parameters", []).append(e["parameters"].pop())
+        before = overlay_in_the_source(self.original)
+        code, out, err, d = self.run_on(change)
+        self.assertEqual(code, 0, err[-600:])
+        drained, parked = overlay_in_the_bundle(objects(os.path.join(d, "cr26-core-bundle")))
+        self.assertEqual((drained, parked), (before["entry"] - 1, before["class variant"] + 1))
+        report = read_json(os.path.join(d, "cr26-coverage-report.json"))
+        self.assertEqual(report["ctl-overlay"]["odp-assignments"],
+                         [{"stated-by": "class variant", "outcome": "parked", "count": parked},
+                          {"stated-by": "entry", "outcome": "drained", "count": drained}])
+        with open(os.path.join(d, "cr26-coverage-report.md"), encoding="utf-8") as f: rule, overlay = overlay_lines(f.read())
+        self.assertIn(f"**Drained x{drained} (x{drained} stated by an entry)**", rule)
+        self.assertIn(f"**Parked x{parked} (x{parked} stated by a class variant)**", rule)
+        self.assertIn(f"ODP assignments x{parked} (x{parked} stated by a class variant). Not parked: ", overlay)
+        self.assertIn(f"Tailoring x{drained} (x{drained} stated by an entry)", overlay)
 
     def test_a_run_leaves_no_bundle_in_the_repositorys_folder(self):
         """backlog #79 (5): --out is required, and it may not name the repository's own folder of the conversion"""

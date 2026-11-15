@@ -17,6 +17,7 @@ from oscal_conv_lib import document_author, document_day, provenance, provenance
 from oscal_conv_lib import known_arguments, out_dir
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import ledger_by_path, ledger_gate, Bundle, COMPAT, COMPAT_ID, COMPAT_FILE
+from oscal_conv_lib import kernel_type, KERNEL_TYPE_BY_MEMBER, NO_KERNEL_TYPE
 from oscal_conv_lib import lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import path_map_check, path_map_measured, held_row, held_rows_match
 
@@ -524,12 +525,12 @@ class Backlog41TheLedgerOfALargeCorpus(unittest.TestCase):
         for rel, o in objs.items():
             os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
             with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(o, f)
-        return led.account(out, objs)
+        return led.account(out, objs), objs
 
     def test_backlog_41_one_row_per_path_and_outcome_and_every_leaf_counted_once(self):
-        full = self.run_ledger()
+        full, objs = self.run_ledger()
         before = json.dumps(full, sort_keys=True)
-        short = ledger_by_path(full, examples=1)
+        short = ledger_by_path(full, objs, examples=1)
         self.assertEqual(json.dumps(full, sort_keys=True), before)                  # the per-leaf ledger is not touched
         self.assertEqual(short["leaf-values"], 14)
         self.assertEqual(short["totals"], full["totals"])
@@ -538,9 +539,11 @@ class Backlog41TheLedgerOfALargeCorpus(unittest.TestCase):
         rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
         self.assertEqual(len(rows), len(short["paths"]))                            # one row per path and outcome
         self.assertEqual(rows[("cat.controls[].title", "copied")]["count"], 3)
-        self.assertEqual(rows[("cat.controls[].title", "copied")]["to"], [{"pointer": "/statements/[]/prose/en", "count": 3}])
+        self.assertEqual(rows[("cat.controls[].title", "copied")]["to"],
+                         [{"object-type": "requirement", "pointer": "/statements/[]/prose/en", "count": 3}])
         self.assertEqual(rows[("cat.controls[].title", "copied")]["example"], "cat#/controls/0/title")
-        self.assertEqual(rows[("cat.controls[].id", "transformed")]["to"], [{"pointer": "/id", "count": 3, "rule": "id-rule"}])
+        self.assertEqual(rows[("cat.controls[].id", "transformed")]["to"],
+                         [{"object-type": "requirement", "pointer": "/id", "count": 3, "rule": "id-rule"}])
         self.assertEqual(rows[("cat.controls[].uuid", "intentionally-dropped")]["reasons"],
                          [{"reason": "an identity of the source document, not content", "count": 3}])
         self.assertEqual(rows[("cat.controls[].note", "unaccounted")]["count"], 2)
@@ -570,6 +573,7 @@ class PhaseEWhatIsNoContent(unittest.TestCase):
                 os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
                 written = tamper(json.loads(json.dumps(obj))) if tamper else obj
                 with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(written, f)
+            self.objects = objects                  # what account() was given, for ledger_by_path
             return led.account(out, objects)
 
     @staticmethod
@@ -686,7 +690,8 @@ class PhaseEWhatIsNoContent(unittest.TestCase):
                          ("unaccounted", "unaccounted"))
 
     def test_the_record_of_a_large_corpus_names_the_rules(self):
-        short = ledger_by_path(self.run_ledger(self.convert()))
+        full = self.run_ledger(self.convert())
+        short = ledger_by_path(full, self.objects)
         rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
         self.assertEqual(rows[("src.controls[].props[].name", "not-content")]["rules"],
                          [{"kind": "selector", "rule": "a prop's name selects the field its value is written to", "count": 2}])
@@ -804,12 +809,14 @@ class PhaseEKeysThatAreSourceValues(unittest.TestCase):
         out = tempfile.mkdtemp()
         with open(os.path.join(out, "o.json"), "w", encoding="utf-8") as f: json.dump(obj, f)
         full = led.account(out, {"o.json": obj})
-        rows = {(r["path"], r["outcome"]): r for r in ledger_by_path(full)["paths"]}
+        rows = {(r["path"], r["outcome"]): r for r in ledger_by_path(full, {"o.json": obj})["paths"]}
         self.assertEqual(len(rows[("cat.params[].label", "copied")]["to"]), 2)
-        short = ledger_by_path(full, collapse=[(r"^(/facets/odp)/[^/]+", r"\1/{param id}")])
+        short = ledger_by_path(full, {"o.json": obj}, collapse=[(r"^(/facets/odp)/[^/]+", r"\1/{param id}")])
         rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
-        self.assertEqual(rows[("cat.params[].label", "copied")]["to"], [{"pointer": "/facets/odp/{param id}/label", "count": 2}])
-        self.assertEqual(rows[("cat.params[].id", "copied")]["to"], [{"pointer": "/facets/odp/{param id}", "count": 2, "as": "key"}])
+        self.assertEqual(rows[("cat.params[].label", "copied")]["to"],
+                         [{"object-type": NO_KERNEL_TYPE, "pointer": "/facets/odp/{param id}/label", "count": 2}])
+        self.assertEqual(rows[("cat.params[].id", "copied")]["to"],
+                         [{"object-type": NO_KERNEL_TYPE, "pointer": "/facets/odp/{param id}", "count": 2, "as": "key"}])
 
 
 class PhaseEOrphans(unittest.TestCase):
@@ -978,6 +985,83 @@ class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
         self.assertEqual(sorted(got), ["class", "id", "ns", "odd", "title"])
         self.assertEqual((dict(got["id"]["outcomes"]), dict(got["id"]["places"])), ({"transformed": 3}, {"/id": 3, "/members/[]/ref": 3}))
         self.assertEqual((dict(got["class"]["outcomes"]), dict(got["class"]["places"])), ({"intentionally-dropped": 2}, {}))
+
+
+class Backlog91TheObjectOfADestination(unittest.TestCase):
+    """ledger_by_path keeps the type of the object a value went to (backlog
+    #91, point 5). Until 2026-11-15 a destination of the record by path was
+    its pointer alone: `/id` of a Set and of a Requirement read alike, and
+    one row stood for both."""
+    SOURCE = {"version": "7", "groups": [{"id": "g", "title": "Group", "controls": [{"id": "c-1", "title": "First"},
+                                                                                     {"id": "c-2", "title": "Second"}]}]}
+
+    def run_ledger(self):
+        led = Ledger(); doc = led.source("cat", copy.deepcopy(self.SOURCE))
+        uri = lambda v: "https://x.example/" + v
+        g = doc["groups"][0]
+        objs = {"objects/set/g.json": {"id": led.derive("URI from the id", uri, g["id"]), "version": doc["version"],
+                                       "title": {"en": g["title"]},
+                                       "members": [{"ref": led.derive("URI from the id", uri, c["id"])} for c in g["controls"]]}}
+        for c in g["controls"]:
+            objs[f"objects/req/{c['id']}.json"] = {"id": led.derive("URI from the id", uri, c["id"]), "version": doc["version"],
+                                                   "title": {"en": c["title"]}, "statements": []}
+        objs["content-manifest.json"] = {"manifest-version": "1", "provenance": {"sources": [{"version": doc["version"]}]}}
+        out = tempfile.mkdtemp()
+        for rel, o in objs.items():
+            os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
+            with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(o, f)
+        return led.account(out, objs), objs
+
+    def test_backlog_91_the_id_of_a_set_and_of_a_requirement_are_two_destinations(self):
+        full, objs = self.run_ledger()
+        self.assertEqual((full["totals"]["unaccounted"], full["verification-failures"]), (0, []))
+        rows = {(r["path"], r["outcome"]): r["to"] for r in ledger_by_path(full, objs)["paths"]}
+        rule = "URI from the id"
+        self.assertEqual(rows[("cat.groups[].id", "transformed")],
+                         [{"object-type": "requirementSet", "pointer": "/id", "count": 1, "rule": rule}])
+        self.assertEqual(rows[("cat.groups[].controls[].id", "transformed")],
+                         [{"object-type": "requirement", "pointer": "/id", "count": 2, "rule": rule},
+                          {"object-type": "requirementSet", "pointer": "/members/[]/ref", "count": 2, "rule": rule}])
+        self.assertEqual(rows[("cat.groups[].title", "copied")], [{"object-type": "requirementSet", "pointer": "/title/en", "count": 1}])
+        self.assertEqual(rows[("cat.groups[].controls[].title", "copied")], [{"object-type": "requirement", "pointer": "/title/en", "count": 2}])
+        # one source value at one pointer of three objects of two types, and in the manifest: a destination per type
+        self.assertEqual(rows[("cat.version", "copied")],
+                         [{"object-type": "manifest", "pointer": "/provenance/sources/[]/version", "count": 1},
+                          {"object-type": "requirement", "pointer": "/version", "count": 2},
+                          {"object-type": "requirementSet", "pointer": "/version", "count": 1}])
+        # every destination of every row names the type of its object
+        self.assertTrue(all(d.get("object-type") for to in rows.values() for d in to))
+
+    def test_backlog_91_a_record_and_objects_of_two_runs_are_refused(self):
+        full, objs = self.run_ledger()
+        del objs["objects/set/g.json"]
+        with self.assertRaises(ValueError) as refused: ledger_by_path(full, objs)
+        self.assertIn("https://x.example/g, which is not among the objects given", str(refused.exception))
+
+    def test_backlog_91_a_type_is_told_by_a_member_the_kernel_requires_of_it_alone(self):
+        """The table of the library against the kernel schema: each type the
+        schema defines is told by a member it requires, and no member that is
+        asked earlier can stand in an object of that type."""
+        here = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(here, "..", "schemas", "jascon-2.0.0.schema.json"), encoding="utf-8") as f: defs = json.load(f)["$defs"]
+        own = {t: next(p for p in d["allOf"] if "$ref" not in p) for t, d in defs.items()
+               if {"$ref": "#/$defs/base"} in d.get("allOf", [])}
+        self.assertEqual(sorted(t for _, t in KERNEL_TYPE_BY_MEMBER), sorted(own))        # the eleven types, each once
+        base = set(defs["base"]["properties"])
+        for i, (member, t) in enumerate(KERNEL_TYPE_BY_MEMBER):
+            self.assertIn(member, own[t]["required"], t)
+            may_have = base | set(own[t]["properties"])
+            self.assertEqual([m for m, _ in KERNEL_TYPE_BY_MEMBER[:i] if m in may_have], [], t)
+            self.assertEqual(kernel_type({"id": "https://x.example/o", **{m: None for m in own[t]["required"]}}), t)
+        # a component with members is a component, a Set is told by its members
+        self.assertEqual(kernel_type({"kind": "system", "members": []}), "component")
+        self.assertEqual(kernel_type({"members": []}), "requirementSet")
+        # what a bundle holds that is no object of the kernel
+        self.assertEqual(kernel_type({"manifest-version": "1", "objects": []}), "manifest")
+        self.assertEqual(kernel_type({"id": "https://x.example/facet/f", "version": "1.0.0", "modifies-semantics": [], "schema": {}}),
+                         "facet-schema")
+        self.assertIsNone(kernel_type({"id": "https://x.example/o", "facets": {}}))
+        self.assertIsNone(kernel_type(["statements"]))
 
 
 if __name__ == "__main__":

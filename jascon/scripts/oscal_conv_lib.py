@@ -848,7 +848,28 @@ class Ledger:
                 "unaccounted-paths": [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(unaccounted.items())],
                 "entries": entries}
 
-def ledger_by_path(result, examples=3, collapse=()):
+# The kernel types an object by the members it requires of it (the `required`
+# of each type in jascon/schemas/jascon-2.0.0.schema.json); an object has no
+# member that names its type. Per type one member it requires, asked in this
+# order: a component may have `members`, which a Set must have, and is told
+# by its `kind` first. No other type knows the member of another.
+KERNEL_TYPE_BY_MEMBER = (("statements", "requirement"), ("selects", "tailoring"), ("source-ref", "mapping"),
+                         ("kind", "component"), ("members", "requirementSet"), ("satisfied-by", "implementation"),
+                         ("subject-refs", "assessment"), ("assessment-ref", "finding"),
+                         ("subject-semantic-digests", "attestation"), ("scenario", "risk"), ("observes", "check"))
+NO_KERNEL_TYPE = "no kernel type"
+
+def kernel_type(obj):
+    """-> what a file of a bundle is: the kernel's name of the type of an
+    object (`requirement`, `requirementSet`, ... as the kernel schema names
+    them), `manifest` for a content manifest, `facet-schema` for the
+    descriptor of a pinned schema, None for anything else."""
+    if not isinstance(obj, dict): return None
+    if "manifest-version" in obj: return "manifest"
+    if "schema" in obj and "modifies-semantics" in obj: return "facet-schema"
+    return next((t for member, t in KERNEL_TYPE_BY_MEMBER if member in obj), None)
+
+def ledger_by_path(result, objects, examples=3, collapse=()):
     """The ledger of a large corpus in the size of its path map: one row per
     source path and outcome, where Ledger.account() gives one entry per
     source leaf value (backlog #41, phase E).
@@ -858,11 +879,18 @@ def ledger_by_path(result, examples=3, collapse=()):
     a record of one entry each would be some fifty megabytes. This keeps what
     the entries say and drops what repeats: for every source path and
     outcome the number of leaf values, the first of them as an example, and
-    where they went - the destination pointers with their array indices
-    collapsed to `[]`, each with its count and, for a transformed value, its
-    rule - or why they were dropped. Nothing is estimated: every row is a
-    count over entries that account() checked against the written files, and
-    the counts add up to `leaf-values`.
+    where they went - the type of the object and the pointer into it, array
+    indices collapsed to `[]`, each with its count and, for a transformed
+    value, its rule - or why they were dropped. Nothing is estimated: every
+    row is a count over entries that account() checked against the written
+    files, and the counts add up to `leaf-values`.
+
+    `objects`: {relpath: object}, what account() was given. An entry names
+    the object a value went to. A row stands for the values of many objects
+    and cannot; it keeps the object's type (`object-type`, kernel_type()).
+    Until 2026-11-15 a destination was its pointer alone, and `/id` of a Set
+    and of a Requirement read alike in a record (backlog #91, point 5). A
+    file of no type the kernel knows reads `no kernel type`.
 
     `unaccounted-paths` keeps the first `examples` pointers of each path and
     the count; the per-leaf list is in the run that wrote it, not in the
@@ -871,6 +899,9 @@ def ledger_by_path(result, examples=3, collapse=()):
     keyed by a source value (a statement id, a parameter name) and would
     otherwise give one row per key. -> a JSON-able dict."""
     collapse = [(re.compile(p), r) for p, r in collapse]
+    # an object is named in an entry as account() names it: by its id, or by its path where it has none
+    types = {(obj.get("id") if isinstance(obj, dict) else None) or rel: kernel_type(obj) or NO_KERNEL_TYPE
+             for rel, obj in objects.items()}
     rows, order = {}, []
     for e in result["entries"]:
         key = (e["path"], e["outcome"])
@@ -883,18 +914,21 @@ def ledger_by_path(result, examples=3, collapse=()):
         if "reason" in e: r["_why"][e["reason"]] += 1
         if e["outcome"] == "not-content": r["_rule"][(e["kind"], e["rule"])] += 1
         for d in e.get("destinations", []):
+            if d["object"] not in types:
+                raise ValueError(f"ledger_by_path: {e['source']} went to {d['object']}, which is not among the objects "
+                                 f"given: the record and the objects are not of one run")
             where = d["pointer"]
             for rx, to in collapse: where = rx.sub(to, where)
             where = re.sub(r"/[0-9]+(?=/|$)", "/[]", where)
-            r["_to"][(where, d.get("as", "value"), d.get("rule", ""), d.get("via", ""))] += 1
+            r["_to"][(where, types[d["object"]], d.get("as", "value"), d.get("rule", ""), d.get("via", ""))] += 1
     paths = []
     for key in sorted(order):
         r = rows[key]
         row = {"path": r["path"], "outcome": r["outcome"], "count": r["count"], "example": r["example"]}
         if r["_to"]:
             row["to"] = []
-            for (where, as_, rule, via), n in sorted(r["_to"].items()):
-                d = {"pointer": where, "count": n}
+            for (where, object_type, as_, rule, via), n in sorted(r["_to"].items()):
+                d = {"object-type": object_type, "pointer": where, "count": n}
                 if as_ != "value": d["as"] = as_
                 if rule: d["rule"] = rule
                 if via: d["via"] = via

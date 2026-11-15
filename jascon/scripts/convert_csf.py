@@ -489,9 +489,10 @@ manifest = bundle.write({"sources": [SOURCE],
 PATH_DROPS = []         # (the source path, the reason, the reading)
 READING = {}
 for path, reason, _ in PATH_DROPS: led.drop("^" + re.escape(path) + "$", reason)
-LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": manifest})
+ACCOUNTED_FILES = {**bundle.objects, "content-manifest.json": manifest}
+LEDGER = led.account(bundle.out, ACCOUNTED_FILES)
 LT = LEDGER["totals"]
-BY_PATH = ledger_by_path(LEDGER)
+BY_PATH = ledger_by_path(LEDGER, ACCOUNTED_FILES)
 with open(os.path.join(OUTDIR, LEDGER_FILE), "w", encoding="utf-8") as f:
     json.dump(BY_PATH, f, indent=1, ensure_ascii=False); f.write("\n")
 

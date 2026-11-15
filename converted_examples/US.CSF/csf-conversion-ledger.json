@@ -18,6 +18,7 @@
    "example": "csf#/catalog/back-matter/resources/0/rlinks/0/href",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/href",
      "count": 3
     }
@@ -43,6 +44,7 @@
    "example": "csf#/catalog/back-matter/resources/0/rlinks/0/media-type",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/rlinks/[]/media-type",
      "count": 3
     }
@@ -55,6 +57,7 @@
    "example": "csf#/catalog/back-matter/resources/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/title",
      "count": 3
     }
@@ -80,6 +83,7 @@
    "example": "csf#/catalog/back-matter/resources/0/uuid",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1references@1/resources/[]/id",
      "count": 3
     }
@@ -144,31 +148,43 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/id",
      "count": 185,
      "rule": "Requirement URI from the subcategory id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 185,
      "rule": "Requirement URI from the subcategory id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 185,
      "rule": "Requirement URI from the subcategory id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 185,
      "rule": "file path of the object in the bundle, from the id"
     },
     {
+     "object-type": "requirement",
      "pointer": "/replaces/[]/ref",
-     "count": 250,
+     "count": 245,
      "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     },
     {
+     "object-type": "requirementSet",
+     "pointer": "/replaces/[]/ref",
+     "count": 5,
+     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
+    },
+    {
+     "object-type": "requirement",
      "pointer": "/statements/[]/id",
      "count": 185,
      "rule": "statement id: the id of the statement part without the control prefix"
@@ -182,8 +198,15 @@
    "example": "csf#/catalog/groups/1/controls/0/controls/5/links/0/href",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/replaces/[]/ref",
-     "count": 127,
+     "count": 122,
+     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/replaces/[]/ref",
+     "count": 5,
      "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
@@ -195,8 +218,15 @@
    "example": "csf#/catalog/groups/1/controls/0/controls/5/links/0/rel",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/replaces/[]/mode",
-     "count": 127,
+     "count": 122,
+     "rule": "lineage mode from the link relation (incorporated_into -> merged-into, moved_to -> renamed)"
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/replaces/[]/mode",
+     "count": 5,
      "rule": "lineage mode from the link relation (incorporated_into -> merged-into, moved_to -> renamed)"
     }
    ]
@@ -208,6 +238,7 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/parts/1/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1examples@1/examples/[]/id",
      "count": 363
     }
@@ -220,6 +251,7 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/parts/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/id",
      "count": 185,
      "rule": "statement id: the id of the statement part without the control prefix"
@@ -259,10 +291,12 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1examples@1/examples/[]/prose/en",
      "count": 363
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/en",
      "count": 185
     }
@@ -275,11 +309,13 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/props/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1csf@1/risk-party",
      "count": 103,
      "as": "key"
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1csf@1/risk-party",
      "count": 22,
      "as": "key",
@@ -320,10 +356,12 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/props/0/remarks",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1csf@1/risk-party/remark",
      "count": 81
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1csf@1/risk-party/remark/[]",
      "count": 44
     }
@@ -336,24 +374,35 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/props/0/value",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1csf@1/risk-party/value",
      "count": 81
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1csf@1/risk-party/value/[]",
      "count": 44
     },
     {
+     "object-type": "requirement",
      "pointer": "/label",
      "count": 185
     },
     {
+     "object-type": "requirement",
      "pointer": "/lifecycle",
      "count": 79
     },
     {
+     "object-type": "requirement",
      "pointer": "/replaces/[]/ref",
-     "count": 127,
+     "count": 122,
+     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/replaces/[]/ref",
+     "count": 5,
      "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
@@ -365,6 +414,7 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/props/1/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/sequence",
      "count": 185,
      "rule": "member sequence of a subcategory: ten times its place among all subcategories of its category, withdrawn ones counted, in the order of the sort-ids"
@@ -378,6 +428,7 @@
    "example": "csf#/catalog/groups/0/controls/0/controls/0/title",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/title/en",
      "count": 185
     }
@@ -390,28 +441,39 @@
    "example": "csf#/catalog/groups/0/controls/0/id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 34,
      "rule": "category Set URI from the category id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 34,
      "rule": "category Set URI from the category id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 34,
      "rule": "category Set URI from the category id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 34,
      "rule": "file path of the object in the bundle, from the id"
     },
     {
+     "object-type": "requirement",
      "pointer": "/replaces/[]/ref",
-     "count": 19,
+     "count": 1,
+     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/replaces/[]/ref",
+     "count": 18,
      "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
@@ -423,8 +485,15 @@
    "example": "csf#/catalog/groups/1/controls/1/links/0/href",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/replaces/[]/ref",
-     "count": 8,
+     "count": 1,
+     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/replaces/[]/ref",
+     "count": 7,
      "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
@@ -436,8 +505,15 @@
    "example": "csf#/catalog/groups/1/controls/1/links/0/rel",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/replaces/[]/mode",
-     "count": 8,
+     "count": 1,
+     "rule": "lineage mode from the link relation (incorporated_into -> merged-into, moved_to -> renamed)"
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/replaces/[]/mode",
+     "count": 7,
      "rule": "lineage mode from the link relation (incorporated_into -> merged-into, moved_to -> renamed)"
     }
    ]
@@ -475,6 +551,7 @@
    "example": "csf#/catalog/groups/0/controls/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1narrative@1/guidance/[]/en",
      "count": 22
     }
@@ -500,16 +577,25 @@
    "example": "csf#/catalog/groups/0/controls/0/props/1/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/label",
      "count": 34
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/lifecycle",
      "count": 12
     },
     {
+     "object-type": "requirement",
      "pointer": "/replaces/[]/ref",
-     "count": 8,
+     "count": 1,
+     "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/replaces/[]/ref",
+     "count": 7,
      "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
     }
    ]
@@ -521,6 +607,7 @@
    "example": "csf#/catalog/groups/0/controls/0/props/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/sequence",
      "count": 34,
      "rule": "member sequence: ten times the place of the member among the members of its Set, in the order of the sort-ids"
@@ -534,6 +621,7 @@
    "example": "csf#/catalog/groups/0/controls/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 34
     }
@@ -546,26 +634,31 @@
    "example": "csf#/catalog/groups/0/id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/id",
      "count": 6,
      "rule": "function Set URI from the function id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/ref",
      "count": 6,
      "rule": "function Set URI from the function id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 6,
      "rule": "function Set URI from the function id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/path",
      "count": 6,
      "rule": "file path of the object in the bundle, from the id"
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/replaces/[]/ref",
      "count": 1,
      "rule": "lineage inverted: the URI of a withdrawn item, written on the successor that its link names"
@@ -605,6 +698,7 @@
    "example": "csf#/catalog/groups/0/parts/0/prose",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.nist.gov~1csf~1facet~1narrative@1/guidance/[]/en",
      "count": 6
     }
@@ -630,6 +724,7 @@
    "example": "csf#/catalog/groups/0/props/1/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/label",
      "count": 6
     }
@@ -642,6 +737,7 @@
    "example": "csf#/catalog/groups/0/props/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/members/[]/sequence",
      "count": 6,
      "rule": "member sequence: ten times the place of the member among the members of its Set, in the order of the sort-ids"
@@ -655,6 +751,7 @@
    "example": "csf#/catalog/groups/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 6
     }
@@ -667,10 +764,12 @@
    "example": "csf#/catalog/metadata/last-modified",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/last-modified",
      "count": 1
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/date",
      "count": 1,
      "rule": "date of the source: the day of the document's last-modified"
@@ -684,6 +783,7 @@
    "example": "csf#/catalog/metadata/links/0/href",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/href",
      "count": 3
     }
@@ -696,6 +796,7 @@
    "example": "csf#/catalog/metadata/links/0/rel",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/links/[]/rel",
      "count": 3
     }
@@ -708,6 +809,7 @@
    "example": "csf#/catalog/metadata/oscal-version",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/format-version",
      "count": 1
     }
@@ -720,6 +822,7 @@
    "example": "csf#/catalog/metadata/parties/0/addresses/0/addr-lines/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/addr-lines/[]",
      "count": 8
     }
@@ -732,6 +835,7 @@
    "example": "csf#/catalog/metadata/parties/0/addresses/0/city",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/city",
      "count": 2
     }
@@ -744,6 +848,7 @@
    "example": "csf#/catalog/metadata/parties/0/addresses/0/postal-code",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/postal-code",
      "count": 2
     }
@@ -756,6 +861,7 @@
    "example": "csf#/catalog/metadata/parties/0/addresses/0/state",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/addresses/[]/state",
      "count": 2
     }
@@ -768,6 +874,7 @@
    "example": "csf#/catalog/metadata/parties/0/email-addresses/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/email-addresses/[]",
      "count": 2
     }
@@ -780,10 +887,12 @@
    "example": "csf#/catalog/metadata/parties/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/name",
      "count": 2
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/author-ref",
      "count": 1,
      "rule": "author of the source: the party its document names as its author, as a party URI under the namespace"
@@ -797,6 +906,7 @@
    "example": "csf#/catalog/metadata/parties/0/short-name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/short-name",
      "count": 2
     }
@@ -809,6 +919,7 @@
    "example": "csf#/catalog/metadata/parties/0/type",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/type",
      "count": 2
     }
@@ -821,6 +932,7 @@
    "example": "csf#/catalog/metadata/parties/0/uuid",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/parties/[]/uuid",
      "count": 2
     }
@@ -833,6 +945,7 @@
    "example": "csf#/catalog/metadata/props/0/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/name",
      "count": 5
     }
@@ -845,6 +958,7 @@
    "example": "csf#/catalog/metadata/props/0/ns",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/ns",
      "count": 4
     }
@@ -857,6 +971,7 @@
    "example": "csf#/catalog/metadata/props/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/props/[]/value",
      "count": 5
     }
@@ -869,6 +984,7 @@
    "example": "csf#/catalog/metadata/published",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/published",
      "count": 1
     }
@@ -881,6 +997,7 @@
    "example": "csf#/catalog/metadata/responsible-parties/0/party-uuids/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/responsible-parties/[]/party-uuids/[]",
      "count": 3
     }
@@ -893,6 +1010,7 @@
    "example": "csf#/catalog/metadata/responsible-parties/0/role-id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/responsible-parties/[]/role-id",
      "count": 3
     }
@@ -905,6 +1023,7 @@
    "example": "csf#/catalog/metadata/revisions/0/last-modified",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/revisions/[]/last-modified",
      "count": 1
     }
@@ -917,6 +1036,7 @@
    "example": "csf#/catalog/metadata/revisions/0/links/0/href",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/revisions/[]/links/[]/href",
      "count": 1
     }
@@ -929,6 +1049,7 @@
    "example": "csf#/catalog/metadata/revisions/0/links/0/rel",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/revisions/[]/links/[]/rel",
      "count": 1
     }
@@ -941,6 +1062,7 @@
    "example": "csf#/catalog/metadata/revisions/0/oscal-version",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/revisions/[]/oscal-version",
      "count": 1
     }
@@ -953,6 +1075,7 @@
    "example": "csf#/catalog/metadata/revisions/0/remarks",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/revisions/[]/remarks",
      "count": 1
     }
@@ -965,6 +1088,7 @@
    "example": "csf#/catalog/metadata/revisions/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/revisions/[]/title",
      "count": 1
     }
@@ -977,6 +1101,7 @@
    "example": "csf#/catalog/metadata/revisions/0/version",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/revisions/[]/version",
      "count": 1
     }
@@ -989,6 +1114,7 @@
    "example": "csf#/catalog/metadata/roles/0/id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/roles/[]/id",
      "count": 3
     }
@@ -1001,6 +1127,7 @@
    "example": "csf#/catalog/metadata/roles/0/title",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/metadata/roles/[]/title",
      "count": 3
     }
@@ -1013,10 +1140,12 @@
    "example": "csf#/catalog/metadata/title",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/title",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 1
     }
@@ -1029,6 +1158,7 @@
    "example": "csf#/catalog/metadata/version",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/version",
      "count": 1
     }
@@ -1041,6 +1171,7 @@
    "example": "csf#/catalog/uuid",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/uuid",
      "count": 1
     }

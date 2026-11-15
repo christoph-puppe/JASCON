@@ -854,8 +854,9 @@ manifest=bundle.write({"sources":[{"title":t,"version":v,**({"uuid":document_uui
 # and lasts as long as the run. The record that is written and committed has
 # one row per source path and outcome (ledger_by_path); the payload keyed by
 # the id of a parameter is one row, not one for every parameter.
-ACCOUNT=led.account(OUT,{**bundle.objects,**bundle.schemas,"content-manifest.json":manifest})
-LEDGER=ledger_by_path(ACCOUNT,collapse=[(r"/param-extras/[^/]+",r"/param-extras/{param}")])
+ACCOUNTED_FILES={**bundle.objects,**bundle.schemas,"content-manifest.json":manifest}
+ACCOUNT=led.account(OUT,ACCOUNTED_FILES)
+LEDGER=ledger_by_path(ACCOUNT,ACCOUNTED_FILES,collapse=[(r"/param-extras/[^/]+",r"/param-extras/{param}")])
 with open(LJS,"w",encoding="utf-8") as f:
     json.dump(LEDGER,f,indent=1,ensure_ascii=False); f.write("\n")
 LT=LEDGER["totals"]; LFAIL=LEDGER["verification-failures"]

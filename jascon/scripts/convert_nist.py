@@ -764,20 +764,33 @@ MANIFEST = bundle.write(PROVENANCE)
 LIFECYCLE_DEFAULT = lifecycle_default_record(bundle.objects, stated)      # E8
 
 # ---------- corpus cross-check: mapping endpoints vs minted ids ----------
+# The citations of SP 800-53 controls in the other corpora, and whether each
+# names an id minted here. The corpora are named (backlog #79, point 6): each
+# is a bundle of this repository, and what is read of it is the objects its
+# manifest lists. Until 2026-11-15 every .json file under converted_examples/
+# was read, and the count depended on what else lay in that folder: a bundle
+# a run had left there, and a coverage report, a manifest and an Attestation
+# that list the carried copies of a control (7 of the 21 then counted). A
+# carried COPY of an SP 800-53 object (the authorization-package pattern) is
+# the object itself and no citation; it is left out, as it was.
+CITING_CORPORA = ("AU.ISM/ism-core-bundle", "DE.BSI/bsi-core-bundle", "US.CSF/csf-core-bundle",
+                  "US.IFA-GoodRead/ifa-core-bundle")
 cited = collections.Counter()
-for base, _, files in os.walk(os.path.join(ROOT, "converted_examples")):
-    if "US.SP800-53" in base or "oscal-export" in base: continue
-    for fn in files:
-        if not fn.endswith(".json"): continue
-        try:
-            txt = open(os.path.join(base, fn), encoding="utf-8").read()
-        except OSError:
-            continue
-        # carried COPIES of sp800-53 objects (the authorization-package
-        # pattern) are the objects themselves, not citations - skip them
-        if '"id": "https://ns.nist.gov/sp800-53/' in txt[:400]: continue
+CITED_IN = []            # per named bundle: the objects read and the citations in them, or that its manifest is not there
+for corpus in CITING_CORPORA:
+    cdir = os.path.join(ROOT, "converted_examples", *corpus.split("/"))
+    try:
+        with open(os.path.join(cdir, "content-manifest.json"), encoding="utf-8") as f: listed = json.load(f)["objects"]
+    except OSError:
+        CITED_IN.append({"bundle": corpus, "found": False}); continue
+    n_read = n_cited = 0
+    for entry in listed:
+        if entry["id"].startswith(NS + "/"): continue          # a carried copy
+        with open(os.path.join(cdir, *entry["path"].split("/")), encoding="utf-8") as f: txt = f.read()
+        n_read += 1
         for m in re.finditer(r'"https://ns\.nist\.gov/sp800-53/req/([A-Za-z0-9.()-]+)"', txt):
-            cited[m.group(1)] += 1
+            cited[m.group(1)] += 1; n_cited += 1
+    CITED_IN.append({"bundle": corpus, "found": True, "objects": n_read, "citations": n_cited})
 minted_names = {rid.rsplit("/", 1)[-1] for cid, (rid, _, _) in req_ids.items()}
 wd_names = {cid.upper() for cid in withdrawn} - minted_names       # since E1 every withdrawn control is an object
 hit = {k: v for k, v in cited.items() if k in minted_names}
@@ -809,7 +822,8 @@ def reading_of(path, reason):
     return next((text for rx, why, text in READINGS if why == reason and re.search(rx, path)), None)
 
 T_WRITTEN = time.time()
-LEDGER = led.account(bundle.out, {**bundle.objects, "content-manifest.json": MANIFEST})
+ACCOUNTED_FILES = {**bundle.objects, "content-manifest.json": MANIFEST}
+LEDGER = led.account(bundle.out, ACCOUNTED_FILES)
 T_ACCOUNTED = time.time()
 LT = LEDGER["totals"]
 # The record. account() gives one entry per source leaf value; for 115,680 values that is some fifty megabytes,
@@ -817,7 +831,7 @@ LT = LEDGER["totals"]
 # payload of odp@1 is keyed by the parameter id, a source value: the key is folded, or every parameter is a row.
 LEDGER_FILE = "sp800-53-conversion-ledger.json"
 COLLAPSE = [(r"(odp@1/params)/[^/]+", r"\1/{parameter id}")]
-RECORD = ledger_by_path(LEDGER, collapse=COLLAPSE)
+RECORD = ledger_by_path(LEDGER, ACCOUNTED_FILES, collapse=COLLAPSE)
 with open(os.path.join(OUTDIR, LEDGER_FILE), "w", encoding="utf-8") as f:
     json.dump(RECORD, f, indent=1, ensure_ascii=False); f.write("\n")
 print(f"ledger: copied {LT['copied']}, transformed {LT['transformed']}, not content {LT['not-content']}, intentionally "
@@ -1245,7 +1259,12 @@ j = report(
      f" - the (requirement, ODP) address resolves via the declaring statement"
      + ("" if not multi_decl else "; ambiguous cases need the statement map") + ".",
      f"- **Corpus mapping endpoints vs minted ids**: {sum(hit.values())} citations resolve "
-     f"({len(hit)} distinct); {sum(miss.values())} cite unknown labels ({sorted(miss)[:8] if miss else []}).",
+     f"({len(hit)} distinct); {sum(miss.values())} cite unknown labels ({sorted(miss)[:8] if miss else []}). Counted in "
+     f"the objects that the manifests of the bundles named here list, under converted_examples/, a carried copy of a "
+     f"control left out: "
+     + "; ".join(f"`{c['bundle']}` x{c['citations']} in {c['objects']:,} object(s)" if c["found"] else
+                 f"`{c['bundle']}` is not there" for c in CITED_IN)
+     + ". No other file is read; until 2026-11-15 every .json file under that folder was.",
      f"- **Baseline ids not emitted** (an id the catalogue does not define): " +
      ("; ".join(f"{b}: {v}" for b, v in bl_missing.items()) if bl_missing else "none") + ".",
      f"- **Cross-control param insertions x{len(cross_param)}** ({cross_param}): prose in one control "
@@ -1294,7 +1313,7 @@ j = report(
      "backlog-10": {"insertion-histogram": {str(k): v for k, v in sorted(decl_hist.items())},
                     "multi-declared": [{"control": c, "param": p, "statements": n} for c, p, n in multi_decl]},
      "endpoint-crosscheck": {"resolved": sum(hit.values()), "distinct": len(hit),
-                             "withdrawn-hits": hit_wd, "unknown": miss},
+                             "withdrawn-hits": hit_wd, "unknown": miss, "corpora": CITED_IN},
      "baseline-missing": dict(bl_missing),
      "lang-wraps": dict(lang_wraps),
      "assessment-for": {"links": af_total, "names": dict(assessed_kind),
@@ -1390,7 +1409,7 @@ if unmapped: wiring.append(f"{len(unmapped)} source path(s) have no row in the p
 try:
     with open(os.path.join(OUTDIR, LEDGER_FILE), encoding="utf-8") as f: on_disk = json.load(f)
 except (OSError, ValueError): on_disk = None
-if on_disk != json.loads(json.dumps(ledger_by_path(LEDGER, collapse=COLLAPSE))):
+if on_disk != json.loads(json.dumps(ledger_by_path(LEDGER, ACCOUNTED_FILES, collapse=COLLAPSE))):
     wiring.append(f"{LEDGER_FILE} on disk is not the record of this run")
 if wiring:
     for x in wiring: print("  LEDGER WIRING", x, file=sys.stderr)

@@ -18,6 +18,7 @@
    "example": "cr26#/CTL/AC/AC-20/guidance/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/guidance/en/[]",
      "count": 67
     }
@@ -30,6 +31,7 @@
    "example": "cr26#/CTL/AC/AC-06-01/parameters/0/parameterId",
    "to": [
     {
+     "object-type": "tailoring",
      "pointer": "/operations/[]/parameter",
      "count": 16
     }
@@ -42,6 +44,7 @@
    "example": "cr26#/CTL/AC/AC-06-01/parameters/0/value",
    "to": [
     {
+     "object-type": "tailoring",
      "pointer": "/operations/[]/value",
      "count": 13
     }
@@ -54,6 +57,7 @@
    "example": "cr26#/CTL/IA/IA-02-08/parameters/0/value",
    "to": [
     {
+     "object-type": "tailoring",
      "pointer": "/operations/[]/value/[]",
      "count": 7,
      "rule": "one selection of a multi-select that the source writes as one string"
@@ -67,6 +71,7 @@
    "example": "cr26#/CTL/IA/IA-05/updated/0/comment",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/updated/[]/comment",
      "count": 1
     }
@@ -79,6 +84,7 @@
    "example": "cr26#/CTL/IA/IA-05/updated/0/date",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/updated/[]/date",
      "count": 1
     }
@@ -91,14 +97,17 @@
    "example": "cr26#/CTL/IA/IA-05/varies_by_class/b/guidance/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/varies_by_class/b/guidance/en/[]",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/varies_by_class/c/guidance/en/[]",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/varies_by_class/d/guidance/en/[]",
      "count": 2
     }
@@ -111,10 +120,12 @@
    "example": "cr26#/CTL/SA/SA-09-05/varies_by_class/c/parameters/0/parameterId",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/varies_by_class/c/parameters/[]/parameterId",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/varies_by_class/d/parameters/[]/parameterId",
      "count": 3
     }
@@ -127,10 +138,12 @@
    "example": "cr26#/CTL/SA/SA-09-05/varies_by_class/c/parameters/0/value",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/varies_by_class/c/parameters/[]/value",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/ctl/{control-family}/{control}/varies_by_class/d/parameters/[]/value",
      "count": 3
     }
@@ -143,6 +156,7 @@
    "example": "cr26#/FRD/data/all/FRD-ACV/alts/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/aliases/[]",
      "count": 190
     }
@@ -155,6 +169,7 @@
    "example": "cr26#/FRD/data/all/FRD-ACV/definition",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/definition/en",
      "count": 81
     }
@@ -167,6 +182,7 @@
    "example": "cr26#/FRD/data/all/FRD-ADV/do_not_link",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/do-not-link",
      "count": 9
     }
@@ -179,6 +195,7 @@
    "example": "cr26#/FRD/data/all/FRD-ADV/ignore_in_terms",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/ignore-in-terms/{term-id}",
      "count": 9
     }
@@ -191,6 +208,7 @@
    "example": "cr26#/FRD/data/all/FRD-ADP/note",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/note/en",
      "count": 29
     }
@@ -203,6 +221,7 @@
    "example": "cr26#/FRD/data/all/FRD-FPV/notes/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/notes/en/[]",
      "count": 7
     }
@@ -215,6 +234,7 @@
    "example": "cr26#/FRD/data/all/FRD-AGY/reference",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/reference",
      "count": 9
     }
@@ -227,6 +247,7 @@
    "example": "cr26#/FRD/data/all/FRD-AGY/reference_url",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/reference-url",
      "count": 9
     }
@@ -239,6 +260,7 @@
    "example": "cr26#/FRD/data/all/FRD-ACV/tag",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/tag",
      "count": 57
     }
@@ -251,6 +273,7 @@
    "example": "cr26#/FRD/data/all/FRD-ACV/term",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/terms/{term-id}/term",
      "count": 81
     }
@@ -263,326 +286,407 @@
    "example": "cr26#/FRD/data/all/FRD-ACV/updated/0/comment",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-AAP/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ACV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ADP/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ADV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-AGY/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ANA/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ANP/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ART/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ASR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CCC/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CCL/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CPF/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CPH/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CRD/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CRP/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CSO/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CTY/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DCE/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DCF/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DFT/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DTM/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCD/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCT/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FIN/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FIR/[]/comment",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FMV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FPR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FPV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FRA/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FRI/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FSI/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-HAN/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IFA/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IIR/[]/comment",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-INC/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-INT/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IRS/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IRV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-KEV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-LEV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-LKY/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAS/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAY/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MBI/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MCE/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MGN/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MNT/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MRD/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MST/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-NCE/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-OCR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ODV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-OIR/[]/comment",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ONC/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PAC/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PAI/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PER/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PFA/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PMV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PRO/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PRV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-QTR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RGL/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RMV/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RSP/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RTR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SCT/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SDR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SGC/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SHD/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SNT/[]/comment",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TLA/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TPR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TRC/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TRF/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLD/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLN/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLR/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VRF/[]/comment",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VUL/[]/comment",
      "count": 1
     }
@@ -595,326 +699,407 @@
    "example": "cr26#/FRD/data/all/FRD-ACV/updated/0/date",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-AAP/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ACV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ADP/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ADV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-AGY/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ANA/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ANP/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ART/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ASR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CCC/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CCL/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CPF/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CPH/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CRD/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CRP/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CSO/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-CTY/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DCE/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DCF/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DFT/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-DTM/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCD/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FCT/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FIN/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FIR/[]/date",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FMV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FPR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FPV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FRA/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FRI/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-FSI/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-HAN/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IFA/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IIR/[]/date",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-INC/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-INT/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IRS/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-IRV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-KEV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-LEV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-LKY/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAS/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAY/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MBI/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MCE/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MGN/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MNT/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MRD/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MST/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-NCE/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-OCR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ODV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-OIR/[]/date",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-ONC/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PAC/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PAI/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PER/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PFA/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PMV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PRO/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-PRV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-QTR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RGL/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RMV/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RSP/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-RTR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SCT/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SDR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SGC/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SHD/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-SNT/[]/date",
      "count": 2
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TLA/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TPR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TRC/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-TRF/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLD/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLN/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VLR/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VRF/[]/date",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-VUL/[]/date",
      "count": 1
     }
@@ -927,6 +1112,7 @@
    "example": "cr26#/FRD/data/all/FRD-MAS/updated/0/issue",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/term-updated/FRD-MAS/[]/issue",
      "count": 1
     }
@@ -939,6 +1125,7 @@
    "example": "cr26#/FRD/info/effective/current_status",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/current_status",
      "count": 1
     }
@@ -951,6 +1138,7 @@
    "example": "cr26#/FRD/info/effective/date/grace/default",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/grace/default",
      "count": 1
     }
@@ -963,6 +1151,7 @@
    "example": "cr26#/FRD/info/effective/date/grace/until_next_assessment",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/grace/until_next_assessment",
      "count": 1
     }
@@ -975,6 +1164,7 @@
    "example": "cr26#/FRD/info/effective/date/maintain",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/maintain",
      "count": 1
     }
@@ -987,6 +1177,7 @@
    "example": "cr26#/FRD/info/effective/date/obtain",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/obtain",
      "count": 1
     }
@@ -999,6 +1190,7 @@
    "example": "cr26#/FRD/info/effective/date/optional_adoption",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/date/optional_adoption",
      "count": 1
     }
@@ -1011,6 +1203,7 @@
    "example": "cr26#/FRD/info/effective/is",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/effective/is",
      "count": 1
     }
@@ -1023,6 +1216,7 @@
    "example": "cr26#/FRD/info/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/name",
      "count": 1
     }
@@ -1035,6 +1229,7 @@
    "example": "cr26#/FRD/info/purpose",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/purpose",
      "count": 1
     }
@@ -1047,6 +1242,7 @@
    "example": "cr26#/FRD/info/short_name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/short_name",
      "count": 1
     }
@@ -1059,6 +1255,7 @@
    "example": "cr26#/FRD/info/status",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/status",
      "count": 1
     }
@@ -1071,6 +1268,7 @@
    "example": "cr26#/FRD/info/web_name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1terminology@1/glossary-info/web_name",
      "count": 1
     }
@@ -1083,6 +1281,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/affects/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/obligated-parties/[]",
      "count": 245,
      "rule": "party URI from a name in affects"
@@ -1096,6 +1295,7 @@
    "example": "cr26#/FRR/AFC/data/all/CSO/AFC-CSO-INB/artifacts/all/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/required-artifacts/[]",
      "count": 79
     }
@@ -1108,16 +1308,19 @@
    "example": "cr26#/FRR/AFC/data/all/CSO/AFC-CSO-INB/controls/0",
    "to": [
     {
+     "object-type": "mapping",
      "pointer": "/id",
      "count": 94,
      "rule": "Mapping id from its owner's id and the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 94,
      "rule": "Mapping id from its owner's id and the control id"
     },
     {
+     "object-type": "mapping",
      "pointer": "/target-ref",
      "count": 94,
      "rule": "SP 800-53 Requirement URI from the control id"
@@ -1131,6 +1334,7 @@
    "example": "cr26#/FRR/IEC/data/all/FRP/IEC-FRP-ORV/corrective_actions/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/corrective-actions/en/[]",
      "count": 12
     }
@@ -1143,6 +1347,7 @@
    "example": "cr26#/FRR/AFC/data/all/CSO/AFC-CSO-INB/danger",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/danger/en",
      "count": 3
     }
@@ -1155,6 +1360,7 @@
    "example": "cr26#/FRR/CDS/data/all/CSO/CDS-CSO-RIS/examples/0/examples/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/examples/[]/examples/[]",
      "count": 24
     }
@@ -1167,6 +1373,7 @@
    "example": "cr26#/FRR/CDS/data/all/CSO/CDS-CSO-RIS/examples/0/id",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/examples/[]/id",
      "count": 5
     }
@@ -1179,6 +1386,7 @@
    "example": "cr26#/FRR/CDS/data/all/CSO/CDS-CSO-RIS/examples/0/key_tests/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/examples/[]/key-tests/[]",
      "count": 15
     }
@@ -1191,6 +1399,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-CDS/following_information/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/following-information/[]",
      "count": 208
     }
@@ -1203,6 +1412,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-EFI/following_information_bullets/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/following-information-bullets/[]",
      "count": 11
     }
@@ -1215,6 +1425,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/force",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/modality",
      "count": 217,
      "rule": "modality from the force word (code map)"
@@ -1228,11 +1439,13 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/en",
      "count": 28,
      "rule": "base prose of a rule that states its text by class only, from its name"
     },
     {
+     "object-type": "requirement",
      "pointer": "/title/en",
      "count": 245
     }
@@ -1245,6 +1458,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/note",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/note/en",
      "count": 57
     }
@@ -1257,6 +1471,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notes/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/notes/en/[]",
      "count": 62
     }
@@ -1269,10 +1484,12 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notification/0/method",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/method",
      "count": 3
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/notification/[]/method",
      "count": 28
     }
@@ -1285,10 +1502,12 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notification/0/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/name/en",
      "count": 3
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/notification/[]/name/en",
      "count": 28
     }
@@ -1301,6 +1520,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/notification/2/optional",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/optional",
      "count": 3
     }
@@ -1313,10 +1533,12 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notification/0/party",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/party",
      "count": 3
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/notification/[]/party",
      "count": 28
     }
@@ -1329,10 +1551,12 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/notification/0/target",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/optional-notification/[]/target",
      "count": 3
     },
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1reporting-obligation@1/notification/[]/target",
      "count": 28
     }
@@ -1345,6 +1569,7 @@
    "example": "cr26#/FRR/AGU/data/all/AGC/AGU-AGC-LIA/reference",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/reference",
      "count": 6
     }
@@ -1357,6 +1582,7 @@
    "example": "cr26#/FRR/AGU/data/all/AGC/AGU-AGC-LIA/reference_url",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/ref",
      "count": 6
     }
@@ -1369,6 +1595,7 @@
    "example": "cr26#/FRR/AFC/data/all/CSO/AFC-CSO-INB/related/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/ref",
      "count": 78,
      "rule": "Requirement URI from the id of a related rule"
@@ -1382,6 +1609,7 @@
    "example": "cr26#/FRR/CCM/data/all/OCR/CCM-OCR-AVL/schema/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/schema-name",
      "count": 24
     }
@@ -1394,6 +1622,7 @@
    "example": "cr26#/FRR/CCM/data/all/OCR/CCM-OCR-AVL/schema/url",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/ref",
      "count": 24
     }
@@ -1406,6 +1635,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/statement",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/en",
      "count": 217
     }
@@ -1418,6 +1648,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-CDS/terms/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/ref",
      "count": 704,
      "rule": "term URI from the term's name, by the glossary's headwords and alternatives"
@@ -1431,6 +1662,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/num",
      "count": 22
     }
@@ -1443,6 +1675,7 @@
    "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-SAR/timeframe_num_max",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/num",
      "count": 1
     }
@@ -1455,6 +1688,7 @@
    "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-SAR/timeframe_num_min",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/num",
      "count": 1
     }
@@ -1467,11 +1701,13 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-PNT/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/type",
      "count": 24,
      "rule": "duration type from the unit of the timeframe"
     },
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/parameters/[]/unit",
      "count": 24
     }
@@ -1484,6 +1720,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/updated/0/comment",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/history/[]/comment/en",
      "count": 303
     }
@@ -1496,6 +1733,7 @@
    "example": "cr26#/FRR/AFC/data/all/FRP/AFC-FRP-VRE/updated/0/date",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/history/[]/date",
      "count": 303
     }
@@ -1508,6 +1746,7 @@
    "example": "cr26#/FRR/FRC/data/all/CLA/FRC-CLA-MFR/updated/0/issue",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/history/[]/ref",
      "count": 5
     }
@@ -1520,6 +1759,7 @@
    "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/artifacts/all/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/artifacts/all/[]",
      "count": 31
     }
@@ -1532,6 +1772,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/following_information/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/following_information/[]",
      "count": 57
     }
@@ -1544,10 +1785,12 @@
    "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/force",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/force",
      "count": 107
     },
     {
+     "object-type": "tailoring",
      "pointer": "/operations/[]/modality",
      "count": 107,
      "rule": "modality from the force word (code map)"
@@ -1561,6 +1804,7 @@
    "example": "cr26#/FRR/CDS/data/all/CSO/CDS-CSO-AVR/varies_by_class/a/note",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/note",
      "count": 4
     }
@@ -1573,6 +1817,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/1/fir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/description",
      "count": 4
     }
@@ -1585,6 +1830,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/1/fir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_num",
      "count": 4
     }
@@ -1597,6 +1843,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/1/fir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_type",
      "count": 4
     }
@@ -1609,6 +1856,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/1/iir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/description",
      "count": 4
     }
@@ -1621,6 +1869,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/1/iir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_num",
      "count": 4
     }
@@ -1633,6 +1882,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/1/iir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_type",
      "count": 4
     }
@@ -1645,6 +1895,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/1/oir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/description",
      "count": 4
     }
@@ -1657,6 +1908,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/1/oir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_num",
      "count": 4
     }
@@ -1669,6 +1921,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/1/oir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_type",
      "count": 4
     }
@@ -1681,6 +1934,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/2/fir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/description",
      "count": 4
     }
@@ -1693,6 +1947,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/2/fir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_num",
      "count": 4
     }
@@ -1705,6 +1960,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/2/fir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_type",
      "count": 4
     }
@@ -1717,6 +1973,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/2/iir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/description",
      "count": 4
     }
@@ -1729,6 +1986,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/2/iir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_num",
      "count": 4
     }
@@ -1741,6 +1999,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/2/iir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_type",
      "count": 4
     }
@@ -1753,6 +2012,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/irv_lev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/description",
      "count": 4
     }
@@ -1765,6 +2025,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/irv_lev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/timeframe_num",
      "count": 4
     }
@@ -1777,6 +2038,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/irv_lev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/timeframe_type",
      "count": 4
     }
@@ -1789,6 +2051,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nirv_lev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/description",
      "count": 4
     }
@@ -1801,6 +2064,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nirv_lev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/timeframe_num",
      "count": 4
     }
@@ -1813,6 +2077,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nirv_lev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/timeframe_type",
      "count": 4
     }
@@ -1825,6 +2090,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nlev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/description",
      "count": 4
     }
@@ -1837,6 +2103,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nlev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/timeframe_num",
      "count": 4
     }
@@ -1849,6 +2116,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/2/nlev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/timeframe_type",
      "count": 4
     }
@@ -1861,6 +2129,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/2/oir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/description",
      "count": 4
     }
@@ -1873,6 +2142,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/2/oir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_num",
      "count": 4
     }
@@ -1885,6 +2155,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/2/oir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_type",
      "count": 4
     }
@@ -1897,6 +2168,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/3/fir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/description",
      "count": 4
     }
@@ -1909,6 +2181,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/3/fir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_num",
      "count": 4
     }
@@ -1921,6 +2194,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/3/fir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_type",
      "count": 4
     }
@@ -1933,6 +2207,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/3/iir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/description",
      "count": 4
     }
@@ -1945,6 +2220,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/3/iir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_num",
      "count": 3
     }
@@ -1957,6 +2233,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/3/iir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_num",
      "count": 1,
      "rule": "decimal string of a number that is no integer (the kernel's spelling of a fraction, D3.9)"
@@ -1970,6 +2247,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/3/iir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_type",
      "count": 4
     }
@@ -1982,6 +2260,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/irv_lev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/description",
      "count": 4
     }
@@ -1994,6 +2273,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/irv_lev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/timeframe_num",
      "count": 4
     }
@@ -2006,6 +2286,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/irv_lev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/timeframe_type",
      "count": 4
     }
@@ -2018,6 +2299,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nirv_lev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/description",
      "count": 4
     }
@@ -2030,6 +2312,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nirv_lev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/timeframe_num",
      "count": 4
     }
@@ -2042,6 +2325,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nirv_lev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/timeframe_type",
      "count": 4
     }
@@ -2054,6 +2338,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nlev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/description",
      "count": 4
     }
@@ -2066,6 +2351,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nlev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/timeframe_num",
      "count": 4
     }
@@ -2078,6 +2364,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/3/nlev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/timeframe_type",
      "count": 4
     }
@@ -2090,6 +2377,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/3/oir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/description",
      "count": 4
     }
@@ -2102,6 +2390,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/3/oir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_num",
      "count": 4
     }
@@ -2114,6 +2403,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/3/oir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_type",
      "count": 4
     }
@@ -2126,6 +2416,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/4/fir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/description",
      "count": 4
     }
@@ -2138,6 +2429,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/4/fir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_num",
      "count": 4
     }
@@ -2150,6 +2442,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/4/fir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_type",
      "count": 4
     }
@@ -2162,6 +2455,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/4/iir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/description",
      "count": 4
     }
@@ -2174,6 +2468,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/4/iir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_num",
      "count": 3
     }
@@ -2186,6 +2481,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/4/iir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_num",
      "count": 1,
      "rule": "decimal string of a number that is no integer (the kernel's spelling of a fraction, D3.9)"
@@ -2199,6 +2495,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/4/iir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_type",
      "count": 4
     }
@@ -2211,6 +2508,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/irv_lev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/description",
      "count": 4
     }
@@ -2223,6 +2521,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/irv_lev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/timeframe_num",
      "count": 4
     }
@@ -2235,6 +2534,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/irv_lev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/timeframe_type",
      "count": 4
     }
@@ -2247,6 +2547,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nirv_lev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/description",
      "count": 4
     }
@@ -2259,6 +2560,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nirv_lev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/timeframe_num",
      "count": 4
     }
@@ -2271,6 +2573,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nirv_lev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/timeframe_type",
      "count": 4
     }
@@ -2283,6 +2586,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nlev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/description",
      "count": 4
     }
@@ -2295,6 +2599,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nlev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/timeframe_num",
      "count": 4
     }
@@ -2307,6 +2612,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/4/nlev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/timeframe_type",
      "count": 4
     }
@@ -2319,6 +2625,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/4/oir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/description",
      "count": 4
     }
@@ -2331,6 +2638,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/4/oir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_num",
      "count": 4
     }
@@ -2343,6 +2651,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/4/oir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_type",
      "count": 4
     }
@@ -2355,6 +2664,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/5/fir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/description",
      "count": 4
     }
@@ -2367,6 +2677,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/5/fir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_num",
      "count": 4
     }
@@ -2379,6 +2690,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-FIR/varies_by_class/a/pain_timeframes/5/fir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/fir/timeframe_type",
      "count": 4
     }
@@ -2391,6 +2703,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/5/iir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/description",
      "count": 4
     }
@@ -2403,6 +2716,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/5/iir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_num",
      "count": 3
     }
@@ -2415,6 +2729,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/d/pain_timeframes/5/iir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_num",
      "count": 1,
      "rule": "decimal string of a number that is no integer (the kernel's spelling of a fraction, D3.9)"
@@ -2428,6 +2743,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-IIR/varies_by_class/a/pain_timeframes/5/iir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/iir/timeframe_type",
      "count": 4
     }
@@ -2440,6 +2756,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/irv_lev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/description",
      "count": 4
     }
@@ -2452,6 +2769,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/irv_lev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/timeframe_num",
      "count": 4
     }
@@ -2464,6 +2782,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/irv_lev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/irv_lev/timeframe_type",
      "count": 4
     }
@@ -2476,6 +2795,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nirv_lev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/description",
      "count": 4
     }
@@ -2488,6 +2808,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nirv_lev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/timeframe_num",
      "count": 4
     }
@@ -2500,6 +2821,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nirv_lev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nirv_lev/timeframe_type",
      "count": 4
     }
@@ -2512,6 +2834,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nlev/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/description",
      "count": 4
     }
@@ -2524,6 +2847,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nlev/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/timeframe_num",
      "count": 4
     }
@@ -2536,6 +2860,7 @@
    "example": "cr26#/FRR/VDR/data/all/TFR/VDR-TFR-PVR/varies_by_class/a/pain_timeframes/5/nlev/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/nlev/timeframe_type",
      "count": 4
     }
@@ -2548,6 +2873,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/5/oir/description",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/description",
      "count": 4
     }
@@ -2560,6 +2886,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/5/oir/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_num",
      "count": 4
     }
@@ -2572,6 +2899,7 @@
    "example": "cr26#/FRR/IEC/data/all/CSO/IEC-CSO-OIR/varies_by_class/a/pain_timeframes/5/oir/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/pain_timeframes/[]/oir/timeframe_type",
      "count": 4
     }
@@ -2584,6 +2912,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/AC/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/AC/[]",
      "count": 141
     }
@@ -2596,6 +2925,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/AT/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/AT/[]",
      "count": 17
     }
@@ -2608,6 +2938,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/AU/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/AU/[]",
      "count": 92
     }
@@ -2620,6 +2951,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/CA/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/CA/[]",
      "count": 42
     }
@@ -2632,6 +2964,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/CM/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/CM/[]",
      "count": 91
     }
@@ -2644,6 +2977,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/CP/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/CP/[]",
      "count": 67
     }
@@ -2656,6 +2990,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/IA/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/IA/[]",
      "count": 98
     }
@@ -2668,6 +3003,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/IR/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/IR/[]",
      "count": 58
     }
@@ -2680,6 +3016,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/MA/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/MA/[]",
      "count": 28
     }
@@ -2692,6 +3029,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/MP/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/MP/[]",
      "count": 21
     }
@@ -2704,6 +3042,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/PE/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/PE/[]",
      "count": 58
     }
@@ -2716,6 +3055,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/PL/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/PL/[]",
      "count": 21
     }
@@ -2728,6 +3068,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/PS/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/PS/[]",
      "count": 30
     }
@@ -2740,6 +3081,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/RA/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/RA/[]",
      "count": 40
     }
@@ -2752,6 +3094,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/SA/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/SA/[]",
      "count": 60
     }
@@ -2764,6 +3107,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/SC/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/SC/[]",
      "count": 114
     }
@@ -2776,6 +3120,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/SI/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/SI/[]",
      "count": 87
     }
@@ -2788,6 +3133,7 @@
    "example": "cr26#/FRR/FRC/data/rev5/CSF/FRC-CSF-BSL/varies_by_class/b/rev5_controls_list/SR/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/rev5_controls_list/SR/[]",
      "count": 37
     }
@@ -2800,6 +3146,7 @@
    "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/statement",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/statement",
      "count": 107
     }
@@ -2812,6 +3159,7 @@
    "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/timeframe_num",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/timeframe_num",
      "count": 51
     }
@@ -2824,6 +3172,7 @@
    "example": "cr26#/FRR/CCM/data/all/QTR/CCM-QTR-MTG/varies_by_class/a/timeframe_type",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/timeframe_type",
      "count": 51
     }
@@ -2836,6 +3185,7 @@
    "example": "cr26#/FRR/CCM/info/20x/effective/current_status",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/current_status",
      "count": 10
     }
@@ -2848,6 +3198,7 @@
    "example": "cr26#/FRR/CCM/info/20x/effective/date/grace/default",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/grace/default",
      "count": 10
     }
@@ -2860,6 +3211,7 @@
    "example": "cr26#/FRR/CCM/info/20x/effective/date/grace/until_next_assessment",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/grace/until_next_assessment",
      "count": 10
     }
@@ -2872,6 +3224,7 @@
    "example": "cr26#/FRR/CCM/info/20x/effective/date/maintain",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/maintain",
      "count": 10
     }
@@ -2884,6 +3237,7 @@
    "example": "cr26#/FRR/CCM/info/20x/effective/date/obtain",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/obtain",
      "count": 10
     }
@@ -2896,6 +3250,7 @@
    "example": "cr26#/FRR/CCM/info/20x/effective/date/optional_adoption",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/date/optional_adoption",
      "count": 10
     }
@@ -2908,6 +3263,7 @@
    "example": "cr26#/FRR/CCM/info/20x/effective/is",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/20x/is",
      "count": 10
     }
@@ -2920,6 +3276,7 @@
    "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/applicability/affects/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/affects/[]",
      "count": 4
     }
@@ -2932,6 +3289,7 @@
    "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/applicability/classes/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/classes/[]",
      "count": 13
     }
@@ -2944,6 +3302,7 @@
    "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/applicability/paths/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/paths/[]",
      "count": 4
     }
@@ -2956,6 +3315,7 @@
    "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/applicability/types/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/types/[]",
      "count": 4
     }
@@ -2968,6 +3328,7 @@
    "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/description",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
      "count": 4
     }
@@ -2980,6 +3341,7 @@
    "example": "cr26#/FRR/CPO/info/20x/subsets/CSX/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 4
     }
@@ -2992,6 +3354,7 @@
    "example": "cr26#/FRR/AFC/info/effective/current_status",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/current_status",
      "count": 7
     }
@@ -3004,6 +3367,7 @@
    "example": "cr26#/FRR/AFC/info/effective/date/grace/default",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/grace/default",
      "count": 7
     }
@@ -3016,6 +3380,7 @@
    "example": "cr26#/FRR/AFC/info/effective/date/grace/until_next_assessment",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/grace/until_next_assessment",
      "count": 7
     }
@@ -3028,6 +3393,7 @@
    "example": "cr26#/FRR/AFC/info/effective/date/maintain",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/maintain",
      "count": 7
     }
@@ -3040,6 +3406,7 @@
    "example": "cr26#/FRR/AFC/info/effective/date/obtain",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/obtain",
      "count": 7
     }
@@ -3052,6 +3419,7 @@
    "example": "cr26#/FRR/AGU/info/effective/date/optional_adoption",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/date/optional_adoption",
      "count": 5
     }
@@ -3064,6 +3432,7 @@
    "example": "cr26#/FRR/AFC/info/effective/is",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/default/is",
      "count": 7
     }
@@ -3076,6 +3445,7 @@
    "example": "cr26#/FRR/IEC/info/flows/0/activity",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/activity",
      "count": 1
     }
@@ -3088,6 +3458,7 @@
    "example": "cr26#/FRR/IEC/info/flows/0/description",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/description",
      "count": 1
     }
@@ -3100,34 +3471,42 @@
    "example": "cr26#/FRR/IEC/info/flows/0/nodes/*",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/*",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-DPR",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-EFI",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-EFR",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-FIR",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-IIR",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/IEC-CSO-OIR",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/nodes/*",
      "count": 1
     }
@@ -3140,6 +3519,7 @@
    "example": "cr26#/FRR/IEC/info/flows/0/steps/1/description",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/steps/[]/description",
      "count": 7
     }
@@ -3152,6 +3532,7 @@
    "example": "cr26#/FRR/IEC/info/flows/0/steps/0/from",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/steps/[]/from",
      "count": 9
     }
@@ -3164,6 +3545,7 @@
    "example": "cr26#/FRR/IEC/info/flows/0/steps/0/to",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/flows/[]/steps/[]/to",
      "count": 9
     }
@@ -3176,6 +3558,7 @@
    "example": "cr26#/FRR/AFC/info/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 17
     }
@@ -3188,6 +3571,7 @@
    "example": "cr26#/FRR/AFC/info/purpose",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
      "count": 17
     }
@@ -3200,6 +3584,7 @@
    "example": "cr26#/FRR/CCM/info/rev5/effective/current_status",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/current_status",
      "count": 10
     }
@@ -3212,6 +3597,7 @@
    "example": "cr26#/FRR/CCM/info/rev5/effective/date/grace/default",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/grace/default",
      "count": 10
     }
@@ -3224,6 +3610,7 @@
    "example": "cr26#/FRR/CCM/info/rev5/effective/date/grace/until_next_assessment",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/grace/until_next_assessment",
      "count": 10
     }
@@ -3236,6 +3623,7 @@
    "example": "cr26#/FRR/CCM/info/rev5/effective/date/maintain",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/maintain",
      "count": 10
     }
@@ -3248,6 +3636,7 @@
    "example": "cr26#/FRR/CCM/info/rev5/effective/date/obtain",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/obtain",
      "count": 10
     }
@@ -3260,6 +3649,7 @@
    "example": "cr26#/FRR/CCM/info/rev5/effective/date/optional_adoption",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/date/optional_adoption",
      "count": 10
     }
@@ -3272,6 +3662,7 @@
    "example": "cr26#/FRR/CCM/info/rev5/effective/is",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1effectivity@1/rev5/is",
      "count": 10
     }
@@ -3284,6 +3675,7 @@
    "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/applicability/affects/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/affects/[]",
      "count": 5
     }
@@ -3296,6 +3688,7 @@
    "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/applicability/classes/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/classes/[]",
      "count": 15
     }
@@ -3308,6 +3701,7 @@
    "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/applicability/paths/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/paths/[]",
      "count": 10
     }
@@ -3320,6 +3714,7 @@
    "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/applicability/types/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/types/[]",
      "count": 5
     }
@@ -3332,6 +3727,7 @@
    "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/description",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
      "count": 5
     }
@@ -3344,6 +3740,7 @@
    "example": "cr26#/FRR/CDS/info/rev5/subsets/CSF/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 5
     }
@@ -3356,6 +3753,7 @@
    "example": "cr26#/FRR/AFC/info/short_name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/label",
      "count": 17
     }
@@ -3368,15 +3766,30 @@
    "example": "cr26#/FRR/AFC/info/status",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/status",
      "count": 17
     },
     {
+     "object-type": "mapping",
      "pointer": "/lifecycle",
-     "count": 395,
+     "count": 94,
      "rule": "lifecycle of an object made from a document (a subset Set, a rule or an indicator, a Mapping of its control links), from the document's status (stable: active; placeholder, empty: draft)"
     },
     {
+     "object-type": "requirement",
+     "pointer": "/lifecycle",
+     "count": 245,
+     "rule": "lifecycle of an object made from a document (a subset Set, a rule or an indicator, a Mapping of its control links), from the document's status (stable: active; placeholder, empty: draft)"
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/lifecycle",
+     "count": 56,
+     "rule": "lifecycle of an object made from a document (a subset Set, a rule or an indicator, a Mapping of its control links), from the document's status (stable: active; placeholder, empty: draft)"
+    },
+    {
+     "object-type": "requirementSet",
      "pointer": "/lifecycle",
      "count": 17,
      "rule": "lifecycle of the Set that stands for a document, from the document's status (stable: active; placeholder, empty: draft)"
@@ -3390,6 +3803,7 @@
    "example": "cr26#/FRR/AFC/info/subsets/FRP/applicability/affects/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/affects/[]",
      "count": 45
     }
@@ -3402,6 +3816,7 @@
    "example": "cr26#/FRR/AFC/info/subsets/FRP/applicability/classes/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/classes/[]",
      "count": 124
     }
@@ -3414,6 +3829,7 @@
    "example": "cr26#/FRR/AFC/info/subsets/FRP/applicability/paths/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/paths/[]",
      "count": 78
     }
@@ -3426,6 +3842,7 @@
    "example": "cr26#/FRR/AFC/info/subsets/FRP/applicability/types/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/types/[]",
      "count": 78
     }
@@ -3438,6 +3855,7 @@
    "example": "cr26#/FRR/AFC/info/subsets/FRP/description",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
      "count": 45
     }
@@ -3450,10 +3868,12 @@
    "example": "cr26#/FRR/AFC/info/subsets/FRP/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 45
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 2,
      "rule": "title of one track's share of a subset, from the subset's name"
@@ -3467,6 +3887,7 @@
    "example": "cr26#/FRR/AFC/info/tag",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1scope@1/tag",
      "count": 17
     }
@@ -3479,6 +3900,7 @@
    "example": "cr26#/FRR/AFC/info/web_name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/annotations/web_name",
      "count": 17
     }
@@ -3491,6 +3913,7 @@
    "example": "cr26#/KSI/CED/id",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/aliases/[]/value",
      "count": 10
     }
@@ -3503,16 +3926,19 @@
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/controls/0",
    "to": [
     {
+     "object-type": "mapping",
      "pointer": "/id",
      "count": 558,
      "rule": "Mapping id from its owner's id and the control id"
     },
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/id",
      "count": 558,
      "rule": "Mapping id from its owner's id and the control id"
     },
     {
+     "object-type": "mapping",
      "pointer": "/target-ref",
      "count": 558,
      "rule": "SP 800-53 Requirement URI from the control id"
@@ -3526,11 +3952,13 @@
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/name",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/en",
      "count": 5,
      "rule": "base prose of an indicator that states its text by class only, from its name"
     },
     {
+     "object-type": "requirement",
      "pointer": "/title/en",
      "count": 46
     }
@@ -3543,6 +3971,7 @@
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/statement",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/statements/[]/prose/en",
      "count": 41
     }
@@ -3555,6 +3984,7 @@
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/terms/0",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/relations/[]/ref",
      "count": 85,
      "rule": "term URI from the term's name, by the glossary's headwords and alternatives"
@@ -3568,6 +3998,7 @@
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/updated/0/comment",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/history/[]/comment/en",
      "count": 87
     }
@@ -3580,6 +4011,7 @@
    "example": "cr26#/KSI/CED/indicators/KSI-CED-RAT/updated/0/date",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/history/[]/date",
      "count": 87
     }
@@ -3592,6 +4024,7 @@
    "example": "cr26#/KSI/SCR/indicators/KSI-SCR-MIT/updated/0/issue",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/history/[]/ref",
      "count": 1
     }
@@ -3604,6 +4037,7 @@
    "example": "cr26#/KSI/CNA/indicators/KSI-CNA-EIS/varies_by_class/b/statement",
    "to": [
     {
+     "object-type": "requirement",
      "pointer": "/facets/https:~1~1ns.jascon.net~1compat~1oscal-1x@1/class-variants/{class}/statement",
      "count": 10
     }
@@ -3616,6 +4050,7 @@
    "example": "cr26#/KSI/CED/name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 10
     }
@@ -3628,6 +4063,7 @@
    "example": "cr26#/KSI/CED/short_name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/label",
      "count": 10
     }
@@ -3640,15 +4076,24 @@
    "example": "cr26#/KSI/CED/status",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/status",
      "count": 10
     },
     {
+     "object-type": "mapping",
      "pointer": "/lifecycle",
-     "count": 604,
+     "count": 558,
      "rule": "lifecycle of an object made from a document (a subset Set, a rule or an indicator, a Mapping of its control links), from the document's status (stable: active; placeholder, empty: draft)"
     },
     {
+     "object-type": "requirement",
+     "pointer": "/lifecycle",
+     "count": 46,
+     "rule": "lifecycle of an object made from a document (a subset Set, a rule or an indicator, a Mapping of its control links), from the document's status (stable: active; placeholder, empty: draft)"
+    },
+    {
+     "object-type": "requirementSet",
      "pointer": "/lifecycle",
      "count": 10,
      "rule": "lifecycle of the Set that stands for a document, from the document's status (stable: active; placeholder, empty: draft)"
@@ -3662,6 +4107,7 @@
    "example": "cr26#/KSI/CED/web_name",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/annotations/web_name",
      "count": 10
     }
@@ -3674,6 +4120,7 @@
    "example": "cr26#/info/default_artifacts/FRR/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/default-artifacts/FRR/[]",
      "count": 5
     }
@@ -3686,6 +4133,7 @@
    "example": "cr26#/info/default_artifacts/KSI/0",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.jascon.net~1stdlib~1facet~1assessment-criteria@1/default-artifacts/KSI/[]",
      "count": 5
     }
@@ -3698,6 +4146,7 @@
    "example": "cr26#/info/description",
    "to": [
     {
+     "object-type": "requirementSet",
      "pointer": "/facets/https:~1~1ns.fedramp.gov~1cr26~1facet~1narrative@1/description/en",
      "count": 1
     }
@@ -3710,10 +4159,12 @@
    "example": "cr26#/info/last_updated",
    "to": [
     {
+     "object-type": "mapping",
      "pointer": "/provenance/date",
      "count": 652
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/date",
      "count": 1
     }
@@ -3726,10 +4177,12 @@
    "example": "cr26#/info/title",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/title",
      "count": 1
     },
     {
+     "object-type": "requirementSet",
      "pointer": "/title/en",
      "count": 1
     }
@@ -3742,16 +4195,34 @@
    "example": "cr26#/info/version",
    "to": [
     {
+     "object-type": "manifest",
      "pointer": "/objects/[]/version",
      "count": 1040
     },
     {
+     "object-type": "manifest",
      "pointer": "/provenance/sources/[]/version",
      "count": 1
     },
     {
+     "object-type": "mapping",
      "pointer": "/version",
-     "count": 1040
+     "count": 652
+    },
+    {
+     "object-type": "requirement",
+     "pointer": "/version",
+     "count": 291
+    },
+    {
+     "object-type": "requirementSet",
+     "pointer": "/version",
+     "count": 92
+    },
+    {
+     "object-type": "tailoring",
+     "pointer": "/version",
+     "count": 5
     }
    ]
   }

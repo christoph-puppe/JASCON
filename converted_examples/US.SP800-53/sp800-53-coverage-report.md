@@ -30,7 +30,7 @@ Source: **Electronic (OSCAL) Version of NIST SP 800-53 Rev 5.2.0 Controls and SP
 ## Findings (computed)
 
 - **#10 measure (ODP -> statement addressing)**: insertion-count histogram {0: 399, 1: 1201}; params inserted in >=2 statements: **0** (none) - the (requirement, ODP) address resolves via the declaring statement.
-- **Corpus mapping endpoints vs minted ids**: 21 citations resolve (5 distinct); 0 cite unknown labels ([]).
+- **Corpus mapping endpoints vs minted ids**: 14 citations resolve (5 distinct); 0 cite unknown labels ([]). Counted in the objects that the manifests of the bundles named here list, under converted_examples/, a carried copy of a control left out: `AU.ISM/ism-core-bundle` x0 in 1,731 object(s); `DE.BSI/bsi-core-bundle` x0 in 1,289 object(s); `US.CSF/csf-core-bundle` x0 in 226 object(s); `US.IFA-GoodRead/ifa-core-bundle` x14 in 14 object(s). No other file is read; until 2026-11-15 every .json file under that folder was.
 - **Baseline ids not emitted** (an id the catalogue does not define): none.
 - **Cross-control param insertions x3** ([('ia-13.3', 'ia-13_odp.01'), ('sc-42.2', 'sc-42.01_odp'), ('si-10.1', 'si-10_odp')]): prose in one control inserts another control's ODP - a source irregularity (of x1,204 insertions in statement text); the declaration is duplicated onto the inserting statement per the per-statement parameter rule. REPORTED upstream.
 - **Params bound nowhere x73** (ODPs defined for assessment that neither control text nor 53A objectives insert) - declarations without any insertion site.

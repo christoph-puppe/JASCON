@@ -563,8 +563,9 @@ w("content-manifest.json", manifest)
 for _pattern, _reason, _ in DECLARED_DROPS:
     led.drop(_pattern, _reason)
 
-LEDGER_FULL = led.account(OUT, {**objects, "content-manifest.json": manifest})
-LEDGER = ledger_by_path(LEDGER_FULL)
+ACCOUNTED_FILES = {**objects, "content-manifest.json": manifest}
+LEDGER_FULL = led.account(OUT, ACCOUNTED_FILES)
+LEDGER = ledger_by_path(LEDGER_FULL, ACCOUNTED_FILES)
 LT = LEDGER["totals"]
 # the record: one row per source path and outcome. The entry of every single
 # value (36,161 for the pinned source) is made and checked in this run and is
