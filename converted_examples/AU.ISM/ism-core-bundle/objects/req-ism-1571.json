@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1571",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1571",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The right to verify compliance with security requirements is documented in contractual arrangements with service providers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

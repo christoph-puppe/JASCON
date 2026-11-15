@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -19,6 +20,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -29,6 +31,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -46,6 +49,7 @@
   },
   {
    "id": "smt.d",
+   "label": "d.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -56,6 +60,7 @@
   },
   {
    "id": "smt.d.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -66,6 +71,7 @@
   },
   {
    "id": "smt.d.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -76,6 +82,7 @@
   },
   {
    "id": "smt.d.3",
+   "label": "3.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -93,6 +100,7 @@
   },
   {
    "id": "smt.e",
+   "label": "e.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -110,6 +118,7 @@
   },
   {
    "id": "smt.f",
+   "label": "f.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -127,6 +136,7 @@
   },
   {
    "id": "smt.g",
+   "label": "g.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -137,6 +147,7 @@
   },
   {
    "id": "smt.h",
+   "label": "h.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -154,6 +165,7 @@
   },
   {
    "id": "smt.h.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -171,6 +183,7 @@
   },
   {
    "id": "smt.h.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -188,6 +201,7 @@
   },
   {
    "id": "smt.h.3",
+   "label": "3.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -205,6 +219,7 @@
   },
   {
    "id": "smt.i",
+   "label": "i.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -215,6 +230,7 @@
   },
   {
    "id": "smt.i.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -225,6 +241,7 @@
   },
   {
    "id": "smt.i.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -235,6 +252,7 @@
   },
   {
    "id": "smt.i.3",
+   "label": "3.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -252,6 +270,7 @@
   },
   {
    "id": "smt.j",
+   "label": "j.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -269,6 +288,7 @@
   },
   {
    "id": "smt.k",
+   "label": "k.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -279,6 +299,7 @@
   },
   {
    "id": "smt.l",
+   "label": "l.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -296,19 +317,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-2_obj",
      "label": "AC-02",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-2"
+      }
+     ],
      "children": [
       {
        "id": "ac-2_obj.a",
        "label": "AC-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ac-2_obj.a-1",
          "label": "AC-02a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "account types allowed for use within the system are defined and documented;"
          }
@@ -316,6 +352,11 @@
         {
          "id": "ac-2_obj.a-2",
          "label": "AC-02a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "account types specifically prohibited for use within the system are defined and documented;"
          }
@@ -325,6 +366,11 @@
       {
        "id": "ac-2_obj.b",
        "label": "AC-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "account managers are assigned;"
        }
@@ -332,6 +378,11 @@
       {
        "id": "ac-2_obj.c",
        "label": "AC-02c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "{param:ac-02_odp.01} for group and role membership are required;"
        }
@@ -339,10 +390,20 @@
       {
        "id": "ac-2_obj.d",
        "label": "AC-02d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "children": [
         {
          "id": "ac-2_obj.d.1",
          "label": "AC-02d.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d.1"
+          }
+         ],
          "prose": {
           "en": "authorized users of the system are specified;"
          }
@@ -350,6 +411,11 @@
         {
          "id": "ac-2_obj.d.2",
          "label": "AC-02d.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d.2"
+          }
+         ],
          "prose": {
           "en": "group and role membership are specified;"
          }
@@ -357,10 +423,20 @@
         {
          "id": "ac-2_obj.d.3",
          "label": "AC-02d.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.d.3"
+          }
+         ],
          "children": [
           {
            "id": "ac-2_obj.d.3-1",
            "label": "AC-02d.03[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.d.3"
+            }
+           ],
            "prose": {
             "en": "access authorizations (i.e., privileges) are specified for each account;"
            }
@@ -368,6 +444,11 @@
           {
            "id": "ac-2_obj.d.3-2",
            "label": "AC-02d.03[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.d.3"
+            }
+           ],
            "prose": {
             "en": "{param:ac-02_odp.02} are specified for each account;"
            }
@@ -379,6 +460,11 @@
       {
        "id": "ac-2_obj.e",
        "label": "AC-02e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "approvals are required by {param:ac-02_odp.03} for requests to create accounts;"
        }
@@ -386,10 +472,20 @@
       {
        "id": "ac-2_obj.f",
        "label": "AC-02f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "children": [
         {
          "id": "ac-2_obj.f-1",
          "label": "AC-02f.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "accounts are created in accordance with {param:ac-02_odp.04};"
          }
@@ -397,6 +493,11 @@
         {
          "id": "ac-2_obj.f-2",
          "label": "AC-02f.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "accounts are enabled in accordance with {param:ac-02_odp.04};"
          }
@@ -404,6 +505,11 @@
         {
          "id": "ac-2_obj.f-3",
          "label": "AC-02f.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "accounts are modified in accordance with {param:ac-02_odp.04};"
          }
@@ -411,6 +517,11 @@
         {
          "id": "ac-2_obj.f-4",
          "label": "AC-02f.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "accounts are disabled in accordance with {param:ac-02_odp.04};"
          }
@@ -418,6 +529,11 @@
         {
          "id": "ac-2_obj.f-5",
          "label": "AC-02f.[05]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.f"
+          }
+         ],
          "prose": {
           "en": "accounts are removed in accordance with {param:ac-02_odp.04};"
          }
@@ -427,6 +543,11 @@
       {
        "id": "ac-2_obj.g",
        "label": "AC-02g.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "prose": {
         "en": "the use of accounts is monitored; "
        }
@@ -434,10 +555,20 @@
       {
        "id": "ac-2_obj.h",
        "label": "AC-02h.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.h"
+        }
+       ],
        "children": [
         {
          "id": "ac-2_obj.h.1",
          "label": "AC-02h.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.h.1"
+          }
+         ],
          "prose": {
           "en": "account managers and {param:ac-02_odp.05} are notified within {param:ac-02_odp.06} when accounts are no longer required;"
          }
@@ -445,6 +576,11 @@
         {
          "id": "ac-2_obj.h.2",
          "label": "AC-02h.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.h.2"
+          }
+         ],
          "prose": {
           "en": "account managers and {param:ac-02_odp.05} are notified within {param:ac-02_odp.07} when users are terminated or transferred;"
          }
@@ -452,6 +588,11 @@
         {
          "id": "ac-2_obj.h.3",
          "label": "AC-02h.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.h.3"
+          }
+         ],
          "prose": {
           "en": "account managers and {param:ac-02_odp.05} are notified within {param:ac-02_odp.08} when system usage or the need to know changes for an individual;"
          }
@@ -461,10 +602,20 @@
       {
        "id": "ac-2_obj.i",
        "label": "AC-02i.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.i"
+        }
+       ],
        "children": [
         {
          "id": "ac-2_obj.i.1",
          "label": "AC-02i.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.i.1"
+          }
+         ],
          "prose": {
           "en": "access to the system is authorized based on a valid access authorization;"
          }
@@ -472,6 +623,11 @@
         {
          "id": "ac-2_obj.i.2",
          "label": "AC-02i.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.i.2"
+          }
+         ],
          "prose": {
           "en": "access to the system is authorized based on intended system usage;"
          }
@@ -479,6 +635,11 @@
         {
          "id": "ac-2_obj.i.3",
          "label": "AC-02i.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.i.3"
+          }
+         ],
          "prose": {
           "en": "access to the system is authorized based on {param:ac-02_odp.09};"
          }
@@ -488,6 +649,11 @@
       {
        "id": "ac-2_obj.j",
        "label": "AC-02j.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.j"
+        }
+       ],
        "prose": {
         "en": "accounts are reviewed for compliance with account management requirements {param:ac-02_odp.10};"
        }
@@ -495,10 +661,20 @@
       {
        "id": "ac-2_obj.k",
        "label": "AC-02k.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.k"
+        }
+       ],
        "children": [
         {
          "id": "ac-2_obj.k-1",
          "label": "AC-02k.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.k"
+          }
+         ],
          "prose": {
           "en": "a process is established for changing shared or group account authenticators (if deployed) when individuals are removed from the group;"
          }
@@ -506,6 +682,11 @@
         {
          "id": "ac-2_obj.k-2",
          "label": "AC-02k.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.k"
+          }
+         ],
          "prose": {
           "en": "a process is implemented for changing shared or group account authenticators (if deployed) when individuals are removed from the group;"
          }
@@ -515,10 +696,20 @@
       {
        "id": "ac-2_obj.l",
        "label": "AC-02l.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.l"
+        }
+       ],
        "children": [
         {
          "id": "ac-2_obj.l-1",
          "label": "AC-02l.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.l"
+          }
+         ],
          "prose": {
           "en": "account management processes are aligned with personnel termination processes;"
          }
@@ -526,6 +717,11 @@
         {
          "id": "ac-2_obj.l-2",
          "label": "AC-02l.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.l"
+          }
+         ],
          "prose": {
           "en": "account management processes are aligned with personnel transfer processes."
          }
@@ -632,7 +828,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[01]"
     },
     "ac-02_odp.02": {
      "guidelines": [
@@ -642,7 +839,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[02]"
     },
     "ac-02_odp.03": {
      "guidelines": [
@@ -652,7 +850,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[03]"
     },
     "ac-02_odp.04": {
      "guidelines": [
@@ -662,7 +861,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[04]"
     },
     "ac-02_odp.05": {
      "guidelines": [
@@ -672,7 +872,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[05]"
     },
     "ac-02_odp.06": {
      "guidelines": [
@@ -682,7 +883,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[06]"
     },
     "ac-02_odp.07": {
      "guidelines": [
@@ -692,7 +894,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[07]"
     },
     "ac-02_odp.08": {
      "guidelines": [
@@ -702,7 +905,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_8"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[08]"
     },
     "ac-02_odp.09": {
      "guidelines": [
@@ -712,7 +916,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_9"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[09]"
     },
     "ac-02_odp.10": {
      "guidelines": [
@@ -722,7 +927,8 @@
      ],
      "alt-identifiers": [
       "ac-2_prm_10"
-     ]
+     ],
+     "sp800-53a-label": "AC-02_ODP[10]"
     }
    }
   }
@@ -870,34 +1076,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AC-2.10",
-    "mode": "merged-into",
-    "label": "AC-02(10)",
-    "title": "Shared and Group Account Credential Change",
-    "into": "smt.k"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AC-13",
-    "mode": "merged-into",
-    "label": "AC-13",
-    "title": "Supervision and Review — Access Control"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-14",
-    "mode": "merged-into",
-    "label": "SC-14",
-    "title": "Public Access Protections"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
-    "mode": "merged-into",
-    "label": "SI-09",
-    "title": "Information Input Restrictions"
-   }
-  ]
- }
+ ]
 }

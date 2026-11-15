@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sr-11.3_obj",
      "label": "SR-11(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "scanning for counterfeit system components is conducted {param:sr-11.03_odp}."
      }
@@ -131,7 +136,8 @@
      ],
      "alt-identifiers": [
       "sr-11.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-11(03)_ODP"
     }
    }
   },
@@ -154,15 +160,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-19.4",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-19.4",
-    "mode": "renamed",
-    "label": "SA-19(04)",
-    "title": "Anti-counterfeit Scanning"
-   }
-  ]
- }
+ ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1247",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1247",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Unneeded user accounts, components, services and functionality of server applications are disabled or removed."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

@@ -1,22 +1,22 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/det-2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Meldung von Ereignissen"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.1",
-   "sequence": 5850
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-2-1",
+   "sequence": 9230
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.2",
-   "sequence": 5860
+   "sequence": 9240
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DET.2.3",
-   "sequence": 5870
+   "sequence": 9250
   }
  ],
  "label": "2",

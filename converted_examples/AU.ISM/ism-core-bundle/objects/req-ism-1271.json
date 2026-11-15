@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1271",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1271",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Network access controls are implemented to restrict database server communications to strictly defined network resources that require access to the database server."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

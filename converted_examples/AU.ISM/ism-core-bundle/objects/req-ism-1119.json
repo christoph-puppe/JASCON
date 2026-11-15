@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1119",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1119",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cables in TOP SECRET areas are fully inspectable for their entire length."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

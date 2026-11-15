@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1255",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1255",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Database users’ ability to access, insert, modify and remove database contents is restricted based on their work duties."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

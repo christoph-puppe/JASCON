@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1778",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1778",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When manually importing data to systems, all data that fails security checks is quarantined until reviewed and subsequently approved or not approved for release."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0305",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0305",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Maintenance or repairs of IT equipment are carried out on site by an appropriately cleared technician."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0675",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0675",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Data authorised for export from SECRET and TOP SECRET systems is digitally signed by a trustworthy source."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09"
   }
  ]
 }

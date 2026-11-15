@@ -26,11 +26,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-6.9_obj",
      "label": "AU-06(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "information from non-technical sources is correlated with audit record information to enhance organization-wide situational awareness."
      }

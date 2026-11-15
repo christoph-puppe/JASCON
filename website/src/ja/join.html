@@ -2,7 +2,7 @@
 title: 参加する：バリデータ、カタログ、異論を持ち寄る | JASCON
 description: JASCON のメンテナーは 1 人で、第三者のユーザーはまだいません。本プロジェクトがフレームワーク発行機関、ツール開発者、GRC エンジニア、監査人に求めること、変更が仕様に取り込まれるまでの流れ、そしてどこから始めればよいかを説明します。
 nav: join
-source: 1f1d09e6b9ec
+source: 9f1d33689e64
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -40,8 +40,8 @@ source: 1f1d09e6b9ec
       <article class="card">
         <div class="card-top"><span class="card-no">測定</span></div>
         <h3>残り 10 コーパスでの値の到達</h3>
-        <p>カバレッジはソースパス単位で実測されています。各値が変換先に到達するかどうかは 1 つのコーパスでしか実測されておらず、そのコーパスでは成り立っていません。他のコーパスのソースファイルを持つ人なら、この測定を実行し、何が失われるかを報告できます。</p>
-        <p class="how"><b>出発点：</b>バックログ項目 41、<code>oscal_conv_lib.value_arrival()</code>。</p>
+        <p>カバレッジはソースパス単位で実測されています。各値がどこへ行ったかは 1 つのコーパスでしか追跡されておらず、そこでは、各ソース値に変換先、名前付きの規則、または明示された理由のいずれかを割り当てる台帳を用いています。他のコーパスのソースファイルを持つ人なら、そのうちの 1 つについて台帳を作成し、何が失われるかを報告できます。</p>
+        <p class="how"><b>出発点：</b>バックログ項目 41、<code>oscal_conv_lib.Ledger</code>。使い方は <code>convert_ifa.py</code> が示しています。</p>
       </article>
       <article class="card">
         <div class="card-top"><span class="card-no">実践</span></div>

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1319",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1319",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Static addressing is not used for assigning IP addresses on wireless networks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

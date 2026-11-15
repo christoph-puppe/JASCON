@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0590",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0590",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Authentication measures for MFDs are the same strength as those used for workstations on networks they are connected to."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

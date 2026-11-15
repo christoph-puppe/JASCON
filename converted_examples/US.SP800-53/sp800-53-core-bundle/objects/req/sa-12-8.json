@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-12.8",
+ "version": "5.2.0",
+ "label": "SA-12(8)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Use of All-source Intelligence"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into RA-3(2)."
+   }
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1146",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1146",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel are advised to maintain separate personal user accounts from any work user accounts they use for online services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

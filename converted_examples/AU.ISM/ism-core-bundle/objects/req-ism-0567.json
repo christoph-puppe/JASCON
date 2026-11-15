@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0567",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0567",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Email servers only relay emails destined for or originating from their domains (including subdomains)."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-09"
   }
  ]
 }

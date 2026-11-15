@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1720",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1720",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "SECRET wall outlet boxes are coloured salmon pink."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

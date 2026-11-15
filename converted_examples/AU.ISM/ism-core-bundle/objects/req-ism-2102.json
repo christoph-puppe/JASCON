@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2102",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2102",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Existing software artefacts in the authoritative source for software are periodically tested to detect known weaknesses using SAST, DAST or SCA, depending on the software artefact type, throughout the software development life cycle."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

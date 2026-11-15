@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1655",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1655",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": ".NET Framework 3.5 (includes .NET 2.0 and 3.0) is disabled or removed."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-09"
   }
  ]
 }

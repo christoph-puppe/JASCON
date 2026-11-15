@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0645",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0645",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Evaluated diodes used for controlling the data flow of unidirectional gateways between SECRET or TOP SECRET networks and public network infrastructure complete a high assurance evaluation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

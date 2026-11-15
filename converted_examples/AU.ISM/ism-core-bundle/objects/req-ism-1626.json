@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1626",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1626",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Legal advice is sought regarding the development and implementation of an insider threat mitigation program."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

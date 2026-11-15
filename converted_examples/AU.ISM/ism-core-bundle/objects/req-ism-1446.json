@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1446",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1446",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When using elliptic curve cryptography, a suitable curve from NIST SP 800-186 is used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-03"
   }
  ]
 }

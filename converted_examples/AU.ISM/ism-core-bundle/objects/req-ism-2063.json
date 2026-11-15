@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2063",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2063",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "If supported, web application session cookies set the HttpOnly flag, Secure flag and the SameSite flag by default."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1592",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1592",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Unprivileged users do not have the ability to install unapproved applications."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

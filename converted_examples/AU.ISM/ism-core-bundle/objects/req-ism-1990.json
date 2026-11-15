@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1990",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1990",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When using ML-DSA and ML-KEM, as per FIPS 204 and FIPS 203 respectively, adherence to pre-requisite FIPS 140-3 validation is preferred."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

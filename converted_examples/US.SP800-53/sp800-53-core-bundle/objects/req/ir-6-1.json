@@ -29,15 +29,20 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "The recipients of incident reports are specified in IR-6b . Automated reporting mechanisms include email, posting on websites (with automatic updates), and automated incident response tools and programs."
+     "en": "The recipients of incident reports are specified in [IR-6b](#ir-6_smt.b) . Automated reporting mechanisms include email, posting on websites (with automatic updates), and automated incident response tools and programs."
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ir-6.1_obj",
      "label": "IR-06(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "incidents are reported using {param:ir-06.01_odp}."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "ir-6.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-06(01)_ODP"
     }
    }
   }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1802",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1802",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "HACE are issued an Approval for Use by ASD and operated in accordance with the latest version of their associated Australian Communications Security Instructions."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2052",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2052",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Event logs produced by software ensure that any sensitive data is protected."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

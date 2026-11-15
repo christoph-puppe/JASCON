@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-procurement-and-outsourcing-managed-s-54236e1",
-   "sequence": 1800
+   "sequence": 1970
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-procurement-and-outsourcing-managed-s-1c74f94",
-   "sequence": 1830
+   "sequence": 2000
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-procurement-and-outsourcing-managed-s-ad76a86",
-   "sequence": 1870
+   "sequence": 2040
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-procurement-and-outsourcing-managed-s-1707ba3",
-   "sequence": 1900
+   "sequence": 2070
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-procurement-and-outsourcing-managed-s-fb72f87",
-   "sequence": 2030
+   "sequence": 2200
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-procurement-and-outsourcing-managed-s-39553db",
-   "sequence": 2060
+   "sequence": 2230
   }
  ],
  "facets": {

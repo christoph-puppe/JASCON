@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -32,6 +33,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -57,15 +59,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "si-22_obj",
      "label": "SI-22",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-22"
+      }
+     ],
      "children": [
       {
        "id": "si-22_obj.a",
        "label": "SI-22a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:si-22_odp.01} for {param:si-22_odp.02} are identified;"
        }
@@ -73,6 +85,11 @@
       {
        "id": "si-22_obj.b",
        "label": "SI-22b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "an alternative information source is used for the execution of essential functions or services on {param:si-22_odp.03} when the primary source of information is corrupted or unavailable."
        }
@@ -150,7 +167,8 @@
      ],
      "alt-identifiers": [
       "si-22_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-22_ODP[01]"
     },
     "si-22_odp.02": {
      "guidelines": [
@@ -160,7 +178,8 @@
      ],
      "alt-identifiers": [
       "si-22_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-22_ODP[02]"
     },
     "si-22_odp.03": {
      "guidelines": [
@@ -170,7 +189,8 @@
      ],
      "alt-identifiers": [
       "si-22_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-22_ODP[03]"
     }
    }
   },

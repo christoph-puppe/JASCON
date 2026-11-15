@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.12",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.12",
  "lifecycle": "active",
  "title": {
-  "de": "Single-Sign-On"
+  "de": "Systemsperre bei Inaktivität"
  },
  "statements": [
   {
@@ -14,8 +14,15 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für Anwendungen SOLLTE die Anmeldung über einen zentralen Identitätsprovider aktivieren."
-   }
+    "de": "Berechtigung für IT-Systeme SOLLTE eine Sperre bei Inaktivität nach {param:ber.3.12-prm1} aktivieren."
+   },
+   "parameters": [
+    {
+     "name": "ber.3.12-prm1",
+     "type": "string",
+     "label": "einer Frist"
+    }
+   ]
   }
  ],
  "facets": {
@@ -23,9 +30,10 @@
    "by-statement": {
     "smt": {
      "action": "aktivieren",
-     "result": "die Anmeldung über einen zentralen Identitätsprovider",
+     "result": "eine Sperre bei Inaktivität",
+     "result-specification": "nach {{einer Frist}}",
      "target-object-categories": [
-      "Anwendungen"
+      "IT-Systeme"
      ]
     }
    }
@@ -57,9 +65,12 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3
+     "effort": 2,
+     "tags": [
+      "Automatic Session Locking"
+     ]
     }
    }
   },
@@ -67,8 +78,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Bei Single Sign-on authentifizieren sich Nutzende bei einem zentralen Identity Provider, der auch die Berechtigungen zur Nutzung der Anwendung prüft. Bei erfolgreicher Authentifizierung und passenden Berechtigungen wird für die Sitzung ein Token ausgestellt, das den Zugang zur Anwendung ermöglicht. Da Nutzende durch Single-Sign-On weniger Anmeldeinformationen benötigen, wird es leichter, sich komplexe Passwörter zu merken oder zentrale gepflegte Schutzmaßnahmen, wie eine Mehr-Faktor-Authentifizierung oder Überwachung von Anmeldeinformationen, auch auf die Anwendung anzuwenden. Zudem erschwert Single-Sign-On auch Phishing-Angriffe, da Anmeldeinformationen nur noch an zentraler Stelle und nicht mehr verstreut in einzelne Anwendungen oder Webseiten abgefragt werden. Andererseits ist bei der Kompromittierung des Single-Sign-On-Logins auch die Authentifizierung an der Anwendung kompromittiert und die Verfügbarkeit der Anwendung hängt auch von der Verfügbarkeit des zentralen Logins ab. Dies kann unter Windows durch Nutzung eines Windows Server Domain Controllers und unter Linux durch Samba mit aktiviertem Heimdal Kerberos Key Distribution Center (KDC) umgesetzt werden."
+      "de": "Kann durch eine Bildschirmsperre oder Abmeldung (Automatic Session Locking) umgesetzt werden. Eine längere Inaktivität kann z.B. 5-15 Minuten lang sein. Verwendet das System keine eigene Authentifizierung, so ist auch diese Anforderung entbehrlich."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.3.12-prm1": {
+     "alt-identifier": "721012f5-5db9-49af-aade-f8eb48d92834"
     }
    }
   }
@@ -76,7 +94,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "494391e7-774c-4cc4-b9ed-dc8ab652e83b"
+   "value": "de11e8f3-d1fa-4b11-a6b0-e0d327b42849"
   }
  ]
 }

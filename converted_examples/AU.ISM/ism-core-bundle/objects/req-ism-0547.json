@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0547",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0547",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Video conferencing and IP telephony calls are conducted using a secure real-time transport protocol."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

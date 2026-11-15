@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1023",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1023",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The intended recipients of blocked inbound emails, and the senders of blocked outbound emails, are notified."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

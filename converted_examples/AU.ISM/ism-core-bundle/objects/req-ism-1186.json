@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1186",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1186",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "IPv6 capable network security appliances are used on IPv6 and dual-stack networks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

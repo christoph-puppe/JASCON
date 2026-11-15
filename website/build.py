@@ -139,6 +139,31 @@ def git(*args):
         return ""
 
 
+def listed_objects(bundle, counts):
+    """(objects the manifest lists, Attestations beside it) of a bundle the
+    validator found green.
+
+    A bundle's objects, as the pages count them, are the entries of its
+    manifest: those are the objects whose two digests the validator
+    recomputed. Since 2026-11-14 the validator also types and counts the
+    Attestations that lie beside a manifest (D3.1; backlog #46). They are no
+    entry of the manifest and have no pair of digests in it, so a page that
+    says "both digests of N objects" must not count them. The validator's
+    report does not say where an Attestation lies, and it refuses a listed
+    one in a pack only (ADVICE-1; measured 2026-11-14 on a copy of the IFA
+    bundle that lists its own: 0 failures). So the manifest is read as
+    well: with every Attestation of the report taken as lying beside it,
+    its entries must be as many as the other objects the validator typed.
+    A bundle that lists an Attestation stops the build here."""
+    beside = counts.pop("attestation", 0)
+    manifest = json.loads(read(os.path.join(REPO, bundle, "content-manifest.json")))
+    listed = len(manifest["objects"])
+    if listed != sum(counts.values()):
+        die(f"{bundle}: its manifest lists {listed} objects, the validator typed "
+            f"{sum(counts.values())} beside {beside} Attestation(s)")
+    return listed, beside
+
+
 def measure():
     """Run the reference validator and read its report."""
     print("build.py: running", VALIDATOR_PY, "...")
@@ -170,13 +195,15 @@ def measure():
                 example_types = counts
             elif name.startswith("jascon/example-packs/"):
                 # the skill's worked advice pack(s) (CP-ADVICE-1): examples, not a corpus
-                packs.append({"path": name, "objects": sum(counts.values())})
+                listed, beside = listed_objects(name, counts)
+                packs.append({"path": name, "objects": listed, "attestations": beside})
             else:
                 corpus = name.split("/")[1]
                 if corpus not in CORPORA:
                     die(f"bundle {name} has no entry in CORPORA; add its title and licence")
-                bundles.append({"corpus": corpus, "path": name,
-                                "objects": sum(counts.values()), "types": counts})
+                listed, beside = listed_objects(name, counts)
+                bundles.append({"corpus": corpus, "path": name, "objects": listed,
+                                "attestations": beside, "types": counts})
     if not families or not bundles:
         die("could not read the validator's report; its output format changed")
 
@@ -256,6 +283,7 @@ def fragments(facts, T):
         "family_rows": family_rows,
         "family_chips": family_chips,
         "bundle_rows": "\n".join(rows),
+        "ledger_rows": ledger_rows(sep),
     }
 
 
@@ -283,6 +311,8 @@ def context(facts, site, T):
                                    if f["name"] == "check"), 0),
             "advice_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
                                     if f["name"] == "advice"), 0),
+            "author_vectors": next((f["vectors"] for f in facts["vectors"]["families"]
+                                    if f["name"] == "author"), 0),
             **ledger_counts(),
         },
         "html": fragments(facts, T),
@@ -294,19 +324,56 @@ def context(facts, site, T):
     return ctx
 
 
-IFA_REPORT = os.path.join("converted_examples", "US.IFA-GoodRead", "ifa-coverage-report.json")
+
+
+def ledgers():
+    """The conversion ledgers (backlog #41), read from the coverage reports the
+    converters wrote: one per corpus whose converter follows every source
+    value into the bundle. -> [(corpus, ledger)], and the number of corpora
+    whose report has none."""
+    found, without = [], 0
+    root = os.path.join(REPO, "converted_examples")
+    for corpus in sorted(os.listdir(root)):
+        reports = [f for f in sorted(os.listdir(os.path.join(root, corpus))) if f.endswith("-coverage-report.json")]
+        if not reports:
+            continue
+        ledger = json.loads(read(os.path.join(root, corpus, reports[0]))).get("ledger")
+        if ledger is None:
+            without += 1
+            continue
+        t = ledger["totals"]
+        if sum(t.values()) != ledger["leaf-values"]:
+            die(f"{corpus}: the ledger's totals do not add up to its leaf values")
+        if ledger["verification-failures"]:
+            die(f"{corpus}: the ledger records {ledger['verification-failures']} failed check(s)")
+        found.append((corpus, ledger))
+    if not found:
+        die("no coverage report carries a ledger")
+    return found, without
 
 
 def ledger_counts():
-    """The conversion ledger of the one corpus that has one (backlog #41), read
-    from the report its converter wrote. The pages name these counts and never
-    type them, so the unaccounted values can be decided path by path without
-    touching a page or a translation."""
-    ledger = json.loads(read(os.path.join(REPO, IFA_REPORT)))["ledger"]
-    t = ledger["totals"]
-    return {"ledger_values": ledger["leaf-values"], "ledger_copied": t["copied"],
+    """What the pages say about the ledgers, summed over the corpora that
+    have one. The pages name these counts and never type them, so a decision
+    about an unaccounted value changes no page and no translation."""
+    found, without = ledgers()
+    t = {k: sum(l["totals"][k] for _, l in found) for k in ("copied", "transformed", "not-content", "intentionally-dropped", "unaccounted")}
+    return {"ledger_corpora": len(found), "ledger_unmeasured": without,
+            "ledger_values": sum(l["leaf-values"] for _, l in found), "ledger_copied": t["copied"],
             "ledger_transformed": t["transformed"], "ledger_carried": t["copied"] + t["transformed"],
+            "ledger_nocontent": t["not-content"],
             "ledger_dropped": t["intentionally-dropped"], "ledger_unaccounted": t["unaccounted"]}
+
+
+def ledger_rows(sep):
+    """One table row per corpus with a ledger; the header is in each page."""
+    rows = []
+    for corpus, l in ledgers()[0]:
+        t = l["totals"]
+        cells = [l["leaf-values"], t["copied"], t["transformed"], t["not-content"], t["intentionally-dropped"], t["unaccounted"]]
+        rows.append('<tr><th scope="row"><span class="corpus-id">' + html.escape(corpus) + "</span></th>"
+                    + "".join('<td class="num">' + f"{n:,}".replace(",", sep) + "</td>" for n in cells) + "</tr>")
+    return "\n".join(rows)
 
 
 DEMO_FILE = "req-ism-1234.json"
@@ -732,11 +799,15 @@ def copy_apps(out, facts):
     for name in ("LICENSE", "NOTICE"):
         shutil.copy2(os.path.join(REPO, name), os.path.join(out, name + ".txt"))
     # Folder listings for what a manifest does not name. A pack manifest a set
-    # keeps (packs/sha256/<hex>) and the attestation of a pack's publisher lie
-    # beside the manifest; the app and the reader find them by asking the server
-    # for the folder, which a static host answers only with an index.html.
+    # keeps (packs/sha256/<hex>) and an Attestation lie beside the manifest;
+    # the app and the reader find them by asking the server for the folder,
+    # which a static host answers only with an index.html. Every bundle served
+    # is listed: since 2026-11-14 the reader asks for the folder of whatever
+    # bundle it loads from a URL (backlog #46), and the IFA bundle has its
+    # Attestation there.
     listed = [os.path.join(out, "jascon", "examples"),
               os.path.join(out, "jascon", "examples", "packs", "sha256")]
+    listed += [os.path.join(out, *b["path"].split("/")) for b in facts["bundles"]]
     packs_dir = os.path.join(out, "jascon", "example-packs")
     if os.path.isdir(packs_dir):
         listed += [os.path.join(packs_dir, d) for d in sorted(os.listdir(packs_dir))

@@ -53,7 +53,7 @@ function baseSet() {
   const edge = { id: P + "/impl/db-konf-14-1", version: "1", lifecycle: "draft", "component-ref": asset.id, "requirement-ref": REQ,
     responsibility: "provider", "satisfied-by": [{ "capability-ref": "cap-konf-14-1" }], status: "planned" };
   return [
-    ...["req-konf-14-1.json", "gspp-taxonomy-1.0.0.json"].map(f => ({ path: f, text: core.jscDecode(fs.readFileSync(path.join(EXAMPLES, f))) })),
+    ...["req-konf-14-1.json", "gspp-taxonomy-1.1.0.json"].map(f => ({ path: f, text: core.jscDecode(fs.readFileSync(path.join(EXAMPLES, f))) })),
     { path: "objects/comp/db.json", text: core.jscSerialize(asset) }, { path: "objects/comp/shop.json", text: core.jscSerialize(system) },
     { path: "objects/impl/db-konf-14-1.json", text: core.jscSerialize(edge) },
   ];

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1794",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1794",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A minimum notification period of one month by service providers for significant changes to their own service provider arrangements is documented in contractual arrangements with service providers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

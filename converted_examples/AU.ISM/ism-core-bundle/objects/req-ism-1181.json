@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1181",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1181",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Networks are segregated into multiple network zones according to the criticality of servers, services and data."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

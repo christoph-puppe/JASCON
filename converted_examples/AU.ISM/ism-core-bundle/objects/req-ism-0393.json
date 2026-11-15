@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0393",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0393",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Databases and their contents are classified based on the sensitivity or classification of data that they contain."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-06"
   }
  ]
 }

@@ -68,8 +68,10 @@ claim about values. The **path map** says where each source path is
 *declared* to go; a converter can declare a destination and never write
 to it. The **conversion ledger** says where each source *value* went: one
 entry per source leaf, keyed by document and indexed JSON Pointer, with
-the destination and one of four outcomes: `copied`, `transformed` by a
-named rule, `intentionally-dropped` with a reason, or `unaccounted`.
+the destination and one of five outcomes: `copied`, `transformed` by a
+named rule, `not-content` by a rule the ledger checks,
+`intentionally-dropped` with a reason, or `unaccounted`. A converter run
+with an unaccounted value ends with exit code 1.
 `oscal_conv_lib.Ledger` builds it from what the converter does. Every
 scalar read from a source carries its origin for as long as it is handed
 on unchanged; what the converter computes is stated at the place it is
@@ -89,12 +91,71 @@ and compared; and every entry is checked against the written files.
 > day: a repeated name keeps every value). An equal value
 > elsewhere proves nothing; follow the value.
 
+The 473 were then decided, class by class, and the decisions are the
+part another converter can reuse. **Carry** what the bundle has a place
+for. The leveraged and the leveraging system got what the main system
+had; the inventory kept the class of each prop; the component definition
+its clause texts and parameter values; each Component its description,
+status, props and roles; the Implementation its narrative, statement by
+statement; the Assessment its activities, tasks and observations; and
+each source document its title, version and dates in the manifest's
+`provenance`. **Resolve** what the source states as a reference: an edge
+is the result of looking up the uuid the source gives, never a value
+typed into the converter. Four hand-wired edges resolved to what they
+had been. Two were wrong in a bundle that had shipped: a capability sat
+on the wrong Component, and another carried the text of a neighbouring
+component. **Do not drop content.** On 2026-11-13 this conversion dropped
+five classes for a declared reason (revision history, the directory of
+parties and roles, back-matter and import links, type tags, the uuids of
+source elements), 298 values. The author's rule of the next day ended
+that: *real content is never dropped*, not by a bug, not by a sentence of
+the path map, not by a declared drop. What may stay out of a bundle is
+what is no content, each by a rule the ledger checks: a name that only
+selects a field, a namespace, an id that can be rebuilt exactly from
+another value, and a back-matter resource that nothing in its document
+refers to. Everything else is carried, and where the kernel and the
+standard facets have no place for a value, it is carried in the compat
+facet and the gap is reported as a finding about the kernel (backlog
+#80 to #85); it is no reason to drop. **Declare** what the source gets
+wrong: three references that name nothing their document defines are
+carried as the source writes them and named in the report as defects of
+the source; nothing is invented for them. Keep roles at two levels,
+the Component and the whole scope; an assignment below that is rolled up
+and linked to them, because a role per statement, task and capability
+multiplies entries without adding a fact. The ledger of that conversion
+now reads 762 copied, 62 transformed, 11 no content by a checked rule,
+none dropped, none unaccounted and no failed check; the ledgers of the
+five other corpora that have one read the same two zeros (214,455 source
+values in all, 2026-11-14).
+
+> **Don't** read "none unaccounted" as "right". It says that every
+> source value has a destination or is no content by a rule that was
+> checked. A ledger holds a rule to what the rule wrote, not to whether
+> the rule is right: a table that maps a status word to the wrong
+> lifecycle passes it, and only a test of the converter catches that.
+> And the ledger runs one way: it follows source values into the bundle.
+> A value the converter writes on its own has no entry — in this
+> conversion three party URIs that no source names — so the report has
+> to say it in words.
+
+> **Don't** let a conversion become a historical document. Pin the
+> source files by digest and reproduce the conversion on every change of
+> the kernel, the library or the converter: fetch, check the digests,
+> convert, and compare byte for byte with what is committed. This
+> project's workflow does that for every corpus whose bundle it ships
+> (`SOURCES.sha256` beside the bundle). A report nobody reproduces
+> describes a converter that may no longer exist.
+
 ## 14.2 Playbook: OSCAL 1.x catalogs and profiles
 
-**Controls.** Each becomes a Requirement; **nested controls become
-statements** of their parent — the 347 German pseudo-controls convert
-into what they always were, identified clauses (Chapter 4's split
-heuristic applies where nesting was structural rather than clausal).
+**Controls.** Each becomes a Requirement, **at every depth: a nested
+control is a full control.** Grundschutz++ nests controls to group them,
+and the nesting becomes a Set whose members are the control's own
+Requirement and then the controls nested in it. SP 800-53 nests its
+enhancements and states the dependency itself, as a `required` link,
+which becomes a relation. Do not turn a nested control into a statement
+of its parent: the Grundschutz++ converter did until 2026-11-14 and lost
+the nested controls' own links (75 of 266).
 Statement parts feed `statements[].prose`, with ODP-style insertion
 points analyzed into typed parameters — the fused-alternatives lesson
 ("TLS 1.3 *oder* …") means this step is analysis, not string
@@ -105,10 +166,13 @@ Facet where those conventions now live; framework-own narrative
 becomes prose-only statements with `modality: "unspecified"` — 
 first-class at Core, losing nothing it had.
 
-**The identity block.** `label` props → kernel `label`;
-`alt-identifier` (×1,219 in the German corpus alone) → `aliases[]`
-with schemes; `sort-id` (×1,150 Australian) → `sequence`; groups →
-nested Sets. This whole row is Level 1 and mechanical — Chapter 5's
+**The identity block.** `label` props → kernel `label`, on the object
+and, for the label printed beside a statement part, on the statement
+(SP 800-53: ×1,122); `alt-identifier` (×1,219 in the German corpus
+alone) → `aliases[]` with schemes; `sort-id` (×1,150 Australian) →
+`sequence`; a per-control revision → the Requirement's `version`, and
+the date of its last change → its `history` (ISM: ×1,101 each, the month
+`Jun-25` written `2025-06`); groups → nested Sets. This whole row is Level 1 and mechanical — Chapter 5's
 §5.3 pipeline *is* the worked playbook, twenty lines of code and a
 funeral.
 
@@ -120,6 +184,24 @@ objectives, taxonomy — Chapters 4 and 7 carry the worked German
 cases). What resists adjudication goes Level 2 into the compatibility
 facet — *visibly*, with §14.6's clock ticking. Level 3 is rarely
 needed for props; it exists for structures, not values.
+
+**The document, its resources, its assessment objectives** *(the
+author's decisions of 2026-11-14, specification D27)*. What the
+catalogue says of itself goes to the manifest: one entry of
+`provenance.sources` with title, version, uuid, the author the
+metadata names, the day of `last-modified`, and `OSCAL` with its
+`oscal-version` as format. The rest of `metadata` (roles, parties,
+links, revisions) stays in the compat facet on the root Set.
+Back-matter resources that something in the document refers to go to
+`references@1` on the root Set, each as written, its `uuid` as `id`; a
+resource nothing refers to is an orphan and is not carried. SP 800-53A
+objectives go to `assessment-criteria@1` (1.1.0), each `assessment-for`
+link as an address: a statement, a statement of another control, the
+control as a whole, or the source's `href` where it names nothing.
+Do not write `{"statement-id": "smt"}` for "the control as a whole"
+when the control has several statements: it names no statement, and
+since that day a validator says so (the SP 800-53 converter did, 217
+times).
 
 **Profiles.** `import` + selection becomes a Tailoring's `selects`
 and `excludes`; `set-parameters` becomes `set-parameter` operations;
@@ -156,11 +238,13 @@ reports what it could not place. Three things in real files to expect: a
 `source` that is a `#uuid` into the back-matter rather than a URL, Rev 4
 sources whose control and parameter ids are not the Rev 5 conversion's,
 and OSCAL's `{{ insert: param, … }}` markup inside the texts; the import
-handles or names each (`drafts/cp-advice-1-census/`). The older conversion in the repository,
-of NIST's example file inside the IFA corpus, still carries the
-control-level description only and leaves 2 clause-level texts and 2
-parameter values behind, although its coverage report counts them as
-carried (backlog #64). Chapter 9.7; `drafts/CP-ADVICE-1.md` §12.)* **Assessment plans and
+handles or names each (`drafts/cp-advice-1-census/`). The conversion in the repository,
+of NIST's example file inside the IFA corpus, has followed the same
+mapping since 2026-11-13 (backlog #64, closed). Until then it carried
+the control-level description only, while its coverage report counted 2
+clause-level texts and 2 parameter values as carried. One difference
+remains: it writes `requirement-ref` into the NIST namespace by rule and
+carries the `source` of the control implementation beside it. Chapter 9.7; `drafts/CP-ADVICE-1.md` §12.)* **Assessment plans and
 results** become Assessment objects (methods via
 `assessment-criteria`) and Findings; **POA&M items** become
 `Finding.actions[]` with computable due dates; and the four
@@ -178,7 +262,8 @@ deletion.
 OSCAL type is date-time-with-timezone); the POA&M `system-id` →
 `component-refs`; the response's `type` prop → `treatment` (`mitigate` →
 `modify`, `accept` → `retain`, `transfer`/`share` → `share`, `avoid` →
-`avoid`); the assessment finding's `related-risks` edge → `treatments[]`;
+`avoid`; `none` and `contingency` have no code and give no `treatment`,
+C.10); the assessment finding's `related-risks` edge → `treatments[]`;
 `threat-ids` → `threat-refs` (none in the corpus). `remediations` stay
 `Finding.actions[]`; `related-observations` ride the Finding's evidence;
 the Finding gains `risk-refs`. `characterizations`, `mitigating-factors`,
@@ -209,6 +294,49 @@ option. A Statement of Applicability built on imported OSCAL risks reports
 its controls as uncovered until someone records the level natively. The
 converter reports that gap; it does not close it.
 
+**Who wrote a record, and when (2.0.0-rc.4 — backlog #69).** A converter
+pre-fills `provenance` from the source and lets the caller overwrite it
+(author decision 2026-11-13). OSCAL says who is responsible for a
+document, by role, and when the document was last changed. It does not
+say who wrote one implementation statement, finding or risk. So the most
+a converter can take is the author of the document, and
+`document_author()` in `oscal_conv_lib.py` is the one rule for it: the
+party named as `creator`, else as `prepared-by`, else the one party the
+responsible-parties name at all, else the one party the document
+defines, else the one organization among its parties, else nobody. "The
+one" is exact; two candidates are no answer. The date is the day of the
+document's `last-modified`, which is the latest day the record can have
+been written and not the day it was. `--author-ref` and `--date`
+overwrite either, field by field, on every record of the run; a record
+gets `provenance` only when both are known. The app's importer follows
+the same rule (`jascon-oscal.js`), with the two values in fields the
+user may change before the import.
+
+As run on the IFA corpus: of seven records that may name an author, one
+gets one from its source — the system's Implementation, from the agency
+its plan defines. The plan of action defines no party, and the leveraged
+pair defines parties without a name, so two Implementations, two
+Findings and two Risks say nobody, and the validator reports each
+(AUTHOR-2). The two authorizations carry the day the source states
+(`date-authorized` → `authorizations[].date`). The approved Deviation
+has no day of decision in the source, and none is written (AUTHOR-3).
+
+> **Don't** fill the gap with the person who ran the converter, or with
+> today. An author nobody stated is a false record of a decision, and it
+> silences the one report that would have asked the question. Overwrite
+> when you know who answers for the import, and say that you did.
+
+*(The same re-run moved the Attestation of the ATO out of the object
+list and beside the manifest, where D3.1 puts it: listed, it could only
+bind a list of its own subjects in place of the manifest's digest, and
+one of its three subject digests had matched no object since the text
+of the bundle was language-tagged at the write. The converter now
+checks, before it ends, that the Attestation binds the manifest as
+written and that every payload passes the schema the bundle pins for
+it. Since 2026-11-14 the validator reads the Attestation beside every
+bundle's manifest and holds it to the same two things (`attestation-binds`,
+Appendix B.1.7): the IFA bundle's reads FULL MATCH.)*
+
 ## 14.4 Playbook: CR26 and other bespoke JSON
 
 The American corpus converts almost by table lookup, because
@@ -218,18 +346,27 @@ elapsed and calendar (with the calendar reference becoming a
 publication duty); `varies_by_class` and the `pain_timeframes`
 matrices → one base Set plus four class Tailorings, by the matrix rule
 (*rows become parameters, columns become Tailorings*); `subsets` and
-per-class baseline lists → Sets; `updated[]` → L0 versions plus
-manifest release notes; the FRD glossary → `terminology@1`;
+per-class baseline lists → Sets; `updated[]`, the update history of an
+entry → the kernel's `history` of the rule or indicator, the entries put
+oldest first where the source lists the newest first, and for a term,
+which is an entry of the glossary and no object, the converter's own
+narrative facet (specification D27); the FRD glossary → `terminology@1`;
 notifications and required-information → `reporting-obligation@1`;
 artifacts, key tests, examples, and the KSI shape →
 `assessment-criteria@1`; `effective` windows → `effectivity@1`;
-schema and legal references → typed links; `web_name` and
-`do_not_link` → annotations; the 263 bare control links → Mapping
+schema and legal references → typed links; `web_name` → annotations;
+`do_not_link` → `terminology@1`; a family's or a KSI category's `status`
+→ the lifecycle of its Set and of what is made from it (`stable` →
+`active`, `placeholder` → `draft`), with the source's word kept beside
+it; the id of a KSI category → an alias of its Set; the 263 bare control
+links → Mapping
 objects imported at honest strength (`supports`, provenance named,
-per §8.6). Two entries are deliberate non-conversions: `flows[]` is
-**Level 3 by declaration** — process graphs are linked diagram
-resources, not requirement data — and anything else that resists is
-Level 2 with a ticket, never a silent prop.
+per §8.6). Nothing is left out. `flows[]`, a process flow the source
+writes out (an activity, its nodes, its steps), is carried on its
+family's Set in the compat facet; until 2026-11-14 it was a declared
+non-conversion, on the reading that a flow is a linked diagram, which
+this one is not. Anything else that resists is Level 2 with a ticket,
+never a silent prop.
 
 For bespoke formats that are *not* CR26, the meta-playbook is this
 book's own method: run a **field census first** — every key path,

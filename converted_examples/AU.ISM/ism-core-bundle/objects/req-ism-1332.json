@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1332",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1332",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "WPA3-Enterprise 192-bit mode is used to protect the confidentiality and integrity of all wireless network traffic."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-09"
   }
  ]
 }

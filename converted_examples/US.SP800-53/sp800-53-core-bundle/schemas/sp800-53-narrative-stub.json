@@ -9,6 +9,9 @@
   "properties": {
    "guidance": {
     "type": "array"
+   },
+   "overview": {
+    "type": "array"
    }
   },
   "additionalProperties": false

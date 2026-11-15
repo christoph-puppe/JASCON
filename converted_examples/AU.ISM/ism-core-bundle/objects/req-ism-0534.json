@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0534",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-0534",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Unused physical ports on network devices are disabled."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1103",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1103",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "In TOP SECRET areas, cable reticulation systems leading into cabinets not in server rooms or communications rooms are terminated at the boundary of the cabinet."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

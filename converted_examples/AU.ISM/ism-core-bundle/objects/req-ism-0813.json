@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0813",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0813",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Server rooms, communications rooms and security containers are not left in unsecured states."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

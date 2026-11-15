@@ -1,6 +1,6 @@
 {
  "id": "https://ifa.gov/goodread/facet/assessment-plan",
- "version": "1.0.0",
+ "version": "1.1.0",
  "modifies-semantics": [],
  "note": "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
  "schema": {
@@ -8,19 +8,204 @@
   "type": "object",
   "properties": {
    "activities": {
-    "type": "array"
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "title",
+      "description",
+      "steps",
+      "related-controls",
+      "source-doc"
+     ],
+     "properties": {
+      "uuid": {
+       "type": "string"
+      },
+      "title": {
+       "type": "string"
+      },
+      "description": {
+       "type": "object",
+       "minProperties": 1,
+       "additionalProperties": {
+        "type": "string"
+       }
+      },
+      "steps": {
+       "type": "array",
+       "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+         "title",
+         "description"
+        ],
+        "properties": {
+         "uuid": {
+          "type": "string"
+         },
+         "title": {
+          "type": "string"
+         },
+         "description": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+           "type": "string"
+          }
+         },
+         "remarks": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+           "type": "string"
+          }
+         }
+        }
+       }
+      },
+      "props": {
+       "type": "object",
+       "additionalProperties": {
+        "anyOf": [
+         {
+          "type": "string"
+         },
+         {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         }
+        ]
+       }
+      },
+      "related-controls": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "source-doc": {
+       "enum": [
+        "ap",
+        "ar"
+       ]
+      }
+     }
+    }
    },
    "tasks": {
-    "type": "array"
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "title",
+      "type",
+      "source-doc"
+     ],
+     "properties": {
+      "uuid": {
+       "type": "string"
+      },
+      "title": {
+       "type": "string"
+      },
+      "type": {
+       "type": "string"
+      },
+      "description": {
+       "type": "object",
+       "minProperties": 1,
+       "additionalProperties": {
+        "type": "string"
+       }
+      },
+      "activities": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "unresolved-activity-uuids": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "subjects": {
+       "type": "array",
+       "items": {
+        "type": "object"
+       }
+      },
+      "remarks": {
+       "type": "object",
+       "minProperties": 1,
+       "additionalProperties": {
+        "type": "string"
+       }
+      },
+      "source-doc": {
+       "enum": [
+        "ap",
+        "ar"
+       ]
+      }
+     }
+    }
    },
    "subjects": {
-    "type": "array"
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "description"
+     ],
+     "properties": {
+      "type": {
+       "type": "string"
+      },
+      "description": {
+       "type": "object",
+       "minProperties": 1,
+       "additionalProperties": {
+        "type": "string"
+       }
+      }
+     }
+    }
    },
    "reviewed-controls": {
-    "type": "array"
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
    },
    "responsible-roles": {
-    "type": "array"
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "role"
+     ],
+     "properties": {
+      "role": {
+       "type": "string"
+      },
+      "parties": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      }
+     }
+    }
    }
   },
   "additionalProperties": false

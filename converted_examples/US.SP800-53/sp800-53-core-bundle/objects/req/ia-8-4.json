@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-8.4_obj",
      "label": "IA-08(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "there is conformance with {param:ia-08.04_odp} for identity management."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ia-8.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-08(04)_ODP"
     }
    }
   }

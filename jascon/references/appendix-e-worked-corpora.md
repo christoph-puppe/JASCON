@@ -13,6 +13,15 @@ gate-item-1 bundles on disk (`bsi-core-bundle`, `ism-core-bundle`,
 
 ## E.1 KONF.14.1 — the protagonist, in its real skin
 
+> **Corrected 2026-11-14.** This example shows the conversion as it was
+> at gate 1: the two controls nested in KONF.14.1 written as two
+> statements of one Requirement. BSI nests controls to group them, and a
+> nested control is a full control. The converter now writes each as a
+> Requirement of its own and the nesting as a Set (Chapter 5). The object
+> below stays as the handbook's example of one Requirement with two
+> statements, two parties and two modalities, which the kernel allows;
+> it is not what a converter writes for a nested control.
+
 **Source (MS-TLS catalog):** one control, `label` prop `VER.2`,
 alt-identifier, taxonomy props, **two nested pseudo-controls**
 (KONF.14.1.1, .2), one param whose label fuses alternatives
@@ -48,8 +57,8 @@ compat waiting room holding `param-extras` — where the fused
 `"TLS 1.3 (oder TLS 1.2 mit PFS)"` sits pending the choice-analysis
 that Chapter 4 prescribes and the open D9 default-value decision.
 
-**What to notice.** The nested controls are now what they always
-were: identified clauses. The Chapter 6 identity-addressing demo
+**What to notice.** Two statements, each with an id of its own: the
+Chapter 6 identity-addressing demo
 works against this literal object (`statement-id: "KONF.14.1.1"`).
 And **statement KONF.14.1.2 is a finding**: its prose says MUSS, its
 grammar props omit `modal_verb` — one of exactly **9** such clauses
@@ -124,41 +133,50 @@ E.5), op addressing, `modality-monotonic` on all 111 ops.
     defines clear roles and responsibilities for cyber
     security ..."}}]}
 ```
-Member of **six Sets**: all five applicability baselines
+Member of **seven Sets**: its group, all five applicability baselines
 (NC · OS · P · S · TS) and the ISM-control category set — the 5,301
 membership props, dead and buried in `members[]`. **The pattern this
 example carries:** `unspecified` is not a defect here. ISM prose is
 declarative present tense; modal verbs are structurally absent
 (1,149/1,150); binding force *is* baseline membership. A Core-tier
-framework, converting with zero facets and zero apology — the
-architecture's promise that narrative frameworks are first-class,
-kept on a real corpus.
+framework: no facet is needed to say what the requirement asks. The
+control's own `revision` is the `version` of its Requirement, and the
+month of its last change is the one entry of its `history` (`"version":
+"1"`, `"history": [{"date": "2025-12"}]`; kernel members since the
+author's decision of 2026-11-14, specification D27; in the compat facet
+for some hours before that). The
+architecture's promise that narrative frameworks are first-class, kept
+on a real corpus.
 
 **Validator checks:** membership expansion through nested taxonomy
 Sets; `sequence` monotonicity; the annotation-free semantic digest
 equals the package-digest content (nothing to strip).
 
-## E.4 The KSI mapping — §8.6 at scale, one specimen of 373
+## E.4 The KSI mapping — §8.6 at scale, one specimen of 558
 
-**Converted** (`objects/map/ksi-ced-rat--ir-2.json`, verbatim):
+**Converted** (`objects/map/ksi-ced-rat--ir-2.json`, as written from
+publication 2026.11.02.01 of 2026-11-02; the ids of the corpus
+shortened):
 ```json
 {"id": ".../cr26/map/ksi-ced-rat--ir-2",
+ "version": "2026.11.02.01",
+ "lifecycle": "active",
  "source-ref": ".../cr26/ksi/KSI-CED-RAT",
  "target-ref": "https://ns.nist.gov/sp800-53/req/IR-2",
  "relationship": "supports",
  "direction": "source-to-target",
  "confidence": "draft",
- "rationale": "Imported from CR26 KSI control list; the source
-   carried no typed relationship (handbook 8.6).",
+ "rationale": {"en": "Imported from CR26 KSI control list; the source
+   carried no typed relationship (handbook 8.6)."},
  "provenance": {"author-ref": ".../cr26/party/fedramp",
-   "date": "2026-07-14"}}
+   "date": "2026-11-02"}}
 ```
 One row of an untyped link list became one honest object: `supports`
 not `equal` (flattery refused), `draft` not `authoritative`
 (diligence graded), provenance named (whose claim), rationale stating
 its own limitation. The SCF spreadsheet import — thousands of rows —
-is this exact pattern at scale and is gate item 3's work; the 373
-here are its proof of mechanism. The source KSI meanwhile is a
+is this exact pattern at scale and is gate item 3's work; the 558
+here (652 with the 94 links of rules) are its proof of mechanism. The source KSI meanwhile is a
 Requirement whose `uses-term` relations resolve into the glossary
 (FRD-INT, FRD-PER, FRD-VLR).
 

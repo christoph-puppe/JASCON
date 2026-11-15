@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1965",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1965",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Files imported or exported via gateways or CDSs undergo content checking."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

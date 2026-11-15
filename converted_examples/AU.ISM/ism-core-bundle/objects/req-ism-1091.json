@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1091",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1091",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Keying material is changed when compromised or suspected of being compromised."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

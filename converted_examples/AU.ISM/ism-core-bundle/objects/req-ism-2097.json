@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2097",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2097",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Mobile devices are configured with always on VPN functionality."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

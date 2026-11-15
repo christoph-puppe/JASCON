@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0027",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0027",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners obtain an authorisation to operate for each non-classified, OFFICIAL: Sensitive, PROTECTED and SECRET system from its authorising officer."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

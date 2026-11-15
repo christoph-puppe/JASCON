@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -19,6 +20,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,19 +38,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cp-8.1_obj",
      "label": "CP-08(01)",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-8.1"
+      }
+     ],
      "children": [
       {
        "id": "cp-8.1_obj.a",
        "label": "CP-08(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cp-8.1_obj.a-1",
          "label": "CP-08(01)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "primary telecommunications service agreements that contain priority-of-service provisions in accordance with availability requirements (including recovery time objectives) are developed;"
          }
@@ -56,6 +73,11 @@
         {
          "id": "cp-8.1_obj.a-2",
          "label": "CP-08(01)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "alternate telecommunications service agreements that contain priority-of-service provisions in accordance with availability requirements (including recovery time objectives) are developed;"
          }
@@ -65,6 +87,11 @@
       {
        "id": "cp-8.1_obj.b",
        "label": "CP-08(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "Telecommunications Service Priority is requested for all telecommunications services used for national security emergency preparedness if the primary and/or alternate telecommunications services are provided by a common carrier."
        }

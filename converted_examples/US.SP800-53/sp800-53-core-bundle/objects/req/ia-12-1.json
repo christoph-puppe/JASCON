@@ -26,11 +26,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-12.1_obj",
      "label": "IA-12(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the registration process to receive an account for logical access includes supervisor or sponsor authorization."
      }
@@ -99,15 +104,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/IA-4.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-4.2",
-    "mode": "merged-into",
-    "label": "IA-04(02)",
-    "title": "Supervisor Authorization"
-   }
-  ]
- }
+ ]
 }

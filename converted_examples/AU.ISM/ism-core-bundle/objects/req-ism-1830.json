@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1830",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1830",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Security-relevant events for Microsoft AD DS domain controllers, Microsoft AD CS CA servers, Microsoft AD FS servers and Microsoft Entra Connect servers are centrally logged."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0385",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0385",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Servers maintain effective functional separation from each other."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

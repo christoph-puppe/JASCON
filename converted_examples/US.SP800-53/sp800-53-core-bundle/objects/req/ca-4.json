@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/CA-4",
+ "version": "5.2.0",
+ "label": "CA-4",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Security Certification"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into CA-2."
+   }
+  }
+ ]
+}

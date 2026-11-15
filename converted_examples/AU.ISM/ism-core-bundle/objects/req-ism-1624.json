@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1624",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1624",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "PowerShell script block logs are protected by Protected Event Logging functionality."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-10"
   }
  ]
 }

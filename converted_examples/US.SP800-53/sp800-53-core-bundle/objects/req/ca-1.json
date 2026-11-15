@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,6 +37,7 @@
   },
   {
    "id": "smt.a.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -64,6 +66,7 @@
   },
   {
    "id": "smt.a.1.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -74,6 +77,7 @@
   },
   {
    "id": "smt.a.1.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -84,6 +88,7 @@
   },
   {
    "id": "smt.a.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -94,6 +99,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -111,6 +117,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -121,6 +128,7 @@
   },
   {
    "id": "smt.c.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -143,6 +151,7 @@
   },
   {
    "id": "smt.c.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -172,19 +181,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ca-1_obj",
      "label": "CA-01",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/CA-1"
+      }
+     ],
      "children": [
       {
        "id": "ca-1_obj.a",
        "label": "CA-01a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ca-1_obj.a-1",
          "label": "CA-01a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "an assessment, authorization, and monitoring policy is developed and documented;"
          }
@@ -192,6 +216,11 @@
         {
          "id": "ca-1_obj.a-2",
          "label": "CA-01a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the assessment, authorization, and monitoring policy is disseminated to {param:ca-01_odp.01};"
          }
@@ -199,6 +228,11 @@
         {
          "id": "ca-1_obj.a-3",
          "label": "CA-01a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "assessment, authorization, and monitoring procedures to facilitate the implementation of the assessment, authorization, and monitoring policy and associated assessment, authorization, and monitoring controls are developed and documented;"
          }
@@ -206,6 +240,11 @@
         {
          "id": "ca-1_obj.a-4",
          "label": "CA-01a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the assessment, authorization, and monitoring procedures are disseminated to {param:ca-01_odp.02};"
          }
@@ -213,14 +252,29 @@
         {
          "id": "ca-1_obj.a.1",
          "label": "CA-01a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "ca-1_obj.a.1.a",
            "label": "CA-01a.01(a)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.a"
+            }
+           ],
            "children": [
             {
              "id": "ca-1_obj.a.1.a-1",
              "label": "CA-01a.01(a)[01]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ca-01_odp.03} assessment, authorization, and monitoring policy addresses purpose;"
              }
@@ -228,6 +282,11 @@
             {
              "id": "ca-1_obj.a.1.a-2",
              "label": "CA-01a.01(a)[02]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ca-01_odp.03} assessment, authorization, and monitoring policy addresses scope;"
              }
@@ -235,6 +294,11 @@
             {
              "id": "ca-1_obj.a.1.a-3",
              "label": "CA-01a.01(a)[03]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ca-01_odp.03} assessment, authorization, and monitoring policy addresses roles;"
              }
@@ -242,6 +306,11 @@
             {
              "id": "ca-1_obj.a.1.a-4",
              "label": "CA-01a.01(a)[04]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ca-01_odp.03} assessment, authorization, and monitoring policy addresses responsibilities;"
              }
@@ -249,6 +318,11 @@
             {
              "id": "ca-1_obj.a.1.a-5",
              "label": "CA-01a.01(a)[05]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ca-01_odp.03} assessment, authorization, and monitoring policy addresses management commitment;"
              }
@@ -256,6 +330,11 @@
             {
              "id": "ca-1_obj.a.1.a-6",
              "label": "CA-01a.01(a)[06]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ca-01_odp.03} assessment, authorization, and monitoring policy addresses coordination among organizational entities;"
              }
@@ -263,6 +342,11 @@
             {
              "id": "ca-1_obj.a.1.a-7",
              "label": "CA-01a.01(a)[07]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:ca-01_odp.03} assessment, authorization, and monitoring policy addresses compliance;"
              }
@@ -272,6 +356,11 @@
           {
            "id": "ca-1_obj.a.1.b",
            "label": "CA-01a.01(b)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.b"
+            }
+           ],
            "prose": {
             "en": "the {param:ca-01_odp.03} assessment, authorization, and monitoring policy is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines;"
            }
@@ -283,6 +372,11 @@
       {
        "id": "ca-1_obj.b",
        "label": "CA-01b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the {param:ca-01_odp.04} is designated to manage the development, documentation, and dissemination of the assessment, authorization, and monitoring policy and procedures;"
        }
@@ -290,14 +384,29 @@
       {
        "id": "ca-1_obj.c",
        "label": "CA-01c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "ca-1_obj.c.1",
          "label": "CA-01c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "children": [
           {
            "id": "ca-1_obj.c.1-1",
            "label": "CA-01c.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current assessment, authorization, and monitoring policy is reviewed and updated {param:ca-01_odp.05}; "
            }
@@ -305,6 +414,11 @@
           {
            "id": "ca-1_obj.c.1-2",
            "label": "CA-01c.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current assessment, authorization, and monitoring policy is reviewed and updated following {param:ca-01_odp.06};"
            }
@@ -314,10 +428,20 @@
         {
          "id": "ca-1_obj.c.2",
          "label": "CA-01c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "children": [
           {
            "id": "ca-1_obj.c.2-1",
            "label": "CA-01c.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current assessment, authorization, and monitoring procedures are reviewed and updated {param:ca-01_odp.07}; "
            }
@@ -325,6 +449,11 @@
           {
            "id": "ca-1_obj.c.2-2",
            "label": "CA-01c.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current assessment, authorization, and monitoring procedures are reviewed and updated following {param:ca-01_odp.08}."
            }
@@ -382,19 +511,22 @@
       {
        "en": "personnel or roles to whom the assessment, authorization, and monitoring policy is to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CA-01_ODP[01]"
     },
     "ca-01_odp.02": {
      "guidelines": [
       {
        "en": "personnel or roles to whom the assessment, authorization, and monitoring procedures are to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CA-01_ODP[02]"
     },
     "ca-01_odp.03": {
      "alt-identifiers": [
       "ca-1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CA-01_ODP[03]"
     },
     "ca-01_odp.04": {
      "guidelines": [
@@ -404,7 +536,8 @@
      ],
      "alt-identifiers": [
       "ca-1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CA-01_ODP[04]"
     },
     "ca-01_odp.05": {
      "guidelines": [
@@ -414,7 +547,8 @@
      ],
      "alt-identifiers": [
       "ca-1_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "CA-01_ODP[05]"
     },
     "ca-01_odp.06": {
      "guidelines": [
@@ -424,7 +558,8 @@
      ],
      "alt-identifiers": [
       "ca-1_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "CA-01_ODP[06]"
     },
     "ca-01_odp.07": {
      "guidelines": [
@@ -434,7 +569,8 @@
      ],
      "alt-identifiers": [
       "ca-1_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "CA-01_ODP[07]"
     },
     "ca-01_odp.08": {
      "guidelines": [
@@ -444,7 +580,8 @@
      ],
      "alt-identifiers": [
       "ca-1_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "CA-01_ODP[08]"
     }
    }
   },

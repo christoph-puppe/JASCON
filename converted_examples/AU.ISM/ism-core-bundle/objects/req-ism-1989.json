@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1989",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1989",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Event logs are retained as per minimum retention requirements for various classes of records as set out by the National Archives of Australia’s Administrative Functions Disposal Authority Express (AFDA Express) Version 2 publication."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

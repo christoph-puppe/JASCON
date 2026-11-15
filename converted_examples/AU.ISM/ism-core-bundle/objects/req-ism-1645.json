@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1645",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1645",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Floor plan diagrams are developed, implemented, maintained and regularly verified."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

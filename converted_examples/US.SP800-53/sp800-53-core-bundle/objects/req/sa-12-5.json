@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-12.5",
+ "version": "5.2.0",
+ "label": "SA-12(5)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Limitation of Harm"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to SR-3(2)."
+   }
+  }
+ ]
+}

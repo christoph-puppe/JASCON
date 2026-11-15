@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2011",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2011",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When phishing-resistant multi-factor authentication is used by user accounts, other non-phishing-resistant multi-factor authentication options are disabled for such user accounts."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

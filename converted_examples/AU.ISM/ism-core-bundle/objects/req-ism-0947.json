@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0947",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0947",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When transferring data manually between two systems belonging to different security domains, rewritable media is sanitised after each data transfer."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-04"
   }
  ]
 }

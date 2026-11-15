@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-2.6_obj",
      "label": "AC-02(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-02.06_odp} are implemented."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ac-2.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-02(06)_ODP"
     }
    }
   }

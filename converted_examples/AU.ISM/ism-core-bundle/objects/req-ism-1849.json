@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1849",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1849",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The OWASP Top 10 Proactive Controls are used in the development of web applications."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

@@ -8,6 +8,14 @@
  "label": "Incident Recovery Communication (RC.CO)",
  "members": [
   {
+   "ref": "https://ns.nist.gov/csf/req/RC.CO-01",
+   "sequence": 10
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/RC.CO-02",
+   "sequence": 20
+  },
+  {
    "ref": "https://ns.nist.gov/csf/req/RC.CO-03",
    "sequence": 30
   },

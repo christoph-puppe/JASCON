@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0817",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0817",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel are advised of what suspicious contact via online services is and how to report it."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-01"
   }
  ]
 }

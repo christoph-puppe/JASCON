@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1550",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1550",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "IT equipment disposal processes, and supporting IT equipment disposal procedures, are developed, implemented and maintained."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

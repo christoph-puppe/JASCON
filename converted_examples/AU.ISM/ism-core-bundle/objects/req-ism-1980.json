@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1980",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1980",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Credential hint functionality is not used for systems."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

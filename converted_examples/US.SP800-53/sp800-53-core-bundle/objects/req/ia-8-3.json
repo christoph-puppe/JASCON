@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/IA-8.3",
+ "version": "5.2.0",
+ "label": "IA-8(3)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Use of FICAM-approved Products"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into IA-8(2)."
+   }
+  }
+ ]
+}

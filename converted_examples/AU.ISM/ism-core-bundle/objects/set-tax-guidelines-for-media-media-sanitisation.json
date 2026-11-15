@@ -8,47 +8,47 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-media-saniti-72291e4",
-   "sequence": 6680
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-volatile-med-389ee00",
-   "sequence": 6710
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-treatment-of-73755f3",
-   "sequence": 6730
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-non-volatile-9d851d5",
-   "sequence": 6770
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-treatment-of-d003625",
-   "sequence": 6790
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-non-volatile-79c10ed",
-   "sequence": 6810
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-non-volatile-7b4c9ac",
-   "sequence": 6830
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-treatment-of-647293e",
    "sequence": 6850
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-volatile-med-389ee00",
+   "sequence": 6880
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-treatment-of-73755f3",
+   "sequence": 6900
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-non-volatile-9d851d5",
+   "sequence": 6940
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-treatment-of-d003625",
+   "sequence": 6960
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-non-volatile-79c10ed",
+   "sequence": 6980
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-non-volatile-7b4c9ac",
+   "sequence": 7000
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-treatment-of-647293e",
+   "sequence": 7020
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-non-volatile-4290e79",
-   "sequence": 6870
+   "sequence": 7040
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-treatment-of-1812538",
-   "sequence": 6890
+   "sequence": 7060
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-sanitisation-media-that-c-9204ee2",
-   "sequence": 6910
+   "sequence": 7080
   }
  ],
  "facets": {

@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "si-16_obj",
      "label": "SI-16",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-16_odp} are implemented to protect the system memory from unauthorized code execution."
      }
@@ -116,7 +121,8 @@
      ],
      "alt-identifiers": [
       "si-16_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-16_ODP"
     }
    }
   },

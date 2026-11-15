@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1400",
- "version": "2026.06.18",
+ "version": "11",
  "label": "ISM-1400",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel using privately owned mobile devices or desktop computers to access OFFICIAL: Sensitive or PROTECTED systems or data have enforced separation of classified data and personal data."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

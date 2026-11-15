@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1065",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1065",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The host-protected area and device configuration overlay table are reset prior to the sanitisation of non-volatile magnetic hard drives."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

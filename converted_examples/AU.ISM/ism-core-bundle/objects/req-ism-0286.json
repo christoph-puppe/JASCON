@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0286",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0286",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When procuring high assurance information technology (IT) equipment, ASD is contacted for any equipment-specific delivery procedures."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

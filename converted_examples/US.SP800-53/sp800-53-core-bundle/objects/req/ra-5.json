@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,6 +37,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -46,6 +48,7 @@
   },
   {
    "id": "smt.b.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -56,6 +59,7 @@
   },
   {
    "id": "smt.b.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -66,6 +70,7 @@
   },
   {
    "id": "smt.b.3",
+   "label": "3.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -76,6 +81,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -86,6 +92,7 @@
   },
   {
    "id": "smt.d",
+   "label": "d.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -103,6 +110,7 @@
   },
   {
    "id": "smt.e",
+   "label": "e.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -120,6 +128,7 @@
   },
   {
    "id": "smt.f",
+   "label": "f.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -137,19 +146,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ra-5_obj",
      "label": "RA-05",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/RA-5"
+      }
+     ],
      "children": [
       {
        "id": "ra-5_obj.a",
        "label": "RA-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ra-5_obj.a-1",
          "label": "RA-05a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "systems and hosted applications are monitored for vulnerabilities {param:ra-05_odp.01} and when new vulnerabilities potentially affecting the system are identified and reported;"
          }
@@ -157,6 +181,11 @@
         {
          "id": "ra-5_obj.a-2",
          "label": "RA-05a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "systems and hosted applications are scanned for vulnerabilities {param:ra-05_odp.02} and when new vulnerabilities potentially affecting the system are identified and reported;"
          }
@@ -166,6 +195,11 @@
       {
        "id": "ra-5_obj.b",
        "label": "RA-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "vulnerability monitoring tools and techniques are employed to facilitate interoperability among tools;"
        },
@@ -173,6 +207,11 @@
         {
          "id": "ra-5_obj.b.1",
          "label": "RA-05b.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.1"
+          }
+         ],
          "prose": {
           "en": "vulnerability monitoring tools and techniques are employed to automate parts of the vulnerability management process by using standards for enumerating platforms, software flaws, and improper configurations;"
          }
@@ -180,6 +219,11 @@
         {
          "id": "ra-5_obj.b.2",
          "label": "RA-05b.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.2"
+          }
+         ],
          "prose": {
           "en": "vulnerability monitoring tools and techniques are employed to facilitate interoperability among tools and to automate parts of the vulnerability management process by using standards for formatting checklists and test procedures;"
          }
@@ -187,6 +231,11 @@
         {
          "id": "ra-5_obj.b.3",
          "label": "RA-05b.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.3"
+          }
+         ],
          "prose": {
           "en": "vulnerability monitoring tools and techniques are employed to facilitate interoperability among tools and to automate parts of the vulnerability management process by using standards for measuring vulnerability impact;"
          }
@@ -196,6 +245,11 @@
       {
        "id": "ra-5_obj.c",
        "label": "RA-05c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "vulnerability scan reports and results from vulnerability monitoring are analyzed;"
        }
@@ -203,6 +257,11 @@
       {
        "id": "ra-5_obj.d",
        "label": "RA-05d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "legitimate vulnerabilities are remediated {param:ra-05_odp.03} in accordance with an organizational assessment of risk;"
        }
@@ -210,6 +269,11 @@
       {
        "id": "ra-5_obj.e",
        "label": "RA-05e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "information obtained from the vulnerability monitoring process and control assessments is shared with {param:ra-05_odp.04} to help eliminate similar vulnerabilities in other systems;"
        }
@@ -217,6 +281,11 @@
       {
        "id": "ra-5_obj.f",
        "label": "RA-05f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "vulnerability monitoring tools that include the capability to readily update the vulnerabilities to be scanned are employed."
        }
@@ -306,14 +375,16 @@
       {
        "en": "frequency for monitoring systems and hosted applications for vulnerabilities is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "RA-05_ODP[01]"
     },
     "ra-05_odp.02": {
      "guidelines": [
       {
        "en": "frequency for scanning systems and hosted applications for vulnerabilities is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "RA-05_ODP[02]"
     },
     "ra-05_odp.03": {
      "guidelines": [
@@ -323,7 +394,8 @@
      ],
      "alt-identifiers": [
       "ra-5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "RA-05_ODP[03]"
     },
     "ra-05_odp.04": {
      "guidelines": [
@@ -333,7 +405,8 @@
      ],
      "alt-identifiers": [
       "ra-5_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "RA-05_ODP[04]"
     }
    }
   },
@@ -452,15 +525,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/RA-5.1",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/RA-5.1",
-    "mode": "merged-into",
-    "label": "RA-05(01)",
-    "title": "Update Tool Capability"
-   }
-  ]
- }
+ ]
 }

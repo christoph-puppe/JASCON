@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1999",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1999",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The board of directors or executive committee ensures the cyber security strategy for their organisation is aligned with the overarching strategic direction and business strategy for their organisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

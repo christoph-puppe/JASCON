@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sc-7.7_obj",
      "label": "SC-07(07)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "split tunneling is prevented for remote devices connecting to organizational systems unless the split tunnel is securely provisioned using {param:sc-07.07_odp}."
      }
@@ -119,7 +124,8 @@
      ],
      "alt-identifiers": [
       "sc-7.7_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-07(07)_ODP"
     }
    }
   }

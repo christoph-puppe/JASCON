@@ -1,0 +1,2955 @@
+/* Holds one-page-apps/jascon-reader.html to the kernel pin of the reference
+   and to what CP-AUTHOR-1 (specification D26) asks of a tool that shows and
+   writes who decided and when (backlog #69).
+
+   In node, on the part of the page between its READER-PURE markers, read out
+   of the HTML file as it is (the page has no build step and no second copy):
+   1. The 19 pin vectors of conformance/kernel-vectors.json: the page's pin
+      test gives the reference's number of failures for each, with the
+      fragments the vector names in the message.
+   2. One case per reason kernel_needed (validate_core.py) knows, and the
+      cases that must not ask for the pin. The number of reasons is counted in
+      the reference's source: a reason added there turns this test red until
+      the page has it and a case holds it. Where python3 is present, the
+      reference's own function is run on the same objects and on the object
+      sets of the kernel and author vectors, and must give the page's answer.
+   3. Who decided an entry: its own provenance, else its record's, else nobody.
+      What a save writes: an unchanged record keeps the author it names, and
+      an unchanged entry of a Tailoring does not change hands with it.
+
+   In Chromium, driving the page:
+   4. jascon/examples, whose objects name their authors: every field is shown
+      where it is, and an entry without its own is marked as inherited.
+   5. The IFA bundle, whose objects name an author in some places and none
+      in others: each place shows what its file says, and the places that say
+      "not stated" are those the reference reports (AUTHOR-2 to AUTHOR-4).
+   6. The workbenches: without an author nothing is refused, no provenance is
+      written and the export pins no kernel; with one, a Tailoring, an
+      Implementation and a Finding carry it and the export pins 2.0.0. A
+      second author does not take over what the first decided. The exports
+      pass validate_core.py, those with authors under --require-authors.
+   7. A bundle whose content needs the pin and has none is shown and reported
+      (KERNEL-1); at a pin the page does not read, nothing is shown (KERNEL-2).
+      Both also for a bundle loaded from a URL with a deep link.
+   8. Pasted objects: Deviations in every state with a review date of every
+      shape, a Risk whose ratings differ in who decided them, authorizations
+      with and without a day. Each is written out as recorded.
+
+   9. A party the kernel requires (backlog #70, "refuse if no party is
+      named"): whom a statement binds, the author of a Mapping, the performer
+      of an Assessment, the approver of a Deviation. For each, an empty field
+      writes nothing and says which field the kernel requires, and a named
+      party is written as named. An approver field starts empty for every
+      Deviation; a Mapping does not take another form's performer.
+  10. The performer starts from the author and from no word, stays once it
+      is typed, and is empty once somebody emptied it; the word an earlier
+      version stored as performer is no party.
+   In node as well: a name becomes a party, an empty field names nobody, and
+   the page mints a party in one place only.
+
+  11. What an Attestation binds of a bundle (backlog #46; Appendix B.1.7). In
+      node: the 19 binds vectors of conformance/attestation-vectors.json give
+      the reference's verdict, manifest, subjects and failure; the line the
+      page prints is the one binds_report prints, for every vector; an
+      envelope is read as the keyless part of verify_envelope reads it, and
+      is never called valid. In Chromium: jascon/examples, the IFA bundle and
+      the worked advice pack, loaded as they lie, show for every Attestation
+      the line the reference prints, and so do changed copies of them; the
+      Attestations beside a manifest are found from a folder, from files and
+      from a URL (a listing, names in the link, or neither, which the page
+      says); they are counted apart from the objects the manifest lists; an
+      export never lists one.
+  12. MANIFEST-1 (backlog #75; specification D3.11): no content manifest
+      lists an Attestation. In node: the eight listed vectors, with the
+      reference's sentence, and the reference's own function on the same
+      objects. In Chromium: copies of the IFA bundle, the worked pack and the
+      example folder whose manifests list an Attestation fail on the page
+      with the reference's sentence, and the Attestation is still held to
+      what it binds; what the page says can be done is done on the copy and
+      holds in the reference.
+
+  13. An Assessment's method is a facet payload (backlog #55; specification
+      D10 as amended). In node: of the thirteen method vectors the page
+      decides the ten that turn on where a key is registered, in the
+      reference's words, and names the three it cannot decide (a payload
+      against its schema: the page carries no schema validator); the
+      reference's own facet_errors on the same objects. In Chromium: what
+      the Assess workbench writes and its export in the reference; bundles
+      and a stored workspace that hold the method an earlier version wrote,
+      shown as stored and not rewritten, and what the page says can be done.
+
+   Needs Playwright with Chromium for 4 to 13 and python3 with jsonschema for
+   the runs of the reference; where one is missing, that part is skipped and
+   says so. Needs no network: the one thing the page asks the web for, its
+   font stylesheet, is answered here with an empty one. */
+import test from "node:test";
+import assert from "node:assert/strict";
+import crypto from "node:crypto";
+import fs from "node:fs";
+import http from "node:http";
+import os from "node:os";
+import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { createRequire } from "node:module";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const READER = path.join(ROOT, "one-page-apps/jascon-reader.html");
+const VALIDATE = path.join(ROOT, "jascon/scripts/validate_core.py");
+const require = createRequire(import.meta.url);
+let chromium = null;
+try { ({ chromium } = require("playwright")); } catch (e) { /* skipped below */ }
+const SKIP = !chromium && "Playwright with Chromium is not installed";
+const PYTHON = spawnSync("python3", ["-c", "import json"]).status === 0;
+const REFERENCE = PYTHON && spawnSync("python3", ["-c", "import jsonschema"]).status === 0;
+const json = rel => JSON.parse(fs.readFileSync(path.join(ROOT, rel), "utf8"));
+
+/* ---------- the pure part of the page, as the page carries it ---------- */
+const HTML = fs.readFileSync(READER, "utf8");
+const P = (() => {
+  const a = HTML.indexOf("/* ==READER-PURE-START== */"), b = HTML.indexOf("/* ==READER-PURE-END== */");
+  assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
+  return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty,
+    canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState, listedAttestationErrors,
+    STDLIB_FACETS, facetHome, methodKeyErrors, facetKeyErrors, facetAndMethodKeyErrors, closureErrors, withdrawnReferences, withdrawnReferenceErrors, operationTargets, operationTargetErrors, manualMethod, isEarlierWorkbenchMethod,
+    attestationMissing, ATTESTATION_REQUIRED, packErrors, STDLIB_DECL, uriOrigin };`)();
+})();
+
+/* ---------- 1. the pin vectors ---------- */
+test("the pin: each of the 25 kernel vectors gets the reference's number of failures from the page's own test, but for two that fail on a shape", () => {
+  const v = json("jascon/conformance/kernel-vectors.json").vectors;
+  assert.equal(v.length, 25);   // 6 more on 2026-11-14 (history, a statement's label, the sources of a manifest); a vector added to the family is looked at here before this number moves (18 until #68 added the pin that ends in a line break)
+  /* two vectors fail on the shape of `provenance.sources`, not on the pin; the page runs no kernel schema and says nothing about them */
+  const SHAPE_ONLY = ["a-source-with-a-date-that-is-no-date", "sources-that-are-no-list-and-a-source-that-says-nothing"];
+  assert.deepEqual(v.filter(c => SHAPE_ONLY.includes(c.name)).map(c => c["expected-frags"]), [["manifest schema violation"], ["manifest schema violation"]]);
+  for (const c of v) {
+    for (const o of c.objects) assert.ok(![null, "manifest"].includes(P.inferType(o)), `${c.name}: ${o.id} is typed`);
+    const errs = P.kernelPinErrors(c.manifest, c.objects);
+    if (SHAPE_ONLY.includes(c.name)) { assert.deepEqual(errs, [], c.name); continue; }
+    assert.equal(errs.length, c["expected-fails"] || 0, `${c.name}: ${errs.join(" | ")}`);
+    for (const frag of c["expected-frags"] || []) assert.ok(errs.some(e => e.includes(frag)), `${c.name}: the message names '${frag}': ${errs.join(" | ")}`);
+  }
+});
+
+/* ---------- 2. one case per reason ---------- */
+const EX = "https://org.example";
+const REQ = { id: `${EX}/req/1`, version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "should", "obligated-parties": [`${EX}/party/o`], prose: { en: "X." } }] };
+const SET = { id: `${EX}/set/base`, version: "1", lifecycle: "active", members: [{ ref: REQ.id, sequence: 10 }] };
+const TAILORING = { id: `${EX}/tailoring/t`, version: "1", lifecycle: "active", selects: [{ "set-ref": SET.id }] };
+const MAPPING = { id: `${EX}/map/m`, version: "1", lifecycle: "active", "source-ref": REQ.id, "target-ref": "https://other.example/req/9", relationship: "supports",
+  direction: "source-to-target", confidence: "draft", provenance: { "author-ref": `${EX}/party/ciso`, date: "2026-11-05" } };
+const COMPONENT = { id: `${EX}/component/c`, version: "1", lifecycle: "active", kind: "system" };
+const IMPLEMENTATION = { id: `${EX}/impl/i`, version: "1", lifecycle: "active", "component-ref": COMPONENT.id, "requirement-ref": REQ.id, responsibility: "customer",
+  "satisfied-by": [{ "capability-ref": "cap" }], status: "implemented" };
+const ASSESSMENT = { id: `${EX}/assessment/a`, version: "1", lifecycle: "active", "subject-refs": [REQ.id], method: { "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": { method: "manual" } }, "performer-ref": `${EX}/party/assessor`,
+  time: "2026-11-05", result: "satisfied" };
+const FINDING = { id: `${EX}/finding/f`, version: "1", lifecycle: "active", "assessment-ref": ASSESSMENT.id, "requirement-ref": REQ.id, state: "open" };
+const ATTESTATION = json("jascon/examples/attestation-acme-2026.json");
+const RISK = { id: `${EX}/risk/R-1`, version: "1", lifecycle: "active", scenario: { en: "Scenario." }, "owner-ref": `${EX}/party/ciso`, state: "identified" };
+const CHECK = json("jascon/examples/check-acme-ssh-ciphers.json");
+const ROW = json("jascon/examples/assessment-acme-bastion-2026-11-10.json")["check-results"][0];
+const WHO = { "author-ref": `${EX}/party/ciso`, date: "2026-11-05" };
+const DEVIATION = { type: "operational-requirement", state: "approved", rationale: { en: "The legacy host cannot." }, "approver-ref": `${EX}/party/ciso`, opened: "2026-11-01" };
+const REVIEW = { type: "date", value: "2027-05-12" };
+const OP = { op: "set-modality", "requirement-ref": REQ.id, "statement-id": "s1", modality: "must" };
+
+/* [the reason, by its place in kernel_needed; what the case is; the objects; the manifest]. Reason 0: 1.0.0 content. */
+const CASES = [
+  [1, "a manifest that pins a scale definition", [REQ], { "manifest-version": "1", scales: [{ id: `${EX}/scale/s`, "exact-version": "1", digest: "sha256:" + "0".repeat(64), path: "scale.json" }] }],
+  [2, "a manifest with a pack header", [COMPONENT], { "manifest-version": "1", pack: { id: `${EX}/pack/p`, version: "1", publisher: { ref: `${EX}/party/vendor` } } }],
+  [3, "an object with a history (the record of its changes; kernel member since 2026-11-14)", [{ ...REQ, history: [{ date: "2025-06" }] }]],
+  [3, "a Set with a history", [REQ, { ...SET, history: [{ date: "2026-03-12" }] }]],
+  [4, "a Requirement that labels a statement", [{ ...REQ, statements: [{ ...REQ.statements[0], label: "a." }] }]],
+  [5, "a Risk", [RISK]],
+  [6, "a Finding with risk-refs", [{ ...FINDING, "risk-refs": [RISK.id] }]],
+  [7, "a Check", [CHECK]],
+  [8, "an Assessment with check-results", [{ ...ASSESSMENT, "check-results": [ROW] }]],
+  [8, "an Assessment with a tailoring-ref", [{ ...ASSESSMENT, "tailoring-ref": TAILORING.id }]],
+  [9, "a Finding with a check-ref", [{ ...FINDING, "check-ref": CHECK.id }]],
+  [10, "a Component whose capability names clauses (statement-ids)", [{ ...COMPONENT, capabilities: [{ id: "cap", "requirement-ref": REQ.id, "statement-ids": ["s1"] }] }]],
+  [11, "a Component with a product-version", [{ ...COMPONENT, "product-version": "7.2" }]],
+  [11, "a Component with an empty product-version: the field is there", [{ ...COMPONENT, "product-version": "" }]],
+  [12, "a Tailoring with provenance", [{ ...TAILORING, provenance: WHO }]],
+  [12, "an Implementation with provenance", [{ ...IMPLEMENTATION, provenance: WHO }]],
+  [12, "a Finding with provenance", [{ ...FINDING, provenance: WHO }]],
+  [13, "a select with provenance", [{ ...TAILORING, selects: [{ "set-ref": SET.id, provenance: WHO }] }]],
+  [13, "an exclude with provenance", [{ ...TAILORING, excludes: [{ ref: REQ.id, provenance: WHO }] }]],
+  [13, "an operation with provenance", [{ ...TAILORING, operations: [{ ...OP, provenance: WHO }] }]],
+  [14, "a Deviation with `decided` in the list of a Requirement", [{ ...REQ, deviations: [{ ...DEVIATION, decided: "2026-11-03" }] }]],
+  [14, "a Deviation with `review-due` in the list of a Finding", [{ ...FINDING, deviations: [{ ...DEVIATION, "review-due": REVIEW }] }]],
+  [14, "a Deviation with `decided` inline on an operation", [{ ...TAILORING, operations: [{ ...OP, modality: "may", deviation: { ...DEVIATION, decided: "2026-11-03" } }] }]],
+  [14, "a Deviation with `review-due` inline on an operation", [{ ...TAILORING, operations: [{ ...OP, modality: "may", deviation: { ...DEVIATION, "review-due": REVIEW } }] }]],
+  [15, "a Component with a dated authorization", [{ ...COMPONENT, authorizations: [{ id: "ato-1", "authority-ref": `${EX}/party/ao`, date: "2026-06-30" }] }]],
+  [0, "one of each type the 1.0.0 kernel has, a Mapping with its provenance among them",
+    [REQ, SET, TAILORING, MAPPING, { ...COMPONENT, authorizations: [{ id: "ato-1", "authority-ref": `${EX}/party/ao` }], capabilities: [{ id: "cap", "requirement-ref": REQ.id }] },
+      IMPLEMENTATION, ASSESSMENT, FINDING, ATTESTATION]],
+  [0, "Deviations that say neither `decided` nor `review-due`, in a list and inline",
+    [{ ...FINDING, deviations: [DEVIATION] }, { ...TAILORING, operations: [{ ...OP, modality: "may", deviation: DEVIATION }], deviations: [DEVIATION] }]],
+  [0, "lists that are there and empty: risk-refs, check-results, statement-ids", [{ ...FINDING, "risk-refs": [] }, { ...ASSESSMENT, "check-results": [] },
+    { ...COMPONENT, capabilities: [{ id: "cap", "statement-ids": [] }] }]],
+  [0, "no object at all, under a manifest that pins nothing", [], { "manifest-version": "1", objects: [], scales: [] }],
+];
+
+/* The reference's function, run by Python on objects typed by the page. Its
+   source is taken out of validate_core.py by name, because the script as a
+   whole runs the conformance corpus when it is loaded. -> [version] */
+function referenceNeeds(cases) {
+  const py = `
+import ast, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+ns = {}
+for node in ast.parse(src).body:
+    if isinstance(node, ast.FunctionDef) and node.name in ("deviations_of", "kernel_needed"):
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+out = [ns["kernel_needed"]({i: (t, o) for i, t, o in c["objs"]}, c.get("manifest"))[0] for c in json.load(sys.stdin)]
+print(json.dumps(out))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+const typed = objs => objs.map(o => [o.id, P.inferType(o), o]);
+
+test("the pin: one case for every reason kernel_needed knows, and none where the content is 1.0.0", () => {
+  /* how many reasons the reference has: the returns of "2.0.0" in kernel_needed */
+  const src = fs.readFileSync(VALIDATE, "utf8"), at = src.indexOf("\ndef kernel_needed(");
+  assert.ok(at >= 0, "validate_core.py has kernel_needed");
+  const body = src.slice(at + 1, src.indexOf("\ndef ", at + 1));
+  const reasons = (body.match(/return "2\.0\.0"/g) || []).length;
+  assert.deepEqual([...new Set(CASES.map(c => c[0]).filter(Boolean))].sort((a, b) => a - b), Array.from({ length: reasons }, (_, i) => i + 1),
+    `kernel_needed returns "2.0.0" in ${reasons} places; there is a case here for each, numbered in its order`);
+  for (const [reason, what, objs, manifest] of CASES) {
+    for (const o of objs) assert.ok(![null, "manifest"].includes(P.inferType(o)), `${what}: ${o.id} is typed`);
+    const [need, why] = P.kernelNeeded(objs, manifest || null);
+    assert.equal(need, reason ? "2.0.0" : "1.0.0", `${what}${why ? ": " + why : ""}`);
+    assert.equal(why === null, !reason, `${what}: a reason is named exactly when the pin is needed`);
+    /* the pin rule on the same content: unpinned it fails once (KERNEL-1) exactly when 2.0.0 is needed; pinned it passes */
+    const m = manifest || { "manifest-version": "1", objects: [] };
+    assert.equal(P.kernelPinErrors(m, objs).length, reason ? 1 : 0, what);
+    assert.deepEqual(P.kernelPinErrors({ ...m, "kernel-version": "2.0.0" }, objs), [], what + ", pinned");
+  }
+});
+
+test("the pin: the reference's own kernel_needed gives the page's answer, on these cases and on the object sets of the kernel and author vectors",
+  { skip: !PYTHON && "python3 is not installed" }, () => {
+    const k = json("jascon/conformance/kernel-vectors.json"), a = json("jascon/conformance/author-vectors.json");
+    const sets = [...CASES.map(([, what, objs, manifest]) => ({ what, objs, manifest })),
+      ...k.vectors.map(c => ({ what: c.name, objs: c.objects, manifest: c.manifest })),
+      ...k["shape-vectors"].filter(c => c.expected === "valid").map(c => ({ what: c.name, objs: [c.document] })),
+      ...[...a["author-vectors"], ...a["review-vectors"]].map(c => ({ what: c.name, objs: c.objects }))];
+    for (const s of sets) for (const o of s.objs) assert.ok(![null, "manifest"].includes(P.inferType(o)), `${s.what}: ${o.id} is typed`);
+    const ref = referenceNeeds(sets.map(s => ({ objs: typed(s.objs), manifest: s.manifest || null })));
+    assert.equal(ref.length, sets.length);
+    sets.forEach((s, i) => assert.equal(P.kernelNeeded(s.objs, s.manifest || null)[0], ref[i], s.what));
+    assert.ok(ref.includes("1.0.0") && ref.includes("2.0.0"), "both answers occur");
+  });
+
+/* ---------- 3. who decided ---------- */
+test("who decided an entry: its own provenance, else its record's, else nobody", () => {
+  const own = { "author-ref": `${EX}/party/ops`, date: "2026-11-12" };
+  assert.deepEqual(P.whoDecided({ provenance: own }, { provenance: WHO }), { ref: own["author-ref"], date: "2026-11-12", from: "own" });
+  assert.deepEqual(P.whoDecided({}, { provenance: WHO }), { ref: WHO["author-ref"], date: "2026-11-05", from: "record" });
+  assert.equal(P.whoDecided({}, {}), null);
+  assert.equal(P.whoDecided({ "owner-ref": `${EX}/party/ciso`, "approver-ref": `${EX}/party/ciso` }, null), null, "an owner or an approver is not an author");
+  assert.deepEqual(P.whoDecided({ provenance: WHO }), { ref: WHO["author-ref"], date: "2026-11-05", from: "own" }, "a record alone");
+});
+
+test("what a save writes: an unchanged record keeps its author and day; an unchanged entry of a Tailoring does not change hands; nobody is invented", () => {
+  const A = { "author-ref": `${EX}/party/ciso`, date: "2026-11-05" }, B = { "author-ref": `${EX}/party/ops`, date: "2026-11-12" };
+  /* a record: new, unchanged, changed, and saved by nobody */
+  assert.deepEqual(P.authorRecord(IMPLEMENTATION, A, undefined).provenance, A, "a new record names who wrote it");
+  assert.deepEqual(P.authorRecord(IMPLEMENTATION, B, { ...IMPLEMENTATION, provenance: A }).provenance, A, "written again unchanged, it is the version it was");
+  assert.deepEqual(P.authorRecord({ ...IMPLEMENTATION, status: "partial" }, B, { ...IMPLEMENTATION, provenance: A }).provenance, B, "changed, it is the version of who changed it");
+  assert.equal("provenance" in P.authorRecord({ ...IMPLEMENTATION, status: "partial" }, null, { ...IMPLEMENTATION, provenance: A }), false, "changed by nobody, it names nobody");
+  assert.equal("provenance" in P.authorRecord(IMPLEMENTATION, null, IMPLEMENTATION), false, "nobody is invented");
+  assert.deepEqual(P.authorRecord(IMPLEMENTATION, B, IMPLEMENTATION).provenance, B, "a record that named nobody gets the author of this save");
+  assert.equal("provenance" in IMPLEMENTATION, false, "the object handed in is not written on");
+
+  /* a Tailoring by A with a select and an operation; B adds an exclude and saves */
+  const first = P.authorTailoring({ ...TAILORING, operations: [OP] }, undefined, A);
+  assert.deepEqual([first.provenance, first.selects[0].provenance, first.operations[0].provenance], [A, undefined, undefined], "the first save: the entries have the Tailoring's");
+  const second = P.authorTailoring({ ...TAILORING, operations: [OP], excludes: [{ ref: REQ.id }] }, first, B);
+  assert.deepEqual(second.provenance, B, "the Tailoring names who wrote this version");
+  assert.deepEqual([second.selects[0].provenance, second.operations[0].provenance], [A, A], "what A decided stays A's: it is written onto the entries before the Tailoring changes hands");
+  assert.equal("provenance" in second.excludes[0], false, "the new entry carries none and so has B's");
+  /* B changes the operation: it is B's decision now */
+  const third = P.authorTailoring({ ...TAILORING, operations: [{ ...OP, modality: "may" }], excludes: [{ ref: REQ.id }] }, second, B);
+  assert.equal("provenance" in third.operations[0], false, "a changed operation is decided by who changed it");
+  assert.deepEqual(third.selects[0].provenance, A);
+  /* the same author on the same day writes nothing onto the entries; a Deviation attached later does not make the operation another's */
+  assert.deepEqual(P.authorTailoring({ ...TAILORING, operations: [OP] }, first, A), first);
+  assert.deepEqual(P.authorTailoring({ ...TAILORING, operations: [{ ...OP, deviation: DEVIATION }] }, first, B).operations[0].provenance, A);
+  /* saved by nobody: the Tailoring names nobody, and the entries keep who decided them */
+  const fourth = P.authorTailoring({ ...TAILORING, operations: [OP] }, first, null);
+  assert.equal("provenance" in fourth, false);
+  assert.deepEqual([fourth.selects[0].provenance, fourth.operations[0].provenance], [A, A]);
+  /* a Tailoring that named nobody: there is nothing to keep, and its entries become the new author's with it */
+  const unsigned = P.authorTailoring({ ...TAILORING, operations: [OP] }, undefined, null);
+  assert.equal(JSON.stringify(unsigned).includes("provenance"), false);
+  assert.equal(JSON.stringify(P.authorTailoring({ ...TAILORING, operations: [OP] }, unsigned, A).operations).includes("provenance"), false);
+});
+
+/* The sentences a workbench shows where the kernel requires a party and nobody named one (backlog #70). */
+const REFUSED = {
+  mapping: "author is empty — the kernel requires a Mapping to name its author (provenance.author-ref); no Mapping was written",
+  assessment: "performer is empty — the kernel requires an Assessment to name who performed it (performer-ref); no Assessment and no Finding was written",
+  deviation: "approver is empty — the kernel requires a Deviation to name who approves it (approver-ref); the operation was not added",
+  statement: "party is empty — the kernel requires a statement to name whom it binds (obligated-parties); no Requirement was written",
+};
+
+test("a party a person named: a URI as typed, a name under the namespace; an empty field names nobody, and the refusal says which field the kernel requires", () => {
+  const NS = "https://example.org/my";
+  assert.equal(P.partyUri("https://cso.example/party/ciso", NS), "https://cso.example/party/ciso", "a URI is taken as typed");
+  assert.equal(P.partyUri("urn:example:party:ciso", NS), "urn:example:party:ciso");
+  assert.equal(P.partyUri("  Head of Security ", NS + "/"), NS + "/party/head-of-security", "a name the person typed is a party the person named");
+  for (const nobody of ["", "   ", null, undefined, "?!", "—"]) assert.equal(P.partyUri(nobody, NS), "", JSON.stringify(nobody) + " names nobody");
+  for (const [kind, sentence] of Object.entries(REFUSED)) {
+    assert.deepEqual(P.requiredParty(kind, "Head of Security", NS), { ref: NS + "/party/head-of-security" }, kind);
+    for (const empty of ["", "  ", null, undefined]) assert.deepEqual(P.requiredParty(kind, empty, NS), { refused: sentence }, kind);
+    assert.match(P.requiredParty(kind, "?!", NS).refused, /"\?!" names no party \(a URI, or a name with a letter a-z or a digit, does\) — the kernel requires /, kind);
+    /* none of the words the page once wrote for an empty field comes back, in the party or in its place */
+    for (const typed of ["", "?!"]) assert.equal("ref" in P.requiredParty(kind, typed, NS), false, kind);
+  }
+  /* The page mints a party in one place, partyUri, from what a field holds. A default word that becomes a party
+     would need a second place or a fallback beside a field, and neither is in the page's script. */
+  const script = HTML.slice(HTML.indexOf("<script>"));
+  assert.equal(script.split('"/party/"').length - 1, 1, 'the string "/party/" stands once in the script, in partyUri');
+  assert.deepEqual(script.match(/\|\|\s*"(assessor|ciso|approver|author|organisation)"/g), null, "no fixed word stands in for an empty field");
+});
+
+/* ---------- the page in a browser ---------- */
+async function open() {
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "jascon-reader-"));
+  const browser = await chromium.launch();
+  const context = await browser.newContext({ acceptDownloads: true, viewport: { width: 1500, height: 1100 } });
+  await context.route(/^https:/, route => route.fulfill({ status: 200, contentType: "text/css", body: "" }));   // the font stylesheet; a test does not wait on the web
+  const page = await context.newPage();
+  const errors = [], answers = [], quiet = [];
+  /* a script error on any page of the test is held against it; prompt() takes the next answer a test queued.
+     `quiet`: URLs a test expects the server to refuse (a folder on a server that lists none): the browser writes
+     such a refusal to its console as an error, and only for these it is not one of the page's. */
+  const watch = p => {
+    p.on("pageerror", e => errors.push("pageerror: " + e.message));
+    p.on("console", m => { if (m.type() === "error" && !(/\b404\b/.test(m.text()) && quiet.some(re => re.test(m.location().url)))) errors.push(`console: ${m.text()} ${m.location().url}`); });
+    p.on("dialog", d => d.type() === "prompt" ? d.accept(answers.length ? answers.shift() : "") : d.accept());
+    return p;
+  };
+  watch(page);
+  await page.goto(pathToFileURL(READER).href);
+  /* a folder, opened as the button does (or files, as "Open JSON file(s)" does); done when the page has indexed
+     it (or has stopped at it) and has held every Attestation to it */
+  const load = async (dir, pick = "#folderpick") => {
+    const lines = await page.locator("#log > div").count();
+    await page.setInputFiles(pick, dir);
+    await page.waitForFunction(n => [...document.querySelectorAll("#log > div")].slice(n)
+      .some(x => /indexed \d+ objects|nothing of this bundle is shown/.test(x.textContent)) && document.body.dataset.binds === "done", lines);
+  };
+  /* What stage 5 says about every Attestation, in the order shown: the verdict and what it means for the bundle,
+     the line, every subject, the manifest bound, the envelope. */
+  const attested = async (p = page) => {
+    await p.click('.navitem[data-view="stage:assess"]');
+    return p.locator("#view-stagefn [data-attestation]").evaluateAll(cards => cards.map(x => ({
+      id: x.dataset.attestation, verdict: x.dataset.binds, manifest: x.dataset.bindsManifest ?? null, fails: x.dataset.bindsFails ?? null,
+      word: x.querySelector("[data-binds-word]")?.textContent ?? null, shownAs: x.querySelector("[data-binds-word]")?.className ?? null,
+      line: x.querySelector("[data-binds-line]")?.textContent ?? null,
+      subjects: [...x.querySelectorAll("[data-subject]")].map(tr => ({ status: tr.dataset.subject, id: tr.querySelector(".reflink")?.textContent ?? null,
+        signed: tr.querySelector("[data-signed]").textContent, delivered: tr.querySelector("[data-delivered]").textContent })),
+      envelope: x.querySelector("[data-envelope]").dataset.envelope, envelopeText: x.querySelector("[data-envelope]").textContent,
+      listed: x.dataset.listed ?? null, listedError: x.querySelector("[data-listed-error]")?.textContent ?? null,
+      todo: x.querySelector("[data-binds-todo]")?.textContent ?? null })));
+  };
+  const view = async v => { await page.click(`.navitem[data-view="${v}"]`); };
+  /* an object, opened from the list of the object browser */
+  const detail = async id => { await view("browser"); await page.locator(`.objrow[data-id="${id}"]`).click(); return page.locator("#detail"); };
+  const text = async loc => (await loc.innerText()).replace(/\s+/g, " ").trim();
+  /* the line that says who decided `of` ("record", "operations[0]", "rating") inside `root`: [own | record | none, its text] */
+  const who = async (root, of) => { const l = root.locator(`[data-who-of="${of}"]`); assert.equal(await l.count(), 1, `one line for ${of}`); return [await l.getAttribute("data-who"), await text(l)]; };
+  const log = async () => page.locator("#log").innerText();
+  const download = async click => {
+    const [d] = await Promise.all([page.waitForEvent("download"), page.click(click)]);
+    const file = path.join(tmp, d.suggestedFilename());
+    await d.saveAs(file);
+    return file;
+  };
+  const finish = async () => assert.deepEqual(errors, [], "no script error on the page");
+  const shutdown = async () => { await browser.close(); fs.rmSync(tmp, { recursive: true, force: true }); };
+  /* over every object of the bundle, opened one by one: how many lines name somebody, and how many places say that nobody, no day decided or no date is stated */
+  const sweep = async () => {
+    await view("browser");
+    const n = { named: 0, nobody: 0, undecided: 0, undated: 0 };
+    for (const id of await page.locator(".objrow").evaluateAll(l => l.map(x => x.dataset.id))) {
+      const d = await detail(id);
+      n.named += await d.locator('[data-who="own"], [data-who="record"]').count();
+      n.nobody += await d.locator('[data-who="none"]').count();
+      n.undecided += await d.locator('[data-decided="none"]').count();
+      n.undated += await d.locator('[data-auth-date="none"]').count();
+    }
+    return n;
+  };
+  return { page, tmp, load, view, detail, text, who, log, download, finish, shutdown, watch, answers, sweep, quiet, attested };
+}
+/* The browser is closed whether the test passes or fails. */
+async function withReader(fn) {
+  const R = await open();
+  try { await fn(R); await R.finish(); } finally { await R.shutdown(); }
+}
+const OPTS = { skip: SKIP, timeout: 120000 };
+
+/* The files of a ZIP as the page writes it (stored, not compressed), written under `dir`. -> the bundle folder */
+function unzipTo(file, dir) {
+  const buf = fs.readFileSync(file);
+  let end = buf.length - 22;
+  while (end >= 0 && buf.readUInt32LE(end) !== 0x06054b50) end--;
+  assert.ok(end >= 0, "a ZIP");
+  let p = buf.readUInt32LE(end + 16), top = null;
+  for (let i = 0; i < buf.readUInt16LE(end + 10); i++) {
+    assert.equal(buf.readUInt16LE(p + 10), 0, "stored");
+    const size = buf.readUInt32LE(p + 24), nl = buf.readUInt16LE(p + 28), at = buf.readUInt32LE(p + 42);
+    const name = buf.subarray(p + 46, p + 46 + nl).toString("utf8");
+    const data = at + 30 + buf.readUInt16LE(at + 26) + buf.readUInt16LE(at + 28);
+    fs.mkdirSync(path.dirname(path.join(dir, name)), { recursive: true });
+    fs.writeFileSync(path.join(dir, name), buf.subarray(data, data + size));
+    top = name.split("/")[0];
+    p += 46 + nl + buf.readUInt16LE(p + 30) + buf.readUInt16LE(p + 32);
+  }
+  return path.join(dir, top);
+}
+/* validate_core.py on one bundle folder -> { ok, line: the bundle's line, notes: what it printed about the bundle } */
+function reference(dir, ...flags) {
+  const run = spawnSync("python3", [VALIDATE, dir, ...flags], { encoding: "utf8" });
+  const lines = run.stdout.split("\n"), from = lines.indexOf("== bundles =="), at = lines.findIndex(l => l.includes(path.basename(path.dirname(dir)) + "/" + path.basename(dir) + ":"));
+  assert.ok(from >= 0 && at > from, "the reference reports the bundle: " + run.stdout.slice(-1500));
+  return { ok: run.status === 0 && /^ALL GREEN$/m.test(run.stdout), line: lines[at], notes: lines.slice(from + 1, at), out: run.stdout };
+}
+
+/* The repository (under /repo/) and the test's temporary folder (under /tmp/) over http. `folders` says what a
+   request for a folder gets: "listing", a page of links as python's http.server and a static site's index.html give
+   it; "page", some other page (a site that answers every unknown address with its start page); or nothing, a 404. */
+async function serve(R, folders) {
+  const server = http.createServer((req, res) => {
+    const u = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+    const file = u.startsWith("/repo/") ? path.join(ROOT, u.slice(6)) : u.startsWith("/tmp/") ? path.join(R.tmp, u.slice(5)) : "";
+    const html = body => { res.writeHead(200, { "content-type": "text/html; charset=utf-8" }); res.end(body); };
+    if (file && folders && fs.existsSync(file) && fs.statSync(file).isDirectory()) {
+      return html(folders === "page" ? '<!doctype html><title>Home</title><a href="about.html">About</a> <a href="notes.json">Notes</a>'
+        : "<ul>" + fs.readdirSync(file).sort().map(n => `<li><a href="${encodeURIComponent(n)}${fs.statSync(path.join(file, n)).isDirectory() ? "/" : ""}">${n}</a></li>`).join("") + "</ul>");
+    }
+    if (!file || !fs.existsSync(file) || !fs.statSync(file).isFile()) { res.writeHead(404); res.end(); return; }
+    res.writeHead(200, { "content-type": file.endsWith(".html") ? "text/html; charset=utf-8" : "application/json" });
+    res.end(fs.readFileSync(file));
+  });
+  await new Promise(done => server.listen(0, "127.0.0.1", done));
+  const at = `http://127.0.0.1:${server.address().port}`;
+  /* the address under which this server has a folder of the repository or of the temporary folder */
+  const url = dir => `${at}/${dir.startsWith(R.tmp) ? "tmp/" + path.relative(R.tmp, dir) : "repo/" + path.relative(ROOT, dir)}`.split(path.sep).join("/") + "/";
+  return { at, url, reader: `${at}/repo/one-page-apps/jascon-reader.html`, close: () => server.close() };
+}
+
+/* One object against the kernel schema, as the reference builds its validator per type. -> [what is wrong] */
+function kernelErrors(type, obj) {
+  const py = `
+import json, sys, jsonschema
+s = json.load(open(sys.argv[1], encoding="utf-8"))
+v = jsonschema.validators.Draft202012Validator({"$ref": "#/$defs/" + sys.argv[2], "$defs": s["$defs"]})
+print(json.dumps([e.message for e in v.iter_errors(json.load(sys.stdin))]))`;
+  const run = spawnSync("python3", ["-c", py, path.join(ROOT, "jascon/schemas/jascon-2.0.0.schema.json"), type], { input: JSON.stringify(obj), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+
+const EXAMPLES = path.join(ROOT, "jascon/examples");
+const IFA = path.join(ROOT, "converted_examples/US.IFA-GoodRead/ifa-core-bundle");
+
+test("the example folder names its authors: every record and entry shows who decided and when, an entry without its own as inherited", OPTS, () => withReader(async R => {
+  const { page } = R;
+  await R.load(EXAMPLES);
+  const CISO = "https://cso.example/party/ciso";
+
+  /* a Tailoring by one author with one operation by another */
+  let d = await R.detail("https://cso.example/tailoring/linux-prod");
+  assert.deepEqual(await R.who(d, "record"), ["own", `${CISO} · 2026-11-02`]);
+  assert.deepEqual(await R.who(d, "selects[0]"), ["record", `${CISO} · 2026-11-02 inherited from the Tailoring`]);
+  assert.deepEqual(await R.who(d, "operations[0]"), ["own", "https://cso.example/party/platform-ops · 2026-11-02"]);
+  assert.equal(await d.locator("[data-inherited]").count(), 1, "one entry of this Tailoring is marked as inherited, the select");
+
+  /* a Tailoring whose two operations name nobody of their own */
+  d = await R.detail("https://ns.bsi.bund.de/gspp/tailoring/erhoeht");
+  const REDAKTION = "https://ns.bsi.bund.de/gspp/party/redaktion · 2026-07-01";
+  assert.deepEqual(await R.who(d, "record"), ["own", REDAKTION]);
+  for (const of of ["selects[0]", "operations[0]", "operations[1]"]) assert.deepEqual(await R.who(d, of), ["record", REDAKTION + " inherited from the Tailoring"], of);
+
+  /* a Risk: its own author, a rating by somebody else, a residual rating that has the Risk's */
+  d = await R.detail("https://cso.example/risk/R-2026-007");
+  assert.deepEqual(await R.who(d, "record"), ["own", `${CISO} · 2026-11-05`]);
+  assert.deepEqual(await R.who(d, "rating"), ["own", "https://cso.example/party/secops · 2026-10-28"]);
+  assert.deepEqual(await R.who(d, "residual-rating"), ["record", `${CISO} · 2026-11-05 inherited from the Risk`]);
+
+  /* a Finding with an approved Deviation: decided, and due for review */
+  d = await R.detail("https://assessor.example/finding/2026-q3-acme-017");
+  assert.deepEqual(await R.who(d, "record"), ["own", "https://assessor.example/party/lead-assessor · 2026-07-18"]);
+  const dev = d.locator('[data-deviation="deviations[0]"]');
+  assert.equal(await R.text(dev.locator("[data-decided]")), "2026-07-18");
+  assert.equal(await dev.locator("[data-decided]").getAttribute("data-decided"), "stated");
+  assert.equal(await R.text(dev.locator("[data-review]")), "2027-07-18");
+  assert.equal(await dev.locator("[data-review]").getAttribute("data-review"), "stated");
+
+  d = await R.detail("https://cso.example/impl/acme--konf-14-1");
+  assert.deepEqual(await R.who(d, "record"), ["own", "https://cso.example/party/platform-ops · 2026-07-10"]);
+
+  /* an authorization with its day */
+  d = await R.detail("https://paas.example/component/platform");
+  const auth = d.locator('[data-authorization="https://paas.example/auth/jab-moderate-2026"]');
+  assert.equal(await R.text(auth.locator("[data-auth-date]")), "2026-03-15");
+  assert.equal(await auth.locator("[data-auth-date]").getAttribute("data-auth-date"), "stated");
+
+  /* over all objects of the folder: no place says that nobody is named, as the reference prints no AUTHOR line for it */
+  assert.deepEqual(await R.sweep(), { named: 14, nobody: 0, undecided: 0, undated: 0 });
+  if (REFERENCE) assert.deepEqual(reference(EXAMPLES).notes.filter(l => /\(AUTHOR-/.test(l)), []);
+
+  /* What the page shows first does not depend on the order in which the files of a folder arrive. That order is
+     the operating system's: the workflow's runner listed the folder otherwise than the machine this test was
+     written on, the page showed the other Tailoring first, and the assertion below failed there (2026-11-14).
+     The same files, handed over in reverse, give the same order on the page. */
+  const pills = async () => { await R.view("stage:tailor"); return page.locator(".fpill[data-tsel]").evaluateAll(l => l.map(x => x.dataset.tsel)); };
+  const asLoaded = await pills();
+  assert.deepEqual(asLoaded, ["https://cso.example/tailoring/linux-prod", "https://ns.bsi.bund.de/gspp/tailoring/erhoeht"], "Tailorings in the order of their paths");
+  await page.evaluate(async () => { await loadFileList([...document.getElementById("folderpick").files].reverse()); });
+  assert.deepEqual(await pills(), asLoaded, "the same files in reverse order: the same order on the page");
+
+  /* the stage views say the same, in short */
+  const stage = page.locator("#view-stagefn");
+  await R.view("stage:tailor");
+  assert.deepEqual(await R.who(stage, "record"), ["own", "ciso · 2026-11-02"]);
+  assert.deepEqual(await R.who(stage, "operations[0]"), ["own", "platform-ops · 2026-11-02"]);
+  await page.locator('[data-tsel="https://ns.bsi.bund.de/gspp/tailoring/erhoeht"]').click();
+  for (const of of ["operations[0]", "operations[1]"]) assert.deepEqual(await R.who(stage, of), ["record", "redaktion · 2026-07-01 inherited"], of);
+  await R.view("stage:implement");
+  assert.deepEqual(await stage.locator("[data-auth-date]").evaluateAll(l => l.map(x => [x.dataset.authDate, x.textContent])), [["stated", "2026-03-15"]]);
+  assert.deepEqual((await stage.locator("table.flat [data-who]").evaluateAll(l => l.map(x => [x.dataset.who, x.textContent]))).sort(),
+    [["own", "platform-ops · 2026-07-10"], ["own", "platform-ops · 2026-11-06"]]);
+  await R.view("stage:assess");
+  assert.deepEqual((await stage.locator(".kanban [data-who]").evaluateAll(l => l.map(x => [x.dataset.who, x.textContent]))).sort(),
+    [["own", "lead-assessor · 2026-07-18"], ["own", "secops · 2026-11-10"]]);
+  assert.equal(await R.text(stage.locator("[data-deviation-line]")), "⚑ Deviation: false-positive · approved · decided 2026-07-18 · review due 2027-07-18");
+
+  /* the resolved package of each Tailoring: Requirements only, so no kernel is pinned; the one whose
+     Requirement carries a facet the folder pins takes that pin and the schema file along */
+  for (const [id, reqs, pins] of [["https://cso.example/tailoring/linux-prod", 1, []], ["https://ns.bsi.bund.de/gspp/tailoring/erhoeht", 3, ["https://ns.bsi.bund.de/facet/gspp-taxonomy"]]]) {
+    await R.view("stage:tailor");
+    await page.locator(`[data-tsel="${id}"]`).click();
+    const dir = unzipTo(await R.download("#wb-t-export-resolved"), path.join(R.tmp, "resolved-" + reqs));
+    const m = JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8"));
+    assert.equal(m.objects.length, reqs, id);
+    assert.equal("kernel-version" in m, false, id);
+    assert.deepEqual(m["facet-schemas"].map(x => x.id), pins, id);
+    for (const pin of m["facet-schemas"]) assert.ok(fs.existsSync(path.join(dir, pin.path)), "the pinned schema is in the package");
+    if (REFERENCE) { const ref = reference(dir); assert.ok(ref.ok, ref.out.slice(-2500)); assert.match(ref.line, / pass, 0 fail/); }
+  }
+
+  /* the folder pins its kernel and needs it: nothing is reported */
+  await R.view("overview");
+  assert.equal(await R.text(page.locator("#ov-kernel")), "2.0.0");
+  assert.equal(await page.locator("[data-pin-error]").count(), 0);
+  assert.doesNotMatch(await R.log(), /KERNEL-/);
+}));
+
+test("the IFA bundle: each record, Deviation and authorization shows what its file says, and says \"not stated\" exactly where the reference reports it", OPTS, () => withReader(async R => {
+  const { page } = R;
+  await R.load(IFA);
+  /* What is expected is read from the bundle's files, not written down here: the conversion is being
+     changed to pre-fill who and when from its sources, and this test holds the page to whatever the
+     files say on the day it runs. */
+  const objs = json(path.relative(ROOT, path.join(IFA, "content-manifest.json"))).objects.map(e => JSON.parse(fs.readFileSync(path.join(IFA, e.path), "utf8")));
+  const NOUN = { risk: "Risk", finding: "Finding", implementation: "Implementation" }, last = uri => uri.split("/").filter(Boolean).pop();
+  const missing = { "AUTHOR-2": [], "AUTHOR-3": [], "AUTHOR-4": [] }, seen = { records: 0, deviations: 0, authorizations: 0 };
+  for (const o of objs) {
+    const type = P.inferType(o), d = await R.detail(o.id), p = o.provenance;
+    if (NOUN[type]) {
+      seen.records++;
+      assert.deepEqual(await R.who(d, "record"), p ? ["own", `${p["author-ref"]} · ${p.date}`] : ["none", `nobody is named — this ${NOUN[type]} does not say who wrote it and when`], o.id);
+      if (!p) missing["AUTHOR-2"].push(o.id);
+    } else assert.equal(await d.locator("[data-who]").count(), 0, `${o.id}: a ${type} gets no line about an author`);
+    for (const [i, dev] of (o.deviations || []).entries()) {
+      seen.deviations++;
+      const box = d.locator(`[data-deviation="deviations[${i}]"]`), settled = ["approved", "withdrawn"].includes(dev.state);
+      const decided = "decided" in dev ? ["stated", dev.decided] : settled ? ["none", `not stated — the Deviation is ${dev.state} and does not say on which day`] : ["open", `not decided — state ${dev.state}`];
+      assert.deepEqual([await box.locator("[data-decided]").getAttribute("data-decided"), await R.text(box.locator("[data-decided]"))], decided, `${o.id} deviations[${i}]`);
+      assert.equal(await box.locator("[data-review]").getAttribute("data-review"), "review-due" in dev ? "stated" : "none", `${o.id} deviations[${i}]`);
+      assert.ok((await R.text(box)).includes(`opened ${dev.opened} — the day it was asked for`));
+      if (decided[0] === "none" && !missing["AUTHOR-3"].includes(o.id)) missing["AUTHOR-3"].push(o.id);
+    }
+    for (const a of o.authorizations || []) {
+      seen.authorizations++;
+      const day = d.locator(`[data-authorization="${a.id}"] [data-auth-date]`);
+      assert.equal(await day.getAttribute("data-auth-date"), "date" in a ? "stated" : "none", `${o.id} ${a.id}`);
+      if ("date" in a) assert.equal(await R.text(day), a.date); else assert.match(await R.text(day), /^not stated — the authorization carries no `date`/);
+      if (!("date" in a) && !missing["AUTHOR-4"].includes(o.id)) missing["AUTHOR-4"].push(o.id);
+    }
+  }
+  assert.ok(seen.records >= 7 && seen.deviations >= 1 && seen.authorizations >= 2, "the bundle holds Risks, Findings, Implementations, a Deviation and authorizations: " + JSON.stringify(seen));
+
+  /* the stage views say the same, in short */
+  const stage = page.locator("#view-stagefn"), of = type => objs.filter(o => P.inferType(o) === type);
+  const short = o => o.provenance ? ["own", `${last(o.provenance["author-ref"])} · ${o.provenance.date}`] : ["none", "nobody is named"];
+  await R.view("stage:implement");
+  assert.deepEqual((await stage.locator("table.flat [data-who]").evaluateAll(l => l.map(x => [x.dataset.who, x.textContent]))).sort(), of("implementation").map(short).sort());
+  assert.deepEqual((await stage.locator("[data-auth-date]").evaluateAll(l => l.map(x => [x.dataset.authDate, x.textContent]))).sort(),
+    of("component").flatMap(o => o.authorizations || []).map(a => "date" in a ? ["stated", a.date] : ["none", "no date field"]).sort());
+  await R.view("stage:assess");
+  assert.deepEqual((await stage.locator(".kanban [data-who]").evaluateAll(l => l.map(x => [x.dataset.who, x.textContent]))).sort(), of("finding").map(short).sort());
+  assert.equal(await stage.locator("[data-deviation-line]").count(), of("finding").flatMap(o => o.deviations || []).length);
+
+  /* the reference names the same objects: a record without provenance (AUTHOR-2), a Deviation approved
+     or withdrawn without `decided` (AUTHOR-3), an authorization without `date` (AUTHOR-4) */
+  if (REFERENCE) {
+    const ref = reference(IFA);
+    for (const rule of Object.keys(missing))
+      assert.deepEqual(ref.notes.filter(l => l.includes(`(${rule})`)).map(l => l.trim().replace(/^note: /, "").split(": ")[0]).sort(), missing[rule].sort(), rule);
+  }
+}));
+
+test("the workbenches: no author refuses nothing and writes none; with an author a Tailoring, an Implementation and a Finding name it; the export pins the kernel exactly then and passes the reference",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const pick = async (id, q) => { await page.fill("#" + id, q); await page.locator(`#${id}-sugg [data-pick]`).first().click(); };
+    const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+    const NS = "https://example.org/my", T = `${NS}/tailoring/my-tailoring`, I = `${NS}/impl/backup-server-encrypt-backups`;
+
+    /* two Requirements and a Set to work on */
+    await R.view("stage:author");
+    for (const [title, prose] of [["Encrypt backups", "Backups are encrypted."], ["Rotate keys", "Keys are rotated."]]) {
+      await page.fill("#wb-au-title", title);
+      await page.fill("#wb-au-prose", prose);
+      await page.fill("#wb-au-party", "Operations");
+      await page.click("#wb-au-addreq");
+    }
+    await page.fill("#wb-au-settitle", "My baseline");
+    await pick("wb-au-mempick", "encrypt");
+    await pick("wb-au-mempick", "rotate");
+    await page.click("#wb-au-addset");
+
+    /* everything written once without an author */
+    const write = async () => {
+      await R.view("stage:tailor");
+      if (!await page.locator("[data-delsel]").count()) {
+        await pick("wb-t-selpick", "my baseline");
+        await pick("wb-t-reqpick", "encrypt");
+        await page.selectOption("#wb-t-mod", "should");
+        await set("#wb-t-devrat", "The legacy tape library cannot encrypt.");
+        await set("#wb-t-devappr", "Head of Security");
+        await page.click("#wb-t-add");
+      }
+      await page.click("#wb-t-graph");
+      await R.view("stage:implement");
+      if (!await page.locator("[data-delcomp]").count()) {
+        await page.fill("#wb-i-ctitle", "Backup server");
+        await page.click("#wb-i-addcomp");
+        await pick("wb-i-pick-0", "encrypt");
+      }
+      await page.click("#wb-i-graph");
+      await R.view("stage:assess");
+      await page.selectOption("#wb-a-scope", "system");
+      if (!await page.inputValue("#wb-a-perf")) await set("#wb-a-perf", "Lead Assessor");
+      if (!await page.locator(".seg .on-not").count()) await page.locator('[data-az$="|not-satisfied"]').first().click();
+      await page.click("#wb-a-gen");
+    };
+    const exported = async name => {
+      const dir = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, name));
+      const manifest = JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8"));
+      const objs = manifest.objects.map(e => JSON.parse(fs.readFileSync(path.join(dir, e.path), "utf8")));
+      return { dir, manifest, objs, of: type => objs.filter(o => P.inferType(o) === type) };
+    };
+
+    await R.view("stage:tailor");
+    assert.match(await R.text(page.locator("#wb-t-who + [data-who-note]")), /^optional — without an author a Tailoring is written without provenance/);
+    await write();
+    const day = await page.evaluate(() => new Date().toISOString().slice(0, 10));
+    for (const [id, noun] of [[I, "Implementation"], [`${NS}/finding/f-${day}-1`, "Finding"]])
+      assert.deepEqual(await R.who(await R.detail(id), "record"), ["none", `nobody is named — this ${noun} does not say who wrote it and when`], id);
+    let d = await R.detail(T);
+    assert.deepEqual(await R.who(d, "record"), ["none", "nobody is named — this Tailoring does not say who wrote it and when"]);
+    for (const of of ["selects[0]", "operations[0]"]) assert.deepEqual(await R.who(d, of), ["none", "nobody is named — neither this entry nor its Tailoring carries provenance"], of);
+    const pending = d.locator('[data-deviation="operations[0].deviation"]');
+    assert.equal(await R.text(pending.locator("[data-decided]")), "not decided — state pending");
+    assert.equal(await pending.locator("[data-review]").getAttribute("data-review"), "none");
+    await R.view("stage:tailor");
+    assert.deepEqual(await R.who(page.locator("#view-stagefn"), "operations[0]"), ["none", "nobody is named"]);
+    assert.equal(await R.text(page.locator("#view-stagefn [data-deviation-line]")), "⚑ Deviation: risk-adjustment · pending · not decided · no review date is stated");
+
+    const A = await exported("without");
+    assert.deepEqual(A.objs.filter(o => JSON.stringify(o).includes("provenance")), [], "no provenance anywhere");
+    assert.equal("kernel-version" in A.manifest, false, "1.0.0 content: the manifest pins no kernel");
+    assert.deepEqual([A.of("tailoring").length, A.of("implementation").length, A.of("finding").length], [1, 1, 1]);
+    assert.equal(A.of("tailoring")[0].operations[0].deviation["approver-ref"], `${NS}/party/head-of-security`, "the approver typed is the approver written");
+    assert.deepEqual(A.of("assessment").map(o => o["performer-ref"]), [`${NS}/party/lead-assessor`]);
+    assert.match(await R.log(), /manifest: no kernel-version is pinned — the content is 1\.0\.0 content/);
+    /* the page states its version once: on the top bar, in the manifest it writes, on the first line of its console */
+    const version = await page.locator("#pill-version").innerText();
+    assert.match(version, /^v\d+\.\d+\.\d+ · build \d{4}-\d{2}-\d{2}$/);
+    assert.equal(A.manifest.provenance.converter, "jascon-reader.html " + version.split(" · ")[0]);
+    assert.ok((await R.log()).includes(`JASCON Bundle Reader ${version} — `));
+    if (REFERENCE) {
+      const ref = reference(A.dir);
+      assert.ok(ref.ok, ref.out.slice(-2500));
+      assert.match(ref.line, / pass, 0 fail/);
+      assert.equal(ref.notes.filter(l => /\(AUTHOR-2\)/.test(l)).length, 2, "the missing authors are two lines of the report: the Implementation and the Finding");
+      assert.equal(reference(A.dir, "--require-authors").ok, false, "and a failure only where the caller asks for authors");
+    }
+
+    /* the same with an author: a URI as typed, on every workbench at once */
+    const CISO = `${NS}/party/ciso`;
+    await R.view("stage:tailor");
+    await set("#wb-t-who", CISO);
+    assert.equal(await R.text(page.locator("#wb-t-who + [data-who-note]")), `a Tailoring written here names ${CISO} · ${day} as its provenance; an entry it held before keeps who decided it`);
+    await R.view("stage:implement");
+    assert.equal(await page.inputValue("#wb-i-who"), CISO, "one author for the three workbenches");
+    /* a plain name becomes a party under the namespace, and the field says which. The name is typed and
+       the button pressed at once, as a person does: the field's change must not cost the click */
+    await page.fill("#wb-i-who", "Platform Ops");
+    await page.click("#wb-i-graph");
+    assert.equal(await R.text(page.locator("#wb-i-who + [data-who-note]")), `an Implementation written here names ${NS}/party/platform-ops · ${day} as its provenance; one that is unchanged keeps what it names`);
+    assert.deepEqual(await R.who(await R.detail(I), "record"), ["own", `${NS}/party/platform-ops · ${day}`]);
+    await R.view("stage:implement");
+    await set("#wb-i-who", CISO);
+    await write();
+
+    d = await R.detail(T);
+    assert.deepEqual(await R.who(d, "record"), ["own", `${CISO} · ${day}`]);
+    for (const of of ["selects[0]", "operations[0]"]) assert.deepEqual(await R.who(d, of), ["record", `${CISO} · ${day} inherited from the Tailoring`], of);
+    const B = await exported("with");
+    const WROTE = { "author-ref": CISO, date: day };
+    assert.deepEqual(B.of("tailoring").map(o => o.provenance), [WROTE]);
+    assert.deepEqual(B.of("implementation").map(o => o.provenance), [{ "author-ref": `${NS}/party/platform-ops`, date: day }], "written again unchanged under another author, the Implementation keeps the author it names");
+    /* The check written with an author is a second check of the day (1.22.0; backlog #71 point 6): it has an
+       Assessment and a Finding of its own, and the Finding of the first check stays as it was written, without
+       an author. Until 1.21.0 the second check took the ids of the first and replaced both. */
+    assert.deepEqual(B.of("finding").map(o => [o.id.split("/").pop(), o.provenance]).sort((a, b) => byId(a[0], b[0])), [[`f-${day}-1`, undefined], [`f-${day}-check-2-1`, WROTE]]);
+    assert.deepEqual(B.of("assessment").map(o => o.id.split("/").pop()).sort(), [`check-${day}`, `check-${day}-2`]);
+    assert.deepEqual(B.objs.filter(o => !["tailoring", "implementation", "finding"].includes(P.inferType(o)) && "provenance" in o), [], "no other type is given one");
+    assert.equal(B.of("tailoring")[0].operations.some(op => "provenance" in op), false, "the entries carry none of their own: they have the Tailoring's");
+    assert.equal(B.manifest["kernel-version"], "2.0.0", "provenance is 2.0.0 content: the manifest pins the kernel");
+    assert.match(await R.log(), /manifest: pins kernel-version 2\.0\.0 — .* names its author \(provenance\)/);
+    const FIRST = `${NS}/finding/f-${day}-1: this Finding does not say who wrote it and when (AUTHOR-2)`;
+    const failuresOf = ref => ref.out.split("\n").map(l => /^  - \[[^\]]*\] (.*)$/.exec(l)).filter(Boolean).map(m => m[1]);
+    if (REFERENCE) {
+      const ref = reference(B.dir, "--as-of", "2026-11-14");
+      assert.ok(ref.ok, ref.out.slice(-2500));
+      assert.match(ref.line, / pass, 0 fail/);
+      assert.deepEqual(ref.notes.filter(l => /\(AUTHOR-/.test(l)).map(l => l.trim().replace(/^note: /, "")), [FIRST], "one line is reported as missing: the Finding of the check that was written without an author");
+      assert.deepEqual(referenceFailures(B.dir).failures, [], "and nothing fails");
+      const asked = reference(B.dir, "--require-authors", "--as-of", "2026-11-14");
+      assert.deepEqual(failuresOf(asked), [FIRST], "where the caller asks for authors, that Finding is the one failure");
+    }
+
+    /* one object, downloaded: the Tailoring as the kernel types it, its author in it */
+    await R.view("stage:tailor");
+    const one = JSON.parse(fs.readFileSync(await R.download("#wb-t-dl"), "utf8"));
+    assert.deepEqual(one.provenance, WROTE);
+    assert.deepEqual(one.title, { en: "my-tailoring" });
+    if (REFERENCE) assert.deepEqual(kernelErrors("tailoring", one), []);
+
+    /* the other export: the resolved package holds Requirements and no decision, and pins nothing */
+    const resolved = unzipTo(await R.download("#wb-t-export-resolved"), path.join(R.tmp, "resolved"));
+    const rm = JSON.parse(fs.readFileSync(path.join(resolved, "content-manifest.json"), "utf8"));
+    assert.equal("kernel-version" in rm, false);
+    assert.equal(rm.objects.length, 2);
+    if (REFERENCE) assert.ok(reference(resolved).ok);
+
+    /* a second author adds an operation and saves: the Tailoring is hers, what the first decided stays his */
+    const OPS = `${NS}/party/head-of-ops`;
+    await set("#wb-t-who", OPS);
+    await pick("wb-t-reqpick", "rotate");
+    await page.selectOption("#wb-t-mod", "must");
+    await page.click("#wb-t-add");
+    await page.click("#wb-t-graph");
+    d = await R.detail(T);
+    assert.deepEqual(await R.who(d, "record"), ["own", `${OPS} · ${day}`]);
+    for (const of of ["selects[0]", "operations[0]"]) assert.deepEqual(await R.who(d, of), ["own", `${CISO} · ${day}`], of + ": decided by the first author, and still his");
+    assert.deepEqual(await R.who(d, "operations[1]"), ["record", `${OPS} · ${day} inherited from the Tailoring`]);
+    const C = await exported("second");
+    assert.deepEqual(C.of("tailoring")[0].operations.map(op => op.provenance), [WROTE, undefined]);
+    if (REFERENCE) assert.deepEqual(failuresOf(reference(C.dir, "--require-authors", "--as-of", "2026-11-14")), [FIRST], "asked for authors, nothing fails but the Finding of the first check");
+
+    /* what the page wrote, read back: pinned and needed, every digest verified */
+    await R.load(B.dir);
+    assert.equal(await page.locator("[data-pin-error]").count(), 0);
+    await page.click("#btn-verify");
+    await page.locator("#pill-verify:not(.hidden)").waitFor();
+    assert.equal(await R.text(page.locator("#pill-verify")), `✓ ${B.manifest.objects.length} objects verified`);
+    assert.equal(B.manifest.objects.length, 11, "two Requirements, two Sets, the Tailoring, the Component, the Implementation, and two checks with a Finding each");
+
+    /* KERNEL-1: the same bundle without its pin is shown, and the page says what is missing */
+    const unpinned = path.join(R.tmp, "unpinned", "bundle"), ahead = path.join(R.tmp, "ahead", "bundle");
+    for (const [dir, pin] of [[unpinned, undefined], [ahead, "3.0.0"]]) {
+      fs.cpSync(B.dir, dir, { recursive: true });
+      const m = { ...B.manifest };
+      if (pin) m["kernel-version"] = pin; else delete m["kernel-version"];
+      fs.writeFileSync(path.join(dir, "content-manifest.json"), JSON.stringify(m, null, 1) + "\n");
+    }
+    await R.load(unpinned);
+    await R.view("overview");
+    assert.match(await R.text(page.locator("#ov-kernel")), /^none pinned/);
+    assert.match(await R.text(page.locator("[data-pin-error]")), /names its author \(provenance\), which needs kernel 2\.0\.0, but the manifest pins no kernel-version \(KERNEL-1/);
+    assert.equal(await page.locator("#nc-tailor").innerText(), "1", "the bundle is shown all the same");
+    if (REFERENCE) {
+      const ref = reference(unpinned);
+      assert.equal(ref.ok, false);
+      assert.match(ref.out, /names its author \(provenance\), which needs kernel 2\.0\.0, but the manifest pins no kernel-version \(KERNEL-1/, "the reference refuses the same bundle with the same sentence");
+    }
+
+    /* KERNEL-2: at a pin the page does not read it stops, names both, and shows nothing of the bundle */
+    await R.load(ahead);
+    assert.match(await R.text(page.locator("#ov-stop")), /The last bundle was not read\. manifest pins kernel-version 3\.0\.0; this reader implements 2\.0\.0 and reads 1\.0\.0, 2\.0\.0 \(KERNEL-2/);
+    assert.equal(await R.text(page.locator("#pill-bundle")), 'not read · kernel-version "3.0.0"');
+    /* what is counted and listed is what was written in the workbenches, which stays in the graph across a load (1.22.0) */
+    assert.deepEqual(await page.evaluate(() => [...new Set([...state.objects.values()].map(r => r.path))]), ["(workspace)"], "no object of the bundle is in the graph");
+    await R.view("browser");
+    assert.equal(await page.locator(".objrow").count(), await page.evaluate(() => JSON.parse(localStorage.getItem("scr-work")).created.length), "the list holds the authored objects and no other");
+    assert.equal(await page.locator("#btn-verify").isDisabled(), true);
+    /* and a bundle it reads is read again afterwards */
+    await R.load(B.dir);
+    assert.equal(await page.locator("#ov-stop").isHidden(), true);
+    assert.equal(await page.locator("#nc-tailor").innerText(), "1");
+
+    /* the same two bundles from a URL, with a deep link to the Tailor stage: the first opens there and
+       shows who decided; the second stays on the overview, which says why nothing is shown */
+    const server = await serve(R, "listing");
+    try {
+      const web = R.watch(await page.context().newPage());
+      const linked = async bundle => {
+        await web.goto("about:blank");
+        await web.goto(`${server.reader}#load=${server.url(bundle)}&view=stage:tailor`);
+        await web.waitForFunction(() => /indexed \d+ objects|nothing of this bundle is shown/.test(document.getElementById("log").textContent));
+        await web.waitForFunction(() => document.querySelector(".navitem.active")?.dataset.view !== "stages");   // the load leaves the Stages view: for the linked view, or for the overview
+      };
+      await linked(B.dir);
+      assert.equal(await web.locator("#view-stagefn").isVisible(), true);
+      assert.deepEqual(await R.who(web.locator("#view-stagefn"), "record"), ["own", `ciso · ${day}`]);
+      assert.deepEqual(await R.who(web.locator("#view-stagefn"), "operations[0]"), ["record", `ciso · ${day} inherited`]);
+      await linked(ahead);
+      assert.equal(await web.locator("#view-stagefn").isVisible(), false, "the linked view is not opened over a bundle that was not read");
+      assert.match(await R.text(web.locator("#ov-stop")), /manifest pins kernel-version 3\.0\.0; this reader implements 2\.0\.0/);
+    } finally { server.close(); }
+  }));
+
+test("a party the kernel requires: an empty field writes nothing and says why; a named party is written as named; an approver is never pre-filled", OPTS, () => withReader(async R => {
+  const { page } = R;
+  const pick = async (id, q) => { await page.fill("#" + id, q); await page.locator(`#${id}-sugg [data-pick]`).first().click(); };
+  const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+  const NS = "https://example.org/my", day = await page.evaluate(() => new Date().toISOString().slice(0, 10));
+  /* what a workbench says beside its button when it refuses: [that it is a refusal for want of a party, the sentence] */
+  const refused = async id => { const e = page.locator("#" + id); return [await e.getAttribute("data-refused"), await R.text(e)]; };
+  /* what the graph holds, by type, as the object browser counts it */
+  const held = async () => Object.fromEntries(await page.locator("#typefilters .fpill[data-t]").evaluateAll(l => l.map(x => [x.dataset.t, Number(x.textContent.split("·").pop())])));
+  const downloads = [];
+  page.on("download", d => downloads.push(d.suggestedFilename()));
+
+  /* 1. whom a statement binds */
+  await R.view("stage:author");
+  assert.equal(await page.inputValue("#wb-au-party"), "", "the party field starts empty");
+  await page.fill("#wb-au-title", "Encrypt backups");
+  await page.fill("#wb-au-prose", "Backups are encrypted.");
+  await page.click("#wb-au-addreq");
+  assert.deepEqual(await refused("wb-au-err"), ["party", REFUSED.statement]);
+  assert.deepEqual(await held(), {}, "nothing was written");
+  assert.deepEqual([await page.inputValue("#wb-au-title"), await page.inputValue("#wb-au-prose")], ["Encrypt backups", "Backups are encrypted."], "and nothing was changed: the form holds what was typed");
+  await page.fill("#wb-au-party", "?!");
+  await page.click("#wb-au-addreq");
+  assert.match((await refused("wb-au-err"))[1], /^party "\?!" names no party \(a URI, or a name with a letter a-z or a digit, does\) — the kernel requires a statement to name whom it binds/);
+  assert.deepEqual(await held(), {});
+  await page.fill("#wb-au-party", "Operations Team");
+  await page.click("#wb-au-addreq");                       // typed and pressed at once
+  assert.deepEqual(await held(), { requirement: 1 });
+  assert.equal(await R.text(page.locator("#wb-au-err")), "");
+  await page.fill("#wb-au-title", "Rotate keys");
+  await page.fill("#wb-au-prose", "Keys are rotated.");
+  await page.fill("#wb-au-party", "https://cso.example/party/key-custodian");
+  await page.click("#wb-au-addreq");
+  await page.fill("#wb-au-settitle", "My baseline");
+  await pick("wb-au-mempick", "encrypt");
+  await pick("wb-au-mempick", "rotate");
+  await page.click("#wb-au-addset");
+  const before = { requirement: 2, requirementSet: 1 };
+  assert.deepEqual(await held(), before);
+
+  /* 2. who performed an Assessment: no performer is typed and there is no author to start from */
+  await R.view("stage:assess");
+  assert.equal(await page.inputValue("#wb-a-perf"), "", "the performer field starts empty");
+  assert.equal(await R.text(page.locator("[data-performer-note]")), "required — the kernel requires an Assessment to name who performed it; without a performer nothing is generated");
+  assert.match(await R.text(page.locator("#wb-a-who + [data-who-note]")), /^optional — without an author a Finding is written without provenance/, "the author beside it stays optional");
+  await page.locator('[data-az$="|not-satisfied"]').first().click();
+  await page.click("#wb-a-gen");
+  assert.deepEqual(await refused("wb-a-err"), ["party", REFUSED.assessment]);
+  await page.click("#wb-a-dl");
+  assert.deepEqual(await refused("wb-a-err"), ["party", REFUSED.assessment]);
+  await page.waitForTimeout(700);                          // a download would have begun by now
+  assert.deepEqual(downloads, [], "nothing was downloaded either");
+  assert.deepEqual(await held(), before, "no Assessment and no Finding");
+
+  /* 3. whose claim a Mapping is. The performer is named now, in the other form - and a Mapping does not take it. */
+  await set("#wb-a-perf", "Lead Assessor");
+  await R.view("stage:map");
+  assert.equal(await page.inputValue("#wb-m-who"), "");
+  assert.equal(await R.text(page.locator("#wb-m-who + [data-who-note]")), "required — the kernel requires a Mapping to name its author; without one no Mapping is written");
+  await pick("wb-m-srcpick", "encrypt");
+  await pick("wb-m-tgtpick", "rotate");
+  await page.click("#wb-m-add");
+  assert.deepEqual(await refused("wb-m-err"), ["party", REFUSED.mapping]);
+  assert.deepEqual(await held(), before, "no Mapping: not under the performer's name, and not under a word");
+  /* The author is typed and the button pressed at once, as a person does. The field loses the focus to the button
+     while the pointer is down, and nothing under the pointer may move then, or the click is lost: the note beside
+     the field, which can grow by a line and push the button down, waits until the pointer is up. */
+  await page.fill("#wb-m-who", "Compliance Office");
+  const button = await page.locator("#wb-m-add").boundingBox();
+  await page.mouse.move(button.x + button.width / 2, button.y + button.height / 2);
+  await page.mouse.down();
+  assert.match(await R.text(page.locator("#wb-m-who + [data-who-note]")), /^required — /, "while the pointer is down the note is not rewritten");
+  await page.mouse.up();
+  assert.deepEqual(await held(), { ...before, mapping: 1 });
+  assert.equal(await R.text(page.locator("#wb-m-who + [data-who-note]")), `a Mapping written here names ${NS}/party/compliance-office · ${day} as its provenance`);
+  /* A Mapping is one claim, added by one press: added again, it names who adds it now, and not who it named
+     before. That is how a Mapping an earlier version wrote under a word comes to a named author. */
+  const claimedBy = async () => ((await R.text(await R.detail(`${NS}/map/encrypt-backups-rotate-keys`))).match(/provenance (\S+) · /) || [])[1];
+  assert.equal(await claimedBy(), `${NS}/party/compliance-office`);
+  await R.view("stage:map");
+  await set("#wb-m-who", "Somebody Else");
+  await page.click("#wb-m-add");
+  assert.equal(await claimedBy(), `${NS}/party/somebody-else`);
+  await R.view("stage:map");
+  await set("#wb-m-who", "Compliance Office");
+  await page.click("#wb-m-add");
+  assert.equal(await claimedBy(), `${NS}/party/compliance-office`);
+  await R.view("stage:map");
+
+  /* 4. the Assessment, its performer named */
+  await R.view("stage:assess");
+  assert.equal(await R.text(page.locator("[data-performer-note]")), `the Assessment names ${NS}/party/lead-assessor as its performer`);
+  await page.click("#wb-a-gen");
+  assert.deepEqual(await held(), { ...before, mapping: 1, assessment: 1, finding: 1 });
+
+  /* 5. who approves a Deviation: the field starts empty for every Deviation, also now that an author is named */
+  await R.view("stage:tailor");
+  assert.equal(await page.inputValue("#wb-t-who"), "Compliance Office");
+  await pick("wb-t-selpick", "my baseline");
+  await pick("wb-t-reqpick", "encrypt");
+  await page.selectOption("#wb-t-mod", "should");
+  assert.equal(await page.inputValue("#wb-t-devappr"), "", "no approver by default, and none taken from the author");
+  await set("#wb-t-devrat", "The legacy tape library cannot encrypt.");
+  await page.click("#wb-t-add");
+  assert.deepEqual(await refused("wb-t-err"), ["party", REFUSED.deviation]);
+  assert.equal(await page.locator("[data-delop]").count(), 0, "the operation was not added");
+  assert.equal(await page.inputValue("#wb-t-devrat"), "The legacy tape library cannot encrypt.", "what was typed stays");
+  await page.fill("#wb-t-devappr", "Head of Security");
+  await page.click("#wb-t-add");                           // typed and pressed at once
+  assert.equal(await page.locator("[data-delop]").count(), 1);
+  assert.equal(await page.inputValue("#wb-t-devappr"), "", "the approver of the Deviation just written does not stay in the field");
+  /* the next Deviation: empty again. An approver typed for an operation that is then begun anew does not stay either. */
+  await pick("wb-t-reqpick", "rotate");
+  await page.selectOption("#wb-t-mod", "may");
+  assert.equal(await page.inputValue("#wb-t-devappr"), "", "the approver of the Deviation before is not the approver of this one");
+  await set("#wb-t-devappr", "Somebody Else");
+  await pick("wb-t-reqpick", "rotate");
+  assert.equal(await page.inputValue("#wb-t-devappr"), "");
+  await set("#wb-t-devrat", "Rotation is manual until the HSM arrives.");
+  await set("#wb-t-devappr", "https://cso.example/party/ciso");
+  await page.click("#wb-t-add");
+  assert.equal(await page.locator("[data-delop]").count(), 2);
+  await page.click("#wb-t-graph");
+
+  /* 6. what was written names the parties as they were named, and no other */
+  const dir = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "named"));
+  const manifest = JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8"));
+  const objs = manifest.objects.map(e => JSON.parse(fs.readFileSync(path.join(dir, e.path), "utf8"))), of = type => objs.filter(o => P.inferType(o) === type);
+  const OFFICE = `${NS}/party/compliance-office`;
+  assert.deepEqual(of("requirement").map(o => o.statements[0]["obligated-parties"]), [[`${NS}/party/operations-team`], ["https://cso.example/party/key-custodian"]]);
+  assert.deepEqual(of("mapping").map(o => o.provenance), [{ "author-ref": OFFICE, date: day }]);
+  assert.deepEqual(of("assessment").map(o => o["performer-ref"]), [`${NS}/party/lead-assessor`]);
+  assert.deepEqual(of("tailoring")[0].operations.map(op => op.deviation["approver-ref"]), [`${NS}/party/head-of-security`, "https://cso.example/party/ciso"]);
+  assert.deepEqual([...new Set(JSON.stringify(objs).match(/https:[^"]*\/party\/[^"]*/g))].sort(),
+    [OFFICE, `${NS}/party/head-of-security`, `${NS}/party/lead-assessor`, `${NS}/party/operations-team`, "https://cso.example/party/ciso", "https://cso.example/party/key-custodian"].sort(),
+    "every party in the bundle is one somebody typed");
+  /* the optional authors of the same bundle: the Tailoring and the Finding name the author, because one was given */
+  assert.deepEqual([of("tailoring")[0].provenance, of("finding")[0].provenance], [{ "author-ref": OFFICE, date: day }, { "author-ref": OFFICE, date: day }]);
+  if (REFERENCE) {
+    const ref = reference(dir, "--require-authors", "--as-of", "2026-11-14");
+    assert.ok(ref.ok, ref.out.slice(-2500));
+    assert.match(ref.line, / pass, 0 fail/);
+    assert.deepEqual(ref.notes.filter(l => /\(AUTHOR-/.test(l)), []);
+  }
+}));
+
+test("the performer of an Assessment starts from the author and from no word; typed, it stays; emptied, it is empty; the word an earlier version stored is no party", OPTS, () => withReader(async R => {
+  const { page } = R;
+  const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+  const NS = "https://example.org/my", day = await page.evaluate(() => new Date().toISOString().slice(0, 10)), ASSESSMENT_ID = `${NS}/asmt/check-${day}`;
+  const refused = async id => { const e = page.locator("#" + id); return [await e.getAttribute("data-refused"), await R.text(e)]; };
+  /* the performer the generated Assessment names, read where the object browser shows it */
+  /* A second check on the same day is a second Assessment (1.22.0; backlog #71 point 6), and the n-th carries its
+     number: the performer is read from the one generated last. */
+  const generated = () => page.evaluate(ns => [...state.objects.keys()].filter(id => id.startsWith(ns + "/asmt/")).length, NS);
+  const performer = async () => { const n = await generated(), t = await R.text(await R.detail(ASSESSMENT_ID + (n > 1 ? "-" + n : ""))); return (t.match(/performer-ref (\S+)/) || [])[1]; };
+  await R.load(EXAMPLES);
+  await R.view("stage:assess");
+  assert.equal(await page.inputValue("#wb-a-perf"), "");
+
+  /* The author is typed, and the pointer pressed somewhere beside the field. While it is down the notes and the
+     performer field stay as they are; once it is up they say what will be written. */
+  await page.fill("#wb-a-who", "https://cso.example/party/secops");
+  const beside = await page.locator("#view-stagefn .wb > .nano").first().boundingBox();
+  await page.mouse.move(beside.x + 4, beside.y + 4);
+  await page.mouse.down();
+  assert.match(await R.text(page.locator("#wb-a-who + [data-who-note]")), /^optional — /, "while the pointer is down nothing is rewritten");
+  assert.equal(await page.inputValue("#wb-a-perf"), "");
+  await page.mouse.up();
+  await page.waitForFunction(() => document.querySelector("#wb-a-perf").value !== "");
+  assert.equal(await R.text(page.locator("#wb-a-who + [data-who-note]")), `a Finding written here names https://cso.example/party/secops · ${day} as its provenance`);
+  /* the performer field has taken the author, and says where it has it from */
+  assert.equal(await page.inputValue("#wb-a-perf"), "https://cso.example/party/secops");
+  assert.equal(await R.text(page.locator("[data-performer-note]")), "the Assessment names https://cso.example/party/secops as its performer — the author, until a performer is typed");
+  await set("#wb-a-who", "Platform Ops");
+  assert.equal(await page.inputValue("#wb-a-perf"), "Platform Ops", "and follows the author while nobody has typed a performer");
+  await page.click("#wb-a-gen");
+  assert.equal(await performer(), `${NS}/party/platform-ops`);
+
+  /* a performer somebody typed stays, whoever the author becomes */
+  await R.view("stage:assess");
+  await set("#wb-a-perf", "Lead Assessor");
+  assert.equal(await R.text(page.locator("[data-performer-note]")), `the Assessment names ${NS}/party/lead-assessor as its performer`);
+  await set("#wb-a-who", "https://cso.example/party/secops");
+  assert.equal(await page.inputValue("#wb-a-perf"), "Lead Assessor");
+  await page.click("#wb-a-gen");
+  assert.equal(await performer(), `${NS}/party/lead-assessor`);
+
+  /* a field somebody emptied is empty: the author does not come back into it, and nothing is written */
+  await R.view("stage:assess");
+  await set("#wb-a-perf", "");
+  await page.click("#wb-a-gen");
+  assert.deepEqual(await refused("wb-a-err"), ["party", REFUSED.assessment]);
+  assert.deepEqual([await generated(), await performer()], [2, `${NS}/party/lead-assessor`], "no third Assessment: the one generated last is the one written before");
+  await R.view("stage:assess");
+  assert.equal(await page.inputValue("#wb-a-perf"), "", "also after the workbench is drawn again");
+
+  /* The state an earlier version stored. It began with the performer "assessor", which nobody had typed: that
+     word is no party, and nothing is generated under it. A performer somebody did type is kept. */
+  const earlier = performerStored => ({ ns: NS, tailor: { label: "my-tailoring", selects: [], excludes: [], operations: [] },
+    system: { title: "My System", components: [], implementations: [] }, assess: { scopeKey: "", performer: performerStored, results: {} } });
+  for (const [storedWord, shown, written] of [["assessor", "", undefined], ["Jane Roe", "Jane Roe", `${NS}/party/jane-roe`]]) {
+    await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), earlier(storedWord));
+    await page.reload();
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    assert.equal(await page.inputValue("#wb-a-perf"), shown, `stored as ${storedWord}`);
+    await page.click("#wb-a-gen");
+    if (written) assert.equal(await performer(), written);
+    else {
+      assert.deepEqual(await refused("wb-a-err"), ["party", REFUSED.assessment]);
+      await R.view("browser");
+      assert.equal(await page.locator(`.objrow[data-id="${ASSESSMENT_ID}"]`).count(), 0, "no Assessment was written");
+    }
+  }
+}));
+
+test("pasted objects: Deviations in every state with review dates of every shape, a Risk's ratings, authorizations with and without a day - written out as recorded", OPTS, () => withReader(async R => {
+  const { page } = R;
+  const paste = async obj => { R.answers.push(JSON.stringify(obj)); await page.click("#btn-paste"); return page.locator("#detail"); };
+  const SCALE = `${EX}/scale/five`;
+
+  /* a Risk that names no author; its rating has none to inherit, its residual rating names its own */
+  let r = await paste({ ...RISK, state: "assessed", rating: { level: "high", "scale-ref": SCALE }, "residual-rating": { level: "low", "scale-ref": SCALE, provenance: WHO } });
+  assert.deepEqual(await R.who(r, "record"), ["none", "nobody is named — this Risk does not say who wrote it and when"]);
+  assert.deepEqual(await R.who(r, "rating"), ["none", "nobody is named — neither this entry nor its Risk carries provenance"]);
+  assert.deepEqual(await R.who(r, "residual-rating"), ["own", `${WHO["author-ref"]} · ${WHO.date}`]);
+
+  /* a Component with one authorization that says its day and one that does not */
+  r = await paste({ ...COMPONENT, authorizations: [{ id: "ato-1", "authority-ref": `${EX}/party/ao`, date: "2026-06-30" }, { id: "ato-2", "authority-ref": `${EX}/party/ao`, "scope-label": "interim (2026-01-15)" }] });
+  assert.deepEqual(await r.locator("[data-auth-date]").evaluateAll(l => l.map(x => [x.dataset.authDate, x.textContent])),
+    [["stated", "2026-06-30"], ["none", "not stated — the authorization carries no `date`: it names the authority and not the day"]]);
+  await R.view("stage:implement");
+  assert.deepEqual(await page.locator("#view-stagefn [data-auth-date]").evaluateAll(l => l.map(x => [x.dataset.authDate, x.textContent])), [["stated", "2026-06-30"], ["none", "no date field"]]);
+
+  await paste({ ...FINDING, provenance: { "author-ref": `${EX}/party/ciso` }, deviations: [
+    { ...DEVIATION, state: "withdrawn" },
+    { ...DEVIATION, state: "investigating" },
+    { ...DEVIATION, decided: "2026-11-03", "review-due": { type: "elapsed-duration", num: 72, unit: "hours" } },
+    { ...DEVIATION, decided: "2026-11-03", "review-due": { type: "calendar-period", num: 6, unit: "months", "calendar-ref": `${EX}/calendar/isms` } },
+    { ...DEVIATION, "review-due": { type: "datetime", value: "2027-05-12T09:00:00Z" } }] });
+  const d = page.locator("#detail"), dev = i => d.locator(`[data-deviation="deviations[${i}]"]`);
+  /* a provenance that names an author and no day shows what is there */
+  assert.deepEqual(await R.who(d, "record"), ["own", `${EX}/party/ciso · no date`]);
+  assert.equal(await R.text(dev(0).locator("[data-decided]")), "not stated — the Deviation is withdrawn and does not say on which day");
+  assert.equal(await dev(0).locator("[data-decided]").getAttribute("data-decided"), "none");
+  assert.equal(await R.text(dev(1).locator("[data-decided]")), "not decided — state investigating");
+  assert.equal(await dev(1).locator("[data-decided]").getAttribute("data-decided"), "open");
+  assert.match(await R.text(dev(2)), /decided 2026-11-03 review-due 72 hours \(elapsed\) — counted from `decided`, else from `opened`/);
+  assert.match(await R.text(dev(3)), /review-due 6 months \(calendar https:\/\/org\.example\/calendar\/isms\) — counted from `decided`, else from `opened`/);
+  assert.equal(await R.text(dev(4).locator("[data-review]")), "2027-05-12T09:00:00Z");
+  assert.equal(await d.locator("[data-deviation]").count(), 5);
+  /* the board of stage 5 says the same, in a line each */
+  await R.view("stage:assess");
+  assert.deepEqual(await page.locator("#view-stagefn [data-deviation-line]").evaluateAll(l => l.map(x => x.textContent.replace(/\s+/g, " "))), [
+    "⚑ Deviation: operational-requirement · withdrawn · no day decided is stated · no review date is stated",
+    "⚑ Deviation: operational-requirement · investigating · not decided · no review date is stated",
+    "⚑ Deviation: operational-requirement · approved · decided 2026-11-03 · review due 72 hours (elapsed)",
+    "⚑ Deviation: operational-requirement · approved · decided 2026-11-03 · review due 6 months (calendar https://org.example/calendar/isms)",
+    "⚑ Deviation: operational-requirement · approved · no day decided is stated · review due 2027-05-12T09:00:00Z"]);
+}));
+
+/* ---------- 11. what an Attestation binds of a bundle (backlog #46; Appendix B.1.7) ---------- */
+const BINDS = json("jascon/conformance/attestation-vectors.json")["binds-vectors"];
+const PACK = path.join(ROOT, "jascon/example-packs/dbvendor-server-7-advice");
+const sha256 = bytes => "sha256:" + crypto.createHash("sha256").update(bytes).digest("hex");
+const byId = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+const deliveredOf = async objs => new Map(await Promise.all(objs.map(async o => [o.id, await P.semanticDigest(o)])));
+const judged = async c => P.attestationBinds(c.attestation, c["manifest-digest"], await deliveredOf(c.objects), c["kept-packs"] || []);
+
+test("attestation-binds: each of the 19 binds vectors gets the reference's verdict, manifest, subjects and failure from the page's own function", async () => {
+  assert.equal(BINDS.length, 19);   // a vector added to the family is looked at here before this number moves
+  const seen = new Set();
+  for (const c of BINDS) {
+    for (const o of c.objects) assert.ok(![null, "manifest"].includes(P.inferType(o)), `${c.name}: ${o.id} is typed`);
+    const r = await judged(c);
+    assert.deepEqual([r.verdict, r.manifest, r.subjects.map(s => s.status), r.fails],
+      [c.expected, c["expected-manifest"], c["expected-subjects"], c["expected-failure"]], c.name);
+    for (const x of [r.verdict, r.manifest, ...r.subjects.map(s => s.status), "fails " + r.fails, "lifecycle " + c.attestation.lifecycle]) seen.add(x);
+  }
+  /* what the deliberate defects need a vector for */
+  for (const x of ["full-match", "semantic-match", "fail", "this", "kept-pack", "other", "match", "differs", "absent", "fails true", "fails false",
+    "lifecycle active", "lifecycle draft", "lifecycle deprecated", "lifecycle withdrawn"]) assert.ok(seen.has(x), `a vector holds a case of '${x}'`);
+  /* no vector holds an Attestation without a subject (the kernel schema refuses one): it binds nothing */
+  for (const [lifecycle, fails] of [["active", true], ["draft", false]]) {
+    const r = await judged({ ...BINDS[0], attestation: { ...BINDS[0].attestation, lifecycle, "subject-semantic-digests": [] } });
+    assert.deepEqual([r.verdict, r.manifest, r.subjects, r.fails], ["fail", "this", [], fails], `no subject, ${lifecycle}`);
+  }
+});
+
+/* binds_report of the reference, run by Python on cases typed by the page (its source is taken out of
+   validate_core.py by name, as for kernel_needed). -> per case, what it prints and what it records as failed */
+function referenceBindsLines(cases) {
+  const py = `
+import ast, contextlib, copy, hashlib, io, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+said = []
+ns = {"json": json, "copy": copy, "hashlib": hashlib, "fail": lambda section, msg: said.append(msg)}
+names = ("_canon", "canonical", "sdig", "by_code_unit", "attestation_binds", "binds_report")
+for node in ast.parse(src).body:
+    wanted = isinstance(node, ast.FunctionDef) and node.name in names
+    if wanted or (isinstance(node, ast.Assign) and getattr(node.targets[0], "id", "") == "BINDS_MANIFEST"):
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+out = []
+for c in json.load(sys.stdin):
+    del said[:]
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        ns["binds_report"]("s", {c["attestation"]["id"]: c["attestation"]}, c["manifest"], {i: (t, o) for i, t, o in c["objs"]}, [(k[len("sha256:"):], b"") for k in c["kept"]])
+    out.append([l.strip() for l in buf.getvalue().splitlines()] + said)
+print(json.dumps(out))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+
+test("attestation-binds: the line the page prints about an Attestation is the one the reference's binds_report prints, for every vector and for an Attestation without subjects",
+  { skip: !PYTHON && "python3 is not installed" }, async () => {
+    const first = BINDS[0], none = lifecycle => ({ ...first, name: `no subject, ${lifecycle}`, attestation: { ...first.attestation, lifecycle, "subject-semantic-digests": [] } });
+    const cases = [...BINDS, none("active"), none("draft")];
+    const ref = referenceBindsLines(cases.map(c => ({ attestation: c.attestation, manifest: c["manifest-digest"], objs: typed(c.objects), kept: c["kept-packs"] || [] })));
+    const lines = [];
+    for (const [i, c] of cases.entries()) {
+      const line = P.bindsLine(c.attestation, await judged(c));
+      assert.deepEqual([line], ref[i], c.name);
+      lines.push(line);
+    }
+    for (const kind of [/^binds: \S+ = FULL MATCH \[\d+ subject\(s\) of this bundle; this manifest\]$/, /= FULL MATCH \[1 subject\(s\) of this bundle; a pack manifest this bundle keeps\]$/,
+      /= SEMANTIC MATCH \[\d+ subject\(s\) of this bundle; another manifest: the content is proven, the packaging was altered\]$/,
+      /= DOES NOT BIND \[lifecycle withdrawn: reported, not a failure\] subject \S+: recomputed semantic digest sha256:[0-9a-f]{64}, signed sha256:[0-9a-f]{64} - this manifest$/,
+      /= DOES NOT BIND \[lifecycle draft: reported, not a failure\] subject \S+: not an object of this bundle - this manifest$/, /= DOES NOT BIND \[lifecycle draft: reported, not a failure\] it names no subject - /,
+      /^\[attestation-binds\] \S+: subject sha256:[0-9a-f]{64}: no object of this bundle carries it - this manifest \(B\.1\.7: /, /^\[attestation-binds\] \S+: it names no subject - /])
+      assert.ok(lines.some(l => kind.test(l)), `a line of the kind ${kind}`);
+  });
+
+/* verify_envelope of the reference, with no trusted key: -> per case [status, detail] */
+function referenceEnvelopes(cases) {
+  const py = `
+import ast, base64, copy, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+ns = {"json": json, "copy": copy, "base64": base64}
+for node in ast.parse(src).body:
+    wanted = isinstance(node, ast.FunctionDef) and node.name in ("_canon", "canonical", "verify_envelope")
+    if wanted or (isinstance(node, ast.Assign) and getattr(node.targets[0], "id", "") == "DSSE_PAYLOAD_TYPE"):
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+print(json.dumps([list(ns["verify_envelope"](c["envelope"], c["attestation"], None)) for c in json.load(sys.stdin)]))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+const ENVELOPE = fs.readFileSync(path.join(ROOT, "jascon/examples/attestation-acme-2026.dsse"), "utf8");
+const NOT_ITS_ENVELOPE = "payload != the Attestation's canonical form (attestation-binds)";
+const UNVERIFIED = "signature UNVERIFIED - this page takes no key and verifies no signature";
+
+test("the envelope of an Attestation, read without a key: this Attestation's or not, as the reference reads it, and never valid", () => {
+  const env = JSON.parse(ENVELOPE), said = (att, text) => { const e = P.envelopeState(att, text); return [e.state, e.detail]; };
+  /* [what, the Attestation, its envelope, what the page says] */
+  const cases = [
+    ["as it lies in the example folder", ATTESTATION, env, ["unverified", UNVERIFIED]],
+    ["an annotation was added: annotations are outside the canonical form", { ...ATTESTATION, annotations: { note: "read on 2026-11-14" } }, env, ["unverified", UNVERIFIED]],
+    ["no signature in the envelope: this page reads none either way", ATTESTATION, { ...env, signatures: [] }, ["unverified", UNVERIFIED]],
+    ["the lifecycle was edited after signing", { ...ATTESTATION, lifecycle: "withdrawn" }, env, ["fail", NOT_ITS_ENVELOPE]],
+    ["a subject was edited after signing", { ...ATTESTATION, "subject-semantic-digests": ATTESTATION["subject-semantic-digests"].slice(1) }, env, ["fail", NOT_ITS_ENVELOPE]],
+    ["an empty payload", ATTESTATION, { ...env, payload: "" }, ["fail", NOT_ITS_ENVELOPE]],
+    ["a payload that goes on after the Attestation's text", ATTESTATION, { ...env, payload: Buffer.concat([Buffer.from(env.payload, "base64"), Buffer.from(" ")]).toString("base64") }, ["fail", NOT_ITS_ENVELOPE]],
+    ["a payload that stops before its end", ATTESTATION, { ...env, payload: Buffer.from(env.payload, "base64").subarray(0, -1).toString("base64") }, ["fail", NOT_ITS_ENVELOPE]],
+    ["another payload type", ATTESTATION, { ...env, payloadType: "application/json" }, ["fail", "wrong payloadType"]],
+    ["a payload that is no base64", ATTESTATION, { ...env, payload: env.payload.slice(0, -4) + "*==" + "=" }, ["fail", "payload is not valid base64"]],
+    ["a payload with a wrong padding", ATTESTATION, { ...env, payload: env.payload.replace(/=*$/, "") + "A" }, ["fail", "payload is not valid base64"]],
+    ["a payload that is no text", ATTESTATION, { ...env, payload: 7 }, ["fail", "payload is not valid base64"]],
+    ["an envelope that is a list", ATTESTATION, [], ["fail", "envelope unreadable"]]];
+  for (const [what, att, envelope, want] of cases) assert.deepEqual(said(att, JSON.stringify(envelope)), want, what);
+  if (PYTHON) {
+    /* the reference says `error` where the page says `fail`, with the same reason; without a key both say unverified */
+    const ref = referenceEnvelopes(cases.map(([, attestation, envelope]) => ({ attestation, envelope })));
+    cases.forEach(([what, , , want], i) => assert.deepEqual(want[0] === "fail" ? ["error", want[1]] : ["unverified", "no trusted key supplied for the signer"], ref[i], what));
+  }
+  /* what the reference decides before it reads an envelope */
+  const { "envelope-ref": ref, ...unsigned } = ATTESTATION;
+  assert.equal(ref, "attestation-acme-2026.dsse");
+  assert.deepEqual(said(unsigned, ENVELOPE), ["none", "no envelope (unsigned attestation)"]);
+  assert.deepEqual(said(ATTESTATION, undefined), ["missing", "envelope-ref 'attestation-acme-2026.dsse' does not resolve beside the manifest"]);
+  assert.deepEqual(said(ATTESTATION, "{"), ["fail", "envelope unreadable"]);
+  /* the page has no state and no word for a signature that holds: it verifies none */
+  const pure = HTML.slice(HTML.indexOf("/* ==READER-PURE-START== */"), HTML.indexOf("/* ==READER-PURE-END== */"));
+  assert.deepEqual([...new Set([...pure.slice(pure.indexOf("function envelopeState(")).matchAll(/state: "([^"]+)"/g)].map(m => m[1]))].sort(), ["fail", "missing", "none", "unverified"]);
+});
+
+test("the digest: the page's own SHA-256, used where the browser offers none, gives node's for every length of padding", () => {
+  for (const n of [0, 1, 55, 56, 63, 64, 65, 119, 120, 1000]) {
+    const bytes = Uint8Array.from({ length: n }, (_, i) => (i * 31 + 7) & 255);
+    assert.equal(P.sha256Fallback(bytes), crypto.createHash("sha256").update(bytes).digest("hex"), `${n} bytes`);
+  }
+});
+
+/* What the reference says about the Attestations it reads with one bundle folder.
+   -> { ok, binds: [[id, line]], envelopes: [[id, state, detail]] }, each in the order of the ids;
+      listed: the MANIFEST-1 failures, in the order the reference records them; others: its other failures */
+function referenceAttested(dir) {
+  const ref = reference(dir, "--as-of", "2026-11-14"), binds = [], envelopes = [], listed = [], others = [];
+  for (const l of ref.notes.map(x => x.trim())) {
+    let m;
+    if ((m = /^binds: (\S+) = /.exec(l))) binds.push([m[1], l]);
+    else if ((m = /^dsse: (\S+) = (.*)$/.exec(l)))
+      envelopes.push([m[1], ...(m[2] === "no envelope (unsigned attestation)" ? ["none", m[2]] : m[2].startsWith("signature UNVERIFIED - ") ? ["unverified", "signature UNVERIFIED"]
+        : m[2].startsWith("FAIL - ") ? ["fail", m[2].slice(7)] : ["not read by this test", m[2]])]);
+  }
+  for (const l of ref.out.split("\n")) {   // what failed the bundle is listed at the end, under the bundle's name
+    const at = l.indexOf("[attestation-binds] ");
+    let m;
+    if (at >= 0 && (m = /^\[attestation-binds\] (\S+): /.exec(l.slice(at)))) binds.push([m[1], l.slice(at)]);
+    else if ((m = /\] (\S+): (envelope-ref '.*' does not resolve beside the manifest)$/.exec(l))) envelopes.push([m[1], "missing", m[2]]);
+    else if ((m = /^  - \[[^\]]*\] (.*\(MANIFEST-1: .*)$/.exec(l))) listed.push(m[1]);
+    else if ((m = /^  - \[[^\]]*\] (.*)$/.exec(l)) && !/: dsse: /.test(l)) others.push(m[1]);
+  }
+  const order = (a, b) => byId(a[0], b[0]);
+  return { ok: ref.ok, line: ref.line, out: ref.out, binds: binds.sort(order), envelopes: envelopes.sort(order), listed, others };
+}
+const WORD = { "full-match": "FULL MATCH", "semantic-match": "SEMANTIC MATCH", fail: "DOES NOT BIND" };
+/* MANIFEST-1 as the reference words it, after the id of the Attestation */
+const MANIFEST_1 = ": an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, " +
+  "D3.1 - an Attestation lies beside a manifest and is never an entry of one)";
+/* What the page says about the Attestations of one bundle folder, held to itself and to the reference: the word
+   and its colour follow the verdict; a failure is shown exactly where the line is the reference's failure; every
+   line and every envelope is read as the reference reads it; an Attestation the manifest lists carries the
+   reference's MANIFEST-1 sentence, and no other does; the page shows a failure exactly when the reference fails
+   the bundle. `shown`: what R.attested() gave for the folder. `also`: failures of the reference that the page
+   is known not to state (a rule it does not hold a bundle to), each a pattern. */
+function asTheReference(shown, dir, what, also = []) {
+  for (const a of shown) {
+    assert.equal(a.listed, String(a.listedError !== null), `${what}: ${a.id} is marked as listed exactly where the sentence stands`);
+    if (a.listedError !== null) assert.equal(a.listedError, a.id + MANIFEST_1, `${what}: ${a.id}`);
+    assert.equal(a.word, WORD[a.verdict], `${what}: ${a.id}`);
+    assert.equal(a.fails, String(a.line.startsWith("[attestation-binds] ")), `${what}: ${a.id} is shown as a failure exactly where the line is one`);
+    assert.equal(a.shownAs, a.verdict === "full-match" ? "verdict-ok" : a.fails === "true" ? "verdict-bad" : "verdict-warn", `${what}: ${a.id}`);
+    assert.ok(["none", "missing", "fail", "unverified"].includes(a.envelope), `${what}: ${a.id}: ${a.envelope}`);
+    if (a.envelope === "unverified") assert.equal(a.envelopeText, UNVERIFIED);
+  }
+  if (!REFERENCE) return;
+  const ref = referenceAttested(dir);
+  assert.deepEqual(shown.map(a => [a.id, a.line]), ref.binds, `${what}: the line of every Attestation is the reference's`);
+  assert.deepEqual(shown.map(a => [a.id, a.envelope, a.envelope === "unverified" ? "signature UNVERIFIED" : a.envelopeText.replace(/^FAIL - /, "")]), ref.envelopes, `${what}: every envelope is read as the reference reads it`);
+  assert.deepEqual(shown.filter(a => a.listed === "true").map(a => a.listedError), ref.listed, `${what}: an Attestation the manifest lists fails with the reference's sentence, each in the reference's order`);
+  assert.equal(shown.some(a => a.fails === "true" || a.envelope === "fail" || a.envelope === "missing" || a.listed === "true"), !ref.ok, `${what}: the page shows a failure exactly when the reference fails the bundle — ${ref.line}`);
+  /* and the reference fails the bundle for nothing else, but for what a test names */
+  assert.deepEqual(ref.others.filter(e => !also.some(re => re.test(e))), [], `${what}: no other failure in the reference`);
+  for (const re of also) assert.ok(ref.others.some(e => re.test(e)), `${what}: the reference states ${re}`);
+}
+/* the Attestations beside a manifest by the reference's rule: a .json of the manifest's folder that the manifest does not list and that types as one */
+function besideOf(dir) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8"));
+  return fs.readdirSync(dir).filter(n => n.endsWith(".json") && n !== "content-manifest.json" && !manifest.objects.some(e => e.path === n))
+    .map(n => [n, JSON.parse(fs.readFileSync(path.join(dir, n), "utf8"))]).filter(([, o]) => P.inferType(o) === "attestation").sort((a, b) => byId(a[1].id, b[1].id));
+}
+
+test("the Attestations beside a manifest: the example folder, the IFA bundle and the worked pack, loaded as they lie, show the reference's verdict for each, every subject with both digests, and how many of each there are",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const asFolder = new Map();   // what each folder says when the button opens it
+    for (const dir of [EXAMPLES, IFA, PACK]) {
+      const what = path.relative(ROOT, dir), manifestBytes = fs.readFileSync(path.join(dir, "content-manifest.json")), manifest = JSON.parse(manifestBytes);
+      const listed = new Map(manifest.objects.map(e => [e.id, e["semantic-digest"]])), beside = besideOf(dir);
+      assert.ok(beside.length >= 1, `${what} has an Attestation beside its manifest`);
+      await R.load(dir);
+      const shown = await R.attested();
+      asTheReference(shown, dir, what);
+      assert.deepEqual(shown.map(a => a.id), beside.map(([, a]) => a.id), `${what}: every Attestation beside the manifest is shown, in the order of the ids`);
+      /* the verdicts arrive after the bundle is shown: stage 5, when it is up, is drawn again with them */
+      await page.evaluate(async () => { for (const x of document.querySelectorAll("#view-stagefn [data-attestation]")) x.dataset.binds = "drawn before"; await judgeAttestations(); });
+      assert.deepEqual(await page.locator("#view-stagefn [data-attestation]").evaluateAll(l => l.map(x => x.dataset.binds)), shown.map(a => a.verdict), what);
+      for (const [i, a] of shown.entries()) {
+        /* Worked out here from the files, without the page's code: which manifest is bound, and per subject which
+           object, the signed digest, and the digest the manifest records for the object as delivered. */
+        const att = beside[i][1], bound = att["content-manifest-digest"];
+        const manifestBound = bound === sha256(manifestBytes) ? "this" : fs.existsSync(path.join(dir, "packs/sha256", bound.slice(7))) ? "kept-pack" : "other";
+        const subjects = att["subject-semantic-digests"].map(sj => ({ status: listed.get(sj.id) === sj["semantic-digest"] ? "match" : listed.has(sj.id) ? "differs" : "absent",
+          id: sj.id, signed: sj["semantic-digest"], delivered: listed.get(sj.id) ?? "not an object the manifest lists" }));
+        assert.equal(a.manifest, manifestBound, a.id);
+        assert.deepEqual(a.subjects, subjects, a.id);
+        assert.equal(a.verdict, subjects.some(sj => sj.status !== "match") ? "fail" : manifestBound === "other" ? "semantic-match" : "full-match", a.id);
+        assert.equal(a.envelope, att["envelope-ref"] ? (fs.existsSync(path.join(dir, att["envelope-ref"])) ? "unverified" : "missing") : "none", a.id);
+      }
+      /* how many of each: the objects the manifest lists, and the Attestations beside it, which are not among them */
+      await R.view("overview");
+      assert.equal(await R.text(page.locator("#ov-listed")), String(manifest.objects.length), what);
+      assert.equal(await R.text(page.locator("#ov-beside")), String(beside.length), what);
+      assert.equal(await page.locator("#ov-other").count(), 0, what);
+      assert.equal(await page.locator("[data-beside]").count(), 0, `${what}: a folder was looked into; nothing is said about how`);
+      assert.deepEqual(await page.locator("[data-ov-binds]").evaluateAll(l => l.map(x => [x.dataset.ovBinds, x.className, x.querySelector("a").textContent])), shown.map(a => [a.verdict, a.shownAs, a.id]), what);
+      const pill = await page.locator("#pill-bundle").getAttribute("title");
+      assert.ok(pill.startsWith(`${manifest.objects.length} object${manifest.objects.length === 1 ? "" : "s"} · ${beside.length} attestation${beside.length > 1 ? "s" : ""} beside the manifest · `), pill);
+      assert.match(await R.log(), new RegExp(` — ${manifest.objects.length} the manifest lists, ${beside.length} Attestation\\(s\\) beside the manifest$`, "m"), what);
+      assert.equal(await page.evaluate(() => document.getElementById("app").scrollWidth <= innerWidth), true, `${what}: the page is no wider than the window, however long the bundle's name is`);
+      /* in a narrow window the numbers are still read: the tagline gives way first, then the name */
+      await page.setViewportSize({ width: 1000, height: 1100 });
+      assert.equal(await page.evaluate(() => { const range = document.createRange(), pill = document.getElementById("pill-bundle"), text = pill.firstChild;
+        range.setStart(text, 0); range.setEnd(text, text.data.indexOf("beside the manifest") + "beside the manifest".length);
+        return range.getBoundingClientRect().right <= pill.getBoundingClientRect().right - 10 && document.getElementById("app").scrollWidth <= innerWidth; }), true, `${what}: at 1000 px the pill shows how many of each`);
+      await page.setViewportSize({ width: 1500, height: 1100 });
+      /* the object browser lists them too, with where each lies and what it binds; the detail says what stage 5 says */
+      await R.view("browser");
+      assert.equal(await page.locator(".objrow").count(), manifest.objects.length + beside.length, what);
+      for (const [i, a] of shown.entries()) {
+        assert.equal(await R.text(page.locator(`.objrow[data-id="${a.id}"] [data-list-binds="${a.verdict}"]`)), "beside the manifest · " + a.word, a.id);
+        assert.equal(await page.locator(`.objrow[data-id="${a.id}"] [data-list-binds]`).evaluate(x => { const text = document.createRange(); text.selectNodeContents(x);
+          return text.getBoundingClientRect().right <= x.closest(".objrow").getBoundingClientRect().right - 10; }), true, `${a.id}: the line is not cut, however long the id is`);
+        const d = await R.detail(a.id);
+        assert.equal(await d.locator("[data-binds-line]").evaluate(x => x.textContent), a.line, a.id);
+        assert.equal(await d.locator("[data-subject]").count(), a.subjects.length, a.id);
+        assert.match(await R.text(d), new RegExp(`where it lies beside the manifest, as ${beside[i][0].replace(/\./g, "\\.")} — not listed`), a.id);
+      }
+      /* the same files in reverse order say the same: nothing shown depends on the order in which files arrive */
+      await page.evaluate(async () => { await loadFileList([...document.getElementById("folderpick").files].reverse()); });
+      await page.waitForFunction(() => document.body.dataset.binds === "done");
+      assert.deepEqual(await R.attested(), shown, `${what}: in reverse order`);
+      asFolder.set(dir, shown);
+    }
+
+    /* A folder dropped on the page goes the way of the button, the envelope included: until 1.12.0 a drop handed
+       on its .json files only, so the envelope of a dropped bundle did not resolve. The drop is made here of the
+       entries a browser hands over, with the files' own bytes. */
+    const tree = dir => fs.readdirSync(dir, { withFileTypes: true }).map(e => e.isDirectory() ? { name: e.name, children: tree(path.join(dir, e.name)) }
+      : { name: e.name, base64: fs.readFileSync(path.join(dir, e.name)).toString("base64") });
+    const lines = await page.locator("#log > div").count();
+    await page.evaluate(root => {
+      const entry = (node, parent) => node.children
+        ? { isDirectory: true, createReader() { let sent = false; return { readEntries: done => { done(sent ? [] : node.children.map(c => entry(c, parent + "/" + node.name))); sent = true; } }; } }
+        : { isFile: true, fullPath: parent + "/" + node.name, file: done => done(new File([Uint8Array.from(atob(node.base64), ch => ch.charCodeAt(0))], node.name)) };
+      document.body.dispatchEvent(Object.assign(new Event("drop", { bubbles: true }), { dataTransfer: { items: [{ webkitGetAsEntry: () => entry(root, "") }] } }));
+    }, { name: "dropped", children: tree(PACK) });
+    await page.waitForFunction(n => [...document.querySelectorAll("#log > div")].slice(n).some(x => /indexed \d+ objects/.test(x.textContent)) && document.body.dataset.binds === "done", lines);
+    assert.deepEqual(await R.attested(), asFolder.get(PACK), "a dropped folder: as the button");
+
+    /* The example folder opened as files ("Open JSON file(s)…"). Files come without their folders: the Attestations
+       among them are found and held to the manifest, an envelope is read where it was opened along, and a pack
+       manifest the bundle keeps cannot be among them - which the page says where it matters. */
+    const files = ext => fs.readdirSync(EXAMPLES).filter(n => ext.some(e => n.endsWith(e))).map(n => path.join(EXAMPLES, n));
+    await R.load(files([".json", ".dsse"]), "#filepick");
+    let shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.id.split("/").pop(), a.verdict, a.manifest, a.envelope]), [["acme-2026", "full-match", "this", "unverified"], ["server-7-hardening-3", "semantic-match", "other", "unverified"]]);
+    assert.equal(await page.locator("#view-stagefn [data-binds-caveat]").count(), 1, "the one that binds another manifest says that no kept pack manifest was looked for");
+    await R.view("overview");
+    assert.equal(await page.locator("[data-beside]").getAttribute("data-beside"), "files");
+    assert.equal(await R.text(page.locator("#ov-beside")), "2");
+    await R.load(files([".json"]), "#filepick");
+    shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.envelope, a.envelopeText]), ["acme-2026", "dbvendor-server-7-advice"].map(n => ["missing", `FAIL - envelope-ref 'attestation-${n}.dsse' does not resolve beside the manifest`]),
+      "an envelope that was not opened along does not resolve, and is not passed over");
+  }));
+
+test("changed copies: a changed subject fails an active Attestation and is only reported for a withdrawn one; another manifest is a Semantic Match; an edited signed Attestation no longer matches its envelope - each as the reference says",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const A = "attestation-ifa-ato.json", PA = "attestation-dbvendor-server-7-advice.json", ZERO = "sha256:" + "0".repeat(64);
+    let n = 0;
+    const copy = (src, name, change, remove = []) => {
+      const dir = path.join(R.tmp, "changed-" + ++n, "bundle");
+      fs.cpSync(src, dir, { recursive: true });
+      const att = JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"));
+      change(att);
+      fs.writeFileSync(path.join(dir, name), JSON.stringify(att, null, 1) + "\n");
+      for (const r of remove) fs.rmSync(path.join(dir, r));
+      return dir;
+    };
+    const subject = a => { a["subject-semantic-digests"][0]["semantic-digest"] = ZERO; };
+    const ISSUE_AGAIN = "What can be done: the signer issues the Attestation again (a new version, signed again), or it is taken out of the bundle. ";
+    const UNSIGNED_WAY = ISSUE_AGAIN + "This one names no envelope, so setting its lifecycle to withdrawn is a way out as well: it is then reported and fails nothing.";
+    const SIGNED_NO_WAY = ISSUE_AGAIN + "Setting its lifecycle to withdrawn is no way out for this one: it names an envelope, and an Attestation that was edited no longer matches its envelope.";
+    /* [what, the folder, the file, the change, files removed, then: verdict, shown as a failure, first subject, envelope, what can be done] */
+    const cases = [
+      ["a subject's digest changed in an active Attestation", IFA, A, subject, [], "fail", "true", "differs", "none", UNSIGNED_WAY],
+      ["a subject the bundle does not hold", IFA, A, a => { a["subject-semantic-digests"][0].id += "-not-delivered"; }, [], "fail", "true", "absent", "none", UNSIGNED_WAY],
+      ["the manifest digest changed", IFA, A, a => { a["content-manifest-digest"] = "sha256:" + "b".repeat(64); }, [], "semantic-match", "false", "match", "none", null],
+      ...["withdrawn", "deprecated", "draft"].map(lc => [`${lc}, with a changed subject`, IFA, A, a => { subject(a); a.lifecycle = lc; }, [], "fail", "false", "differs", "none", null]),
+      ["withdrawn, and it still binds", IFA, A, a => { a.lifecycle = "withdrawn"; }, [], "full-match", "false", "match", "none", null],
+      ["signed, the lifecycle edited to withdrawn", PACK, PA, a => { a.lifecycle = "withdrawn"; }, [], "full-match", "false", "match", "fail", null],
+      ["signed, a subject's digest changed", PACK, PA, subject, [], "fail", "true", "differs", "fail", SIGNED_NO_WAY],
+      ["signed, the envelope taken away", PACK, PA, () => {}, [PA.replace(/json$/, "dsse")], "full-match", "false", "match", "missing", null],
+      ["the envelope reference removed and the lifecycle withdrawn: an unsigned record", PACK, PA, a => { a.lifecycle = "withdrawn"; delete a["envelope-ref"]; }, [], "full-match", "false", "match", "none", null]];
+    for (const [what, src, name, change, remove, verdict, fails, first, envelope, todo] of cases) {
+      const dir = copy(src, name, change, remove);
+      await R.load(dir);
+      const shown = await R.attested();
+      assert.equal(shown.length, 1, what);
+      const [a] = shown;
+      assert.deepEqual([a.verdict, a.fails, a.subjects[0]?.status, a.envelope, a.todo], [verdict, fails, first, envelope, todo], what);
+      asTheReference(shown, dir, what);
+      if (a.envelope === "fail") assert.equal(a.envelopeText, "FAIL - " + NOT_ITS_ENVELOPE, what);
+      assert.deepEqual(await page.locator("#view-stagefn [data-binds-envelope]").evaluateAll(l => l.map(x => [x.className, x.textContent])),
+        ["fail", "missing"].includes(envelope) ? [["verdict-bad", "· ✗ and its envelope fails (below)"]] : [], `${what}: the card names a failing envelope beside the verdict, which is about digests`);
+      if (first === "differs") {
+        const delivered = JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8")).objects.find(e => e.id === a.subjects[0].id)["semantic-digest"];
+        assert.deepEqual([a.subjects[0].signed, a.subjects[0].delivered], [ZERO, delivered], `${what}: the signed digest beside the delivered one`);
+      }
+      if (first === "absent") assert.equal(a.subjects[0].delivered, "not an object the manifest lists", what);
+      /* the overview says it in a line: a failure in red, what is only reported not */
+      await R.view("overview");
+      const line = page.locator("[data-ov-binds]");
+      assert.equal(await line.getAttribute("class"), verdict === "full-match" ? "verdict-ok" : fails === "true" ? "verdict-bad" : "verdict-warn", what);
+      assert.ok((await R.text(line)).startsWith(verdict !== "fail" ? `${WORD[verdict]} (` : fails === "true" ? "✗ DOES NOT BIND — a failure · " : "DOES NOT BIND — reported, not a failure · "), `${what}: ${await R.text(line)}`);
+      /* an envelope that fails is named there too, beside whatever the digests say */
+      assert.deepEqual(await line.locator("[data-ov-envelope]").evaluateAll(l => l.map(x => [x.className, x.textContent])),
+        ["fail", "missing"].includes(envelope) ? [["verdict-bad", "✗ its envelope: " + a.envelopeText]] : [], what);
+    }
+
+    /* Attestations are shown in the order of their ids, as the reference reports them, not in that of their files */
+    const renamed = path.join(R.tmp, "renamed", "examples");
+    fs.cpSync(EXAMPLES, renamed, { recursive: true });
+    fs.renameSync(path.join(renamed, "attestation-acme-2026.json"), path.join(renamed, "z-attestation-acme-2026.json"));
+    await R.load(renamed);
+    const inOrder = await R.attested();
+    assert.deepEqual(inOrder.map(x => [x.id, x.verdict]), [["https://agency-x.example/attestation/acme-2026", "full-match"], ["https://dbvendor.example/attestation/server-7-hardening-3", "full-match"]]);
+    asTheReference(inOrder, renamed, "the example folder with an Attestation's file renamed");
+
+    /* Two manifests in what was opened: the one highest up is the bundle's, whichever file arrives first. An
+       Attestation in a folder below it does not lie beside it: it is held to the bundle all the same and fails
+       nothing, and its subjects are compared with the objects the manifest lists, not with every object loaded. */
+    const outer = path.join(R.tmp, "nested", "pack");
+    fs.cpSync(PACK, outer, { recursive: true });
+    fs.cpSync(IFA, path.join(outer, "below"), { recursive: true });
+    await R.load(outer);
+    const both = await R.attested();
+    assert.deepEqual(both.map(x => [x.id.split("/").pop(), x.verdict, x.fails, x.manifest, x.subjects.map(sj => sj.status).join()]),
+      [["server-7-hardening-3", "full-match", "false", "this", "match"], ["ifa-ato", "fail", "false", "other", "absent,absent,absent"]]);
+    const below = page.locator('#view-stagefn [data-attestation="https://ifa.gov/goodread/attestation/ifa-ato"]');
+    assert.match(await R.text(below), /DOES NOT BIND — the Attestation is active; it was not read with this bundle, so it fails none /);
+    assert.match(await R.text(below), /where it lies a file the manifest does not list and that does not lie beside it \(below\/attestation-ifa-ato\.json\) — not read with the bundle/);
+    await R.view("overview");
+    assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside")), await R.text(page.locator("#ov-other"))], ["1", "1", "17"]);
+    await page.evaluate(async () => { await loadFileList([...document.getElementById("folderpick").files].reverse()); });
+    await page.waitForFunction(() => document.body.dataset.binds === "done");
+    assert.deepEqual(await R.attested(), both, "the same files in reverse order: the same manifest, the same verdicts");
+    if (REFERENCE) {
+      const ref = referenceAttested(outer);
+      assert.deepEqual([ref.ok, ref.binds.map(b => b[0])], [true, ["https://dbvendor.example/attestation/server-7-hardening-3"]], "the reference reads the one beside the manifest: " + ref.line);
+    }
+
+    /* A file the kernel does not accept as an Attestation (backlog #71 point 9). The page reads an object by its
+       fields and carries no schema; the reference reads a file beside the manifest as an Attestation only when the
+       kernel schema accepts it. An "Attestation" without a subject is none to the kernel (minItems 1): the reference
+       does not read the file and says nothing about it. Until 1.21.0 the page showed it as an Attestation that does
+       not bind and fails the bundle. Since 1.22.0 it checks the members the kernel requires, does not read the file
+       as an Attestation, and names it in the overview with what it lacks. */
+    for (const [what, change, lacks] of [
+      ["no subject", a => { a["subject-semantic-digests"] = []; }, "subject-semantic-digests names no subject (the kernel requires at least one)"],
+      ["no signer and no timestamp", a => { delete a.signer; delete a.timestamp; }, "no signer; no timestamp"],
+      ["no lifecycle", a => { delete a.lifecycle; }, "no lifecycle"]]) {
+      const dir = copy(IFA, A, change);
+      await R.load(dir);
+      assert.deepEqual(await R.attested(), [], `${what}: no Attestation is shown`);
+      await R.view("overview");
+      assert.deepEqual(await page.locator("[data-not-attestation]").evaluateAll(l => l.map(x => [x.dataset.notAttestation, x.textContent])), [[A, `○ ${A}: ${lacks}`]], what);
+      assert.deepEqual([await R.text(page.locator("#ov-beside")), await page.locator("#ov-other").count()], ["0", 0], `${what}: it is counted nowhere`);
+      assert.match(await R.log(), new RegExp(`not read as an Attestation: ${A} — the kernel requires members it does not have: ${lacks.replace(/[()]/g, "\\$&")}`), what);
+      if (REFERENCE) {
+        const ref = referenceAttested(dir);
+        assert.deepEqual([ref.ok, ref.binds, ref.envelopes], [true, [], []], `${what}: the reference does not read a file the kernel schema refuses: ` + ref.line);
+      }
+    }
+    /* a file with every required member is read as before, and where it fails the page says how far its own check goes */
+    const dir = copy(IFA, A, subject);
+    await R.load(dir);
+    assert.equal(await page.locator("[data-not-attestation]").count(), 0);
+    const [a] = await R.attested();
+    assert.deepEqual([a.verdict, a.fails], ["fail", "true"]);
+    assert.match(await R.text(page.locator("#view-stagefn [data-attestation]")), /DOES NOT BIND — a failure: the Attestation is active, and validate_core\.py fails the bundle for it — provided the kernel schema accepts the file as an Attestation: this page checks that the members the kernel requires are there, and no more/);
+  }));
+
+test("from a URL: the Attestations beside a manifest are found through the server's listing of the folder or by the names the link gives; with neither the page says that it did not look",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const folder = new Map();   // what each folder says when it is opened as a folder
+    for (const dir of [EXAMPLES, IFA, PACK]) { await R.load(dir); folder.set(dir, await R.attested()); }
+    const names = dir => besideOf(dir).map(([name]) => name).sort();   // the test knows the names; the page lists the folder or is given them
+    const web = R.watch(await page.context().newPage());
+    const overview = async () => {
+      await web.click('.navitem[data-view="overview"]');
+      return [await web.locator("[data-beside]").getAttribute("data-beside"), await web.locator("#ov-beside").innerText(), await web.locator("#pill-bundle").getAttribute("title")];
+    };
+    const loaded = () => web.waitForFunction(n => [...document.querySelectorAll("#log > div")].slice(n).some(x => /indexed \d+ objects/.test(x.textContent)) && document.body.dataset.binds === "done", 0);
+    const linked = async (server, dir, more = "") => { await web.goto("about:blank"); await web.goto(`${server.reader}#load=${server.url(dir)}${more}`); await loaded(); return overview(); };
+    const lists = await serve(R, "listing"), silent = await serve(R, null), other = await serve(R, "page");
+    R.quiet.push(new RegExp(`^${silent.at}/.*/$`), new RegExp(`^${silent.at}/.*/(packs/sha256/[0-9a-f]{64}|not-there\\.json)$`));   // a folder, a pack manifest that is not kept, a file the link names and the server does not have
+    try {
+      for (const dir of [EXAMPLES, IFA, PACK]) {
+        const what = path.relative(ROOT, dir), count = String(folder.get(dir).length);
+        /* a server that lists its folders: as the folder */
+        let [how, beside, pill] = await linked(lists, dir);
+        assert.deepEqual([how, beside], ["listing", count], what);
+        assert.deepEqual(await R.attested(web), folder.get(dir), `${what}, listed by the server: as the folder`);
+        /* a server that lists none, and a link that names nothing: none is found, and the page says that it did not look */
+        for (const [server, why] of [[silent, "refuses the folder"], [other, "answers the folder with another page"]]) {
+          [how, beside, pill] = await linked(server, dir);
+          assert.deepEqual([how, beside], ["no-listing", "0"], `${what}: the server ${why}`);
+          assert.match(pill, /^(1 object|(?!1 )\d+ objects) · attestations beside the manifest not looked for · /, what);
+          assert.match(await R.text(web.locator("[data-beside]")), /^— not looked for: this server lists no folders, and nothing was named\. Add &attestation=<file name> to the link, or open the folder$/);
+          assert.match(await web.locator("#log").innerText(), /this server lists no folders: an Attestation beside the manifest cannot be found from a URL/);
+          assert.deepEqual(await R.attested(web), [], what);
+        }
+        /* the same server, and a link that names them: as the folder - also the one that binds a pack manifest the
+           bundle keeps, which is asked for under the name its digest gives it */
+        [how, beside] = await linked(silent, dir, "&attestation=" + names(dir).join(","));
+        assert.deepEqual([how, beside], ["named", count], what);
+        assert.deepEqual(await R.attested(web), folder.get(dir), `${what}, named in the link: as the folder`);
+        assert.equal(await web.locator("[data-beside-refused]").count(), 0, what);
+      }
+      /* names that give no Attestation are said, each with its reason, and none of them is shown as one */
+      const [how, beside] = await linked(silent, EXAMPLES, "&attestation=attestation-acme-2026.json,not-there.json,authorization-summary.md,req-konf-14-1.json,packs/x.json");
+      assert.deepEqual([how, beside], ["named", "1"]);
+      assert.deepEqual(await web.locator("[data-beside-refused]").evaluateAll(l => l.map(x => x.textContent)), [
+        "✗ not-there.json: not fetched (HTTP 404)", "✗ authorization-summary.md: the file is no Attestation",
+        "✗ req-konf-14-1.json: the manifest lists this file, so it does not lie beside it", "✗ packs/x.json: an Attestation beside the manifest is named by its file name, without a folder"]);
+      assert.deepEqual((await R.attested(web)).map(a => a.id), ["https://agency-x.example/attestation/acme-2026"]);
+      /* the button asks for the address and then for the names */
+      R.answers.push(silent.url(PACK), " " + names(PACK).join(" , "));
+      await web.click("#btn-url");
+      await web.waitForFunction(() => document.getElementById("pill-bundle").title.startsWith("1 object · 1 attestation beside the manifest") && document.body.dataset.binds === "done");
+      assert.deepEqual(await R.attested(web), folder.get(PACK), "by the button, with a name");
+      R.answers.push(silent.url(IFA));   // and no name
+      await web.click("#btn-url");
+      await web.waitForFunction(() => document.getElementById("pill-bundle").title.startsWith("16 objects · attestations beside the manifest not looked for"));
+    } finally { lists.close(); silent.close(); other.close(); }
+  }));
+
+test("an export never lists an Attestation: it is written beside the manifest, and the reference reads it there; a pasted Attestation fails no bundle",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const stored = created => ({ v: 2, ns: "https://example.org/my", tailor: { label: "my-tailoring", selects: [], excludes: [], operations: [] },
+      system: { title: "My System", components: [], implementations: [] }, assess: { scopeKey: "", performer: "", results: {} }, created });
+    const exported = async (created, name) => {
+      await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), stored(created));
+      await page.reload();
+      const dir = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, name));
+      return { dir, manifest: JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8")), log: await R.log() };
+    };
+
+    /* a workspace that holds an unsigned Attestation and its three subjects (the first binds vector) */
+    const c = BINDS[0], att = c.attestation;
+    let x = await exported([...c.objects, att], "unsigned");
+    let shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.id, a.verdict, a.envelope]), [[att.id, "not-judged", "none"]], "without a bundle an Attestation is held to none");
+    assert.deepEqual(x.manifest.objects.map(e => e.id), c.objects.map(o => o.id), "the manifest lists the three objects and no Attestation");
+    for (const e of x.manifest.objects) assert.notEqual(P.inferType(JSON.parse(fs.readFileSync(path.join(x.dir, e.path), "utf8"))), "attestation", e.path);
+    assert.deepEqual(fs.readdirSync(x.dir).sort(), ["attestation-ato.json", "content-manifest.json", "objects"], "the Attestation lies beside the manifest");
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(x.dir, "attestation-ato.json"), "utf8")), att, "as it was held");
+    /* the manifest is new, so what bound another one with unchanged subjects is a Semantic Match: the page says so when it writes, and the reference says the same of the export */
+    const SEMANTIC = `binds: ${att.id} = SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`;
+    assert.ok(x.log.includes("in this export — " + SEMANTIC + "\n"), x.log.slice(-900));
+    assert.match(x.log, /workspace bundle exported: 3 objects \+ content-manifest with both digests \+ 1 Attestation\(s\) beside the manifest, not listed \(D3\.1\) \([\d.]+ kB zip\) — loads back into this reader and nothing fails in what this page checks \(closure-required references and what they resolve to, references to a withdrawn object, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
+    await R.load(x.dir);
+    shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest, a.line]), [["semantic-match", "false", "other", SEMANTIC]]);
+    asTheReference(shown, x.dir, "the export, loaded again");
+    assert.ok((await page.locator("#pill-bundle").getAttribute("title")).startsWith("3 objects · 1 attestation beside the manifest · "));
+
+    /* A manifest that lists its Attestation, as reader 1.12.0 wrote it. D3.1 excludes that, and since 2026-11-14
+       the reference refuses it in every bundle (MANIFEST-1; until then it passed: 5 pass, 0 fail). So does the
+       page, in the reference's words; the Attestation is still held to its subjects like any other and counted
+       among the objects the manifest lists, as the reference counts it, and the page says where it lies. */
+    const moved = "objects/att/attestation-ato.json", unsigned = x;
+    const listedBy = async (name, listedAtt) => {
+      const dir = path.join(R.tmp, name, "bundle"), bytes = Buffer.from(JSON.stringify(listedAtt, null, 1) + "\n");
+      fs.cpSync(unsigned.dir, dir, { recursive: true });
+      fs.rmSync(path.join(dir, "attestation-ato.json"));
+      fs.mkdirSync(path.join(dir, "objects/att"));
+      fs.writeFileSync(path.join(dir, moved), bytes);
+      fs.writeFileSync(path.join(dir, "content-manifest.json"), JSON.stringify({ ...unsigned.manifest, objects: [...unsigned.manifest.objects,
+        { id: listedAtt.id, version: listedAtt.version, "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(listedAtt), path: moved }] }, null, 1) + "\n");
+      return dir;
+    };
+    /* one whose subject was changed after signing: listed or not, an active Attestation that does not bind fails the bundle */
+    const changed = await listedBy("listed-changed", { ...att, "subject-semantic-digests": att["subject-semantic-digests"].map((sj, i) => i ? sj : { ...sj, "semantic-digest": "sha256:" + "0".repeat(64) }) });
+    await R.load(changed);
+    shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.listed, a.subjects.map(sj => sj.status).join()]), [["fail", "true", "true", "differs,match,match"]]);
+    asTheReference(shown, changed, "a manifest that lists an Attestation that does not bind");
+    const listing = await listedBy("listed", att);
+    await R.load(listing);
+    shown = await R.attested();
+    assert.deepEqual(shown.map(a => [a.verdict, a.fails, a.manifest, a.listed, a.listedError]), [["semantic-match", "false", "other", "true", att.id + MANIFEST_1]]);
+    asTheReference(shown, listing, "a manifest that lists its Attestation");
+    assert.match(await R.text(page.locator("#view-stagefn [data-attestation]")), /where it lies listed by the manifest, as objects\/att\/attestation-ato\.json — D3\.1 excludes that: an Attestation lies beside a manifest and is never an entry of one \(MANIFEST-1\)\. It is held to what it binds all the same/);
+    await R.view("overview");
+    assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside"))], ["4", "0"]);
+    assert.match(await R.text(page.locator("[data-ov-binds]")), /^SEMANTIC MATCH \(another manifest\) · \S+ ✗ listed by the manifest \(MANIFEST-1\)$/);
+
+    /* a signed Attestation in a workspace: the workspace holds objects and no envelope files, so it leaves without
+       its envelope - not listed either, and the page says that a validator fails the export for it */
+    const packAtt = besideOf(PACK)[0][1], packManifest = json("jascon/example-packs/dbvendor-server-7-advice/content-manifest.json");
+    const subjectOfPack = JSON.parse(fs.readFileSync(path.join(PACK, packManifest.objects[0].path), "utf8"));
+    x = await exported([subjectOfPack, packAtt], "signed");
+    assert.deepEqual(x.manifest.objects.map(e => e.id), [subjectOfPack.id]);
+    assert.deepEqual(fs.readdirSync(x.dir).sort(), ["attestation-server-7-hardening-3.json", "content-manifest.json", "objects"]);
+    const UNRESOLVED = `envelope-ref '${packAtt["envelope-ref"]}' does not resolve beside the manifest`;
+    assert.ok(x.log.includes(`in this export — dsse: ${packAtt.id} = FAIL - ${UNRESOLVED} (the workspace holds no envelope files)\n`), x.log.slice(-900));
+    assert.match(x.log, /— loads back into this reader and validate_core\.py fails it: 1 line\(s\) above say why$/m);
+    if (REFERENCE) {
+      const ref = referenceAttested(x.dir);
+      assert.equal(ref.ok, false, ref.line);
+      assert.deepEqual(ref.envelopes, [[packAtt.id, "missing", UNRESOLVED]]);
+      assert.deepEqual(ref.binds, [[packAtt.id, `binds: ${packAtt.id} = SEMANTIC MATCH [1 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`]]);
+    }
+
+    /* An Attestation leaves as it is held, whatever is in it. An object written in a workbench has its plain-text
+       title written as a language map on the way out; an Attestation is somebody's statement and is not rewritten. */
+    const plain = { ...att, title: "Authorization, as somebody typed it" };
+    x = await exported([...c.objects, plain], "plain");
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(x.dir, "attestation-ato.json"), "utf8")), plain);
+
+    /* an export of what was written here does not carry the Attestations of the loaded bundle: they bind that delivery */
+    await page.evaluate(() => localStorage.removeItem("scr-work"));
+    await page.reload();
+    await R.load(EXAMPLES);
+    await R.view("stage:tailor");
+    const resolved = unzipTo(await R.download("#wb-t-export-resolved"), path.join(R.tmp, "resolved"));
+    assert.deepEqual(fs.readdirSync(resolved).sort(), ["content-manifest.json", "objects"]);
+    assert.match(await R.log(), /resolved package exported: .* — the 2 Attestation\(s\) of the loaded bundle are not carried: they bind that delivery, and this export delivers other objects$/m);
+
+    /* an Attestation pasted beside a loaded bundle is held to it all the same, and fails nothing: it did not come with it */
+    R.answers.push(JSON.stringify(att));
+    await page.click("#btn-paste");
+    await page.waitForFunction(() => document.body.dataset.binds === "done");
+    const pasted = page.locator("#detail [data-attestation]");
+    assert.deepEqual([await pasted.getAttribute("data-binds"), await pasted.getAttribute("data-binds-fails"), await pasted.locator("[data-binds-word]").getAttribute("class")], ["fail", "false", "verdict-warn"]);
+    assert.match(await R.text(pasted), /^DOES NOT BIND — the Attestation is active; it was not read with this bundle, so it fails none /);
+    assert.match(await R.text(pasted), /where it lies pasted — it did not come with the loaded bundle/);
+    assert.equal(await pasted.locator("[data-binds-todo]").count(), 0, "what can be done is said where a bundle fails");
+    await R.view("overview");
+    assert.deepEqual([await R.text(page.locator("#ov-listed")), await R.text(page.locator("#ov-beside")), await R.text(page.locator("#ov-other"))], ["24", "2", "1"]);
+    assert.equal(await page.locator("[data-ov-binds]").count(), 2, "the overview lists the two that came with the bundle");
+  }));
+
+/* ---------- 12. MANIFEST-1: no content manifest lists an Attestation (backlog #75; specification D3.11) ---------- */
+const LISTED = json("jascon/conformance/attestation-vectors.json")["listed-vectors"];
+
+test("MANIFEST-1: each of the 8 listed vectors gets one failure per listed Attestation from the page's own function, in the reference's words and in the order of the ids", () => {
+  assert.equal(LISTED.length, 8);   // a vector added to the family is looked at here before this number moves
+  const seen = new Set();
+  for (const c of LISTED) {
+    for (const o of c.objects) assert.ok(![null, "manifest"].includes(P.inferType(o)), `${c.name}: ${o.id} is typed`);
+    const errs = P.listedAttestationErrors(c.objects);
+    assert.equal(errs.length, c["expected-fails"], c.name);
+    assert.deepEqual(errs, c["expected-ids"].map(id => id + MANIFEST_1), c.name);
+    const atts = c.objects.filter(o => P.inferType(o) === "attestation");
+    seen.add(errs.length + " listed");
+    for (const a of atts) { seen.add("lifecycle " + a.lifecycle); seen.add("envelope-ref" in a ? "signed" : "unsigned"); }
+    if (atts.length > 1 && atts.map(a => a.id).join() !== c["expected-ids"].join()) seen.add("listed in another order than that of the ids");
+    if (c.objects.some(o => /\/attestation\//.test(o.id) && P.inferType(o) !== "attestation")) seen.add("an id that says attestation on another type");
+    if (atts.length === c.objects.length) seen.add("nothing but an Attestation");
+  }
+  /* what the deliberate defects need a vector for */
+  for (const x of ["0 listed", "1 listed", "2 listed", "lifecycle active", "lifecycle draft", "lifecycle withdrawn", "signed", "unsigned",
+    "listed in another order than that of the ids", "an id that says attestation on another type", "nothing but an Attestation"]) assert.ok(seen.has(x), `a vector holds a case of '${x}'`);
+  /* No vector holds an id beyond the Basic Multilingual Plane. The order is that of the UTF-16 code units, as for every
+     list of ids (D2): U+1F600 is written D83D DE00 and comes before U+E000, which it follows by code point. */
+  const att = LISTED.flatMap(c => c.objects).find(o => P.inferType(o) === "attestation"), home = "https://agency-x.example/attestation/";
+  assert.deepEqual(P.listedAttestationErrors(["", "\u{1F600}"].map(tail => ({ ...att, id: home + tail }))), ["\u{1F600}", ""].map(tail => home + tail + MANIFEST_1));
+});
+
+/* listed_attestation_errors of the reference, run by Python on objects typed by the page. -> per case [message] */
+function referenceListed(cases) {
+  const py = `
+import ast, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+ns = {}
+for node in ast.parse(src).body:
+    if isinstance(node, ast.FunctionDef) and node.name in ("by_code_unit", "listed_attestation_errors"):
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+cases = json.loads(sys.stdin.buffer.read().decode("utf-8"))
+print(json.dumps([ns["listed_attestation_errors"]({i: (t, o) for i, t, o in c}) for c in cases]))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+
+test("MANIFEST-1: the reference's own listed_attestation_errors gives the page's messages, for every vector and for ids whose order by code unit is not their order by code point",
+  { skip: !PYTHON && "python3 is not installed" }, () => {
+    const att = LISTED.flatMap(c => c.objects).find(o => P.inferType(o) === "attestation"), named = tail => ({ ...att, id: "https://agency-x.example/attestation/" + tail });
+    /* U+1F600 is written with the code units D83D DE00, which come before U+E000; by code point it comes after */
+    const cases = [...LISTED, { name: "beyond the Basic Multilingual Plane", objects: [named(""), named("\u{1F600}"), named("z"), named("Z")] }];
+    const ref = referenceListed(cases.map(c => typed(c.objects)));
+    cases.forEach((c, i) => assert.deepEqual(P.listedAttestationErrors(c.objects), ref[i], c.name));
+    assert.deepEqual(ref.at(-1).map(e => e.slice("https://agency-x.example/attestation/".length, e.indexOf(": an Attestation"))), ["Z", "z", "\u{1F600}", ""]);
+  });
+
+test("MANIFEST-1 on the page: a manifest that lists an Attestation fails in the reference's words wherever the Attestation is shown; the Attestation is still held to what it binds; what the page says can be done holds in the reference",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    let n = 0;
+    /* A copy of `src` whose manifest lists the Attestation files `names`: each is moved under objects/attestation/ and
+       entered with both digests right, as the IFA bundle had its own until 2026-11-13. `change` edits each first. */
+    const listing = async (src, names, change = () => {}) => {
+      const dir = path.join(R.tmp, "listed-" + ++n, "bundle"), mp = path.join(dir, "content-manifest.json");
+      fs.cpSync(src, dir, { recursive: true });
+      const original = fs.readFileSync(mp), manifest = JSON.parse(original);
+      fs.mkdirSync(path.join(dir, "objects/attestation"), { recursive: true });
+      for (const name of names) {
+        const att = JSON.parse(fs.readFileSync(path.join(dir, name), "utf8"));
+        change(att);
+        const bytes = Buffer.from(JSON.stringify(att, null, 1) + "\n"), rel = "objects/attestation/" + name;
+        fs.rmSync(path.join(dir, name));
+        fs.writeFileSync(path.join(dir, rel), bytes);
+        manifest.objects.push({ id: att.id, version: att.version, path: rel, "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(att) });
+      }
+      fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+      return { dir, mp, original, manifest, names };
+    };
+    /* What the page says can be done about a listing, done: the entries taken out of the manifest and the files put
+       beside it. The manifest is written anew (other bytes than the bundle came with), or its own bytes are put back. */
+    const besideAgain = (x, ownBytes) => {
+      for (const name of x.names) fs.renameSync(path.join(x.dir, "objects/attestation", name), path.join(x.dir, name));
+      fs.rmdirSync(path.join(x.dir, "objects/attestation"));
+      const anew = Buffer.from(JSON.stringify({ ...x.manifest, objects: x.manifest.objects.filter(e => !e.path.startsWith("objects/attestation/")) }, null, 2) + "\n");
+      assert.equal(anew.equals(x.original), false, "written anew, the manifest has other bytes than it came with");
+      fs.writeFileSync(x.mp, ownBytes ? x.original : anew);
+    };
+    const held = async (x, what, also) => { await R.load(x.dir); const shown = await R.attested(); asTheReference(shown, x.dir, what, also); return shown; };
+    const A = "attestation-ifa-ato.json", AID = "https://ifa.gov/goodread/attestation/ifa-ato", ZERO = "sha256:" + "0".repeat(64);
+    const MOVE = "What can be done: take its entry out of the manifest and put the file beside the manifest.";
+    const THEN = " The manifest is then another file: where its bytes are exactly those the Attestation binds, the Attestation is a Full Match; otherwise it is a Semantic Match, which fails nothing, until the signer issues it again.";
+    const ISSUE_AGAIN = "the signer issues the Attestation again (a new version, signed again), or it is taken out of the bundle. This one names no envelope, so setting its lifecycle to withdrawn is a way out as well: it is then reported and fails nothing.";
+    const said = shown => shown.map(a => [a.id.split("/").pop(), a.verdict, a.manifest, a.fails, a.listed]);
+
+    /* 1. the IFA bundle, its Attestation listed and nothing else wrong: the listing fails the bundle, the binding does not */
+    let x = await listing(IFA, [A]);
+    let shown = await held(x, "the IFA bundle, its Attestation listed");
+    assert.deepEqual(said(shown), [["ifa-ato", "semantic-match", "other", "false", "true"]]);
+    assert.equal(shown[0].listedError, AID + MANIFEST_1);
+    assert.equal(shown[0].todo, MOVE + THEN);
+    const card = page.locator("#view-stagefn [data-attestation]");
+    assert.deepEqual(await card.locator("[data-binds-listed]").evaluateAll(l => l.map(e => [e.className, e.textContent])), [["verdict-bad", "· ✗ and the manifest lists it: the bundle fails (MANIFEST-1)"]]);
+    assert.match(await R.text(card), /SEMANTIC MATCH · ✗ and the manifest lists it: the bundle fails \(MANIFEST-1\) — every subject matches and the Attestation binds another manifest: .* The manifest that lists it is never the one it binds; the failure here is the listing /);
+    assert.match(await R.text(card), /where it lies listed by the manifest, as objects\/attestation\/attestation-ifa-ato\.json — D3\.1 excludes that: an Attestation lies beside a manifest and is never an entry of one \(MANIFEST-1\)\. It is held to what it binds all the same/);
+    assert.equal(await card.locator("[data-where-listed]").getAttribute("class"), "verdict-bad");
+    /* the console says it as an error, in the reference's words */
+    assert.deepEqual(await page.locator("#log > div.l-err").evaluateAll(l => l.map(e => e.textContent.replace(/^[\d:.]+/, ""))), [AID + MANIFEST_1]);
+    /* the overview: the Attestation is one of the objects the manifest lists, as a validator counts it, and that is the failure */
+    await R.view("overview");
+    const entries = x.manifest.objects.length;
+    assert.equal(await R.text(page.locator("#ov-kv .v", { has: page.locator("#ov-listed") })), `${entries} of ${entries} manifest entries ✗ ${AID}${MANIFEST_1}`);
+    assert.deepEqual(await page.locator("#ov-kv [data-listed-error]").evaluateAll(l => l.map(e => [e.className, e.textContent])), [["verdict-bad", "✗ " + AID + MANIFEST_1]]);
+    assert.equal(await R.text(page.locator("#ov-beside")), "0");
+    assert.equal(await R.text(page.locator("[data-ov-binds]")), `SEMANTIC MATCH (another manifest) · ${AID} ✗ listed by the manifest (MANIFEST-1)`);
+    assert.equal(await page.locator("[data-ov-listed]").getAttribute("class"), "verdict-bad");
+    assert.ok((await page.locator("#pill-bundle").getAttribute("title")).startsWith(`${entries} objects · no attestation beside the manifest · ✗ 1 attestation listed (MANIFEST-1) · `), await page.locator("#pill-bundle").getAttribute("title"));
+    /* the object browser: in the list and in the detail */
+    await R.view("browser");
+    assert.deepEqual(await page.locator(`.objrow[data-id="${AID}"] [data-list-listed]`).evaluateAll(l => l.map(e => [e.className, e.textContent])), [["verdict-bad", "· ✗ listed by the manifest (MANIFEST-1)"]]);
+    assert.equal(await R.text(page.locator(`.objrow[data-id="${AID}"] [data-list-binds]`)), "SEMANTIC MATCH · ✗ listed by the manifest (MANIFEST-1)");
+    const d = await R.detail(AID);
+    assert.equal(await d.locator("[data-listed-error]").evaluate(e => e.textContent), AID + MANIFEST_1);
+    assert.equal(await d.locator("[data-attestation]").getAttribute("data-listed"), "true");
+    if (REFERENCE) assert.match(referenceAttested(x.dir).line, / pass, 1 fail /, "the listing is the one failure of the bundle");
+
+    /* ... and what the page says can be done, done. Written anew, the manifest is another file: a Semantic Match, and the bundle passes */
+    besideAgain(x);
+    shown = await held(x, "the Attestation beside the manifest again, the manifest written anew");
+    assert.deepEqual([said(shown), shown[0].todo], [[["ifa-ato", "semantic-match", "other", "false", "false"]], null]);
+    await R.view("overview");
+    assert.deepEqual([await page.locator("[data-listed-error]").count(), await page.locator("[data-ov-listed]").count(), await R.text(page.locator("#ov-beside"))], [0, 0, "1"], "nothing of the listing stays on the page");
+    assert.doesNotMatch(await page.locator("#pill-bundle").getAttribute("title"), /listed|MANIFEST-1/);
+    assert.match(await R.text(page.locator("#detail")), /^Select an object on the left /, "the detail that was up belonged to the bundle before, and went with it");
+    /* with the bytes it binds, the manifest is that manifest again: a Full Match */
+    fs.writeFileSync(x.mp, x.original);
+    shown = await held(x, "the Attestation beside the manifest again, the manifest's own bytes");
+    assert.deepEqual(said(shown), [["ifa-ato", "full-match", "this", "false", "false"]]);
+
+    /* 2. listed, and it does not bind either: two failures, and moving the file cures one of them */
+    x = await listing(IFA, [A], a => { a["subject-semantic-digests"][0]["semantic-digest"] = ZERO; });
+    shown = await held(x, "listed, and a subject's digest changed");
+    assert.deepEqual([said(shown), shown[0].subjects[0].status], [[["ifa-ato", "fail", "other", "true", "true"]], "differs"]);
+    assert.equal(shown[0].todo, "What can be done: about the listing, take its entry out of the manifest and put the file beside the manifest. That does not make it bind: " + ISSUE_AGAIN + " The listing fails the bundle whatever the lifecycle is.");
+    if (REFERENCE) assert.match(referenceAttested(x.dir).line, / pass, 2 fail /);
+    besideAgain(x);
+    shown = await held(x, "... beside the manifest again: it still does not bind");
+    assert.deepEqual([said(shown), shown[0].todo], [[["ifa-ato", "fail", "other", "true", "false"]], "What can be done: " + ISSUE_AGAIN]);
+
+    /* 3. the lifecycle changes nothing about where an Attestation lies: withdrawn and not binding, the listing is the one failure */
+    x = await listing(IFA, [A], a => { a["subject-semantic-digests"][0]["semantic-digest"] = ZERO; a.lifecycle = "withdrawn"; });
+    shown = await held(x, "listed, withdrawn, and a subject's digest changed");
+    assert.deepEqual(said(shown), [["ifa-ato", "fail", "other", "false", "true"]]);
+    assert.equal(shown[0].todo, MOVE + " That it does not bind is then reported and fails nothing: its lifecycle is withdrawn.");
+    besideAgain(x);
+    shown = await held(x, "... beside the manifest again: reported, and the bundle passes");
+    assert.deepEqual([said(shown), shown[0].todo], [[["ifa-ato", "fail", "other", "false", "false"]], null]);
+    x = await listing(IFA, [A], a => { a.lifecycle = "draft"; });
+    assert.deepEqual(said(await held(x, "listed, a draft")), [["ifa-ato", "semantic-match", "other", "false", "true"]]);
+
+    /* 4. In a pack the reference states two rules: MANIFEST-1, and ADVICE-1 (a pack holds Components only). Until
+       1.21.0 the page stated MANIFEST-1 and held no pack to ADVICE-1 to ADVICE-3; since 1.22.0 it states both, the
+       second in the overview and in the console, in the reference's words (backlog #71 point 12). */
+    const PA = "attestation-dbvendor-server-7-advice.json";
+    const ADVICE_1 = / is a attestation - an advice pack holds components only \(an attestation travels beside the manifest, D3\.1\) \(ADVICE-1: /;
+    x = await listing(PACK, [PA]);
+    shown = await held(x, "the worked pack, its Attestation listed", [ADVICE_1]);
+    assert.deepEqual([said(shown), shown[0].envelope], [[["server-7-hardening-3", "semantic-match", "other", "false", "true"]], "unverified"]);
+    await R.view("overview");
+    const packSaid = await page.locator("#ov-kv [data-pack-error]").evaluateAll(l => l.map(e => e.textContent.replace(/^✗ /, "")));
+    assert.equal(packSaid.length, 1);
+    assert.match(packSaid[0], ADVICE_1);
+    assert.ok((await R.log()).includes(packSaid[0]), "the console has the same sentence");
+    if (REFERENCE) {
+      const ref = referenceAttested(x.dir);
+      assert.match(ref.line, / pass, 2 fail /);
+      assert.deepEqual(ref.others, packSaid, "the page's sentence is the reference's");
+    }
+    /* the row that lists the Attestations read with the bundle is titled for both kinds while one is listed */
+    assert.deepEqual(await page.locator("#ov-kv .k").evaluateAll(l => l.map(e => e.textContent).filter(t => t.startsWith("attestations "))), ["attestations beside the manifest, and listed by it"]);
+    /* at 1,000 px the pill still shows the tag that says the bundle fails */
+    await page.setViewportSize({ width: 1000, height: 1100 });
+    assert.equal(await page.evaluate(() => { const range = document.createRange(), pill = document.getElementById("pill-bundle"), text = pill.firstChild;
+      range.setStart(text, 0); range.setEnd(text, text.data.indexOf("(MANIFEST-1)") + "(MANIFEST-1)".length);
+      const box = pill.getBoundingClientRect(), bar = document.getElementById("topbar").getBoundingClientRect();
+      return [...range.getClientRects()].every(r => r.right <= box.right && r.bottom <= box.bottom + 1 && r.top >= box.top - 1) && box.bottom <= bar.bottom && document.getElementById("app").scrollWidth <= innerWidth; }), true,
+      "at 1000 px the pill shows the text up to (MANIFEST-1) inside the header");
+    await page.setViewportSize({ width: 1500, height: 1100 });
+
+    /* 5. The example folder with both of its Attestations listed: one sentence each, in the order of the ids. The one
+       that binds a pack manifest the bundle keeps is a Full Match all the same - the manifest it binds is not the one
+       that lists it - and stays one when it is moved. */
+    x = await listing(EXAMPLES, [PA, "attestation-acme-2026.json"]);
+    shown = await held(x, "the example folder, both Attestations listed");
+    assert.deepEqual(said(shown), [["acme-2026", "semantic-match", "other", "false", "true"], ["server-7-hardening-3", "full-match", "kept-pack", "false", "true"]]);
+    assert.deepEqual(shown.map(a => a.todo), [MOVE + THEN, MOVE + " It binds a pack manifest this bundle keeps, which that does not change: it stays a Full Match."]);
+    await R.view("overview");
+    assert.deepEqual(await page.locator("#ov-kv [data-listed-error]").evaluateAll(l => l.map(e => e.textContent)), shown.map(a => "✗ " + a.id + MANIFEST_1));
+    assert.match(await page.locator("#pill-bundle").getAttribute("title"), /^26 objects · no attestation beside the manifest · ✗ 2 attestations listed \(MANIFEST-1\) · /);
+    besideAgain(x);
+    assert.deepEqual(said(await held(x, "... both beside the manifest again, the manifest written anew")),
+      [["acme-2026", "semantic-match", "other", "false", "false"], ["server-7-hardening-3", "full-match", "kept-pack", "false", "false"]]);
+
+    /* 6. Where the page and the reference differ, measured and not hidden (as for a file beside the manifest, above):
+       the page reads an object by its fields, the reference by the kernel schema. A listed file with the fields of
+       an Attestation and no subject is no Attestation to the kernel. Both fail the bundle, in other words: the page
+       with MANIFEST-1 and what the primitive makes of it, the reference with the file matching no type. */
+    x = await listing(IFA, [A], a => { a["subject-semantic-digests"] = []; });
+    await R.load(x.dir);
+    shown = await R.attested();
+    assert.deepEqual([said(shown), shown[0].listedError, shown[0].subjects.length], [[["ifa-ato", "fail", "other", "true", "true"]], AID + MANIFEST_1, 0]);
+    if (REFERENCE) {
+      const ref = referenceAttested(x.dir);
+      assert.deepEqual([ref.ok, ref.listed, ref.binds], [false, [], []]);
+      assert.deepEqual(ref.others.map(e => e.replace(/ \(closest .*$/, "")), ["objects/attestation/attestation-ifa-ato.json: matches NO type"]);
+    }
+  }));
+
+/* ---------- 13. an Assessment's method is a facet payload (backlog #55; specification D10 as amended) ---------- */
+const METHODS = json("jascon/conformance/facet-vectors.json")["method-vectors"];
+const CRITERIA = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1";
+const MANUAL = { [CRITERIA]: { method: "manual" } };
+/* what the Assess workbench wrote until 1.14.0 */
+const EARLIER = { kind: "manual-check", note: "authored in JASCON Bundle Reader workbench" };
+const unregistered = (path, key) => `${path}: method '${key}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`;
+const UNCHECKED = "; this page carries no schema validator and does not check it.";
+const SAID = { stdlib: "a facet of the standard library. A validator holds this payload to the facet's descriptor" + UNCHECKED,
+  pinned: file => `a facet this bundle pins (${file}). A validator holds this payload to that schema` + UNCHECKED,
+  private: "private: kept, and ignored by every validator by definition. Nothing checks this payload." };
+/* The vectors this page cannot decide. In each, every key of the method names a registered facet, and the payload is
+   one that facet's schema refuses: the page carries no schema and no schema validator, so it has nothing to say. */
+const UNDECIDED = ["method-stdlib-payload-violates-its-schema", "method-stdlib-payload-with-a-member-the-facet-does-not-know", "method-pinned-payload-violates-the-pin"];
+
+test("an Assessment's method: of the 13 method vectors the page decides the ten that turn on where a key is registered, in the reference's words; three turn on a payload and its schema, which this page does not hold",
+  () => {
+    assert.equal(METHODS.length, 13);   // a vector added to the family is looked at here before this number moves (12 until the app's port added the object called `method` inside a payload)
+    /* the standard library the page knows is the folder of its descriptors */
+    const stdlib = fs.readdirSync(path.join(ROOT, "jascon/schemas/stdlib")).filter(n => n.endsWith(".json")).map(n => json("jascon/schemas/stdlib/" + n).id);
+    assert.equal(stdlib.length, 10);   // ten descriptors of nine facets: assessment-criteria has two versions, references is new (2026-11-14)
+    assert.deepEqual([...P.STDLIB_FACETS].sort(), [...new Set(stdlib)].sort());
+    assert.deepEqual(P.manualMethod(), MANUAL);
+    assert.ok(stdlib.includes(CRITERIA.replace(/@1$/, "")) && json("jascon/schemas/stdlib/assessment-criteria-1.0.0.json").schema.properties.method.enum.includes("manual"), "what the workbench writes is a value the descriptor knows");
+    const homes = new Set(), decided = [];
+    for (const c of METHODS) {
+      const pinned = new Set(Object.keys(c.pinned || {})), keyOf = frag => /^method '(.*)'$/.exec(frag)[1];
+      const errs = P.methodKeyErrors(c.object, pinned, c.name);
+      const ofMethod = c["expected-frags"].filter(f => f.startsWith("method '")), ofFacets = c["expected-frags"].filter(f => f.startsWith("facet '"));
+      assert.equal(ofMethod.length + ofFacets.length, c["expected-frags"].length, `${c.name}: every fragment names a method or a facet`);
+      for (const key of Object.keys(c.object.method || {})) homes.add(String(P.facetHome(key, pinned)));
+      if (UNDECIDED.includes(c.name)) {
+        assert.deepEqual(errs, [], `${c.name}: every key is registered, and the page has nothing to say`);
+        assert.deepEqual([c.expected, c["expected-errors"], ofMethod.length], ["invalid", 1, 1], c.name);
+        assert.ok(["stdlib", "pinned"].includes(P.facetHome(keyOf(ofMethod[0]), pinned)), `${c.name}: the error is about the payload of a registered facet`);
+        continue;
+      }
+      /* one message per key no facet registers, each the reference's sentence. What a vector expects of `facets`
+         (one does) is another rule, to which this page holds no object. */
+      assert.deepEqual(errs, ofMethod.map(f => unregistered(c.name, keyOf(f))), c.name);
+      assert.equal(errs.length, c["expected-errors"] - ofFacets.length, c.name);
+      if (!ofFacets.length) assert.equal(errs.length ? "invalid" : "valid", c.expected, c.name);
+      decided.push(c.name);
+    }
+    assert.equal(decided.length, 10);
+    assert.deepEqual([...homes].sort(), ["null", "pinned", "private", "stdlib"], "the vectors hold a key of every kind");
+    /* where a key is registered, case by case */
+    const pins = new Set(["https://assessor.example/facet/review"]);
+    for (const [key, home] of [[CRITERIA, "stdlib"], ["https://ns.jascon.net/stdlib/facet/assessment-criteria", "stdlib"], ["https://ns.jascon.net/stdlib/facet/assessment-criteria@9", "stdlib"],
+      ["https://ns.jascon.net/stdlib/facet/collector@1", "stdlib"], ["https://ns.jascon.net/stdlib/facet/no-such-facet@1", null], ["https://ns.jascon.net/stdlib/facet/", null],
+      ["https://assessor.example/facet/review@1", "pinned"], ["https://assessor.example/facet/review", "pinned"], ["https://assessor.example/facet/review@1@2", null],
+      ["https://assessor.example/facet/other@1", null], ["private:lab-notes@1", "private"], ["private:", "private"], ["Private:lab-notes@1", null], ["kind", null], ["note", null], ["", null], ["@1", null]])
+      assert.equal(P.facetHome(key, pins), home, JSON.stringify(key));
+    assert.equal(P.facetHome("https://assessor.example/facet/review@1", new Set()), null, "pinned by another bundle is pinned nowhere here");
+    /* the form the workbench wrote until 1.14.0 is known as that, and nothing else is */
+    assert.equal(P.isEarlierWorkbenchMethod(EARLIER), true);
+    for (const other of [MANUAL, {}, { kind: "manual-check" }, { ...EARLIER, note: "another note" }, { ...EARLIER, more: 1 }, { kind: "review", note: EARLIER.note }, null, "manual-check"])
+      assert.equal(P.isEarlierWorkbenchMethod(other), false, JSON.stringify(other));
+    assert.deepEqual(P.methodKeyErrors({ id: "https://a.example/asmt/1", method: EARLIER }, new Set()), ["kind", "note"].map(k => unregistered("https://a.example/asmt/1", k)), "one message per key, in the order of the keys, under the object's id");
+    for (const none of [{ id: "x" }, { id: "x", method: "manual" }, { id: "x", method: [EARLIER] }, { id: "x", method: null }, null]) assert.deepEqual(P.methodKeyErrors(none, new Set()), []);
+  });
+
+/* facet_errors of the reference, run by Python on the same objects. Its source is taken out of validate_core.py by
+   name; the validators it asks for are built here from the descriptors of the standard library and from the schemas
+   a case pins, as the reference builds them. -> per case [message] */
+function referenceFacetErrors(cases) {
+  const py = `
+import ast, json, os, sys
+import jsonschema
+src = open(sys.argv[1], encoding="utf-8").read()
+make = jsonschema.validators.Draft202012Validator
+stdlib = {}
+for fn in sorted(os.listdir(sys.argv[2])):
+    if fn.endswith(".json"):
+        d = json.load(open(os.path.join(sys.argv[2], fn), encoding="utf-8"))
+        stdlib[d["id"]] = make(d["schema"])
+ns = {"STDLIB": stdlib}
+for node in ast.parse(src).body:
+    if isinstance(node, ast.FunctionDef) and node.name == "facet_errors":
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+cases = json.loads(sys.stdin.buffer.read().decode("utf-8"))
+print(json.dumps([ns["facet_errors"](c["object"], {k: make(s) for k, s in (c.get("pinned") or {}).items()}, c["name"]) for c in cases]))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE, path.join(ROOT, "jascon/schemas/stdlib")], { input: JSON.stringify(cases), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+
+test("an Assessment's method: the reference's own facet_errors names the keys the page names, in the same words; what it says beyond that is about a payload and its schema, or about `facets`",
+  { skip: !REFERENCE && "python3 with jsonschema is not installed" }, () => {
+    const a = METHODS[0].object, withMethod = (name, method, pinned) => ({ name, object: { ...a, method }, pinned });
+    const cases = [...METHODS,
+      withMethod("the form the workbench wrote until 1.14.0", EARLIER),
+      withMethod("what the workbench writes now", MANUAL),
+      withMethod("the version after the @ is not part of the id", { "https://ns.jascon.net/stdlib/facet/assessment-criteria@9": { method: "automated" } }),
+      withMethod("no version at all", { "https://ns.jascon.net/stdlib/facet/assessment-criteria": { method: "automated" } }),
+      withMethod("private: is asked before the standard library and is case-sensitive", { "private:x": 1, "Private:x": 1 }),
+      withMethod("a second @ belongs to the id", { "https://assessor.example/facet/review@1@2": {} }, { "https://assessor.example/facet/review": { type: "object" } }),
+      withMethod("a facet of the standard library that does not exist", { "https://ns.jascon.net/stdlib/facet/no-such-facet@1": {} })];
+    const ref = referenceFacetErrors(cases), undecided = [], ofFacets = [];
+    cases.forEach((c, i) => {
+      const keys = ref[i].filter(e => / method '.*' is no registered facet /.test(e)), payloads = ref[i].filter(e => / method '.*' payload violates its schema: /.test(e));
+      const facets = ref[i].filter(e => !keys.includes(e) && !payloads.includes(e));
+      assert.deepEqual(P.methodKeyErrors(c.object, new Set(Object.keys(c.pinned || {})), c.name), keys, c.name);
+      if (payloads.length) undecided.push(c.name);
+      if (facets.length) { ofFacets.push(c.name); for (const e of facets) assert.match(e, /: unregistered facet '/, c.name); }
+    });
+    assert.deepEqual(undecided, UNDECIDED, "the vectors the page cannot decide are those in which the reference refuses a payload");
+    assert.deepEqual(ofFacets, ["method-and-facets-are-both-held"]);
+    assert.deepEqual(ref[METHODS.length], ["kind", "note"].map(k => unregistered("the form the workbench wrote until 1.14.0", k)));
+    assert.deepEqual(ref.slice(METHODS.length + 1, METHODS.length + 4), [[], [], []], "what the workbench writes passes, and so does the same facet under another version or none");
+  });
+
+/* What the reference says about the methods of one bundle folder: -> { ok, line, unregistered: [message], violated: [message], others: [message] } */
+function referenceMethods(dir) {
+  const ref = reference(dir, "--as-of", "2026-11-14");
+  const failures = ref.out.split("\n").map(l => /^  - \[[^\]]*\] (.*)$/.exec(l)).filter(Boolean).map(m => m[1]);
+  const unregisteredKeys = failures.filter(e => / method '.*' is no registered facet /.test(e)), violated = failures.filter(e => / method '.*' payload violates its schema: /.test(e));
+  return { ok: ref.ok, line: ref.line, unregistered: unregisteredKeys, violated, others: failures.filter(e => !unregisteredKeys.includes(e) && !violated.includes(e)) };
+}
+
+test("the method on the page: the Assess workbench states a manual assessment under the standard facet and its export passes the reference; every key of a method is shown with where its facet is registered, a key no facet registers in the reference's words, and the payload as not checked here",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+    const NS = "https://example.org/my", day = await page.evaluate(() => new Date().toISOString().slice(0, 10)), WB = `${NS}/asmt/check-${day}`;
+    /* what the detail that is up says about a method: per key [key, where it is registered, the error, the word about checking] */
+    const methodSaid = d => d.locator(".facetbox[data-method-key]").evaluateAll(l => l.map(x => [x.dataset.methodKey, x.dataset.methodHome,
+      x.querySelector("[data-method-error]")?.textContent ?? null, x.querySelector("[data-method-unchecked]")?.textContent ?? null]));
+    const cardLine = id => R.text(page.locator("#view-stagefn .stmt", { has: page.locator(`[data-ref="${id}"]`) }).locator("[data-method-line]"));
+    const errorsShown = async () => { await R.view("overview"); return page.locator("#ov-kv [data-method-error]").evaluateAll(l => l.map(e => e.textContent)); };
+    const consoleErrors = () => page.locator("#log > div.l-err").evaluateAll(l => l.map(e => e.textContent.replace(/^[\d:.]+/, "")));
+    /* an object of a bundle written anew, and the manifest's two digests of it with it: nothing else is wrong with the bundle */
+    const rewritten = async (dir, id, change) => {
+      const mp = path.join(dir, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === id);
+      const obj = JSON.parse(fs.readFileSync(path.join(dir, entry.path), "utf8"));
+      change(obj);
+      const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+      fs.writeFileSync(path.join(dir, entry.path), bytes);
+      Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+      fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+      return obj;
+    };
+    const held = async (dir, what, also = []) => {   // the page's errors are the reference's, and it fails the bundle for nothing else but what a test names
+      const shown = await errorsShown();
+      if (REFERENCE) {
+        const ref = referenceMethods(dir);
+        assert.deepEqual(shown, ref.unregistered.map(e => "✗ " + e), `${what}: the keys no facet registers, in the reference's words and order`);
+        assert.deepEqual([ref.violated, ref.others.filter(e => !also.some(re => re.test(e)))], [[], []], `${what}: nothing else fails in the reference — ${ref.line}`);
+        for (const re of also) assert.ok(ref.others.some(e => re.test(e)), `${what}: the reference states ${re}`);
+        assert.equal(ref.ok, !shown.length && !also.length, `${what}: ${ref.line}`);
+      }
+      return shown;
+    };
+
+    /* 1. The Assess workbench, on a requirement written in the workbench (so that the export holds what its Finding
+       names). A person answers the form, which is a manual assessment. The object that is downloaded and the one that
+       goes into the graph state it under the standard facet, and carry no note that names this tool: the manifest of
+       the export names it. */
+    await R.view("stage:author");
+    await page.fill("#wb-au-title", "Encrypt backups");
+    await page.fill("#wb-au-prose", "Backups are encrypted.");
+    await page.fill("#wb-au-party", "Operations Team");
+    await page.click("#wb-au-addreq");
+    await R.view("stage:assess");
+    await set("#wb-a-perf", "Lead Assessor");
+    await page.locator('[data-az$="|not-satisfied"]').first().click();
+    const downloaded = JSON.parse(fs.readFileSync(await R.download("#wb-a-dl"), "utf8"));
+    assert.deepEqual([downloaded.id, downloaded.method], [WB, MANUAL], "the Assessment that is downloaded");
+    await page.waitForTimeout(600);   // the Finding that is downloaded after it
+    await page.click("#wb-a-gen");
+    assert.equal(await cardLine(WB), "method: manual · assessment-criteria@1 (standard library)");
+    let d = await R.detail(WB);
+    assert.deepEqual(await methodSaid(d), [[CRITERIA, "stdlib", null, SAID.stdlib]]);
+    const workbench = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "workbench"));
+    const wm = JSON.parse(fs.readFileSync(path.join(workbench, "content-manifest.json"), "utf8")), entry = wm.objects.find(e => e.id === WB);
+    const written = JSON.parse(fs.readFileSync(path.join(workbench, entry.path), "utf8"));
+    assert.deepEqual(written.method, MANUAL, "the Assessment that is exported");
+    assert.deepEqual(Object.keys(written).sort(), ["id", "lifecycle", "method", "performer-ref", "result", "subject-refs", "time", "title", "version"], "and nothing on it names the tool");
+    assert.equal(wm.provenance.converter, "jascon-reader.html " + (await page.locator("#pill-version").innerText()).split(" · ")[0], "the manifest does");
+    assert.doesNotMatch(await R.log(), /in this export — .* method '/);
+    assert.match(await R.log(), /workspace bundle exported: 3 objects .* — loads back into this reader and nothing fails in what this page checks \(closure-required references and what they resolve to, references to a withdrawn object, facet and method keys, Attestations\); it runs no kernel schema and checks no facet payload$/m);
+    if (REFERENCE) { const ref = referenceMethods(workbench); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [true, [], [], []], ref.line); }
+
+    /* 2. The folders as they lie. The example folder's three Assessments state their method under the standard facet;
+       the IFA bundle's under a facet the bundle pins. Nothing fails, and nothing is said to have been checked. */
+    await R.load(EXAMPLES);
+    assert.deepEqual(await held(EXAMPLES, "jascon/examples"), []);
+    await R.view("stage:assess");
+    assert.equal(await cardLine("https://assessor.example/assessment/2026-q3-acme"), "method: assessment-criteria@1 (standard library)");
+    assert.deepEqual(await page.locator("#view-stagefn [data-method-line]").evaluateAll(l => l.map(e => e.textContent.replace(/\s+/g, " ").trim()).sort()),
+      ["method: assessment-criteria@1 (standard library)", "method: automated · assessment-criteria@1 (standard library)", "method: automated · assessment-criteria@1 (standard library)",
+        "method: manual · assessment-criteria@1 (standard library)"], "the folder's three, and the one written in the workbench above, which stays in the graph across a load (1.22.0)");
+    d = await R.detail("https://assessor.example/assessment/2026-q3-acme");
+    assert.deepEqual(await methodSaid(d), [[CRITERIA, "stdlib", null, SAID.stdlib]]);
+    assert.match(await R.text(d), /Method — a facet payload \(D10\): each key names the facet the method is stated under .*Document review of KONF\.14\.1 evidence duties/i, "the payload stands under its key, as recorded");
+    assert.equal(await d.locator("[data-method-todo]").count(), 0);
+
+    /* 3. A bundle an earlier version exported: the same export with the method as the workbench wrote it until 1.14.0.
+       It is shown as loaded - nothing is rewritten - and fails, on the page as in the reference, once for each key. */
+    const earlier = path.join(R.tmp, "earlier", "bundle");
+    fs.cpSync(workbench, earlier, { recursive: true });
+    await rewritten(earlier, WB, o => { o.method = EARLIER; });
+    await R.load(earlier);
+    const both = ["kind", "note"].map(k => unregistered(WB, k));
+    assert.deepEqual(await held(earlier, "an export of 1.14.0"), both.map(e => "✗ " + e));
+    assert.deepEqual(await consoleErrors(), both, "the console says it as errors, in the reference's words");
+    await R.view("stage:assess");
+    assert.equal(await cardLine(WB), "method: ✗ kind (no facet registers this key) · ✗ note (no facet registers this key) — a validator refuses it (D10)");
+    d = await R.detail(WB);
+    assert.deepEqual(await methodSaid(d), [["kind", "none", both[0], null], ["note", "none", both[1], null]]);
+    assert.equal(await d.locator("[data-method-restate]").count(), 0, "an object of a loaded bundle is not the page's to state anew");
+    const TODO = `What can be done: state the method under a facet that is registered — the standard ${CRITERIA} for a manual or an automated assessment, a facet whose schema the bundle pins, or a private: key, which every validator keeps and ignores. The object is then another: the manifest's two digests of it are written anew.`;
+    assert.equal(await R.text(d.locator("[data-method-todo]")), TODO);
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(earlier, entry.path), "utf8")).method, EARLIER, "the file is as it was");
+    /* ... and what the page says can be done, done on the copy: the standard facet, and the digests anew */
+    await rewritten(earlier, WB, o => { o.method = MANUAL; });
+    await R.load(earlier);
+    assert.deepEqual(await held(earlier, "... its method stated under the standard facet"), []);
+
+    /* 4. The IFA bundle. Its Assessment states its method under a facet the bundle pins; a key beside it that no facet
+       registers fails for that key alone (the reference's own copy c12); under private: the same key is kept and ignored;
+       and with the pinned schema's file taken away the pin registers nothing, as the reference has it. */
+    const IA = "https://ifa.gov/goodread/assessment/conmon-2023-06", PLAN = "https://ifa.gov/goodread/facet/assessment-plan@1";
+    const planFile = json("converted_examples/US.IFA-GoodRead/ifa-core-bundle/content-manifest.json")["facet-schemas"].find(f => f.id === PLAN.replace(/@1$/, "")).path;
+    await R.load(IFA);
+    assert.deepEqual(await held(IFA, "the IFA bundle"), []);
+    d = await R.detail(IA);
+    assert.deepEqual(await methodSaid(d), [[PLAN, "pinned", null, SAID.pinned(planFile)]]);
+    const ifa = n => { const dir = path.join(R.tmp, "ifa-" + n, "bundle"); fs.cpSync(IFA, dir, { recursive: true }); return dir; };
+    let copy = ifa(1);
+    await rewritten(copy, IA, o => { o.method.kind = "review"; });
+    await R.load(copy);
+    assert.deepEqual(await held(copy, "the IFA bundle, a key nobody registered beside the pinned one"), ["✗ " + unregistered(IA, "kind")]);
+    await R.view("stage:assess");
+    assert.equal(await cardLine(IA), "method: assessment-plan@1 (pinned by this bundle) · ✗ kind (no facet registers this key) — a validator refuses it (D10)");
+    d = await R.detail(IA);
+    assert.deepEqual(await methodSaid(d), [[PLAN, "pinned", null, SAID.pinned(planFile)], ["kind", "none", unregistered(IA, "kind"), null]]);
+    assert.equal(await R.text(d.locator("[data-method-todo]")), TODO);
+    await rewritten(copy, IA, o => { o.method["private:kind@1"] = o.method.kind; delete o.method.kind; });
+    await R.load(copy);
+    assert.deepEqual(await held(copy, "... the key under private:"), []);
+    d = await R.detail(IA);
+    assert.deepEqual((await methodSaid(d)).map(m => m.slice(0, 2).concat(m[3])), [[PLAN, "pinned", SAID.pinned(planFile)], ["private:kind@1", "private", SAID.private]]);
+    copy = ifa(2);
+    fs.rmSync(path.join(copy, planFile));
+    await R.load(copy);
+    assert.deepEqual(await held(copy, "the IFA bundle without the schema file of the method's facet", [/^schemas\/goodread-ap-stub\.json: pinned facet schema listed but missing$/]), ["✗ " + unregistered(IA, PLAN)]);
+    d = await R.detail(IA);
+    assert.deepEqual(await methodSaid(d), [[PLAN, "none", unregistered(IA, PLAN), null]]);
+    assert.equal(await R.text(d.locator("[data-method-pin-missing]")), `The manifest pins this facet, and its schema file ${planFile} was not read: a pin without its file registers nothing.`);
+
+    /* 5. A workspace an earlier version stored. Its Assessment is restored as it was stored and said to fail; an export
+       that holds it says so and fails the reference; on a person's word the page states the method anew, and then
+       the export passes. */
+    const req = BINDS[0].objects[0], OLD = { id: `${NS}/asmt/check-2026-11-10`, version: "1", lifecycle: "draft", title: "Check 2026-11-10 — a set", "subject-refs": [req.id], method: EARLIER,
+      "performer-ref": `${NS}/party/lead-assessor`, time: "2026-11-10T09:00:00.000Z", result: "satisfied" };
+    const stored = { v: 2, ns: NS, tailor: { label: "my-tailoring", selects: [], excludes: [], operations: [] }, system: { title: "My System", components: [], implementations: [] },
+      assess: { scopeKey: "", performer: "", results: {} }, created: [req, OLD] };
+    await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), stored);
+    await page.reload();
+    const inStore = () => page.evaluate(id => JSON.parse(localStorage.getItem("scr-work")).created.find(o => o.id === id).method, OLD.id);
+    assert.deepEqual(await inStore(), EARLIER, "restored, the stored object is as it was");
+    assert.match(await R.log(), new RegExp(`1 Assessment\\(s\\) of the workspace state their method under a key no facet registers, as the Assess workbench wrote it until 1\\.14\\.0: an export that holds one fails a validator \\(D10\\)\\. Each is kept as stored; its detail in the object browser says what can be done — ${OLD.id.replace(/[.]/g, "\\.")}$`, "m"));
+    d = await R.detail(OLD.id);
+    const old = ["kind", "note"].map(k => unregistered(OLD.id, k));
+    assert.deepEqual(await methodSaid(d), [["kind", "none", old[0], null], ["note", "none", old[1], null]]);
+    assert.match(await R.text(d.locator("[data-method-todo]")), /^This is how the Assess workbench of this page stated a manual check until 1\.14\.0\. It is kept as it was stored, and an export that holds it fails a validator\. State it under the standard facet: manual writes \{"https:\/\/ns\.jascon\.net\/stdlib\/facet\/assessment-criteria@1":\{"method":"manual"\}\} in its place, in the workspace\.$/);
+    let out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "stored"));
+    for (const e of old) assert.ok((await R.log()).includes("in this export — " + e + "\n"), e);
+    assert.match(await R.log(), /workspace bundle exported: 2 objects .* — loads back into this reader and validate_core\.py fails it: 2 line\(s\) above say why$/m);
+    if (REFERENCE) { const ref = referenceMethods(out); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [false, old, [], []], ref.line); }
+    assert.deepEqual(await inStore(), EARLIER, "an export rewrites nothing either");
+    await d.locator("[data-method-restate]").click();
+    assert.deepEqual(await methodSaid(page.locator("#detail")), [[CRITERIA, "stdlib", null, SAID.stdlib]], "stated anew, on a person's word, and shown at once");
+    assert.equal(await page.locator("#detail [data-method-todo]").count(), 0);
+    assert.deepEqual(await inStore(), MANUAL, "in the workspace too");
+    assert.ok((await R.log()).includes(`${OLD.id}: its method is stated anew in the workspace — ${JSON.stringify(MANUAL)} in place of ${JSON.stringify(EARLIER)}, which no facet registers`));
+    await R.view("stage:assess");
+    assert.equal(await cardLine(OLD.id), "method: manual · assessment-criteria@1 (standard library)");
+    out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "restated"));
+    assert.deepEqual(JSON.parse(fs.readFileSync(path.join(out, "objects/asmt", fs.readdirSync(path.join(out, "objects/asmt"))[0]), "utf8")), { ...OLD, title: { en: OLD.title }, method: MANUAL }, "nothing but the method changed (and the title leaves as a language map, as every export writes it)");
+    if (REFERENCE) { const ref = referenceMethods(out); assert.deepEqual([ref.ok, ref.unregistered, ref.violated, ref.others], [true, [], [], []], ref.line); }
+
+    /* 6. Pasted: a private key is kept and said to be checked by nobody; an empty method states none; a method of the
+       earlier form on an object that is not the workspace's gets no button. */
+    const paste = async obj => { R.answers.push(JSON.stringify(obj)); await page.click("#btn-paste"); return page.locator("#detail"); };
+    d = await paste({ ...OLD, id: `${NS}/asmt/private`, method: { "private:lab-notes@1": { whatever: [1, 2, 3] } } });
+    assert.deepEqual(await methodSaid(d), [["private:lab-notes@1", "private", null, SAID.private]]);
+    d = await paste({ ...OLD, id: `${NS}/asmt/empty`, method: {} });
+    assert.deepEqual([await methodSaid(d), await R.text(d.locator("[data-method-empty]"))], [[], "it states no method: the object is empty. The kernel schema accepts that, and the rule about facets has no key to hold."]);
+    d = await paste({ ...OLD, id: `${NS}/asmt/pasted`, method: EARLIER });
+    assert.deepEqual([(await methodSaid(d)).map(m => m[1]), await d.locator("[data-method-restate]").count(), await R.text(d.locator("[data-method-todo]"))], [["none", "none"], 0, TODO]);
+  }));
+
+/* ---------- 14. closure-required references in an export, and the keys of `facets` (v1.16.0) ---------- */
+/* closure_errors of the reference, run by Python on the same objects, typed as the page types them. -> [message] */
+function referenceClosure(objs) {
+  const py = `
+import ast, json, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+ns = {"content_digest": lambda o: None}
+for node in ast.parse(src).body:
+    if isinstance(node, ast.FunctionDef) and node.name == "closure_errors":
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+objs = json.loads(sys.stdin.buffer.read().decode("utf-8"))
+print(json.dumps(ns["closure_errors"]({o["id"]: (t, o) for t, o in objs})))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE], { input: JSON.stringify(objs.map(o => [P.inferType(o), o])), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+/* the failures the reference lists for one bundle folder */
+const referenceFailures = dir => { const ref = reference(dir, "--as-of", "2026-11-14"); return { ok: ref.ok, line: ref.line, failures: ref.out.split("\n").map(l => /^  - \[[^\]]*\] (.*)$/.exec(l)).filter(Boolean).map(m => m[1]) }; };
+/* the lines an export wrote as failing it, after "in this export — " */
+const exportFails = log => [...log.matchAll(/in this export — (.*)$/gm)].map(m => m[1]);
+
+/* the lines of closure_errors the page ports: a reference that does not resolve, and one that resolves to another type */
+const PORTED_CLOSURE = / closure-required .* does not resolve in-bundle: |: (selects set-ref|excludes ref|treatments requirement-ref) resolves to a |: (risk-refs|component-refs|tailoring-refs) entry resolves /;
+test("closure-required references: every reference need() asks for in closure_errors, and every typed check, gets the reference's sentence from the page's own function, in the reference's order",
+  { skip: !PYTHON && "python3 is not installed" }, () => {
+    const E = "https://ex.org", R1 = { id: `${E}/req/1`, version: "1", lifecycle: "active", statements: [{ id: "s1" }] };
+    const S = { id: `${E}/set/1`, version: "1", lifecycle: "active", members: [{ ref: R1.id }, { ref: `${E}/req/gone-member` }] };
+    const T = { id: `${E}/tailoring/1`, version: "1", selects: [{ "set-ref": S.id }, { "set-ref": `${E}/set/gone` }, { all: true }], excludes: [{ ref: R1.id }, { ref: `${E}/req/gone-exclude` }],
+      operations: [{ "requirement-ref": `${E}/req/gone-op`, "statement-id": "s1" }, { "requirement-ref": R1.id }] };
+    const I = { id: `${E}/impl/1`, "component-ref": `${E}/comp/gone`, "requirement-ref": `${E}/req/gone-impl`, responsibility: "provider" };
+    const F = { id: `${E}/finding/1`, "assessment-ref": `${E}/asmt/gone`, "requirement-ref": R1.id, state: "open", "risk-refs": [`${E}/risk/elsewhere`] };
+    const K = { id: `${E}/risk/1`, scenario: "x", "owner-ref": `${E}/party/o`, treatments: [{ "requirement-ref": `${E}/req/gone-treat` }, { "requirement-ref": R1.id }],
+      "component-refs": [`${E}/comp/gone-risk`], "tailoring-refs": [T.id, `${E}/tailoring/gone`] };
+    const objs = [R1, S, T, I, F, K], ref = referenceClosure(objs), page = P.closureErrors(objs);
+    assert.deepEqual(page, ref.filter(e => PORTED_CLOSURE.test(e)));
+    assert.deepEqual(page.map(e => / closure-required (.*) does not resolve/.exec(e)[1]), ["member ref", "selects set-ref", "excludes ref", "operation requirement-ref",
+      "component-ref", "requirement-ref", "assessment-ref", "treatments requirement-ref (RISK-7)", "component-refs (RISK-7)", "tailoring-refs (RISK-7)"], "one of every kind");
+    assert.deepEqual(P.closureErrors([R1, { ...S, members: [{ ref: R1.id }] }, { ...F, "assessment-ref": R1.id }]), [], "what resolves is not said; a Finding's risk-refs are a landmark, not closure-required");
+    /* the typed checks (v1.17.0): every reference resolves, each to an object of another type than its edge allows */
+    const C = { id: `${E}/comp/1`, version: "1", lifecycle: "active", kind: "service" };
+    const T2 = { id: `${E}/tailoring/2`, version: "1", selects: [{ "set-ref": R1.id }, { "set-ref": S.id }], excludes: [{ ref: C.id }, { ref: S.id }, { ref: R1.id }] };
+    const F2 = { id: `${E}/finding/2`, "assessment-ref": R1.id, "requirement-ref": R1.id, state: "open", "risk-refs": [R1.id, K.id, `${E}/risk/elsewhere`] };
+    const K2 = { id: `${E}/risk/2`, scenario: "x", "owner-ref": `${E}/party/o`, treatments: [{ "requirement-ref": S.id }, { "requirement-ref": R1.id }],
+      "component-refs": [R1.id, C.id], "tailoring-refs": [S.id, T2.id] };
+    const whole = { ...S, members: [{ ref: R1.id }] }, typedObjs = [R1, whole, C, T2, F2, K2, { ...K, treatments: [], "component-refs": [], "tailoring-refs": [] }];
+    assert.deepEqual(typedObjs.map(o => P.inferType(o)), ["requirement", "requirementSet", "component", "tailoring", "finding", "risk", "risk"], "the page types the fixture as meant");
+    const typedRef = referenceClosure(typedObjs), typedPage = P.closureErrors(typedObjs);
+    assert.deepEqual(typedPage, typedRef, "every line of the reference, and nothing else: no rule the page does not port fires on this fixture");
+    assert.deepEqual(typedPage.map(e => /: (selects set-ref|excludes ref|treatments requirement-ref|risk-refs|component-refs|tailoring-refs) (?:entry )?resolves /.exec(e)[1]),
+      ["selects set-ref", "excludes ref", "risk-refs", "treatments requirement-ref", "component-refs", "tailoring-refs"], "one of every typed check, each once");
+    /* both kinds on one edge, in the reference's order: a reference that does not resolve is said before the next edge's type */
+    const mixed = [R1, whole, { ...T2, selects: [{ "set-ref": `${E}/set/gone` }, { "set-ref": R1.id }] }];
+    assert.deepEqual(P.closureErrors(mixed), referenceClosure(mixed));
+    assert.equal(P.closureErrors(mixed).length, 3);
+  });
+
+/* facet_errors lists, object by object, the keys of `facets` and then those of `method` (v1.17.0) */
+test("facet and method keys no facet registers are listed object by object, facets before the method, as facet_errors lists them", () => {
+  const BADF = "https://no.example/f@1", BADM = "https://no.example/m@1";
+  const a = { id: "https://ex.org/asmt/1", facets: { [BADF]: 1 }, method: { [BADM]: 1 } }, b = { id: "https://ex.org/asmt/2", facets: { [BADF]: 1 }, method: { [BADM]: 1 } };
+  const got = P.facetAndMethodKeyErrors([a, b], new Map());
+  assert.deepEqual(got.map(e => [e.split(": ")[0].split("/").pop(), /unregistered facet/.test(e) ? "facet" : "method"]), [["1", "facet"], ["1", "method"], ["2", "facet"], ["2", "method"]]);
+  assert.deepEqual(got, [...P.facetKeyErrors(a, new Map()), ...P.methodKeyErrors(a, new Map()), ...P.facetKeyErrors(b, new Map()), ...P.methodKeyErrors(b, new Map())]);
+});
+
+test("an export whose Finding names a requirement of the loaded bundle: the page fails it with the reference's closure-required line, and where it finds nothing it says what it checked",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    await page.fill("#wb-a-perf", "Lead Assessor");
+    await page.locator("#wb-a-perf").dispatchEvent("change");
+    await page.locator('[data-az$="|not-satisfied"]').first().click();
+    await page.click("#wb-a-gen");
+    const out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "closure"));
+    const log = await R.log(), fails = exportFails(log), closure = fails.filter(e => / closure-required /.test(e));
+    assert.equal(closure.length, 1, log.slice(-1500));
+    assert.match(closure[0], /\/finding\/.*: closure-required requirement-ref does not resolve in-bundle: https:\/\//);
+    assert.match(log, new RegExp(`validate_core\\.py fails it: ${fails.length} line\\(s\\) above say why$`, "m"));
+    assert.doesNotMatch(log, /passes validate_core\.py/);
+    if (REFERENCE) {
+      const ref = referenceFailures(out);
+      assert.equal(ref.ok, false, ref.line);
+      assert.deepEqual(ref.failures.filter(e => / closure-required /.test(e)), closure, "the reference's line, word for word");
+      assert.deepEqual(ref.failures, fails, "and the reference fails it for nothing else");
+    }
+  }));
+
+/* ---------- 15. the same check on a loaded bundle, and the order of an export's failures (v1.17.0; backlog #92) ---------- */
+test("a loaded bundle: a closure-required reference that does not resolve, and one that resolves to another type, fail in the reference's words in the overview and the console",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1", FINDING = "https://assessor.example/finding/2026-q3-acme-017";
+    await R.load(EXAMPLES);
+    await R.view("overview");
+    assert.equal(await page.locator("#ov-kv [data-closure-error]").count(), 0, "the example folder as committed has no such line");
+    /* a copy whose Finding names a requirement nobody holds and, as its risk, a Requirement; both digests anew */
+    const copy = path.join(R.tmp, "closure-load", "examples");
+    fs.cpSync(EXAMPLES, copy, { recursive: true });
+    const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === FINDING);
+    const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+    obj["requirement-ref"] = "https://ns.bsi.bund.de/gspp/req/NOT-HERE";
+    obj["risk-refs"] = [KONF];
+    const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+    fs.writeFileSync(path.join(copy, entry.path), bytes);
+    Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+    fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+    await R.load(copy);
+    await R.view("overview");
+    const want = [`${FINDING}: closure-required requirement-ref does not resolve in-bundle: https://ns.bsi.bund.de/gspp/req/NOT-HERE`,
+      `${FINDING}: risk-refs entry resolves in-bundle to a requirement, not a Risk: ${KONF} (RISK-12: a Risk edge is typed - a mis-aimed ref is a wrong statement, not a loose one)`];
+    assert.deepEqual(await page.locator("#ov-kv [data-closure-error]").evaluateAll(l => l.map(x => x.textContent)), want.map(e => "✗ " + e));
+    const errs = await page.locator("#log > div.l-err").evaluateAll(l => l.map(x => x.textContent));
+    for (const e of want) assert.ok(errs.some(x => x.endsWith(e)), "the console says it as an error: " + e);
+    if (REFERENCE) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures.filter(e => PORTED_CLOSURE.test(e)), want, "the reference's lines, word for word and in its order"); }
+  }));
+
+test("an export that fails for two rules lists its failures in the reference's order: the reference that does not resolve before the key no facet registers",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const NS = "https://example.org/other", BAD = "https://ns.bsi.bund.de/facet/not-pinned@1";
+    const REQ = { id: `${NS}/req/x`, version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [`${NS}/party/ops`], prose: { en: "X." } }], facets: { [BAD]: { a: 1 } } };
+    /* an Assessment and a Finding about a requirement of the loaded bundle, written in the workbench ... */
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    await page.fill("#wb-a-perf", "Lead Assessor");
+    await page.locator("#wb-a-perf").dispatchEvent("change");
+    await page.locator('[data-az$="|not-satisfied"]').first().click();
+    await page.click("#wb-a-gen");
+    /* ... and a requirement under a key no facet registers, put into the stored workspace after them; the page anew
+       restores the three, and no bundle is loaded */
+    await page.evaluate(req => { const w = JSON.parse(localStorage.getItem("scr-work")); w.created.push(req); localStorage.setItem("scr-work", JSON.stringify(w)); }, REQ);
+    await page.reload();
+    const out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "order"));
+    const log = await R.log(), fails = exportFails(log);
+    assert.equal(fails.length, 2, log.slice(-2500));
+    assert.match(fails[0], / closure-required requirement-ref does not resolve in-bundle: /, "until 1.16.0 the facet key stood first");
+    assert.equal(fails[1], `${REQ.id}: unregistered facet '${BAD}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`);
+    if (REFERENCE) { const ref = referenceFailures(out); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures, fails, "the reference's failures, in its order"); }
+  }));
+
+/* ---------- 17. a statement's label, an object's history, a manifest's sources (v1.18.0; backlog #80, #81, #84) ---------- */
+test("a statement's label and an object's history are shown as the bundle states them, and the bundle is named after the sources its manifest lists",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const NS = "https://ns.auth.gov/fw", REQ = { id: `${NS}/req/1`, version: "4", label: "R-1", lifecycle: "active",
+      statements: [{ id: "smt.a", label: "a.", modality: "must", "obligated-parties": [`${NS}/p/o`], prose: { en: "Lock the door." } },
+                   { id: "smt.b", modality: "should", "obligated-parties": [`${NS}/p/o`], prose: { en: "Log who locked it." } }],
+      history: [{ date: "2025-06" }, { date: "2026-03-12", comment: { en: "Reworded." }, ref: "https://github.com/example/rules/issues/41" }] };
+    const dir = path.join(R.tmp, "labelled"); fs.mkdirSync(path.join(dir, "objects"), { recursive: true });
+    const bytes = Buffer.from(JSON.stringify(REQ, null, 1) + "\n");
+    fs.writeFileSync(path.join(dir, "objects", "req-1.json"), bytes);
+    const manifest = { "manifest-version": "1", "kernel-version": "2.0.0",
+      provenance: { sources: [{ title: "House rules", version: "2026.03", uuid: "36766a6f-e174-4292-a03e-fcb3b4b09201", date: "2026-03-12", format: "OSCAL", "format-version": "1.1.2" },
+                              { title: "House rules, annex" }], converter: "by hand" },
+      objects: [{ id: REQ.id, version: REQ.version, "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(REQ), path: "objects/req-1.json" }] };
+    fs.writeFileSync(path.join(dir, "content-manifest.json"), JSON.stringify(manifest, null, 1) + "\n");
+    await R.load(dir);
+    assert.match(await R.text(page.locator("#pill-bundle")), /House rules \+ 1 more source$/);
+    await R.view("overview");
+    assert.match(await R.text(page.locator("#ov-kv")), /House rules · v2026\.03 · OSCAL 1\.1\.2 · 2026-03-12/);
+    assert.match(await R.text(page.locator("#ov-kv")), /House rules, annex/);
+    const d = await R.detail(REQ.id);
+    assert.deepEqual(await d.locator("[data-stmt-label]").evaluateAll(l => l.map(x => x.textContent)), ["a."], "the label where the statement has one, and none made up for the other");
+    assert.deepEqual(await d.locator("[data-history-entry]").evaluateAll(l => l.map(x => x.textContent.replace(/\s+/g, " ").trim())),
+      ["2025-06", "2026-03-12 Reworded. · https://github.com/example/rules/issues/41"]);
+    assert.equal(await d.locator('[data-history-entry] a[href="https://github.com/example/rules/issues/41"]').count(), 1, "what an entry refers to is a link where it is an address");
+    assert.doesNotMatch(await R.text(d), /Fields/, "the history is not shown a second time among the other fields");
+    if (REFERENCE) { const ref = reference(dir, "--as-of", "2026-11-14"); assert.equal(ref.ok, true, ref.line + "\n" + ref.out.slice(-800)); }
+  }));
+
+/* ---------- 16. what was withdrawn (v1.17.0; backlog #87) ---------- */
+test("withdrawn objects are left out of the list and of a Set's members until the switch shows them; a link opens one all the same",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const CSF = path.join(ROOT, "converted_examples/US.CSF/csf-core-bundle");
+    const manifest = JSON.parse(fs.readFileSync(path.join(CSF, "content-manifest.json"), "utf8"));
+    const objs = manifest.objects.map(e => JSON.parse(fs.readFileSync(path.join(CSF, e.path), "utf8")));
+    const total = objs.length, gone = objs.filter(o => o.lifecycle === "withdrawn"), goneIds = new Set(gone.map(o => o.id));
+    assert.ok(gone.length > 0 && gone.length < total, "the bundle holds withdrawn objects and others");
+    /* a Set that lists a withdrawn member and one that is not */
+    const mixedSet = objs.find(o => o.members && o.lifecycle !== "withdrawn" && o.members.some(m => goneIds.has(m.ref)) && o.members.some(m => !goneIds.has(m.ref)));
+    assert.ok(mixedSet, "the bundle has a Set in force with a withdrawn member");
+    const goneMembers = mixedSet.members.filter(m => goneIds.has(m.ref)).length;
+    await R.load(CSF);
+    await R.view("browser");
+    const rows = () => page.locator("#objlist .objrow").evaluateAll(l => l.map(x => x.dataset.id));
+    assert.equal(await R.text(page.locator("#life-withdrawn")), `withdrawn · ${gone.length} hidden`);
+    const hiddenRows = await rows();
+    assert.equal(hiddenRows.length, total - gone.length);
+    assert.equal(hiddenRows.filter(id => goneIds.has(id)).length, 0, "no withdrawn object is in the list");
+    assert.equal(await R.text(page.locator("#withdrawn-hint")), `${gone.length} withdrawn object(s) match and are not shown`);
+    /* the Set: its members without the withdrawn ones, and how many those are */
+    const d = await R.detail(mixedSet.id);
+    const members = () => d.locator("a.reflink[data-ref]").evaluateAll(l => l.map(x => x.dataset.ref));
+    assert.equal((await members()).filter(id => goneIds.has(id)).length, 0);
+    assert.equal(await d.locator("[data-withdrawn-members]").getAttribute("data-withdrawn-members"), String(goneMembers));
+    assert.match(await R.text(d), new RegExp(`Members \\(${mixedSet.members.length}\\) — ${goneMembers} withdrawn not shown`, "i"));
+    /* shown on request: the list, and the Set that is open */
+    await page.click("#life-withdrawn");
+    assert.equal(await R.text(page.locator("#life-withdrawn")), `withdrawn · ${gone.length} shown`);
+    assert.equal((await rows()).length, total);
+    assert.equal(await page.locator("#withdrawn-hint").count(), 0);
+    assert.equal((await members()).filter(id => goneIds.has(id)).length, goneMembers);
+    assert.equal(await d.locator("[data-withdrawn-members]").count(), 0);
+    /* hidden again, a link to a withdrawn object opens it */
+    await page.click("#life-withdrawn");
+    const old = gone.find(o => o.statements).id;
+    await page.evaluate(id => openObject(id), old);   // what a click on a link to it does (wireRefs)
+    await page.waitForFunction(id => document.querySelector("#detail")?.textContent.includes(id), old);
+    assert.match(await R.text(page.locator("#detail")), /withdrawn/);
+    assert.equal((await rows()).filter(id => goneIds.has(id)).length, 0, "the list still leaves them out");
+  }));
+
+/* What the facet vectors say of the keys of `facets` against what the page decides. */
+test("the keys of facets: the page names the keys the reference's facet_errors names as unregistered, in the same words; a payload against its schema stays undecided, as for a method",
+  { skip: !REFERENCE && "python3 with jsonschema is not installed" }, () => {
+    const v = json("jascon/conformance/facet-vectors.json"), cases = [...v.vectors, ...v["method-vectors"]], ref = referenceFacetErrors(cases);
+    const decided = [], undecided = [];
+    cases.forEach((c, i) => {
+      const keys = ref[i].filter(e => /: unregistered facet '/.test(e)), payloads = ref[i].filter(e => /: facet '.*' payload violates its schema: /.test(e));
+      assert.deepEqual(P.facetKeyErrors(c.object, new Set(Object.keys(c.pinned || {})), c.name), keys, c.name);
+      if (payloads.length) undecided.push(c.name);
+      else if (c.object.facets && !("expected-errors" in c)) { assert.equal(keys.length ? "invalid" : "valid", c.expected, c.name); decided.push(c.name); }
+    });
+    /* the nine vectors of 2026-11-14 (assessment-criteria 1.1.0 beside 1.0.0, references) turn on a payload and its schema but
+       for three whose payload is valid: the page says of their keys that they are registered, and nothing of their payloads */
+    assert.deepEqual(decided, ["stdlib-payload-valid", "unregistered-facet-fails-closed", "pinned-framework-facet-valid", "private-facet-ignored-by-definition",
+      "assessment-criteria-1.1.0-typed-objectives", "assessment-criteria-pinned-at-1.0.0-is-held-to-1.0.0", "references-resources-in-the-source-s-shape"]);
+    assert.deepEqual(undecided, ["stdlib-payload-corrupt-wrong-types", "stdlib-payload-missing-required", "pinned-framework-facet-corrupt",
+      "assessment-criteria-1.1.0-an-address-that-names-nothing", "assessment-criteria-1.1.0-an-address-with-a-member-the-facet-does-not-know",
+      "assessment-criteria-1.1.0-assessment-for-as-one-string", "assessment-criteria-pinned-at-1.0.0-still-refuses-what-1.0.0-refuses",
+      "references-a-resource-without-an-id", "references-no-resource"]);
+    assert.deepEqual(P.facetKeyErrors({ id: "x", facets: { "private:a": 1, "https://no.example/f@1": 1 } }, new Set()), ["x: unregistered facet 'https://no.example/f@1' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)"]);
+  });
+
+test("the keys of facets on the page: each key says where its facet is registered; a key no facet registers fails in the reference's words in the detail, the overview, the console and an export",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1", PINNED = "https://ns.bsi.bund.de/facet/gspp-taxonomy@1", BAD = "https://ns.bsi.bund.de/facet/not-pinned@1";
+    const said = d => d.locator(".facetbox[data-facet-key]").evaluateAll(l => l.map(x => [x.dataset.facetKey, x.dataset.facetHome,
+      x.querySelector("[data-facet-error]")?.textContent ?? null, x.querySelector("[data-facet-unchecked]") ? "unchecked" : null]));
+    const heading = d => d.locator(".sectionlabel").evaluateAll(l => l.map(x => x.textContent).filter(t => /^Facets/.test(t)));
+    const err = (id, key) => `${id}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`;
+    await R.load(EXAMPLES);
+    let d = await R.detail(KONF);
+    assert.deepEqual(await said(d), [[PINNED, "pinned", null, "unchecked"]]);
+    assert.deepEqual(await heading(d), ["Facets — extensions (D10): each key names a facet, and where it is registered is said per key"]);
+    /* a copy whose requirement names a facet nobody pins, with both digests anew */
+    const copy = path.join(R.tmp, "facets", "examples");
+    fs.cpSync(EXAMPLES, copy, { recursive: true });
+    const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === KONF);
+    const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+    obj.facets = { [BAD]: obj.facets[PINNED] };
+    const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+    fs.writeFileSync(path.join(copy, entry.path), bytes);
+    Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+    fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+    await R.load(copy);
+    const e = err(KONF, BAD);
+    await R.view("overview");
+    assert.deepEqual(await page.locator("#ov-kv [data-facet-error]").evaluateAll(l => l.map(x => x.textContent)), ["✗ " + e]);
+    assert.ok((await page.locator("#log > div.l-err").evaluateAll(l => l.map(x => x.textContent))).some(t => t.endsWith(e)), "the console says it as an error");
+    d = await R.detail(KONF);
+    assert.deepEqual(await said(d), [[BAD, "none", e, null]]);
+    assert.doesNotMatch((await heading(d)).join(), /registered extensions/i, "the heading calls no key registered");
+    if (REFERENCE) { const ref = referenceFailures(copy); assert.deepEqual([ref.ok, ref.failures], [false, [e]], ref.line); }
+    /* an export: a requirement of the workspace under that key */
+    const NS = "https://example.org/my", REQ = { id: `${NS}/req/x`, version: "1", lifecycle: "active",
+      statements: [{ id: "s1", modality: "must", "obligated-parties": [`${NS}/party/ops`], prose: { en: "X." } }],
+      /* the payload of the example's requirement for the one statement this one has: a by-statement key that names no statement is another failure (D10) */
+      facets: { [BAD]: { "by-statement": { s1: obj.facets[BAD]["by-statement"].s1 } } } };
+    await page.evaluate(w => localStorage.setItem("scr-work", JSON.stringify(w)), { v: 2, ns: NS, tailor: { label: "t", selects: [], excludes: [], operations: [] },
+      system: { title: "S", components: [], implementations: [] }, assess: { scopeKey: "", performer: "", results: {} }, created: [REQ] });
+    await page.reload();
+    const out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "facets-export"));
+    const log = await R.log();
+    assert.deepEqual(exportFails(log), [err(REQ.id, BAD)]);
+    assert.match(log, /validate_core\.py fails it: 1 line\(s\) above say why$/m);
+    if (REFERENCE) { const ref = referenceFailures(out); assert.deepEqual([ref.ok, ref.failures], [false, [err(REQ.id, BAD)]], ref.line); }
+  }));
+
+/* ---------- 18. WITHDRAWN-1: an object in force leans on a withdrawn one (v1.19.0; backlog #93) ---------- */
+/* withdrawn_references of the reference is ported whole, so every vector is decided here. `expected` lists
+   [object id, edge, id of the withdrawn object]; the sentence is the reference's. */
+const WITHDRAWN = json("jascon/conformance/lifecycle-vectors.json")["withdrawn-references"];
+test("WITHDRAWN-1: each of the 16 vectors gets the reference's entries from the page's own function, in its order, and its sentence", () => {
+  assert.equal(WITHDRAWN.length, 16);
+  for (const c of WITHDRAWN) {
+    assert.deepEqual(P.withdrawnReferences(c.objects), c.expected, c.name);
+    const errs = P.withdrawnReferenceErrors(c.objects);
+    assert.equal(errs.length, c.expected.length, c.name);
+    errs.forEach((e, i) => assert.ok(e.startsWith(`${c.expected[i][0]}: ${c.expected[i][1]} names ${c.expected[i][2]}, which is withdrawn (WITHDRAWN-1: an object in force does not lean on a withdrawn one - `), `${c.name}: ${e}`));
+  }
+  assert.deepEqual(P.withdrawnReferences([]), []);
+  assert.deepEqual(P.withdrawnReferences(null), []);
+});
+test("a loaded bundle that holds a requirement as withdrawn: what leans on it fails in the reference's words, in the overview and the console; the bundle as committed has no such line",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1", IS_W1 = e => /, which is withdrawn \(WITHDRAWN-1: /.test(e);
+    await R.load(EXAMPLES);
+    await R.view("overview");
+    assert.equal(await page.locator("#ov-kv [data-closure-error]").count(), 0, "the example folder as committed has no such line");
+    const copy = path.join(R.tmp, "withdrawn-load", "examples");
+    fs.cpSync(EXAMPLES, copy, { recursive: true });
+    const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === KONF);
+    const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+    obj.lifecycle = "withdrawn";
+    const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+    fs.writeFileSync(path.join(copy, entry.path), bytes);
+    Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+    fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+    await R.load(copy);
+    await R.view("overview");
+    const shown = (await page.locator("#ov-kv [data-closure-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, ""));
+    assert.ok(shown.length >= 2 && shown.every(IS_W1), shown.join("\n"));
+    assert.ok(shown.some(e => e.includes(": requirement-ref names " + KONF)) && shown.some(e => e.includes(": source-ref names " + KONF)), "the Implementation that answers it and the Mapping that joins it");
+    const errs = await page.locator("#log > div.l-err").evaluateAll(l => l.map(x => x.textContent));
+    for (const e of shown) assert.ok(errs.some(x => x.endsWith(e)), "the console says it as an error: " + e);
+    if (REFERENCE) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures.filter(IS_W1), shown, "the reference's lines, word for word and in its order"); }
+  }));
+
+/* The reference's sentence for OPERATION-1 (backlog #96), and a copy of the example folder under `name` in which the
+   Tailoring `id` was changed by `change` and the manifest entry carries the digests of the changed file. -> the folder */
+const OPERATION_SAID = "an operation that changes a statement names it - set-modality, set-parameter and replace-prose carry a statement-id, and a set-parameter names a parameter that statement declares";
+async function tailoringCopy(R, name, id, change) {
+  const copy = path.join(R.tmp, name, "examples");
+  fs.cpSync(EXAMPLES, copy, { recursive: true });
+  const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === id);
+  const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+  change(obj);
+  const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+  fs.writeFileSync(path.join(copy, entry.path), bytes);
+  Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+  fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+  return copy;
+}
+
+/* ---------- 19. the operations a resolved package applies (v1.20.0; backlog #71 point 5) ---------- */
+/* The kernel names eight kinds of operation; the page applies set-modality, set-parameter and replace-prose.
+   Each case adds one operation to the Tailoring of the example folder that the reference passes and the page
+   does not apply: one of the other five kinds (on the requirement, and one on a statement), or a set-parameter
+   on a parameter its statement does not declare. Until 1.19.0 the last two left the preview without a word and the
+   resolved package without the operation; the first five were stopped by a sentence about a statement
+   "undefined". Since 2026-11-15 the reference refuses the last case as well (OPERATION-1, backlog #96), and the
+   page (1.21.0) says so in the overview in the reference's words. */
+test("a Tailoring with an operation the page does not apply: the preview names it and no resolved package can be exported, for each of the five kinds, for one of them on a statement, and for a parameter the statement does not declare; the reference passes each bundle but the last, which OPERATION-1 refuses in both",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const T = "https://cso.example/tailoring/linux-prod", LNX = "https://cso.example/req/LNX-SSH-1", KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1";
+    const NOT = kind => `${kind} on ${LNX} is not applied: this page applies set-modality, set-parameter, replace-prose and no other operation`;
+    const CASES = [
+      [{ op: "set-field", field: "label", value: "LNX-SSH-1 (prod)" }, NOT("set-field")],
+      [{ op: "add-relation", relation: { type: "related", ref: KONF } }, NOT("add-relation")],
+      [{ op: "remove-relation", relation: { type: "related", ref: KONF } }, NOT("remove-relation")],
+      [{ op: "attach-facet", facet: "private:note@1", payload: { text: "prod only" } }, NOT("attach-facet")],
+      [{ op: "detach-facet", facet: "private:note@1" }, NOT("detach-facet")],
+      [{ op: "attach-facet", "statement-id": "s2", facet: "private:note@1", payload: { text: "prod only" } }, NOT("attach-facet")],
+      [{ op: "set-parameter", "statement-id": "s2", parameter: "no-such", value: 1 }, `set-parameter on ${LNX} is not applied: statement s2 declares no parameter no-such`],
+    ];
+    const shown = async () => {
+      await R.view("stage:tailor");
+      await page.locator(`[data-tsel="${T}"]`).click();
+      return { errors: (await page.locator("#view-stagefn [data-resolve-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")),
+        refused: await page.locator("#view-stagefn [data-resolve-refused]").count(), disabled: await page.locator("#wb-t-export-resolved").isDisabled() };
+    };
+    await R.load(EXAMPLES);
+    assert.deepEqual(await shown(), { errors: [], refused: 0, disabled: false }, "the Tailoring as committed resolves: its one operation is a set-parameter on a declared parameter");
+    for (const [op, sentence] of CASES) {
+      const name = op.op + (op.parameter ? "-" + op.parameter : op["statement-id"] ? "-" + op["statement-id"] : ""), copy = path.join(R.tmp, "resolve-" + name, "examples");
+      fs.cpSync(EXAMPLES, copy, { recursive: true });
+      const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === T);
+      const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+      obj.operations.push({ ...op, "requirement-ref": LNX, provenance: obj.operations[0].provenance });
+      const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+      fs.writeFileSync(path.join(copy, entry.path), bytes);
+      Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+      fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+      await R.load(copy);
+      assert.deepEqual(await shown(), { errors: [sentence], refused: 1, disabled: true }, name);
+      assert.equal(await page.locator("#view-stagefn .chip").filter({ hasText: "modified" }).textContent(), "1 modified", name + ": the operation the page applies is still shown as applied");
+      const refused = op.parameter === "no-such" ? [`${T}: operations[1]: set-parameter names the parameter 'no-such', which statement 's2' of ${LNX} does not declare (OPERATION-1: ${OPERATION_SAID})`] : [];
+      await R.view("overview");
+      assert.deepEqual((await page.locator("#ov-kv [data-closure-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")), refused, name);
+      if (REFERENCE) {
+        if (refused.length) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures, refused, name + ": the reference's line, word for word"); }
+        else { const ref = reference(copy); assert.ok(ref.ok, name + ": " + ref.out.slice(-1500)); assert.match(ref.line, / pass, 0 fail/, name); }
+      }
+    }
+  }));
+
+/* ---------- 20. OPERATION-1: an operation that changes a statement names it (v1.21.0; backlog #96) ---------- */
+/* operation_targets of the reference is ported whole, so every vector is decided here. `expected` lists
+   [id of the Tailoring, index of the operation, "statement" or "parameter"]; the sentences are the reference's. */
+const OPERATIONS = json("jascon/conformance/reference-vectors.json")["operation-targets"];
+test("OPERATION-1: each of the 15 vectors gets the reference's entries from the page's own function, in its order, and its sentences", () => {
+  assert.equal(OPERATIONS.length, 15);
+  for (const c of OPERATIONS) {
+    assert.deepEqual(P.operationTargets(c.objects), c.expected, c.name);
+    const errs = P.operationTargetErrors(c.objects);
+    assert.equal(errs.length, c.expected.length, c.name);
+    errs.forEach((e, i) => assert.ok(e.startsWith(`${c.expected[i][0]}: operations[${c.expected[i][1]}]: `) && e.endsWith(`(OPERATION-1: ${OPERATION_SAID})`)
+      && (c.expected[i][2] === "statement" ? / names no statement \(/.test(e) : / does not declare \(/.test(e)), `${c.name}: ${e}`));
+  }
+  assert.deepEqual(P.operationTargets([]), []);
+  assert.deepEqual(P.operationTargets(null), []);
+});
+test("a loaded bundle with a set-modality that names no statement: the overview and the console fail it in the reference's words, and the resolved preview says that it names no statement",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const T = "https://ns.bsi.bund.de/gspp/tailoring/erhoeht", ISM = "https://ns.cyber.gov.au/ism/req/ISM-1234";
+    const copy = await tailoringCopy(R, "operation-1", T, o => o.operations.push({ op: "set-modality", "requirement-ref": ISM, modality: "may" }));
+    await R.load(copy);
+    await R.view("overview");
+    const want = [`${T}: operations[2]: set-modality names no statement (OPERATION-1: ${OPERATION_SAID})`];
+    assert.deepEqual((await page.locator("#ov-kv [data-closure-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")), want);
+    const errs = await page.locator("#log > div.l-err").evaluateAll(l => l.map(x => x.textContent));
+    assert.ok(errs.some(x => x.endsWith(want[0])), "the console says it as an error");
+    await R.view("stage:tailor");
+    await page.locator(`[data-tsel="${T}"]`).click();
+    assert.deepEqual((await page.locator("#view-stagefn [data-resolve-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")), [`set-modality on ${ISM} names no statement`]);
+    assert.equal(await page.locator("#wb-t-export-resolved").isDisabled(), true);
+    if (REFERENCE) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures, want, "the reference's line, word for word"); }
+  }));
+
+/* ---------- 21. the scope of a resolved package (v1.21.0; backlog #71 points 13 and 14) ---------- */
+/* The example Tailoring selects a baseline of three requirements, one of them through a nested Set. Each case
+   changes its selection. `scope` is what the preview counts and what the resolved package holds. */
+test("the resolved scope: an exclude that names a Set removes its members, one that names a Requirement removes it; a select by predicate is said not to be resolved and no resolved package can be exported",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const T = "https://ns.bsi.bund.de/gspp/tailoring/erhoeht", LINUX = "https://cso.example/set/linux-baseline", ISM = "https://ns.cyber.gov.au/ism/req/ISM-1234";
+    const shown = async () => {
+      await R.view("stage:tailor");
+      await page.locator(`[data-tsel="${T}"]`).click();
+      return { scope: await page.locator("#view-stagefn .chip").filter({ hasText: "requirements in resolved scope" }).textContent(),
+        errors: (await page.locator("#view-stagefn [data-resolve-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")),
+        disabled: await page.locator("#wb-t-export-resolved").isDisabled() };
+    };
+    const packed = async name => {
+      const dir = unzipTo(await R.download("#wb-t-export-resolved"), path.join(R.tmp, "scope-out-" + name));
+      if (REFERENCE) { const ref = reference(dir); assert.ok(ref.ok, name + ": " + ref.out.slice(-2500)); }
+      return JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8")).objects.map(e => e.id).sort();
+    };
+    const BASE = ["https://ns.bsi.bund.de/gspp/req/KONF.14.1", ISM, "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR"].sort();
+    const why = { rationale: { en: "Not in this scope." } };
+
+    /* a second Set is selected and then excluded as a Set: its one member leaves the scope */
+    let copy = await tailoringCopy(R, "scope-set", T, o => { o.selects.push({ "set-ref": LINUX }); o.excludes = [{ ref: LINUX, ...why }]; });
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "3 requirements in resolved scope", errors: [], disabled: false });
+    assert.deepEqual(await packed("set"), BASE);
+    if (REFERENCE) { const ref = reference(copy); assert.ok(ref.ok, ref.out.slice(-2500)); assert.ok(ref.notes.some(l => l.includes(`risk-coverage: ${T} `) && l.includes(" selected=3 ")), "the reference counts three selected requirements: " + ref.notes.join("\n").slice(-1500)); }
+
+    /* an exclude that names one Requirement removes that one */
+    copy = await tailoringCopy(R, "scope-one", T, o => { o.excludes = [{ ref: ISM, ...why }]; });
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "2 requirements in resolved scope", errors: [], disabled: false });
+    assert.deepEqual(await packed("one"), BASE.filter(id => id !== ISM));
+
+    /* a select by predicate beside the select of a Set */
+    copy = await tailoringCopy(R, "scope-predicate", T, o => o.selects.push({ predicate: { present: { path: "facets" } } }));
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "3 requirements in resolved scope",
+      errors: ["selects[1] is a select by predicate, which this page does not resolve: the scope below holds the members of the selected Sets only"], disabled: true });
+    if (REFERENCE) { const ref = reference(copy); assert.ok(ref.ok, "the reference passes a select by predicate: " + ref.out.slice(-2500)); }
+  }));
+
+/* ---------- 22. what the kernel requires of an Attestation, and what a pack may hold (v1.22.0; backlog #71 points 9 and 12) ---------- */
+test("the members the page requires of an Attestation are those the kernel schema requires, and each one that is missing is named", () => {
+  const defs = json("jascon/schemas/jascon-2.0.0.schema.json").$defs, own = defs.attestation.allOf[1];
+  assert.deepEqual([...P.ATTESTATION_REQUIRED].sort(), [...defs.base.required, ...own.required].sort(), "the page's list is base.required and attestation.required of the kernel schema");
+  assert.equal(own.properties["subject-semantic-digests"].minItems, 1, "the kernel requires at least one subject");
+  const A = { id: "https://ex.org/attestation/1", version: "1", lifecycle: "active", "subject-semantic-digests": ["sha256:" + "0".repeat(64)],
+    "content-manifest-digest": "sha256:" + "0".repeat(64), signer: "https://ex.org/party/s", timestamp: "2026-11-15" };
+  assert.deepEqual(P.attestationMissing(A), []);
+  for (const k of P.ATTESTATION_REQUIRED.filter(k => k !== "subject-semantic-digests")) {
+    const o = { ...A }; delete o[k];
+    assert.deepEqual(P.attestationMissing(o), [`no ${k}`]);
+  }
+  for (const none of [[], "sha256:" + "0".repeat(64), null, {}])
+    assert.deepEqual(P.attestationMissing({ ...A, "subject-semantic-digests": none }), ["subject-semantic-digests names no subject (the kernel requires at least one)"]);
+  assert.deepEqual(P.attestationMissing({ "subject-semantic-digests": [] }).length, 7, "every missing member is named, not the first only");
+});
+
+/* pack_errors of the reference, run by Python on the same manifest and objects, typed as the page types them. -> [[message]] per case */
+function referencePack(cases) {
+  const py = `
+import ast, json, os, sys
+src = open(sys.argv[1], encoding="utf-8").read()
+ns = {"STDLIB_DECL": {}}
+for fn in sorted(os.listdir(sys.argv[2])):
+    d = json.load(open(os.path.join(sys.argv[2], fn), encoding="utf-8"))
+    ns["STDLIB_DECL"][d["id"]] = d.get("modifies-semantics", [])
+for node in ast.parse(src).body:
+    if isinstance(node, ast.FunctionDef) and node.name in ("pack_errors", "_adv", "uri_origin"):
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+    if isinstance(node, ast.Assign) and getattr(node.targets[0], "id", None) == "ADVICE_RULES":
+        exec(compile(ast.Module([node], []), sys.argv[1], "exec"), ns)
+out = []
+for manifest, objs, declared in json.loads(sys.stdin.buffer.read().decode("utf-8")):
+    out.append([m for _, m in ns["pack_errors"](manifest, {o["id"]: (t, o) for t, o in objs}, declared)])
+print(json.dumps(out))`;
+  const run = spawnSync("python3", ["-c", py, VALIDATE, path.join(ROOT, "jascon/schemas/stdlib")],
+    { input: JSON.stringify(cases.map(([m, objs, declared]) => [m, objs.map(o => [P.inferType(o), o]), declared || null])), encoding: "utf8" });
+  assert.equal(run.status, 0, run.stderr.slice(-1500));
+  return JSON.parse(run.stdout);
+}
+test("ADVICE-1 to ADVICE-3: each of the 15 pack vectors gets from the page's own function the rules the vector expects, in the reference's words; what the standard library's facets declare is what the page knows",
+  () => {
+    const stdlib = Object.fromEntries(fs.readdirSync(path.join(ROOT, "jascon/schemas/stdlib")).map(f => json("jascon/schemas/stdlib/" + f)).map(d => [d.id.split("/").pop(), d["modifies-semantics"]]));
+    assert.deepEqual(P.STDLIB_DECL, stdlib, "STDLIB_DECL is modifies-semantics of every descriptor in jascon/schemas/stdlib");
+    const vectors = json("jascon/conformance/advice-vectors.json")["pack-vectors"];
+    assert.equal(vectors.length, 15);
+    const rules = msgs => [...new Set(msgs.map(m => / \((ADVICE-\d+): /.exec(m)[1]))].sort();
+    const got = vectors.map(v => P.packErrors(v.manifest, v.objects, v.declared));
+    for (const [i, v] of vectors.entries()) {
+      const expected = (v["expected-rules"] || []).filter(r => r.startsWith("ADVICE-")).sort();
+      assert.deepEqual(rules(got[i]), expected, v.name);
+      if (expected.length) for (const frag of v["expected-frags"] || []) assert.ok(got[i].some(m => m.includes(frag)), `${v.name}: ${frag}`);
+    }
+    assert.deepEqual([...new Set(got.flatMap(rules))].sort(), ["ADVICE-1", "ADVICE-2", "ADVICE-3"], "the vectors reach all three rules");
+    assert.deepEqual(P.packErrors({ "manifest-version": "1", objects: [] }, vectors[1].objects), [], "a manifest without a pack header is held to nothing");
+    if (PYTHON) assert.deepEqual(got, referencePack(vectors.map(v => [v.manifest, v.objects, v.declared])), "message for message the reference's pack_errors");
+  });
+
+test("a pack on the page: a Requirement among its objects, an object and a publisher under another origin, and a facet that declares a semantics class are each named in the overview in the reference's words",
+  { ...OPTS, timeout: 360000 }, () => withReader(async R => {
+    const { page } = R;
+    let n = 0;
+    /* a copy of the worked pack; `change` gets the folder and the manifest and may add files and entries or edit the header */
+    const packCopy = async change => {
+      const dir = path.join(R.tmp, "pack-" + ++n, "bundle"), mp = path.join(dir, "content-manifest.json");
+      fs.cpSync(PACK, dir, { recursive: true });
+      const manifest = JSON.parse(fs.readFileSync(mp, "utf8"));
+      const put = async (rel, obj) => {
+        const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+        fs.mkdirSync(path.dirname(path.join(dir, rel)), { recursive: true });
+        fs.writeFileSync(path.join(dir, rel), bytes);
+        const entry = { id: obj.id, version: obj.version, path: rel, "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) };
+        const at = manifest.objects.findIndex(e => e.id === obj.id);
+        if (at >= 0) manifest.objects[at] = entry; else manifest.objects.push(entry);
+      };
+      await change(manifest, put, rel => JSON.parse(fs.readFileSync(path.join(dir, rel), "utf8")));
+      fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+      return dir;
+    };
+    const said = async dir => {
+      await R.load(dir);
+      await R.view("overview");
+      const errors = await page.locator("#ov-kv [data-pack-error]").evaluateAll(l => l.map(e => e.textContent.replace(/^✗ /, "")));
+      const log = await R.log();
+      for (const e of errors) assert.ok(log.includes(e), "the console has the sentence: " + e);
+      if (REFERENCE) {
+        const ref = referenceFailures(dir);
+        assert.deepEqual(errors, ref.failures.filter(e => / \(ADVICE-[123]: /.test(e)), "the page's sentences are the reference's, in its order: " + ref.line);
+      }
+      return errors.map(e => / \((ADVICE-\d+): /.exec(e)[1]);
+    };
+    const REQ = json("jascon/examples/req-acme-lnx-ssh-1.json"), COMP = "objects/component/server-7.json";
+
+    assert.deepEqual(await said(await packCopy(() => {})), [], "the worked pack as it lies");
+    assert.equal(await page.locator("#ov-kv .k").evaluateAll(l => l.filter(e => e.textContent === "what a pack may hold").length), 0, "no row where nothing fails");
+    /* a Requirement under the pack's own origin: ADVICE-1 alone; one under another origin: ADVICE-1 and ADVICE-2 */
+    assert.deepEqual(await said(await packCopy((m, put) => put("objects/req/own.json", { ...REQ, id: "https://dbvendor.example/req/own" }))), ["ADVICE-1"]);
+    assert.deepEqual(await said(await packCopy((m, put) => put("objects/req/foreign.json", REQ))), ["ADVICE-1", "ADVICE-2"]);
+    /* the publisher under another origin */
+    assert.deepEqual(await said(await packCopy(m => { m.pack.publisher.ref = "https://elsewhere.example/party/vendor"; })), ["ADVICE-2"]);
+    /* a facet of the standard library that declares a semantics class, on the pack's Component; one that declares none */
+    const withFacet = (key, payload) => packCopy(async (m, put, read) => { const c = read(COMP); c.facets = { ...(c.facets || {}), [key]: payload }; await put(COMP, c); });
+    assert.deepEqual(await said(await withFacet("https://ns.jascon.net/stdlib/facet/effectivity@1", { federal: { is: "required" } })), ["ADVICE-3"]);
+    assert.deepEqual((await said(await withFacet("https://ns.jascon.net/stdlib/facet/terminology@1", {}))).filter(r => r === "ADVICE-3"), [], "a facet that declares nothing is not named");
+    assert.deepEqual(await said(await withFacet("private:notes@1", { anything: true })), [], "a private payload declares nothing");
+  }));
+
+/* ---------- 23. the Tailor workbench takes a value that was typed when its button is pressed (v1.22.0; backlog #71 point 3) ---------- */
+test("the Tailor workbench: a value typed into a field of the operation and the button pressed at once adds the operation, with that value, at the first press",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const pick = async (id, q) => { await page.fill("#" + id, q); await page.locator(`#${id}-sugg [data-pick]`).first().click(); };
+    const operations = () => page.evaluate(() => JSON.parse(localStorage.getItem("scr-work")).tailor.operations);
+    const LNX = "https://cso.example/req/LNX-SSH-1", ISM = "https://ns.cyber.gov.au/ism/req/ISM-1234";
+    await R.load(EXAMPLES);
+    await R.view("stage:tailor");
+    /* a parameter value: typed, and the button pressed while the field still has the focus */
+    await pick("wb-t-reqpick", "LNX-SSH-1");
+    await page.selectOption("#wb-t-op", "set-parameter");
+    await page.fill("#wb-t-val", "4");
+    await page.click("#wb-t-add");
+    let ops = await operations();
+    assert.deepEqual(ops.map(o => [o.op, o["requirement-ref"], o["statement-id"], o.parameter, String(o.value)]), [["set-parameter", LNX, "s1", "max-auth-tries", "4"]], "one press adds the operation with the value that was typed");
+    assert.equal(await page.locator("[data-delop]").count(), 1, "and the workbench shows it");
+    /* the language of a replaced prose: the same kind of field */
+    await pick("wb-t-reqpick", "ISM-1234");
+    await page.selectOption("#wb-t-op", "replace-prose");
+    await page.fill("#wb-t-prose", "Ein neuer Satz.");
+    await page.fill("#wb-t-lang", "de");
+    await page.click("#wb-t-add");
+    ops = await operations();
+    assert.deepEqual(ops.slice(1).map(o => [o.op, o["requirement-ref"], o.prose]), [["replace-prose", ISM, { de: "Ein neuer Satz." }]]);
+    assert.equal(await page.locator("[data-delop]").count(), 2);
+    /* a field changed without the pointer redraws at once, as before: the verdict beside it follows the value */
+    await pick("wb-t-reqpick", "LNX-SSH-1");
+    await page.selectOption("#wb-t-op", "set-parameter");
+    await page.fill("#wb-t-val", "99");
+    await page.locator("#wb-t-val").dispatchEvent("change");
+    assert.match(await R.text(page.locator("#view-stagefn .wb")), /INVALID|deviation|bounds/i);
+
+    /* The same loss in a search field (found while building point 3, measured on reader 1.21.0): the field redraws
+       its workbench a moment after the last key, and a button pressed across that moment was replaced under the
+       pointer. Typed into the search of the Assess workbench, and an answer pressed and held across the redraw. */
+    await R.view("stage:assess");
+    const answers = () => page.evaluate(() => Object.values(JSON.parse(localStorage.getItem("scr-work")).assess.results || {}).filter(r => r.result).length);
+    assert.equal(await answers(), 0);
+    await page.locator("#wb-a-q").pressSequentially("req", { delay: 10 });
+    const box = await page.locator('[data-az$="|not-satisfied"]').first().boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await page.waitForTimeout(600);   // the redraw is due 300 ms after the last key
+    await page.mouse.up();
+    await page.waitForFunction(() => Object.values(JSON.parse(localStorage.getItem("scr-work")).assess.results || {}).some(r => r.result), null, { timeout: 5000 });
+    assert.equal(await answers(), 1, "the answer pressed while the search was about to redraw is recorded");
+  }));
+
+/* ---------- 24. what was written in a workbench stays in the graph across a load (v1.22.0; backlog #71 point 4) ---------- */
+test("an authored object stays in the graph when a bundle is loaded, and the workspace export holds it; where the loaded bundle holds an object of the same id, the bundle's object is shown and the console says so",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const NS = "https://example.org/my", REQ = `${NS}/req/encrypt-backups`;
+    await R.view("stage:author");
+    await page.fill("#wb-au-title", "Encrypt backups");
+    await page.fill("#wb-au-prose", "Backups are encrypted.");
+    await page.fill("#wb-au-party", "Operations");
+    await page.click("#wb-au-addreq");
+    const where = id => page.evaluate(i => state.objects.get(i)?.path ?? null, id);
+    assert.equal(await where(REQ), "(workspace)");
+
+    await R.load(EXAMPLES);
+    assert.equal(await where(REQ), "(workspace)", "after a load the authored object is still in the graph");
+    assert.match(await R.log(), /workspace kept: 1 authored object\(s\) stay in the graph beside the loaded bundle/);
+    await R.view("overview");
+    assert.equal(await R.text(page.locator("#ov-other")), "1", "counted among the objects the manifest does not list");
+    assert.equal(await page.locator("#pill-bundle").getAttribute("title").then(t => /^\d+ objects · /.test(t)), true);
+    const out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "kept"));
+    const ids = JSON.parse(fs.readFileSync(path.join(out, "content-manifest.json"), "utf8")).objects.map(e => e.id);
+    assert.deepEqual(ids, [REQ], "the export of the workspace holds it, and nothing of the loaded bundle");
+    if (REFERENCE) { const ref = reference(out); assert.ok(ref.ok, ref.out.slice(-2000)); }
+
+    /* the bundle just exported holds the same id: it is shown as the bundle has it */
+    await R.load(out);
+    assert.notEqual(await where(REQ), "(workspace)", "the bundle's object is the one in the graph");
+    assert.match(await R.log(), new RegExp(`1 authored object\\(s\\) are not put beside the loaded bundle, which holds an object of the same id; they stay stored in the workspace — ${REQ}`));
+    await R.view("overview");
+    assert.deepEqual([await R.text(page.locator("#ov-listed")), await page.locator("#ov-other").count()], ["1", 0]);
+    /* and it is still stored: after another load it is back */
+    await R.load(EXAMPLES);
+    assert.equal(await where(REQ), "(workspace)");
+  }));
+
+/* ---------- 25. a second check on the same day is a second Assessment (v1.22.0; backlog #71 point 6) ---------- */
+test("the Assess workbench: a second check on the same day gets an id of its own, and so do its Findings; the first keeps the id it always had",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+    const NS = "https://example.org/my", day = new Date().toISOString().slice(0, 10);
+    const minted = kind => page.evaluate(([ns, k]) => [...state.objects.keys()].filter(id => id.startsWith(`${ns}/${k}/`)).sort(), [NS, kind]);
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    await set("#wb-a-perf", "Lead Assessor");
+    await page.locator('[data-az$="|not-satisfied"]').first().click();
+    await page.click("#wb-a-gen");
+    assert.deepEqual([await minted("asmt"), await minted("finding")], [[`${NS}/asmt/check-${day}`], [`${NS}/finding/f-${day}-1`]], "the first check of a day: the ids as before");
+    const first = await page.evaluate(id => JSON.stringify(state.objects.get(id).obj), `${NS}/asmt/check-${day}`);
+    await R.view("stage:assess");
+    await page.click("#wb-a-gen");
+    assert.deepEqual([await minted("asmt"), await minted("finding")],
+      [[`${NS}/asmt/check-${day}`, `${NS}/asmt/check-${day}-2`], [`${NS}/finding/f-${day}-1`, `${NS}/finding/f-${day}-check-2-1`]], "the second check is a second Assessment with its own Finding");
+    assert.equal(await page.evaluate(id => JSON.stringify(state.objects.get(id).obj), `${NS}/asmt/check-${day}`), first, "the first Assessment is as it was written");
+    assert.equal(await page.evaluate(id => state.objects.get(id).obj["assessment-ref"], `${NS}/finding/f-${day}-check-2-1`), `${NS}/asmt/check-${day}-2`, "the second Finding names the second Assessment");
+    await R.view("stage:assess");
+    await page.click("#wb-a-gen");
+    assert.equal((await minted("asmt")).length, 3, "and a third");
+    /* the export holds the six objects under six ids. (It holds nothing of the loaded bundle, so the reference
+       fails it for the Requirement the three Findings name and for nothing else.) */
+    const out = unzipTo(await R.download("#btn-export-ws"), path.join(R.tmp, "checks"));
+    assert.equal(new Set(JSON.parse(fs.readFileSync(path.join(out, "content-manifest.json"), "utf8")).objects.map(e => e.id)).size, 6);
+    if (REFERENCE) { const ref = referenceFailures(out);
+      assert.deepEqual(ref.failures.map(f => f.replace(/^\S+: /, "")), Array(3).fill("closure-required requirement-ref does not resolve in-bundle: " + (await page.evaluate(id => state.objects.get(id).obj["requirement-ref"], `${NS}/finding/f-${day}-1`))), ref.line); }
+  }));
+
+/* ---------- 26. stage 5 shows the Risks its heading names (v1.22.0; backlog #71 point 7) ---------- */
+test("stage 5 shows every Risk of the bundle as recorded: its state, its level and residual level, the treatment decided and the requirements that carry it",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const RISK = json("jascon/examples/risk-acme-kms-key-rotation.json");
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    const cards = page.locator("#view-stagefn [data-risk]");
+    assert.deepEqual(await cards.evaluateAll(l => l.map(x => x.dataset.risk)), [RISK.id]);
+    assert.match(await R.text(page.locator("#view-stagefn")), /Risks \(1\) — /i);
+    const card = cards.first();
+    assert.equal(await R.text(card.locator("[data-risk-state]")), RISK.state);
+    assert.equal(await R.text(card.locator("[data-risk-level]")), `level ${RISK.rating.level} ▶ residual ${RISK["residual-rating"].level} · treatment ${RISK.treatment}`);
+    assert.match(await R.text(card.locator("[data-risk-treatments]")), /^carried by .*KONF\.14\.1.* stmt s2$/);
+    assert.equal(await card.locator(`[data-risk-treatments] .reflink[data-ref="${RISK.treatments[0]["requirement-ref"]}"]`).count(), 1, "the requirement is a link into the graph");
+    assert.match(await R.text(card), /author: .*ciso/);
+    /* a Risk that records less says so, and a bundle with a Risk and nothing else of the stage still shows it */
+    R.answers.push(JSON.stringify({ id: "https://ex.org/risk/bare", version: "1", lifecycle: "draft", scenario: { en: "Something fails." }, "owner-ref": "https://ex.org/party/o", state: "identified" }));
+    await page.click("#btn-paste");
+    await R.view("stage:assess");
+    const bare = page.locator('#view-stagefn [data-risk="https://ex.org/risk/bare"]');
+    assert.deepEqual([await R.text(bare.locator("[data-risk-level]")), await R.text(bare.locator("[data-risk-treatments]"))], ["no level recorded · no treatment decided", "no requirement carries a treatment"]);
+  }));
+
+/* ---------- 27. what is in force and what is changed in a resolved package (v1.22.0; backlog #71 points 15 to 17) ---------- */
+test("the resolved scope: a withdrawn Requirement a selected Set lists is left out and counted; an operation on a Requirement outside the scope is named as not applied, is no error and is not counted as modified",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const T = "https://ns.bsi.bund.de/gspp/tailoring/erhoeht", KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1", ISM = "https://ns.cyber.gov.au/ism/req/ISM-1234",
+      IEC = "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR", LNX = "https://cso.example/req/LNX-SSH-1";
+    const chip = async what => (await page.locator("#view-stagefn .chip").filter({ hasText: what }).textContent()).trim();
+    const shown = async () => {
+      await R.view("stage:tailor");
+      await page.locator(`[data-tsel="${T}"]`).click();
+      return { scope: await chip("requirements in resolved scope"), modified: await chip("modified"),
+        notes: (await page.locator("#view-stagefn [data-resolve-note]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^○ /, "")),
+        withdrawn: await page.locator("#view-stagefn [data-resolve-withdrawn]").evaluateAll(l => l.map(x => x.textContent)),
+        cards: await page.locator("#view-stagefn .stmt .reflink").evaluateAll(l => [...new Set(l.map(x => x.dataset.ref))]),
+        errors: await page.locator("#view-stagefn [data-resolve-error]").count(), disabled: await page.locator("#wb-t-export-resolved").isDisabled() };
+    };
+    const packed = async name => {
+      const dir = unzipTo(await R.download("#wb-t-export-resolved"), path.join(R.tmp, "force-out-" + name));
+      if (REFERENCE) { const ref = reference(dir); assert.ok(ref.ok, name + ": " + ref.out.slice(-2500)); }
+      return JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8")).objects.map(e => e.id).sort();
+    };
+    const why = { rationale: { en: "Not in this scope." } };
+    const onIsm = { op: "set-modality", "requirement-ref": ISM, "statement-id": "s1", modality: "must" };
+
+    /* as the folder lies: three in the scope, one of them changed, nothing else said */
+    await R.load(EXAMPLES);
+    assert.deepEqual(await shown(), { scope: "3 requirements in resolved scope", modified: "1 modified", notes: [], withdrawn: [], cards: [KONF], errors: 0, disabled: false });
+
+    /* (15) one of the three is withdrawn: the reference does not count it, and the page does not hold it */
+    let copy = await tailoringCopy(R, "force-withdrawn", IEC, o => { o.lifecycle = "withdrawn"; });
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "2 requirements in resolved scope", modified: "1 modified", notes: [],
+      withdrawn: [`○ 1 withdrawn requirement(s) that a selected Set lists are not in force and not in the scope (first: ${IEC})`], cards: [KONF], errors: 0, disabled: false });
+    assert.deepEqual(await packed("withdrawn"), [KONF, ISM].sort());
+    assert.match(await R.log(), new RegExp(`1 withdrawn requirement\\(s\\) of the selected Sets are not in the package \\(first: ${IEC}\\)`));
+    if (REFERENCE) { const ref = reference(copy); assert.ok(ref.ok, ref.out.slice(-2500));
+      assert.ok(ref.notes.some(l => l.includes(`${T}: 1 selected requirement(s) are withdrawn and not counted (first: ${IEC})`)), "the reference says the same of its selection");
+      assert.ok(ref.notes.some(l => l.includes(`risk-coverage: ${T} `) && l.includes(" selected=2 ")), "and counts two"); }
+
+    /* (16), (17) an operation on a Requirement the Tailoring excludes: named, not counted, no error; the package is without the Requirement */
+    copy = await tailoringCopy(R, "force-excluded", T, o => { o.operations.push(onIsm); o.excludes = [{ ref: ISM, ...why }]; });
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "2 requirements in resolved scope", modified: "1 modified",
+      notes: [`set-modality on ${ISM} is not applied: the Tailoring excludes that Requirement`], withdrawn: [], cards: [KONF], errors: 0, disabled: false });
+    assert.deepEqual(await packed("excluded"), [KONF, IEC].sort());
+    if (REFERENCE) { const ref = reference(copy); assert.ok(ref.ok, "the reference passes the bundle and has no word for the operation: " + ref.out.slice(-2500)); }
+
+    /* the same operation where the Requirement is in the scope is applied and counted */
+    copy = await tailoringCopy(R, "force-applied", T, o => { o.operations.push(onIsm); });
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "3 requirements in resolved scope", modified: "2 modified", notes: [], withdrawn: [], cards: [KONF, ISM], errors: 0, disabled: false });
+
+    /* an operation on a Requirement no selected Set holds */
+    const onLnx = { op: "set-parameter", "requirement-ref": LNX, "statement-id": "s1", parameter: "max-auth-tries", value: 4 };
+    copy = await tailoringCopy(R, "force-unselected", T, o => { o.operations.push(onLnx); });
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "3 requirements in resolved scope", modified: "1 modified",
+      notes: [`set-parameter on ${LNX} is not applied: no selected Set holds that Requirement`], withdrawn: [], cards: [KONF], errors: 0, disabled: false });
+    assert.deepEqual(await packed("unselected"), [KONF, ISM, IEC].sort());
+
+    /* with a select by predicate the scope is a lower bound: the page does not say that the operation is not applied */
+    copy = await tailoringCopy(R, "force-open", T, o => { o.operations.push(onLnx); o.selects.push({ predicate: { present: { path: "facets" } } }); });
+    await R.load(copy);
+    const open = await shown();
+    assert.deepEqual([open.notes, open.errors, open.disabled, open.modified],
+      [[`set-parameter on ${LNX} is not shown as applied: no selected Set holds that Requirement, and the select by predicate is not resolved here`], 1, true, "1 modified"]);
+  }));

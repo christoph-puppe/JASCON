@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2072",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2072",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "AI models are stored in a non-executable file format that does not allow arbitrary code execution."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

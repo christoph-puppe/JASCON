@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.7",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.3.7",
  "lifecycle": "active",
  "title": {
@@ -57,7 +57,8 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.44",
       "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.24"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.24",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.34"
      ]
     }
    }
@@ -65,7 +66,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4
     }
@@ -75,7 +76,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Funktionsfähigkeit von Zugangkontrollen wie Wachdiensten und Schließanlagen ist essenziell,  um den Zutritt Unbefugter wirksam verhindern zu können. Regelmäßige Überprüfungen können beispielsweise durch angekündigte oder unangekündigte Rundgänge, die stichprobenartige Auswertung von Kameraaufzeichnungen und Logbüchern oder die Analyse verschiedener Kennzahlen erfolgen."
+      "de": "Die Funktionsfähigkeit von Zugangkontrollen wie Wachdiensten und Schließanlagen ist essenziell, um den Zutritt Unbefugter wirksam verhindern zu können. Regelmäßige Überprüfungen können beispielsweise durch angekündigte oder unangekündigte Rundgänge, die stichprobenartige Auswertung von Kameraaufzeichnungen und Logbüchern oder die Analyse verschiedener Kennzahlen erfolgen."
      }
     }
    }
@@ -83,7 +84,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "geb.3.7-prm1": {
-     "alt-identifier": "407e3436-9719-4c45-a009-183c7818d376"
+     "alt-identifier": "29802e29-c17b-454a-9860-e137a3772820"
     }
    }
   }

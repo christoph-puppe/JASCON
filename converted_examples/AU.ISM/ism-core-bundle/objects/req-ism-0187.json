@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0187",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0187",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "SECRET cables, when bundled together or run in conduit, are run exclusively in their own individual cable bundle or conduit."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

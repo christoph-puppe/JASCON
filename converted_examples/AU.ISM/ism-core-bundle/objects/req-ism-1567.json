@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1567",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1567",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Suppliers identified as high risk by a cyber supply chain risk assessment are not used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-09"
   }
  ]
 }

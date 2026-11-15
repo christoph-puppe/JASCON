@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -26,6 +27,7 @@
   },
   {
    "id": "smt.a.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,6 +38,7 @@
   },
   {
    "id": "smt.a.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -46,6 +49,7 @@
   },
   {
    "id": "smt.a.3",
+   "label": "3.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -56,6 +60,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -66,6 +71,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -93,6 +99,7 @@
   },
   {
    "id": "smt.d",
+   "label": "d.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -110,6 +117,7 @@
   },
   {
    "id": "smt.e",
+   "label": "e.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -127,6 +135,7 @@
   },
   {
    "id": "smt.f",
+   "label": "f.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -151,19 +160,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ra-3_obj",
      "label": "RA-03",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/RA-3"
+      }
+     ],
      "children": [
       {
        "id": "ra-3_obj.a",
        "label": "RA-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ra-3_obj.a.1",
          "label": "RA-03a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "a risk assessment is conducted to identify threats to and vulnerabilities in the system;"
          }
@@ -171,6 +195,11 @@
         {
          "id": "ra-3_obj.a.2",
          "label": "RA-03a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "prose": {
           "en": "a risk assessment is conducted to determine the likelihood and magnitude of harm from unauthorized access, use, disclosure, disruption, modification, or destruction of the system; the information it processes, stores, or transmits; and any related information;"
          }
@@ -178,6 +207,11 @@
         {
          "id": "ra-3_obj.a.3",
          "label": "RA-03a.03",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.3"
+          }
+         ],
          "prose": {
           "en": "a risk assessment is conducted to determine the likelihood and impact of adverse effects on individuals arising from the processing of personally identifiable information;"
          }
@@ -187,6 +221,11 @@
       {
        "id": "ra-3_obj.b",
        "label": "RA-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "risk assessment results and risk management decisions from the organization and mission or business process perspectives are integrated with system-level risk assessments;"
        }
@@ -194,6 +233,11 @@
       {
        "id": "ra-3_obj.c",
        "label": "RA-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "risk assessment results are documented in {param:ra-03_odp.01};"
        }
@@ -201,6 +245,11 @@
       {
        "id": "ra-3_obj.d",
        "label": "RA-03d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "risk assessment results are reviewed {param:ra-03_odp.03};"
        }
@@ -208,6 +257,11 @@
       {
        "id": "ra-3_obj.e",
        "label": "RA-03e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "risk assessment results are disseminated to {param:ra-03_odp.04};"
        }
@@ -215,6 +269,11 @@
       {
        "id": "ra-3_obj.f",
        "label": "RA-03f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "the risk assessment is updated {param:ra-03_odp.05} or when there are significant changes to the system, its environment of operation, or other conditions that may impact the security or privacy state of the system."
        }
@@ -293,7 +352,8 @@
     "ra-03_odp.01": {
      "alt-identifiers": [
       "ra-3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-03_ODP[01]"
     },
     "ra-03_odp.02": {
      "guidelines": [
@@ -303,7 +363,8 @@
      ],
      "alt-identifiers": [
       "ra-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "RA-03_ODP[02]"
     },
     "ra-03_odp.03": {
      "guidelines": [
@@ -313,7 +374,8 @@
      ],
      "alt-identifiers": [
       "ra-3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "RA-03_ODP[03]"
     },
     "ra-03_odp.04": {
      "guidelines": [
@@ -323,7 +385,8 @@
      ],
      "alt-identifiers": [
       "ra-3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "RA-03_ODP[04]"
     },
     "ra-03_odp.05": {
      "guidelines": [
@@ -333,7 +396,8 @@
      ],
      "alt-identifiers": [
       "ra-3_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "RA-03_ODP[05]"
     }
    }
   },
@@ -480,15 +544,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/RA-4",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/RA-4",
-    "mode": "merged-into",
-    "label": "RA-04",
-    "title": "Risk Assessment Update"
-   }
-  ]
- }
+ ]
 }

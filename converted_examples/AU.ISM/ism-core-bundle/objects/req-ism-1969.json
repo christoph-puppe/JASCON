@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1969",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1969",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Malicious code, when stored or communicated, is treated beforehand to prevent accidental execution."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

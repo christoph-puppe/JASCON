@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1967",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1967",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners, in consultation with each system’s authorising officer, ensure controls for each TOP SECRET system and its operating environment, including each sensitive compartmented information system and its operating environment, undergo a security assessment by ASD assessors (or their delegates) to determine if they have been implemented correctly and are operating as intended."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

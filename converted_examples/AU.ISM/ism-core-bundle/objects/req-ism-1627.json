@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1627",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1627",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Inbound network connections from anonymity networks are blocked."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

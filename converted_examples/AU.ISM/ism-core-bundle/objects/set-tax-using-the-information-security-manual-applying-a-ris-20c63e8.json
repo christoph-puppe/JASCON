@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-20c63e8",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Define the system"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Define the system",
+     "name": "overview",
+     "prose": {
+      "en": "**Determine the system boundary, business criticality, and security and resilience objectives for the system based on an assessment of the impact if it were to be compromised or attacked.**\n\nWhen embarking upon the design of a system, the system boundary, business criticality, and security and resilience objectives for the system should be determined. This will ultimately guide activities, such as selecting and tailoring controls, to meet those security and resilience objectives as well as determining the level of residual security risk that will be accepted before the system is authorised to operate.\n\nFollowing the determination of the system boundary, business criticality, and security and resilience objectives for a system, a description of the system and its characteristics should be documented in the system’s system security plan."
+     }
+    }
+   ]
+  }
+ }
+}

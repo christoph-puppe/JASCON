@@ -1,0 +1,24 @@
+# The source file of this conversion, pinned.
+#
+# convert_bsi.py reads it from sources/ (git-ignored). The Validators
+# workflow downloads it from the base below, checks it against this list
+# with `sha256sum -c`, runs the converter and fails if the conversion in this
+# folder comes out different. The bundle and the two coverage reports are
+# therefore a reproducible record: a change of the kernel, of
+# oscal_conv_lib.py or of the converter that would alter them is noticed.
+#
+# The base is the publisher's repository at commit
+# 10f3c22898a4b15eb95fa228d78654cff32208e4 ("chore: publish rolling
+# artifacts", 2026-10-30), which holds the catalogue version of 2026-10-29.
+# The publisher rearranged the repository between the version of 2026-07-16
+# (commit 39a1193f3d230828ea6614eb20c94a026c9f7df0, path
+# Anwenderkataloge/Grundschutz++/Grundschutz++-catalog.json), from which this
+# conversion was made until 2026-11-14, and this one: the catalogue a user
+# works with is now the resolved catalogue of the control layer. The
+# converter reads it under the name it has always read.
+#
+# base: https://raw.githubusercontent.com/BSI-Bund/Stand-der-Technik-Bibliothek/10f3c22898a4b15eb95fa228d78654cff32208e4/
+# into: sources
+# path: control_layer/Grundschutz++/Grundschutz++-resolved_catalog.json -> Grundschutz++-catalog.json
+#
+592410c513691c18631402db3982dda6a4530dd6f2960868a6999017d311fa28  Grundschutz++-catalog.json

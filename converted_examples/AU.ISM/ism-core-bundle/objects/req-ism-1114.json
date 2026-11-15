@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1114",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1114",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cable bundles or conduits sharing a common cable reticulation system have a dividing partition or visible gap between each cable bundle and conduit."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

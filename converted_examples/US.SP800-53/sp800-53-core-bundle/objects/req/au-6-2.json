@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AU-6.2",
+ "version": "5.2.0",
+ "label": "AU-6(2)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Automated Security Alerts"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SI-4."
+   }
+  }
+ ]
+}

@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.IP-03",
+ "version": "2.0",
+ "label": "PR.IP-03",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.IP-03"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Configuration change control processes are in place"
+   }
+  }
+ ]
+}

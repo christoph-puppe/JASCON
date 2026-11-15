@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -26,6 +27,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -50,15 +52,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-10.2_obj",
      "label": "AU-10(02)",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-10.2"
+      }
+     ],
      "children": [
       {
        "id": "au-10.2_obj.a",
        "label": "AU-10(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the binding of the information producer identity to the information is validated at {param:au-10.02_odp.01};"
        }
@@ -66,6 +78,11 @@
       {
        "id": "au-10.2_obj.b",
        "label": "AU-10(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:au-10.02_odp.02} in the event of a validation error are performed."
        }
@@ -143,7 +160,8 @@
      ],
      "alt-identifiers": [
       "au-10.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-10(02)_ODP[01]"
     },
     "au-10.02_odp.02": {
      "guidelines": [
@@ -153,7 +171,8 @@
      ],
      "alt-identifiers": [
       "au-10.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-10(02)_ODP[02]"
     }
    }
   },

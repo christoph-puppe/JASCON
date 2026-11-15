@@ -41,11 +41,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sc-8_obj",
      "label": "SC-08",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the {param:sc-08_odp} of transmitted information is/are protected."
      }
@@ -110,7 +115,8 @@
     "sc-08_odp": {
      "alt-identifiers": [
       "sc-8_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-08_ODP"
     }
    }
   }
@@ -218,21 +224,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SC-33",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-9",
-    "mode": "merged-into",
-    "label": "SC-09",
-    "title": "Transmission Confidentiality"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-33",
-    "mode": "merged-into",
-    "label": "SC-33",
-    "title": "Transmission Preparation Integrity"
-   }
-  ]
- }
+ ]
 }

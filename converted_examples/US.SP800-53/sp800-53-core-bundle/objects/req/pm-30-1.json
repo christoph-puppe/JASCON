@@ -22,19 +22,29 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "The identification and prioritization of suppliers of critical or mission-essential technologies, products, and services is paramount to the mission/business success of organizations. The assessment of suppliers is conducted using supplier reviews (see SR-6 ) and supply chain risk assessment processes (see RA-3(1) ). An analysis of supply chain risk can help an organization identify systems or components for which additional supply chain risk mitigations are required."
+     "en": "The identification and prioritization of suppliers of critical or mission-essential technologies, products, and services is paramount to the mission/business success of organizations. The assessment of suppliers is conducted using supplier reviews (see [SR-6](#sr-6) ) and supply chain risk assessment processes (see [RA-3(1)](#ra-3.1) ). An analysis of supply chain risk can help an organization identify systems or components for which additional supply chain risk mitigations are required."
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pm-30.1_obj",
      "label": "PM-30(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-30.1_obj-1",
        "label": "PM-30(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "suppliers of critical or mission-essential technologies, products, and services are identified;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pm-30.1_obj-2",
        "label": "PM-30(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "suppliers of critical or mission-essential technologies, products, and services are prioritized;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "pm-30.1_obj-3",
        "label": "PM-30(01)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "suppliers of critical or mission-essential technologies, products, and services are assessed."
        }

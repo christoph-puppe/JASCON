@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1275",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1275",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "All queries to databases from software are filtered for legitimate content and correct syntax."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

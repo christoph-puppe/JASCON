@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1851",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1851",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The OWASP API Security Top 10 are mitigated in the development of web APIs."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

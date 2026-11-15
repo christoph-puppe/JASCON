@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1548",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1548",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Data restoration processes, and supporting data restoration procedures, are developed, implemented and maintained."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

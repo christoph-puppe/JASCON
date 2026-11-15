@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1581",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1581",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Continuous real-time monitoring of the capacity and availability of online services is performed."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

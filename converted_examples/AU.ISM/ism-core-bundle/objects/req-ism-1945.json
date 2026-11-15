@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1945",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1945",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT flag is removed from certificate templates."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

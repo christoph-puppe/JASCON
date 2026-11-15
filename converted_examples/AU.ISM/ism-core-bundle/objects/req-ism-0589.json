@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0589",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0589",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "MFDs are not used to scan or copy documents above the sensitivity or classification of networks they are connected to."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

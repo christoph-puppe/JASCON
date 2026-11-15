@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0571",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0571",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When users send or receive emails, an authenticated and encrypted channel is used to route emails via their organisation’s centralised email gateways."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-06"
   }
  ]
 }

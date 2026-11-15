@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1552",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1552",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "All web application content is offered exclusively using HTTPS."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-10"
   }
  ]
 }

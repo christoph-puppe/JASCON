@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2021",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2021",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners implement and maintain data minimisation practices for each of their systems."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

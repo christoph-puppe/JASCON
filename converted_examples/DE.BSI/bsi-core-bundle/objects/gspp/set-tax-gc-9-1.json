@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/gc-9-1",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Festlegung einer Sicherheitsorganisation"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/GC.9.1",
+   "sequence": 340
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-9-1-1",
+   "sequence": 430
+  }
+ ]
+}

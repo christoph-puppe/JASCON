@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1268",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1268",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The need-to-know principle is enforced for database contents through the application of minimum privileges, database views, database roles and data tokenisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

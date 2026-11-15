@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/PL-2.1",
+ "version": "5.2.0",
+ "label": "PL-2(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Concept of Operations"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into PL-7."
+   }
+  }
+ ]
+}

@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-9ae4659",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Using a risk management framework"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Using a risk management framework",
+     "name": "overview",
+     "prose": {
+      "en": "The risk management framework defined by the ISM draws from National Institute of Standards and Technology (NIST) Special Publication (SP) 800-37 Rev. 2, [Risk Management Framework for Information Systems and Organizations: A System Life Cycle Approach for Security and Privacy](#4ea4e1e9-09f5-46c2-b003-352bc862d5ed). Broadly, the risk management framework defined by the ISM has six steps: define the system, select controls, implement controls, assess controls, authorise the system and monitor the system."
+     }
+    }
+   ]
+  }
+ }
+}

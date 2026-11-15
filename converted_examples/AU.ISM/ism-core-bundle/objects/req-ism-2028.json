@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2028",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2028",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "All software artefacts are tested to detect known weaknesses using static application security testing (SAST), dynamic application security testing (DAST) or software composition analysis (SCA), depending on the software artefact type, before being imported into the authoritative source for software."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1576",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1576",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "If an organisation’s systems are accessed or administered by a service provider in an unauthorised manner, the organisation is immediately notified."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1619",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1619",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Service accounts are created as group Managed Service Accounts."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-10"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1277",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1277",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Data communicated between database servers and web servers is encrypted using Australian Signals Directorate-approved cryptography."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

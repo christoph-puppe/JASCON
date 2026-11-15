@@ -38,11 +38,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-16.2_obj",
      "label": "AU-16(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "cross-organizational audit information is provided to {param:au-16.02_odp.01} based on {param:au-16.02_odp.02}."
      }
@@ -97,7 +102,8 @@
      ],
      "alt-identifiers": [
       "au-16.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-16(02)_ODP[01]"
     },
     "au-16.02_odp.02": {
      "guidelines": [
@@ -107,7 +113,8 @@
      ],
      "alt-identifiers": [
       "au-16.2_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-16(02)_ODP[02]"
     }
    }
   }

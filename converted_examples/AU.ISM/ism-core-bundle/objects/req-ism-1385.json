@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1385",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1385",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Administrative infrastructure is segregated from the wider network and the internet."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

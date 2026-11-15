@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0293",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0293",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "IT equipment is classified based on the highest sensitivity or classification of data that it is approved for processing, storing or communicating."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

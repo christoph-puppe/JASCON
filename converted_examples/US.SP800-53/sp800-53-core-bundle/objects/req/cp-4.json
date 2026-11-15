@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -41,6 +42,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -51,6 +53,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -68,19 +71,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cp-4_obj",
      "label": "CP-04",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/CP-4"
+      }
+     ],
      "children": [
       {
        "id": "cp-4_obj.a",
        "label": "CP-04a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cp-4_obj.a-1",
          "label": "CP-04a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the contingency plan for the system is tested {param:cp-04_odp.01};"
          }
@@ -88,6 +106,11 @@
         {
          "id": "cp-4_obj.a-2",
          "label": "CP-04a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:cp-04_odp.02} are used to determine the effectiveness of the plan;"
          }
@@ -95,6 +118,11 @@
         {
          "id": "cp-4_obj.a-3",
          "label": "CP-04a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:cp-04_odp.03} are used to determine the readiness to execute the plan;"
          }
@@ -104,6 +132,11 @@
       {
        "id": "cp-4_obj.b",
        "label": "CP-04b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the contingency plan test results are reviewed;"
        }
@@ -111,6 +144,11 @@
       {
        "id": "cp-4_obj.c",
        "label": "CP-04c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "corrective actions are initiated, if needed."
        }
@@ -188,21 +226,24 @@
      ],
      "alt-identifiers": [
       "cp-4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-04_ODP[01]"
     },
     "cp-04_odp.02": {
      "guidelines": [
       {
        "en": "tests for determining the effectiveness of the contingency plan are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-04_ODP[02]"
     },
     "cp-04_odp.03": {
      "guidelines": [
       {
        "en": "tests for determining readiness to execute the contingency plan are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CP-04_ODP[03]"
     }
    }
   },
@@ -273,15 +314,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/CP-10.1",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/CP-10.1",
-    "mode": "merged-into",
-    "label": "CP-10(01)",
-    "title": "Contingency Plan Testing"
-   }
-  ]
- }
+ ]
 }

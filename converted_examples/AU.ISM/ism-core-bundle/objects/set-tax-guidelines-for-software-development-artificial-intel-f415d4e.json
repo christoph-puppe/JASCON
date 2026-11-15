@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-artificial-intel-14231ad",
-   "sequence": 12270
+   "sequence": 12440
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-artificial-intel-a491200",
-   "sequence": 12300
+   "sequence": 12470
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-artificial-intel-a562722",
-   "sequence": 12340
+   "sequence": 12510
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-artificial-intel-44c0d81",
-   "sequence": 12380
+   "sequence": 12550
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-artificial-intel-14bf117",
-   "sequence": 12410
+   "sequence": 12580
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-artificial-intel-1222ac6",
-   "sequence": 12430
+   "sequence": 12600
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-artificial-intel-e9412df",
-   "sequence": 12450
+   "sequence": 12620
   }
  ],
  "facets": {

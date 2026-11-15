@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,6 +37,7 @@
   },
   {
    "id": "smt.a.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -64,6 +66,7 @@
   },
   {
    "id": "smt.a.1.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -74,6 +77,7 @@
   },
   {
    "id": "smt.a.1.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -84,6 +88,7 @@
   },
   {
    "id": "smt.a.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -94,6 +99,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -111,6 +117,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -121,6 +128,7 @@
   },
   {
    "id": "smt.c.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -143,6 +151,7 @@
   },
   {
    "id": "smt.c.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -172,19 +181,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sa-1_obj",
      "label": "SA-01",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/SA-1"
+      }
+     ],
      "children": [
       {
        "id": "sa-1_obj.a",
        "label": "SA-01a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "sa-1_obj.a-1",
          "label": "SA-01a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a system and services acquisition policy is developed and documented;"
          }
@@ -192,6 +216,11 @@
         {
          "id": "sa-1_obj.a-2",
          "label": "SA-01a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the system and services acquisition policy is disseminated to {param:sa-01_odp.01};"
          }
@@ -199,6 +228,11 @@
         {
          "id": "sa-1_obj.a-3",
          "label": "SA-01a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "system and services acquisition procedures to facilitate the implementation of the system and services acquisition policy and associated system and services acquisition controls are developed and documented;"
          }
@@ -206,6 +240,11 @@
         {
          "id": "sa-1_obj.a-4",
          "label": "SA-01a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the system and services acquisition procedures are disseminated to {param:sa-01_odp.02};"
          }
@@ -213,14 +252,29 @@
         {
          "id": "sa-1_obj.a.1",
          "label": "SA-01a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "sa-1_obj.a.1.a",
            "label": "SA-01a.01(a)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.a"
+            }
+           ],
            "children": [
             {
              "id": "sa-1_obj.a.1.a-1",
              "label": "SA-01a.01(a)[01]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sa-01_odp.03} system and services acquisition policy addresses purpose;"
              }
@@ -228,6 +282,11 @@
             {
              "id": "sa-1_obj.a.1.a-2",
              "label": "SA-01a.01(a)[02]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sa-01_odp.03} system and services acquisition policy addresses scope;"
              }
@@ -235,6 +294,11 @@
             {
              "id": "sa-1_obj.a.1.a-3",
              "label": "SA-01a.01(a)[03]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sa-01_odp.03} system and services acquisition policy addresses roles;"
              }
@@ -242,6 +306,11 @@
             {
              "id": "sa-1_obj.a.1.a-4",
              "label": "SA-01a.01(a)[04]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sa-01_odp.03} system and services acquisition policy addresses responsibilities;"
              }
@@ -249,6 +318,11 @@
             {
              "id": "sa-1_obj.a.1.a-5",
              "label": "SA-01a.01(a)[05]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sa-01_odp.03} system and services acquisition policy addresses management commitment;"
              }
@@ -256,6 +330,11 @@
             {
              "id": "sa-1_obj.a.1.a-6",
              "label": "SA-01a.01(a)[06]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sa-01_odp.03} system and services acquisition policy addresses coordination among organizational entities;"
              }
@@ -263,6 +342,11 @@
             {
              "id": "sa-1_obj.a.1.a-7",
              "label": "SA-01a.01(a)[07]",
+             "assessment-for": [
+              {
+               "statement-id": "smt.a.1.a"
+              }
+             ],
              "prose": {
               "en": "the {param:sa-01_odp.03} system and services acquisition policy addresses compliance;"
              }
@@ -272,6 +356,11 @@
           {
            "id": "sa-1_obj.a.1.b",
            "label": "SA-01a.01(b)",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1.b"
+            }
+           ],
            "prose": {
             "en": "the {param:sa-01_odp.03} system and services acquisition policy is consistent with applicable laws, Executive Orders, directives, regulations, policies, standards, and guidelines;"
            }
@@ -283,6 +372,11 @@
       {
        "id": "sa-1_obj.b",
        "label": "SA-01b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the {param:sa-01_odp.04} is designated to manage the development, documentation, and dissemination of the system and services acquisition policy and procedures;"
        }
@@ -290,14 +384,29 @@
       {
        "id": "sa-1_obj.c",
        "label": "SA-01c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "sa-1_obj.c.1",
          "label": "SA-01c.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.1"
+          }
+         ],
          "children": [
           {
            "id": "sa-1_obj.c.1-1",
            "label": "SA-01c.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the system and services acquisition policy is reviewed and updated {param:sa-01_odp.05};"
            }
@@ -305,6 +414,11 @@
           {
            "id": "sa-1_obj.c.1-2",
            "label": "SA-01c.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.1"
+            }
+           ],
            "prose": {
             "en": "the current system and services acquisition policy is reviewed and updated following {param:sa-01_odp.06};"
            }
@@ -314,10 +428,20 @@
         {
          "id": "sa-1_obj.c.2",
          "label": "SA-01c.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c.2"
+          }
+         ],
          "children": [
           {
            "id": "sa-1_obj.c.2-1",
            "label": "SA-01c.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current system and services acquisition procedures are reviewed and updated {param:sa-01_odp.07};"
            }
@@ -325,6 +449,11 @@
           {
            "id": "sa-1_obj.c.2-2",
            "label": "SA-01c.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.c.2"
+            }
+           ],
            "prose": {
             "en": "the current system and services acquisition procedures are reviewed and updated following {param:sa-01_odp.08}."
            }
@@ -397,19 +526,22 @@
       {
        "en": "personnel or roles to whom the system and services acquisition policy is to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-01_ODP[01]"
     },
     "sa-01_odp.02": {
      "guidelines": [
       {
        "en": "personnel or roles to whom the system and services acquisition procedures are to be disseminated is/are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SA-01_ODP[02]"
     },
     "sa-01_odp.03": {
      "alt-identifiers": [
       "sa-1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SA-01_ODP[03]"
     },
     "sa-01_odp.04": {
      "guidelines": [
@@ -419,7 +551,8 @@
      ],
      "alt-identifiers": [
       "sa-1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SA-01_ODP[04]"
     },
     "sa-01_odp.05": {
      "guidelines": [
@@ -429,7 +562,8 @@
      ],
      "alt-identifiers": [
       "sa-1_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "SA-01_ODP[05]"
     },
     "sa-01_odp.06": {
      "guidelines": [
@@ -439,7 +573,8 @@
      ],
      "alt-identifiers": [
       "sa-1_prm_5"
-     ]
+     ],
+     "sp800-53a-label": "SA-01_ODP[06]"
     },
     "sa-01_odp.07": {
      "guidelines": [
@@ -449,7 +584,8 @@
      ],
      "alt-identifiers": [
       "sa-1_prm_6"
-     ]
+     ],
+     "sp800-53a-label": "SA-01_ODP[07]"
     },
     "sa-01_odp.08": {
      "guidelines": [
@@ -459,7 +595,8 @@
      ],
      "alt-identifiers": [
       "sa-1_prm_7"
-     ]
+     ],
+     "sp800-53a-label": "SA-01_ODP[08]"
     }
    }
   },

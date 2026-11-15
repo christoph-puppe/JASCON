@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "si-7.2_obj",
      "label": "SI-07(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "automated tools that provide notification to {param:si-07.02_odp} upon discovering discrepancies during integrity verification are employed."
      }
@@ -134,7 +139,8 @@
      ],
      "alt-identifiers": [
       "si-7.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(02)_ODP"
     }
    }
   },

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1890",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1890",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Microsoft Office macros are checked to ensure they are free of malicious code before being digitally signed or placed within Trusted Locations."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

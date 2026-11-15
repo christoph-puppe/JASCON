@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.3.2",
  "lifecycle": "active",
  "title": {
@@ -49,7 +49,8 @@
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.44",
       "https://ns.bsi.bund.de/gspp/threat/G-0.16",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.24"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.24",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.34"
      ]
     }
    }
@@ -57,7 +58,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4
     }
@@ -67,7 +68,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Einrichtung definierter Anmelde- und Empfangsbereiche dient der Kontrolle des physischen Zugangs zum Standort. Diese Bereiche können als erste Verteidigungslinie fungieren, indem sie einen klaren Trennpunkt zwischen öffentlichen und geschützten Zonen etablieren. Durch die strukturierte Implementierung solcher Bereiche können unbefugte Zutritte vermieden werden, die andernfalls zu Sicherheitsverletzungen führen könnten. Ein fehlendes oder unzureichendes Empfangsmanagement könnte beispielsweise dazu führen, dass nicht autorisierte Personen unkontrolliert Zugang zu sensiblen Bereichen erhalten, vertrauliche Dokumente einsehen, Firmengeheimnisse entwenden oder sogar physische Sabotageakte durchführen.  Bei der Umsetzung können verschiedene Ansätze verfolgt werden, die je nach Institution und sonstigen angewendeten Sicherheitsanforderungen variieren. Der Anmeldebereich kann mit einem digitalen Besuchermanagementsystem ausgestattet werden, welches die Authentifizierung und Registrierung von Besuchern erleichtert und eine lückenlose Dokumentation ermöglicht. Ergänzend hierzu kann die räumliche Gestaltung durch klare Beschilderung, bauliche Trennung mittels Schranken oder Drehkreuzen sowie die strategische Positionierung des Empfangsbereichs optimiert werden. Zudem kann die Schulung des Empfangspersonals in Sicherheitsprotokollen und die Einführung von Besucherausweisen mit temporären Zugriffsrechten die Effektivität dieser Sicherheitsmaßnahme verstärken. Die Integration mit anderen Sicherheitssystemen wie Videoüberwachung oder elektronischen Zutrittskontrollsystemen kann ebenfalls in Betracht gezogen werden, um ein umfassendes Sicherheitskonzept zu gewährleisten."
+      "de": "Die Einrichtung definierter Anmelde- und Empfangsbereiche dient der Kontrolle des physischen Zugangs zum Standort. Diese Bereiche können als erste Verteidigungslinie fungieren, indem sie einen klaren Trennpunkt zwischen öffentlichen und geschützten Zonen etablieren. Durch die strukturierte Implementierung solcher Bereiche können unbefugte Zutritte vermieden werden, die andernfalls zu Sicherheitsverletzungen führen könnten. Ein fehlendes oder unzureichendes Empfangsmanagement könnte beispielsweise dazu führen, dass nicht autorisierte Personen unkontrolliert Zugang zu sensiblen Bereichen erhalten, vertrauliche Dokumente einsehen, Firmengeheimnisse entwenden oder sogar physische Sabotageakte durchführen. Bei der Umsetzung können verschiedene Ansätze verfolgt werden, die je nach Institution und sonstigen angewendeten Sicherheitsanforderungen variieren. Der Anmeldebereich kann mit einem digitalen Besuchermanagementsystem ausgestattet werden, welches die Authentifizierung und Registrierung von Besuchern erleichtert und eine lückenlose Dokumentation ermöglicht. Ergänzend hierzu kann die räumliche Gestaltung durch klare Beschilderung, bauliche Trennung mittels Schranken oder Drehkreuzen sowie die strategische Positionierung des Empfangsbereichs optimiert werden. Zudem kann die Schulung des Empfangspersonals in Sicherheitsprotokollen und die Einführung von Besucherausweisen mit temporären Zugriffsrechten die Effektivität dieser Sicherheitsmaßnahme verstärken. Die Integration mit anderen Sicherheitssystemen wie Videoüberwachung oder elektronischen Zutrittskontrollsystemen kann ebenfalls in Betracht gezogen werden, um ein umfassendes Sicherheitskonzept zu gewährleisten."
      }
     }
    }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1683",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1683",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Successful and unsuccessful multi-factor authentication events are centrally logged."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

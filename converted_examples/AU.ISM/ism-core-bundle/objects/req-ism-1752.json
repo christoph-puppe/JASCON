@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1752",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1752",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A vulnerability scanner is used at least fortnightly to identify missing patches or updates for vulnerabilities in operating systems of IT equipment other than workstations, servers and network devices."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

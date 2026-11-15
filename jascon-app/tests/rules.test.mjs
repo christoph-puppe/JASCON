@@ -1,5 +1,5 @@
 /* Runs the conformance vectors of jascon/conformance/ against
-   jascon-rules.js, family by family. All seventeen families are ported. A
+   jascon-rules.js, family by family. All eighteen families are ported. A
    family that is listed in PORTED must pass completely; NOT_PORTED names the families the app does not implement (today: none)
    and stays as the place to name a family that is not ported yet. The last
    test fails when a vector file appears that is in neither list, so a new
@@ -9,6 +9,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import nodeCrypto from "node:crypto";
+import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
@@ -20,7 +21,7 @@ const rules = require("../jascon-rules.js");
 const vectors = name => JSON.parse(fs.readFileSync(path.join(CONF, name + "-vectors.json"), "utf8"));
 const asObjs = list => new Map(list.map(o => [o.id, { type: core.jscInferType(o), obj: o }]));
 
-const PORTED = ["advice", "attestation", "check", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
+const PORTED = ["advice", "attestation", "author", "check", "composition", "conditional", "dsse", "facet", "jcs", "kernel", "lifecycle", "modality", "parameter", "reference", "risk", "scale", "tailoring", "tier"];
 const NOT_PORTED = [];   // every family of jascon/conformance/ is ported today
 /* Where a vector carries expected-frag (singular), it asserts the wording of
    one Python schema library's diagnostic; the vector files call that
@@ -36,13 +37,13 @@ test("modality: every vector", () => {
 
 test("parameter: every vector", () => {
   const v = vectors("parameter").vectors;
-  assert.equal(v.length, 21);
+  assert.equal(v.length, 22);   // 22nd: a decimal that ends in a line break (#68)
   for (const c of v) assert.equal(rules.jscParamCheck(c.parameter, c.value), c.verdict, c.name);
 });
 
 test("tier: the derived tier of every vector (structural mode)", async () => {
   const v = vectors("tier").vectors;
-  assert.equal(v.length, 9);
+  assert.equal(v.length, 10);
   for (const c of v) {
     // the vectors carry COMPUTE where a live digest belongs, as the Python runner fills it
     const byId = new Map(c.objects.map(o => [o.id, o]));
@@ -149,7 +150,7 @@ test("schema matching agrees with the type every shipped object was given by its
   const ROOT = path.resolve(CONF, "../..");
   const dir = path.join(ROOT, "converted_examples/US.IFA-GoodRead/ifa-core-bundle/objects");
   const files = fs.readdirSync(dir, { recursive: true }).filter(f => String(f).endsWith(".json"));
-  assert.ok(files.length >= 17);
+  assert.ok(files.length >= 16);   // 16 since 2026-11-13: the Attestation lies beside the manifest, not under objects/ (D3.1, backlog #46)
   for (const f of files) {
     const o = JSON.parse(fs.readFileSync(path.join(dir, String(f)), "utf8"));
     assert.equal(rules.jscTypeOf(o), core.jscInferType(o), String(f));
@@ -170,13 +171,13 @@ test("a schema keyword this checker does not implement is refused, not skipped",
 
 test("reference: the number of closure errors of every vector", () => {
   const v = vectors("reference").vectors;
-  assert.equal(v.length, 13);
+  assert.equal(v.length, 27);   // 9 more on 2026-11-14: a statement-id inside a facet payload (D10, backlog #83)
   for (const c of v) assert.equal(rules.jscClosureErrors(rules.jscTypedObjects(c.objects)).length, c["expected-errors"], c.name);
 });
 
 test("kernel: the pin rules of every vector", () => {
   const v = vectors("kernel").vectors;
-  assert.equal(v.length, 11);   // was 9: two more since a capability's statement-ids and a Component's product-version need 2.0.0
+  assert.equal(v.length, 25);   // 6 more on 2026-11-14: history and a statement's label need the pin, the sources of a manifest do not (backlog #80, #81, #84); was 11: seven more with CP-AUTHOR-1 (provenance, a Deviation's decided and review-due, an authorization's date); the 19th is a pin that ends in a line break (#68)
   for (const c of v) {
     const objs = rules.jscTypedObjects(c.objects);
     const errs = rules.jscShapeErrors("contentManifest", c.manifest).length ? ["manifest schema violation"] : rules.jscKernelPinErrors(c.manifest, objs);
@@ -186,13 +187,30 @@ test("kernel: the pin rules of every vector", () => {
   }
 });
 
+/* HISTORY-1 (backlog #81): the entries of `history` stand oldest first. */
+test("kernel: the history vectors, HISTORY-1 named on refusal; a whole object says it too", () => {
+  const v = vectors("kernel")["history-vectors"];
+  assert.equal(v.length, 8);
+  for (const c of v) {
+    assert.equal(rules.jscMatchTypes(c.object).length, 1, c.name + ": the object has one type");
+    const errs = rules.jscHistoryErrors(c.object);
+    assert.equal(errs.length ? "invalid" : "valid", c.expected, `${c.name}: ${errs[0] || ""}`);
+    for (const e of errs) assert.ok(e.includes(c["expected-rule"]) && e.includes(rules.JSC_HISTORY_RULES["HISTORY-1"]), e);
+    assert.deepEqual(rules.jscObjectErrors(c.object).errors, errs, c.name + ": the check of one object carries the same lines");
+  }
+});
+
 /* The closed shapes of fields that 2.0.0 typed or added (Finding.actions[].due,
-   Deviation.opened, Component.product-version). The schema says valid or
-   invalid; an invalid one names its rule, DATE-1 or DATE-2, as the Python
-   runner (run_kernel) asserts it. */
-test("kernel: the shape vectors of the typed fields, with DATE-1 and DATE-2 named on refusal", () => {
+   Deviation.opened, Component.product-version, and with CP-AUTHOR-1 the
+   closed `provenance`, a Deviation's `decided` and `review-due`, the date of
+   an authorization and the three times any string satisfied until then).
+   The schema says valid or invalid; an invalid one names exactly the rules
+   of its `expected-rules`, DATE-1 to DATE-5, as the Python runner
+   (run_kernel) asserts it - and no rule where the vector names none. */
+test("kernel: the shape vectors of the typed fields, with DATE-1 to DATE-6 named on refusal", () => {
   const v = vectors("kernel")["shape-vectors"];
-  assert.equal(v.length, 14);
+  assert.equal(v.length, 64);   // 12 more on 2026-11-14: `history` and a statement's `label` (backlog #81, #84); 16 more with #68: values that end in a line break, a relation type with a line terminator, and their valid twins
+  assert.deepEqual([...new Set(v.flatMap(c => c["expected-rules"] || []))].sort(), ["DATE-1", "DATE-2", "DATE-3", "DATE-4", "DATE-5", "DATE-6"], "every DATE rule has a vector that names it");
   for (const c of v) {
     const matched = rules.jscMatchTypes(c.document);
     assert.equal(matched.length === 1 && matched[0] === c.kind ? "valid" : "invalid", c.expected, c.name);
@@ -202,7 +220,34 @@ test("kernel: the shape vectors of the typed fields, with DATE-1 and DATE-2 name
   }
   const msg = rules.jscObjectErrors({ id: "https://ex.org/f", version: "1", lifecycle: "active", "assessment-ref": "https://ex.org/a", "requirement-ref": "https://ex.org/r", state: "open",
     deviations: [{ id: "d1", type: "risk-adjustment", rationale: { en: "x" }, state: "pending", "approver-ref": "https://ex.org/p", opened: "next week" }] }).errors[0];
-  assert.match(msg, /\[DATE-1\] deviations\[0\]\.opened is 'next week' - a Deviation's `opened` is a date, YYYY-MM-DD/);
+  assert.match(msg, /\[DATE-1\] deviations\[0\]\.opened is 'next week' - a Deviation's `opened` and `decided` are dates, YYYY-MM-DD/);
+  /* the wording of the four that came with CP-AUTHOR-1: the place, the value as the reference prints it, the rule's why */
+  const said = c => rules.jscObjectErrors(v.find(x => x.name === c).document).errors.join(" ");
+  assert.match(said("deviation-decided-as-free-text"), /\[DATE-1\] deviations\[0\]\.decided is '[^']+' - a Deviation's `opened` and `decided` are dates/);
+  assert.match(said("mapping-provenance-date-as-free-text"), /\[DATE-3\] provenance\.date is '[^']+' - the `date` of a Mapping's provenance is a date, YYYY-MM-DD/);
+  assert.match(said("assessment-time-without-an-offset"), /\[DATE-4\] time is '[^']+' - the `time` of an Assessment is a date or an RFC 3339 date-time with an offset/);
+  assert.match(said("attestation-timestamp-as-free-text"), /\[DATE-5\] timestamp is '[^']+' - the `timestamp` of an Attestation is a date or an RFC 3339 date-time with an offset/);
+});
+
+/* The export writes the kernel pin from jscNeedsKernel2 (jascon-core.js); the
+   whole-set check holds a set to KERNEL-1 with jscKernelNeeded. The same
+   reasons stand in two files. Every object set of the kernel and author
+   families, and every valid shape document on its own, gets the same answer
+   from both - otherwise the app exports a set that its own rules, and the
+   reference, refuse for want of the pin. */
+test("kernel: the pin the export writes (jscNeedsKernel2) is the pin KERNEL-1 asks for (jscKernelNeeded)", () => {
+  const k = vectors("kernel"), a = vectors("author");
+  const sets = [...k.vectors.map(c => [c.name, c.objects]), ...k["shape-vectors"].filter(c => c.expected === "valid").map(c => [c.name, [c.document]]),
+    ...[...a["author-vectors"], ...a["review-vectors"]].map(c => [c.name, c.objects])];
+  let needing = 0;
+  for (const [name, list] of sets) {
+    const typed = rules.jscTypedObjects(list);
+    assert.equal(typed.size, list.length, name + ": every object is typed");
+    const asked = rules.jscKernelNeeded(typed)[0] === "2.0.0";
+    assert.equal(core.jscNeedsKernel2({ scales: new Map(), objects: asObjs(list) }), asked, name);
+    needing += asked ? 1 : 0;
+  }
+  assert.ok(needing > 0 && needing < sets.length, "both answers occur among the sets");
 });
 
 test("risk: object vectors (shape, with the rule named on refusal)", () => {
@@ -239,6 +284,259 @@ test("risk: bundle vectors (closure, typed edges, coverage, RISK-11, notes)", as
       if ("pending" in want) assert.deepEqual(keys(got.pending), [...want.pending].sort(), `${c.name}: pending of ${tid}`);
     }
   }
+});
+
+/* CP-AUTHOR-1: who decided, and when. `expected` of an author vector is the
+   whole report as [rule, object id, count], in its order. A review vector
+   gives the day it is asked about (`as-of`) and names the overdue and the
+   not-evaluable places as [object id, where], absent meaning none. A case
+   whose objects do not all get a type fails, as in the reference's runner
+   (run_author). The messages are not part of the vectors' assertion. */
+const authorTyped = c => {
+  const objs = rules.jscTypedObjects(c.objects);
+  assert.equal(objs.size, c.objects.length, `${c.name}: every object is typed`);
+  return objs;
+};
+const reviewPairs = r => [r.overdue.map(e => [e.id, e.where]), r["not-evaluable"].map(e => [e.id, e.where])];
+test("author: what is missing, one entry per object and rule (AUTHOR-1 to AUTHOR-4)", async () => {
+  const v = vectors("author")["author-vectors"];
+  assert.equal(v.length, 18);
+  for (const c of v) {
+    const report = await rules.jscAuthorReport(authorTyped(c));
+    assert.deepEqual(report.map(e => [e.rule, e.id, e.count]), c.expected, c.name);
+    for (const e of report) assert.ok(e.rule in rules.JSC_AUTHOR_RULES && e.message.startsWith(e.id + ": ") && e.message.endsWith(`(${e.rule})`), `${c.name}: ${e.message}`);
+  }
+});
+test("lifecycle: an active Set that lists draft members is reported, and nothing fails (DRAFT-1)", async () => {
+  const v = vectors("lifecycle")["draft-members"];
+  assert.equal(v.length, 4);
+  for (const c of v) {
+    const objs = authorTyped(c), report = rules.jscDraftMemberReport(objs);
+    assert.deepEqual(report.map(e => [e.id, e.count]), c.expected, c.name);
+    const lines = rules.jscDraftLines(report);
+    for (const l of lines) assert.ok(l.kind === "note" && l.rule in rules.JSC_DRAFT_RULES && l.text.startsWith(l.object + ": an active Set lists "), `${c.name}: ${l.text}`);
+  }
+  /* as part of the check of a whole set: a note of the area `lifecycle`, and no error, with any switch */
+  const file = obj => ({ path: "objects/" + obj.id.split("/").slice(-2).join("-") + ".json", text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin: "imported" });
+  const g = core.jscGraphFrom(v[0].objects.map(file));
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g), { requireAuthors: true });
+  assert.deepEqual(res.report.drafts, [{ id: v[0].expected[0][0], count: 1 }]);
+  assert.deepEqual(res.findings.filter(f => f.area === "lifecycle").map(f => [f.kind, f.object, f.message]),
+    [["note", v[0].expected[0][0], "an active Set lists 1 draft member(s) (DRAFT-1: a draft may be used; nothing fails)"]]);
+  assert.deepEqual(res.report.lines.filter(l => l.rule === "DRAFT-1"), rules.jscDraftLines(res.report.drafts));
+});
+test("lifecycle: an object in force that leans on a withdrawn one is an error, edge by edge (WITHDRAWN-1)", async () => {
+  const v = vectors("lifecycle")["withdrawn-references"];
+  assert.equal(v.length, 16);
+  for (const c of v) {
+    const objs = authorTyped(c), got = rules.jscWithdrawnReferences(objs);
+    assert.deepEqual(got.map(e => [e.id, e.edge, e.ref]), c.expected, c.name);
+    const errors = rules.jscWithdrawnReferenceErrors(objs);
+    assert.equal(errors.length, c.expected.length, c.name);
+    errors.forEach((m, i) => assert.ok(m.startsWith(`${c.expected[i][0]}: ${c.expected[i][1]} names ${c.expected[i][2]}, which is withdrawn (WITHDRAWN-1: `), `${c.name}: ${m}`));
+  }
+  /* the edges of the table are those the vectors expect, and no other */
+  const named = new Set(v.flatMap(c => c.expected.map(e => e[1])));
+  assert.deepEqual([...named].sort(), Object.values(rules.JSC_WITHDRAWN_EDGES).flat().map(e => e[2]).filter((x, i, a) => a.indexOf(x) === i).sort());
+  /* as part of the check of a whole set: an error of the area `lifecycle`, filed under the object that leans */
+  const file = obj => ({ path: "objects/" + obj.id.split("/").slice(-2).join("-") + ".json", text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin: "imported" });
+  const g = core.jscGraphFrom(v[0].objects.map(file));
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
+  const found = res.findings.filter(f => f.area === "lifecycle");
+  assert.deepEqual(found.map(f => [f.kind, f.object]), [["error", v[0].expected[0][0]]]);
+  assert.ok(found[0].message.startsWith(`requirement-ref names ${v[0].expected[0][2]}, which is withdrawn (WITHDRAWN-1: `), found[0].message);
+});
+test("reference: what the references of the form #id name, kind by kind, and which name nothing (FRAGMENT-1)", async () => {
+  const v = vectors("reference")["fragment-references"];
+  assert.equal(v.length, 14);
+  for (const c of v) {
+    const report = rules.jscFragmentReport(authorTyped(c), c.manifest);
+    assert.deepEqual(report, c.expected, c.name);
+    const lines = rules.jscFragmentLines(report);
+    assert.equal(lines.length, report.total ? 1 + report.nothing.length : 0, c.name);
+    for (const l of lines) assert.ok(l.kind === "note" && l.rule in rules.JSC_FRAGMENT_RULES, `${c.name}: ${l.text}`);
+  }
+  assert.equal(rules.jscAsciiLower("AC-2(1) ÄZ"), "ac-2(1) Äz", "A to Z only: a letter outside ASCII keeps its case");
+  /* as part of the check of a whole set: notes of the area `reference`, and no error */
+  const c = v.find(x => x.name === "a-statement-as-object-underscore-statement-id-and-one-the-object-does-not-have");
+  const file = obj => ({ path: "objects/" + obj.id.split("/").slice(-2).join("-") + ".json", text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin: "imported" });
+  const g = core.jscGraphFrom(c.objects.map(file));
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
+  assert.deepEqual(res.report.fragments, c.expected);
+  assert.deepEqual(res.findings.filter(f => f.area === "reference").map(f => [f.kind, f.object, f.message]), [
+    ["note", null, "fragments: 2 reference(s) of the form #id: 0 to a resource, 0 to an object, 1 to a statement, 0 to a parameter, 0 to a source document, 1 to nothing (FRAGMENT-1)"],
+    ["note", c.expected.nothing[0][0], "#ac-2_smt.z names nothing the bundle carries (FRAGMENT-1: reported; nothing fails)"]]);
+  assert.deepEqual(res.report.lines.filter(l => l.rule === "FRAGMENT-1"), rules.jscFragmentLines(res.report.fragments));
+});
+test("reference: an operation that changes a statement names it, and a set-parameter a parameter that statement declares (OPERATION-1)", async () => {
+  const v = vectors("reference")["operation-targets"];
+  assert.equal(v.length, 15);
+  for (const c of v) {
+    const objs = authorTyped(c);
+    assert.deepEqual(rules.jscOperationTargets(objs).map(e => [e.id, e.index, e.what]), c.expected, c.name);
+    const errors = rules.jscOperationTargetErrors(objs);
+    assert.equal(errors.length, c.expected.length, c.name);
+    errors.forEach((m, i) => assert.ok(m.startsWith(`${c.expected[i][0]}: operations[${c.expected[i][1]}]: `) && m.endsWith(`(OPERATION-1: ${rules.JSC_OPERATION_RULES["OPERATION-1"]})`), `${c.name}: ${m}`));
+  }
+  /* as part of the check of a whole set: errors of the area `reference`, filed under the Tailoring, in the reference's words */
+  const c = v.find(x => x.name === "tailorings-in-the-order-of-their-ids-and-operations-in-the-order-of-the-document");
+  const file = obj => ({ path: "objects/" + obj.id.split("/").slice(-2).join("-") + ".json", text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin: "imported" });
+  const g = core.jscGraphFrom(c.objects.map(file));
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
+  const said = `(OPERATION-1: ${rules.JSC_OPERATION_RULES["OPERATION-1"]})`, R1 = "https://ns.auth.gov/fw/req/1";
+  assert.deepEqual(res.findings.filter(f => f.area === "reference" && f.kind === "error").map(f => [f.object, f.message]), [
+    [c.expected[0][0], `operations[0]: set-parameter names no statement ${said}`],
+    [c.expected[1][0], `operations[1]: set-parameter names the parameter 'n', which statement 's2' of ${R1} does not declare ${said}`],
+    [c.expected[2][0], `operations[2]: replace-prose names no statement ${said}`]]);
+});
+test("author: a review-due that has passed on the day asked about (REVIEW-1)", () => {
+  const v = vectors("author")["review-vectors"];
+  assert.equal(v.length, 22);
+  for (const c of v) {
+    const r = rules.jscReviewReport(authorTyped(c), c["as-of"]);
+    assert.deepEqual(reviewPairs(r), [c["expected-overdue"] || [], c["expected-not-evaluable"] || []], c.name);
+    assert.ok(r.dated >= r.overdue.length + r["not-evaluable"].length, c.name + ": every place reported was asked");
+  }
+});
+/* What the vectors leave to the platform. JavaScript's Date reads a year
+   below 100 as 19xx, rolls the 31st of February over into March and offers
+   local time beside UTC; the reference's calendar ends at 0001 and 9999,
+   where Python raises. Each line is what validate_core.py's _utc_day gives. */
+test("REVIEW-1: the day a review-due falls on - leap days, the ends of the calendar, offsets, durations", () => {
+  const NO = "not a day of the calendar", day = (due, start) => rules.jscUtcDay(due, start);
+  const date = value => day({ type: "date", value }), at = value => day({ type: "datetime", value });
+  const after = (num, unit, start) => day({ type: "elapsed-duration", num, unit }, start);
+  for (const ok of ["2024-02-29", "2000-02-29", "0001-01-01", "0099-12-31", "9999-12-31"]) assert.deepEqual(date(ok), [ok, null], ok);
+  for (const bad of ["2026-02-29", "1900-02-29", "2026-02-31", "2026-04-31", "0000-01-01", "2026-00-10", "2026-13-01", "2026-11-00", "next week"]) assert.deepEqual(date(bad), [null, NO], bad);
+  /* a date-time is an instant: its day is the UTC day, whatever the offset says the local day is */
+  assert.deepEqual(at("2026-11-13T00:30:00+02:00"), ["2026-11-12", null]);
+  assert.deepEqual(at("2026-11-12T23:30:00-05:00"), ["2026-11-13", null]);
+  assert.deepEqual(at("2026-11-12T23:59:59.999Z"), ["2026-11-12", null]);
+  assert.deepEqual(at("2026-12-31T23:00:00-01:00"), ["2027-01-01", null]);
+  assert.deepEqual(at("2024-03-01T00:00:00+00:01"), ["2024-02-29", null]);
+  assert.deepEqual(at("0050-06-01T12:00:00Z"), ["0050-06-01", null], "a year below 100 is that year, not 19xx");
+  for (const bad of ["2026-02-31T10:00:00Z", "2026-11-13T24:00:00Z", "2026-11-13T23:60:00Z", "2026-11-13T23:59:60Z", "2026-11-13T12:00:00+24:00"]) assert.deepEqual(at(bad), [null, NO], bad);
+  assert.deepEqual(at("0001-01-01T00:00:00+01:00"), [null, NO], "the instant lies before the calendar begins");
+  assert.deepEqual(at("9999-12-31T23:30:00-01:00"), [null, NO], "the instant lies after the calendar ends");
+  /* an elapsed duration is added to 00:00 UTC of the day it counts from */
+  assert.deepEqual(after(86399, "seconds", "2026-11-12"), ["2026-11-12", null]);
+  assert.deepEqual(after(86400, "seconds", "2026-11-12"), ["2026-11-13", null]);
+  assert.deepEqual(after(1440, "minutes", "2026-12-31"), ["2027-01-01", null]);
+  assert.deepEqual(after(24, "hours", "2024-02-28"), ["2024-02-29", null]);
+  assert.deepEqual(after(24, "hours", "2026-02-28"), ["2026-03-01", null]);
+  assert.deepEqual(after(24, "hours", "2026-02-31"), [null, NO], "the day it counts from is no day");
+  assert.deepEqual(after(24, "hours", "9999-12-31"), [null, NO]);
+  assert.deepEqual(after(9007199254740991, "hours", "2026-11-12"), [null, NO], "the largest number a bundle may carry");
+  assert.deepEqual(after(24, "hours", undefined), [null, "a duration, and no date to count it from"]);
+  assert.match(day({ type: "calendar-period", num: 1, unit: "months", "calendar-ref": "https://org.example/cal" }, "2026-11-12")[1], /no calendar https:\/\/org\.example\/cal \(D9/);
+  assert.deepEqual(day({ type: "fortnight", num: 1 }, "2026-11-12"), [null, "not a typed review-due"]);
+  /* the day asked about is an argument the caller owes; a day that is none is refused, not rolled over */
+  for (const bad of [undefined, "", "13.11.2026", "2026-02-31", "2026-11-13T00:00:00Z"]) assert.throws(() => rules.jscReviewReport(new Map(), bad), /REVIEW-1 is asked about a day/, String(bad));
+  assert.deepEqual(rules.jscReviewReport(new Map(), "2026-11-13"), { dated: 0, overdue: [], "not-evaluable": [] });
+});
+test("REVIEW-1: the report does not depend on the time zone of the machine", t => {
+  const v = vectors("author")["review-vectors"], was = process.env.TZ;
+  const run = () => JSON.stringify([v.map(c => rules.jscReviewReport(rules.jscTypedObjects(c.objects), c["as-of"])),
+    ["2026-11-13T00:30:00+02:00", "2026-11-12T23:30:00-05:00", "2026-01-01T00:00:00Z", "2026-12-31T23:59:59Z"].map(value => rules.jscUtcDay({ type: "datetime", value })),
+    rules.jscUtcDay({ type: "elapsed-duration", num: 24, unit: "hours" }, "2026-12-31"), rules.jscUtcDay({ type: "date", value: "2026-03-01" })]);
+  try {
+    process.env.TZ = "UTC";
+    const utc = run();
+    /* fourteen hours ahead of UTC and eleven behind: local midnight is another UTC day in both */
+    for (const zone of ["Pacific/Kiritimati", "Pacific/Pago_Pago"]) {
+      process.env.TZ = zone;
+      /* a node without time zone data stays in UTC whatever TZ says; the test would then prove nothing */
+      if (new Date(Date.UTC(2026, 10, 13)).getHours() === 0) return t.skip(`this node does not switch to ${zone} at run time`);
+      assert.equal(run(), utc, zone);
+    }
+  } finally {
+    if (was === undefined) delete process.env.TZ; else process.env.TZ = was;
+  }
+});
+
+/* The two reports on the two folders the reference prints them for. A set is
+   read as the app reads it (a graph from the folder's files), so this is the
+   map a page will pass. The expectation is what validate_core.py printed for
+   these folders with --as-of 2026-11-13; the next test asks it again. */
+const EXAMPLES = path.resolve(CONF, "../examples"), IFA = path.resolve(CONF, "../../converted_examples/US.IFA-GoodRead/ifa-core-bundle");
+const folderTree = (dir, prefix = "") => fs.readdirSync(dir).sort().flatMap(n => fs.statSync(path.join(dir, n)).isDirectory()
+  ? folderTree(path.join(dir, n), prefix + n + "/") : [{ path: prefix + n, text: core.jscDecode(fs.readFileSync(path.join(dir, n))) }]);
+const folderObjects = dir => core.jscGraphFrom(core.jscClassifyFiles(folderTree(dir)).records).objects;
+test("author and review on the example folder and the IFA bundle, as of 2026-11-13: what the reference reports", async () => {
+  const ex = folderObjects(EXAMPLES), exReview = rules.jscReviewReport(ex, "2026-11-13");
+  assert.deepEqual(await rules.jscAuthorReport(ex), [], "the example folder names its authors");
+  assert.equal(exReview.dated, 2);
+  assert.deepEqual(exReview.overdue, []);
+  assert.deepEqual(exReview["not-evaluable"].map(e => [e.id, e.where]), [["https://cso.example/risk/R-2026-007", "review-due"]]);
+  assert.match(exReview["not-evaluable"][0].why, /^a calendar period, and this tool has no calendar https:\/\/cso\.example\/calendar\/isms /);
+  const G = "https://ifa.gov/goodread/", ifa = folderObjects(IFA);
+  /* seven lines since the converter pre-fills from the source (backlog #69): the two authorizations carry the
+     date the source states, and the system's Implementation the author its plan names. The plan of action
+     names no party and the leveraged pair no party with a name, so their records still say nobody. */
+  assert.deepEqual((await rules.jscAuthorReport(ifa)).map(e => [e.rule, e.id, e.count]), [
+    ["AUTHOR-2", G + "finding/goodread-risk-1", 1], ["AUTHOR-3", G + "finding/goodread-risk-1", 1], ["AUTHOR-2", G + "finding/goodread-risk-2", 1],
+    ["AUTHOR-2", G + "impl/csp-iaas-ac-2", 1], ["AUTHOR-2", G + "impl/saas-ac-2", 1],
+    ["AUTHOR-2", G + "risk/goodread-risk-1", 1], ["AUTHOR-2", G + "risk/goodread-risk-2", 1]]);
+  assert.deepEqual(rules.jscReviewReport(ifa, "2026-11-13"), { dated: 2, "not-evaluable": [], overdue: [
+    { id: G + "risk/goodread-risk-1", where: "review-due", day: "2024-01-01" }, { id: G + "risk/goodread-risk-2", where: "review-due", day: "2023-06-23" }] });
+});
+const pythonWithJsonschema = spawnSync("python3", ["-c", "import jsonschema"], { encoding: "utf8" }).status === 0;
+test("author and review: the reference validator prints the same lines for the two folders", { skip: !pythonWithJsonschema && "python3 with jsonschema is not installed" }, async () => {
+  const AS_OF = "2026-11-13";
+  /* the lines of report_authors_and_reviews, from the app's two reports: jscAuthorReviewLines is what the Validate page shows */
+  const lines = async objs => rules.jscAuthorReviewLines(await rules.jscAuthorReport(objs), rules.jscReviewReport(objs, AS_OF), AS_OF, false)
+    .map(l => (l.kind === "summary" ? l.text : `note: ${l.text}`));
+  /* one run: the bundle named on the command line, then the example folder, each above its summary line */
+  const run = spawnSync("python3", [path.resolve(CONF, "../scripts/validate_core.py"), "--as-of", AS_OF, IFA], { encoding: "utf8" });
+  assert.equal(run.status, 0, run.stdout.slice(-2000) + run.stderr.slice(-2000));
+  const out = run.stdout.split(/\r?\n/), from = out.indexOf("== bundles =="), ifaEnd = out.findIndex(l => /^ {2}\S*ifa-core-bundle: \d+ pass/.test(l)), exEnd = out.findIndex(l => l.startsWith("  skill-examples: "));
+  assert.ok(from >= 0 && ifaEnd > from && exEnd > ifaEnd, "the output has its two sections");
+  const said = part => part.map(l => l.trim()).filter(l => /\((AUTHOR-[1-4]|REVIEW-1)[):]/.test(l));
+  assert.deepEqual(await lines(folderObjects(IFA)), said(out.slice(from, ifaEnd)), "the IFA bundle");
+  assert.deepEqual(await lines(folderObjects(EXAMPLES)), said(out.slice(ifaEnd, exEnd)), "the example folder");
+});
+
+/* The two reports as part of the check of a whole set (what the Validate page
+   runs). The day is an argument: the rules read no clock. */
+const folderGraph = dir => core.jscGraphFrom(core.jscClassifyFiles(folderTree(dir)).records);
+test("a whole set: the two reports are part of the check; AUTHOR lines fail only when the caller requires authors, REVIEW-1 never", async () => {
+  const g = folderGraph(IFA), verified = await core.jscVerify(g);
+  const of = (res, area, kind) => res.findings.filter(f => f.area === area && f.kind === kind);
+  const plain = await rules.jscCheckGraph(g, verified, { asOf: "2026-11-13" });
+  assert.equal(plain.report["as-of"], "2026-11-13");
+  assert.equal(plain.report["require-authors"], false);
+  assert.equal(plain.report.authors.length, 7);   // 7 since the converter pre-fills from the source (backlog #69); 10 before
+  assert.deepEqual(plain.report.review, rules.jscReviewReport(g.objects, "2026-11-13"));
+  /* the author and review lines, then the one FRAGMENT-1 line of this bundle: a link names the source document it came from */
+  assert.deepEqual(plain.report.lines, [...rules.jscAuthorReviewLines(await rules.jscAuthorReport(g.objects), rules.jscReviewReport(g.objects, "2026-11-13"), "2026-11-13", false),
+    ...rules.jscFragmentLines(plain.report.fragments)]);
+  assert.deepEqual(plain.report.fragments, { total: 1, nothing: [], resource: 0, object: 0, statement: 0, parameter: 0, source: 1 });
+  assert.deepEqual([of(plain, "author", "note").length, of(plain, "author", "error").length], [7, 0], "a missing author is a line of the report");
+  assert.deepEqual([of(plain, "review", "note").length, of(plain, "review", "error").length], [3, 0], "the summary and the two overdue reviews");
+  const errorsBefore = plain.findings.filter(f => f.kind === "error").length;
+  const strict = await rules.jscCheckGraph(g, verified, { asOf: "2026-11-13", requireAuthors: true });
+  assert.equal(strict.report["require-authors"], true);
+  assert.deepEqual([of(strict, "author", "note").length, of(strict, "author", "error").length], [0, 7], "required: every AUTHOR line is a failure");
+  assert.deepEqual([of(strict, "review", "note").length, of(strict, "review", "error").length], [3, 0], "REVIEW-1 fails nothing, with any switch");
+  assert.equal(strict.findings.filter(f => f.kind === "error").length, errorsBefore + 7, "nothing else changes");
+  const never = l => l.rule === "REVIEW-1" || l.rule === "FRAGMENT-1";     // reports that fail nothing, with any switch
+  assert.ok(strict.report.lines.filter(l => !never(l)).every(l => l.kind === "error") && strict.report.lines.filter(never).every(l => l.kind !== "error"));
+  /* the day asked about decides what is overdue: due on that day is not overdue, the day after it is */
+  const overdueOn = async day => (await rules.jscCheckGraph(g, verified, { asOf: day })).report.review.overdue.map(e => e.day);
+  assert.deepEqual(await overdueOn("2023-06-23"), []);
+  assert.deepEqual(await overdueOn("2023-06-24"), ["2023-06-23"]);
+  assert.deepEqual(await overdueOn("2024-01-02"), ["2024-01-01", "2023-06-23"]);
+  /* no day given: who is missing is still reported, a review is not asked, and nothing is read from a clock */
+  const undated = await rules.jscCheckGraph(g, verified);
+  assert.equal(undated.report.review, null);
+  assert.equal(undated.report["as-of"], null);
+  assert.equal(undated.report.authors.length, 7);
+  assert.equal(of(undated, "review", "note").length, 0);
+  await assert.rejects(rules.jscCheckGraph(g, verified, { asOf: "13.11.2026" }), /REVIEW-1 is asked about a day/);
+  /* the example folder names its authors: required or not, nothing fails */
+  const ex = folderGraph(EXAMPLES), exStrict = await rules.jscCheckGraph(ex, await core.jscVerify(ex), { asOf: "2026-11-13", requireAuthors: true });
+  assert.deepEqual(exStrict.findings.filter(f => f.kind === "error"), []);
+  assert.deepEqual(exStrict.report.lines.map(l => l.kind), ["summary", "note"]);
 });
 
 test("scale: every vector (definition, matrix, levels, residual, SCALE-4)", () => {
@@ -308,11 +606,52 @@ test("NUMBER-1 (errata 2026-11-13): JSON.parse alone would let every spelling an
 
 test("facet: every vector (stdlib, pinned, private, unregistered)", () => {
   const v = vectors("facet").vectors;
-  assert.equal(v.length, 7);
+  assert.equal(v.length, 16);   // 9 more on 2026-11-14: assessment-criteria 1.1.0 beside 1.0.0, and references (backlog #82, #83)
   for (const c of v) {
     const errs = rules.jscFacetErrors([[c.name, c.object]], new Map(Object.entries(c.pinned || {})));
     assert.equal(errs.length ? "invalid" : "valid", c.expected, `${c.name}: ${errs[0] || ""}`);
   }
+});
+
+/* An Assessment's `method` is a facet payload (backlog #55). The reference runner holds an implementation to the number
+   of errors for the object and to a fragment of each: an error about a method names it as method '<key>', one about a
+   facet as facet '<key>'. The name of a vector is no part of an error, so the object is labelled with its own id here. */
+test("facets: an Assessment's method is held to its facet, all 13 vectors by the number of errors and a fragment of each", () => {
+  const v = vectors("facet")["method-vectors"];
+  assert.equal(v.length, 13);
+  let errors = 0;
+  for (const c of v) {
+    const errs = rules.jscFacetErrors([[c.object.id || "object", c.object]], new Map(Object.entries(c.pinned || {})));
+    assert.equal(errs.length, c["expected-errors"], `${c.name}: ${errs.join(" | ")}`);
+    assert.equal(errs.length ? "invalid" : "valid", c.expected, c.name);
+    for (const frag of c["expected-frags"]) assert.ok(errs.some(e => e.includes(frag)), `${c.name}: no error says ${frag}: ${errs.join(" | ")}`);
+    assert.ok(errs.every(e => !e.includes(c.name)), c.name + ": the name of the vector is in no error");
+    errors += errs.length;
+  }
+  assert.equal(errors, 8, "eight errors in the thirteen cases");
+  /* the two sentences of the reference, written out once */
+  const asmt = method => ({ id: "https://a.example/assessment/x", version: "1", lifecycle: "active", "subject-refs": ["https://a.example/req/1"], method, "performer-ref": "https://a.example/p", time: "2026-11-14T09:00:00Z", result: "satisfied" });
+  const said = method => rules.jscFacetErrors([["https://a.example/assessment/x", asmt(method)]], new Map());
+  assert.deepEqual(said({ kind: "manual-check", tool: "JASCON-App 0.9.12" }), ["kind", "tool"].map(k =>
+    `https://a.example/assessment/x: method '${k}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`));
+  assert.match(said({ [rules.JSC_ASSESSMENT_CRITERIA]: { method: "by hand" } })[0], /^https:\/\/a\.example\/assessment\/x: method 'https:\/\/ns\.jascon\.net\/stdlib\/facet\/assessment-criteria@1' payload violates its schema: /);
+  assert.deepEqual(said("manual"), [], "a method that is no object is the kernel schema's matter and not this rule's");
+  /* a member called `method` inside a facet payload is that facet's business, also where it is an object with keys of its own */
+  assert.deepEqual(rules.jscFacetErrors([["x", { ...asmt(rules.jscManualMethod()), facets: { "https://assessor.example/facet/review@1": { method: { kind: "sampled" } } } }]],
+    new Map([["https://assessor.example/facet/review", { type: "object" }]])), []);
+  assert.equal(rules.jscFacetErrors([["x", { id: "x", method: { kind: "y" } }]], new Map()).length, 1, "the member is read at the top of any object, as the reference reads it");
+  /* what the Assess page writes is the standard facet for a manual check, and the reference's rule accepts it */
+  assert.deepEqual(rules.jscManualMethod(), { "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": { method: "manual" } });
+  assert.deepEqual(said(rules.jscManualMethod()), []);
+  assert.deepEqual(rules.jscObjectErrors(asmt(rules.jscManualMethod())).errors, []);
+  /* the method this app wrote before build 0.9.13 is recognised as its own, and nothing else is */
+  const own = { kind: "manual-check", tool: "JASCON-App 0.9.12" };
+  assert.equal(rules.jscIsAppMethodBefore0913(own), true);
+  for (const other of [{ kind: "manual-check" }, { kind: "manual-check", tool: "Another Tool 1.0" }, { kind: "scan", tool: "JASCON-App 0.9.12" }, { ...own, note: "x" }, rules.jscManualMethod(), {}, null, "manual"]) {
+    assert.equal(rules.jscIsAppMethodBefore0913(other), false, JSON.stringify(other));
+    assert.equal(rules.jscRewriteAppMethod(asmt(other)), null, "a method of another shape is somebody else's and is not rewritten: " + JSON.stringify(other));
+  }
+  assert.deepEqual(rules.jscRewriteAppMethod(asmt(own)), asmt(rules.jscManualMethod()), "only the method changes");
 });
 
 test("tailoring: the operation law of every vector, through the function the app uses", async () => {
@@ -354,6 +693,189 @@ test("attestation: the bi-modal verdict of every vector", async () => {
     const got = rules.jscAttestationVerdict(await digests(sc.subject, 1), await digests(delivered, sc["delivered-mutation"] === "reindent" ? 4 : 1));
     assert.equal(got, c.expected, c.name);
   }
+});
+
+/* attestation-binds applied to a bundle (Appendix B.1.7; backlog #46). The reference runner holds an
+   implementation to four things per case: the verdict, which manifest is bound, the status of every subject in
+   the Attestation's order, and whether the bundle fails. So does this test, and it holds the count: a list
+   that grew in the reference and not here would otherwise pass. Every object of a case must type, as in the
+   runner (`len(objs) == len(case["objects"])`). */
+test("attestation-binds on a bundle: all 19 vectors, by verdict, manifest bound, every subject and failure", async () => {
+  const v = vectors("attestation")["binds-vectors"];
+  assert.equal(v.length, 19);
+  const seen = { verdicts: new Set(), manifests: new Set(), statuses: new Set(), lifecycles: new Set() };
+  for (const c of v) {
+    const objs = rules.jscTypedObjects(c.objects);
+    assert.equal(objs.size, c.objects.length, c.name + ": every object of the case types");
+    const r = rules.jscAttestationBinds(c.attestation, c["manifest-digest"], await rules.jscSemanticDigests(objs), c["kept-packs"] || []);
+    assert.deepEqual([r.verdict, r.manifest, r.subjects.map(s => s.status), r.fails],
+      [c.expected, c["expected-manifest"], c["expected-subjects"], c["expected-failure"]], c.name);
+    seen.verdicts.add(r.verdict); seen.manifests.add(r.manifest); r.subjects.forEach(s => seen.statuses.add(s.status)); seen.lifecycles.add(c.attestation.lifecycle);
+  }
+  /* the vectors reach every value an answer can take; a list that lost a kind of case would be noticed here */
+  assert.deepEqual([[...seen.verdicts].sort(), [...seen.manifests].sort(), [...seen.statuses].sort(), [...seen.lifecycles].sort()],
+    [["fail", "full-match", "semantic-match"], ["kept-pack", "other", "this"], ["absent", "differs", "match"], ["active", "deprecated", "draft", "withdrawn"]]);
+});
+
+/* The lines of the reference (binds_report of validate_core.py), word for word. The expected texts are written
+   out here; tests/pages.test.mjs compares the page with what the reference prints for three folders. */
+test("attestation-binds: one line per Attestation in the order of the ids, in the reference's words; a failure only while the Attestation is active", async () => {
+  const A = "https://a.example", D = n => "sha256:" + String(n).repeat(64);
+  const req = n => ({ id: `${A}/req/${n}`, version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [A + "/p"], prose: { en: `Do ${n}.` } }] });
+  const objs = rules.jscTypedObjects([req(1), req(2)]), delivered = await rules.jscSemanticDigests(objs);
+  const d1 = delivered.get(A + "/req/1"), d2 = delivered.get(A + "/req/2");
+  const att = (name, subjects, bound, lifecycle = "active") => [`${A}/attestation/${name}`, { id: `${A}/attestation/${name}`, version: "1", lifecycle,
+    "subject-semantic-digests": subjects, "content-manifest-digest": bound, signer: A + "/p", timestamp: "2026-11-14T09:00:00Z" }];
+  const named = (n, digest) => ({ id: `${A}/req/${n}`, "semantic-digest": digest });
+  const atts = new Map([
+    att("z-full", [named(1, d1), d2], D("a")),
+    att("b-kept", [named(2, d2)], D("c")),
+    att("c-other", [named(1, d1)], D("e")),
+    att("d-changed", [named(1, D(9)), named(2, d2), named(3, D(8)), D(7)], D("a")),
+    att("e-withdrawn", [named(1, D(9))], D("e"), "withdrawn"),
+    att("f-empty", [], D("a")),
+    att("g-draft", [D(7)], D("a"), "draft"),
+  ]);
+  const lines = rules.jscBindsReport(atts, D("a"), delivered, [D("c")]);
+  const B17 = "(B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)";
+  assert.deepEqual(lines.map(l => [l.kind, l.text]), [
+    ["line", `binds: ${A}/attestation/b-kept = FULL MATCH [1 subject(s) of this bundle; a pack manifest this bundle keeps]`],
+    ["line", `binds: ${A}/attestation/c-other = SEMANTIC MATCH [1 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]`],
+    ["failure", `[attestation-binds] ${A}/attestation/d-changed: subject ${A}/req/1: recomputed semantic digest ${d1}, signed ${D(9)}; subject ${A}/req/3: not an object of this bundle; subject ${D(7)}: no object of this bundle carries it - this manifest ${B17}`],
+    ["line", `binds: ${A}/attestation/e-withdrawn = DOES NOT BIND [lifecycle withdrawn: reported, not a failure] subject ${A}/req/1: recomputed semantic digest ${d1}, signed ${D(9)} - another manifest`],
+    ["failure", `[attestation-binds] ${A}/attestation/f-empty: it names no subject - this manifest ${B17}`],
+    ["line", `binds: ${A}/attestation/g-draft = DOES NOT BIND [lifecycle draft: reported, not a failure] subject ${D(7)}: no object of this bundle carries it - this manifest`],
+    ["line", `binds: ${A}/attestation/z-full = FULL MATCH [2 subject(s) of this bundle; this manifest]`],
+  ]);
+  assert.deepEqual(lines.filter(l => l.fails).map(l => l.id.split("/").pop()), ["d-changed", "f-empty"]);
+});
+
+/* MANIFEST-1 (D3.11; backlog #75): no content manifest lists an Attestation. The reference runner holds an
+   implementation to the number of failures and to the id each one starts with, and so does this test; the count
+   of the vectors is held too. */
+test("MANIFEST-1: all 8 vectors; one failure per Attestation among the objects a manifest lists, in the order of the ids", () => {
+  const v = vectors("attestation")["listed-vectors"];
+  assert.equal(v.length, 8);
+  let failures = 0;
+  for (const c of v) {
+    const objs = rules.jscTypedObjects(c.objects);
+    assert.equal(objs.size, c.objects.length, c.name + ": every object of the case types");
+    const errs = rules.jscListedAttestationErrors(objs);
+    assert.equal(errs.length, c["expected-fails"], c.name);
+    assert.deepEqual(errs.map(e => e.slice(0, e.indexOf(": an Attestation is listed"))), c["expected-ids"], c.name + ": each failure starts with the id, in the order of the ids");
+    assert.ok(errs.every(e => e.includes("(MANIFEST-1: ")), c.name);
+    failures += errs.length;
+  }
+  assert.equal(failures, 7, "seven listed Attestations in the eight cases");
+  /* the reference's sentence, written out once */
+  const att = { id: "https://a.example/attestation/x", version: "1", lifecycle: "withdrawn", "subject-semantic-digests": ["sha256:" + "0".repeat(64)],
+    "content-manifest-digest": "sha256:" + "1".repeat(64), signer: "https://a.example/p", timestamp: "2026-11-14T09:00:00Z" };
+  assert.deepEqual(rules.jscListedAttestationErrors(rules.jscTypedObjects([att])), ["https://a.example/attestation/x: an Attestation is listed in the content manifest " +
+    "(MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside a manifest and is never an entry of one)"]);
+});
+
+/* The reference sees a bundle on disk. A set is a bundle that was loaded and may have been written to since, so
+   jscSetBinds first decides which bundle the comparison is made against (its `basis`). Held here on the IFA
+   bundle with files added the way the store holds them: `origin` says whether a file arrived or was written. */
+test("attestation-binds on a set: as loaded it is held to the manifest it came with, written to since to the bundle an export would write; what is only an artefact of the app is no failure", async () => {
+  const AID = "https://ifa.gov/goodread/attestation/ifa-ato", NS = "https://org.example";
+  const arrived = () => core.jscClassifyFiles(folderTree(IFA)).records.map(r => ({ ...r, origin: "imported" }));
+  const file = (path, obj, origin) => ({ path, text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin });
+  const binds = async records => { const g = core.jscGraphFrom(records); return { g, ...(await rules.jscSetBinds(g, rules.jscTypedObjects([...g.objects.values()].map(r => r.obj)))) }; };
+  const said = (b, id) => { const l = b.lines.find(x => x.id === id); return [l.kind, l.text.replace(/^(binds: \S+ = |\[attestation-binds\] \S+ )/, "").replace(/sha256:[0-9a-f]{64}/g, "sha256:…").replace(/ \(B\.1\.7.*$/, "")]; };
+  const req = { id: NS + "/req/door", version: "1", lifecycle: "active", statements: [{ id: "s1", modality: "must", "obligated-parties": [NS + "/party/staff"], prose: { en: "Lock the door." } }] };
+  const att = (name, subjects, bound) => ({ id: `${NS}/attestation/${name}`, version: "1", lifecycle: "active", "subject-semantic-digests": subjects,
+    "content-manifest-digest": bound, signer: NS + "/party/ao", timestamp: "2026-11-14T09:00:00Z" });
+  const named = async o => ({ id: o.id, "semantic-digest": await core.jscSemanticDigest(o) });
+
+  /* as it was loaded: the manifest it came with, and the objects that manifest lists */
+  const loaded = await binds(arrived()), delivered = await core.jscPackageDigest(loaded.g.manifestText);
+  assert.deepEqual([loaded.basis, loaded["manifest-digest"], loaded["loaded-manifest-digest"]], ["loaded", delivered, delivered]);
+  assert.deepEqual(said(loaded, AID), ["line", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+
+  /* as loaded, and damaged: a file that arrived with the bundle and that its manifest does not list is no object of the
+     bundle, for the reference too. An Attestation that names it fails, and one that names an Attestation beside the
+     manifest by its digest does as well: what is not listed is no subject of anything */
+  const ifaAtt = loaded.g.objects.get(AID).obj;
+  const damaged = await binds([...arrived(), file("objects/req/door.json", req, "imported"),
+    file("attestation-door.json", att("door", [await named(req)], delivered), "imported"),
+    file("attestation-of-an-attestation.json", att("meta", [await core.jscSemanticDigest(ifaAtt)], delivered), "imported")]);
+  assert.equal(damaged.basis, "loaded", "nothing was written here: the folder is judged against its own manifest");
+  assert.deepEqual(said(damaged, NS + "/attestation/door"), ["failure", `subject ${req.id}: not an object of this bundle - this manifest`]);
+  assert.deepEqual(said(damaged, NS + "/attestation/meta"), ["failure", "subject sha256:…: no object of this bundle carries it - this manifest"]);
+  assert.deepEqual(said(damaged, AID), ["line", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+
+  /* the same Requirement written here: the manifest the set came with does not list it and never will. Held to that
+     manifest, an Attestation that names it would fail for no reason but that this app has written no manifest yet.
+     It is held to the bundle an export would write: the Requirement is listed there */
+  const withReq = [...arrived(), file("objects/req/door.json", req, "authored")];
+  const next = await core.jscPackageDigest((await core.jscBuildBundle(core.jscGraphFrom(withReq))).files[0].text);
+  assert.notEqual(next, delivered);
+  const door = att("door", [await named(req)], next);
+  const written = await binds([...withReq, file("attestation-door.json", door, "authored"),
+    file("attestation-of-an-attestation.json", att("meta", [await core.jscSemanticDigest(door)], next), "authored")]);
+  assert.deepEqual([written.basis, written["manifest-digest"], written["loaded-manifest-digest"]], ["export", next, delivered]);
+  assert.deepEqual(said(written, NS + "/attestation/door"), ["line", "FULL MATCH [1 subject(s) of this bundle; this manifest]"]);
+  assert.deepEqual(said(written, NS + "/attestation/meta"), ["failure", "subject sha256:…: no object of this bundle carries it - this manifest"],
+    "an Attestation beside the manifest is not listed by an export either, so it is no subject");
+  assert.deepEqual(said(written, AID), ["line", "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"],
+    "the Attestation that bound the manifest that was loaded is no failure: its subjects are as signed");
+  assert.deepEqual(written.lines.filter(l => l.fails).map(l => l.id), [NS + "/attestation/meta"]);
+
+  /* a subject that was changed here is a failure on either basis */
+  const impl = loaded.g.objects.get("https://ifa.gov/goodread/impl/system1234-ac-6.1");
+  const edited = await binds(arrived().map(r => (r.path === impl.path ? { ...r, text: core.jscSerialize({ ...impl.obj, status: "planned" }), origin: "authored" } : r)));
+  assert.equal(edited.basis, "export");
+  assert.deepEqual(said(edited, AID), ["failure", `subject ${impl.obj.id}: recomputed semantic digest sha256:…, signed sha256:… - another manifest`]);
+  /* saved here without a change: the manifest the set came with still describes it */
+  const untouched = await binds(arrived().map(r => (r.path === impl.path ? { ...r, origin: "authored" } : r)));
+  assert.deepEqual([untouched.basis, said(untouched, AID)[1]], ["loaded", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+  /* an Attestation written here, and nothing else: it is no object of the manifest, so the manifest still describes the set */
+  const withdrawn = await binds(arrived().map(r => (r.id === AID ? { ...r, text: core.jscSerialize({ ...ifaAtt, lifecycle: "withdrawn" }), origin: "authored" } : r)));
+  assert.deepEqual([withdrawn.basis, said(withdrawn, AID)[1]], ["loaded", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+  /* and that holds for a damaged folder too: an Attestation written here does not make the folder one that was changed here */
+  const both = await binds([...arrived().map(r => (r.id === AID ? { ...r, text: core.jscSerialize({ ...ifaAtt, lifecycle: "withdrawn" }), origin: "authored" } : r)), file("objects/req/door.json", req, "imported")]);
+  assert.deepEqual([both.basis, said(both, AID)[1]], ["loaded", "FULL MATCH [3 subject(s) of this bundle; this manifest]"]);
+
+  /* a scale written here changes the manifest an export writes, as an object does */
+  const scaleText = fs.readFileSync(path.join(EXAMPLES, "scale-bsi-200-3-schadenshoehe.json"), "utf8");
+  const scaled = await binds([...arrived(), { path: "scales/schadenshoehe.json", text: scaleText, kind: "scale", type: null, id: JSON.parse(scaleText).id, origin: "authored" }]);
+  assert.deepEqual([scaled.basis, said(scaled, AID)[1]], ["export", "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"]);
+
+  /* MANIFEST-1 on the two bases. A bundle whose manifest lists its Attestation, as the IFA bundle had it until 2026-11-13:
+     the file lies under objects/ and the manifest has a line for it with both digests */
+  const manifest = JSON.parse(loaded.g.manifestText), attText = loaded.g.objects.get(AID).text, attPath = "objects/attestation/attestation-ifa-ato.json";
+  manifest.objects.push({ id: AID, version: ifaAtt.version, path: attPath, "package-digest": await core.jscPackageDigest(attText), "semantic-digest": await core.jscSemanticDigest(ifaAtt) });
+  const listing = () => arrived().map(r => (r.kind === "manifest" ? { ...r, text: core.jscSerialize(manifest) } : r.id === AID ? { ...r, path: attPath } : r));
+  const MANIFEST_1 = `${AID}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded from the content manifest by definition, D3.1 - ` +
+    "an Attestation lies beside a manifest and is never an entry of one)";
+  const refused = await binds(listing()), line = b => b.lines.find(l => l.id === AID);
+  assert.deepEqual([refused.basis, line(refused).listed, line(refused)["manifest-1"]], ["loaded", "refused", MANIFEST_1]);
+  assert.deepEqual(said(refused, AID), ["line", "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"],
+    "it is still held to what it binds: a manifest that lists it cannot be the one it binds");
+  const asCame = await core.jscBuildBundle(refused.g);
+  assert.deepEqual([asCame.verbatim, asCame.files[0].text === core.jscSerialize(manifest), asCame.problems], [true, true, []], "a set nobody changed leaves as it came, listing and all: nothing is repaired in silence");
+  const res = await rules.jscCheckGraph(refused.g, await core.jscVerify(refused.g));
+  assert.deepEqual(res.findings.filter(f => f.kind === "error").map(f => `${f.object}: ${f.message}`), [MANIFEST_1], "the whole-set check fails the set with the reference's sentence, and with nothing else");
+  /* the same set after something else in it was written here: the manifest in question is the export's, which lists no Attestation */
+  const risk = [...refused.g.objects.values()].find(r => r.type === "risk");
+  const after = await binds(listing().map(r => (r.path === risk.path ? { ...r, text: core.jscSerialize({ ...risk.obj, title: { en: "Reworded" } }), origin: "authored" } : r)));
+  assert.deepEqual([after.basis, line(after).listed, line(after)["manifest-1"]], ["export", "left-out", null]);
+  const rewritten = await core.jscBuildBundle(after.g);
+  assert.equal(rewritten.verbatim, false);
+  assert.deepEqual(rewritten.manifest.objects.filter(e => e.id === AID), [], "the manifest written here does not list the Attestation");
+  assert.equal(rewritten.manifest.objects.length, manifest.objects.length - 1, "and lists everything else");
+  assert.deepEqual(rewritten.files.filter(f => /attestation/.test(f.path)).map(f => [f.path, f.text === attText]), [["attestation-ifa-ato.json", true]], "its file leaves beside the manifest, unchanged");
+  assert.deepEqual(rewritten.problems, [`${AID}: was listed in the manifest this set came with; a manifest written here lists no Attestation (MANIFEST-1), so it leaves beside the manifest as attestation-ifa-ato.json`]);
+  assert.equal(after["manifest-digest"], await core.jscPackageDigest(rewritten.files[0].text), "and that manifest is the one the comparison names");
+  const res2 = await rules.jscCheckGraph(after.g, await core.jscVerify(after.g));
+  assert.deepEqual(res2.findings.filter(f => f.kind === "error"), []);
+  assert.deepEqual(res2.findings.filter(f => f.area === "manifest" && f.object === AID).map(f => [f.kind, f.message]),
+    [["note", "the manifest this set came with lists this Attestation, which MANIFEST-1 refuses; the manifest an export writes now does not list it, and the file leaves beside the manifest"]]);
+
+  /* a set without a manifest: there is nothing it was loaded with, and the comparison is with what an export would write */
+  const loose = await binds(arrived().filter(r => r.kind !== "manifest"));
+  assert.deepEqual([loose.basis, loose["loaded-manifest-digest"], said(loose, AID)[1]], ["export", null, "SEMANTIC MATCH [3 subject(s) of this bundle; another manifest: the content is proven, the packaging was altered]"]);
 });
 
 test("one object: prose-params-resolve, duplicate statement ids, a by-statement key that names nothing, an empty optional list", () => {
@@ -406,7 +928,12 @@ test("a whole set: the example folder, checked as a bundle, passes as it passes 
 
 test("composition: every vector, as the reference runner judges it", () => {
   const v = vectors("composition").vectors;
-  assert.equal(v.length, 7);
+  assert.equal(v.length, 11);   // two with #68 (a pin version that ends in a line break, one in other digits), two with #72 (the number domain)
+  /* #72: the domain is asked of the digits, so that no number is read before it is known to be exact */
+  assert.deepEqual(rules.jscSemver("1.9007199254740991.0"), [1, 9007199254740991, 0]);
+  assert.equal(rules.jscSemver("1.9007199254740992.0"), null);
+  assert.equal(rules.jscSemver("1.2.90071992547409910"), null, "seventeen digits");
+  assert.deepEqual(rules.jscSemver("0001.02.0000000000000000000003"), [1, 2, 3], "zeros in front do not make a number long");
   for (const c of v) {
     const side = x => [(x.objects || []).map(o => [o.id, o]), x.pins || {}];
     const { resolutions, errors } = rules.jscCompose(...side(c.a), ...side(c.b));
@@ -487,11 +1014,13 @@ test("a whole set: a signed attestation is verified with a trusted key, unverifi
   assert.equal(wrong.status, "error");
   assert.equal(wrong.tier, "consumer", "a signature that does not verify proves nothing");
   assert.match(wrong.errors[0], /no signature verifies under the trusted key/);
-  /* without the envelope file: the attestation is not listed in a manifest here, so the reference would not look and this is a note */
+  /* without the envelope file: an error, for an attestation beside the manifest as for a listed one. Until the reference
+     read the Attestations beside a manifest (backlog #46, 2026-11-14) it did not look, and this was a note here */
   const g2 = core.jscGraphFrom(core.jscClassifyFiles(files.slice(0, -1)).records), r2 = await rules.jscCheckGraph(g2, null, { trusted: c["trusted-keys"] });
   assert.equal(r2.signatures[att.id], "missing");
   assert.equal(r2.tiers[tid], "consumer");
-  assert.deepEqual(r2.findings.filter(f => f.kind === "error" && f.area === "signature"), []);
+  assert.deepEqual(r2.findings.filter(f => f.kind === "error" && f.area === "signature").map(f => [f.object, f.message]),
+    [[att.id, `envelope-ref '${att["envelope-ref"]}' does not resolve beside the manifest`]]);
 });
 
 /* CP-CHECK-1. The bundle vectors name the exact set of CHECK rules a

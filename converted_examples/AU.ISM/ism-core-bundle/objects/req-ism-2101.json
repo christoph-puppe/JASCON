@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2101",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2101",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Sensitive or classified phone calls and conversations are not conducted within or near connected vehicles."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

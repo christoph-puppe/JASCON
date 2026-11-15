@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0846",
- "version": "2026.06.18",
+ "version": "9",
  "label": "ISM-0846",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "All users, except for local administrator accounts and break glass accounts, cannot disable, bypass or be exempted from application control."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

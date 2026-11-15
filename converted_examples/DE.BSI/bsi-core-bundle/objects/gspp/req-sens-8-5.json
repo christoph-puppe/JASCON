@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.8.5",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.8.5",
  "lifecycle": "active",
  "title": {
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -68,7 +68,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Fremde IT-Systeme sind ein Risiko, weil sie an das interne Netz angeschlossen, zum Mithören von Gesprächen oder zur Standortverfolgung missbraucht werden können. Relevant sind dabei sowohl Geräte der Mitarbeitenden, als auch von Externen. Dies kann auch durch eine Hinterlegung  von Geräten an der Pforte oder in verschließbaren Fächern am Eingang umgesetzt werden."
+      "de": "Fremde IT-Systeme sind ein Risiko, weil sie an das interne Netz angeschlossen, zum Mithören von Gesprächen oder zur Standortverfolgung missbraucht werden können. Relevant sind dabei sowohl Geräte der Mitarbeitenden, als auch von Externen. Dies kann auch durch eine Hinterlegung von Geräten an der Pforte oder in verschließbaren Fächern am Eingang umgesetzt werden."
      }
     }
    }

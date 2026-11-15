@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1956",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1956",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Microsoft AD FS token-signing and encryption certificates are changed twice in quick succession if they are compromised, they are suspected of being compromised or they have not been changed in the past 12 months."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

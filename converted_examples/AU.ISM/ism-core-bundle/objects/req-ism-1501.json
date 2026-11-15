@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1501",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1501",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Operating systems that are no longer supported by vendors are replaced."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-09"
   }
  ]
 }

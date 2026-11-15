@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1321",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1321",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "802.1X authentication with EAP-TLS, using X.509 certificates, is used for mutual authentication; with all other EAP methods disabled on supplicants and authentication servers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-09"
   }
  ]
 }

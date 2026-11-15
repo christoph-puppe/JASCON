@@ -26,15 +26,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sc-20.2_obj",
      "label": "SC-20(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-20.2_obj-1",
        "label": "SC-20(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "data origin artifacts are provided for internal name/address resolution queries;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "sc-20.2_obj-2",
        "label": "SC-20(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "integrity protection artifacts are provided for internal name/address resolution queries."
        }

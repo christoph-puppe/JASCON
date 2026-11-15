@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1937",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1937",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "User accounts are checked at least weekly for the presence of the sIDHistory attribute."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

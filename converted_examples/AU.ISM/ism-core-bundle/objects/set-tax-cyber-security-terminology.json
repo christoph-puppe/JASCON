@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-terminology",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Cyber security terminology"
+ },
+ "members": [
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-terminology-glossary-of-abbreviations",
+   "sequence": 17180
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/cyber-security-terminology-glossary-of-cyber-security-terms",
+   "sequence": 17190
+  }
+ ]
+}

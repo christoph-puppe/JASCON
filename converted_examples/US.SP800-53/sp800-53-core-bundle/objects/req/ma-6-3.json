@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ma-6.3_obj",
      "label": "MA-06(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "predictive maintenance data is transferred to a maintenance management system using {param:ma-06.03_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ma-6.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "MA-06(03)_ODP"
     }
    }
   }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2060",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2060",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Code reviews are utilised to ensure software components meets Secure by Design principles and practices as well as secure programming practices."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

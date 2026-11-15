@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.12.8",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.12.8",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Konfiguration für VK-Anwendungen SOLLTE Bild und Ton per Default deaktivieren."
+    "de": "Konfiguration für VK-Anwendungen SOLLTE beim Beitritt zu Konferenzschaltungen Bild und Ton per Default deaktivieren."
    }
   }
  ],
@@ -23,7 +23,7 @@
    "by-statement": {
     "smt": {
      "action": "deaktivieren",
-     "result": "Bild und Ton per Default",
+     "result": "beim Beitritt zu Konferenzschaltungen Bild und Ton per Default",
      "target-object-categories": [
       "VK-Anwendungen"
      ]
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 1,
      "tags": [
@@ -69,7 +69,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Eine Konfiguration, bei der die Standardeinstellung (per default) für Bild und Ton deaktiviert ist, bedeutet, dass Nutzerinnen und Nutzer die Videokonferenz-Anwendungen (VK-Anwendungen) betreten, ohne dass ihre Kamera und ihr Mikrofon automatisch eingeschaltet sind.  Diese Voreinstellung minimiert das Risiko, dass sensible oder private Informationen unbeabsichtigt geteilt werden. Einem Vorfall, bei dem vertrauliche Gespräche im Hintergrund unfreiwillig übertragen werden, könnte so effektiv vorgebeugt werden. Die Institution kann dadurch das Risiko unbeabsichtigter Datenexposition minimieren, indem die Kontrolle über die Aktivierung von Bild und Ton explizit bei den Nutzenden bleibt. Um diese Anforderung umzusetzen, kann die Institution die technischen Einstellungen in der Verwaltungs- oder Admin-Konsole der jeweiligen Anwendung anpassen, um die Standardwerte für alle Teilnehmenden zu ändern. Ebenfalls kann eine technische Richtlinie implementiert werden, die sicherstellt, dass die Applikation vor dem Start eines Meetings eine Checkliste anzeigt, die die Nutzenden explizit auffordert, Kamera und Mikrofon bewusst zu aktivieren."
+      "de": "Eine Konfiguration, bei der die Standardeinstellung (per default) für Bild und Ton deaktiviert ist, bedeutet, dass Nutzerinnen und Nutzer die Videokonferenz-Anwendungen (VK-Anwendungen) betreten, ohne dass ihre Kamera und ihr Mikrofon automatisch eingeschaltet sind. Diese Voreinstellung minimiert das Risiko, dass sensible oder private Informationen unbeabsichtigt geteilt werden. Einem Vorfall, bei dem vertrauliche Gespräche im Hintergrund unfreiwillig übertragen werden, könnte so effektiv vorgebeugt werden. Die Institution kann dadurch das Risiko unbeabsichtigter Datenexposition minimieren, indem die Kontrolle über die Aktivierung von Bild und Ton explizit bei den Nutzenden bleibt. Um diese Anforderung umzusetzen, kann die Institution die technischen Einstellungen in der Verwaltungs- oder Admin-Konsole der jeweiligen Anwendung anpassen, um die Standardwerte für alle Teilnehmenden zu ändern. Ebenfalls kann eine technische Richtlinie implementiert werden, die sicherstellt, dass die Applikation vor dem Start eines Meetings eine Checkliste anzeigt, die die Nutzenden explizit auffordert, Kamera und Mikrofon bewusst zu aktivieren."
      }
     }
    }

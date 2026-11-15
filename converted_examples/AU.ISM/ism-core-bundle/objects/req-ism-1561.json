@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1561",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1561",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Passwords used for multi-factor authentication on TOP SECRET systems are a minimum of 10 characters."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

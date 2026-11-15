@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1871",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1871",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Application control is applied to all locations other than user profiles and temporary folders used by operating systems, web browsers and email clients."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

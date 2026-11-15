@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0138",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0138",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The integrity of evidence gathered during an investigation is maintained by investigators:\n\n- recording all their actions\n- maintaining a proper chain of custody\n- following all instructions provided by relevant law enforcement agencies."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

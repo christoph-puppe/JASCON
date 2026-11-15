@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0874",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0874",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Mobile devices and desktop computers access the internet via an organisation’s internet gateway rather than via a direct connection to the internet."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

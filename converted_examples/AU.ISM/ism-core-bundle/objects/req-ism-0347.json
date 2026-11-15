@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0347",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0347",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When transferring data manually between two systems belonging to different security domains, write-once media is used unless the destination system has a mechanism through which read-only access can be ensured."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-04"
   }
  ]
 }

@@ -1,14 +1,14 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/pers-6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Weggang von Mitarbeitenden"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1",
-   "sequence": 1750
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers-6-1",
+   "sequence": 2690
   }
  ],
  "label": "6",

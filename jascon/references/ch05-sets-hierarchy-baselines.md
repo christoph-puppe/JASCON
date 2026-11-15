@@ -87,9 +87,13 @@ CSF's Functions → Categories → Subcategories, SCF's 34 domains, CIS's
 Controls → Safeguards, ISO 27002's themes, the German layer-and-module
 architecture — all of them are this shape and nothing but this shape.
 Crucially, the nesting happens *between sets*, never inside requirements:
-requirements do not contain requirements, ever. The 347 German
-pseudo-controls became statements (Chapter 4); structural grouping became
-sets; and the old world's group/part nesting — the attractor that
+requirements do not contain requirements, ever. Where a source nests
+controls, each is a Requirement of its own and the nesting is a Set: the
+348 nested controls of Grundschutz++ are Requirements, and each of the
+126 controls that hold them gives a Set whose first member is the
+control's own Requirement (BSI nests to group; until 2026-11-14 this
+handbook read the nested controls as clauses of their parent). Structural
+grouping became sets; and the old world's group/part nesting — the attractor that
 produced the #2118 dispute — has no surface left to land on.
 
 **Order is `sequence`.** An ascending integer, unique within one members

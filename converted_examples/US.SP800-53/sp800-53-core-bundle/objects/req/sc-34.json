@@ -26,6 +26,7 @@
   },
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -36,6 +37,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -60,15 +62,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sc-34_obj",
      "label": "SC-34",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-34_obj.a",
        "label": "SC-34a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the operating environment for {param:sc-34_odp.01} is loaded and executed from hardware-enforced, read-only media;"
        }
@@ -76,6 +88,11 @@
       {
        "id": "sc-34_obj.b",
        "label": "SC-34b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:sc-34_odp.02} for {param:sc-34_odp.01} are loaded and executed from hardware-enforced, read-only media."
        }
@@ -171,7 +188,8 @@
      ],
      "alt-identifiers": [
       "sc-34_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-34_ODP[01]"
     },
     "sc-34_odp.02": {
      "guidelines": [
@@ -181,7 +199,8 @@
      ],
      "alt-identifiers": [
       "sc-34_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SC-34_ODP[02]"
     }
    }
   },

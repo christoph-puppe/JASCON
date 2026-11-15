@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0520",
- "version": "2026.06.18",
+ "version": "9",
  "label": "ISM-0520",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Network access controls are implemented on networks to prevent the connection of unauthorised network devices and networked IT equipment."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

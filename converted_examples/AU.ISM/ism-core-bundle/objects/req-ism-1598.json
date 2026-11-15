@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1598",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1598",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Following maintenance or repairs to IT equipment, it is inspected to confirm that it retains its approved configuration and that no unauthorised modifications have been made."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

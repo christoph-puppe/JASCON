@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-infrastructure-emanati-8055da2",
-   "sequence": 4240
+   "sequence": 4410
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-infrastructure-emanati-29bc851",
-   "sequence": 4260
+   "sequence": 4430
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-infrastructure-emanati-0e776d3",
-   "sequence": 4310
+   "sequence": 4480
   }
  ]
 }

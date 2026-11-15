@@ -1,5 +1,5 @@
 {
- "description": "set-parameter law (D13 table): the value MUST satisfy the declared type, cardinality, choices, and bounds; out-of-bounds only via Deviation. Tightening direction (C.9): a move against the declared direction requires a Deviation. calendar-period without calendar-ref fails closed (D9). Each vector: parameter declaration + proposed value -> verdict (valid | invalid | deviation-required).",
+ "description": "set-parameter law (D13 table): the value MUST satisfy the declared type, cardinality, choices, and bounds; out-of-bounds only via Deviation. Tightening direction (C.9): a move against the declared direction requires a Deviation. calendar-period without calendar-ref fails closed (D9). Each vector: parameter declaration + proposed value -> verdict (valid | invalid | deviation-required). Backlog #68: a decimal that ends in a line break is not a decimal - `99.95\\n` is `invalid`, in every implementation.",
  "vectors": [
   {
    "name": "choice-in-set",
@@ -294,6 +294,17 @@
    },
    "value": 9007199254740991,
    "verdict": "valid"
+  },
+  {
+   "name": "decimal-that-ends-in-a-line-break",
+   "parameter": {
+    "name": "uptime",
+    "type": "decimal",
+    "min": 0,
+    "max": 100
+   },
+   "value": "99.95\n",
+   "verdict": "invalid"
   }
  ]
 }

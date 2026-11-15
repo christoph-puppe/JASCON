@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1533",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1533",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A mobile device management policy is developed, implemented and maintained."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1151",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1151",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "SPF is used to verify the authenticity of incoming emails."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-10"
   }
  ]
 }

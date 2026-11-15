@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0694",
- "version": "2026.06.18",
+ "version": "9",
  "label": "ISM-0694",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Privately owned mobile devices and desktop computers do not access SECRET and TOP SECRET systems or data."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

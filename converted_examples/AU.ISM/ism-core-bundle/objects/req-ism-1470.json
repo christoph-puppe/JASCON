@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1470",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-1470",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Unneeded user accounts, components, services and functionality of user applications are disabled or removed."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

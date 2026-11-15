@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0408",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0408",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Systems have a logon banner that reminds users of their security responsibilities when accessing the system and its resources."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

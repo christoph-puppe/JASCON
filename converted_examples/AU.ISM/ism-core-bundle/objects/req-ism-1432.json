@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1432",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1432",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Domain names for online services are protected via registrar locking and confirming that domain registration details are correct."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1804",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1804",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Break clauses associated with failure to meet security requirements are documented in contractual arrangements with service providers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

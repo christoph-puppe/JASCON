@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1686",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1686",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Credential Guard functionality is enabled."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

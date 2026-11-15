@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ra-5.6_obj",
      "label": "RA-05(06)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the results of multiple vulnerability scans are compared using {param:ra-05.06_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ra-5.6_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(06)_ODP"
     }
    }
   },

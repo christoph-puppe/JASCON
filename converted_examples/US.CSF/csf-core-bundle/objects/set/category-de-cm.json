@@ -20,8 +20,24 @@
    "sequence": 30
   },
   {
+   "ref": "https://ns.nist.gov/csf/req/DE.CM-04",
+   "sequence": 40
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/DE.CM-05",
+   "sequence": 50
+  },
+  {
    "ref": "https://ns.nist.gov/csf/req/DE.CM-06",
    "sequence": 60
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/DE.CM-07",
+   "sequence": 70
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/DE.CM-08",
+   "sequence": 80
   },
   {
    "ref": "https://ns.nist.gov/csf/req/DE.CM-09",

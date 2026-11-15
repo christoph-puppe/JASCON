@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1938",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1938",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The Domain Computers security group does not have write or modify permissions to any Microsoft Active Directory objects."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pe-8.3_obj",
      "label": "PE-08(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "personally identifiable information contained in visitor access records is limited to {param:pe-08.03_odp} identified in the privacy risk assessment."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "pe-8.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-08(03)_ODP"
     }
    }
   }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1870",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1870",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Application control is applied to user profiles and temporary folders used by operating systems, web browsers and email clients."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

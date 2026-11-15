@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1948",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1948",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "CA Certificate Manager approval is required for certificate templates that allow a Subject Alternative Name to be supplied."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

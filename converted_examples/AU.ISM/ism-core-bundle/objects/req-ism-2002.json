@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2002",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2002",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The board of directors or executive committee maintains a sufficient level of cyber security literacy to fulfil both their fiduciary duties and any legislative or regulatory obligations."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

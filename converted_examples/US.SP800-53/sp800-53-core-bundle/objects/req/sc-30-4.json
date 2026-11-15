@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sc-30.4_obj",
      "label": "SC-30(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "realistic but misleading information about the security state or posture of {param:sc-30.04_odp} is employed."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "sc-30.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-30(04)_ODP"
     }
    }
   },

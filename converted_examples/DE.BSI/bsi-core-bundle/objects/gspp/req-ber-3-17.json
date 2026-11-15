@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.17",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.17",
  "lifecycle": "active",
  "title": {
-  "de": "Systemsperre bei Inaktivität"
+  "de": "Gruppenkonten - MFA"
  },
  "statements": [
   {
@@ -14,15 +14,8 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für IT-Systeme SOLLTE eine Sperre bei Inaktivität nach {param:ber.3.17-prm1} aktivieren."
-   },
-   "parameters": [
-    {
-     "name": "ber.3.17-prm1",
-     "type": "string",
-     "label": "einer Frist"
-    }
-   ]
+    "de": "Berechtigung SOLLTE für Gruppenkonten die Mehr-Faktor-Authentisierung aktivieren."
+   }
   }
  ],
  "facets": {
@@ -30,11 +23,7 @@
    "by-statement": {
     "smt": {
      "action": "aktivieren",
-     "result": "eine Sperre bei Inaktivität",
-     "result-specification": "nach {{einer Frist}}",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
+     "result": "für Gruppenkonten die Mehr-Faktor-Authentisierung"
     }
    }
   },
@@ -42,7 +31,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Konfigurationshistorie"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -50,7 +39,7 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
+     "confidentiality": "2",
      "integrity": "1",
      "availability": "1",
      "authenticity": "1",
@@ -65,11 +54,11 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
+     "effort": 4,
      "tags": [
-      "Automatic Session Locking"
+      "Insider Threat"
      ]
     }
    }
@@ -78,15 +67,8 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Kann durch eine Bildschirmsperre oder Abmeldung (Automatic Session Locking) umgesetzt werden. Eine längere Inaktivität kann z.B. 5-15 Minuten lang sein. Verwendet das System keine eigene Authentifizierung, so ist auch diese Anforderung entbehrlich."
+      "de": "Werden trotz des damit verbundenen Risikos Gruppenkonten genutzt, so kann mit Mehr-Faktor-Authentifizierung der Mißbrauch von Zugangsdaten erschwert werden. Kann zum Beispiel durch mehrere dem Zugangskonto zugewiesene Hardwaretoken oder durch OTP-Apps umgesetzt werden. Falls keine Gruppenkonten verwendet werden, so ist die Anforderung entbehrlich."
      }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.3.17-prm1": {
-     "alt-identifier": "de11e8f3-d1fa-4b11-a6b0-e0d327b42849"
     }
    }
   }
@@ -94,7 +76,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "de11e8f3-d1fa-4b11-a6b0-e0d327b42849"
+   "value": "d59c4b33-c1d6-446a-bb0f-047fe832974d"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0549",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0549",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Video conferencing and IP telephony traffic is physically or logically separated from other data traffic."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

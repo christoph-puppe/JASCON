@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/arch-9",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Kapazitätsmanagement"
@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.1",
-   "sequence": 4600
+   "sequence": 7540
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.2",
-   "sequence": 4610
+   "sequence": 7550
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.3",
-   "sequence": 4620
+   "sequence": 7560
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.4",
-   "sequence": 4630
+   "sequence": 7570
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.9.5",
-   "sequence": 4640
+   "sequence": 7580
   }
  ],
  "label": "9",

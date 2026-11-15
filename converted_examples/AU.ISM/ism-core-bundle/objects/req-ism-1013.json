@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1013",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1013",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The effective range of wireless communications outside an organisation’s area of control is limited by implementing RF shielding on facilities in which SECRET or TOP SECRET wireless networks are used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

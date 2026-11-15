@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0206",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0206",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cable labelling processes, and supporting cable labelling procedures, are developed, implemented and maintained."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

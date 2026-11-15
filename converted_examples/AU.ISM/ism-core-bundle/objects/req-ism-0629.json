@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0629",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0629",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "For gateways between networks belonging to different security domains, any shared components are managed by system administrators for the higher security domain or by system administrators from a mutually agreed upon third party."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

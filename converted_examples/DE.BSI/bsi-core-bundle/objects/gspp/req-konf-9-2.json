@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.9.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.9.2",
  "lifecycle": "active",
  "title": {
-  "de": "Begrenzung der Rechenleistung"
+  "de": "Begrenzung der Hostleistung"
  },
  "statements": [
   {
@@ -64,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -85,7 +85,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "konf.9.2-prm1": {
-     "alt-identifier": "3b0eb166-07b9-4b51-a1f5-75513b28015c"
+     "alt-identifier": "e6ccd9c6-4c4f-4010-96cc-ca3e4a69d054"
     }
    }
   }

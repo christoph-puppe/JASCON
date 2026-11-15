@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1806",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1806",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Default user accounts or credentials for user applications, including for any pre-configured user accounts, are changed, disabled or removed during initial setup."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

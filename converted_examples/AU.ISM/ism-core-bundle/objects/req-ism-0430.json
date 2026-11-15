@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0430",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0430",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Access to systems and their resources are removed or suspended the same day personnel no longer have a legitimate requirement for access."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

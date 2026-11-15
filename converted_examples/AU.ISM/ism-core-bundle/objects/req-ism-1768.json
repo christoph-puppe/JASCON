@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1768",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1768",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When using SHA-2 for hashing, an output size of at least 384 bits is used, preferably SHA-384 or SHA-512."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

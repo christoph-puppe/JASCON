@@ -26,15 +26,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pe-9_obj",
      "label": "PE-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pe-9_obj-1",
        "label": "PE-09[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "power equipment for the system is protected from damage and destruction;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pe-9_obj-2",
        "label": "PE-09[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "power cabling for the system is protected from damage and destruction."
        }

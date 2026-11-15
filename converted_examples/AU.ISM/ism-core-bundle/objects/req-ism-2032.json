@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2032",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2032",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The build solution ensures that all automated testing is completed without warnings, alerts or errors before building software artefacts."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

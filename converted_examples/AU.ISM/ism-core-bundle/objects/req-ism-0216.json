@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0216",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0216",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "TOP SECRET patch panels are installed in individual TOP SECRET cabinets."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

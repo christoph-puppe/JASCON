@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.BE-05",
+ "version": "2.0",
+ "label": "ID.BE-05",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.BE-05"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Resilience requirements to support delivery of critical services are established for all operating states (e.g. under duress/attack, during recovery, normal operations)"
+   }
+  }
+ ]
+}

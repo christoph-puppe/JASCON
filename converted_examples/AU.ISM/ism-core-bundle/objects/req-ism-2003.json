@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2003",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2003",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The board of directors or executive committee maintains awareness of key cyber security recruitment activities, retention rates for cyber security personnel, and cyber security skills and experience gaps within their organisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

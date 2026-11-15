@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0372",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0372",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The destruction of media storing accountable material is performed under the supervision of at least two cleared personnel."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

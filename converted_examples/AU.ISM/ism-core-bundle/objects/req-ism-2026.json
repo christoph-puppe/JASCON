@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2026",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2026",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "All software artefacts are scanned for malicious content before being imported into the authoritative source for software."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

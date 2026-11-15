@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1424",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1424",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Content-Security-Policy, Hypertext Transfer Protocol Strict Transport Security and X-Frame-Options are specified by web server software via security policy in response headers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1525",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1525",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners register each system with its authorising officer."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-01"
   }
  ]
 }

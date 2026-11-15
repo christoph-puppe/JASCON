@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1320",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1320",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "MAC address filtering is not used to restrict which devices can connect to wireless networks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

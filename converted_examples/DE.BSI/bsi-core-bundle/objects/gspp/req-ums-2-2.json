@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/UMS.2.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "UMS.2.2",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Umsetzung MUSS eine Priorisierung der festgelegten Maßnahmen auf Basis der der Risikobewertung, Abhängigkeiten und Ressourcenverfügbarkeit festlegen."
+    "de": "Umsetzung MUSS eine Priorisierung der festgelegten Maßnahmen auf Basis der Risikobewertung, Abhängigkeiten und Ressourcenverfügbarkeit festlegen."
    }
   }
  ],
@@ -24,7 +24,7 @@
     "smt": {
      "action": "festlegen",
      "result": "eine Priorisierung der festgelegten Maßnahmen",
-     "result-specification": "auf Basis der der Risikobewertung, Abhängigkeiten und Ressourcenverfügbarkeit"
+     "result-specification": "auf Basis der Risikobewertung, Abhängigkeiten und Ressourcenverfügbarkeit"
     }
    }
   },

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1083",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1083",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel are advised of the sensitivity or classification permitted for voice and data communications when using mobile devices."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0374",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0374",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Media disposal processes, and supporting media disposal procedures, are developed, implemented and maintained."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

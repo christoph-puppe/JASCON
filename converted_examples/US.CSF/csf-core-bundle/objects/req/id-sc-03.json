@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.SC-03",
+ "version": "2.0",
+ "label": "ID.SC-03",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.SC-03"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Contracts with suppliers and third-party partners are used to implement appropriate measures designed to meet the objectives of an organization’s cybersecurity program and Cyber Supply Chain Risk Management Plan."
+   }
+  }
+ ]
+}

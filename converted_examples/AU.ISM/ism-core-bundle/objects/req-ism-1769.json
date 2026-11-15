@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1769",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1769",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When using AES for encryption, AES-128, AES-192 or AES-256 is used, preferably AES-256."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

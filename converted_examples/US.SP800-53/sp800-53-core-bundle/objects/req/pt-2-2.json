@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pt-2.2_obj",
      "label": "PT-02(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "enforcement of the authorized processing of personally identifiable information is managed using {param:pt-02.02_odp}."
      }
@@ -95,7 +100,8 @@
      ],
      "alt-identifiers": [
       "pt-2.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PT-02(02)_ODP"
     }
    }
   },

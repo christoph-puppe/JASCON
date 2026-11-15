@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0120",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0120",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cyber security personnel have access to sufficient tools to facilitate the detection of cyber security events and the identification of cyber security incidents."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

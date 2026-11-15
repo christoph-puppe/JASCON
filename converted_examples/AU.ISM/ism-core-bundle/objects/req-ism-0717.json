@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0717",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-0717",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CISO oversees the management of cyber security personnel within their organisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-10"
   }
  ]
 }

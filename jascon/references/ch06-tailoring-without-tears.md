@@ -35,7 +35,7 @@ ordered list of operations to apply to the survivors.*
 
 ```json
 { "id": "https://ns.fedramp.gov/cr26/tailoring/class-a",
-  "version": "2026.07.14.01",
+  "version": "2026.11.02.01",
   "selects":  [ {"set-ref": "https://ns.fedramp.gov/cr26/set/all-20x"} ],
   "excludes": [ ],
   "operations": [ … ] }
@@ -90,6 +90,12 @@ Every operation shares the address shape:
   "parameter": "iir-deadline",
   "value": {"type": "elapsed-duration", "num": 6, "unit": "hours"} }
 ```
+
+Three of the eight change something a statement owns: `set-modality`,
+`set-parameter` and `replace-prose`. They carry the `statement-id`, and
+a `set-parameter` names a parameter that statement declares; a
+validator refuses the operation otherwise (OPERATION-1, Chapter 12).
+The other five address the requirement as a whole and carry none.
 
 Pin the target's exact version when you can (the specification says
 SHOULD); pinned or not, a vanished address fails closed. And if you find
@@ -167,17 +173,48 @@ publishes four class variants of its own rules, that is not FedRAMP
 deviating from FedRAMP; the published Tailoring *is* the norm, its
 audit record is the publication itself — versioned, signed, lifecycled
 like every authored object. The converter corpse that forced the
-question: 29 variant-only CR26 rules whose base prose had to be
+question: 28 variant-only CR26 rules (publication 2026.11.02.01 of
+2026-11-02) whose base prose had to be
 *synthesized* so a pseudo-Deviation had something to point at —
 ceremony without a wronged party. The weakening classification still
 computes, so any consumer can ask "which classes ease the base?"
-(CR26's measured answer across 111 class-variant modality moves:
+(CR26's measured answer across 107 class-variant modality moves:
 zero); what disappears is only the obligation to mint a record where
 nothing was departed from. And "whose Tailoring is it" is derived, not
 declared (the layered anchor, v0.6 cycle): id origin matching the
 selected content's origin claims authority; the authority's own
 Attestation over the Tailoring proves it — proof beats prefix; mixed
 or predicate selection is consumer work by definition.
+
+**Who decided it.** *(2.0.0-rc.4, specification D26.)* A weakening has
+always named its approver, through its Deviation. A strengthening, a
+selection and an exclusion named nobody: the comparison with the
+neighbouring formats found that, and an application that logs every
+change was ahead. A Tailoring can now say who wrote it and when, in
+`provenance: {author-ref, date}`, and each select, exclude and operation
+can say the same for itself. An entry that says nothing has its
+Tailoring's author, so a Tailoring by one person names that person once
+and a second decider is named where they decided:
+
+```json
+{ "id": "https://cso.example/tailoring/linux-prod", "version": "2026-11", "lifecycle": "active",
+  "provenance": { "author-ref": "https://cso.example/party/ciso", "date": "2026-11-02" },
+  "selects": [ { "set-ref": "https://cso.example/set/linux-baseline" } ],
+  "operations": [ { "op": "set-parameter", "requirement-ref": "https://cso.example/req/LNX-SSH-1",
+                    "statement-id": "s1", "parameter": "max-auth-tries", "value": 4,
+                    "provenance": { "author-ref": "https://cso.example/party/platform-ops", "date": "2026-11-02" } } ] }
+```
+
+The field is optional, and a validator reports a consumer's Tailoring
+that leaves an entry without an author (AUTHOR-1); `--require-authors`
+makes the report a failure. An authority's Tailoring is not asked: its
+origin and its Attestation say whose it is.
+
+> **Don't** take the author for a signature. `provenance` is a claim
+> inside the object. The semantic digest covers it, so whoever attests
+> the Tailoring attests the claim, and that signature is the proof.
+> And don't take it for a log: a change is a new version, and who made
+> the change is that version's `provenance`.
 
 ## 6.4 Resolution you can memorize
 

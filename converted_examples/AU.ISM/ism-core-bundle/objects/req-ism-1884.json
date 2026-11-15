@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1884",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1884",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Emanation security doctrine produced by ASD for the management of emanation security matters is complied with."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

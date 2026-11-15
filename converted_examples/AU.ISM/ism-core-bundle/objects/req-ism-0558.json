@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0558",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0558",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "IP phones used in public areas do not have the ability to access data networks, voicemail and directory services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

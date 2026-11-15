@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0870",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0870",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Mobile devices are carried or stored in a secured state when not being actively used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-04"
   }
  ]
 }

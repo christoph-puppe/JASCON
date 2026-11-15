@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0682",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0682",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Bluetooth functionality is not enabled on SECRET and TOP SECRET mobile devices."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

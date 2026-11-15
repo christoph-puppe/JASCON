@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pe-3.3_obj",
      "label": "PE-03(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "guards are employed to control {param:pe-03.03_odp} to the facility where the system resides 24 hours per day, 7 days per week."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "pe-3.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-03(03)_ODP"
     }
    }
   }

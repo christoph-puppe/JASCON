@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1591",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1591",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Access to systems and their resources are removed or suspended as soon as practicable when personnel are detected undertaking malicious activities."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

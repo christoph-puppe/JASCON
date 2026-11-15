@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1597",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1597",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Credentials are obscured as they are entered into systems."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-08"
   }
  ]
 }

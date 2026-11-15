@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1102",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1102",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cable reticulation systems leading into cabinets are terminated as close as possible to the cabinet."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

@@ -65,16 +65,5 @@
    "ref": "https://ns.nist.gov/csf/req/RS.MI-03",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/RS.MI-03",
-    "mode": "merged-into",
-    "label": "RS.MI-03",
-    "title": "RS.MI-03",
-    "prose": "Newly identified vulnerabilities are mitigated or documented as accepted risks"
-   }
-  ]
- }
+ ]
 }

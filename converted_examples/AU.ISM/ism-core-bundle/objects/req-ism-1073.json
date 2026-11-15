@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1073",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-1073",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "An organisation’s systems are not accessed or administered by a service provider unless a contractual arrangement exists between the organisation and the service provider to do so."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

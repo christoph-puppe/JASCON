@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AT-5",
+ "version": "5.2.0",
+ "label": "AT-5",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Contacts with Security Groups and Associations"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into PM-15."
+   }
+  }
+ ]
+}

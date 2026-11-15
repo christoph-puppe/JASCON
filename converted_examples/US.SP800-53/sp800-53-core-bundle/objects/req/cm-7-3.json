@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cm-7.3_obj",
      "label": "CM-07(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:cm-07.03_odp} are complied with."
      }
@@ -117,7 +122,8 @@
      "alt-identifiers": [
       "cm-7.3_prm_1"
      ],
-     "alt-label": "registration requirements for functions, ports, protocols, and services"
+     "alt-label": "registration requirements for functions, ports, protocols, and services",
+     "sp800-53a-label": "CM-07(03)_ODP"
     }
    }
   }

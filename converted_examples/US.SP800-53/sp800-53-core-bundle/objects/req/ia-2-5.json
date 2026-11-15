@@ -27,11 +27,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-2.5_obj",
      "label": "IA-02(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "users are required to be individually authenticated before granting access to the shared accounts or resources when shared accounts or authenticators are employed."
      }

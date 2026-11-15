@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/RS.AN-05",
+ "version": "2.0",
+ "label": "RS.AN-05",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "RS.AN-05"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Processes are established to receive, analyze and respond to vulnerabilities disclosed to the organization from internal and external sources (e.g. internal testing, security bulletins, or security researchers)"
+   }
+  }
+ ]
+}

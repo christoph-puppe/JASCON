@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0409",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0409",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Foreign nationals, including seconded foreign nationals, do not have access to systems that process, store or communicate AUSTEO or REL data unless effective controls are in place to ensure such data is not accessible to them."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-06"
   }
  ]
 }

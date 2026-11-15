@@ -1,0 +1,39 @@
+{
+ "id": "https://ns.nist.gov/csf/set/category/pr-ac",
+ "version": "2.0",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Identity Management, Authentication and Access Control"
+ },
+ "label": "Identity Management, Authentication and Access Control (PR.AC)",
+ "members": [
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.AC-01",
+   "sequence": 10
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.AC-02",
+   "sequence": 20
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.AC-03",
+   "sequence": 30
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.AC-04",
+   "sequence": 40
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.AC-05",
+   "sequence": 50
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.AC-06",
+   "sequence": 60
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/req/PR.AC-07",
+   "sequence": 70
+  }
+ ]
+}

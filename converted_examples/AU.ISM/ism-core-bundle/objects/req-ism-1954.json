@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1954",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1954",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Credentials for built-in Administrator accounts, break glass accounts, local administrator accounts and service accounts are randomly generated."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

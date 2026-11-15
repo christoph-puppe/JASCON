@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0317",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0317",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "At least three pages of random text with no blank areas are printed on each colour printer cartridge or MFD print drum."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

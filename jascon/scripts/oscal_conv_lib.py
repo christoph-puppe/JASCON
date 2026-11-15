@@ -25,6 +25,34 @@ def robust_rmtree(path, attempts=5):
             if i == attempts - 1: raise
             time.sleep(0.5 * (i + 1))
 
+def known_arguments(argv, takes_value):
+    """Holds a converter's command line to the arguments it knows. Every
+    token must be one of `takes_value`, followed by its value; anything else
+    stops the run. Without this a misspelled `--obligated-party` is an
+    argument nobody reads: the run writes the default and says nothing. What
+    a value must be is checked by the function that reads it."""
+    i = 0
+    while i < len(argv):
+        a = argv[i]
+        if a not in takes_value:
+            raise SystemExit(f"unknown argument {a!r}; this converter takes " + ", ".join(sorted(takes_value)))
+        if i + 1 >= len(argv) or argv[i + 1] in takes_value:
+            raise SystemExit(f"{a} needs a value")
+        i += 2
+
+def out_dir(argv, default):
+    """Where a converter writes its bundle and its two coverage reports:
+    `--out DIR` among its arguments -> the absolute DIR, else `default`, the
+    corpus folder in the repository. A run that is not meant to change the
+    committed conversion - one with `--obligated-party`, or one on a source
+    whose bundle is not redistributed - belongs in a DIR of its own. The
+    argument given twice, or without a value, stops the run."""
+    given = [i for i, a in enumerate(argv) if a == "--out"]
+    if not given: return default
+    if len(given) > 1: raise SystemExit("--out is given more than once")
+    if given[0] + 1 >= len(argv) or not argv[given[0] + 1]: raise SystemExit("--out needs a directory")
+    return os.path.abspath(argv[given[0] + 1])
+
 def make_T(lang, counter=None):
     """Language-tag payload free text (backlog #12). Never for labels/ids."""
     def T(v, field=None):
@@ -55,6 +83,84 @@ def textify(obj, lang):
         if isinstance(op.get("deviation"), dict): wrap(op["deviation"], "rationale")
     return n
 
+# The compat facet: what a source holds and neither the kernel nor a standard
+# facet has a member for. Until 2026-11-14 five converters each pinned
+# `https://ns.jascon.net/compat/oscal-1x` 1.0.0 with a schema of their own;
+# one id and version is one schema (author, 2026-11-14), so it is written
+# here once, with every member any of them uses. The order of the members
+# is part of the pinned file.
+#
+# 1.2.0 (2026-11-14, after the author's decisions on backlog #80 to #84 and
+# #91): `back-matter` and `history` are gone, because the resources a text
+# refers to stand in the standard facet `references@1` and the record of an
+# object's changes in the kernel's `history`; the items of `props` and of
+# `group-parts` are typed and closed, as the ISM's own schema had them
+# until the schemas were made one (#91). `uuid` stays for an element of
+# the source that became an object; the uuid of a source document stands in
+# the manifest's `provenance.sources[]`.
+COMPAT_ID = "https://ns.jascon.net/compat/oscal-1x"
+COMPAT = COMPAT_ID + "@1"
+COMPAT_VERSION = "1.2.0"
+COMPAT_FILE = "oscal-1x-compat-1.2.0.json"
+COMPAT_NOTE = ("NORMATIVE pinned payload schema (backlog #26), one for every converter of this repository since "
+               "2026-11-14: closed shape - unknown keys are rejected, never smuggled")
+COMPAT_PROPERTIES = {
+    "metadata": {"type": "object"},        # the source document's metadata, in the source's shape
+    "uuid": {"type": "string"},            # the uuid the source gives the element this object is made from
+    "catalog": {"type": "object"},
+    "imports": {"type": "array"},          # a profile's imports, as the source writes them
+    "merge": {"type": "object"},           # a profile's merge directive
+    "class": {"type": "string"},
+    "group-parts": {"type": "array", "items": {"type": "object", "additionalProperties": False, "properties": {
+        "group": {"type": "string"}, "name": {"type": "string"},
+        "prose": {"type": "object", "additionalProperties": {"type": "string"}}}}},
+    "param-extras": {"type": "object"},
+    "props": {"type": "array", "items": {"type": "object", "additionalProperties": False, "required": ["name", "value"],
+              "properties": {"name": {"type": "string"}, "uuid": {"type": "string"}, "ns": {"type": "string"},
+                             "value": {"type": "string"}, "class": {"type": "string"}, "group": {"type": "string"},
+                             "remarks": {"type": "string"}}}},
+    "parts": {"type": "array"},
+    "links": {"type": "array"},
+    "control": {"type": "object"},
+    "group": {"type": "object"},
+    "nested-in": {"type": "string"},
+    "unmapped": {"type": "object"},
+    "flows": {"type": "array"},            # process flows written out in the source (CR26)
+    "class-variants": {"type": "object"},  # CR26
+    "ctl": {"type": "object"},             # CR26
+}
+
+def compat_schema():
+    """The pinned file of the compat facet, the same in every bundle: write it to `schemas/` + COMPAT_FILE."""
+    return {"id": COMPAT_ID, "version": COMPAT_VERSION, "modifies-semantics": [], "note": COMPAT_NOTE,
+            "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema", "type": "object",
+                       "properties": copy.deepcopy(COMPAT_PROPERTIES), "additionalProperties": False}}
+
+# The standard facets a converter of this repository writes besides the
+# compat facet (the author's decisions of 2026-11-14 on backlog #82 and #83).
+# A bundle pins the descriptor verbatim: Bundle.pin_stdlib(<file>).
+REFERENCES = "https://ns.jascon.net/stdlib/facet/references@1"
+REFERENCES_FILE = "references-1.0.0.json"
+ASSESSMENT_CRITERIA = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1"
+ASSESSMENT_CRITERIA_FILE = "assessment-criteria-1.1.0.json"
+
+def resource_entry(resource):
+    """A back-matter resource of an OSCAL document as `references@1` carries
+    it: as the source writes it, with its uuid under the member the facet
+    names, `id` - which is what a text of the bundle refers to (`#id`)."""
+    return {"id": resource["uuid"], **{k: v for k, v in resource.items() if k != "uuid"}}
+
+def referred_to(doc, element, reference="#{}"):
+    """Does a string of `doc` outside `element` (a dict of it that has a `uuid`) hold a reference to the element?
+    The converter's side of Ledger.orphan(): what is referred to is carried, what is not is declared an orphan."""
+    needle = reference.format(element["uuid"])
+    def walk(n):
+        if n is element: return False
+        if isinstance(n, dict): return any(walk(v) for v in n.values())
+        if isinstance(n, list): return any(walk(v) for v in n)
+        return isinstance(n, str) and needle in n
+    return walk(doc)
+
 def slug(s):
     s = re.sub(r"[^a-z0-9]+", "-", (s or "").lower()).strip("-")
     if len(s) <= 60:
@@ -77,6 +183,42 @@ def semantic_digest(obj):
     c = json.dumps(_canon(o), separators=(",", ":"), ensure_ascii=False).encode("utf-8")
     return "sha256:" + hashlib.sha256(c).hexdigest()
 
+def needs_kernel_2(objects):
+    """True when one of the objects carries what the 1.0.0 kernel cannot
+    type, so that the manifest must pin `kernel-version` 2.0.0 (KERNEL-1).
+    The rule is `kernel_needed` of validate_core.py; this is its copy for a
+    writer that has no schema at hand, so it tells the types apart by the
+    fields only they carry. test_oscal_conv_lib.py holds it to the pin
+    vectors of the conformance corpus.
+
+    Until 2026-11-13 this test knew a Risk and `risk-refs` and nothing else:
+    a converter that had written a Check, a `product-version` or a
+    `provenance` on an Implementation would have shipped a bundle the
+    validator refuses."""
+    def deviations(o):
+        out = [d for d in o.get("deviations") or [] if isinstance(d, dict)]
+        if "selects" in o:                                   # a Tailoring carries them inline on an operation too
+            out += [op["deviation"] for op in o.get("operations") or []
+                    if isinstance(op, dict) and isinstance(op.get("deviation"), dict)]
+        return out
+    for o in objects:
+        if "history" in o: return True                                            # the record of an object's changes (2026-11-14, #81)
+        if any(isinstance(s, dict) and "label" in s for s in o.get("statements") or []): return True   # a statement's label (#84)
+        if "scenario" in o and "owner-ref" in o: return True                      # a Risk
+        if o.get("risk-refs") or o.get("check-ref"): return True                  # a Finding that names one, or a Check
+        if "criteria" in o and "observes" in o: return True                       # a Check
+        if "performer-ref" in o and (o.get("check-results") or o.get("tailoring-ref")): return True
+        if "kind" in o:                                                           # a Component
+            if "product-version" in o: return True
+            if any(c.get("statement-ids") for c in o.get("capabilities") or [] if isinstance(c, dict)): return True
+            if any("date" in a for a in o.get("authorizations") or [] if isinstance(a, dict)): return True
+        # `provenance` is 1.0.0 on a Mapping (which has a relationship) and came with the Check
+        if "provenance" in o and "relationship" not in o: return True
+        if "selects" in o and any("provenance" in e for k in ("selects", "excludes", "operations")
+                                  for e in o.get(k) or [] if isinstance(e, dict)): return True
+        if any("decided" in d or "review-due" in d for d in deviations(o)): return True
+    return False
+
 class Bundle:
     def __init__(self, out_dir, lang="en"):
         self.out = out_dir
@@ -84,16 +226,28 @@ class Bundle:
         self.objects = {}          # relpath -> obj
         self.schemas = {}          # relpath -> pinned schema obj
     def add(self, relpath, obj):
+        # MANIFEST-1 (backlog #75): what is added here is listed in the manifest,
+        # and no manifest lists an Attestation (D3.1). An Attestation binds the
+        # digest of the manifest's bytes, so it is written after the manifest
+        # and beside it, as convert_ifa.py does. The IFA bundle listed its own
+        # until 2026-11-13, and no validator said so.
+        if isinstance(obj, dict) and "subject-semantic-digests" in obj and "content-manifest-digest" in obj:
+            raise SystemExit(f"{relpath}: an Attestation is not an object of a bundle's manifest (MANIFEST-1, D3.1); "
+                             f"write it beside the manifest, after the manifest is written")
         self.objects[relpath] = obj
     def stub(self, name, fid, mods, props,
-             note="NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled"):
+             note="NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
+             version="1.0.0"):
         # #26 delivered: pins are the normative payload contract, fail-closed.
         # (method name kept for call-site stability; these are no longer stubs)
         self.schemas[f"schemas/{name}"] = {
-            "id": fid, "version": "1.0.0", "modifies-semantics": mods, "note": note,
+            "id": fid, "version": version, "modifies-semantics": mods, "note": note,
             "schema": {"$schema": "https://json-schema.org/draft/2020-12/schema",
                        "type": "object", "properties": props,
                        "additionalProperties": False}}
+    def pin_compat(self):
+        """Pins the one compat schema (compat_schema() below)."""
+        self.schemas[f"schemas/{COMPAT_FILE}"] = compat_schema()
     def pin_stdlib(self, filename):
         """#26: stdlib facets are pinned VERBATIM from the normative
         descriptor - the pin and the descriptor cannot diverge."""
@@ -132,7 +286,7 @@ class Bundle:
         # backlog #44: content beyond the 1.0.0 kernel names its kernel
         # (KERNEL-1). Bundles without it stay unpinned - byte-identical to
         # their 1.0.0 conversion and readable by a 1.0.0 tool.
-        if any(("scenario" in o and "owner-ref" in o) or o.get("risk-refs") for o in self.objects.values()):
+        if needs_kernel_2(self.objects.values()):
             manifest["kernel-version"] = "2.0.0"
         manifest.update({"provenance": provenance,
                     "objects": [{"id": o["id"], "version": o["version"],
@@ -316,21 +470,69 @@ class _TInt(_Tracked, int):
         self._origins, self._rule, self._fn, self._inputs = tuple(origins), rule, fn, tuple(inputs)
         return self
 
-def _track(value, origins, rule=None, fn=None, inputs=()):
-    if isinstance(value, bool) or value is None: return value      # cannot carry an origin
+class _TFloat(_Tracked, float):
+    def __new__(cls, value, origins=(), rule=None, fn=None, inputs=()):
+        self = float.__new__(cls, value)
+        self._origins, self._rule, self._fn, self._inputs = tuple(origins), rule, fn, tuple(inputs)
+        return self
+
+class _TBool(_Tracked):
+    """A boolean that knows where it came from. `bool` cannot be subclassed,
+    and json writes `true` and `false` for the two singletons only, so this
+    stands in the objects a converter builds until Ledger.resolve() puts the
+    plain boolean in its place and remembers where it stood. It is true or
+    false as its value is, equal to the plain boolean, and json cannot write
+    it: a converter that forgets resolve() stops instead of writing a wrong
+    file."""
+    __slots__ = ("_value", "_origins", "_rule", "_fn", "_inputs")
+    def __init__(self, value, origins=(), rule=None, fn=None, inputs=()):
+        self._value = bool(value)
+        self._origins, self._rule, self._fn, self._inputs = tuple(origins), rule, fn, tuple(inputs)
+    def __bool__(self): return self._value
+    def __eq__(self, other): return self._value == (other._value if isinstance(other, _TBool) else other)
+    def __ne__(self, other): return not self.__eq__(other)
+    def __hash__(self): return hash(self._value)
+    def __repr__(self): return repr(self._value)
+
+def _track(value, origins, rule=None, fn=None, inputs=(), typed=True):
+    """`typed`: also a boolean and a fraction carry their origin (a _TBool
+    needs Ledger.resolve() before the objects are written)."""
+    if value is None: return value                                  # states nothing
+    if isinstance(value, bool): return _TBool(value, origins, rule, fn, inputs) if typed else value
     if isinstance(value, str): return _TStr(value, origins, rule, fn, inputs)
     if isinstance(value, int): return _TInt(value, origins, rule, fn, inputs)
+    if isinstance(value, float): return _TFloat(value, origins, rule, fn, inputs) if typed else value
     return value
 
 def _plain(v):
     """A tracked value as the plain scalar it is (for typed comparison)."""
     if isinstance(v, _TStr): return str.__str__(v)
+    if isinstance(v, _TBool): return v._value
     if isinstance(v, _TInt): return int(v)
+    if isinstance(v, _TFloat): return float(v)
     return v
 
 def _at(doc, parts):
     for x in parts: doc = doc[x]
     return doc
+
+# What becomes of a source leaf value. `not-content` (2026-11-14): what may
+# stay out of a bundle by a rule that account() checked - a name that only
+# selects a field, a namespace, an id that is rebuilt exactly, and (the
+# author's fourth class of the same day) an element nothing refers to.
+LEDGER_OUTCOMES = ("copied", "transformed", "not-content", "intentionally-dropped", "unaccounted")
+
+def ledger_gate(result, converter):
+    """Ends a converter's run with 1 when its ledger has a claim that does not
+    hold or a source value that is unaccounted (author, 2026-11-14: "a
+    converter run with an unaccounted value exits non-zero"). Call it last,
+    after the bundle, the reports and the record are written: the run fails,
+    and what it wrote says why."""
+    bad = len(result["verification-failures"]), result["totals"]["unaccounted"]
+    if any(bad):
+        raise SystemExit(f"{converter}: the conversion ledger has {bad[0]} claim(s) that do not hold and {bad[1]} source "
+                         f"value(s) unaccounted - content is never dropped, and what is no content is so by a rule "
+                         f"the ledger checks (see the record and the report this run wrote)")
 
 class Ledger:
     def __init__(self):
@@ -339,27 +541,55 @@ class Ledger:
         self._drops = []        # (compiled regex over the collapsed path, reason)
         self._value_drops = {}  # (tag, parts) -> reason, for a single source leaf
         self._same = []         # (dropped tracked value, kept tracked value, rule)
+        self._placed = []       # (tracked boolean, destination) noted by resolve()
+        self._not_content = {}  # (tag, parts) -> (kind, rule, check, origins it depends on)
+        self._refs = {}         # (tag, uuid, prefix) -> is the element referred to from outside itself
 
-    def source(self, tag, doc):
-        """-> a copy of `doc` whose string and integer leaves carry their origin."""
+    def source(self, tag, doc, typed=False):
+        """-> a copy of `doc` whose string and integer leaves carry their origin.
+        `typed=True`: its booleans and fractions carry theirs too. A converter
+        that asks for it calls resolve() on its objects before it writes them;
+        without it a boolean and a fraction stay plain, as they were until
+        2026-11-14, and a value the converter carries reads as unaccounted."""
         assert tag not in self.docs, f"source tag {tag} used twice"
         self.docs[tag] = doc
         def walk(n, parts):
             if isinstance(n, dict): return {k: walk(v, parts + (k,)) for k, v in n.items()}
             if isinstance(n, list): return [walk(v, parts + (i,)) for i, v in enumerate(n)]
             self.leaves.append((tag, parts))
-            return _track(n, [(tag, parts)])
+            return _track(n, [(tag, parts)], typed=typed)
         return walk(doc, ())
+
+    def resolve(self, objects):
+        """objects: {relpath: object}, as account() takes them, BEFORE they are
+        written and before a digest is taken of them. Puts the plain boolean in
+        the place of every tracked one and remembers where it stood, so that
+        account() can hold the claim against the file. A tracked boolean that
+        is left in an object makes json refuse to write it."""
+        def note(v, rel, oid, parts):
+            self._placed.append((v, {"object": oid, "file": rel, "pointer": _pointer(parts), "as": "value"}))
+            return v._value
+        def walk(n, rel, oid, parts):
+            if isinstance(n, dict):
+                for k in list(n):
+                    if isinstance(n[k], _TBool): n[k] = note(n[k], rel, oid, parts + [k])
+                    else: walk(n[k], rel, oid, parts + [k])
+            elif isinstance(n, list):
+                for i, v in enumerate(n):
+                    if isinstance(v, _TBool): n[i] = note(v, rel, oid, parts + [i])
+                    else: walk(v, rel, oid, parts + [i])
+        for rel, obj in sorted(objects.items()):
+            walk(obj, rel, (obj.get("id") if isinstance(obj, dict) else None) or rel, [])
 
     def derive(self, rule, fn, *inputs):
         """-> fn(*inputs), carrying the origins of every tracked input. The
         function is kept: account() calls it again on the source's own values."""
         value = fn(*inputs)
-        if isinstance(value, bool) or not isinstance(value, (str, int)):
-            raise TypeError(f"rule {rule}: a derived value must be a string or an integer to carry its origin, "
-                            f"got {type(value).__name__}")
+        if not isinstance(value, (str, int, float, _TBool)):        # bool is an int
+            raise TypeError(f"rule {rule}: a derived value must be a string, a number or a boolean to carry its "
+                            f"origin, got {type(value).__name__}")
         origins = [o for x in inputs if isinstance(x, _Tracked) for o in x._origins]
-        return _track(_plain(value), origins, rule, fn, inputs)
+        return _track(_plain(value), origins, rule, fn, inputs)       # a boolean result needs resolve() before the write
 
     def drop(self, pattern, reason):
         """Declare that source leaves whose collapsed path matches `pattern`
@@ -378,6 +608,105 @@ class Ledger:
             for v in value: self.drop_value(v, reason)
         elif isinstance(value, _Tracked) and value._rule is None:
             for origin in value._origins: self._value_drops.setdefault(origin, reason)
+
+    # ---- what is no content (author, 2026-11-14) -------------------------
+    # "Real content is never dropped. What may stay out of a bundle is only
+    # what is not content: a name that merely selects a field, a namespace,
+    # an id that is rebuilt exactly from another value. Each such class
+    # needs a stated rule that the ledger checks." The three methods below
+    # are those three classes. Each claim is checked by account(): against
+    # the source's own values, and against what became of the values the
+    # claim rests on. A name that selects a value which is not in the bundle
+    # selects nothing, and an id rebuilt from a value the bundle does not
+    # hold cannot be rebuilt from the bundle; such a leaf is not "no
+    # content", it is unaccounted (or dropped, where what it rests on is a
+    # declared drop). A leaf that has a destination is carried, whatever is
+    # declared for it here.
+    @staticmethod
+    def _leaf_origins(x):
+        out = []
+        def walk(n):
+            if isinstance(n, dict):
+                for k, v in n.items(): walk(k); walk(v)
+            elif isinstance(n, (list, tuple)):
+                for v in n: walk(v)
+            elif isinstance(n, _Tracked): out.extend(n._origins)
+        walk(x)
+        return out
+
+    def _declare(self, value, kind, rule, check, rests_on, needs=True):
+        if not isinstance(value, _Tracked) or value._rule is not None or len(value._origins) != 1:
+            raise TypeError(f"{kind} ({rule}): the value must be one leaf of a source, as source() gave it")
+        me = value._origins[0]
+        rests = tuple(o for o in rests_on if o != me)                # a prop handed over whole holds its own name
+        if needs and not rests: raise ValueError(f"{kind} ({rule}): it stands beside no other source value")
+        self._not_content.setdefault(me, (kind, rule, check, rests))
+
+    def selector(self, name, rule, selects, among=None):
+        """`name` (the name of a prop or of a part, a class) is no content: it
+        only says which field the value beside it belongs in. `selects`: that
+        value, or the structure of values it selects; there must be one.
+        `among`: the names this converter's mapping knows, if the claim is to
+        be held to them. It shares the fate of what it selects: unaccounted
+        while one of those values is, dropped when all of them are dropped,
+        and no content otherwise."""
+        check = (lambda v: v in among) if among is not None else (lambda v: True)
+        self._declare(name, "selector", rule, check, self._leaf_origins(selects))
+
+    def namespace(self, ns, rule, allowed, of):
+        """`ns` is the namespace that qualifies the name `of` (or a structure
+        of names): no content when its value is one of `allowed` - the
+        namespaces this converter's mapping is written for - and what it
+        qualifies is accounted for (as for a selector). Another namespace is
+        another meaning of the name, and is not covered: the claim is
+        reported as one that does not hold."""
+        allowed = frozenset(allowed)
+        self._declare(ns, "namespace", rule, lambda v: v in allowed, self._leaf_origins(of))
+
+    def rebuilt(self, value, rule, fn, *inputs):
+        """`value` is an id (or a label made from one) that fn(*inputs) gives
+        exactly: no content, because nothing is lost without it. Checked: the
+        function, applied to the source's own values, gives the source value;
+        and every source value among the inputs is accounted for, so that the
+        bundle still holds what the id is rebuilt from (one input that is
+        dropped, and the id is dropped with it). A value that the function
+        does not give is not covered, and the claim is reported as one that
+        does not hold. The inputs are single values, a source's or plain."""
+        self._declare(value, "rebuilt-id", rule, (fn, tuple(inputs)), self._leaf_origins(inputs), needs=False)
+
+    def orphan(self, uuid, rule, reference="#{}"):
+        """The element that holds `uuid` (a back-matter resource) is orphaned:
+        nothing else in its document refers to it, so nobody can reach it
+        and it is not carried (author, 2026-11-14: "orphaned elemente
+        braucht niemand"). `uuid`: the element's own uuid, as source() gave
+        it; every leaf of the element is covered. `reference`: how the
+        document refers to such an element, with {} for the uuid (OSCAL
+        writes a link to a back-matter resource as `#uuid`). Checked by
+        account(): no string of the same document outside the element
+        contains that reference. Where one does, the claim does not hold and
+        the leaves are unaccounted. A leaf that has a destination is carried
+        all the same."""
+        if not isinstance(uuid, _Tracked) or uuid._rule is not None or len(uuid._origins) != 1:
+            raise TypeError(f"orphan ({rule}): the uuid must be one leaf of a source, as source() gave it")
+        tag, parts = uuid._origins[0]
+        prefix, value = parts[:-1], reference.format(_plain(uuid))
+        if not prefix: raise ValueError(f"orphan ({rule}): the uuid of the document itself is no element of it")
+        check = lambda _v, tag=tag, prefix=prefix, value=value: not self._referred_to(tag, value, prefix)
+        for t, leaf in self.leaves:
+            if t == tag and leaf[:len(prefix)] == prefix:
+                self._not_content.setdefault((t, leaf), ("orphan", rule, check, ()))
+
+    def _referred_to(self, tag, value, prefix):
+        """Does a string of document `tag` outside the element at `prefix` contain `value`?"""
+        key = (tag, value, prefix)
+        if key not in self._refs:
+            def walk(n, parts):
+                if parts[:len(prefix)] == prefix and len(parts) >= len(prefix): return False
+                if isinstance(n, dict): return any(walk(v, parts + (k,)) for k, v in n.items())
+                if isinstance(n, list): return any(walk(v, parts + (i,)) for i, v in enumerate(n))
+                return isinstance(n, str) and value in n
+            self._refs[key] = walk(self.docs[tag], ())
+        return self._refs[key]
 
     def same(self, dropped, kept, rule):
         """Deduplication: `dropped` and `kept` are two structures the converter
@@ -418,6 +747,8 @@ class Ledger:
         for rel, obj in sorted(objects.items()):
             with open(os.path.join(out_dir, rel), encoding="utf-8") as f: written[rel] = json.load(f)
             walk(obj, rel, obj.get("id") or rel, [])       # the manifest has no id: it is named by its path
+        for value, dest in self._placed:                   # the booleans resolve() took out of the objects
+            if dest["file"] in written: found[id(value)].append((value, dest))
         # 2. per source leaf: the tracked values that stand for it, directly or through same()
         by_origin = collections.defaultdict(list)   # (tag, parts) -> [(tracked value, destination, via)]
         for hits in found.values():
@@ -450,38 +781,253 @@ class Ledger:
             if not isinstance(x, _Tracked): return x
             if x._rule is None: return _at(self.docs[x._origins[0][0]], x._origins[0][1])
             return x._fn(*[fresh(i) for i in x._inputs])
-        entries, totals = [], collections.Counter()
-        unaccounted = collections.defaultdict(list)
+        # 3a. every leaf with a destination that holds is carried
+        carried = {}                                # origin -> [destination]
         for tag, parts in self.leaves:
-            origin, path = (tag, parts), self.collapsed(tag, parts)
-            entry = {"source": f"{tag}#{_pointer(parts)}", "path": path}
-            dests, outcome = [], None
+            origin, dests = (tag, parts), []
             for value, dest, via in by_origin.get(origin, []):
                 d = {"object": dest["object"], "pointer": dest["pointer"]}
                 if dest["as"] == "key": d["as"] = "key"
                 if value._rule: d["rule"] = value._rule
                 if via: d["via"] = via
                 if not holds(value, origin, dest):
-                    failures.append({"source": entry["source"], **d}); continue
+                    failures.append({"source": f"{tag}#{_pointer(parts)}", **d}); continue
                 dests.append(d)
-            if dests:
+            if dests: carried[origin] = dests
+        # 3b. what became of a leaf: carried, no content by a rule that holds, dropped for a declared reason, or
+        #     unaccounted. A leaf declared no content rests on other leaves and shares their fate.
+        def declared_drop(origin):
+            reason = self._value_drops.get(origin)
+            if reason is None:
+                path = self.collapsed(*origin)
+                reason = next((why for rx, why in self._drops if rx.search(path)), None)
+            return reason
+        state = {}                                  # origin -> (outcome, detail)
+        def fate(origin, seen=()):
+            if origin in state: return state[origin]
+            if origin in carried: r = ("carried", None)
+            elif origin in self._not_content and origin not in seen:
+                kind, rule, check, rests = self._not_content[origin]
+                here = _at(self.docs[origin[0]], origin[1])
+                if isinstance(check, tuple): ok = _token(check[0](*[fresh(i) for i in check[1]])) == _token(here)
+                else: ok = bool(check(here))
+                if not ok:
+                    failures.append({"source": f"{origin[0]}#{_pointer(origin[1])}", "claim": kind, "rule": rule})
+                    r = ("unaccounted", None)
+                else:
+                    below = [fate(o, seen + (origin,)) for o in rests]
+                    gone = [b[1] for b in below if b[0] == "intentionally-dropped"]
+                    if any(b[0] == "unaccounted" for b in below): r = ("unaccounted", None)
+                    elif gone and (kind == "rebuilt-id" or len(gone) == len(below)):
+                        r = ("intentionally-dropped", f"{rule} - of a value that is dropped: {gone[0]}")
+                    else: r = ("not-content", {"kind": kind, "rule": rule})
+            else:
+                reason = declared_drop(origin)
+                r = ("intentionally-dropped", reason) if reason is not None else ("unaccounted", None)
+            state[origin] = r
+            return r
+        entries, totals = [], collections.Counter()
+        unaccounted = collections.defaultdict(list)
+        for tag, parts in self.leaves:
+            origin, path = (tag, parts), self.collapsed(tag, parts)
+            entry = {"source": f"{tag}#{_pointer(parts)}", "path": path}
+            outcome, detail = fate(origin)
+            if outcome == "carried":
+                dests = carried[origin]
                 outcome = "copied" if any("rule" not in d for d in dests) else "transformed"
                 entry["destinations"] = sorted(dests, key=lambda d: (d["object"] or "", d["pointer"]))
-            else:
-                reason = self._value_drops.get(origin)
-                if reason is None: reason = next((why for rx, why in self._drops if rx.search(path)), None)
-                if reason is not None:
-                    outcome, entry["reason"] = "intentionally-dropped", reason
-                else:
-                    outcome = "unaccounted"; unaccounted[path].append(entry["source"])
+            elif outcome == "not-content": entry.update(detail)
+            elif outcome == "intentionally-dropped": entry["reason"] = detail
+            else: unaccounted[path].append(entry["source"])
             entry["outcome"] = outcome; totals[outcome] += 1
             entries.append(entry)
         return {"measures": "one entry per source leaf value: where it went, checked against the written files",
                 "leaf-values": len(self.leaves),
-                "totals": {k: totals[k] for k in ("copied", "transformed", "intentionally-dropped", "unaccounted")},
+                "totals": {k: totals[k] for k in LEDGER_OUTCOMES},
                 "verification-failures": failures,
                 "unaccounted-paths": [{"path": p, "count": len(w), "pointers": w} for p, w in sorted(unaccounted.items())],
                 "entries": entries}
+
+# The kernel types an object by the members it requires of it (the `required`
+# of each type in jascon/schemas/jascon-2.0.0.schema.json); an object has no
+# member that names its type. Per type one member it requires, asked in this
+# order: a component may have `members`, which a Set must have, and is told
+# by its `kind` first. No other type knows the member of another.
+KERNEL_TYPE_BY_MEMBER = (("statements", "requirement"), ("selects", "tailoring"), ("source-ref", "mapping"),
+                         ("kind", "component"), ("members", "requirementSet"), ("satisfied-by", "implementation"),
+                         ("subject-refs", "assessment"), ("assessment-ref", "finding"),
+                         ("subject-semantic-digests", "attestation"), ("scenario", "risk"), ("observes", "check"))
+NO_KERNEL_TYPE = "no kernel type"
+
+def kernel_type(obj):
+    """-> what a file of a bundle is: the kernel's name of the type of an
+    object (`requirement`, `requirementSet`, ... as the kernel schema names
+    them), `manifest` for a content manifest, `facet-schema` for the
+    descriptor of a pinned schema, None for anything else."""
+    if not isinstance(obj, dict): return None
+    if "manifest-version" in obj: return "manifest"
+    if "schema" in obj and "modifies-semantics" in obj: return "facet-schema"
+    return next((t for member, t in KERNEL_TYPE_BY_MEMBER if member in obj), None)
+
+def ledger_by_path(result, objects, examples=3, collapse=()):
+    """The ledger of a large corpus in the size of its path map: one row per
+    source path and outcome, where Ledger.account() gives one entry per
+    source leaf value (backlog #41, phase E).
+
+    account() traces and checks every leaf; for the IFA corpus its 835
+    entries are the committed record. SP 800-53 has 115,680 leaf values, and
+    a record of one entry each would be some fifty megabytes. This keeps what
+    the entries say and drops what repeats: for every source path and
+    outcome the number of leaf values, the first of them as an example, and
+    where they went - the type of the object and the pointer into it, array
+    indices collapsed to `[]`, each with its count and, for a transformed
+    value, its rule - or why they were dropped. Nothing is estimated: every
+    row is a count over entries that account() checked against the written
+    files, and the counts add up to `leaf-values`.
+
+    `objects`: {relpath: object}, what account() was given. An entry names
+    the object a value went to. A row stands for the values of many objects
+    and cannot; it keeps the object's type (`object-type`, kernel_type()).
+    Until 2026-11-15 a destination was its pointer alone, and `/id` of a Set
+    and of a Requirement read alike in a record (backlog #91, point 5). A
+    file of no type the kernel knows reads `no kernel type`.
+
+    `unaccounted-paths` keeps the first `examples` pointers of each path and
+    the count; the per-leaf list is in the run that wrote it, not in the
+    record. `collapse`: (pattern, replacement) pairs applied to a destination
+    pointer before its array indices are collapsed, for a payload that is
+    keyed by a source value (a statement id, a parameter name) and would
+    otherwise give one row per key. -> a JSON-able dict."""
+    collapse = [(re.compile(p), r) for p, r in collapse]
+    # an object is named in an entry as account() names it: by its id, or by its path where it has none
+    types = {(obj.get("id") if isinstance(obj, dict) else None) or rel: kernel_type(obj) or NO_KERNEL_TYPE
+             for rel, obj in objects.items()}
+    rows, order = {}, []
+    for e in result["entries"]:
+        key = (e["path"], e["outcome"])
+        r = rows.get(key)
+        if r is None:
+            r = rows[key] = {"path": e["path"], "outcome": e["outcome"], "count": 0, "example": e["source"],
+                             "_to": collections.Counter(), "_why": collections.Counter(), "_rule": collections.Counter()}
+            order.append(key)
+        r["count"] += 1
+        if "reason" in e: r["_why"][e["reason"]] += 1
+        if e["outcome"] == "not-content": r["_rule"][(e["kind"], e["rule"])] += 1
+        for d in e.get("destinations", []):
+            if d["object"] not in types:
+                raise ValueError(f"ledger_by_path: {e['source']} went to {d['object']}, which is not among the objects "
+                                 f"given: the record and the objects are not of one run")
+            where = d["pointer"]
+            for rx, to in collapse: where = rx.sub(to, where)
+            where = re.sub(r"/[0-9]+(?=/|$)", "/[]", where)
+            r["_to"][(where, types[d["object"]], d.get("as", "value"), d.get("rule", ""), d.get("via", ""))] += 1
+    paths = []
+    for key in sorted(order):
+        r = rows[key]
+        row = {"path": r["path"], "outcome": r["outcome"], "count": r["count"], "example": r["example"]}
+        if r["_to"]:
+            row["to"] = []
+            for (where, object_type, as_, rule, via), n in sorted(r["_to"].items()):
+                d = {"object-type": object_type, "pointer": where, "count": n}
+                if as_ != "value": d["as"] = as_
+                if rule: d["rule"] = rule
+                if via: d["via"] = via
+                row["to"].append(d)
+        if r["_why"]:
+            row["reasons"] = [{"reason": why, "count": n} for why, n in sorted(r["_why"].items())]
+        if r["_rule"]:
+            row["rules"] = [{"kind": kind, "rule": rule, "count": n} for (kind, rule), n in sorted(r["_rule"].items())]
+        paths.append(row)
+    assert sum(r["count"] for r in paths) == result["leaf-values"]
+    return {"measures": "one row per source path and outcome; every source leaf value was traced and checked "
+                        "against the written files in the run that wrote this record, and is counted in one row",
+            "leaf-values": result["leaf-values"],
+            "totals": dict(result["totals"]),
+            "verification-failures": list(result["verification-failures"]),
+            "unaccounted-paths": [{"path": u["path"], "count": u["count"], "pointers": u["pointers"][:examples]}
+                                  for u in result["unaccounted-paths"]],
+            "paths": paths}
+
+def path_map_check(paths, row_of):
+    """Holds a converter's path map against the record of its run (backlog
+    #89). The path map of a coverage report says where a source PATH goes;
+    the ledger measures where each VALUE went. A ledger holds a rule to what
+    it wrote: a rule that writes to another place than the map says passes
+    it, and so does a sentence of the map that says "not carried" of a value
+    that is. Three converters had written this check for themselves; it is
+    here so that every converter with a record by path has it.
+
+    paths: the rows of ledger_by_path(...)["paths"], one per source path and
+    outcome, each with `to`, the places its values stand at (a JSON Pointer
+    into the object, array positions as `[]`).
+    row_of(path) -> None where the map has no row for the path, else
+    (outcomes, places): the outcomes the row allows (names of
+    LEDGER_OUTCOMES), or None where the converter holds the outcomes of its
+    rows by a check of its own and only the places are asked here; and a
+    pattern over the places, read with re.search, or None for a row whose
+    values stand nowhere.
+
+    -> {"disagree": [{path, outcome, count, example, allowed}],
+        "elsewhere": [{path, pointer, count}],
+        "sentences": [one for each entry of the two lists, in that order]},
+    in the order of the record. `disagree`: a path and outcome its row does
+    not allow. `elsewhere`: a place values stand at that their row does not
+    name. An unaccounted value is the gate's (ledger_gate) and is in neither
+    list; a path without a row is the coverage's (UNMAPPED). Nothing is
+    written and nothing ends here: a converter adds the sentences to its
+    wiring checks and the lists to its report."""
+    disagree, elsewhere = [], []
+    for row in paths:
+        mapped_to = row_of(row["path"])
+        if mapped_to is None: continue
+        allowed, places = mapped_to
+        if allowed is not None and row["outcome"] != "unaccounted" and row["outcome"] not in allowed:
+            disagree.append({"path": row["path"], "outcome": row["outcome"], "count": row["count"],
+                             "example": row["example"], "allowed": list(allowed)})
+        for t in row.get("to", []):
+            if places is None or not re.search(places, t["pointer"]):
+                elsewhere.append({"path": row["path"], "pointer": t["pointer"], "count": t["count"]})
+    return {"disagree": disagree, "elsewhere": elsewhere,
+            "sentences": [f"{d['count']:,} value(s) of {d['path']} are {d['outcome']}, and the path map allows "
+                          f"{' or '.join(d['allowed'])} there (first {d['example']})" for d in disagree]
+                       + [f"{e['count']:,} value(s) of {e['path']} stand at {e['pointer']}, "
+                          f"a place the path map does not name for that path" for e in elsewhere]}
+
+def held_row(held, index):
+    """(outcomes, places) for path_map_check from a converter's table HELD,
+    whose entries are (the row's pattern, outcomes or None, places): the
+    places a tuple of patterns, each for one whole pointer. -> None for a
+    path without a row (index None)."""
+    if index is None: return None
+    _, outcomes, places = held[index]
+    return outcomes, ("^(" + "|".join(places) + ")$" if places else None)
+
+def held_rows_match(held, patterns):
+    """A converter's table HELD stands beside its path map, row for row:
+    the first member of each entry is the pattern of the row it speaks for.
+    -> a sentence for a wiring check where the two lists differ, else None.
+    Without this a row put into the map, taken out of it or moved would be
+    held to the outcomes and places of another row."""
+    mine = [h[0] for h in held]
+    if mine == list(patterns): return None
+    at = next((i for i, (a, b) in enumerate(zip(mine, patterns)) if a != b), min(len(mine), len(patterns)))
+    return (f"the table of outcomes and places (HELD) has {len(mine)} row(s) and the path map {len(patterns)}; they "
+            f"differ first at row {at}: a row of the path map was added, removed or moved without its entry")
+
+def path_map_measured(paths, row_key):
+    """What the record of a run measured for each row of a path map: the
+    material a converter's author reads against the row's sentence when the
+    outcomes and the places of a row are written down or changed.
+    row_key(path) -> a hashable name of the row, or None.
+    -> {row key: {"outcomes": {outcome: values}, "places": {pointer: values}}}"""
+    out = {}
+    for row in paths:
+        k = row_key(row["path"])
+        if k is None: continue
+        m = out.setdefault(k, {"outcomes": collections.Counter(), "places": collections.Counter()})
+        m["outcomes"][row["outcome"]] += row["count"]
+        for t in row.get("to", []): m["places"][t["pointer"]] += t["count"]
+    return out
 
 def props_by_name(props, ledger=None, field="value"):
     """OSCAL props [{name, value}, ...] -> {name: value}. A name that repeats
@@ -507,6 +1053,214 @@ def props_by_name(props, ledger=None, field="value"):
             ledger.same(name, key, "a prop name that repeats is one key; its values are listed in source order")
         out[name] = out[name] + [value] if isinstance(out[name], list) else [out[name], value]
     return out
+
+# OSCAL's risk response carries a `type` prop with seven allowed values:
+# avoid, mitigate, transfer, accept, share, contingency, none. C.10 has four
+# treatment options (ISO 31000 6.5.2; one to one with BSI 200-3). Five of
+# the seven are one of the four. The other two are decided (backlog #47b,
+# 2026-11-13) and neither gets a code:
+#   none         the source says that no option was chosen. A Risk says the
+#                same by carrying no `treatment`, so nothing is lost.
+#   contingency  a plan for the day the risk materialises. It is none of the
+#                four options, and no corpus instance has been counted
+#                (D22, test 3: a code needs one).
+# In both cases the response itself stays verbatim in the converter's facet.
+RESPONSE_TREATMENT = {"avoid": "avoid", "mitigate": "modify", "transfer": "share",
+                      "share": "share", "accept": "retain"}
+
+def response_treatment(rtype):
+    """OSCAL risk response type -> (C.10 treatment option or None, a report
+    line saying why there is none, or None). Never guesses: a value outside
+    the five mapped ones gives no option, and the caller counts the line."""
+    if rtype in RESPONSE_TREATMENT:
+        return RESPONSE_TREATMENT[rtype], None
+    if rtype == "none":
+        return None, "response type `none`: the source chose no option, so no `treatment` is written (C.10)"
+    return None, f"response type `{rtype}` has no treatment code (C.10)"
+
+# ---------- who wrote a record, and when (backlog #69) ----------
+# The kernel has one place for it since 2.0.0-rc.4: `provenance`
+# {author-ref, date}, optional on a Tailoring and its entries, a Risk and
+# its ratings, an Implementation, a Finding, a Mapping and a Check. A
+# converter pre-fills it from what the source says and lets the caller
+# overwrite it (author decision 2026-11-13: "all converters should pre-fill
+# that data from the source corpus but import tool should be able to
+# overwrite it"). Nothing is invented: where the source names nobody, or no
+# day, the record gets no `provenance` and the validator reports it
+# (AUTHOR-1 to 4).
+#
+# An OSCAL document says who is responsible for it in its metadata, by role,
+# and when it was last changed. It does not say who wrote one statement of
+# it. The author of the document is therefore the most a converter can
+# pre-fill for a record taken from it, and the day of `last-modified` the
+# latest day the record can have been written. The rule below is the same
+# rule in jascon-app/jascon-oscal.js; the test table is shared.
+# What it rests on: OSCAL 1.1.3 defines the role ids `creator` ("the person
+# or organization that created this content") and `prepared-by` ("... that
+# prepared this content") for a document's metadata (read 2026-11-13:
+# oscal_metadata_metaschema.xml at tag v1.1.3). Steps 2 to 4 are not
+# OSCAL's: they are this library's reading of a document that uses neither
+# role, and they give an answer only where exactly one candidate exists.
+_DAY = re.compile(r"[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])\Z")
+
+def document_author(metadata):
+    """-> the party (the entry of `metadata.parties`) an OSCAL document names
+    as its author, or None.
+      1. the one party named for the role `creator`, else for `prepared-by`,
+         else for `author` (the author, 2026-11-14, backlog #91: the CSF
+         names its author under that role; OSCAL lists it among its roles);
+      2. else the one party that the responsible-parties name at all;
+      3. else the one party the document defines;
+      4. else the one organization among the parties it defines;
+      5. else nobody.
+    "The one" is exact: two candidates are no answer, and the next step is
+    asked. A uuid the document does not define names nobody. A party without
+    a name cannot be named by a landmark URI, so it is nobody too. A party is
+    an entry of `parties` with a uuid; where a uuid is defined twice, the
+    first definition is the party (the two rules agreed on everything but
+    this when 4,000 generated documents were put to both, 2026-11-14)."""
+    plist = []
+    for x in metadata.get("parties", []) or []:
+        if isinstance(x, dict) and isinstance(x.get("uuid"), str) and all(x["uuid"] != y["uuid"] for y in plist):
+            plist.append(x)
+    def defined(uuid): return next((x for x in plist if x["uuid"] == uuid), None)
+    def named(role=None):
+        seen = []
+        for rp in metadata.get("responsible-parties", []) or []:
+            if role is None or rp.get("role-id") == role:
+                for u in rp.get("party-uuids", []) or []:
+                    if defined(u) is not None and u not in seen: seen.append(u)
+        return seen
+    pick = None
+    for got in (named("creator"), named("prepared-by"), named("author"), named()):
+        if len(got) == 1: pick = defined(got[0]); break
+    if pick is None and len(plist) == 1: pick = plist[0]
+    if pick is None:
+        orgs = [x for x in plist if x.get("type") == "organization"]
+        if len(orgs) == 1: pick = orgs[0]
+    return pick if pick is not None and pick.get("name") else None
+
+def is_day(value):
+    """True for a string that is a date as the kernel writes one, YYYY-MM-DD."""
+    return isinstance(value, str) and bool(_DAY.match(value))
+
+def document_day(metadata):
+    """-> the day of the document's `last-modified`, as the document wrote it
+    (its first ten characters), or None when they are not a date."""
+    lm = metadata.get("last-modified")
+    return lm[:10] if isinstance(lm, str) and _DAY.match(lm[:10]) else None
+
+def provenance(author, date, override=(None, None)):
+    """What the source states, overwritten field by field by what the caller
+    gave. -> {author-ref, date}, or None unless both are known: the kernel's
+    `provenance` is closed and requires both."""
+    a, d = override[0] or author, override[1] or date
+    return {"author-ref": a, "date": d} if a and d else None
+
+def provenance_override(argv):
+    """Reads `--author-ref URI` and `--date YYYY-MM-DD` from a converter's
+    arguments -> (author or None, date or None). Other arguments are left to
+    the converter. A value that is not what it must be stops the run: an
+    overwrite the caller asked for is never dropped silently."""
+    author = date = None
+    for i, a in enumerate(argv):
+        if a not in ("--author-ref", "--date"): continue
+        if i + 1 >= len(argv): raise SystemExit(f"{a} needs a value")
+        v = argv[i + 1]
+        if a == "--author-ref":
+            if not re.match(r"https?://[^\s]+\Z", v): raise SystemExit(f"--author-ref {v!r} is not an http(s) URI of a party")
+            author = v
+        else:
+            if not _DAY.match(v): raise SystemExit(f"--date {v!r} is not a date, YYYY-MM-DD")
+            try: time.strptime(v, "%Y-%m-%d")
+            except ValueError: raise SystemExit(f"--date {v!r} is not a day of the calendar")
+            date = v
+    return author, date
+
+def obligated_party(argv, default):
+    """Whom a statement binds where the source does not say (backlog #74)
+    -> (party URI, "converter-default" | "caller").
+
+    The kernel requires `obligated-parties` on every statement. A catalogue
+    seldom says whom its controls bind, so each converter names one party
+    for its corpus. That party is the converter's reading of the framework
+    and not a value of the source; the author decided on 2026-11-14 that it
+    is an argument with a named default. `--obligated-party URI` among a
+    converter's arguments puts the caller's party in the default's place.
+
+    Where a source does name a party for a statement (an implementation
+    level in SP 800-53, `affects` in CR26), a converter writes what the
+    source says and uses this party only where the source is silent.
+
+    A value that is no http(s) URI stops the run, and so does the argument
+    given twice: an overwrite the caller asked for is never dropped or
+    guessed. There is no way to ask for no party at all: the kernel requires
+    one, and no tool writes a party nobody named (#70)."""
+    if not re.match(r"https?://[^\s]+\Z", default or ""):
+        raise SystemExit(f"the converter's default obligated party {default!r} is not an http(s) URI")
+    given = [i for i, a in enumerate(argv) if a == "--obligated-party"]
+    if not given: return default, "converter-default"
+    if len(given) > 1: raise SystemExit("--obligated-party is given more than once")
+    if given[0] + 1 >= len(argv): raise SystemExit("--obligated-party needs a value")
+    v = argv[given[0] + 1]
+    if not re.match(r"https?://[^\s]+\Z", v): raise SystemExit(f"--obligated-party {v!r} is not an http(s) URI of a party")
+    return v, "caller"
+
+def lifecycle_default_record(objects, stated):
+    """What a coverage report's JSON says under `lifecycle-default`: the
+    kernel requires a lifecycle on every object, and where the source states
+    no status the converter writes `active` as its own, named default
+    (author, 2026-11-14). objects: {relpath: object} of the bundle; stated:
+    the ids of the objects whose lifecycle is the source's word (a status
+    mapped by a rule)."""
+    stated = set(stated)
+    own = [o for o in objects.values() if isinstance(o, dict) and "lifecycle" in o and o.get("id") not in stated]
+    other = sorted({o["lifecycle"] for o in own} - {"active"})
+    if other: raise SystemExit(f"lifecycle {other} is written on an object whose status the source does not state: "
+                               f"the converter's default is `active` and nothing else")
+    return {"value": "active", "origin": "converter-default", "objects": len(own),
+            "source-states": sum(1 for o in objects.values() if isinstance(o, dict) and o.get("id") in stated)}
+
+def lifecycle_default_line(record, why="a published catalogue is taken to be in force", tail=None):
+    """The line of a coverage report (markdown) for lifecycle_default_record().
+    `why`: the converter's reason for the default, as a clause. `tail`: what
+    the source says of status, where neither of the two sentences below fits
+    (a source that states a status no rule maps to a lifecycle)."""
+    n, m = record["objects"], record["source-states"]
+    if tail is None:
+        tail = (f" On {m:,} object(s) the lifecycle is the source's own status, mapped by a rule." if m
+                else " The source states no status on any object.")
+    return (f"- **Lifecycle**: `active` on {n:,} object(s) is the converter's default and not a value of the source: "
+            f"the kernel requires a lifecycle on every object, and {why}." + tail)
+
+def obligated_party_record(party, origin, default, source_states=None):
+    """What a coverage report's JSON says about it, under `obligated-party`:
+    the party written, who chose it, the converter's default, and - where a
+    source names parties itself - how (`source_states`: a phrase that
+    completes "the source names a party ...", e.g. "as the implementation
+    level of a control")."""
+    r = {"value": party, "origin": origin, "converter-default": default}
+    if source_states: r["source-states"] = source_states
+    return r
+
+def obligated_party_line(party, origin, default, why="", source_states=None):
+    """The line of a coverage report (markdown) that says whom the statements
+    bind and who said so. `why`: the converter's reason for its default, as a
+    sentence without a full stop. `source_states`: see obligated_party_record."""
+    where = (f"on every statement for which the source names no party; where it names one ({source_states}), "
+             f"that one is written. `{party}` is" if source_states else "on every statement")
+    reason = f" Why this default: {why}." if why else ""
+    if source_states:
+        if origin == "caller":
+            return (f"- **Obligated party**: `{party}` {where} given by the caller with `--obligated-party`; "
+                    f"the converter's own default is `{default}`.{reason}")
+        return (f"- **Obligated party**: `{party}` {where} the converter's default and not a value of the "
+                f"source; `--obligated-party URI` writes another.{reason}")
+    if origin == "caller":
+        return (f"- **Obligated party**: `{party}` {where}, given by the caller with `--obligated-party`. "
+                f"The converter's own default is `{default}`.{reason}")
+    return (f"- **Obligated party**: `{party}` {where}. This is the converter's default and not a value of "
+            f"the source; `--obligated-party URI` writes another.{reason}")
 
 def coverage(paths, rules):
     """rules: list of (regex, level, target). Returns (rows, unmapped)."""

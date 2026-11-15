@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-12.3_obj",
      "label": "IA-12(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the presented identity evidence is validated and verified through {param:ia-12.03_odp}."
      }
@@ -105,7 +110,8 @@
      "alt-identifiers": [
       "ia-12.3_prm_1"
      ],
-     "alt-label": "organizational defined methods of validation and verification"
+     "alt-label": "organizational defined methods of validation and verification",
+     "sp800-53a-label": "IA-12(03)_ODP"
     }
    }
   }

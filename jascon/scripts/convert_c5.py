@@ -5,14 +5,31 @@ prose -> c5/corresponding@1, the CRM evidence); 623 class children ->
 Requirements; class -> membership Sets (basic baseline, additional-sharpen,
 additional-complement); sharpened-basic-criterion -> typed `sharpens`
 relation; 6 title-only `gc-undefined` stubs -> parked L2 + defect finding.
-Coverage target: 0."""
-import json, os, re, collections
+Coverage target: 0.
+
+    convert_c5.py [--obligated-party URI] [--out DIR]
+
+The converter reads no party from the catalogue: it writes one of its own
+on every statement, `<namespace>/party/cloud-service-provider`.
+--obligated-party writes the caller's party in its place, and the coverage
+report says which of the two it was (backlog #74). --out writes the bundle
+and the two reports to DIR. The bundle of this corpus is not redistributed
+and must not be committed, so a run belongs in a DIR outside the repository."""
+import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "c5-2026-oscal-catalog.json")
-OUTDIR = os.path.join(ROOT, "converted_examples", "DE.C5")
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--obligated-party", "--out"))
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "DE.C5"))
 NS = "https://ns.bsi.bund.de/c5"   # minted by converter; pending a BSI-published URI
+# Whom a statement binds is not a value of this source (backlog #74)
+PARTY_DEFAULT = f"{NS}/party/cloud-service-provider"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
+PARTY_WHY = ("C5 binds the provider; customer duties live in the corresponding facet, deliberately NOT as "
+             "obligated-parties")
 F_CORR = f"{NS}/facet/corresponding@1"
 F_NARR = f"{NS}/facet/narrative@1"
 COMPAT = "https://ns.jascon.net/compat/oscal-1x@1"
@@ -70,7 +87,7 @@ def convert_child(c, parent_id):
            "title": c.get("title", c["id"]),
            "statements": [{"id": stmt.get("id", c["id"] + "_stmt").rsplit("_", 1)[-1],
                            "modality": mod,
-                           "obligated-parties": [f"{NS}/party/cloud-service-provider"],
+                           "obligated-parties": [PARTY],
                            "prose": {"en": prose}}]}
     guid = [T(p.get("prose", ""), "guidance") for p in c.get("parts", []) or [] if p["name"].startswith("guidance")]
     if guid:
@@ -176,8 +193,7 @@ j = report(
      f"c5/corresponding@1** on the criterion Set: customer-side duties - measured CRM evidence for the "
      f"shared-responsibility model (handbook ch09).",
      f"- **guidance(-N) parts -> narrative@1** guidance[] (children with 2+ guidance parts exist; all carried).",
-     f"- **Obligated party**: documented default {NS}/party/cloud-service-provider (C5 binds the provider; "
-     f"customer duties live in the corresponding facet, deliberately NOT as obligated-parties).",
+     obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT, PARTY_WHY),
      f"- **Payload free text language-tagged** ({{en: ...}}): "
      + ", ".join(f"{k} x{v}" for k, v in sorted(lang_wraps.items())) + ". Harmonized from the start (backlog #12)."],
     [f"- **Defective source ids: 6 x `gc-undefined`** - six title-only stubs in the GC group share one id "
@@ -194,6 +210,7 @@ j = report(
     {"source": cat["metadata"]["title"], "source-version": VER,
      "objects-emitted": {"requirements": len(req_ids), "sets": nset},
      "modality-word-rule": dict(mod_count),
+     "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      "class-sets": {k: len(set(v)) for k, v in class_members.items()},
      "sharpens": {"resolved": len(sharpens_ok), "broken": sharpens_broken, "missing-prop": sharpens_missing},
      "gc-undefined-stubs": [{"group": g, "id": i, "title": t} for g, i, t in undefined_stubs],

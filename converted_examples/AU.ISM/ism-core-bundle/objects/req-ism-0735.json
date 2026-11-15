@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0735",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0735",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CISO oversees the development, implementation and maintenance of their organisation’s cyber security awareness training program."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

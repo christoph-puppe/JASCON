@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2108",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2108",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Mobile applications encrypt all sensitive or classified data communicated over public network infrastructure using ASD-approved cryptography."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

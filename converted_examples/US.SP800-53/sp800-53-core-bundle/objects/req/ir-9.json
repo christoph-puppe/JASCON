@@ -19,6 +19,7 @@
   },
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,6 +37,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -46,6 +48,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -63,6 +66,7 @@
   },
   {
    "id": "smt.d",
+   "label": "d.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -73,6 +77,7 @@
   },
   {
    "id": "smt.e",
+   "label": "e.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -83,6 +88,7 @@
   },
   {
    "id": "smt.f",
+   "label": "f.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -93,6 +99,7 @@
   },
   {
    "id": "smt.g",
+   "label": "g.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -117,15 +124,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ir-9_obj",
      "label": "IR-09",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ir-9_obj.a",
        "label": "IR-09a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:ir-09_odp.01} is/are assigned the responsibility to respond to information spills;"
        }
@@ -133,6 +150,11 @@
       {
        "id": "ir-9_obj.b",
        "label": "IR-09b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "the specific information involved in the system contamination is identified in response to information spills;"
        }
@@ -140,6 +162,11 @@
       {
        "id": "ir-9_obj.c",
        "label": "IR-09c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "{param:ir-09_odp.02} is/are alerted of the information spill using a method of communication not associated with the spill;"
        }
@@ -147,6 +174,11 @@
       {
        "id": "ir-9_obj.d",
        "label": "IR-09d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "the contaminated system or system component is isolated in response to information spills;"
        }
@@ -154,6 +186,11 @@
       {
        "id": "ir-9_obj.e",
        "label": "IR-09e.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "the information is eradicated from the contaminated system or component in response to information spills;"
        }
@@ -161,6 +198,11 @@
       {
        "id": "ir-9_obj.f",
        "label": "IR-09f.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "other systems or system components that may have been subsequently contaminated are identified in response to information spills;"
        }
@@ -168,6 +210,11 @@
       {
        "id": "ir-9_obj.g",
        "label": "IR-09g.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.g"
+        }
+       ],
        "prose": {
         "en": "{param:ir-09_odp.03} are performed in response to information spills."
        }
@@ -242,7 +289,8 @@
      ],
      "alt-identifiers": [
       "ir-9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IR-09_ODP[01]"
     },
     "ir-09_odp.02": {
      "guidelines": [
@@ -252,7 +300,8 @@
      ],
      "alt-identifiers": [
       "ir-9_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "IR-09_ODP[02]"
     },
     "ir-09_odp.03": {
      "guidelines": [
@@ -262,7 +311,8 @@
      ],
      "alt-identifiers": [
       "ir-9_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "IR-09_ODP[03]"
     }
    }
   }
@@ -306,15 +356,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/IR-9.1",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IR-9.1",
-    "mode": "merged-into",
-    "label": "IR-09(01)",
-    "title": "Responsible Personnel"
-   }
-  ]
- }
+ ]
 }

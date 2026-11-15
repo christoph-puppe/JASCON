@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.10",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.10",
  "lifecycle": "active",
  "title": {
-  "de": "Identität-Zugangskonto"
+  "de": "Anmeldeversuchsgrenze am System"
  },
  "statements": [
   {
@@ -14,16 +14,27 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE ein Zugangskonto zu genau einer Identität zuweisen."
-   }
+    "de": "Berechtigung für IT-Systeme SOLLTE weitere Anmeldeversuche nach Erreichen von {param:ber.3.10-prm1} fehlgeschlagenen Versuchen vorübergehend blockieren."
+   },
+   "parameters": [
+    {
+     "name": "ber.3.10-prm1",
+     "type": "string",
+     "label": "einem maximalen Schwellwert an"
+    }
+   ]
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "zuweisen",
-     "result": "ein Zugangskonto zu genau einer Identität"
+     "action": "blockieren",
+     "result": "weitere Anmeldeversuche nach Erreichen von {{einem maximalen Schwellwert an}} fehlgeschlagenen Versuchen",
+     "result-specification": "vorübergehend",
+     "target-object-categories": [
+      "IT-Systeme"
+     ]
     }
    }
   },
@@ -31,7 +42,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "IT-Betriebskonzept"
+      "Konfigurationshistorie"
      ]
     }
    }
@@ -54,9 +65,13 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2
+     "effort": 2,
+     "tags": [
+      "Credential Stuffing",
+      "Brute-Force-Attacke"
+     ]
     }
    }
   },
@@ -64,8 +79,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Wenn ein Zugangskonto genau einer Identität zugewiesen ist erleichtert dies die Vergabe von Berechtigungen nach dem Need-to-know-Prinzip. Außerdem kann so bei einem Vorfall nachvollzogen werden, welche Person welche Befehle ausgeführt hat, z.B. mittels des Audit Logs. Anders herum können einer Identität auch mehrere Zugangskonten zugewiesen sein, z.B. ein normalen Nutzungskonto und ein Zugangskonto für die Systemadministration."
+      "de": "Betrifft sowohl die lokale Anmeldung über eine Benutzeroberfläche als auch den Zugriff über Fernwartungsprotokolle oder -anwendungen wie RDP, SNMP, wenn diese vorhanden sind. Die Umsetzung erfolgt im einfachsten Fall durch ein Login, bzw. eine Bildschirmsperre für das IT-System. Biometrische Daten wie Fingerabdrücke können gefälscht werden und sind nicht so leicht zu ändern wie Passwörter. Setzen Sie Biometrie daher nicht als einzigen Authentifizierungsfaktor ein, sondern wenn, dann nur zur Ergänzung (Mehr-Faktor-Authentifizierung). Die Anforderung ist entbehrlich, wenn das System keinen Zugriff auf schützenswerte Daten erlaubt, z.B. bei Nutzung als Kiosk."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.3.10-prm1": {
+     "alt-identifier": "ac47b367-365b-4a5f-8e37-f7b427b7cc38"
     }
    }
   }
@@ -73,7 +95,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "3aee31a9-78e2-453e-8bce-d4212130dbf7"
+   "value": "c37f30d1-8fd7-4497-b3f1-07d8f54b717c"
   }
  ]
 }

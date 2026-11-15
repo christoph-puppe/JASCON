@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.5",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.5",
  "lifecycle": "active",
  "title": {
-  "de": "Mehr-Faktor-Authentisierung für weitreichende Berechtigungen"
+  "de": "Deaktivierung einfacher Biometrie auf IT-Systemen"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE Mehr-Faktor-Authentisierung für weitreichende Berechtigungen aktivieren."
+    "de": "Berechtigung für IT-Systeme SOLLTE die Authentifizierung nur anhand von Biometrie deaktivieren."
    }
   }
  ],
@@ -22,9 +22,11 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "aktivieren",
-     "result": "Mehr-Faktor-Authentisierung",
-     "result-specification": "für weitreichende Berechtigungen"
+     "action": "deaktivieren",
+     "result": "die Authentifizierung nur anhand von Biometrie",
+     "target-object-categories": [
+      "IT-Systeme"
+     ]
     }
    }
   },
@@ -54,16 +56,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
-     "tags": [
-      "MFA",
-      "Living off the land",
-      "Privilege Escalation",
-      "Credential Stuffing",
-      "Brute-Force-Attacke"
-     ]
+     "effort": 3
     }
    }
   },
@@ -71,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Eine Mehr-Faktor-Authentifizierung bei Zugängen mit weitreichenden Berechtigungen, z.B. Administrationskonten, die Zugriff auf wichtige Server wie den Verzeichnisdienst, das MDM, EDR oder DNS haben, erschwert den unberechtigten Zugang zu diesen Zugängen. Auch der Zugriff auch besonders sensible Daten kann eine weitreichende Berechtigung sein."
+      "de": "Wenn die Authentifizierung nur biometrisch vorgenommen wird (z.B. anhand von Fingerabdrücken oder Abbildern des Gesichtes), dann könnten Angreifer Fälschungen oder gestohlene Fingerabdrücke missbrauchen, um sich Zugang zu verschaffen. Werden biometrische Verfahren dagegen mit weiteren Authentisierungsmittel (z.B. einer PIN) kombiniert, können sie den Zugriffsschutz verbessern. Ein häufig vorkommendes Beispiel sind Mobilgeräte wie Smartphones, die durch Fingerabdruck den Zugriff auf Daten oder Funktionen wie das mobile Bezahlen gestatten - obwohl auf dem Gerät selbst häufig noch Fingerabdrücke erkennbar sind."
      }
     }
    }
@@ -80,17 +75,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "55b70084-f446-42af-908b-0f514a72f380"
+   "value": "4483f020-da27-44af-ae23-edf7d676d72f"
   }
  ],
  "relations": [
   {
-   "type": "required",
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.11"
-  },
-  {
    "type": "related",
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.4"
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.5"
   }
  ]
 }

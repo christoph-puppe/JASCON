@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1750",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1750",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Administrative infrastructure for critical servers, high-value servers and regular servers is segregated from each other."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

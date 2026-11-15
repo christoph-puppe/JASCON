@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sc-10_obj",
      "label": "SC-10",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the network connection associated with a communication session is terminated at the end of the session or after {param:sc-10_odp} of inactivity."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "sc-10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-10_ODP"
     }
    }
   }

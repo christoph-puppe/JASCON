@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SI-4.6",
+ "version": "5.2.0",
+ "label": "SI-4(6)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Restrict Non-privileged Users"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into AC-6(10)."
+   }
+  }
+ ]
+}

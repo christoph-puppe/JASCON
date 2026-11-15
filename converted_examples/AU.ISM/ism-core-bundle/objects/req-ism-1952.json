@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1952",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1952",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Privileged user accounts are not synchronised between Microsoft AD DS and Microsoft Entra ID."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

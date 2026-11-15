@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/root",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Anwenderkatalog Grundschutz++"
@@ -8,83 +8,159 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc",
-   "sequence": 290
+   "sequence": 550
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm",
-   "sequence": 410
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums",
-   "sequence": 600
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb",
    "sequence": 780
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums",
+   "sequence": 970
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/vrb",
+   "sequence": 1150
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf",
-   "sequence": 930
+   "sequence": 1480
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/risk",
-   "sequence": 990
+   "sequence": 1540
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/asst",
-   "sequence": 1510
+   "sequence": 2290
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/pers",
-   "sequence": 1770
+   "sequence": 2710
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes",
-   "sequence": 2400
+   "sequence": 4080
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dls",
-   "sequence": 2570
+   "sequence": 4340
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/test",
-   "sequence": 2790
+   "sequence": 4800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb",
-   "sequence": 3360
+   "sequence": 5780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens",
-   "sequence": 4260
+   "sequence": 6820
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch",
-   "sequence": 4660
+   "sequence": 7600
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber",
-   "sequence": 5500
+   "sequence": 8650
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/not",
-   "sequence": 5810
+   "sequence": 9110
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/det",
-   "sequence": 6300
+   "sequence": 10140
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/rea",
-   "sequence": 6440
+   "sequence": 10460
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf",
-   "sequence": 7730
+   "sequence": 12420
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/dev",
-   "sequence": 8100
+   "sequence": 12860
   }
- ]
+ ],
+ "facets": {
+  "https://ns.jascon.net/stdlib/facet/references@1": {
+   "resources": [
+    {
+     "id": "c7b0b893-2bdb-4d52-9f10-20ebb42468d8",
+     "title": "BSI IT-Grundschutz Edition 2023",
+     "rlinks": [
+      {
+       "href": "https://www.bsi.bund.de/DE/Themen/Unternehmen-und-Organisationen/Standards-und-Zertifizierung/IT-Grundschutz/it-grundschutz_node.html",
+       "hashes": [
+        {
+         "algorithm": "MD5",
+         "value": "c91280d3504b9c81c5ceaf5bdaee5c7f"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "metadata": {
+    "last-modified": "2026-10-29T08:03:17.266980922Z",
+    "oscal-version": "1.1.3",
+    "document-ids": [
+     {
+      "scheme": "https://www.ietf.org/rfc/rfc9562",
+      "identifier": "ebe77c16-3ddc-42ce-8d53-eff5b6e23334"
+     }
+    ],
+    "props": [
+     {
+      "name": "scope_implements_norm",
+      "ns": "http://csrc.nist.gov/ns/oscal/1.0",
+      "value": "§ 44 Abs. 1 BSIG"
+     },
+     {
+      "name": "keywords",
+      "value": "Information Security Management System"
+     }
+    ],
+    "links": [
+     {
+      "href": "#c7b0b893-2bdb-4d52-9f10-20ebb42468d8",
+      "rel": "reference",
+      "text": "BSI IT-Grundschutz Edition 2023"
+     }
+    ],
+    "roles": [
+     {
+      "id": "creator",
+      "title": "Creator"
+     }
+    ],
+    "parties": [
+     {
+      "uuid": "52300f5f-7957-470a-bb63-4e50a82d1bed",
+      "type": "person",
+      "name": "Bundesamt für Sicherheit in der Informationstechnik",
+      "email-addresses": [
+       "service-center@bsi.bund.de"
+      ]
+     }
+    ],
+    "responsible-parties": [
+     {
+      "role-id": "creator",
+      "party-uuids": [
+       "52300f5f-7957-470a-bb63-4e50a82d1bed"
+      ]
+     }
+    ],
+    "remarks": "Der Grundschutz++ ist eine vom Bundesamt für Sicherheit in der Informationstechnik (BSI) entwickelte und frei verfügbare Vorgehensweise um ein ganzheitliches Informationssicherheits-Managementsystem (ISMS) in Institutionen zu errichten und erhalten. Dieser Katalog enthält sowohl die Anforderungen zur Umsetzung der Grundschutz-Methodik als auch die konkreten technisch-organisatorischen Anforderungen die zur Absicherung erforderlich sind."
+   }
+  }
+ }
 }

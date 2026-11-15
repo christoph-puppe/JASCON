@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1616",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1616",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A vulnerability disclosure program is implemented to assist with the secure development and maintenance of products and services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-08"
   }
  ]
 }

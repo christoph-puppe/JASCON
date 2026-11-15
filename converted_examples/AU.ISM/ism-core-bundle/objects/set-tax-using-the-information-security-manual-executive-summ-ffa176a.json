@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-ffa176a",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Authority"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Authority",
+     "name": "overview",
+     "prose": {
+      "en": "The ISM represents the considered advice of the Australian Signals Directorate (ASD). This advice is provided in accordance with ASD’s designated functions under the [Intelligence Services Act 2001](#bf76a2ec-3cf5-4a02-839a-7b2ea11cb3fc).\n\nASD also provides cyber security advice in the form of Australian Communications Security Instructions and other cyber security-related publications. In these cases, operating system, application and device-specific advice may take precedence over the advice in the ISM."
+     }
+    }
+   ]
+  }
+ }
+}

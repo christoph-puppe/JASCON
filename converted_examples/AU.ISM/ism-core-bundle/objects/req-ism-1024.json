@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1024",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1024",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Notifications of undeliverable emails are only sent to senders that can be verified via SPF or other trusted means."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1657",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1657",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Application control restricts the execution of executables, libraries, scripts, installers, compiled HTML, HTML applications and control panel applets to an organisation-approved set."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09"
   }
  ]
 }

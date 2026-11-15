@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0835",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0835",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Following sanitisation, TOP SECRET volatile media retains its classification if it stored static data for an extended period, or had data repeatedly stored on or written to the same memory location for an extended period."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

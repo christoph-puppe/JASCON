@@ -2,7 +2,7 @@
 title: Belege: was gemessen wurde und was nicht | JASCON
 description: Das Konformitätskorpus, die beiden Referenzvalidatoren, die konvertierten Kataloge mit ihren Lizenzen, die Nachweis-Gates, die offenen Grenzen und die Nachbarformate. Jede Zahl ist als gemessen, entworfen oder offen gekennzeichnet.
 nav: evidence
-source: b72ba9a0a5ba
+source: e8504f5dccf6
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -38,7 +38,7 @@ source: b72ba9a0a5ba
         </article>
         <article class="card">
           <div class="card-top"><h3>validate_core.ps1</h3><span class="tier tier-measured">gemessen am 12. November 2026</span></div>
-          <p>Der Zwilling: {{ n.powershell_lines }} Zeilen Windows PowerShell 5.1 ohne Abhängigkeiten, für den Rechner, den ein Auditor ohnehin hat. Am 12. November lieferte er auf einem gehosteten Windows-Runner dieselben Zählergebnisse wie die Python-Referenz, für alle {{ n.vectors }} Vektoren, die fünf Bundles, das ausgearbeitete Paket und den Beispielordner. Ein <a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">Workflow</a> wiederholt diesen Lauf bei jeder Änderung.</p>
+          <p>Der Zwilling: {{ n.powershell_lines }} Zeilen Windows PowerShell 5.1 ohne Abhängigkeiten, für den Rechner, den ein Auditor ohnehin hat. Auf einem gehosteten Windows-Runner liefert er dieselben Zählergebnisse wie die Python-Referenz, für alle {{ n.vectors }} Vektoren, die fünf Bundles, das ausgearbeitete Paket und den Beispielordner. Ein <a href="{{ repo }}/actions/workflows/validators.yml" rel="noopener">Workflow</a> wiederholt diesen Lauf bei jeder Änderung.</p>
         </article>
         <article class="card">
           <div class="card-top"><h3>Ein dritter, im Browser</h3><span class="tier tier-measured">gemessen</span></div>
@@ -81,7 +81,7 @@ source: b72ba9a0a5ba
         <h3>Die Messung zu 1.0.0 <span class="tier tier-measured">22. Juli 2026</span></h3>
         <ul class="plain">
           <li>Elf Bundles, 6.914 Objekte, beide Digests je Objekt nachgeprüft.</li>
-          <li>251.591 Blattwerte in den Quellen, jeder Quellpfad mit deklariertem Ziel.</li>
+          <li>251.681 Blattwerte in den Quellen, jeder Quellpfad mit deklariertem Ziel.</li>
           <li>Export von zehn Katalog-Bundles nach OSCAL 1.2.2: gültig gegen das Release-Schema von NIST, 5.886 von 5.886 Objekten nach dem Reimport gleich nach semantischem Digest.</li>
           <li>Größe im Vergleich zu den Quellen: ISM 29 % kleiner, Grundschutz++ 50 % kleiner, CR26 55 % größer. Das Format ist kleiner, wo eine Quelle redundant ist, und größer, wo ein eigens entwickeltes Format knapp war.</li>
         </ul>
@@ -126,6 +126,10 @@ source: b72ba9a0a5ba
         <span class="gate-when">12. Nov. 2026</span><span class="gate-rail"><i></i></span>
         <div class="gate-body"><h3>2.0.0-rc.3: Empfehlungspakete und zwei typisierte Datumsfelder <span class="tier tier-designed">Release-Kandidat, nicht getaggt</span></h3><p>Die Empfehlungen eines Herstellers als eine veröffentlichte Datei, angenommen mit acht dokumentierten Entscheidungen: kein neuer Typ, elf Regeln, {{ n.advice_vectors }} Vektoren und ein ausgearbeitetes Paket mit signierter Attestierung. Über die mitgelieferten Bundles ausgeführt, fand die Regel zu <code>capability-ref</code> im konvertierten NIST-Beispiel eine Kante, die auf eine Fähigkeit verwies, die ihre eigene Komponente nicht deklariert. Am selben Tag schloss der Autor die vier Punkte, die vor dem Setzen des Release-Tags noch offen waren. Zwei Felder, die 1.0.0 als Freitext ließ, sind nun typisiert: das Datum, an dem eine Abweichung eröffnet wurde, und das Fälligkeitsdatum einer Maßnahme.</p></div>
       </div>
+      <div class="gate rc">
+        <span class="gate-when">13. Nov. 2026</span><span class="gate-rail"><i></i></span>
+        <div class="gate-body"><h3>2.0.0-rc.4: wer entschieden hat, und wann <span class="tier tier-designed">Release-Kandidat, nicht getaggt</span></h3><p>Der Vergleich mit fünf Nachbarformaten fand zwei Stellen, an denen eines von ihnen voraus war, und der Autor hat beide am selben Tag entschieden. Wer entschieden hat und wann, wird nun auf eine einzige Weise geschrieben, <code>provenance</code>, und ist optional an einem Tailoring und jedem seiner Einträge, an einem Risiko und seinen Bewertungen, an einer Umsetzung und an einer Feststellung. Eine Abweichung kann angeben, wann über sie entschieden wurde und wann sie zur Überprüfung fällig ist. Ein Validator meldet, was fehlt, eine Zeile je Objekt und Regel, und meldet ein Überprüfungsdatum, das gemessen am Datum des Laufs verstrichen ist. Ein fehlender Autor lässt ein Bundle nur scheitern, wenn der Aufrufer es verlangt; ein verstrichenes Überprüfungsdatum nie. Kein neuer Typ und kein neues Primitiv: {{ n.author_vectors }} Vektoren für die beiden Meldungen, und neunzehn absichtlich eingebaute Fehler in der Referenz färben jeweils einen rot. Drei Zeitangaben, die jede Zeichenkette akzeptierten, sind typisiert.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -147,8 +151,16 @@ source: b72ba9a0a5ba
         <p>Die Python-Referenz und der PowerShell-Zwilling wurden vom Autor des Projekts mit KI-Unterstützung aus denselben Quellen geschrieben. Ihre Unabhängigkeit beschränkt sich auf Sprache und Laufzeitumgebung. Das Gate misst, ob die Spezifikation eine Implementierung festlegt. Es misst nicht, was ein Fremder an einem Wochenende daraus macht.</p>
       </div>
       <div class="limit">
-        <h3>Pfadabdeckung heißt nicht, dass die Werte ankommen <span class="tier tier-open">offen, Backlog 41</span></h3>
-        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wurde an einem Korpus nachverfolgt, dem NIST-Beispielsystem, mit einem Protokoll, das jeden Quellwert durch den Konverter verfolgt: Von {{ n.ledger_values }} Blattwerten werden {{ n.ledger_carried }} übertragen ({{ n.ledger_copied }} kopiert, {{ n.ledger_transformed }} über eine benannte Regel), {{ n.ledger_dropped }} entfallen mit angegebenem Grund, und {{ n.ledger_unaccounted }} sind ungeklärt: kein Ziel und kein angegebener Grund. Die übrigen zehn Korpora sind nicht gemessen.</p>
+        <h3>Pfadabdeckung heißt nicht, dass die Werte ankommen <span class="tier tier-open">offen für {{ n.ledger_unmeasured }} Korpora</span></h3>
+        <p>Die Abdeckungsberichte zählen Quellpfade mit deklariertem Ziel. Ob jeder Wert ankommt, wird an {{ n.ledger_corpora }} Korpora nachverfolgt, mit einem Protokoll, das jeden Quellwert durch den Konverter verfolgt: Von {{ n.ledger_values }} Blattwerten werden {{ n.ledger_carried }} übertragen ({{ n.ledger_copied }} kopiert, {{ n.ledger_transformed }} über eine benannte Regel), {{ n.ledger_nocontent }} sind kein Inhalt nach einer Regel, die das Protokoll prüft (ein Name, der nur ein Feld auswählt, ein Namensraum, eine Kennung, die sich exakt rekonstruieren lässt, eine Ressource, auf die nichts verweist), {{ n.ledger_dropped }} entfallen, und {{ n.ledger_unaccounted }} sind ungeklärt. Ein Konverterlauf mit einem ungeklärten Wert schlägt fehl. Jede Pfadkarte dieser Korpora hatte 100 % ausgewiesen, und die ersten Protokolle fanden dennoch Werte, die verloren gingen; sie werden jetzt übertragen. Ein Protokoll hält eine Regel an das, was sie geschrieben hat, nicht daran, ob die Regel richtig ist, und es verfolgt nicht zurück, was ein Konverter von sich aus schreibt. Der Workflow reproduziert diese Konvertierungen bei jeder Änderung aus ihren festgeschriebenen Quelldateien. Die übrigen {{ n.ledger_unmeasured }} Korpora sind nicht gemessen.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Korpus</th><th class="num">Quellwerte</th><th class="num">Kopiert</th><th class="num">Über eine benannte Regel</th><th class="num">Kein Inhalt, nach geprüfter Regel</th><th class="num">Entfallen</th><th class="num">Ungeklärt</th></tr></thead>
+            <tbody>
+{{ html.ledger_rows }}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="limit">
         <h3>Das erste Risk-Korpus bleibt in seinem ersten Zustand <span class="tier tier-open">offen</span></h3>
@@ -160,23 +172,19 @@ source: b72ba9a0a5ba
       </div>
       <div class="limit">
         <h3>2.0.0 ist ein Kandidat, kein Release <span class="tier tier-open">offen</span></h3>
-        <p>Es ist nichts mehr zu entscheiden, und beide Validatoren sind auf allen {{ n.vectors }} Vektoren des Kandidaten grün. Das Setzen des Tags ist Sache des Autors und ist noch nicht erfolgt. Bis dahin ist 1.0.0 die veröffentlichte Version, und die Strukturen von 2.0.0 können sich noch ändern.</p>
+        <p>Es bleibt nichts zu entscheiden, und beide Validatoren sind auf allen {{ n.vectors }} Vektoren des Kandidaten grün. Die zwei Änderungen, die der Autor am 13. November 2026 angenommen hat, sind als rc.4 darin enthalten; die Tools, die die neuen Felder schreiben, folgen noch. Das Tag ist der Schritt des Autors, und er ist nicht getan. Bis dahin ist 1.0.0 die veröffentlichte Version, und die Strukturen von 2.0.0 können sich noch ändern.</p>
       </div>
       <div class="limit">
         <h3>Nicht jedes Bundle für 1.0.0 ist ein Bundle für 2.0.0 <span class="tier tier-measured">entschieden</span></h3>
-        <p>Bis rc.2 akzeptierte das Schema von 2.0.0 alles, was 1.0.0 akzeptierte. Seit rc.3 muss das Datum, an dem eine Abweichung eröffnet wurde, ein Datum sein und das Fälligkeitsdatum einer Maßnahme ein typisierter Zeitpunkt oder eine Dauer. Ein Bundle für 1.0.0 mit Freitext in einem dieser Felder muss ihn konvertieren. Alle fünf mitgelieferten Bundles und der Beispielordner sind konform. Ein Muster mit einer Unicode-Kategorie folgt der Unicode-Datenbank der Maschine, auf der es läuft, sodass ein später zugewiesener Codepunkt auf zwei Maschinen zwei Urteile ergeben kann; ein Autor, der ein eindeutiges Urteil braucht, schreibt den Bereich aus.</p>
+        <p>Bis rc.2 akzeptierte das Schema von 2.0.0 alles, was 1.0.0 akzeptierte. Seit rc.3 muss das Datum, an dem eine Abweichung eröffnet wurde, ein Datum sein und das Fälligkeitsdatum einer Maßnahme ein typisierter Zeitpunkt oder eine Dauer. Ein Bundle für 1.0.0 mit Freitext in einem dieser Felder muss ihn konvertieren. Seit rc.4 gilt dasselbe für das Datum der Herkunftsangabe eines Mappings, den Zeitpunkt einer Prüfung und den Zeitstempel einer Attestierung. Alle fünf mitgelieferten Bundles und der Beispielordner sind konform. Ein Muster mit einer Unicode-Kategorie folgt der Unicode-Datenbank der Maschine, auf der es läuft, sodass ein später zugewiesener Codepunkt auf zwei Maschinen zwei Urteile ergeben kann; ein Autor, der ein eindeutiges Urteil braucht, schreibt den Bereich aus.</p>
       </div>
       <div class="limit">
         <h3>Empfehlungspakete stützen sich auf eine einzige Beispieldatei <span class="tier tier-designed">entworfen</span></h3>
         <p>Keine Katalogbehörde veröffentlicht Herstellerempfehlungen. Für solche Daten verlangt die Aufnahmeregel einen Standard, der den Datensatz fordert, oder zwei offene Implementierungen, deren Inhalt gezählt wurde. Empfehlungspakete haben weder das eine noch das andere. Das Feld auf Klauselebene an einer Fähigkeit stützt sich auf eine einzige fiktive Komponentendefinition aus den Beispielen von NIST, mit drei Empfehlungen, zwei Einträgen auf Klauselebene und zwei vorgeschlagenen Parameterwerten; das Feld für die Produktversion stützt sich auf nichts Gezähltes. Beide kamen auf Entscheidung des Autors entgegen dieser Regel in den Kern, und die Spezifikation hält es so fest. Kein Hersteller hat ein Paket veröffentlicht; der Paket-Builder importiert OSCAL-Komponentendefinitionen, und die Beispiele von NIST kommen durch, ohne dass etwas verloren geht, das ein Paket aufnehmen kann, aber keine von einem Hersteller veröffentlichte Komponentendefinition ist bisher durch ihn gelaufen. Diese Erhebung steht noch aus.</p>
       </div>
       <div class="limit">
-        <h3>Bekannte Mängel in mitgelieferten Beispielen <span class="tier tier-open">offen, Backlog 46 und 55</span></h3>
-        <p>Die Beispiel-Attestierung dient nur der Veranschaulichung: Ihre Subject-Digests passen zu keinem Beispielobjekt. Der Methoden-Payload eines Assessments wird noch nicht gegen sein fixiertes Facettenschema validiert, und die drei im Repository würden daran scheitern.</p>
-      </div>
-      <div class="limit">
-        <h3>Zwei Stellen, an denen ein Nachbar voraus ist <span class="tier tier-open">offen, Backlog 65 und 66</span></h3>
-        <p>Der Vergleich vom 13. November 2026 fand zwei. Eine Deviation hält fest, wann sie eröffnet und wer sie genehmigt hat, und hat kein Ablaufdatum; eine Sicherheitsausnahme in CISO Assistant hat ein Ablaufdatum und ein Risiko in OSCAL eine Frist. Keine Tailoring-Operation hält ihren eigenen Autor fest: Eine Abschwächung erfordert eine genehmigte Deviation, jede andere Änderung wird nur über das Tailoring zugeordnet, das sie enthält, während CISO Assistant jede Änderung protokolliert. Beide stehen als Einträge 65 und 66 im Backlog; jeder erfordert eine Entscheidung des Autors.</p>
+        <h3>Wer entschieden hat, wird festgehalten, nicht erzwungen <span class="tier tier-designed">in rc.4, Backlog 65 und 66</span></h3>
+        <p>Der Vergleich vom 13. November 2026 fand zwei Stellen, an denen ein Nachbar voraus war: Eine Deviation hatte kein Ablaufdatum, während eine Sicherheitsausnahme in CISO Assistant ein Ablaufdatum hat und ein Risiko in OSCAL eine Frist; und keine Tailoring-Operation hielt ihren eigenen Autor fest, während CISO Assistant jede Änderung protokolliert. Beides ist in rc.4 enthalten. Die Felder sind optional: Ein Validator meldet einen fehlenden Autor, der ein Bundle nur scheitern lässt, wenn der Aufrufer es verlangt, und ein verstrichenes Überprüfungsdatum, das dies nie tut. Eine Deviation, deren Überprüfungsdatum verstrichen ist, bleibt in Kraft, bis jemand handelt. Der Autor einer Version ist kein Protokoll jeder Änderung. Seit dem 14. November 2026 schreiben die Tools die Felder. Die Seiten der App schreiben den Autor, den ihr Nutzer eingestellt hat, und Konverter und Importe füllen Autor und Datum aus der Quelle vor; wer importiert, kann beides überschreiben. Eine Quelle gibt wenig her: OSCAL nennt, wer für ein Dokument verantwortlich ist, nicht, wer eine seiner Aussagen geschrieben hat. So erhält im konvertierten NIST-Beispiel einer von sieben Einträgen einen Autor, und sieben solcher Meldungszeilen bleiben.</p>
       </div>
       <div class="limit">
         <h3>Die Governance ist eine Person <span class="tier tier-open">offen</span></h3>

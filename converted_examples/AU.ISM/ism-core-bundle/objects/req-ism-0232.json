@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0232",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0232",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Telephone systems used for sensitive or classified conversations encrypt all traffic that passes over external systems."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0285",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-0285",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Evaluated products are delivered in a manner consistent with any delivery procedures defined in associated evaluation documentation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

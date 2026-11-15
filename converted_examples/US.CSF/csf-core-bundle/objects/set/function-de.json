@@ -14,6 +14,10 @@
   {
    "ref": "https://ns.nist.gov/csf/set/category/de-cm",
    "sequence": 20
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/de-dp",
+   "sequence": 30
   }
  ],
  "facets": {

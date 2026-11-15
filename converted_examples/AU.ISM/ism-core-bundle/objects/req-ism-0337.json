@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0337",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0337",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Media is only used with systems that are authorised to process, store or communicate its sensitivity or classification."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0479",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0479",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Symmetric cryptographic algorithms are not used in Electronic Codebook Mode."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

@@ -34,15 +34,20 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "In certain situations, such as when there is a threat to human life or an event that threatens the organization’s ability to carry out critical missions or business functions, an override capability for access control mechanisms may be needed. Override conditions are defined by organizations and used only in those limited circumstances. Audit events are defined in AU-2 . Audit records are generated in AU-12."
+     "en": "In certain situations, such as when there is a threat to human life or an event that threatens the organization’s ability to carry out critical missions or business functions, an override capability for access control mechanisms may be needed. Override conditions are defined by organizations and used only in those limited circumstances. Audit events are defined in [AU-2](#au-2) . Audit records are generated in [AU-12](#au-12)."
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-3.10_obj",
      "label": "AC-03(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "an audited override of automated access control mechanisms is employed under {param:ac-03.10_odp.01} by {param:ac-03.10_odp.02}."
      }
@@ -115,7 +120,8 @@
      ],
      "alt-identifiers": [
       "ac-3.10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-03(10)_ODP[01]"
     },
     "ac-03.10_odp.02": {
      "guidelines": [
@@ -125,7 +131,8 @@
      ],
      "alt-identifiers": [
       "ac-3.10_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-03(10)_ODP[02]"
     }
    }
   }
@@ -161,15 +168,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/AC-17.7",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AC-17.7",
-    "mode": "merged-into",
-    "label": "AC-17(07)",
-    "title": "Additional Protection for Security Function Access"
-   }
-  ]
- }
+ ]
 }

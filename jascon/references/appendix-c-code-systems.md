@@ -61,7 +61,9 @@ all of them without flattery.
 
 `draft · active · deprecated · withdrawn` — on every object (A.0).
 Deprecation is a state *with a successor pointer* (`replaces` on the
-new object carries the mode); withdrawal is terminal. Identity events
+new object carries the mode); withdrawal is terminal, and in a bundle
+that holds an object as withdrawn nothing in force leans on it
+(WITHDRAWN-1, Chapter 12; the record may still name it). Identity events
 (rebrand, split, merge, rename) are **not** lifecycle codes — they
 are `canonical-alias`/`replaces` records (Chapter 3), because a state
 field cannot carry a forwarding address.
@@ -113,8 +115,9 @@ Stewardship of the code system tracks upstream (the R13 standing
 duty). The composition arithmetic (what survives a two-hop chain)
 is Chapter 8's table; the short version: `equal` chains, everything
 else degrades honestly toward `intersects`/`supports`.
-**Observed:** 373 Mapping objects minted from CR26's untyped KSI
-links — all `supports` per the §8.6 import rule, because flattering
+**Observed:** 652 Mapping objects minted from CR26's untyped control
+links (558 of KSIs, 94 of rules; publication 2026.11.02.01 of
+2026-11-02) — all `supports` per the §8.6 import rule, because flattering
 an untyped link into `equal` is how crosswalk trust dies.
 
 **`supplements`** *(v0.6 cycle, 2026-07-21)* — the one code beyond the
@@ -137,7 +140,8 @@ Interconnections are **relations between Components**, not a kind.
 `draft · reviewed · authoritative` — on Mappings. The grade answers
 "how much diligence stands behind this claim," and provenance answers
 "whose diligence" — together they let contradictory mappings coexist
-without a fistfight (D20). **Observed:** 373 × `draft` — correctly
+without a fistfight (D20). **Observed:** 652 × `draft` (CR26
+publication 2026.11.02.01 of 2026-11-02) — correctly
 humble for machine-imported link lists; `reviewed` appears in the
 example bundle's hand-checked crosswalk; `authoritative` is reserved
 for the mapping's *owner-of-record*.
@@ -217,9 +221,18 @@ OSCAL's response `type` prop carries the option — `mitigate` ×1 →
 acceptance, RISK-6). The fit is not one-to-one in the other direction:
 OSCAL allows seven values for that prop (`avoid · mitigate · transfer ·
 accept · share · contingency · none`); `transfer` and `share` both land
-on `share`, and `contingency` and `none` have no code here. Zero corpus
-instances of either so far; if one appears it stays in the facet and is
-counted, never coerced.
+on `share`, and `contingency` and `none` have no code here. Decided
+2026-11-13 (backlog #47b), and neither gets one. `none` says that no
+option was chosen; a Risk says the same by carrying no `treatment`, so
+the absence of the field is that value. `contingency` is a plan for the
+day the risk materialises and is none of the four options; a fifth code
+needs a counted instance (D22, test 3), and no corpus holds one. In both
+cases a converter writes no `treatment`, leaves the response verbatim in
+its facet and counts it in its report, never coerced. Run on 2026-11-13
+on two copies of the IFA POA&M with one response type changed: the Risk
+carries no `treatment`, the facet carries the type, the bundle
+validates. The question reopens with the first instance in a real
+corpus.
 **Pack kinds** *(2.0.0, CP-ADVICE-1)*: `advice` — a closed set
 of one. The kind is what the pack rules fire on: an `advice` pack holds
 Components only (ADVICE-1). A pack of Checks would be a second code with
@@ -265,4 +278,6 @@ check needs and an assessment does not.
 
 **C.15 Collector runtimes** (in `collector@1`): `sh · bash · powershell ·
 python · ansible · http-api`, or a namespaced URI. For `http-api` the
-`source` has no declared format yet (backlog #62).
+`source` has no declared format yet (issue 37 of the repository's
+tracker, which holds the whole of API-based checks; backlog #62 was
+moved there on 2026-11-15).

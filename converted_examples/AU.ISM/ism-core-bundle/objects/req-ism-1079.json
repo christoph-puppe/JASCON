@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1079",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-1079",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "ASD’s approval is sought before undertaking any maintenance or repairs to high assurance IT equipment."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

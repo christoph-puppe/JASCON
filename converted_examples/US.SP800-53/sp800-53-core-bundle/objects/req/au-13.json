@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -31,6 +32,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -41,6 +43,7 @@
   },
   {
    "id": "smt.b.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -58,6 +61,7 @@
   },
   {
    "id": "smt.b.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -82,15 +86,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-13_obj",
      "label": "AU-13",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-13"
+      }
+     ],
      "children": [
       {
        "id": "au-13_obj.a",
        "label": "AU-13a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:au-13_odp.01} is/are monitored {param:au-13_odp.02} for evidence of unauthorized disclosure of organizational information;"
        }
@@ -98,10 +112,20 @@
       {
        "id": "au-13_obj.b",
        "label": "AU-13b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "au-13_obj.b.1",
          "label": "AU-13b.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.1"
+          }
+         ],
          "prose": {
           "en": "{param:au-13_odp.03} are notified if an information disclosure is discovered;"
          }
@@ -109,6 +133,11 @@
         {
          "id": "au-13_obj.b.2",
          "label": "AU-13b.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.2"
+          }
+         ],
          "prose": {
           "en": "{param:au-13_odp.04} are taken if an information disclosure is discovered."
          }
@@ -185,7 +214,8 @@
      ],
      "alt-identifiers": [
       "au-13_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-13_ODP[01]"
     },
     "au-13_odp.02": {
      "guidelines": [
@@ -195,7 +225,8 @@
      ],
      "alt-identifiers": [
       "au-13_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-13_ODP[02]"
     },
     "au-13_odp.03": {
      "guidelines": [
@@ -205,7 +236,8 @@
      ],
      "alt-identifiers": [
       "au-13_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AU-13_ODP[03]"
     },
     "au-13_odp.04": {
      "guidelines": [
@@ -215,7 +247,8 @@
      ],
      "alt-identifiers": [
       "au-13_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "AU-13_ODP[04]"
     }
    }
   },

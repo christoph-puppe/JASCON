@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0554",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-0554",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "An encrypted and non-replayable two-way authentication scheme is used for call authentication and authorisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

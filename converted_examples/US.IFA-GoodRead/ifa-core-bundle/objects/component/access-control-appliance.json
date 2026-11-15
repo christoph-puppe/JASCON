@@ -26,6 +26,9 @@
     "implementation-point": "internal",
     "virtual": "yes"
    }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "22222222-0000-4000-9001-000000000003"
   }
  }
 }

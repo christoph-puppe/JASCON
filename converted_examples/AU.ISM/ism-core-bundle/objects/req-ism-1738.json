@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1738",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1738",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The right to verify compliance with security requirements documented in contractual arrangements with service providers is regularly exercised."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

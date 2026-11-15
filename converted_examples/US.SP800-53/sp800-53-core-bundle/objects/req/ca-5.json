@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -19,6 +20,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -43,15 +45,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ca-5_obj",
      "label": "CA-05",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/CA-5"
+      }
+     ],
      "children": [
       {
        "id": "ca-5_obj.a",
        "label": "CA-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "a plan of action and milestones for the system is developed to document the planned remediation actions of the organization to correct weaknesses or deficiencies noted during the assessment of the controls and to reduce or eliminate known vulnerabilities in the system;"
        }
@@ -59,6 +71,11 @@
       {
        "id": "ca-5_obj.b",
        "label": "CA-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "existing plan of action and milestones are updated {param:ca-05_odp} based on the findings from control assessments, independent audits or reviews, and continuous monitoring activities."
        }
@@ -133,7 +150,8 @@
      ],
      "alt-identifiers": [
       "ca-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CA-05_ODP"
     }
    }
   },

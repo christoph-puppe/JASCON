@@ -34,11 +34,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-4_obj",
      "label": "AU-04",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "audit log storage capacity is allocated to accommodate {param:au-04_odp}."
      }
@@ -120,7 +125,8 @@
      ],
      "alt-identifiers": [
       "au-4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-04_ODP"
     }
    }
   }

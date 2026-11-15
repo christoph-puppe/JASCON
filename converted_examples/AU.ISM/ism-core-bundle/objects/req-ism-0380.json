@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0380",
- "version": "2026.06.18",
+ "version": "10",
  "label": "ISM-0380",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Unneeded user accounts, components, services and functionality of operating systems are disabled or removed."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

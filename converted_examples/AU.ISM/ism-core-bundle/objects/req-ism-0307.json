@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0307",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0307",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "If an appropriately cleared technician is not used to undertake maintenance or repairs to IT equipment, the IT equipment and associated media are sanitised before maintenance or repairs."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

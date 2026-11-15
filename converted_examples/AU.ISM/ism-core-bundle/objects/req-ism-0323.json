@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0323",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0323",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Media is classified to the highest sensitivity or classification of data it stores, unless the media has been classified to a higher sensitivity or classification."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

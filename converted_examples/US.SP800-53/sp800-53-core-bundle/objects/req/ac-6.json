@@ -26,11 +26,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-6_obj",
      "label": "AC-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the principle of least privilege is employed, allowing only authorized accesses for users (or processes acting on behalf of users) that are necessary to accomplish assigned organizational tasks."
      }
@@ -154,27 +159,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AC-3.1",
-    "mode": "merged-into",
-    "label": "AC-03(01)",
-    "title": "Restricted Access to Privileged Functions"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-14",
-    "mode": "merged-into",
-    "label": "SC-14",
-    "title": "Public Access Protections"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-9",
-    "mode": "merged-into",
-    "label": "SI-09",
-    "title": "Information Input Restrictions"
-   }
-  ]
- }
+ ]
 }

@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.MA-01",
+ "version": "2.0",
+ "label": "PR.MA-01",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.MA-01"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Maintenance and repair of organizational assets are performed and logged, with approved and controlled tools"
+   }
+  }
+ ]
+}

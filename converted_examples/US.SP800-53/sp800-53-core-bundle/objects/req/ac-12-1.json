@@ -34,11 +34,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-12.1_obj",
      "label": "AC-12(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a logout capability is provided for user-initiated communications sessions whenever authentication is used to gain access to {param:ac-12.01_odp}."
      }
@@ -114,7 +119,8 @@
      ],
      "alt-identifiers": [
       "ac-12.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-12(01)_ODP"
     }
    }
   }
@@ -130,15 +136,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SC-23.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-23.2",
-    "mode": "merged-into",
-    "label": "SC-23(02)",
-    "title": "User-initiated Logouts and Message Displays"
-   }
-  ]
- }
+ ]
 }

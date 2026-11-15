@@ -146,6 +146,52 @@ example bundle carries a language map there (`{"en": "…"}`).
 the corpus default-artifacts block. **Status:** high; exercised
 across all three corpora.
 
+**Version 1.1.0** *(2026-11-14, the author's decision on backlog #83;
+specification D27)* types `objectives[]` and adds `methods[]`. An
+objective: `{id?, label?, prose?, assessment-for[]?, methods[]?,
+children[]?}`, the objectives under it in `children`. `assessment-for`
+says what the objective assesses, as a list of **addresses**:
+`{"statement-id": "smt.a"}` a statement of the host Requirement;
+`{"requirement-ref": …, "statement-id": …}` a statement of another
+Requirement; `{"requirement-ref": …}` alone a Requirement as a whole;
+`{"href": …}` a reference of the source that names nothing, carried as
+it stands. A `statement-id` in an address is held by every validator as
+a `by-statement` key is (D10). `methods[]`: `{method ●, label?,
+objects[]?}`, the assessment methods a source states (SP 800-53A:
+EXAMINE, INTERVIEW, TEST, each with its objects); `method`, singular,
+is unchanged. *Measured on SP 800-53A:* 3,707 addresses on 1,014
+Requirements: 3,484 a statement of the host, 5 a statement of another
+control, 217 the control as a whole, 1 nothing the catalogue defines.
+Until that day the converter kept all of this in a facet of its own,
+where no rule read the addresses.
+**1.0.0 stays in the library.** A bundle that pins it is held to it; an
+unpinned payload is held to 1.1.0. The example folder of this handbook
+pins 1.0.0.
+
+## D.6a `references@1` *(2026-11-14 — backlog #82)*
+
+**Purpose:** the documents a catalogue's texts and links refer to, on
+the Set that stands for the catalogue. **Declares:** `[]`: a resource
+changes no selection, tailoring, assessment or rendering rule.
+**Payload:** `{resources[] ●}`, each entry as its source writes it, with
+one member the facet names: `id` ●. A text of the bundle refers to a
+resource as `#id`.
+```json
+{"resources": [ {"id": "36766a6f-e174-4292-a03e-fcb3b4b09201",
+   "title": "Strategies to mitigate cybersecurity incidents",
+   "rlinks": [{"href": "https://…", "media-type": "text/html"}]} ]}
+```
+**Absorbs:** the back-matter of an OSCAL catalogue, which three
+converters had carried in three places (a facet of their own, the compat
+facet, the manifest). *Measured:* ISM 246 resources, named by 486
+references; SP 800-53 178 on the root Set and one on each of its four
+baseline Sets; CSF 3; Grundschutz++ 1. A resource nothing refers to is
+not carried (the author's decision of 2026-11-14, a rule the ledger
+checks). **Not decided:** what a validator does with `#id`. In SP 800-53
+the same form names a control, a statement or a parameter in 422 of 540
+places, so "names no resource" is no defect there (specification D27,
+backlog #82).
+
 ## D.6b `collector@1` *(2.0.0 — CP-CHECK-1)*
 
 **For:** the code that observes what a Check declares. It sits on the
@@ -176,7 +222,8 @@ looked for and did not find is left out; a collector that could not
 look prints nothing. Credentials and target inventory never appear
 here: they are the runner's configuration.
 **Open:** the `source` of an `http-api` collector is free text, which no
-tool can execute as it stands (backlog #62).
+tool can execute as it stands (issue 37 of the repository's tracker;
+backlog #62 was moved there on 2026-11-15).
 
 ## D.7 `system-context@1` — *medium confidence*
 
@@ -221,6 +268,44 @@ its descriptor and a residue KPI per release (§14.6).
 | CR26 | 29 + 5 objects | rule & KSI `class-variants` (full variant fidelity; feeds the open D13 ceremony question) |
 | CR26 | 79 entries | the CTL Rev5 overlay — parked until the NIST catalog conversion (gate 3) supplies statement addresses |
 
+**Measured again on 2026-11-14.** The author's rule of that day, *real
+content is never dropped*, moved every source value without a kernel
+place into this facet, and it has one schema now: every converter pins
+the same file, version 1.1.0 (`oscal_conv_lib.compat_schema`); until then
+five converters pinned five schemas under one id and version 1.0.0.
+Objects that carry it, read from the committed bundles: ISM 1,641
+(`props` on 1,101 Requirements, the control's own revision and month of
+change; `group-parts` on 539 Sets; the document's `metadata` and `uuid`
+on the root); Grundschutz++ 209 (`param-extras` on 208 Requirements;
+`metadata`, `uuid` and one `back-matter` resource on the root); CSF 1
+(the root); SP 800-53 6 (the root and the four baseline Sets: `metadata`,
+`uuid`, `back-matter`, `imports`, `merge`; and the three print labels of
+SI-2(7) in `parts`); IFA 13 (`uuid` of the source element an object is
+made from). CR26, counted on a bundle converted here: `history` on 291
+Requirements, `flows` on one family Set, `class-variants` on 28 rules
+and 5 indicators. Of the CTL overlay, the ODP assignments left the facet
+at gate 3 (they are operations of a Tailoring); its guidance is still
+here. The exits are filed as backlog #80 to #85.
+
+**After the author's decisions on those six (2026-11-14, later the same
+day; specification D27).** Four kinds of value left the facet: an
+object's change record (the kernel's `version` and `history`), the print
+label of a statement (the kernel's `label`), the resources texts refer
+to (`references@1`), and the uuid of a source document (the manifest's
+`provenance.sources`). Its schema is version 1.2.0: `back-matter` and
+`history` are no members any more, and the items of `props` and
+`group-parts` are typed and closed. Objects that carry it now, read
+from the committed bundles: ISM 540 (`group-parts` on 539 Sets, the
+document's `metadata` on the root); Grundschutz++ 209 (`param-extras` on
+208 Requirements, `metadata` on the root); CSF 1; SP 800-53 5 (`metadata`
+on the root and the four baseline Sets, `imports` and `merge` on the
+four); IFA 13 (`uuid` of the source element an object is made from).
+CR26, on a bundle converted here: 35 (`class-variants` on 33, `flows` on
+one family Set, `ctl` on the overlay Set). What is left is what the
+author decided stays: a document's metadata beyond title, version, uuid,
+author, day and format; a parameter's second identifier; a profile's
+import and merge directives; and what CR26 writes that nothing else has.
+
 Every row has a named exit: a spec decision, a facet graduation, or a
 gate-3 dependency. A row without an exit would be a prop with a
 registration number — the smell §14.6 warns about.
@@ -229,9 +314,11 @@ registration number — the smell §14.6 warns about.
 
 Authorities mint their own, registered and pinned like anything else.
 The gate produced five real ones: **`gspp-taxonomy@1`**
-(sec-level/effort/tags/class/practice — sample from KONF.14.1:
-`{"sec-level": "normal-SdT", "effort": 2, "tags": ["Produktbeschreibung",
-"Cryptography", "Zero Trust"], ...}`), **`gspp-narrative@1`**
+(class/sec-level/effort/tags, keyed by statement; since version 1.1.0
+typed, with the publisher's two levels and an effort of 0 to 5 — sample
+from KONF.14.1: `{"by-statement": {"smt": {"class":
+"BSI-Stand-der-Technik-Kernel", "sec-level": "normal-SdT", "effort": 2,
+"tags": ["Produktbeschreibung", "Cryptography"]}}}`), **`gspp-narrative@1`**
 (guidance + layer descriptions), **`cr26/scope@1`** (subset
 applicability — sample: `{"types": ["20x","Rev5"], "paths":
 ["Program","Agency"], "classes": ["B","C","D"], "affects":

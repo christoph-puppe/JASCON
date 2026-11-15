@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1438",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1438",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Where a high availability requirement exists for website hosting, CDNs that cache websites are used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

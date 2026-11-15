@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0565",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0565",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Email servers are configured to block, log and report emails with inappropriate protective markings."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-03"
   }
  ]
 }

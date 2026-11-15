@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/PE-10.1",
+ "version": "5.2.0",
+ "label": "PE-10(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Accidental and Unauthorized Activation"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into PE-10."
+   }
+  }
+ ]
+}

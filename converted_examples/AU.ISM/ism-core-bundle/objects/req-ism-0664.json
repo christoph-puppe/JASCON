@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0664",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0664",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Data exported from SECRET and TOP SECRET systems is reviewed and authorised by a trustworthy source beforehand."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09"
   }
  ]
 }

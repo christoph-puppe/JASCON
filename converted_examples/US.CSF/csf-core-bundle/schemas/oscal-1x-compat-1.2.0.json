@@ -1,0 +1,116 @@
+{
+ "id": "https://ns.jascon.net/compat/oscal-1x",
+ "version": "1.2.0",
+ "modifies-semantics": [],
+ "note": "NORMATIVE pinned payload schema (backlog #26), one for every converter of this repository since 2026-11-14: closed shape - unknown keys are rejected, never smuggled",
+ "schema": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+   "metadata": {
+    "type": "object"
+   },
+   "uuid": {
+    "type": "string"
+   },
+   "catalog": {
+    "type": "object"
+   },
+   "imports": {
+    "type": "array"
+   },
+   "merge": {
+    "type": "object"
+   },
+   "class": {
+    "type": "string"
+   },
+   "group-parts": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "group": {
+       "type": "string"
+      },
+      "name": {
+       "type": "string"
+      },
+      "prose": {
+       "type": "object",
+       "additionalProperties": {
+        "type": "string"
+       }
+      }
+     }
+    }
+   },
+   "param-extras": {
+    "type": "object"
+   },
+   "props": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "name",
+      "value"
+     ],
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "uuid": {
+       "type": "string"
+      },
+      "ns": {
+       "type": "string"
+      },
+      "value": {
+       "type": "string"
+      },
+      "class": {
+       "type": "string"
+      },
+      "group": {
+       "type": "string"
+      },
+      "remarks": {
+       "type": "string"
+      }
+     }
+    }
+   },
+   "parts": {
+    "type": "array"
+   },
+   "links": {
+    "type": "array"
+   },
+   "control": {
+    "type": "object"
+   },
+   "group": {
+    "type": "object"
+   },
+   "nested-in": {
+    "type": "string"
+   },
+   "unmapped": {
+    "type": "object"
+   },
+   "flows": {
+    "type": "array"
+   },
+   "class-variants": {
+    "type": "object"
+   },
+   "ctl": {
+    "type": "object"
+   }
+  },
+  "additionalProperties": false
+ }
+}

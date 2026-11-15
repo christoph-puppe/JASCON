@@ -1,6 +1,6 @@
 {
  "id": "https://ifa.gov/goodread/facet/finding-target",
- "version": "1.0.0",
+ "version": "1.1.0",
  "modifies-semantics": [],
  "note": "NORMATIVE pinned payload schema (backlog #26): closed shape - unknown keys are rejected, never smuggled",
  "schema": {
@@ -8,6 +8,9 @@
   "type": "object",
   "properties": {
    "target-objective-id": {
+    "type": "string"
+   },
+   "target-type": {
     "type": "string"
    },
    "implementation-statement-uuid": {

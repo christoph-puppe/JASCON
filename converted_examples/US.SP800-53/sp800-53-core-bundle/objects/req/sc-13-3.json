@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SC-13.3",
+ "version": "5.2.0",
+ "label": "SC-13(3)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Individuals Without Formal Access Approvals"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SC-13."
+   }
+  }
+ ]
+}

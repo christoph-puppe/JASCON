@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-2061",
-   "sequence": 12060
+   "sequence": 12230
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-2060",
-   "sequence": 12070
+   "sequence": 12240
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-2062",
-   "sequence": 12080
+   "sequence": 12250
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-0402",
-   "sequence": 12090
+   "sequence": 12260
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-2122",
-   "sequence": 12100
+   "sequence": 12270
   }
  ],
  "facets": {

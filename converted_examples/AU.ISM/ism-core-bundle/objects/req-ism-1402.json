@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1402",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1402",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Credentials stored on systems are protected by a password manager; a hardware security module; or by salting, hashing and stretching them before storage within a database."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

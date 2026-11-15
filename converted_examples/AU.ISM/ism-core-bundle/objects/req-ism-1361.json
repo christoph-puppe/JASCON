@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1361",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1361",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Security Construction and Equipment Committee-approved equipment or ASIO-approved equipment is used when destroying media."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-06"
   }
  ]
 }

@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.10",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.10",
  "lifecycle": "active",
  "title": {
-  "de": "Monitoring von Zugangsdaten"
+  "de": "Zugriffsbeschränkung pro IT-System"
  },
  "statements": [
   {
@@ -14,24 +14,19 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE Zugangsdaten auf Kompromittierung durch {param:ber.5.10-prm1} überwachen."
-   },
-   "parameters": [
-    {
-     "name": "ber.5.10-prm1",
-     "type": "string",
-     "label": "einen automatisierten Mechanismus"
-    }
-   ]
+    "de": "Berechtigung für IT-Systeme SOLLTE den lesenden und schreibenden Zugriff auf Authentifizierungsmittel einschränken."
+   }
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "überwachen",
-     "result": "Zugangsdaten auf Kompromittierung",
-     "result-specification": "durch {{einen automatisierten Mechanismus}}"
+     "action": "einschränken",
+     "result": "den lesenden und schreibenden Zugriff auf Authentifizierungsmittel",
+     "target-object-categories": [
+      "IT-Systeme"
+     ]
     }
    }
   },
@@ -39,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Detektions-Konzept"
+      "Konfigurationshistorie"
      ]
     }
    }
@@ -49,13 +44,10 @@
     "smt": {
      "confidentiality": "1",
      "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
+     "availability": "0",
+     "authenticity": "2",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
      ]
     }
    }
@@ -63,13 +55,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Credential Stuffing",
-      "Password Policy"
-     ]
+     "effort": 2
     }
    }
   },
@@ -77,15 +65,8 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Eine Kompromittierung meint hier, dass Zugangsdaten wie Benutzername und Passwort (englisch: credentials) von Unbefugten eingesehen, abgefangen oder manipuliert wurden, sodass ein Missbrauch für unautorisierte Zugriffe möglich wird. Dies könnte etwa durch Leaks in Datenbanken, durch Phishing-Angriffe oder durch das Abfangen unverschlüsselter Übertragungen entstehen. Ein automatisierter Mechanismus bezeichnet hierbei eine technische Lösung, die ohne manuelles Zutun kontinuierlich prüft, ob bekannte Indikatoren einer Kompromittierung vorliegen (englisch: credential monitoring system). Geeignete Mechanismen können etwa Credential-Leak-Monitoring-Dienste, Data Breach Checker oder Darknet-Scanning-Tools sein. Der Zweck dieser Vorgabe liegt darin, dass ein frühzeitiges Erkennen von kompromittierten Zugangsdaten helfen kann, unautorisierte Logins und den Missbrauch sensibler Systeme zu verhindern; ohne eine solche Überwachung könnte ein Angreifer über lange Zeit unentdeckt mit gestohlenen Daten arbeiten und kritische Schäden verursachen. Ergeben sich hierbei Anzeichen auf eine Kompromittierung oder einen Leak der Zugangsdaten, so kann als Reaktion ein Wechsel der Zugangsdaten über einen nicht kompromittierten Kommunikationskanal veranlasst oder schlicht das betroffene Zugangskonto gesperrt werden."
+      "de": "Lesender Zugriff bezeichnet in diesem Kontext jede Möglichkeit, Authentifizierungsmittel einzusehen, auszulesen, zu exportieren, zu kopieren oder technisch zu verwenden, ohne sie unmittelbar zu verändern; schreibender Zugriff meint jede Möglichkeit, Authentifizierungsmittel anzulegen, zu ändern, zu ersetzen, zu löschen, zu importieren oder deren Vertrauensstatus zu beeinflussen. Authentifizierungsmittel sind hier alle technischen oder organisatorisch verwalteten Mittel, mit denen Identitäten nachgewiesen oder Vertrauensbeziehungen hergestellt werden, etwa Passwörter, private Schlüssel, API-Keys, Token, Zertifikate, Kerberos-Keytabs, SSH-Schlüssel, Recovery-Codes, Hardware-Token-Zuordnungen oder Einträge in Trust Stores. Der Zugriff auf solche Mittel ist besonders sensibel, weil bereits lesender Zugriff in vielen Fällen zur Nachahmung einer Identität oder zur Umgehung vorgesehener Kontrollmechanismen führen könnte, während schreibender Zugriff zusätzlich Manipulationen an Vertrauensketten, Schlüsselmaterial oder Anmeldeverfahren ermöglichen könnte."
      }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.5.10-prm1": {
-     "alt-identifier": "4785649d-561d-4757-9421-4d0db14ee4df"
     }
    }
   }
@@ -93,7 +74,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "4785649d-561d-4757-9421-4d0db14ee4df"
+   "value": "8acf96e8-7266-4378-abd0-f718b2f641a6"
   }
  ]
 }

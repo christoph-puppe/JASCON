@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1236",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1236",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Malicious domain names, dynamic domain names and domain names that can be registered anonymously for free are blocked by web content filters."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

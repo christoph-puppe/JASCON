@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1787",
-   "sequence": 1690
+   "sequence": 1860
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1788",
-   "sequence": 1700
+   "sequence": 1870
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1789",
-   "sequence": 1710
+   "sequence": 1880
   }
  ],
  "facets": {

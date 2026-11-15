@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0718",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0718",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CISO regularly reports directly to their organisation’s board of directors or executive committee on cyber security matters."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

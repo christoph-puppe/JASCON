@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1515",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1515",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Restoration of data, applications and settings from backups to a common point in time is tested as part of disaster recovery exercises."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

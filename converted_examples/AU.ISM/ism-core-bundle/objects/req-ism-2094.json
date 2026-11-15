@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2094",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2094",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Content filtering is implemented by AI applications to detect and block sensitive data exposure and improper output."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0445",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0445",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Privileged users are assigned a dedicated privileged user account to be used solely for duties requiring privileged access."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

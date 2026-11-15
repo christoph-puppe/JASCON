@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1934",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1934",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "User accounts with DCSync permissions are reviewed at least annually, and those without an ongoing requirement for the permissions have them removed."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

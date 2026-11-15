@@ -34,11 +34,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-4.23_obj",
      "label": "AC-04(23)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "when transferring information between security domains, non-releasable information is modified by implementing {param:ac-04.23_odp}."
      }
@@ -108,7 +113,8 @@
      ],
      "alt-identifiers": [
       "ac-4.23_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(23)_ODP"
     }
    }
   }

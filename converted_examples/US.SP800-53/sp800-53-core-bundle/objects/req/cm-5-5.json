@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -31,6 +32,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -55,19 +57,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cm-5.5_obj",
      "label": "CM-05(05)",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-5.5"
+      }
+     ],
      "children": [
       {
        "id": "cm-5.5_obj.a",
        "label": "CM-05(05)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "cm-5.5_obj.a-1",
          "label": "CM-05(05)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "privileges to change system components within a production or operational environment are limited;"
          }
@@ -75,6 +92,11 @@
         {
          "id": "cm-5.5_obj.a-2",
          "label": "CM-05(05)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "privileges to change system-related information within a production or operational environment are limited;"
          }
@@ -84,10 +106,20 @@
       {
        "id": "cm-5.5_obj.b",
        "label": "CM-05(05)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cm-5.5_obj.b-1",
          "label": "CM-05(05)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "privileges are reviewed {param:cm-05.05_odp.01};"
          }
@@ -95,6 +127,11 @@
         {
          "id": "cm-5.5_obj.b-2",
          "label": "CM-05(05)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "privileges are reevaluated {param:cm-05.05_odp.02}."
          }
@@ -189,14 +226,16 @@
       {
        "en": "frequency at which to review privileges is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-05(05)_ODP[01]"
     },
     "cm-05.05_odp.02": {
      "guidelines": [
       {
        "en": "frequency at which to reevaluate privileges is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "CM-05(05)_ODP[02]"
     }
    }
   }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1297",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1297",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Legal advice is sought prior to allowing privately owned mobile devices and desktop computers to access systems or data."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

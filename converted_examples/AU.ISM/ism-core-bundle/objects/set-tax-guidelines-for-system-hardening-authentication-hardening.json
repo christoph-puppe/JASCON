@@ -8,59 +8,59 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-30cf19a",
-   "sequence": 9180
+   "sequence": 9350
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-9c33b84",
-   "sequence": 9230
+   "sequence": 9400
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-52b55f0",
-   "sequence": 9430
+   "sequence": 9600
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-e25522e",
-   "sequence": 9460
+   "sequence": 9630
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-391d9cc",
-   "sequence": 9580
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-f166060",
-   "sequence": 9640
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-37407b9",
-   "sequence": 9700
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-853bff9",
    "sequence": 9750
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-349fd89",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-f166060",
+   "sequence": 9810
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-37407b9",
    "sequence": 9870
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-853bff9",
+   "sequence": 9920
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-349fd89",
+   "sequence": 10040
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-c21dbbd",
-   "sequence": 9890
+   "sequence": 10060
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-46ae4e8",
-   "sequence": 9910
+   "sequence": 10080
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-f02c89a",
-   "sequence": 9930
+   "sequence": 10100
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-34e64b7",
-   "sequence": 9950
+   "sequence": 10120
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-authentication-harde-f4c3c1b",
-   "sequence": 9970
+   "sequence": 10140
   }
  ],
  "facets": {

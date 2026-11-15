@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Schutz vor Schadprogrammen"
@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.3.1",
-   "sequence": 3490
+   "sequence": 5990
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.3.2",
-   "sequence": 3500
+   "sequence": 6000
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.3.3",
-   "sequence": 3510
+   "sequence": 6010
   }
  ],
  "label": "3",

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1524",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1524",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Content filters used by CDSs undergo rigorous security testing to ensure they perform as expected and cannot be bypassed."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

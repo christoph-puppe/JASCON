@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1562",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1562",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Video conferencing and IP telephony infrastructure is hardened."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-12"
   }
  ]
 }

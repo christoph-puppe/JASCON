@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.2",
  "lifecycle": "active",
  "title": {
-  "de": "Vorgehensweise zur Zurücksetzung"
+  "de": "Autorisierung neuer Zugangskonten"
  },
  "statements": [
   {
@@ -14,16 +14,24 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE eine Vorgehensweise zur Zurücksetzung von Authentifizierungsmitteln verankern."
-   }
+    "de": "Berechtigung SOLLTE die Einrichtung von Zugangskonten durch {param:ber.3.2-prm1} autorisieren."
+   },
+   "parameters": [
+    {
+     "name": "ber.3.2-prm1",
+     "type": "string",
+     "label": "bestimmte Personen oder Rollen"
+    }
+   ]
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "verankern",
-     "result": "eine Vorgehensweise zur Zurücksetzung von Authentifizierungsmitteln"
+     "action": "autorisieren",
+     "result": "die Einrichtung von Zugangskonten",
+     "result-specification": "durch {{bestimmte Personen oder Rollen}}"
     }
    }
   },
@@ -42,9 +50,11 @@
      "confidentiality": "1",
      "integrity": "1",
      "availability": "0",
-     "authenticity": "2",
+     "authenticity": "1",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
      ]
     }
    }
@@ -52,9 +62,12 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3
+     "effort": 3,
+     "tags": [
+      "Change Management"
+     ]
     }
    }
   },
@@ -62,8 +75,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Zurücksetzung meint hier die geregelte Wiederherstellung, Erneuerung, Sperrung und Neuvergabe solcher Mittel, wenn sie vergessen, verloren, kompromittiert, technisch unbrauchbar oder aus anderen nachvollziehbaren Gründen nicht mehr sicher verwendbar sind; sie umfasst insbesondere die Prüfung der Identität der berechtigten Person, die Verhinderung unberechtigter Übernahmeversuche und die nachvollziehbare Durchführung des Vorgangs. Eine verankerte Vorgehensweise kann verhindern, dass der Reset selbst zum Einfallstor wird: Ohne klare Regeln könnte ein Angreifer über Social Engineering, manipulierte Helpdesk-Anfragen, abgefangene Wiederherstellungslinks oder missbrauchte Sicherheitsfragen Zugriff auf fremde Konten erhalten. Ebenso könnte eine uneinheitliche Behandlung verlorener Token, vergessener Passwörter oder kompromittierter Zertifikate dazu führen, dass alte Authentifizierungsmittel weiterverwendet werden oder neue Mittel an die falsche Person gelangen."
+      "de": "Gemeint ist hier die Entscheidungsbefugnis für die Freigabe neuer Zugangskonten. Dies können je nach Organissationsstruktur beispielsweise fachliche Vorgesetzte, Systemverantwortliche, Anwendungseigentümer, Rollenverantwortliche, Personalverantwortliche, Sicherheitsbeauftragte oder benannte Administratoren mit Freigabekompetenz sein. Eine geregelte Autorisierung stellt sicher, dass Zugänge nur auf Grundlage eines legitimen geschäftlichen oder technischen Bedarfs entstehen. Ohne eine solche Autorisierung könnte ein Zugangskonto \"auf Zuruf\" ohne gültigen Auftrag eingerichtet werden, z.B. für hier nicht berechtigte Personen, ehemalige Beschäftigte oder externe Dienstleister. Dies könnte unbefugte Zugriffe, Berechtigungsausweitung, Umgehung von Verantwortlichkeiten oder nicht erkennbare Schattenkonten begünstigen."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.3.2-prm1": {
+     "alt-identifier": "8e546864-67eb-4b98-8fa4-827423afa4da"
     }
    }
   }
@@ -71,7 +91,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "ae227c3a-d871-45ae-bec4-d0ecad83f73b"
+   "value": "48b77493-1bc3-4296-9e77-0460841d6914"
   }
  ]
 }

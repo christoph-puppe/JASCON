@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0724",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-0724",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CISO implements cyber security measurement metrics and key performance indicators for their organisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-10"
   }
  ]
 }

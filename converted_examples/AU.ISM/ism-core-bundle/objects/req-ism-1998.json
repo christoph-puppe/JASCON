@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1998",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1998",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The board of directors or executive committee ensures that cyber security is integrated throughout all business functions within their organisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

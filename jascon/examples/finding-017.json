@@ -2,6 +2,10 @@
  "id": "https://assessor.example/finding/2026-q3-acme-017",
  "version": "1",
  "lifecycle": "active",
+ "provenance": {
+  "author-ref": "https://assessor.example/party/lead-assessor",
+  "date": "2026-07-18"
+ },
  "assessment-ref": "https://assessor.example/assessment/2026-q3-acme",
  "requirement-ref": "https://ns.bsi.bund.de/gspp/req/KONF.14.1",
  "statement-ref": "s2",
@@ -29,6 +33,11 @@
    },
    "approver-ref": "https://assessor.example/party/lead-assessor",
    "opened": "2026-07-16",
+   "decided": "2026-07-18",
+   "review-due": {
+    "type": "date",
+    "value": "2027-07-18"
+   },
    "refs": [
     "https://cso.example/doc/kms-log-extract-2026-07"
    ]

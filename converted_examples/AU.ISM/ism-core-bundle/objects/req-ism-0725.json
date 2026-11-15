@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0725",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0725",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CISO coordinates cyber security and business alignment through a cyber security steering committee or advisory board, comprising key cyber security and business executives, which meets formally and regularly."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

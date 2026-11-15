@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0270",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0270",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Protective markings are applied to emails and reflect the highest sensitivity or classification of the subject, body and attachments."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-06"
   }
  ]
 }

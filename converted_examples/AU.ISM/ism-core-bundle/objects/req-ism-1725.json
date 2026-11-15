@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1725",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1725",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Magnetic tapes are destroyed using a furnace/incinerator, hammer mill, disintegrator, degausser or by cutting."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

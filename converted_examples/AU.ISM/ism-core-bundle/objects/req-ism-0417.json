@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0417",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0417",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When systems cannot support multi-factor authentication, single-factor authentication using passwords is implemented instead."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

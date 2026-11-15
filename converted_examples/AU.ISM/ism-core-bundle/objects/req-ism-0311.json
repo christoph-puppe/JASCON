@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0311",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0311",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "IT equipment containing media is sanitised by removing the media from the IT equipment or by sanitising the media in situ."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

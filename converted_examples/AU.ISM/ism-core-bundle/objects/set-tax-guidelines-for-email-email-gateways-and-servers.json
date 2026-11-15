@@ -8,43 +8,43 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-cent-7d03d34",
-   "sequence": 13130
+   "sequence": 13300
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-emai-70fd6b2",
-   "sequence": 13150
+   "sequence": 13320
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-open-8baf25d",
-   "sequence": 13170
+   "sequence": 13340
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-emai-708b9c7",
-   "sequence": 13200
+   "sequence": 13370
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-send-659d293",
-   "sequence": 13240
+   "sequence": 13410
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-doma-92002ed",
-   "sequence": 13280
+   "sequence": 13450
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-doma-c253ead",
-   "sequence": 13310
+   "sequence": 13480
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-emai-dba77bf",
-   "sequence": 13330
+   "sequence": 13500
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-bloc-cc36621",
-   "sequence": 13350
+   "sequence": 13520
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-email-email-gateways-and-servers-noti-de629e3",
-   "sequence": 13370
+   "sequence": 13540
   }
  ],
  "facets": {

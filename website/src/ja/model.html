@@ -2,7 +2,7 @@
 title: モデル：11 のオブジェクト型 | JASCON
 description: JASCON のカーネルを 1 ページで説明します。入れ子の浅い 11 のオブジェクト型、法助動詞の順序、型付きパラメータ、契約を伴うファセット、オブジェクトごとの 2 つのダイジェスト、3 つの適合性ティア、そして OSCAL 1.x の各構成要素の移行先です。
 nav: model
-source: 20b1275c2e33
+source: 3632a143f8f5
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -23,8 +23,8 @@ source: 20b1275c2e33
         </div>
         <ul class="ticks">
           <li><b><code>id</code></b> は、発行機関自身のドメイン配下の URI です。文字列として比較され、取得されることはないため、外部から遮断されたネットワークでも検証が機能します。</li>
-          <li><b><code>version</code></b> と、マニフェスト内の 2 つのダイジェストが履歴を担います。ISM は同じ目的のために、2,202 個の改訂用 props を手作業で維持しています。</li>
-          <li><b><code>statements</code></b> がリストなのは、条項が実際に存在するからです。Grundschutz++ には、条項を参照可能にするためだけに存在する、入れ子になった 347 個の疑似管理策があります。</li>
+          <li><b><code>version</code></b> はオブジェクト自身のバージョンで、<b><code>history</code></b> は発行者によるその変更の記録です。マニフェスト内の 2 つのダイジェストが各バージョンを封印します。ISM は同じ目的のために、2,202 個の改訂用 props を手作業で維持しています。</li>
+          <li><b><code>statements</code></b> がリストなのは、条項が一つずつ参照されるからです。SP 800-53 は管理策を a.、b.、c. の項目として記述しており、実装はそれぞれに個別に応答し、評価目的はそれぞれを個別に名指しします。</li>
           <li><b><code>modality</code></b> と <b><code>obligated-parties</code></b> はステートメントに置かれます。1 つの要求事項で、運用者を MUST で、顧客を SHOULD で拘束できます。</li>
           <li><b><code>prose</code></b> は、言語タグからテキストへのマップです。</li>
         </ul>
@@ -216,7 +216,7 @@ source: 20b1275c2e33
             <tbody>
               <tr><th scope="row">Full Match</th><td class="yes">一致</td><td class="yes">一致</td><td>証明されたパッケージそのもの。</td></tr>
               <tr><th scope="row">Semantic Match</th><td class="no">不一致</td><td class="yes">一致</td><td>承認された内容を再パッケージしたもの。検証者はその旨を報告する。</td></tr>
-              <tr><th scope="row">Tamper</th><td class="no">任意</td><td class="no">不一致</td><td>内容が承認されたものと異なる。</td></tr>
+              <tr><th scope="row">結び付かない</th><td class="no">任意</td><td class="no">不一致または欠落</td><td>失敗であり、第三の状態ではない。内容が承認されたものと異なるか、バンドルに含まれていない。証明が <code>active</code> である間は、バンドルを不合格にする。草案、非推奨、または取り下げられた証明は報告されるだけで、何も不合格にしない。</td></tr>
             </tbody>
           </table>
         </div>

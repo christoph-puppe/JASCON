@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1564",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1564",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "At the conclusion of a security assessment for a system, a plan of action and milestones is produced by the system owner."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-05"
   }
  ]
 }

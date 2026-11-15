@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0637",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0637",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Gateways implement a demilitarised zone if external parties require access to an organisation’s services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

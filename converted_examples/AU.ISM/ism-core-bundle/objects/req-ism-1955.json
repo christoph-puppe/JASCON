@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1955",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1955",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Credentials for computer accounts are changed if they are compromised, they are suspected of being compromised or they have not been changed in the past 30 days."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

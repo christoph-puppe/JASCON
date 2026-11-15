@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1211",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1211",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System administrators perform system administration activities in accordance with the system’s change and configuration management plan."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

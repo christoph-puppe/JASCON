@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2100",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2100",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Sensitive or classified data is not viewed on mobile devices within or near connected vehicles."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

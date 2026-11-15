@@ -1,18 +1,18 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-8",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Sicherheitsupdates"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.8.1",
-   "sequence": 7130
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-8-1",
+   "sequence": 11470
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/KONF.8.2",
-   "sequence": 7140
+   "sequence": 11480
   }
  ],
  "label": "8",

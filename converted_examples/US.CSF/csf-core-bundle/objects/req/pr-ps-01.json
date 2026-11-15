@@ -65,37 +65,5 @@
    "ref": "https://ns.nist.gov/csf/req/PR.PT-03",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.IP-01",
-    "mode": "merged-into",
-    "label": "PR.IP-01",
-    "title": "PR.IP-01",
-    "prose": "A baseline configuration of information technology/industrial control systems is created and maintained incorporating security principles (e.g. concept of least functionality)"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.IP-03",
-    "mode": "merged-into",
-    "label": "PR.IP-03",
-    "title": "PR.IP-03",
-    "prose": "Configuration change control processes are in place"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.PT-02",
-    "mode": "merged-into",
-    "label": "PR.PT-02",
-    "title": "PR.PT-02",
-    "prose": "Removable media is protected and its use restricted according to policy"
-   },
-   {
-    "ref": "https://ns.nist.gov/csf/req/PR.PT-03",
-    "mode": "merged-into",
-    "label": "PR.PT-03",
-    "title": "PR.PT-03",
-    "prose": "The principle of least functionality is incorporated by configuring systems to provide only essential capabilities"
-   }
-  ]
- }
+ ]
 }

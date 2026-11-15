@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0559",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0559",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Microphones (including headsets and USB handsets) and webcams are not used with non-SECRET workstations in SECRET areas."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

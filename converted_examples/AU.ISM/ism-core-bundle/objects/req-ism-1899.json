@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1899",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1899",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Network devices that do not belong to administrative infrastructure cannot initiate connections with administrative infrastructure."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

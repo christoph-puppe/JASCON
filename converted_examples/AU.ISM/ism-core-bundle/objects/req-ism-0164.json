@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0164",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0164",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Unauthorised people are prevented from observing systems, in particular workstation displays and keyboards, within facilities."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

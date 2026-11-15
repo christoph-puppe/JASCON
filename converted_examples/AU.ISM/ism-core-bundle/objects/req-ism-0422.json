@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0422",
- "version": "2026.06.18",
+ "version": "9",
  "label": "ISM-0422",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Passwords used for single-factor authentication on TOP SECRET systems are a minimum of 20 characters."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

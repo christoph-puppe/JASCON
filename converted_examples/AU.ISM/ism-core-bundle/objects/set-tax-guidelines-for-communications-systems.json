@@ -8,19 +8,19 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-telephone-systems",
-   "sequence": 4490
+   "sequence": 4660
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-video-conferen-2032f0e",
-   "sequence": 4740
+   "sequence": 4910
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-multifunction-devices",
-   "sequence": 4880
+   "sequence": 5050
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-fax-machines-a-aca3c8f",
-   "sequence": 4910
+   "sequence": 5080
   }
  ]
 }

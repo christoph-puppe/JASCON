@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pe-9.1_obj",
      "label": "PE-09(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "redundant power cabling paths that are physically separated by {param:pe-09.01_odp} are employed."
      }
@@ -98,7 +103,8 @@
      ],
      "alt-identifiers": [
       "pe-9.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-09(01)_ODP"
     }
    }
   }

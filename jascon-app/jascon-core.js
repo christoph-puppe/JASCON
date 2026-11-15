@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.6";
+const JSC_BUILD = "0.9.24";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -72,6 +72,8 @@ const JSC_CFG = [
     label: N("Namespace for new objects"), help: N("The URI under which this app mints ids, for example https://your.example. Use a name you control.") },
   { key: "org:owner", def: "", choices: null,
     label: N("Default risk owner"), help: N("A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created.") },
+  { key: "org:me", def: "", choices: null,
+    label: N("Who am I"), help: N("Your own party URI, for example https://your.example/party/jane-doe. Prefilled as the author of what you write (a Tailoring, a Risk, an Implementation, a Finding, a Mapping, a Check) and as the performer of a check you run. Each form shows it and lets you change it. Empty: a page names nobody unless you type a party. Where the kernel requires the party (the author of a Mapping or a Check, the performer of an Assessment) nothing is saved without one; elsewhere the page saves all the same and names no author.") },
   /* Model access (jascon-ai.js). The key of a service is not a setting: it
      is typed on the page that calls the model and held in memory only. */
   { key: "ai:backend", def: "gemini", choices: ["gemini", "openrouter", "openai"],
@@ -261,15 +263,27 @@ function jscClassifyFiles(files) {
     else if (scalePaths.has(f.path) || jscIsScale(json)) { rec.kind = "scale"; rec.id = json.id || null; }
     else if (type && type !== "manifest") { rec.kind = "object"; rec.type = type; rec.id = json.id || f.path; }
   }
+  /* MANIFEST-1: said when the files arrive. Nothing is changed: the set keeps the manifest as it came. */
+  const listedPaths = pinned("objects");
+  for (const rec of records) {
+    if (rec.kind === "object" && rec.type === "attestation" && listedPaths.has(rec.path)) {
+      problems.push(`${JSC_MANIFEST} lists an Attestation (${rec.path}), which no content manifest may (MANIFEST-1). The set is kept as it came and the Validate page reports it; ` +
+        "once the Attestation is taken out of the list there, or the set is changed otherwise, an export writes a manifest that leaves the Attestation out and puts its file beside it");
+    }
+  }
   return { records, problems };
 }
 
 /* -> graph {
      manifest, manifestText,
-     objects: Map(id -> {obj, type, path, text, origin, entry}), order: [id],
-     scales: Map(id -> {def, path, text, pin}),
-     facetSchemas: [{def, path, text, pin}], aux: [{path, text}], problems }
+     objects: Map(id -> {obj, type, path, text, origin, entry, unlisted}), order: [id],
+     scales: Map(id -> {def, path, text, origin, pin}),
+     facetSchemas: [{def, path, text, origin, pin}], aux: [{path, text}], problems }
    `entry` and `pin` are the manifest's lines for that file, or null.
+   `origin` is "imported" for a file that arrived with a bundle and
+   "authored" or "pack" for one that was written here since.
+   `unlisted` is true for an Attestation the manifest lists and the user
+   took out of that list here (see jscBuildBundle).
    `order` is manifest order, then everything the manifest does not list,
    by path. */
 function jscGraphFrom(records) {
@@ -289,14 +303,14 @@ function jscGraphFrom(records) {
     let json;
     try { json = JSON.parse(r.text); } catch (e) { g.problems.push(`${r.path}: not JSON`); continue; }
     if (r.kind === "scale") {
-      g.scales.set(json.id, { def: json, path: r.path, text: r.text, pin: scaleLines.get(r.path) || null });
+      g.scales.set(json.id, { def: json, path: r.path, text: r.text, origin: r.origin || "imported", pin: scaleLines.get(r.path) || null });
     } else if (r.kind === "facet-schema") {
-      g.facetSchemas.push({ def: json, path: r.path, text: r.text, pin: facetLines.get(r.path) || null });
+      g.facetSchemas.push({ def: json, path: r.path, text: r.text, origin: r.origin || "imported", pin: facetLines.get(r.path) || null });
     } else {
       const id = json.id || r.path;
       if (g.objects.has(id)) { g.problems.push(`${r.path}: id ${id} is already defined by ${g.objects.get(id).path}; second file ignored`); continue; }
       g.objects.set(id, { obj: json, type: r.type || jscInferType(json), path: r.path, text: r.text,
-        origin: r.origin || "imported", entry: objLines.get(r.path) || null });
+        origin: r.origin || "imported", entry: objLines.get(r.path) || null, unlisted: !!r.unlisted });
       byPath.set(r.path, id);
     }
   }
@@ -346,22 +360,57 @@ function jscObjectPath(type, id, taken) {
    a bundle that has no manifest of its own (an imported catalog names its
    source, a resolved package the Tailoring it was resolved with).
    -> { files: [{path, text}], manifest, verbatim, problems } */
-/* An attestation is listed only if the manifest it came with listed it;
-   otherwise it travels beside the manifest (D3.1). */
+/* An Attestation lies beside the manifest and is not listed in it: it binds
+   the digest of the manifest's bytes, so a manifest that lists one cannot be
+   the manifest it binds (D3.1; MANIFEST-1, backlog #75). No manifest this
+   app writes lists one.
+   A manifest a set came with may list one, against that rule. Then two
+   things hold, and neither repairs anything in silence:
+   - A set nobody changed leaves as it came, with that manifest, byte for
+     byte: the export passes on what it was given, and the Validate page
+     reports the listing as the failure it is.
+   - Once the set was written to, the export writes a new manifest, and that
+     one leaves the Attestation out. Its file leaves beside the manifest,
+     moved there if it lay in a folder (the reference reads an unlisted
+     Attestation only beside the manifest), and the export says so
+     (`problems`).
+   A set nobody changed had no way to the second case (backlog #71, point
+   11). It has one now, and it is the user's act: an Attestation the manifest
+   lists can be taken out of that list (`unlisted` on its record, set by
+   jscSet.unlistAttestation). Nothing else of the set is touched: the file
+   keeps its bytes and its place in the set, and the manifest the set came
+   with is kept. The set then counts as changed in this one respect, and
+   the export writes the new manifest as in the second case.
+   jscBesideManifest: is this Attestation beside the manifest the set came
+   with? */
 const jscBesideManifest = r => r.type === "attestation" && !r.entry;
 /* An object the manifest of the set does not know yet: the app wrote it
    ("authored"), or it came with an advice pack ("pack") and is the vendor's
    file byte for byte. Either way the export lists it. */
 const jscAddedHere = r => r.origin === "authored" || r.origin === "pack";
+/* Does the content need kernel 2.0.0? The export writes the pin from this. The
+   reasons are those of jscKernelNeeded in jascon-rules.js (KERNEL-1), read on
+   the types the graph gave its objects; tests/rules.test.mjs compares the two. */
 function jscNeedsKernel2(g) {
   if (g.scales.size) return true;
+  const entries = v => (Array.isArray(v) ? v : []).filter(x => x && typeof x === "object" && !Array.isArray(x));
   for (const r of g.objects.values()) {
     if (r.type === "risk" || r.type === "check") return true;
+    /* decided on 2026-11-14 (backlog #81 and #84): `history` on any object, `label` on a statement */
+    if ("history" in r.obj) return true;
+    if (r.type === "requirement" && entries(r.obj.statements).some(s => "label" in s)) return true;
     if (r.type === "finding" && ((Array.isArray(r.obj["risk-refs"]) && r.obj["risk-refs"].length) || r.obj["check-ref"])) return true;
     if (r.type === "assessment" && (r.obj["check-results"] || r.obj["tailoring-ref"])) return true;
     /* CP-ADVICE-1 and the author decision of 2026-11-12: clauses on a capability, the product version */
     if (r.type === "component" && ("product-version" in r.obj ||
       (Array.isArray(r.obj.capabilities) && r.obj.capabilities.some(c => c && Array.isArray(c["statement-ids"]) && c["statement-ids"].length)))) return true;
+    /* CP-AUTHOR-1: `provenance` where 1.0.0 had none, a Deviation's `decided` and `review-due` (in the
+       `deviations` list of any object and inline on a Tailoring's operation), the `date` of an authorization */
+    if (["tailoring", "implementation", "finding"].includes(r.type) && "provenance" in r.obj) return true;
+    const ops = r.type === "tailoring" ? entries(r.obj.operations) : [];
+    if (r.type === "tailoring" && [...entries(r.obj.selects), ...entries(r.obj.excludes), ...ops].some(e => "provenance" in e)) return true;
+    if ([...entries(r.obj.deviations), ...entries(ops.map(op => op.deviation))].some(d => "decided" in d || "review-due" in d)) return true;
+    if (r.type === "component" && entries(r.obj.authorizations).some(a => "date" in a)) return true;
   }
   return false;
 }
@@ -372,10 +421,14 @@ const jscKeptPacks = g => g.aux.filter(a => a.path.startsWith(JSC_PACK_STORE_DIR
   .map(a => [a.path.slice(JSC_PACK_STORE_DIR.length), a.text]);
 async function jscBuildBundle(g, provenance) {
   const problems = [];
-  const objects = [];
+  /* `objects`: the lines of the manifest as the set came, an Attestation it listed among them; this is compared with
+     the manifest the set came with. `leftOut`: the Attestations among them, which a manifest written here does not list. */
+  const objects = [], leftOut = [];
   for (const id of g.order) {
     const r = g.objects.get(id);
     if (jscBesideManifest(r)) continue;
+    if (r.type === "attestation") leftOut.push(r);
+    if (r.type === "attestation" && r.unlisted) continue;   // taken out of the list by the user: the lines then differ from the manifest the set came with
     objects.push({ id: r.obj.id, version: r.obj.version,
       "package-digest": await jscPackageDigest(r.text),
       "semantic-digest": await jscSemanticDigest(r.obj), path: r.path });
@@ -390,7 +443,10 @@ async function jscBuildBundle(g, provenance) {
   for (const x of g.scales.values()) { const p = await pinOf(x); if (p) { scalePins.push(p); shipped.push(x); } }
   const old = g.manifest || {};
   const kernel = jscNeedsKernel2(g) ? JSC_KERNEL : old["kernel-version"];
-  const said = m => JSON.stringify([m["kernel-version"] || null, m.objects || [], m["facet-schemas"] || [], m.scales || []]);
+  /* What a manifest says: the pin and its three lists, in canonical form. The order of the lines counts, the order of
+     the keys inside a line does not: until build 0.9.12 it did, and a manifest that another tool wrote with `path`
+     before the digests was replaced by a new one on export although nothing in the set had changed (ERRATA.md). */
+  const said = m => jscCanonical([m["kernel-version"] || null, m.objects || [], m["facet-schemas"] || [], m.scales || []]);
   const manifest = { "manifest-version": "1" };
   if (kernel) manifest["kernel-version"] = kernel;
   manifest.provenance = g.manifest
@@ -401,9 +457,25 @@ async function jscBuildBundle(g, provenance) {
   if (scalePins.length) manifest.scales = scalePins;
   if (old.renderings) manifest.renderings = old.renderings;
   const verbatim = !!g.manifest && said(old) === said(manifest);
+  /* a new manifest lists no Attestation; one that lay in a folder gets a place beside the manifest */
+  const moved = new Map();
+  if (!verbatim && leftOut.length) {
+    const out = new Set(leftOut.map(r => r.obj.id)), taken = new Set([JSC_MANIFEST, ...[...g.objects.values()].map(r => r.path), ...g.aux.map(a => a.path)]);
+    manifest.objects = objects.filter(e => !out.has(e.id));
+    for (const r of leftOut) {
+      if (r.path.includes("/")) {
+        const base = r.path.split("/").pop().replace(/\.json$/i, "");
+        let to = base + ".json";
+        for (let n = 2; taken.has(to); n++) to = `${base}-${n}.json`;
+        taken.add(to); moved.set(r.path, to);
+      }
+      problems.push(`${r.obj.id}: was listed in the manifest this set came with; a manifest written here lists no Attestation (MANIFEST-1), ` +
+        `so it leaves beside the manifest as ${moved.get(r.path) || r.path}`);
+    }
+  }
   const files = [
     { path: JSC_MANIFEST, text: verbatim ? g.manifestText : jscSerialize(manifest) },
-    ...g.order.map(id => ({ path: g.objects.get(id).path, text: g.objects.get(id).text })),
+    ...g.order.map(id => ({ path: moved.get(g.objects.get(id).path) || g.objects.get(id).path, text: g.objects.get(id).text })),
     ...shipped.map(x => ({ path: x.path, text: x.text })),
     ...g.aux,
   ];
@@ -571,6 +643,12 @@ const jscCfg = {
   remove(key) { localStorage.removeItem(PREFIX + key); },
 };
 window.jscCfg = jscCfg;
+/* Who am I: the party URI the user set as their own, or "". The pages offer
+   it as the author of what they write (`provenance.author-ref`, D26); none
+   of them writes an author the user has not seen. Never a default party:
+   an unset setting means nobody is known. */
+const jscWhoAmI = () => jscCfg.get("org:me").trim();
+window.jscWhoAmI = jscWhoAmI;
 
 /* ---------- languages ----------
    The English text is the key: T called with an English text returns the
@@ -777,7 +855,7 @@ const jscSet = {
       if (!type || type === "manifest") throw new Error(`${obj && obj.id}: not a kernel object`);
       const old = g.objects.get(obj.id);
       return { path: old ? old.path : jscObjectPath(type, obj.id, taken), text: jscSerialize(obj),
-        kind: "object", type, id: obj.id, origin: "authored" };
+        kind: "object", type, id: obj.id, origin: "authored", ...(old && old.unlisted ? { unlisted: true } : {}) };
     });
     await jscStore.putMany(this.name, records);
     await this.load();
@@ -788,6 +866,23 @@ const jscSet = {
     await jscStore.remove(this.name, paths);
     await this.load();
     jscLog.ok(T("removed {n} object(s) from set \"{set}\"", { n: paths.length, set: this.name }));
+  },
+  /* Takes an Attestation the manifest lists out of that list (MANIFEST-1; backlog #71, point 11). Only the record is
+     marked: its bytes, its place in the set and the manifest the set came with stay. From then on the export writes
+     a new manifest without it and puts the file beside the manifest (jscBuildBundle).
+     -> true when the Attestation was listed and is marked now */
+  async unlistAttestation(id) {
+    const r = this.graph.objects.get(id);
+    if (!r || r.type !== "attestation" || !r.entry || r.unlisted) return false;
+    await jscStore.putMany(this.name, [{ path: r.path, text: r.text, kind: "object", type: r.type, id, origin: r.origin, unlisted: true }]);
+    await this.load();
+    return true;
+  },
+  /* Facet schemas the set pins, each a file of its own ([{path, def}], as an import returns them); a file of the same
+     path is overwritten. The export pins every facet schema of the set. */
+  async saveFacetSchemas(list) {
+    await jscStore.putMany(this.name, list.map(f => ({ path: f.path, text: jscSerialize(f.def), kind: "facet-schema", type: null, id: f.def.id, origin: "authored" })));
+    await this.load();
   },
   /* A scale is a pinned file, not an object; its path follows its id. */
   async saveScale(def) {
@@ -862,7 +957,10 @@ async function jscReadDrop(dataTransfer) {
   return jscReadFiles(files);
 }
 /* Fetches a bundle folder over http(s): the manifest, then every file it
-   lists, sixteen at a time. file:// blocks fetch by design. */
+   lists, sixteen at a time, then what lies beside the manifest where the
+   server lists the folder. file:// blocks fetch by design.
+   -> { files, failed: [message], beside: was the folder read for files that
+        nothing names (an Attestation beside the manifest, kept packs) } */
 async function jscFetchBundle(url) {
   let base = new URL(String(url).trim().replace(/content-manifest\.json$/, ""), location.href);
   if (!base.pathname.endsWith("/")) base = new URL(base.href + "/");
@@ -883,17 +981,26 @@ async function jscFetchBundle(url) {
       try { files.push(await get(p)); } catch (e) { failed.push(e.message); }
     }
   }));
-  /* What lies beside the manifest and is named by nothing it lists: the pack
-     manifests a set keeps (packs/sha256/<hex>, CP-ADVICE-1 §4.5) and the
-     attestation of a pack's publisher. A URL names files, not folders, so
-     these can only be found where the server lists the folder, as python's
-     http.server does. A request for a listing that is not there shows as an
-     error in the browser's console, so the server is asked only where there
-     is a reason: the manifest carries a pack header, or it lists Components
-     under an origin from which it lists nothing else, the mark of a set that
-     holds a pack (a pack brings Components and nothing else, all under its
-     publisher's origin: ADVICE-1, ADVICE-2). Without a listing nothing is
-     found; a folder or a ZIP carries these files. */
+  /* What lies beside the manifest and is named by nothing it lists: the
+     Attestations of the bundle (D3.1), the pack manifests a set keeps
+     (packs/sha256/<hex>, CP-ADVICE-1 §4.5) and the attestation of a pack's
+     publisher. A URL names files, not folders, so these can only be found
+     where the server lists the folder, as python's http.server does and as a
+     static site does with an index.html of links.
+     The folder is asked for once with every load, as the reader does since
+     1.13.0 (backlog #71, point 8): any bundle may have an Attestation beside
+     its manifest, and nothing in the manifest says so. A page counts as a
+     listing of the folder only when it links content-manifest.json, which
+     lies in that folder: any other page a server sends for the folder would
+     pass for a folder that was looked into.
+     Until build 0.9.23 the server was asked only where a bundle keeps a pack
+     (a pack header, or Components under an origin from which the manifest
+     lists nothing else), because a request for a listing that is not there
+     shows as an error in the browser's console. The Attestation beside any
+     other bundle's manifest did not arrive. That console line is the price
+     now, once per load, on a server that lists nothing. Without a listing
+     nothing is found, and the hub says so; a folder or a ZIP carries these
+     files. */
   const listing = async rel => {
     try {
       const res = await fetch(new URL(rel, base));
@@ -901,29 +1008,22 @@ async function jscFetchBundle(url) {
       return [...(await res.text()).matchAll(/href="([^"?#]+)"/g)].map(m => { try { return decodeURIComponent(m[1]); } catch (e) { return ""; } });
     } catch (e) { return null; }
   };
-  const origin = id => String(id).split("/").slice(0, 3).join("/");
-  const typed = files.slice(1).map(f => { try { const o = JSON.parse(f.text); return [jscInferType(o), o && o.id]; } catch (e) { return [null, null]; } }).filter(([t, id]) => t && typeof id === "string");
-  const others = new Set(typed.filter(([t]) => t !== "component").map(([, id]) => origin(id)));
-  let top = null;
-  if (manifest.pack || typed.some(([t, id]) => t === "component" && !others.has(origin(id)))) {
-    top = await listing("");
-    if (top) {
-      const kept = [];
-      if (top.includes("packs/")) {
-        for (const name of ((await listing(JSC_PACK_STORE_DIR)) || []).filter(n => /^[0-9a-f]{64}$/.test(n)).slice(0, 64)) {
-          try { files.push(await get(JSC_PACK_STORE_DIR + name)); kept.push("sha256:" + name); } catch (e) { failed.push(e.message); }
-        }
+  const page = await listing(""), top = page && page.includes(JSC_MANIFEST) ? page : null;
+  if (top) {
+    if (top.includes("packs/")) {
+      for (const name of ((await listing(JSC_PACK_STORE_DIR)) || []).filter(n => /^[0-9a-f]{64}$/.test(n)).slice(0, 64)) {
+        try { files.push(await get(JSC_PACK_STORE_DIR + name)); } catch (e) { failed.push(e.message); }
       }
-      /* beside a pack's manifest: its attestations; beside a set's: those that bind a pack manifest it keeps */
-      if (manifest.pack || kept.length) {
-        const beside = top.filter(n => /^[^/]+\.json$/.test(n) && n !== JSC_MANIFEST && !paths.includes(n)).slice(0, 64);
-        for (const name of beside) {
-          try {
-            const f = await get(name), o = JSON.parse(f.text);
-            if (jscInferType(o) === "attestation" && (manifest.pack || kept.includes(o["content-manifest-digest"]))) files.push(f);
-          } catch (e) { /* not a file this app reads */ }
-        }
-      }
+    }
+    /* Beside the manifest: every Attestation, whatever manifest it binds. Each is held to what it binds
+       (backlog #46), a set's own as a vendor's. Until build 0.9.11 only those were taken that bind a pack's
+       manifest, so the Attestation over the set's own manifest was left behind although the folder was read. */
+    const beside = top.filter(n => /^[^/]+\.json$/.test(n) && n !== JSC_MANIFEST && !paths.includes(n)).slice(0, 64);
+    for (const name of beside) {
+      try {
+        const f = await get(name), o = JSON.parse(f.text);
+        if (jscInferType(o) === "attestation") files.push(f);
+      } catch (e) { /* not a file this app reads */ }
     }
   }
   /* the envelope of a listed attestation lies beside the manifest and is named only by the attestation */
@@ -949,7 +1049,9 @@ async function jscFetchBundle(url) {
   const rows = files.flatMap(f => { try { return JSON.parse(f.text)["check-results"] || []; } catch (e) { return []; } });
   const records = await follow(rows.flatMap(r => [r && (r["evidence-record"] || {}).ref, r && (r["observation-ref"] || {}).ref]));
   await follow(records.flatMap(f => { try { return (JSON.parse(f.text).outputs || []).map(o => "evidence/sha256/" + String(o.digest).replace(/^sha256:/, "")); } catch (e) { return []; } }));
-  return { files, failed };
+  /* `beside`: was the manifest's folder read for files nothing names? False where the server gave no listing of
+     it; an Attestation beside the manifest is then not in the set, and the hub says so. */
+  return { files, failed, beside: !!top };
 }
 /* The trusted keys typed on the Validate page for the active set: a map of
    signer URI to Ed25519 public key in hex, or null when there is none or it
@@ -1067,6 +1169,85 @@ function jscBanner(msg) {
 }
 jscBanner.clear = () => { const b = document.getElementById("jsc-banner"); if (b) b.remove(); };
 window.jscBanner = jscBanner;
+
+/* ---------- a redraw that waits for the click ----------
+   A text field reports its change when it loses the focus, and a press on
+   a button is what takes the focus away. A form that drew itself again on
+   that change replaced the button under the press: the release found
+   another element, and the browser made no click of the two. A button that
+   was disabled until the form had the value got no click either. So the
+   first click after typing was lost and the second one worked (backlog
+   #71, point 1; measured in Chromium on the Tailor page, the Checks editor,
+   the Risk form and the Import page).
+
+   A page asks for such a redraw with jscRedraw(fn). Outside a press fn runs
+   at once and its result is returned. While a pointer is down fn waits: the
+   handler that asked has stored the value already, and the form the user
+   pressed on stays. When the press is over, in this order: the form is
+   drawn again with the value in it, and then the click goes to the same
+   control of the new form, if that is there and enabled. So the click acts
+   on the form that holds what was typed, and a button that the value makes
+   illegal stays unclicked.
+
+   The same control: the pressed element if it is still in the page, else
+   the nearest element around it that has an id, or data attributes that
+   exactly one element of the new form has. A field found that way gets the
+   focus the press was for. A press on a disabled control makes no click
+   event; it is taken for a click when the pointer was released on that
+   control. Where nothing is found, nothing is clicked, as before. */
+const jscRedraw = (() => {
+  let press = null;   // the press under way: { target, off: the disabled control it began on, releasedOn, waiting: [fn], timer }
+  const addressOf = n => {
+    if (n.id) return "#" + CSS.escape(n.id);
+    const data = [...n.attributes].filter(a => a.name.startsWith("data-") && !a.name.startsWith("data-i18n"));
+    return data.length ? n.localName + data.map(a => `[${a.name}="${CSS.escape(a.value)}"]`).join("") : null;
+  };
+  const sameControl = node => {
+    if (node.isConnected) return node;
+    const label = node.closest("label");
+    for (let n = label && label.control ? label.control : node; n; n = n.parentElement) {
+      const address = addressOf(n);
+      if (address) { const found = document.querySelectorAll(address); return found.length === 1 ? found[0] : null; }
+    }
+    return null;
+  };
+  /* the press is over: draw what waited, then hand the click on */
+  const finish = async clicked => {
+    const p = press;
+    if (!p) return;
+    press = null;
+    clearTimeout(p.timer);
+    if (!p.waiting.length) return;
+    for (const fn of p.waiting) await fn();
+    const meant = clicked ? p.target : p.off && p.releasedOn && p.off.contains(p.releasedOn) ? p.off : null;
+    const now = meant && sameControl(meant);
+    if (!now || now.matches(":disabled")) return;
+    if (now !== meant && now.matches("input, textarea, select")) now.focus();
+    now.click();
+  };
+  window.addEventListener("pointerdown", e => {
+    finish(false);   // a press that never ended
+    if (e.button === 0 && e.target instanceof Element) press = { target: e.target, off: e.target.closest(":disabled"), releasedOn: null, waiting: [], timer: 0 };
+  }, true);
+  window.addEventListener("pointerup", e => {
+    if (!press) return;
+    press.releasedOn = e.target instanceof Element ? e.target : null;
+    /* a mouse sends the click in the same turn as the release; a touch sends it a little later */
+    press.timer = setTimeout(() => finish(false), e.pointerType === "mouse" ? 0 : 400);
+  }, true);
+  window.addEventListener("click", e => {
+    if (!press) return;
+    if (press.waiting.length) { e.stopImmediatePropagation(); e.preventDefault(); finish(true); } else finish(false);
+  }, true);
+  /* a press that ends in no release the page sees: nothing waits for longer than the next key or the next press */
+  for (const type of ["pointercancel", "keydown"]) window.addEventListener(type, () => finish(false), true);
+  window.addEventListener("blur", e => { if (e.target === window) finish(false); });
+  return fn => {
+    if (!press) return fn();
+    if (!press.waiting.includes(fn)) press.waiting.push(fn);
+  };
+})();
+window.jscRedraw = jscRedraw;
 
 /* ---------- page shell ----------
    A tool page writes only what is its own: a rail and a main area inside

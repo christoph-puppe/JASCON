@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0371",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0371",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel supervising the destruction of media supervise its handling to the point of destruction and ensure that the destruction is completed successfully."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

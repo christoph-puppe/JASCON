@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1844",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1844",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Computer accounts that are not Microsoft AD DS domain controllers are not trusted for delegation to services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

@@ -9,12 +9,13 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
    ],
    "prose": {
-    "en": "Provide audit record generation capability for the event types the system is capable of auditing as defined in AU-2a on {param:au-12_odp.01};"
+    "en": "Provide audit record generation capability for the event types the system is capable of auditing as defined in [AU-2a](#au-2_smt.a) on {param:au-12_odp.01};"
    },
    "parameters": [
     {
@@ -26,6 +27,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -43,12 +45,13 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
    ],
    "prose": {
-    "en": "Generate audit records for the event types defined in AU-2c that include the audit record content defined in AU-3."
+    "en": "Generate audit records for the event types defined in [AU-2c](#au-2_smt.c) that include the audit record content defined in [AU-3](#au-3)."
    }
   }
  ],
@@ -56,19 +59,29 @@
   "https://ns.nist.gov/sp800-53/facet/narrative@1": {
    "guidance": [
     {
-     "en": "Audit records can be generated from many different system components. The event types specified in AU-2d are the event types for which audit logs are to be generated and are a subset of all event types for which the system can generate audit records."
+     "en": "Audit records can be generated from many different system components. The event types specified in [AU-2d](#au-2_smt.d) are the event types for which audit logs are to be generated and are a subset of all event types for which the system can generate audit records."
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-12_obj",
      "label": "AU-12",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-12"
+      }
+     ],
      "children": [
       {
        "id": "au-12_obj.a",
        "label": "AU-12a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "audit record generation capability for the event types the system is capable of auditing (defined in AU-02_ODP[01]) is provided by {param:au-12_odp.01};"
        }
@@ -76,6 +89,11 @@
       {
        "id": "au-12_obj.b",
        "label": "AU-12b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:au-12_odp.02} is/are allowed to select the event types that are to be logged by specific components of the system;"
        }
@@ -83,6 +101,11 @@
       {
        "id": "au-12_obj.c",
        "label": "AU-12c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "audit records for the event types defined in AU-02_ODP[02] that include the audit record content defined in AU-03 are generated."
        }
@@ -163,7 +186,8 @@
      ],
      "alt-identifiers": [
       "au-12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-12_ODP[01]"
     },
     "au-12_odp.02": {
      "guidelines": [
@@ -173,7 +197,8 @@
      ],
      "alt-identifiers": [
       "au-12_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-12_ODP[02]"
     }
    }
   }
@@ -265,21 +290,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/AU-2.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AU-2.1",
-    "mode": "merged-into",
-    "label": "AU-02(01)",
-    "title": "Compilation of Audit Records from Multiple Sources"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AU-2.2",
-    "mode": "merged-into",
-    "label": "AU-02(02)",
-    "title": "Selection of Audit Events by Component"
-   }
-  ]
- }
+ ]
 }

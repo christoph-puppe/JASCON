@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2107",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2107",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel are encouraged to use any available privacy settings to restrict who can view personal information they post on online services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

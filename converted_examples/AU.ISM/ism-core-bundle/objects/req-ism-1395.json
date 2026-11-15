@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1395",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-1395",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Service providers, including any subcontractors, provide an appropriate level of protection for any data entrusted to them or their services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

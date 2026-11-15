@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0472",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0472",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When using DH for agreeing on encryption session keys, a modulus of at least 2048 bits is used, preferably 3072 bits."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

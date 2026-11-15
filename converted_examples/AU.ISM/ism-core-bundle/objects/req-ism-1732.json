@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1732",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1732",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "To the extent possible, all intrusion remediation activities are conducted in a coordinated manner during the same planned outage."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

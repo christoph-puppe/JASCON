@@ -12,7 +12,14 @@ string and tested substring membership, so the six cases of issue 32 gave
 five false arrivals and one false absence. Standard library only."""
 import copy, json, os, sys, tempfile, unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug
+from oscal_conv_lib import global_occurrence, Ledger, props_by_name, slug, RESPONSE_TREATMENT, response_treatment
+from oscal_conv_lib import document_author, document_day, provenance, provenance_override, needs_kernel_2
+from oscal_conv_lib import known_arguments, out_dir
+from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
+from oscal_conv_lib import ledger_by_path, ledger_gate, Bundle, COMPAT, COMPAT_ID, COMPAT_FILE
+from oscal_conv_lib import kernel_type, KERNEL_TYPE_BY_MEMBER, NO_KERNEL_TYPE
+from oscal_conv_lib import lifecycle_default_record, lifecycle_default_line
+from oscal_conv_lib import path_map_check, path_map_measured, held_row, held_rows_match
 
 
 def measure(source, output):
@@ -134,7 +141,7 @@ class Issue33Ledger(unittest.TestCase):
                                             "src#/controls/1/id": "copied", "src#/controls/1/description": "unaccounted"})
         self.assertEqual(r["unaccounted-paths"],
                          [{"path": "src.controls[].description", "count": 1, "pointers": ["src#/controls/1/description"]}])
-        self.assertEqual(r["totals"], {"copied": 3, "transformed": 0, "intentionally-dropped": 0, "unaccounted": 1})
+        self.assertEqual(r["totals"], {"copied": 3, "transformed": 0, "not-content": 0, "intentionally-dropped": 0, "unaccounted": 1})
         # the global check, on the same data, sees nothing wrong
         self.assertEqual(global_occurrence([("src", self.SOURCE)], [{"id": "a", "description": "Same text"}, {"id": "b"}])["exact"], 4)
 
@@ -216,7 +223,7 @@ class Issue33Ledger(unittest.TestCase):
         def convert(src, led):
             return {"o/a.json": {"id": "https://ex.org/a", "props": props_by_name(src["props"], led)}}
         r = self.run_ledger(source, convert)
-        self.assertEqual(r["totals"], {"copied": 8, "transformed": 0, "intentionally-dropped": 0, "unaccounted": 0})
+        self.assertEqual(r["totals"], {"copied": 8, "transformed": 0, "not-content": 0, "intentionally-dropped": 0, "unaccounted": 0})
         e = {x["source"]: x for x in r["entries"]}
         self.assertEqual(e["src#/props/1/value"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address/0"}])
         self.assertEqual(e["src#/props/3/value"]["destinations"], [{"object": "https://ex.org/a", "pointer": "/props/ipv4-address/2"}])
@@ -255,6 +262,806 @@ class Issue33Ledger(unittest.TestCase):
         self.assertIs(copy.deepcopy(tracked["s"]), tracked["s"], "a copy keeps the trace")
         self.assertEqual((type(tracked["n"] + 1), type(tracked["s"].strip())), (int, str), "a computed value is plain")
         with self.assertRaises(TypeError): led.derive("to a list", lambda s: [s], tracked["s"])
+
+
+class Backlog47bResponseTypes(unittest.TestCase):
+    """OSCAL allows seven values for the type of a risk response; C.10 has
+    four treatment options. Five of the seven are one of the four. `none`
+    and `contingency` get no code (backlog #47b, decided 2026-11-13): the
+    converter writes no `treatment` and counts the response."""
+
+    def test_backlog_47b_the_five_mapped_types_reach_all_four_options(self):
+        for rtype, code in RESPONSE_TREATMENT.items():
+            self.assertEqual(response_treatment(rtype), (code, None), rtype)
+        self.assertEqual(set(RESPONSE_TREATMENT.values()), {"modify", "retain", "avoid", "share"})
+
+    def test_backlog_47b_none_gives_no_option_and_says_that_none_was_chosen(self):
+        code, why = response_treatment("none")
+        self.assertIsNone(code)
+        self.assertIn("no `treatment` is written", why)
+
+    def test_backlog_47b_contingency_gives_no_option_and_is_counted_as_uncoded(self):
+        self.assertEqual(response_treatment("contingency"),
+                         (None, "response type `contingency` has no treatment code (C.10)"))
+
+    def test_backlog_47b_a_misspelled_type_is_not_guessed_at(self):
+        self.assertIsNone(response_treatment("mitigation")[0])
+
+
+class Backlog69WhoWroteItAndWhen(unittest.TestCase):
+    """A converter pre-fills `provenance` from what the source document says
+    about itself, and the caller may overwrite it (author decision
+    2026-11-13). The rule for the author of an OSCAL document is one rule,
+    in this library and in the app's importer (jascon-oscal.js); the table
+    below is the same table on both sides."""
+    A = {"uuid": "a", "type": "person", "name": "Amy Assessor"}
+    B = {"uuid": "b", "type": "person", "name": "Owen Pearson"}
+    O = {"uuid": "o", "type": "organization", "name": "Important Federal Agency"}
+    P = {"uuid": "p", "type": "organization", "name": "Assessors Inc."}
+    N = {"uuid": "n", "type": "person"}                          # defined without a name
+
+    def who(self, rps, parties):
+        meta = {"responsible-parties": [{"role-id": r, "party-uuids": us} for r, us in rps]}
+        if parties is not None: meta["parties"] = parties
+        got = document_author(meta)
+        return None if got is None else got["uuid"]
+
+    def test_backlog_69_the_document_author_table(self):
+        A, B, O, P, N = self.A, self.B, self.O, self.P, self.N
+        table = [
+            ("a creator is the author", [("creator", ["a"]), ("contact", ["b"])], [A, B], "a"),
+            ("prepared-by, where no creator is named", [("prepared-by", ["a"]), ("owner", ["b"])], [A, B], "a"),
+            ("two creators are no answer; prepared-by is asked next", [("creator", ["a", "b"]), ("prepared-by", ["b"])], [A, B], "b"),
+            ("the one party any role names", [("assessor", ["a"])], [A, O], "a"),
+            ("several responsible people: the one organization", [("owner", ["a"]), ("developer", ["b"])], [A, B, O], "o"),
+            ("several responsible people and no organization", [("owner", ["a"]), ("developer", ["b"])], [A, B], None),
+            ("several responsible people and two organizations", [("owner", ["a"]), ("developer", ["b"])], [A, B, O, P], None),
+            ("no role, one party", [], [A], "a"),
+            ("no role, two people", [], [A, B], None),
+            ("no role, two people and one organization", [], [A, B, O], "o"),
+            ("no parties at all", [], None, None),
+            ("a creator the document does not define is nobody; the one party stands", [("creator", ["x"])], [A], "a"),
+            ("a party without a name cannot be named by a URI", [("assessor", ["n"])], [N, O], None),
+            ("a uuid the document does not define is not counted", [("assessor", ["x", "a"])], [A, B], "a"),
+            ("a party defined twice is one party", [], [A, dict(A)], "a"),
+            ("of two definitions of one uuid the first is the party", [], [A, {"uuid": "a", "type": "person"}], "a"),
+            ("of two definitions of one uuid the first is the party, also when it has no name", [], [{"uuid": "a", "type": "person"}, A], None),
+            ("an entry without a uuid is no party", [], [{"type": "organization", "name": "Nameless Ltd"}, A], "a"),
+        ]
+        for what, rps, parties, want in table:
+            self.assertEqual(self.who(rps, parties), want, what)
+
+    def test_backlog_69_the_day_is_the_date_of_last_modified_or_nothing(self):
+        self.assertEqual(document_day({"last-modified": "2026-05-12T10:26:16.00000-00:00"}), "2026-05-12")
+        self.assertEqual(document_day({"last-modified": "2026-05-12"}), "2026-05-12")
+        for bad in ("2026-13-01T00:00:00Z", "12 May 2026", "", None, 20260512, "2026-05-1"):
+            self.assertIsNone(document_day({"last-modified": bad}), repr(bad))
+        self.assertIsNone(document_day({}))
+
+    def test_backlog_69_the_caller_overwrites_field_by_field(self):
+        src = ("https://ifa.gov/party/amy", "2026-05-12")
+        self.assertEqual(provenance(*src), {"author-ref": src[0], "date": src[1]})
+        self.assertEqual(provenance(*src, override=("https://org.example/party/ciso", None)),
+                         {"author-ref": "https://org.example/party/ciso", "date": "2026-05-12"})
+        self.assertEqual(provenance(*src, override=(None, "2026-11-13")),
+                         {"author-ref": src[0], "date": "2026-11-13"})
+        self.assertEqual(provenance(None, None, override=("https://org.example/party/ciso", "2026-11-13")),
+                         {"author-ref": "https://org.example/party/ciso", "date": "2026-11-13"})
+
+    def test_backlog_69_no_provenance_without_both_an_author_and_a_date(self):
+        self.assertIsNone(provenance(None, "2026-05-12"))
+        self.assertIsNone(provenance("https://ifa.gov/party/amy", None))
+        self.assertIsNone(provenance(None, None, override=("https://org.example/party/ciso", None)))
+        self.assertIsNone(provenance(None, None))
+
+    def test_backlog_69_the_two_arguments_are_read_and_held_to_their_types(self):
+        self.assertEqual(provenance_override([]), (None, None))
+        self.assertEqual(provenance_override(["--author-ref", "https://org.example/party/ciso"]),
+                         ("https://org.example/party/ciso", None))
+        self.assertEqual(provenance_override(["--date", "2026-11-13", "--author-ref", "https://org.example/party/ciso"]),
+                         ("https://org.example/party/ciso", "2026-11-13"))
+        for bad in (["--date", "13.11.2026"], ["--date", "2026-11-13\n"], ["--date", "2026-02-30"], ["--date", "2026-1-3"], ["--date"],
+                    ["--author-ref", "the CISO"], ["--author-ref", ""], ["--author-ref"]):
+            with self.assertRaises(SystemExit, msg=repr(bad)): provenance_override(bad)
+
+    def test_backlog_69_other_arguments_are_left_to_the_converter(self):
+        self.assertEqual(provenance_override(["--out", "/tmp/x", "--date", "2026-11-13"]), (None, "2026-11-13"))
+
+
+class Backlog69ThePinAWriterSets(unittest.TestCase):
+    """Bundle.write pins kernel 2.0.0 when the content needs it. The rule is
+    the validator's (kernel_needed); the library's copy is held to the pin
+    vectors of the conformance corpus, so the two cannot drift apart
+    unnoticed."""
+    def test_backlog_69_the_library_pins_what_the_pin_vectors_say_needs_a_pin(self):
+        here = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(here, "..", "conformance", "kernel-vectors.json"), encoding="utf-8") as f:
+            vectors = json.load(f)["vectors"]
+        asked = 0
+        for v in vectors:
+            m = v["manifest"]
+            if m.get("scales") or m.get("pack"): continue          # reasons a manifest carries; Bundle.write writes neither
+            frags = " ".join(v.get("expected-frags") or [])
+            if "KERNEL-1" in frags:
+                self.assertTrue(needs_kernel_2(v["objects"]), v["name"]); asked += 1
+            elif not v.get("expected-fails") and m.get("kernel-version") in (None, "1.0.0"):
+                self.assertFalse(needs_kernel_2(v["objects"]), v["name"]); asked += 1
+            elif not v.get("expected-fails") and m.get("kernel-version") == "2.0.0":
+                # a pinned vector is content that needs its pin, except the one that pins 2.0.0 on 1.0.0 content
+                asked += 1
+        self.assertGreaterEqual(asked, 15, "the pin vectors were not found")
+
+    def test_backlog_69_each_reason_for_a_pin_is_known(self):
+        req = {"id": "https://x/req/1", "version": "1", "lifecycle": "active", "statements": []}
+        self.assertFalse(needs_kernel_2([req]))
+        self.assertFalse(needs_kernel_2([{"id": "https://x/map/1", "relationship": "equal",
+                                          "provenance": {"author-ref": "https://x/p", "date": "2026-11-13"}}]))
+        reasons = {
+            "a Risk": {"scenario": "s", "owner-ref": "https://x/p"},
+            "risk-refs": {"assessment-ref": "a", "risk-refs": ["https://x/risk/1"]},
+            "check-ref": {"assessment-ref": "a", "check-ref": "https://x/check/1"},
+            "a Check": {"criteria": [], "observes": []},
+            "check results": {"performer-ref": "p", "check-results": [{}]},
+            "a tailoring-ref on an Assessment": {"performer-ref": "p", "tailoring-ref": "https://x/t"},
+            "product-version": {"kind": "software", "product-version": "7"},
+            "statement-ids on a capability": {"kind": "software", "capabilities": [{"id": "c", "statement-ids": ["s1"]}]},
+            "a dated authorization": {"kind": "system", "authorizations": [{"id": "a", "date": "2026-06-30"}]},
+            "provenance on an Implementation": {"component-ref": "c", "requirement-ref": "r", "provenance": {}},
+            "provenance on a Finding": {"assessment-ref": "a", "provenance": {}},
+            "provenance on a Tailoring": {"selects": [], "provenance": {}},
+            "provenance on a select": {"selects": [{"set-ref": "s", "provenance": {}}]},
+            "provenance on an operation": {"selects": [], "operations": [{"op": "set-parameter", "provenance": {}}]},
+            "a Deviation with decided": {"assessment-ref": "a", "deviations": [{"decided": "2026-11-13"}]},
+            "a Deviation with review-due": {"assessment-ref": "a", "deviations": [{"review-due": {}}]},
+            "a Deviation on an operation": {"selects": [], "operations": [{"deviation": {"decided": "2026-11-13"}}]},
+        }
+        for what, o in reasons.items():
+            self.assertTrue(needs_kernel_2([req, o]), what)
+
+
+class Backlog74WhatAConverterIsTold(unittest.TestCase):
+    """Two readers of a converter's command line that came with #74: where
+    the conversion is written, and that no argument goes unread. The nine
+    converters that use them are run in test_convert_obligated_party.py."""
+
+    def test_backlog_74_out_names_the_folder_and_without_it_the_corpus_folder_stands(self):
+        self.assertEqual(out_dir([], "/repo/converted_examples/X"), "/repo/converted_examples/X")
+        self.assertEqual(out_dir(["--obligated-party", "https://a.example/p"], "d"), "d")
+        self.assertEqual(out_dir(["--obligated-party", "https://a.example/p", "--out", os.path.join("some", "where")], "d"),
+                         os.path.abspath(os.path.join("some", "where")))
+        for argv, word in ((["--out"], "needs a directory"), (["--out", ""], "needs a directory"),
+                           (["--out", "a", "--out", "b"], "more than once")):
+            with self.assertRaises(SystemExit, msg=argv) as c: out_dir(argv, "d")
+            self.assertIn(word, str(c.exception))
+
+    def test_backlog_74_an_argument_nobody_reads_stops_the_run(self):
+        takes = ("--obligated-party", "--out")
+        for ok in ([], ["--out", "x"], ["--obligated-party", "https://a.example/p", "--out", "x"]):
+            self.assertIsNone(known_arguments(ok, takes), ok)
+        for argv, word in ((["--obligated-partie", "https://a.example/p"], "unknown argument '--obligated-partie'"),   # the default would be written, silently
+                           (["https://a.example/p"], "unknown argument"),
+                           (["--out", "x", "stray"], "unknown argument 'stray'"),
+                           (["--date", "2026-11-14"], "unknown argument '--date'"),       # another converter's argument is not this one's
+                           (["--out"], "--out needs a value"),
+                           (["--out", "--obligated-party", "https://a.example/p"], "--out needs a value")):
+            with self.assertRaises(SystemExit, msg=argv) as c: known_arguments(argv, takes)
+            self.assertIn(word, str(c.exception))
+
+
+class Backlog74WhomAStatementBinds(unittest.TestCase):
+    """The obligated party of a converted statement is the converter's default
+    unless the caller names another (author, 2026-11-14). The report says
+    which of the two it was."""
+    D = "https://ns.example/fw/party/organisation"
+
+    def test_backlog_74_without_the_argument_the_default_is_written_and_named_as_the_converters(self):
+        self.assertEqual(obligated_party([], self.D), (self.D, "converter-default"))
+        self.assertEqual(obligated_party(["--author-ref", "https://a.example/p", "--date", "2026-01-01"], self.D), (self.D, "converter-default"))
+
+    def test_backlog_74_the_callers_party_takes_the_defaults_place(self):
+        mine = "https://acme.example/party/it-operations"
+        for argv in (["--obligated-party", mine], ["--date", "2026-01-01", "--obligated-party", mine, "--out", "x"]):
+            self.assertEqual(obligated_party(argv, self.D), (mine, "caller"))
+
+    def test_backlog_74_a_value_that_is_no_party_stops_the_run(self):
+        for argv, word in ((["--obligated-party"], "needs a value"), (["--obligated-party", ""], "not an http(s) URI"),
+                           (["--obligated-party", "organisation"], "not an http(s) URI"),
+                           (["--obligated-party", "https://a.example/p\n"], "not an http(s) URI"),      # #68: a line break ends no value
+                           (["--obligated-party", "https://a.example/p q"], "not an http(s) URI"),
+                           (["--obligated-party", "https://a.example/p", "--obligated-party", "https://b.example/p"], "more than once")):
+            with self.assertRaises(SystemExit, msg=argv) as c: obligated_party(argv, self.D)
+            self.assertIn(word, str(c.exception))
+        with self.assertRaises(SystemExit) as c: obligated_party([], "organisation")       # a converter's own default is held to the same
+        self.assertIn("default", str(c.exception))
+
+    def test_backlog_74_the_report_says_who_chose_the_party(self):
+        mine = "https://acme.example/party/it"
+        d = obligated_party_line(self.D, "converter-default", self.D, "the framework binds the organisation implicitly")
+        self.assertIn(f"`{self.D}` on every statement.", d)
+        self.assertIn("the converter's default and not a value of the source", d)
+        self.assertIn("--obligated-party URI", d)
+        self.assertIn("Why this default: the framework binds the organisation implicitly.", d)
+        c = obligated_party_line(mine, "caller", self.D)
+        self.assertIn(f"`{mine}` on every statement, given by the caller", c)
+        self.assertIn(f"The converter's own default is `{self.D}`.", c)
+        self.assertNotIn("not a value of the source", c)
+        s = obligated_party_line(self.D, "converter-default", self.D, source_states="as the implementation level of a control")
+        self.assertIn("for which the source names no party; where it names one (as the implementation level of a control), that one is written", s)
+        self.assertEqual(obligated_party_record(self.D, "converter-default", self.D), {"value": self.D, "origin": "converter-default", "converter-default": self.D})
+        self.assertEqual(obligated_party_record(mine, "caller", self.D, "in `affects` of a rule"),
+                         {"value": mine, "origin": "caller", "converter-default": self.D, "source-states": "in `affects` of a rule"})
+
+class Backlog75NoManifestListsAnAttestation(unittest.TestCase):
+    """MANIFEST-1: the library's Bundle lists whatever is added to it, so it
+    takes no Attestation. A converter writes one beside the manifest."""
+    def test_backlog_75_an_attestation_is_not_added_to_a_bundle(self):
+        from oscal_conv_lib import Bundle
+        b = Bundle(tempfile.mkdtemp())
+        att = {"id": "https://a.example/attestation/x", "version": "1", "lifecycle": "active", "signer": "https://a.example/party/ao",
+               "timestamp": "2026-11-14T09:00:00Z", "content-manifest-digest": "sha256:" + "a" * 64,
+               "subject-semantic-digests": [{"id": "https://a.example/req/1", "semantic-digest": "sha256:" + "b" * 64}]}
+        with self.assertRaises(SystemExit) as c: b.add("objects/attestation/x.json", att)
+        self.assertIn("MANIFEST-1", str(c.exception))
+        self.assertEqual(b.objects, {})
+        comp = {"id": "https://a.example/attestation/not-one", "version": "1", "lifecycle": "active", "kind": "system", "title": "A component"}
+        b.add("objects/component/c.json", comp)                 # the shape decides, not the id
+        self.assertEqual(list(b.objects), ["objects/component/c.json"])
+
+class Backlog41TheLedgerOfALargeCorpus(unittest.TestCase):
+    """ledger_by_path: the record of a corpus too large for one entry per
+    leaf value. It counts the entries Ledger.account() checked; it adds
+    nothing and loses no leaf."""
+    def run_ledger(self):
+        src = {"controls": [{"id": "a-1", "title": "First", "class": "x", "note": "kept nowhere", "uuid": "u1"},
+                            {"id": "a-2", "title": "Second", "class": "x", "note": "kept nowhere too", "uuid": "u2"},
+                            {"id": "a-3", "title": "Third", "class": "y", "uuid": "u3"}]}
+        led = Ledger(); doc = led.source("cat", copy.deepcopy(src))
+        led.drop(r"\.uuid$", "an identity of the source document, not content")
+        objs = {}
+        for i, c in enumerate(doc["controls"]):
+            objs[f"objects/req/{c['id']}.json"] = {"id": led.derive("id-rule", lambda v: "https://x.example/req/" + v, c["id"]),
+                                                   "statements": [{"prose": {"en": c["title"]}}], "tags": [c["class"]]}
+        out = tempfile.mkdtemp()
+        for rel, o in objs.items():
+            os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
+            with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(o, f)
+        return led.account(out, objs), objs
+
+    def test_backlog_41_one_row_per_path_and_outcome_and_every_leaf_counted_once(self):
+        full, objs = self.run_ledger()
+        before = json.dumps(full, sort_keys=True)
+        short = ledger_by_path(full, objs, examples=1)
+        self.assertEqual(json.dumps(full, sort_keys=True), before)                  # the per-leaf ledger is not touched
+        self.assertEqual(short["leaf-values"], 14)
+        self.assertEqual(short["totals"], full["totals"])
+        self.assertEqual(short["totals"], {"copied": 6, "transformed": 3, "not-content": 0, "intentionally-dropped": 3, "unaccounted": 2})
+        self.assertEqual(sum(r["count"] for r in short["paths"]), 14)
+        rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
+        self.assertEqual(len(rows), len(short["paths"]))                            # one row per path and outcome
+        self.assertEqual(rows[("cat.controls[].title", "copied")]["count"], 3)
+        self.assertEqual(rows[("cat.controls[].title", "copied")]["to"],
+                         [{"object-type": "requirement", "pointer": "/statements/[]/prose/en", "count": 3}])
+        self.assertEqual(rows[("cat.controls[].title", "copied")]["example"], "cat#/controls/0/title")
+        self.assertEqual(rows[("cat.controls[].id", "transformed")]["to"],
+                         [{"object-type": "requirement", "pointer": "/id", "count": 3, "rule": "id-rule"}])
+        self.assertEqual(rows[("cat.controls[].uuid", "intentionally-dropped")]["reasons"],
+                         [{"reason": "an identity of the source document, not content", "count": 3}])
+        self.assertEqual(rows[("cat.controls[].note", "unaccounted")]["count"], 2)
+        self.assertNotIn("to", rows[("cat.controls[].note", "unaccounted")])
+        self.assertEqual(short["unaccounted-paths"], [{"path": "cat.controls[].note", "count": 2, "pointers": ["cat#/controls/0/note"]}])
+        self.assertNotIn("entries", short)
+
+class PhaseEWhatIsNoContent(unittest.TestCase):
+    """The author's rule of 2026-11-14: "Real content is never dropped. What
+    may stay out of a bundle is only what is not content: a name that merely
+    selects a field, a namespace, an id that is rebuilt exactly from another
+    value. Each such class needs a stated rule that the ledger checks, not an
+    'unaccounted' line." Each test plays a converter that states such a rule
+    and looks at what the ledger makes of it."""
+
+    SOURCE = {"controls": [{"id": "ac-1", "props": [{"name": "label", "ns": "https://ns.example/a", "value": "AC-1"},
+                                                    {"name": "sort-id", "ns": "https://ns.example/a", "value": "ac-01"}],
+                            "parts": [{"id": "ac-1_smt", "name": "statement", "prose": "Develop a policy."}]}]}
+    NAMES = {"label": "label", "sort-id": "sort"}
+
+    def run_ledger(self, convert, source=None, typed=False, tamper=None, resolve=True):
+        led = Ledger()
+        objects = convert(led.source("src", copy.deepcopy(source or self.SOURCE), typed=typed), led)
+        if resolve: led.resolve(objects)
+        with tempfile.TemporaryDirectory() as out:
+            for rel, obj in objects.items():
+                os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
+                written = tamper(json.loads(json.dumps(obj))) if tamper else obj
+                with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(written, f)
+            self.objects = objects                  # what account() was given, for ledger_by_path
+            return led.account(out, objects)
+
+    @staticmethod
+    def by_source(result):
+        return {e["source"]: e for e in result["entries"]}
+
+    def convert(self, carry=("label", "sort-id"), among=NAMES, allowed=("https://ns.example/a",), part_id=None, drop=None):
+        """a converter that writes a prop's value into the field its name selects"""
+        def run(src, led):
+            c = src["controls"][0]; part = c["parts"][0]
+            obj = {"id": led.derive("id from the control id", lambda i: "https://ex.org/" + i, c["id"]),
+                   "statements": [{"prose": part["prose"]}]}
+            for p in c["props"]:
+                if p["name"] in carry: obj[self.NAMES.get(p["name"], "other")] = p["value"]
+                led.selector(p["name"], "a prop's name selects the field its value is written to", p["value"], among=among)
+                led.namespace(p["ns"], "the namespace of a prop this mapping is written for", allowed, p["name"])
+            led.selector(part["name"], "a part's name selects the member its prose is written to", part["prose"])
+            led.rebuilt(part["id"], "a statement part's id is its control's id and _smt",
+                        part_id or (lambda i: i + "_smt"), c["id"])
+            if drop: led.drop(drop, "declared by this test")
+            return {"o/ac-1.json": obj}
+        return run
+
+    def test_a_name_a_namespace_and_a_rebuilt_id_are_no_content_when_the_rule_holds(self):
+        r = self.run_ledger(self.convert())
+        self.assertEqual(r["totals"], {"copied": 3, "transformed": 1, "not-content": 6, "intentionally-dropped": 0, "unaccounted": 0})
+        self.assertEqual(r["verification-failures"], [])
+        e = self.by_source(r)
+        name = e["src#/controls/0/props/0/name"]
+        self.assertEqual({k: name[k] for k in ("kind", "rule", "outcome")},
+                         {"kind": "selector", "rule": "a prop's name selects the field its value is written to", "outcome": "not-content"})
+        self.assertEqual(e["src#/controls/0/props/1/ns"]["kind"], "namespace")
+        self.assertEqual(e["src#/controls/0/parts/0/id"]["kind"], "rebuilt-id")
+        self.assertNotIn("destinations", e["src#/controls/0/parts/0/id"])
+
+    def test_a_name_that_selects_a_lost_value_is_not_covered(self):
+        # the value of sort-id is written nowhere: its name selected nothing, and its namespace qualifies that name
+        r = self.run_ledger(self.convert(carry=("label",)))
+        e = self.by_source(r)
+        self.assertEqual([e[f"src#/controls/0/props/1/{k}"]["outcome"] for k in ("value", "name", "ns")], ["unaccounted"] * 3)
+        self.assertEqual([e[f"src#/controls/0/props/0/{k}"]["outcome"] for k in ("value", "name", "ns")],
+                         ["copied", "not-content", "not-content"])
+        self.assertEqual(r["totals"]["unaccounted"], 3)
+        self.assertEqual(r["verification-failures"], [], "a lost value is unaccounted; no claim about it was false")
+
+    def test_a_name_goes_with_a_value_that_is_dropped_for_a_declared_reason(self):
+        r = self.run_ledger(self.convert(carry=("label",), drop=r"props\[\]\.value$"))
+        e = self.by_source(r)
+        self.assertEqual(e["src#/controls/0/props/0/value"]["outcome"], "copied", "a drop never overrides a destination")
+        self.assertEqual(e["src#/controls/0/props/1/value"]["outcome"], "intentionally-dropped")
+        name = e["src#/controls/0/props/1/name"]
+        self.assertEqual(name["outcome"], "intentionally-dropped")
+        self.assertEqual(name["reason"], "a prop's name selects the field its value is written to - of a value that is dropped: declared by this test")
+        self.assertEqual(r["totals"]["not-content"], 4)
+
+    def test_a_name_the_mapping_does_not_know_is_a_claim_that_does_not_hold(self):
+        r = self.run_ledger(self.convert(among={"label": "label"}))
+        e = self.by_source(r)
+        self.assertEqual(e["src#/controls/0/props/1/name"]["outcome"], "unaccounted")
+        self.assertEqual(r["verification-failures"], [{"source": "src#/controls/0/props/1/name", "claim": "selector",
+                                                       "rule": "a prop's name selects the field its value is written to"}])
+
+    def test_another_namespace_is_another_meaning_and_is_not_covered(self):
+        src = copy.deepcopy(self.SOURCE); src["controls"][0]["props"][1]["ns"] = "https://ns.example/b"
+        r = self.run_ledger(self.convert(), source=src)
+        e = self.by_source(r)
+        self.assertEqual((e["src#/controls/0/props/0/ns"]["outcome"], e["src#/controls/0/props/1/ns"]["outcome"]), ("not-content", "unaccounted"))
+        self.assertEqual([(f["source"], f["claim"]) for f in r["verification-failures"]], [("src#/controls/0/props/1/ns", "namespace")])
+
+    def test_an_id_the_rule_does_not_give_is_not_rebuilt(self):
+        r = self.run_ledger(self.convert(part_id=lambda i: i + ".smt"))
+        self.assertEqual(self.by_source(r)["src#/controls/0/parts/0/id"]["outcome"], "unaccounted")
+        self.assertEqual([(f["source"], f["claim"]) for f in r["verification-failures"]], [("src#/controls/0/parts/0/id", "rebuilt-id")])
+
+    def test_an_id_is_rebuilt_only_from_what_the_bundle_holds(self):
+        def convert(src, led):                       # the control id is written nowhere
+            c = src["controls"][0]; part = c["parts"][0]
+            led.rebuilt(part["id"], "id plus _smt", lambda i: i + "_smt", c["id"])
+            return {"o/x.json": {"id": "https://ex.org/x", "prose": part["prose"]}}
+        e = self.by_source(self.run_ledger(convert))
+        self.assertEqual((e["src#/controls/0/id"]["outcome"], e["src#/controls/0/parts/0/id"]["outcome"]), ("unaccounted", "unaccounted"))
+        def dropped(src, led):
+            led.drop(r"controls\[\]\.id$", "declared by this test")
+            return convert(src, led)
+        e = self.by_source(self.run_ledger(dropped))
+        self.assertEqual(e["src#/controls/0/parts/0/id"]["outcome"], "intentionally-dropped", "it goes with what it is rebuilt from")
+
+    def test_a_value_that_has_a_destination_is_carried_whatever_is_declared_for_it(self):
+        def convert(src, led):
+            p = src["controls"][0]["props"][0]
+            led.selector(p["name"], "a prop's name", p["value"])
+            return {"o/x.json": {"id": "https://ex.org/x", "props": {p["name"]: p["value"]}}}
+        e = self.by_source(self.run_ledger(convert))
+        self.assertEqual(e["src#/controls/0/props/0/name"]["outcome"], "copied")
+        self.assertNotIn("kind", e["src#/controls/0/props/0/name"])
+
+    def test_a_rule_is_stated_about_a_source_leaf_and_about_something(self):
+        led = Ledger(); src = led.source("src", copy.deepcopy(self.SOURCE)); p = src["controls"][0]["props"][0]
+        with self.assertRaises(TypeError): led.selector("label", "a plain string", p["value"])
+        with self.assertRaises(TypeError): led.selector(led.derive("made", lambda v: v + "x", p["name"]), "a derived value", p["value"])
+        with self.assertRaises(ValueError): led.selector(p["name"], "selects nothing", "a plain string")
+        with self.assertRaises(ValueError): led.selector(p["name"], "selects itself only", {"name": p["name"]})
+        with self.assertRaises(ValueError): led.namespace(p["ns"], "qualifies nothing", ["https://ns.example/a"], None)
+        led.selector(p["name"], "the prop handed over whole", p)     # its own name is left out of what it rests on
+
+    def test_two_rules_that_rest_on_each_other_cover_nothing(self):
+        def convert(src, led):
+            p = src["controls"][0]["props"][0]
+            led.selector(p["name"], "the name selects the namespace", p["ns"])
+            led.namespace(p["ns"], "the namespace qualifies the name", ["https://ns.example/a"], p["name"])
+            return {"o/x.json": {"id": "https://ex.org/x"}}
+        e = self.by_source(self.run_ledger(convert))
+        self.assertEqual((e["src#/controls/0/props/0/name"]["outcome"], e["src#/controls/0/props/0/ns"]["outcome"]),
+                         ("unaccounted", "unaccounted"))
+
+    def test_the_record_of_a_large_corpus_names_the_rules(self):
+        full = self.run_ledger(self.convert())
+        short = ledger_by_path(full, self.objects)
+        rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
+        self.assertEqual(rows[("src.controls[].props[].name", "not-content")]["rules"],
+                         [{"kind": "selector", "rule": "a prop's name selects the field its value is written to", "count": 2}])
+        self.assertEqual(rows[("src.controls[].parts[].id", "not-content")]["rules"],
+                         [{"kind": "rebuilt-id", "rule": "a statement part's id is its control's id and _smt", "count": 1}])
+        self.assertEqual(short["totals"]["not-content"], 6)
+        self.assertEqual(sum(r["count"] for r in short["paths"]), short["leaf-values"])
+
+
+class PhaseETypedValues(unittest.TestCase):
+    """A boolean and a fraction are content like a string. Until 2026-11-14
+    the ledger could not follow them: the CR26 source has 49 booleans and 3
+    fractions, the converter carried them, and its ledger read them as
+    unaccounted."""
+
+    SOURCE = {"rule": {"id": "r1", "required": True, "optional": False, "weight": 0.75, "count": 3}}
+
+    def run_ledger(self, convert, typed=True, resolve=True, tamper=None):
+        return PhaseEWhatIsNoContent.run_ledger(self, convert, source=self.SOURCE, typed=typed, tamper=tamper, resolve=resolve)
+
+    @staticmethod
+    def convert(src, led):
+        r = src["rule"]
+        return {"o/r1.json": {"id": led.derive("id", lambda i: "https://ex.org/" + i, r["id"]),
+                              "required": r["required"], "optional": r["optional"], "weight": r["weight"], "count": r["count"]}}
+
+    def test_a_boolean_and_a_fraction_are_followed_to_where_they_stand(self):
+        r = self.run_ledger(self.convert)
+        self.assertEqual(r["totals"], {"copied": 4, "transformed": 1, "not-content": 0, "intentionally-dropped": 0, "unaccounted": 0})
+        e = PhaseEWhatIsNoContent.by_source(r)
+        self.assertEqual(e["src#/rule/optional"]["destinations"], [{"object": "https://ex.org/r1", "pointer": "/optional"}])
+        self.assertEqual(e["src#/rule/weight"]["destinations"], [{"object": "https://ex.org/r1", "pointer": "/weight"}])
+
+    def test_without_the_argument_they_are_plain_as_before(self):
+        r = self.run_ledger(self.convert, typed=False)
+        e = PhaseEWhatIsNoContent.by_source(r)
+        self.assertEqual([e[f"src#/rule/{k}"]["outcome"] for k in ("required", "optional", "weight", "count")],
+                         ["unaccounted", "unaccounted", "unaccounted", "copied"])
+
+    def test_what_is_written_is_a_plain_boolean_and_the_same_bytes(self):
+        led = Ledger(); src = led.source("src", copy.deepcopy(self.SOURCE), typed=True)
+        objects = self.convert(src, led)
+        with self.assertRaises(TypeError): json.dumps(objects)       # a converter that forgets resolve() writes nothing
+        led.resolve(objects)
+        obj = objects["o/r1.json"]
+        self.assertIs(obj["required"], True); self.assertIs(obj["optional"], False)
+        self.assertEqual(json.dumps(obj), '{"id": "https://ex.org/r1", "required": true, "optional": false, "weight": 0.75, "count": 3}')
+
+    def test_a_tracked_boolean_is_true_and_false_as_its_value_is(self):
+        led = Ledger(); r = led.source("src", copy.deepcopy(self.SOURCE), typed=True)["rule"]
+        self.assertTrue(r["required"]); self.assertFalse(r["optional"])
+        self.assertEqual((r["required"] == True, r["optional"] == False, r["optional"] != True), (True, True, True))
+        self.assertEqual("yes" if r["optional"] else "no", "no")
+        self.assertIs(copy.deepcopy(r["optional"]), r["optional"], "a copy keeps the trace")
+
+    def test_a_boolean_is_checked_against_the_written_file_with_its_type(self):
+        def flipped(o): o["optional"] = True; return o
+        r = self.run_ledger(self.convert, tamper=flipped)
+        self.assertEqual([f["source"] for f in r["verification-failures"]], ["src#/rule/optional"])
+        def as_number(o): o["required"] = 1; o["weight"] = "0.75"; return o
+        r = self.run_ledger(self.convert, tamper=as_number)
+        self.assertEqual(sorted(f["source"] for f in r["verification-failures"]), ["src#/rule/required", "src#/rule/weight"])
+
+    def test_a_boolean_in_a_list_and_one_made_by_a_rule(self):
+        def convert(src, led):
+            r = src["rule"]
+            return {"o/r1.json": {"id": "https://ex.org/r1", "flags": [r["required"], r["optional"]],
+                                  "free": led.derive("optional or not required", lambda a, b: bool(a) or not b, r["optional"], r["required"]),
+                                  "share": led.derive("the weight in percent", lambda w: w * 100, r["weight"])}}
+        r = self.run_ledger(convert)
+        e = PhaseEWhatIsNoContent.by_source(r)
+        self.assertEqual(r["verification-failures"], [])
+        self.assertEqual(e["src#/rule/optional"]["destinations"],
+                         [{"object": "https://ex.org/r1", "pointer": "/flags/1"},
+                          {"object": "https://ex.org/r1", "pointer": "/free", "rule": "optional or not required"}])
+        self.assertEqual(e["src#/rule/weight"]["destinations"], [{"object": "https://ex.org/r1", "pointer": "/share", "rule": "the weight in percent"}])
+        def wrong(o): o["free"] = True; return o
+        self.assertEqual(len(self.run_ledger(convert, tamper=wrong)["verification-failures"]), 2, "both inputs of the rule")
+
+
+class PhaseETheGate(unittest.TestCase):
+    """"A converter run with an unaccounted value exits non-zero" (author,
+    2026-11-14)."""
+    def result(self, unaccounted=0, failures=0):
+        return {"totals": {"copied": 5, "transformed": 0, "not-content": 0, "intentionally-dropped": 0, "unaccounted": unaccounted},
+                "verification-failures": [{}] * failures}
+
+    def test_a_run_with_nothing_unaccounted_goes_on(self):
+        self.assertIsNone(ledger_gate(self.result(), "convert_x.py"))
+
+    def test_one_unaccounted_value_ends_the_run_with_a_message(self):
+        with self.assertRaises(SystemExit) as c: ledger_gate(self.result(unaccounted=1), "convert_x.py")
+        self.assertIn("convert_x.py", str(c.exception)); self.assertIn("1 source value(s) unaccounted", str(c.exception))
+        self.assertNotEqual(c.exception.code, 0)
+
+    def test_a_claim_that_does_not_hold_ends_the_run_too(self):
+        with self.assertRaises(SystemExit) as c: ledger_gate(self.result(failures=2), "convert_x.py")
+        self.assertIn("2 claim(s) that do not hold", str(c.exception))
+
+    def test_the_exit_code_of_a_process_is_one(self):
+        import subprocess
+        code = ("import sys; sys.path.insert(0, %r)\nfrom oscal_conv_lib import ledger_gate\n"
+                "ledger_gate({'totals': {'unaccounted': 3}, 'verification-failures': []}, 'convert_x.py')\n") % os.path.dirname(os.path.abspath(__file__))
+        p = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+        self.assertEqual(p.returncode, 1); self.assertIn("3 source value(s) unaccounted", p.stderr)
+
+
+class PhaseEKeysThatAreSourceValues(unittest.TestCase):
+    """ledger_by_path(collapse=...): a payload keyed by a source value gives
+    one row per key unless the key is collapsed (SP 800-53: 741 kB)."""
+    def test_a_key_made_of_a_source_value_is_one_row(self):
+        src = {"params": [{"id": "ac-01_odp.01", "label": "frequency"}, {"id": "ac-01_odp.02", "label": "personnel"}]}
+        led = Ledger(); doc = led.source("cat", copy.deepcopy(src))
+        obj = {"id": "https://ex.org/ac-1", "facets": {"odp": {p["id"]: {"label": p["label"]} for p in doc["params"]}}}
+        out = tempfile.mkdtemp()
+        with open(os.path.join(out, "o.json"), "w", encoding="utf-8") as f: json.dump(obj, f)
+        full = led.account(out, {"o.json": obj})
+        rows = {(r["path"], r["outcome"]): r for r in ledger_by_path(full, {"o.json": obj})["paths"]}
+        self.assertEqual(len(rows[("cat.params[].label", "copied")]["to"]), 2)
+        short = ledger_by_path(full, {"o.json": obj}, collapse=[(r"^(/facets/odp)/[^/]+", r"\1/{param id}")])
+        rows = {(r["path"], r["outcome"]): r for r in short["paths"]}
+        self.assertEqual(rows[("cat.params[].label", "copied")]["to"],
+                         [{"object-type": NO_KERNEL_TYPE, "pointer": "/facets/odp/{param id}/label", "count": 2}])
+        self.assertEqual(rows[("cat.params[].id", "copied")]["to"],
+                         [{"object-type": NO_KERNEL_TYPE, "pointer": "/facets/odp/{param id}", "count": 2, "as": "key"}])
+
+
+class PhaseEOrphans(unittest.TestCase):
+    """The author's fourth class of what may stay out of a bundle
+    (2026-11-14): "orphaned elemente braucht niemand" - a back-matter
+    resource nothing in its document refers to. The ledger checks that
+    nothing does."""
+
+    SOURCE = {"uuid": "00000000-0000-4000-8000-00000000000a",
+              "metadata": {"links": [{"href": "#00000000-0000-4000-8000-000000000002", "rel": "latest-version"}]},
+              "controls": [{"id": "c-1", "prose": "See [the guide](#00000000-0000-4000-8000-000000000001)."}],
+              "back-matter": {"resources": [
+                  {"uuid": "00000000-0000-4000-8000-000000000001", "title": "The guide", "rlinks": [{"href": "https://example.org/guide"}]},
+                  {"uuid": "00000000-0000-4000-8000-000000000002", "title": "The latest version"},
+                  {"uuid": "00000000-0000-4000-8000-000000000003", "title": "Nobody names this", "rlinks": [{"href": "https://example.org/x"}],
+                   "remarks": "Listed as #00000000-0000-4000-8000-000000000003 in the printed edition."},
+                  {"uuid": "00000000-0000-4000-8000-00000000000a", "title": "Has the document's own uuid"}]}}
+
+    def run_ledger(self, orphans, carry=(0, 1), source=None):
+        def convert(src, led):
+            res = src["back-matter"]["resources"]
+            for i in orphans: led.orphan(res[i]["uuid"], "a back-matter resource nothing in the document refers to")
+            return {"o/root.json": {"id": "https://ex.org/root", "uuid": src["uuid"], "links": src["metadata"]["links"],
+                                    "prose": src["controls"][0]["prose"], "ctl": src["controls"][0]["id"],
+                                    "resources": [res[i] for i in carry]}}
+        return PhaseEWhatIsNoContent.run_ledger(self, convert, source=source or self.SOURCE)
+
+    def test_a_resource_nothing_refers_to_stays_out_by_a_checked_rule(self):
+        r = self.run_ledger(orphans=(2, 3))
+        self.assertEqual((r["totals"]["unaccounted"], r["verification-failures"]), (0, []))
+        e = PhaseEWhatIsNoContent.by_source(r)
+        self.assertEqual({k: e["src#/back-matter/resources/2/title"][k] for k in ("outcome", "kind")}, {"outcome": "not-content", "kind": "orphan"})
+        self.assertEqual(e["src#/back-matter/resources/2/rlinks/0/href"]["kind"], "orphan", "every leaf of the element")
+        self.assertEqual(e["src#/back-matter/resources/2/remarks"]["outcome"], "not-content", "its own text naming itself is no reference from outside")
+        self.assertEqual(r["totals"]["not-content"], 6)
+        self.assertEqual(e["src#/back-matter/resources/3/uuid"]["outcome"], "not-content",
+                         "equal to the document's own uuid, which is no reference to it")
+
+    def test_a_resource_a_text_or_a_metadata_link_names_is_no_orphan(self):
+        for i, source in ((0, "src#/back-matter/resources/0/title"), (1, "src#/back-matter/resources/1/title")):
+            r = self.run_ledger(orphans=(i, 2, 3), carry=tuple({0, 1} - {i}))
+            e = PhaseEWhatIsNoContent.by_source(r)
+            self.assertEqual(e[source]["outcome"], "unaccounted")
+            self.assertEqual({f["claim"] for f in r["verification-failures"]}, {"orphan"})
+            self.assertEqual(e["src#/back-matter/resources/2/title"]["outcome"], "not-content", "the true orphan is not touched")
+
+    def test_an_orphan_that_is_carried_all_the_same_reads_as_carried(self):
+        r = self.run_ledger(orphans=(2, 3), carry=(0, 1, 2))
+        self.assertEqual(PhaseEWhatIsNoContent.by_source(r)["src#/back-matter/resources/2/title"]["outcome"], "copied")
+
+    def test_an_undeclared_resource_that_is_not_carried_is_unaccounted(self):
+        r = self.run_ledger(orphans=(3,))
+        self.assertEqual(r["totals"]["unaccounted"], 4)
+
+    def test_the_rule_is_stated_about_an_elements_own_uuid(self):
+        led = Ledger(); src = led.source("src", copy.deepcopy(self.SOURCE))
+        with self.assertRaises(TypeError): led.orphan("00000000-0000-4000-8000-000000000003", "a plain string")
+        with self.assertRaises(ValueError): led.orphan(src["uuid"], "the document itself")
+
+
+class PhaseEOneCompatSchemaAndTheLifecycleDefault(unittest.TestCase):
+    def test_every_bundle_pins_the_same_compat_schema(self):
+        a, b = Bundle(tempfile.mkdtemp(), "a"), Bundle(tempfile.mkdtemp(), "b")
+        a.pin_compat(); b.pin_compat()
+        self.assertEqual(json.dumps(a.schemas), json.dumps(b.schemas))
+        pin = a.schemas["schemas/" + COMPAT_FILE]
+        self.assertEqual((pin["id"], pin["version"], pin["schema"]["additionalProperties"]), (COMPAT_ID, "1.2.0", False))
+        self.assertEqual(COMPAT, COMPAT_ID + "@1")
+        # every member a converter writes (ISM, Grundschutz++, CSF, SP 800-53, CR26, IFA) is a member of it
+        props = pin["schema"]["properties"]
+        for member in ("group-parts", "props", "nested-in", "metadata", "uuid", "catalog", "param-extras", "parts", "links",
+                       "control", "group", "unmapped", "imports", "merge", "class", "flows", "class-variants", "ctl"):
+            self.assertIn(member, props)
+        # 1.2.0 (2026-11-14): what has a place of its own since the author's decisions is no member any more - the
+        # resources a text refers to (references@1) and the record of an object's changes (the kernel's `history`)
+        for gone in ("back-matter", "history"): self.assertNotIn(gone, props)
+        # ... and the items of `props` and `group-parts` are closed, as the ISM's own schema had them (backlog #91)
+        self.assertEqual((props["props"]["items"]["additionalProperties"], props["props"]["items"]["required"]), (False, ["name", "value"]))
+        self.assertEqual((props["group-parts"]["items"]["additionalProperties"], sorted(props["group-parts"]["items"]["properties"])),
+                         (False, ["group", "name", "prose"]))
+
+    def test_the_lifecycle_a_converter_writes_on_its_own_is_counted_and_named(self):
+        objs = {"a": {"id": "x/a", "lifecycle": "active"}, "b": {"id": "x/b", "lifecycle": "withdrawn"}, "c": {"id": "x/c", "lifecycle": "active"},
+                "m": {"objects": []}}
+        r = lifecycle_default_record(objs, stated=["x/b"])
+        self.assertEqual(r, {"value": "active", "origin": "converter-default", "objects": 2, "source-states": 1})
+        self.assertIn("`active` on 2 object(s) is the converter's default", lifecycle_default_line(r))
+        self.assertIn("On 1 object(s) the lifecycle is the source's own status", lifecycle_default_line(r))
+        with self.assertRaises(SystemExit): lifecycle_default_record(objs, stated=[])     # `withdrawn` by nobody's word
+
+
+class Backlog89ThePathMapHeldAgainstTheRecord(unittest.TestCase):
+    """A ledger holds a rule to what it wrote. That a value stands where the
+    path map of the report says, and with the outcome its sentence states, is
+    asked by path_map_check on the record by path."""
+    RECORD = [
+        {"path": "src.catalog.title", "outcome": "copied", "count": 1, "example": "A title",
+         "to": [{"pointer": "/title/en", "count": 1}]},
+        {"path": "src.catalog.controls[].id", "outcome": "transformed", "count": 3, "example": "ac-1",
+         "to": [{"pointer": "/id", "count": 3, "rule": "URI from the id"}, {"pointer": "/members/[]/ref", "count": 3, "rule": "URI from the id"}]},
+        {"path": "src.catalog.controls[].class", "outcome": "intentionally-dropped", "count": 2, "example": "x",
+         "reasons": [{"reason": "not needed", "count": 2}]},
+        {"path": "src.catalog.controls[].ns", "outcome": "not-content", "count": 3, "example": "http://x"},
+        {"path": "src.catalog.controls[].odd", "outcome": "unaccounted", "count": 1, "example": "?"},
+        {"path": "src.catalog.unmapped", "outcome": "copied", "count": 1, "example": "u", "to": [{"pointer": "/anywhere", "count": 1}]}]
+    CARRIED = ("copied", "transformed")
+    def rows(self, **change):
+        table = {"src.catalog.title": (self.CARRIED, r"^/title/en$"),
+                 "src.catalog.controls[].id": (self.CARRIED, r"^(/id|/members/\[\]/ref)$"),
+                 "src.catalog.controls[].class": (("intentionally-dropped",), None),
+                 "src.catalog.controls[].ns": (("not-content",), None),
+                 "src.catalog.controls[].odd": (self.CARRIED, r"^/odd$")}
+        table.update(change)
+        return table.get
+
+    def test_a_record_the_map_describes_gives_no_sentence(self):
+        held = path_map_check(self.RECORD, self.rows())
+        self.assertEqual(held, {"disagree": [], "elsewhere": [], "sentences": []})
+
+    def test_a_value_at_a_place_its_row_does_not_name(self):
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].id": (self.CARRIED, r"^/id$")}))
+        self.assertEqual(held["elsewhere"], [{"path": "src.catalog.controls[].id", "pointer": "/members/[]/ref", "count": 3}])
+        self.assertEqual(held["sentences"], ["3 value(s) of src.catalog.controls[].id stand at /members/[]/ref, a place the path map does not name for that path"])
+        # a row that names no place at all has every place against it
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (self.CARRIED, None)}))
+        self.assertEqual([e["pointer"] for e in held["elsewhere"]], ["/title/en"])
+
+    def test_an_outcome_its_row_does_not_allow(self):
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].class": (self.CARRIED, None)}))
+        self.assertEqual(held["disagree"], [{"path": "src.catalog.controls[].class", "outcome": "intentionally-dropped", "count": 2,
+                                             "example": "x", "allowed": ["copied", "transformed"]}])
+        self.assertEqual(held["sentences"], ["2 value(s) of src.catalog.controls[].class are intentionally-dropped, and the path map "
+                                             "allows copied or transformed there (first x)"])
+        # a sentence that says "not carried" of a value that is
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (("not-content",), r"^/title/en$")}))
+        self.assertEqual([(d["path"], d["outcome"]) for d in held["disagree"]], [("src.catalog.title", "copied")])
+
+    def test_an_unaccounted_value_is_the_gates_and_a_path_without_a_row_the_coverages(self):
+        held = path_map_check(self.RECORD, self.rows())
+        self.assertNotIn("odd", " ".join(held["sentences"]))
+        self.assertNotIn("unmapped", " ".join(held["sentences"]))
+
+    def test_the_outcomes_are_asked_before_the_places_and_both_in_the_order_of_the_record(self):
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.title": (("not-content",), None),
+                                                        "src.catalog.controls[].id": (("not-content",), r"^/id$")}))
+        self.assertEqual([s.split(" value(s) of ")[1].split(" ")[0] + (" at" if " stand at " in s else " is") for s in held["sentences"]],
+                         ["src.catalog.title is", "src.catalog.controls[].id is", "src.catalog.title at", "src.catalog.controls[].id at"])
+
+    def test_a_converter_that_holds_its_outcomes_itself_asks_for_the_places_only(self):
+        held = path_map_check(self.RECORD, self.rows(**{"src.catalog.controls[].class": (None, None), "src.catalog.title": (None, r"^/title$")}))
+        self.assertEqual(held["disagree"], [])
+        self.assertEqual([e["pointer"] for e in held["elsewhere"]], ["/title/en"])
+
+    def test_a_table_beside_the_path_map_row_for_row(self):
+        HELD = [(r"^a$", ("copied",), (r"/x", r"/y/\[\]/z")), (r"^b$", None, ()), (r"^c$", ("not-content",), ())]
+        self.assertEqual(held_row(HELD, 0), (("copied",), r"^(/x|/y/\[\]/z)$"))
+        self.assertEqual(held_row(HELD, 1), (None, None))
+        self.assertIsNone(held_row(HELD, None))
+        self.assertIsNone(held_rows_match(HELD, [r"^a$", r"^b$", r"^c$"]))
+        self.assertIn("differ first at row 1", held_rows_match(HELD, [r"^a$", r"^new$", r"^b$", r"^c$"]))
+        self.assertIn("has 3 row(s) and the path map 2", held_rows_match(HELD, [r"^a$", r"^b$"]))
+        self.assertIn("differ first at row 0", held_rows_match(HELD, [r"^b$", r"^a$", r"^c$"]))
+
+    def test_what_a_record_measured_for_each_row(self):
+        got = path_map_measured(self.RECORD, lambda p: None if p.endswith("unmapped") else p.rsplit(".", 1)[1])
+        self.assertEqual(sorted(got), ["class", "id", "ns", "odd", "title"])
+        self.assertEqual((dict(got["id"]["outcomes"]), dict(got["id"]["places"])), ({"transformed": 3}, {"/id": 3, "/members/[]/ref": 3}))
+        self.assertEqual((dict(got["class"]["outcomes"]), dict(got["class"]["places"])), ({"intentionally-dropped": 2}, {}))
+
+
+class Backlog91TheObjectOfADestination(unittest.TestCase):
+    """ledger_by_path keeps the type of the object a value went to (backlog
+    #91, point 5). Until 2026-11-15 a destination of the record by path was
+    its pointer alone: `/id` of a Set and of a Requirement read alike, and
+    one row stood for both."""
+    SOURCE = {"version": "7", "groups": [{"id": "g", "title": "Group", "controls": [{"id": "c-1", "title": "First"},
+                                                                                     {"id": "c-2", "title": "Second"}]}]}
+
+    def run_ledger(self):
+        led = Ledger(); doc = led.source("cat", copy.deepcopy(self.SOURCE))
+        uri = lambda v: "https://x.example/" + v
+        g = doc["groups"][0]
+        objs = {"objects/set/g.json": {"id": led.derive("URI from the id", uri, g["id"]), "version": doc["version"],
+                                       "title": {"en": g["title"]},
+                                       "members": [{"ref": led.derive("URI from the id", uri, c["id"])} for c in g["controls"]]}}
+        for c in g["controls"]:
+            objs[f"objects/req/{c['id']}.json"] = {"id": led.derive("URI from the id", uri, c["id"]), "version": doc["version"],
+                                                   "title": {"en": c["title"]}, "statements": []}
+        objs["content-manifest.json"] = {"manifest-version": "1", "provenance": {"sources": [{"version": doc["version"]}]}}
+        out = tempfile.mkdtemp()
+        for rel, o in objs.items():
+            os.makedirs(os.path.dirname(os.path.join(out, rel)), exist_ok=True)
+            with open(os.path.join(out, rel), "w", encoding="utf-8") as f: json.dump(o, f)
+        return led.account(out, objs), objs
+
+    def test_backlog_91_the_id_of_a_set_and_of_a_requirement_are_two_destinations(self):
+        full, objs = self.run_ledger()
+        self.assertEqual((full["totals"]["unaccounted"], full["verification-failures"]), (0, []))
+        rows = {(r["path"], r["outcome"]): r["to"] for r in ledger_by_path(full, objs)["paths"]}
+        rule = "URI from the id"
+        self.assertEqual(rows[("cat.groups[].id", "transformed")],
+                         [{"object-type": "requirementSet", "pointer": "/id", "count": 1, "rule": rule}])
+        self.assertEqual(rows[("cat.groups[].controls[].id", "transformed")],
+                         [{"object-type": "requirement", "pointer": "/id", "count": 2, "rule": rule},
+                          {"object-type": "requirementSet", "pointer": "/members/[]/ref", "count": 2, "rule": rule}])
+        self.assertEqual(rows[("cat.groups[].title", "copied")], [{"object-type": "requirementSet", "pointer": "/title/en", "count": 1}])
+        self.assertEqual(rows[("cat.groups[].controls[].title", "copied")], [{"object-type": "requirement", "pointer": "/title/en", "count": 2}])
+        # one source value at one pointer of three objects of two types, and in the manifest: a destination per type
+        self.assertEqual(rows[("cat.version", "copied")],
+                         [{"object-type": "manifest", "pointer": "/provenance/sources/[]/version", "count": 1},
+                          {"object-type": "requirement", "pointer": "/version", "count": 2},
+                          {"object-type": "requirementSet", "pointer": "/version", "count": 1}])
+        # every destination of every row names the type of its object
+        self.assertTrue(all(d.get("object-type") for to in rows.values() for d in to))
+
+    def test_backlog_91_a_record_and_objects_of_two_runs_are_refused(self):
+        full, objs = self.run_ledger()
+        del objs["objects/set/g.json"]
+        with self.assertRaises(ValueError) as refused: ledger_by_path(full, objs)
+        self.assertIn("https://x.example/g, which is not among the objects given", str(refused.exception))
+
+    def test_backlog_91_a_type_is_told_by_a_member_the_kernel_requires_of_it_alone(self):
+        """The table of the library against the kernel schema: each type the
+        schema defines is told by a member it requires, and no member that is
+        asked earlier can stand in an object of that type."""
+        here = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(here, "..", "schemas", "jascon-2.0.0.schema.json"), encoding="utf-8") as f: defs = json.load(f)["$defs"]
+        own = {t: next(p for p in d["allOf"] if "$ref" not in p) for t, d in defs.items()
+               if {"$ref": "#/$defs/base"} in d.get("allOf", [])}
+        self.assertEqual(sorted(t for _, t in KERNEL_TYPE_BY_MEMBER), sorted(own))        # the eleven types, each once
+        base = set(defs["base"]["properties"])
+        for i, (member, t) in enumerate(KERNEL_TYPE_BY_MEMBER):
+            self.assertIn(member, own[t]["required"], t)
+            may_have = base | set(own[t]["properties"])
+            self.assertEqual([m for m, _ in KERNEL_TYPE_BY_MEMBER[:i] if m in may_have], [], t)
+            self.assertEqual(kernel_type({"id": "https://x.example/o", **{m: None for m in own[t]["required"]}}), t)
+        # a component with members is a component, a Set is told by its members
+        self.assertEqual(kernel_type({"kind": "system", "members": []}), "component")
+        self.assertEqual(kernel_type({"members": []}), "requirementSet")
+        # what a bundle holds that is no object of the kernel
+        self.assertEqual(kernel_type({"manifest-version": "1", "objects": []}), "manifest")
+        self.assertEqual(kernel_type({"id": "https://x.example/facet/f", "version": "1.0.0", "modifies-semantics": [], "schema": {}}),
+                         "facet-schema")
+        self.assertIsNone(kernel_type({"id": "https://x.example/o", "facets": {}}))
+        self.assertIsNone(kernel_type(["statements"]))
 
 
 if __name__ == "__main__":

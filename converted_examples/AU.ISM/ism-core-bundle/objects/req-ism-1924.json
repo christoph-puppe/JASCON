@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1924",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1924",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Generative AI applications evaluate user prompts to detect and mitigate adversarial inputs or suffixes designed to elicit unintended behaviour or assist in the generation of sensitive or harmful content."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09"
   }
  ]
 }

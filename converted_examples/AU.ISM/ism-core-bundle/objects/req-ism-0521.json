@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0521",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0521",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "IPv6 functionality is disabled in dual-stack network devices unless it is being used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

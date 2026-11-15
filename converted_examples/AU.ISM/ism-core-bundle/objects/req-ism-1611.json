@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1611",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1611",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Break glass accounts are only used when normal authentication processes cannot be used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-08"
   }
  ]
 }

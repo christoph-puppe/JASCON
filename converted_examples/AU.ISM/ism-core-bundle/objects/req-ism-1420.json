@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1420",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1420",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Data from production environments is not used in non-production environments unless the non-production environment is secured to at least the same level as the production environment."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

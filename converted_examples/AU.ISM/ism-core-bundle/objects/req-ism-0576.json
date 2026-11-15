@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0576",
- "version": "2026.06.18",
+ "version": "10",
  "label": "ISM-0576",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A cyber security incident management policy, and associated cyber security incident response plan, is developed, implemented and maintained."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

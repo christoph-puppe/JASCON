@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,6 +37,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -53,19 +55,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pe-16_obj",
      "label": "PE-16",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-16"
+      }
+     ],
      "children": [
       {
        "id": "pe-16_obj.a",
        "label": "PE-16a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pe-16_obj.a-1",
          "label": "PE-16a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:pe-16_odp.01} are authorized when entering the facility;"
          }
@@ -73,6 +90,11 @@
         {
          "id": "pe-16_obj.a-2",
          "label": "PE-16a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:pe-16_odp.01} are controlled when entering the facility;"
          }
@@ -80,6 +102,11 @@
         {
          "id": "pe-16_obj.a-3",
          "label": "PE-16a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:pe-16_odp.02} are authorized when exiting the facility;"
          }
@@ -87,6 +114,11 @@
         {
          "id": "pe-16_obj.a-4",
          "label": "PE-16a.[04]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:pe-16_odp.02} are controlled when exiting the facility;"
          }
@@ -96,6 +128,11 @@
       {
        "id": "pe-16_obj.b",
        "label": "PE-16b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "records of the system components are maintained."
        }
@@ -167,14 +204,16 @@
       {
        "en": "types of system components to be authorized and controlled when entering the facility are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PE-16_ODP[01]"
     },
     "pe-16_odp.02": {
      "guidelines": [
       {
        "en": "types of system components to be authorized and controlled when exiting the facility are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "PE-16_ODP[02]"
     }
    }
   }

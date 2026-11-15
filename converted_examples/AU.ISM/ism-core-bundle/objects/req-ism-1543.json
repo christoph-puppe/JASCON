@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1543",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1543",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "An authorised RF and IR device register for SECRET and TOP SECRET areas is developed, implemented, maintained and regularly verified."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

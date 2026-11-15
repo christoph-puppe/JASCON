@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0732",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-0732",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CISO receives and manages a dedicated cyber security budget for their organisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-10"
   }
  ]
 }

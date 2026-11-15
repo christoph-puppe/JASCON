@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AC-19.3",
+ "version": "5.2.0",
+ "label": "AC-19(3)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Use of Portable Storage Devices with No Identifiable Owner"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into MP-7."
+   }
+  }
+ ]
+}

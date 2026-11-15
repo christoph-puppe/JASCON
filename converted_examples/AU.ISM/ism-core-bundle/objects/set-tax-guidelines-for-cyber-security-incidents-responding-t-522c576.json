@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-responding-t-8880098",
-   "sequence": 1410
+   "sequence": 1580
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-responding-t-8ce0605",
-   "sequence": 1430
+   "sequence": 1600
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-responding-t-fae0a69",
-   "sequence": 1470
+   "sequence": 1640
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-responding-t-76d772c",
-   "sequence": 1530
+   "sequence": 1700
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cyber-security-incidents-responding-t-e7ca961",
-   "sequence": 1550
+   "sequence": 1720
   }
  ],
  "facets": {

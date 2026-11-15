@@ -33,15 +33,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sc-18.2_obj",
      "label": "SC-18(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sc-18.2_obj-1",
        "label": "SC-18(02)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the acquisition of mobile code to be deployed in the system meets {param:sc-18.02_odp};"
        }
@@ -49,6 +59,11 @@
       {
        "id": "sc-18.2_obj-2",
        "label": "SC-18(02)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the development of mobile code to be deployed in the system meets {param:sc-18.02_odp};"
        }
@@ -56,6 +71,11 @@
       {
        "id": "sc-18.2_obj-3",
        "label": "SC-18(02)[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the use of mobile code to be deployed in the system meets {param:sc-18.02_odp}."
        }
@@ -139,7 +159,8 @@
      ],
      "alt-identifiers": [
       "sc-18.2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SC-18(02)_ODP"
     }
    }
   }

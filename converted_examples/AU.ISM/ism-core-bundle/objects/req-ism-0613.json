@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0613",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0613",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System administrators for gateways that connect to Australian Eyes Only or Releasable To networks are Australian nationals."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

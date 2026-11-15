@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/NOT.4.11",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "NOT.4.11",
  "lifecycle": "active",
  "title": {
@@ -45,7 +45,8 @@
      "authenticity": "0",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.45",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.39"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.39",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.1"
      ]
     }
    }
@@ -53,7 +54,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4
     }
@@ -63,7 +64,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Datenträgerarchive sind verschlossene Räume, die dediziert zur langfristigen Aufbewahrung von Datenträgern bestimmt sind. Die Anforderung gilt auch dann als umgesetzt, wenn zusätzlich zur Datensicherung im Datenträgerarchiv auch noch Kopien existieren, die nicht im Datenträgerarchiv aufbewahrt werden.  Ein wesentlicher Mehrwert von Datenträgerarchiven ist die geschützte Aufbewahrung. Daher zählt ein Datenträgerarchiv nur dann als Mehrwert, wenn das Archiv sich auch in einem anderen Brandabschnitt befindet als die Originaldaten."
+      "de": "Datenträgerarchive sind verschlossene Räume, die dediziert zur langfristigen Aufbewahrung von Datenträgern bestimmt sind. Die Anforderung gilt auch dann als umgesetzt, wenn zusätzlich zur Datensicherung im Datenträgerarchiv auch noch Kopien existieren, die nicht im Datenträgerarchiv aufbewahrt werden. Ein wesentlicher Mehrwert von Datenträgerarchiven ist die geschützte Aufbewahrung. Daher zählt ein Datenträgerarchiv nur dann als Mehrwert, wenn das Archiv sich auch in einem anderen Brandabschnitt befindet als die Originaldaten."
      }
     }
    }

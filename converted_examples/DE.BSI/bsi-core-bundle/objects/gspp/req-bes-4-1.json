@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BES.4.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BES.4.1",
  "lifecycle": "active",
  "title": {
@@ -55,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 2,
      "tags": [
@@ -68,7 +68,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Hierzu kann auf die Klassifizierung von Informationen zurückgegriffen werden, die vom zu beschaffenden Vertrag betroffen sind.  Oft verfügen Lieferanten über eigene Klassifizierungsschemata, die sie wiederum mit bestimmten Sicherheitsregelungen und -mechanismen verknüpft haben. In diesem Fall bietet sich ein Mapping zwischen den institutionseigenen Klassen und denen des Lieferanten an.  Weitere Informationen zur Festlegung möglicher Kriterien, inklusive einer Risikobeurteilung, können der ISO/IEC 27036-3 entnommen werden."
+      "de": "Hierzu kann auf die Klassifizierung von Informationen zurückgegriffen werden, die vom zu beschaffenden Vertrag betroffen sind. Oft verfügen Lieferanten über eigene Klassifizierungsschemata, die sie wiederum mit bestimmten Sicherheitsregelungen und -mechanismen verknüpft haben. In diesem Fall bietet sich ein Mapping zwischen den institutionseigenen Klassen und denen des Lieferanten an. Weitere Informationen zur Festlegung möglicher Kriterien, inklusive einer Risikobeurteilung, können der ISO/IEC 27036-3 entnommen werden."
      }
     }
    }

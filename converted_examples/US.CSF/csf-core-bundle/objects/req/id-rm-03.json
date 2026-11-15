@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.RM-03",
+ "version": "2.0",
+ "label": "ID.RM-03",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.RM-03"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "The organization’s determination of risk tolerance is informed by its role in critical infrastructure and sector specific risk analysis"
+   }
+  }
+ ]
+}

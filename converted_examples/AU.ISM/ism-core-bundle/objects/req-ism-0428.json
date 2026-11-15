@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0428",
- "version": "2026.06.18",
+ "version": "10",
  "label": "ISM-0428",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Services are configured with a session lock that:\n\n- activates after a maximum of 15 minutes of user inactivity, a maximum of 12 hours of overall session time or when manually activated by users\n- blocks access to all session content\n- requires users to re-authenticate using all authentication factors to unlock the session\n- denies users the ability to disable the session locking mechanism."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

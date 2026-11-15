@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2073",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2073",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A post-quantum cryptography transition plan is developed, implemented and maintained."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09"
   }
  ]
 }

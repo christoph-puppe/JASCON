@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2116",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2116",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cyber threat intelligence services are used to support the detection of cyber security events and the identification of cyber security incidents."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

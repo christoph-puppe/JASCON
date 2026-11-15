@@ -41,10 +41,14 @@
  "facets": {
   "https://ifa.gov/goodread/facet/finding-target@1": {
    "poam-item": {
+    "uuid": "e174dfb9-0ae3-4a8f-8e7c-081527b84337",
     "title": "Update Django Framework Configuration to Disable Default Admin Panel",
     "description": {
      "en": "Budget and technical staff are needed to re-design and re-implement a part of the SYSTEM1234 application's use of a web application programming framework to mitigate the risk of low privilege users directly modifying the database of this application. This application is a high-visibility service and integral to future operations of the IFA Office of Public Affairs and its staff."
     },
+    "unresolved-risk-uuids": [
+     "401c15c9-ad6b-4d4a-a591-7d53a3abb3b6"
+    ],
     "observations": [
      "https://ifa.gov/goodread/evidence/obs-0c4de4fc"
     ]

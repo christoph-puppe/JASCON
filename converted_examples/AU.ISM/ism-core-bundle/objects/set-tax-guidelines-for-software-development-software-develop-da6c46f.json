@@ -8,67 +8,67 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-53c5897",
-   "sequence": 11310
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-1c4e1bb",
-   "sequence": 11360
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-091e2ec",
-   "sequence": 11380
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-8d8b643",
-   "sequence": 11450
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-e256b93",
    "sequence": 11480
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-1c4e1bb",
+   "sequence": 11530
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-091e2ec",
+   "sequence": 11550
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-8d8b643",
+   "sequence": 11620
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-e256b93",
+   "sequence": 11650
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-f92b064",
-   "sequence": 11780
+   "sequence": 11950
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-29856ee",
-   "sequence": 11810
+   "sequence": 11980
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-e97f69d",
-   "sequence": 11840
+   "sequence": 12010
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-0b65e13",
-   "sequence": 11870
+   "sequence": 12040
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-93a49e6",
-   "sequence": 11940
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-8539e90",
-   "sequence": 12000
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-00c36be",
-   "sequence": 12050
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-fe20c6e",
    "sequence": 12110
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-8539e90",
+   "sequence": 12170
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-00c36be",
+   "sequence": 12220
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-fe20c6e",
+   "sequence": 12280
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-64ad27c",
-   "sequence": 12160
+   "sequence": 12330
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-58d8c0d",
-   "sequence": 12200
+   "sequence": 12370
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-software-development-software-develop-91074e8",
-   "sequence": 12220
+   "sequence": 12390
   }
  ],
  "facets": {

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0556",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0556",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Workstations are not connected to video conferencing units or IP phones unless the workstation or the device uses Virtual Local Area Networks or similar mechanisms to maintain separation between video conferencing, IP telephony and other data traffic."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-10"
   }
  ]
 }

@@ -22,8 +22,8 @@ nav: model
         </div>
         <ul class="ticks">
           <li><b><code>id</code></b> is a URI under the authority's own domain. It is compared as a string and never fetched, so validation works on a sealed network.</li>
-          <li><b><code>version</code></b> and two digests in the manifest carry the history. The ISM maintains 2,202 revision props by hand for the same purpose.</li>
-          <li><b><code>statements</code></b> is a list because clauses are real: Grundschutz++ contains 347 nested pseudo-controls that exist only to make clauses addressable.</li>
+          <li><b><code>version</code></b> is the object's own version, and <b><code>history</code></b> is its publisher's record of its changes; two digests in the manifest seal each version. The ISM maintains 2,202 revision props by hand for the same purpose.</li>
+          <li><b><code>statements</code></b> is a list because clauses are addressed one at a time: SP 800-53 writes a control as items a., b., c., which an implementation answers and an assessment objective names singly.</li>
           <li><b><code>modality</code></b> and <b><code>obligated-parties</code></b> sit on the statement. One requirement can bind the operator with MUST and the customer with SHOULD.</li>
           <li><b><code>prose</code></b> is a map from language tag to text.</li>
         </ul>
@@ -215,7 +215,7 @@ nav: model
             <tbody>
               <tr><th scope="row">Full Match</th><td class="yes">equal</td><td class="yes">equal</td><td>The exact package that was attested.</td></tr>
               <tr><th scope="row">Semantic Match</th><td class="no">differs</td><td class="yes">equal</td><td>The approved content, repackaged. The verifier says so.</td></tr>
-              <tr><th scope="row">Tamper</th><td class="no">any</td><td class="no">differs</td><td>The content is not what was approved.</td></tr>
+              <tr><th scope="row">Does not bind</th><td class="no">any</td><td class="no">differs, or absent</td><td>A failure, not a third state. The content is not what was approved, or the bundle does not hold it. It fails the bundle while the attestation is <code>active</code>; a draft, a deprecated or a withdrawn one is reported and fails nothing.</td></tr>
             </tbody>
           </table>
         </div>

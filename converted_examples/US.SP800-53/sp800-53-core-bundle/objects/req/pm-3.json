@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -19,6 +20,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -29,6 +31,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -46,19 +49,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pm-3_obj",
      "label": "PM-03",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/PM-3"
+      }
+     ],
      "children": [
       {
        "id": "pm-3_obj.a",
        "label": "PM-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pm-3_obj.a-1",
          "label": "PM-03a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the resources needed to implement the information security program are included in capital planning and investment requests, and all exceptions are documented;"
          }
@@ -66,6 +84,11 @@
         {
          "id": "pm-3_obj.a-2",
          "label": "PM-03a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the resources needed to implement the privacy program are included in capital planning and investment requests, and all exceptions are documented;"
          }
@@ -75,10 +98,20 @@
       {
        "id": "pm-3_obj.b",
        "label": "PM-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "pm-3_obj.b-1",
          "label": "PM-03b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the documentation required for addressing the information security program in capital planning and investment requests is prepared in accordance with applicable laws, executive orders, directives, policies, regulations, standards;"
          }
@@ -86,6 +119,11 @@
         {
          "id": "pm-3_obj.b-2",
          "label": "PM-03b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "the documentation required for addressing the privacy program in capital planning and investment requests is prepared in accordance with applicable laws, executive orders, directives, policies, regulations, standards;"
          }
@@ -95,10 +133,20 @@
       {
        "id": "pm-3_obj.c",
        "label": "PM-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "children": [
         {
          "id": "pm-3_obj.c-1",
          "label": "PM-03c.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "information security resources are made available for expenditure as planned;"
          }
@@ -106,6 +154,11 @@
         {
          "id": "pm-3_obj.c-2",
          "label": "PM-03c.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "privacy resources are made available for expenditure as planned."
          }

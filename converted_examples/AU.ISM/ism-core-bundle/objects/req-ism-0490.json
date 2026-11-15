@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0490",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0490",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Versions of S/MIME earlier than S/MIME version 3.0 are not used for S/MIME connections."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

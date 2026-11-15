@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2047",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2047",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Where software allows an authentication factor to be reset, the user is notified of the reset through a secondary channel."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1406",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1406",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "SOEs are used for workstations and servers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-08"
   }
  ]
 }

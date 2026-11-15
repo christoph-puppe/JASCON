@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.AC-01",
+ "version": "2.0",
+ "label": "PR.AC-01",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.AC-01"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Identities and credentials are issued, managed, verified, revoked, and audited for authorized devices, users and processes"
+   }
+  }
+ ]
+}

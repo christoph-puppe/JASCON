@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/det-6-2",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Beurteilung von Eingängen"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.2",
+   "sequence": 10090
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.2.1",
+   "sequence": 10100
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.2.2",
+   "sequence": 10110
+  }
+ ]
+}

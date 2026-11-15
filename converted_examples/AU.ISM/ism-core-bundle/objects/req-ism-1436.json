@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1436",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1436",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Critical online services are segregated from other online services that are more likely to be targeted as part of denial-of-service attacks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/DE.AE-01",
+ "version": "2.0",
+ "label": "DE.AE-01",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "DE.AE-01"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "A baseline of network operations and expected data flows for users and systems is established and managed"
+   }
+  }
+ ]
+}

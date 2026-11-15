@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1615",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1615",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Break glass accounts are tested after credentials are changed."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-08"
   }
  ]
 }

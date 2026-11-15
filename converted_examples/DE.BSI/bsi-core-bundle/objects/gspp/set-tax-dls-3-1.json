@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/dls-3-1",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Einhaltung der Sicherheitsvorgaben"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.1",
+   "sequence": 4200
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DLS.3.1.1",
+   "sequence": 4210
+  }
+ ]
+}

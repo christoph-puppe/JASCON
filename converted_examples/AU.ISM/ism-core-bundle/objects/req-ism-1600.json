@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1600",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1600",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Media is sanitised before it is used for the first time."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-04"
   }
  ]
 }

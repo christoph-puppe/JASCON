@@ -229,6 +229,8 @@ jscI18n.add("de", {
   "this page runs from file://, where the browser blocks fetch. Serve the repository (python -m http.server) and open the page over http.":
     "Diese Seite läuft von file://, dort blockiert der Browser fetch. Das Repository ausliefern (python -m http.server) und die Seite über http öffnen.",
   "{n} file(s) could not be fetched (first: {first})": "{n} Datei(en) konnten nicht geholt werden (erste: {first})",
+  "This server does not list the folder of the bundle. A URL names files, not folders, so an Attestation beside the manifest could not be looked for, and none is held to what it binds; load the folder or a ZIP for that.":
+    "Dieser Server listet den Ordner des Bundles nicht auf. Eine URL nennt Dateien, keine Ordner; nach einer Attestation neben dem Manifest konnte deshalb nicht gesucht werden, und keine wird an dem gemessen, was sie bindet. Dafür den Ordner oder ein ZIP laden.",
   "the folder": "dem Ordner", "the selection": "der Auswahl", "the drop": "dem Drop",
   "this set has no manifest; there is nothing to verify against": "Dieses Set hat kein Manifest; es gibt nichts, wogegen geprüft werden könnte",
   "verified": "geprüft", "mismatch": "Abweichung", "not in the manifest": "nicht im Manifest", "listed but missing": "gelistet, aber fehlend", "pins": "Pins",
@@ -460,8 +462,13 @@ $("pick-files").addEventListener("change", async e => { await load(await jscRead
    over the set, whatever it turns out to be. */
 async function loadUrl(url, asPack) {
   try {
-    const { files, failed } = await jscFetchBundle(url);
+    const { files, failed, beside } = await jscFetchBundle(url);
     if (failed.length) hubLog.warn(T("{n} file(s) could not be fetched (first: {first})", { n: failed.length, first: failed[0] }));
+    /* A URL names files, not folders: an Attestation beside the manifest is named by nothing the manifest lists
+       (D3.1) and is found only through a listing of the folder, which is asked for with every load (backlog #71,
+       point 8). Where the server gives none, no Attestation is in the set, the Validate page holds none to what
+       it binds, and that is said here so that silence is not read as a pass (backlog #46). */
+    if (!beside) hubLog.info(T("This server does not list the folder of the bundle. A URL names files, not folders, so an Attestation beside the manifest could not be looked for, and none is held to what it binds; load the folder or a ZIP for that."));
     if (asPack) { await offerPack(files, url); return true; }
     return await load(files, url);
   } catch (e) {

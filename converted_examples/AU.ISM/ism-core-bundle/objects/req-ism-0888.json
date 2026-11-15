@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0888",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0888",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cyber security documentation is reviewed at least annually and includes a ‘current as at \\[date\\]’ or equivalent statement."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

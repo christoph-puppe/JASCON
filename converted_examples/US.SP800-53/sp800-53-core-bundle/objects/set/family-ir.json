@@ -156,16 +156,24 @@
    "sequence": 370
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/IR-9.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/IR-9.1",
    "sequence": 380
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/IR-9.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/IR-9.2",
    "sequence": 390
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/IR-9.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/IR-9.3",
    "sequence": 400
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/IR-9.4",
+   "sequence": 410
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/IR-10",
+   "sequence": 420
   }
  ]
 }

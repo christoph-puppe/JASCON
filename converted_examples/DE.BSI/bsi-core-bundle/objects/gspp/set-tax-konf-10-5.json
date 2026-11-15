@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-10-5",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Überprüfung der Konfiguration"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.5",
+   "sequence": 11600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.10.5.1",
+   "sequence": 11610
+  }
+ ]
+}

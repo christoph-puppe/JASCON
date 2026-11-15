@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0418",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0418",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Physical credentials are kept separate from systems they are used to authenticate to, except for when performing authentication activities."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

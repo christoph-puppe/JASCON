@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1272",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1272",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "If only local access to a database is required, networking functionality of database management system applications is disabled or directed to listen solely to the localhost interface."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

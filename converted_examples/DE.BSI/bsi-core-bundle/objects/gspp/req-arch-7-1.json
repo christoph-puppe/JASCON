@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/ARCH.7.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "ARCH.7.1",
  "lifecycle": "active",
  "title": {
@@ -64,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -82,7 +82,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "arch.7.1-prm1": {
-     "alt-identifier": "dbc89a40-82e3-48c7-9422-ce8f874ca1cf"
+     "alt-identifier": "97281ea7-171f-4667-9549-775b4dedde7b"
     }
    }
   }

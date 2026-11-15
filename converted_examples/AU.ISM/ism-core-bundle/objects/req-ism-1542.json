@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1542",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1542",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Microsoft Office is configured to prevent activation of Object Linking and Embedding packages."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-01"
   }
  ]
 }

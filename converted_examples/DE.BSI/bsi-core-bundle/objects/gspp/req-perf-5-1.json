@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERF.5.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERF.5.1",
  "lifecycle": "active",
  "title": {
@@ -48,7 +48,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Implementierung von  Monitoring-Methoden und -tools sollte an die individuellen Bedürfnisse und Möglichkeiten der Institution angepasst sein. Während kleinere Institutionen mit einfacheren Lösungen arbeiten können, benötigen größere und komplexere Umgebungen oft umfassendere und stärker automatisierte Ansätze. Die gewonnenen Monitoring-Daten sollten systematisch ausgewertet und für verschiedene Zwecke genutzt werden, darunter die Erstellung von Kennzahlen und Berichten, die Früherkennung von Sicherheitsrisiken, die Unterstützung der Incident Response und die kontinuierliche Verbesserung des ISMS. Beispielhafte Tools für die Überwachung von Informationssicherheit sind Security Information and Event Management (SIEM) Systeme für die zentrale Sammlung, Korrelation und Analyse von Sicherheitsereignissen aus verschiedenen Quellen;  Intrusion Detection/Prevention Systeme (IDS/IPS) zur Erkennung und Abwehr verdächtiger Netzwerkaktivitäten;  Vulnerability Management Systeme zur systematischen Identifikation und Behandlung von Schwachstellen sowie Configuration Monitoring Tools zur Überwachung von Konfigurationsänderungen in Systemen und Anwendungen."
+      "de": "Die Implementierung von Monitoring-Methoden und -tools sollte an die individuellen Bedürfnisse und Möglichkeiten der Institution angepasst sein. Während kleinere Institutionen mit einfacheren Lösungen arbeiten können, benötigen größere und komplexere Umgebungen oft umfassendere und stärker automatisierte Ansätze. Die gewonnenen Monitoring-Daten sollten systematisch ausgewertet und für verschiedene Zwecke genutzt werden, darunter die Erstellung von Kennzahlen und Berichten, die Früherkennung von Sicherheitsrisiken, die Unterstützung der Incident Response und die kontinuierliche Verbesserung des ISMS. Beispielhafte Tools für die Überwachung von Informationssicherheit sind Security Information and Event Management (SIEM) Systeme für die zentrale Sammlung, Korrelation und Analyse von Sicherheitsereignissen aus verschiedenen Quellen; Intrusion Detection/Prevention Systeme (IDS/IPS) zur Erkennung und Abwehr verdächtiger Netzwerkaktivitäten; Vulnerability Management Systeme zur systematischen Identifikation und Behandlung von Schwachstellen sowie Configuration Monitoring Tools zur Überwachung von Konfigurationsänderungen in Systemen und Anwendungen."
      }
     }
    }
@@ -56,7 +56,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "perf.5.1-prm1": {
-     "alt-identifier": "17e221bd-3b74-453a-ad4e-e2cb346b6af5"
+     "alt-identifier": "698213de-6178-4d8b-8931-059ab5542c9f"
     }
    }
   }

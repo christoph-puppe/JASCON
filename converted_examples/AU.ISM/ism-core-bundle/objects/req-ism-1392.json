@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1392",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1392",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When implementing application control using path rules, only approved users can modify approved files and write to approved folders."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

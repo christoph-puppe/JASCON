@@ -26,15 +26,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pm-6_obj",
      "label": "PM-06",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "pm-6_obj-1",
        "label": "PM-06[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "information security measures of performance are developed;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "pm-6_obj-2",
        "label": "PM-06[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "information security measures of performance are monitored;"
        }
@@ -49,6 +64,11 @@
       {
        "id": "pm-6_obj-3",
        "label": "PM-06[03]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the results of information security measures of performance are reported;"
        }
@@ -56,6 +76,11 @@
       {
        "id": "pm-6_obj-4",
        "label": "PM-06[04]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "privacy measures of performance are developed;"
        }
@@ -63,6 +88,11 @@
       {
        "id": "pm-6_obj-5",
        "label": "PM-06[05]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "privacy measures of performance are monitored;"
        }
@@ -70,6 +100,11 @@
       {
        "id": "pm-6_obj-6",
        "label": "PM-06[06]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the results of privacy measures of performance are reported."
        }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1727",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1727",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Semiconductor memory is destroyed using a furnace/incinerator, hammer mill or disintegrator."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

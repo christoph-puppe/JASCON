@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0240",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0240",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Paging, Multimedia Message Service, Short Message Service and messaging apps are not used to communicate sensitive or classified data."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

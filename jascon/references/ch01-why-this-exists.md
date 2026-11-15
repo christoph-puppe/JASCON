@@ -303,8 +303,9 @@ controls instead of 998, because nested controls were missed), the
 correction shipped with the same prominence as the original claim.
 
 **Concepts enter through the corpus.** No mechanism is introduced
-abstractly. Statements arrive via the 347 German pseudo-controls that
-exist only because clauses had no home; the modality lattice arrives via
+abstractly. Statements arrive via the lettered items of SP 800-53, which
+an implementation answers and an assessment objective names one at a
+time; the modality lattice arrives via
 the American `force` distribution and the German *DARF NUR*; mappings
 arrive via the crosswalk economies of SCF and CSA. If a concept cannot be
 motivated by something an authority actually shipped, it did not survive

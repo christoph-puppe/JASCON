@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1580",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1580",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Where a high availability requirement exists for online services, the services are architected to automatically transition between availability zones."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

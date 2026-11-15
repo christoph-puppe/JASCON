@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1296",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1296",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Physical security is implemented to protect network devices in public areas from physical damage or unauthorised access."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1646",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1646",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Floor plan diagrams contain the following:\n\n- cable paths (including ingress and egress points between floors)\n- cable reticulation system and conduit paths\n- floor concentration boxes\n- wall outlet boxes\n- network cabinets."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-06"
   }
  ]
 }

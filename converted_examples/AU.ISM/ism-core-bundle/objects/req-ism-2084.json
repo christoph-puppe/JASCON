@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2084",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2084",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "AI-specific documentation, including AI model cards and AI system cards (or equivalent artefacts), is used to document AI model characteristics, system architectures, use cases and security risks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

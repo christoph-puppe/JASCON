@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/UMS.2.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "UMS.2.1",
  "lifecycle": "active",
  "title": {
@@ -50,7 +50,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Je nach Organisation ist eine strukturierte Vorgehensweise festzulegen. Dabei empfiehlt es sich zu prüfen, ob Maßnahmen etabliert sind, die mehrere Anforderungen zugleich abdecken. Ebenso werden Synergieeffekte  erschlossen, indem ähnliche Defizite in anderen Bereichen identifiziert und mit gemeinsamen Lösungen adressiert werden. Das Ergebnis dieser Anforderung ist die Überführung des unstrukturierten Anforderungspakets hin zu einem strukturierten Umsetzungsplans."
+      "de": "Je nach Organisation ist eine strukturierte Vorgehensweise festzulegen. Dabei empfiehlt es sich zu prüfen, ob Maßnahmen etabliert sind, die mehrere Anforderungen zugleich abdecken. Ebenso werden Synergieeffekte erschlossen, indem ähnliche Defizite in anderen Bereichen identifiziert und mit gemeinsamen Lösungen adressiert werden. Das Ergebnis dieser Anforderung ist die Überführung des unstrukturierten Anforderungspakets hin zu einem strukturierten Umsetzungsplan."
      }
     }
    }

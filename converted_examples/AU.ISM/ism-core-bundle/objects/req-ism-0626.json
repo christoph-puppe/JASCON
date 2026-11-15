@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0626",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0626",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "CDSs are implemented between SECRET or TOP SECRET networks and any other networks belonging to different security domains."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

@@ -28,6 +28,10 @@
    "sequence": 50
   },
   {
+   "ref": "https://ns.nist.gov/csf/req/ID.AM-06",
+   "sequence": 60
+  },
+  {
    "ref": "https://ns.nist.gov/csf/req/ID.AM-07",
    "sequence": 70
   },

@@ -1,26 +1,26 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/geb-8",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Verwahrung von Speichermedien"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/GEB.8.1",
-   "sequence": 3170
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/geb-8-1",
+   "sequence": 5350
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.8.2",
-   "sequence": 3180
+   "sequence": 5360
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.8.3",
-   "sequence": 3190
+   "sequence": 5370
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.8.4",
-   "sequence": 3200
+   "sequence": 5380
   }
  ],
  "label": "8",

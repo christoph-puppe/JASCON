@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1014",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1014",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Individual logins are implemented for IP phones used for SECRET or TOP SECRET conversations."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

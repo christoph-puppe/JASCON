@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-fundamentals",
-   "sequence": 14760
+   "sequence": 14930
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-algorithms",
-   "sequence": 15220
+   "sequence": 15390
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-cryptographic-protocols",
-   "sequence": 15260
+   "sequence": 15430
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-transport-layer-security",
-   "sequence": 15380
+   "sequence": 15550
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-secure-shell",
-   "sequence": 15500
+   "sequence": 15670
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-secure-multipurpose-inte-a1727f0",
-   "sequence": 15530
+   "sequence": 15700
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-security",
-   "sequence": 15720
+   "sequence": 15890
   }
  ]
 }

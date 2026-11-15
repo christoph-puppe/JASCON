@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1799",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1799",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Incoming emails are rejected if they do not pass DMARC checks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-09"
   }
  ]
 }

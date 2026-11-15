@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1764",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1764",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When using ECDSA for digital signatures, NIST P-384 or P-521 curves are used, preferably the NIST P-384 curve."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

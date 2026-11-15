@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2106",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2106",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel are advised to limit posting information about their work-related skills and experience on unauthorised online services, and to report cases where such information is posted."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

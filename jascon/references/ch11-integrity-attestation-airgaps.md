@@ -95,8 +95,8 @@ Every bundle carries one:
       "path": "objects/acme-saas.json" }, … ],
   "facet-schemas": [
     { "id": "https://ns.bsi.bund.de/facet/gspp-taxonomy",
-      "exact-version": "1.0.0", "digest": "sha256:…",
-      "path": "schemas/gspp-taxonomy-1.0.0.json" } ],
+      "exact-version": "1.1.0", "digest": "sha256:…",
+      "path": "schemas/gspp-taxonomy-1.1.0.json" } ],
   "renderings": [ { "path": "render/authorization.pdf",
                     "digest": "sha256:…" } ] }
 ```
@@ -238,6 +238,63 @@ of §11.1 has no state to hide in: it breaks Full and gains nothing.
 Everything else — bad signature, missing subjects, unverifiable
 envelope — is failure, with the DSSE profile (next) defining exactly
 what "verifiable" means.
+
+**What a validator does with it *(since 2026-11-14 — backlog #46)*.**
+The reference validators read every Attestation that comes with a
+bundle — beside its manifest, where §11.4 puts it, and any that a
+manifest lists against that rule — and hold it to what it binds. Each
+subject is one of three things against the objects the manifest lists:
+it *matches* (the object of that id carries the signed semantic digest;
+a bare digest matches when any object carries it), it *differs* (the
+object of that id carries another digest: its content changed after
+signing), or it is *absent* (no such object here). The manifest it
+binds is this one, a vendor's pack manifest that the bundle keeps
+(Chapter 9.7), or another. All subjects match and the manifest is this
+one or a kept pack's: **Full Match**. All match and the manifest is
+another: **Semantic Match**, printed as that. Anything else fails — and
+it fails the bundle while the Attestation is still claimed
+(`lifecycle: active`). A draft, a deprecated or a withdrawn Attestation
+that does not bind is printed with its verdict and fails nothing: that
+is how an attested object is changed without leaving a bundle that can
+never validate again. Change the object, and withdraw the Attestation
+or issue it again. Withdrawing a *signed* Attestation is the signer's
+act: the envelope signs the Attestation's canonical form, lifecycle
+included, so whoever edits the lifecycle of a signed Attestation breaks
+its envelope, and the run says that instead (measured). The signer
+issues a new version, or the Attestation leaves the bundle.
+
+Where the Attestation lies is a rule of its own. It lies beside the
+manifest, and the manifest does not list it: an object a content
+manifest lists is not an Attestation, in any bundle (**MANIFEST-1**,
+specification D3, item 11). For an Attestation that binds the manifest
+it comes with, the reason is arithmetic. It binds the digest of the
+manifest's bytes, and a manifest that lists the Attestation carries the
+Attestation's digests, so the two can never agree: such an Attestation
+is never a Full Match of the manifest that lists it. A vendor's
+Attestation in a consumer's bundle binds the vendor's manifest, which
+the bundle keeps, and has no such cycle; listed, it is still a Full
+Match of that manifest, and the bundle fails all the same. The rule
+draws the line by kind, so that a tool knows where to look for an
+Attestation before it asks what it binds. What it binds, whether it is
+signed and whether it is still claimed change nothing about the rule.
+
+> **Don't** enter an Attestation in the manifest because it is a file
+> of the bundle like the others. Until 2026-11-14 only a pack's manifest
+> was held to this. A converted corpus listed its Attestation from its
+> first conversion on, and so did every bundle one of this repository's
+> tools exported with one; both validators passed them, and the only
+> trace was a verdict nobody read as a defect. The sentence in the
+> specification said "by definition", and nothing held a bundle to it
+> until somebody porting the check asked what happens when one does.
+
+> **Don't** ship an Attestation that nothing checks. The example folder
+> of this handbook carried one from before 1.0.0 until 2026-11-14 whose
+> three subject digests matched no object, whose manifest digest matched
+> no manifest and whose envelope was a file name. It showed the shape of
+> an Attestation, every run was green, and it bound nothing. A converted
+> corpus had the same defect in one of three subjects, taken before the
+> text of the bundle was final. Neither was found by reading. Both were
+> found the day a tool recomputed the digests.
 
 ## 11.6 The DSSE-profile checklist
 

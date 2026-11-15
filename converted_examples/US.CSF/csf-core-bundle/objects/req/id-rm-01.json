@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.RM-01",
+ "version": "2.0",
+ "label": "ID.RM-01",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.RM-01"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Risk management processes are established, managed, and agreed to by organizational stakeholders"
+   }
+  }
+ ]
+}

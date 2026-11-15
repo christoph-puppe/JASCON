@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1565",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1565",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Tailored privileged user training is undertaken annually by all privileged users."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-06"
   }
  ]
 }

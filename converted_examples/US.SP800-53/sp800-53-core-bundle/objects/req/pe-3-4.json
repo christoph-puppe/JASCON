@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pe-3.4_obj",
      "label": "PE-03(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "lockable physical casings are used to protect {param:pe-03.04_odp} from unauthorized access."
      }
@@ -101,7 +106,8 @@
      ],
      "alt-identifiers": [
       "pe-3.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-03(04)_ODP"
     }
    }
   }

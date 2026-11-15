@@ -26,11 +26,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-2.2_obj",
      "label": "IA-02(02)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "multi-factor authentication for access to non-privileged accounts is implemented."
      }
@@ -119,21 +124,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/IA-5.11",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-2.4",
-    "mode": "merged-into",
-    "label": "IA-02(04)",
-    "title": "Local Access to Non-privileged Accounts"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-5.11",
-    "mode": "merged-into",
-    "label": "IA-05(11)",
-    "title": "Hardware Token-based Authentication"
-   }
-  ]
- }
+ ]
 }

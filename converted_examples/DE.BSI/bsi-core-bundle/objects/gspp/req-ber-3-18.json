@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.18",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.18",
  "lifecycle": "active",
  "title": {
-  "de": "Sperre der Anwendung bei Inaktivität"
+  "de": "Gruppenkonten - Wechsel dokumentieren"
  },
  "statements": [
   {
@@ -14,27 +14,17 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für Anwendungen SOLLTE eine Sperre bei Inaktivität nach {param:ber.3.18-prm1} aktivieren."
-   },
-   "parameters": [
-    {
-     "name": "ber.3.18-prm1",
-     "type": "string",
-     "label": "einer Frist"
-    }
-   ]
+    "de": "Berechtigung SOLLTE für Gruppenkonten die Identitäten, welche die Möglichkeit zum Zugriff haben, zum Wechselzeitpunkt dokumentieren."
+   }
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "aktivieren",
-     "result": "eine Sperre bei Inaktivität",
-     "result-specification": "nach {{einer Frist}}",
-     "target-object-categories": [
-      "Anwendungen"
-     ]
+     "action": "dokumentieren",
+     "result": "für Gruppenkonten die Identitäten, welche die Möglichkeit zum Zugriff haben,",
+     "result-specification": "zum Wechselzeitpunkt"
     }
    }
   },
@@ -42,7 +32,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Konfigurationshistorie"
+      "Inventar Berechtigungen"
      ]
     }
    }
@@ -53,7 +43,7 @@
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "1",
+     "authenticity": "2",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
       "https://ns.bsi.bund.de/gspp/threat/G-0.30",
@@ -65,12 +55,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
-     "tags": [
-      "Automatic Session Locking"
-     ]
+     "effort": 3
     }
    }
   },
@@ -78,15 +65,8 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Kann je nach Anmeldeweg durch eine Abmeldung (Automatic Session Locking) direkt an der Anwendung, über Single-Sign-On oder (bei Anmeldung über das Netz) die Trennung der Netzverbindung umgesetzt werden. Eine längere Inaktivität kann z.B. 5-15 Minuten lang sein. Verfügt die Anwendung über keine eigene Authentifizierungsmethode, so ist die Anforderung entbehrlich."
+      "de": "Es kann z.B. anhand von Dienst- oder Anwesenheitsplänen nachvollzogen werden, wer wann theoretisch Zugriff gehabt haben könnte. Werden keine Gruppenkonten verwendet, so ist die Anforderung entbehrlich."
      }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.3.18-prm1": {
-     "alt-identifier": "5c8bb88d-6692-4904-908a-ed3f7a81b34e"
     }
    }
   }
@@ -94,7 +74,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "5c8bb88d-6692-4904-908a-ed3f7a81b34e"
+   "value": "8a3e8298-6e99-4fe7-9924-72a910207f4f"
   }
  ]
 }

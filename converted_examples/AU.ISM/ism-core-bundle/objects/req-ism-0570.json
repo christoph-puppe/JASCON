@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0570",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0570",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Where backup or alternative email gateways are in place, they are maintained at the same standard as the primary email gateway."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

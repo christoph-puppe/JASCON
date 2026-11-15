@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1493",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-1493",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Software registers for workstations, servers, network devices and networked IT equipment are developed, implemented, maintained and regularly verified."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

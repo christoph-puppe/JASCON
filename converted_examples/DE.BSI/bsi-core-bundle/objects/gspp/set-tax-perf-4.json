@@ -1,18 +1,18 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/perf-4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Managementbewertungen"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.1",
-   "sequence": 880
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/perf-4-1",
+   "sequence": 1430
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/PERF.4.2",
-   "sequence": 890
+   "sequence": 1440
   }
  ],
  "label": "4",

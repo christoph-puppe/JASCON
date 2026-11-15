@@ -14,21 +14,23 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (568 in 17 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (800 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
 **eleven framework and lifecycle corpora converted at 100 % declared path
-coverage** (251,591 source leaf values, every source path with a computed
-destination; whether every *value* arrives is measured on one corpus so
-far and does not hold there — backlog #41 — including NIST
+coverage** (251,681 source leaf values, every source path with a computed
+destination; where every *value* went is traced by a ledger on six of
+them: of 214,455 source values, 122,891 are carried and 91,564 are no
+content by a rule the ledger checks, none is dropped and none
+unaccounted — including NIST
 SP 800-53 Rev 5, its 800-53B baselines, and CSF 2.0), a **bidirectional
 OSCAL 1.2.2 export** that round-trips 5,886/5,886 objects to semantic-digest
 equality against the official NIST schema, and a zero-dependency
 **single-file reader & authoring studio** that turns the whole thing into
 something you can click.
 
-> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.3 on `main`, not
+> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.4 is the candidate, not
 > tagged** — evidence-gated, maintained in personal capacity. Where JASCON
 > sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
@@ -37,21 +39,122 @@ something you can click.
 > under `https://ns.jascon.net/`, the attestation media type
 > `application/vnd.jascon.attestation+json`, and the schema filenames.
 
-![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): stage 5, Assess and Attest — Risk, Assessment, Finding and Attestation objects, with the check workbench that mints real Assessment and Finding objects.](docs/img/reader-assess.png)
+![The bundle reader on the IFA GoodRead lifecycle corpus (NIST example content): the end of stage 5, Assess and Attest — the Attestation of the authorization to operate, held to the bundle: FULL MATCH, each of its three subjects with the signed and the delivered semantic digest, the manifest it binds, its envelope and where its file lies.](docs/img/reader-assess.png)
 
 *Above: the reader on the IFA GoodRead lifecycle corpus — an OSCAL SSP,
 assessment plan, assessment results and POA&M converted to typed objects.
-Stage 5 shows the Risk objects beside the Assessment, its Findings and the
-Attestation; the workbench above them runs a check against the bundle's
-requirements and mints real objects.*
+Stage 5 ends with the Attestation of the authorization to operate. It
+lies beside the manifest, where D3.1 puts it; the reader recomputes the
+semantic digest of each of its three subjects and the digest of the
+manifest's bytes, and says what the reference validator says: FULL MATCH.
+The Attestation is unsigned (the converter models it from the
+authorization date of the SSP), and the page says that too; it takes no
+key and has no word for a signature that holds. (Reader 1.22.0,
+2026-11-15, loaded from `python -m http.server`, which lists the folder.
+The bundle's manifest lists 16 objects. The stage shows the bundle's
+two Risks first, above the part of the page that is in the picture.)*
 
 ## Unreleased: JASCON 2.0.0 — Risk, Check and advice packs
 
-> **State 2026-11-12 — release candidate 2.0.0-rc.3; not tagged.**
+> **State 2026-11-14 — release candidate 2.0.0-rc.4; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
 > candidate adds two kernel types, Risk and Check, and advice packs.
-> Both reference validators are green on it, and nothing is left to
-> decide: the tag is the author's call.
+> Both reference validators are green on it, and no question waits for
+> the author: the tag is the author's call. (The last three were
+> answered on 2026-11-14 — the workflow does not convert the CIS
+> Controls, the subject a Grundschutz++ statement names is the practice
+> and not a party, and the CR26 converter's readings are kept; backlog
+> #76 to #78.)
+>
+> **Who decided, and when** ([CP-AUTHOR-1](drafts/CP-AUTHOR-1.md),
+> decided by the author on 2026-11-13; release candidate 4): a
+> comparison with five neighbouring formats found two places where one of
+> them was ahead. An approved exception had no date ahead of it, and no
+> tailoring change named its own author.
+>
+> - **Built:** one spelling, `provenance: {author-ref, date}`, optional
+>   on a Tailoring and each of its selects, excludes and operations, on a
+>   Risk and its ratings, on an Implementation and a Finding. A Deviation
+>   may say when it was `decided` and when it is due for review
+>   (`review-due`); an authorization may carry its `date`. Three times
+>   that accepted any string are typed.
+> - **Reported, not enforced:** the validator prints what is missing
+>   (AUTHOR-1 to 4) and which review dates have passed (REVIEW-1, against
+>   the date of the run or `--as-of`). `--require-authors` turns the
+>   first into failures; the second never fails, and a Deviation past
+>   its review stays in force until someone acts.
+> - **Measured:** 40 vectors for the two reports and 29 for the pin and
+>   the shapes; nineteen deliberate defects in the reference each turn
+>   one red. The example folder names its authors.
+> - **Written by the tools** (backlog #69, 2026-11-14): the app has one
+>   setting, *Who am I*; its Tailor, Risk, Implement and Assess pages
+>   write `provenance` with it, and its Validate page shows both reports.
+>   The reader (since 1.11.0) shows who decided each entry, marks what an
+>   entry inherits from its record, and pins the kernel by the
+>   validator's own reasons.
+>   Converters and imports pre-fill who and when from the source, and
+>   whoever imports may overwrite both. A source gives little: OSCAL
+>   names who is responsible for a document, not who wrote one of its
+>   statements, so one of seven records in the converted NIST example
+>   gets an author and seven report lines remain.
+> - **Not there:** a version's author is not a log of every change. An
+>   author taken from a source is the document's, under the document's
+>   date.
+> - **No tool invents a party** (backlog #70, decided by the author on
+>   2026-11-14: "refuse if no party is named"): where the kernel
+>   requires one — a Mapping's and a Check's author, an Assessment's
+>   performer, a Deviation's approver, the obligated party of a
+>   statement — and the user named none, the app and the reader wrote
+>   one made from a word. They refuse the save now and say which field
+>   is missing; an approver always starts empty. Objects written before
+>   keep the made-up parties.
+> - **Whom a converted statement binds is an argument** (backlog #74,
+>   decided by the author on 2026-11-14): a catalogue seldom says whom
+>   its controls bind, so a converter names one party for its corpus.
+>   That party is the converter's default and not a value of the source,
+>   its coverage report says so, and `--obligated-party URI` writes
+>   another; the app's import presets show the default and take another.
+>   Of the 4,434 statements in the four shipped catalogue bundles, 2,516
+>   carry a converter's party and 1,918 what the source states (counted
+>   again on 2026-11-14, after every withdrawn item became an object).
+> - **The shipped conversions are reproducible** (2026-11-14): the
+>   workflow fetches each source at its pinned tag or commit, converts
+>   again and fails when a shipped bundle or its report differs from
+>   what is committed, for all five shipped corpora and no longer for
+>   one. The CR26 converter, which nothing had run since its bundle left
+>   the repository, covers the publisher's current publication again
+>   and is run the same way; its bundle is not committed (backlog #73).
+> - **An Attestation is held to what it binds** (backlog #46, closed
+>   2026-11-14): the primitive `attestation-binds` was defined and
+>   applied by no tool to a bundle, and the example folder's Attestation
+>   had bound nothing since before 1.0.0. Every Attestation read with a
+>   bundle — beside its manifest, where D3.1 puts it — is now judged
+>   subject by subject and against the manifest it binds: Full Match,
+>   Semantic Match, or it fails the bundle while it is `active`. The
+>   reference, the PowerShell twin, the app (0.9.11) and the reader
+>   (1.13.0) do it, each held to the same 19 vectors, and
+>   the example Attestation is real and signed with the public fixture
+>   key. A signed Attestation cannot be withdrawn by editing it: its
+>   envelope signs the canonical form, lifecycle included. Three
+>   readings are this project's and not the primitive's text — a subject
+>   the bundle does not hold fails, a pack manifest the bundle keeps
+>   counts as delivered, a withdrawn Attestation fails nothing.
+> - **No manifest lists an Attestation** (backlog #75, decided by the
+>   author on 2026-11-14: "refusal in all"): the specification excluded
+>   Attestations from the content manifest "by definition", and the
+>   validators refused a listed one in a pack only. A copy of a shipped
+>   bundle that listed its own passed in both. Rule MANIFEST-1
+>   (specification D3, item 11) now refuses it in every bundle: the
+>   reference, the PowerShell twin, the app (0.9.12) and the reader
+>   (1.14.0), each held to eight vectors. A bundle that listed its
+>   Attestation and passed fails; the reader wrote such bundles until
+>   1.12.0. The Attestation is still held to what it binds, and the
+>   rule asks only where it lies.
+> - **One value, one spelling, once more** (backlog #68, 2026-11-13): a
+>   date, a digest or a decimal that ends in a line break was accepted
+>   by two of the three implementations, because Python and .NET read
+>   `$` in a pattern as "the end, or before a final line break". All
+>   three refuse it now (specification D3.10; 22 vectors).
 >
 > **Advice packs** ([CP-ADVICE-1](drafts/CP-ADVICE-1.md), accepted by the
 > author on 2026-11-12): a vendor's recommendations as one published
@@ -62,7 +165,7 @@ requirements and mints real objects.*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all, 17 families) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 800 in 18 families since 2026-11-15) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped
@@ -84,7 +187,20 @@ requirements and mints real objects.*
 > - **Second implementation:** the PowerShell twin ran on Windows
 >   PowerShell 5.1 on a hosted runner of GitHub Actions: 537 of 537
 >   vectors, the bundles, the pack and the example folder with the
->   reference's counts (backlog #63, closed). A
+>   reference's counts (backlog #63, closed). Since 2026-11-13 no
+>   PowerShell operator compares two strings in the twin: every such
+>   comparison is a code-point comparison (backlog #58, closed), and
+>   it ran green on all 574 vectors that day
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43492500585)),
+>   and on all 643 of rc.4 later the same day
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43504417645)),
+>   and on the 665 after phase C on 2026-11-14
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43538983821)),
+>   and on the 684 after phase D the same day, where a test also drives
+>   it over changed copies of a bundle
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43556089767)),
+>   and on the 692 with MANIFEST-1 later that day
+>   ([run](https://github.com/christoph-puppe/JASCON/actions/runs/43585154996)). A
 >   [workflow](.github/workflows/validators.yml) now runs both validators
 >   and the app's port on every change.
 > - **Not there:** a pack published by a vendor; a converter from OSCAL
@@ -158,20 +274,71 @@ requirements and mints real objects.*
 > - **Reported, not smoothed over:** OSCAL's risk data has no owner, no
 >   single level and no acceptance date, so the first Risk corpus cannot
 >   leave the `identified` state; and the coverage reports count source
->   *paths*, not values that arrive — on the IFA corpus 122 content values
->   do not (the other ten corpora are unmeasured).
+>   *paths*, not values that arrive. Since 2026-11-14 a ledger follows
+>   every source value on six corpora (IFA, ISM, Grundschutz++, CSF,
+>   SP 800-53, CR26): of 214,455 values, 71,259 are copied, 51,632 made
+>   by a named rule that is applied again and compared, and 91,564 are
+>   no content by a rule the ledger checks (a name that only selects a
+>   field, a namespace, an id that can be rebuilt exactly, a back-matter
+>   resource nothing refers to). None is dropped and none unaccounted,
+>   and a converter run with an unaccounted value ends with 1. The first
+>   ledgers had found values that were lost behind path maps of 100 %;
+>   the author's rule of that day is "real content is never dropped",
+>   and each loss is carried now. A ledger holds a rule to what it wrote,
+>   not to whether the rule is right. The corpora whose sources are not
+>   in the repository have no ledger (backlog #41, closed for the six).
+>   The workflow reproduces the six conversions from their pinned
+>   sources on every change.
+> - **Decided on 2026-11-14, after those ledgers (specification D27):**
+>   six findings about what the kernel had no place for. Every object
+>   may carry `history`, its publisher's record of its changes, and
+>   `version` is the object's own; a statement may carry the `label`
+>   printed beside it; a manifest names what it was made from
+>   (`provenance.sources`); the resources texts refer to stand in a
+>   ninth standard facet, `references@1`; assessment objectives say
+>   which statement they assess in `assessment-criteria` 1.1.0, and
+>   every validator holds those addresses. Measured: 1,101 ISM
+>   Requirements carry their revision as `version` and one history
+>   entry; 291 rules and indicators of CR26 carry 390; SP 800-53 has
+>   1,122 statement labels and 3,707 addresses, of which the bundle of
+>   the morning wrote 218 that named no statement. 44 vectors.
+> - **Decided later that day:** what `#id` in a text names, and what may
+>   lean on a withdrawn object. A reference of the form `#id` names a
+>   resource the bundle carries, an object, a statement, a parameter or a
+>   source document of the manifest, and a validator reports the number
+>   of each and which name nothing (FRAGMENT-1; nothing fails). Measured:
+>   SP 800-53 has 541 such references, 118 to a resource, 348 to another
+>   control, 73 to a statement, one to a parameter and one to nothing, a
+>   defect of the source; the ISM's 486 all name a resource. And in a
+>   bundle that holds an object as withdrawn, an Implementation, a
+>   Tailoring, a Mapping, a Component, a Check or a live Risk that is in
+>   force may not lean on it (WITHDRAWN-1, an error); lineage, the
+>   members of a Set and the records of an assessment still name it.
+>   The handbook had said so since 1.0.0 and no validator held it. No
+>   committed bundle fails. 30 vectors.
+> - **Decided on 2026-11-15:** an operation of a Tailoring that changes
+>   a statement names it. `set-modality`, `set-parameter` and
+>   `replace-prose` carry a `statement-id`, and a `set-parameter` names
+>   a parameter that statement declares (OPERATION-1, an error).
+>   Measured before the rule: a `set-modality` from must to may that
+>   left the statement out passed without a Deviation. No committed
+>   bundle fails. 15 vectors. Also since that day a number of a facet
+>   pin's version is at most 2^53 − 1 in every validator (2 vectors).
 > - **Licences:** the repository is Apache-2.0; the converted corpora were
 >   checked against their publishers' terms and six bundles were removed
 >   ("What ships here", below).
 > - **Why 2.0.0:** the released spec says kernel-shape changes ride a
 >   *major* (D22 rev 3), and the author kept that rule. Until rc.2 it was
 >   a major by rule and a superset in fact. Since rc.3 two free-text date
->   fields are typed (above), so a 1.0.0 bundle is a 2.0.0 bundle only if
->   it wrote dates there; every bundle that ships does. A 1.0.0 *tool*
+>   fields are typed (above), and since rc.4 three more (a Mapping's
+>   provenance date, an Assessment's time, an Attestation's timestamp),
+>   so a 1.0.0 bundle is a 2.0.0 bundle only if it wrote dates and times
+>   there; every bundle that ships does. A 1.0.0 *tool*
 >   cannot read a bundle that carries a Risk.
 > - **The specification text:**
->   [`jascon-specification-2.0.0-rc.3.md`](drafts/jascon-specification-2.0.0-rc.3.md)
->   — a release candidate; D23 carries Risk, D24 Check, D25 advice packs.
+>   [`jascon-specification-2.0.0-rc.4.md`](drafts/jascon-specification-2.0.0-rc.4.md)
+>   — a release candidate; D23 carries Risk, D24 Check, D25 advice packs,
+>   D26 who decided and when.
 > - **The kernel names itself:** a manifest may carry `kernel-version`,
 >   and a bundle with content beyond 1.0.0 (a Risk) must — an older tool
 >   then stops with both versions in the message instead of "matches NO
@@ -356,9 +523,9 @@ The census corpora (gate 1 — the evidence base the architecture was derived fr
 
 | Corpus | Source | Emitted | Coverage |
 |---|---|---|---|
-| [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements · 561 Sets (P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
-| [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-07-16, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 651 Requirements carrying 999 statements · 221 params with label/default · 162 Sets | 49,431 / 49,431 |
-| † [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.07.14.01 | 292 Requirements · 373 Mappings · 91 Sets · 4 Tailorings | 7,294 / 7,294 |
+| [AU.ISM](converted_examples/AU.ISM/ism-coverage-report.md) | ACSC ISM, OSCAL 1.1.2 catalog, 1,150 controls | 1,150 Requirements (1,101 with the control's own revision as `version` and the month of its last change as `history`) · 581 Sets (every group of the source is a Set since 2026-11-14; P10 fix pass recovered 239 taxonomy sets a slug collision had silently merged) | 36,161 / 36,161 leaf values |
+| [DE.BSI](converted_examples/DE.BSI/bsi-coverage-report.md) | Grundschutz++ v2026-10-29, OSCAL 1.1.3 (MS-TLS dropped by decision — defects reported to BSI) | 1,000 Requirements, one for every control at every depth (since 2026-11-14; until then a nested control was a statement of its parent, and its links were lost) · 224 params with label/default · 289 Sets (160 groups, 126 groupings of a control with the controls nested in it, 2 baselines, the root) | 49,521 / 49,521 |
+| † [FedRAMP-CR26](converted_examples/FedRAMP-CR26/cr26-coverage-report.md) | CR26 bespoke JSON, v2026.11.02.01 (measured again on 2026-11-14; the census of July was of v2026.07.14.01: 292 Requirements · 373 Mappings · 4 Tailorings, 7,294 / 7,294) | 291 Requirements · 652 Mappings · 92 Sets · 5 Tailorings | 7,532 / 7,532 |
 
 Validation corpora (converted 2026-07-21; the model held without kernel
 changes beyond the same morning's already-decided D9-rev parameter
@@ -379,9 +546,9 @@ changes forced):
 
 | Corpus | Source | Emitted | Coverage |
 |---|---|---|---|
-| [US.SP800-53](converted_examples/US.SP800-53/sp800-53-coverage-report.md) | NIST SP 800-53 Rev 5.2.0 catalog + four 800-53B baseline profiles, OSCAL 1.2.2 | 1,014 Requirements (1,600 statement-scoped ODP params, SP 800-53A layer as facet) · 25 Sets (20 families + 4 baselines + root); 182 withdrawn tombstones inverted onto successor `replaces[]` | 115,680 / 115,680 |
-| [US.CSF](converted_examples/US.CSF/csf-coverage-report.md) | NIST CSF 2.0, OSCAL 1.2.2 | 106 Requirements · 29 Sets (functions → categories → subcategories, 3-level nesting); 91 withdrawn (12 categories + 79 subcategories) inverted | 4,726 / 4,726 |
-| [US.IFA-GoodRead](converted_examples/US.IFA-GoodRead/ifa-coverage-report.md) | OSCAL IFA GoodRead example set (SSP + AP + AR + POA&M) + leveraged/leveraging SSP pair + component-definition | 6 Components · 3 Implementations (D5 `inherited-from` with basis-ref) · 1 Assessment · 2 Findings (one approved risk-adjustment Deviation) · 1 Attestation (the ATO) · 2 carried Requirements | 835 / 835 |
+| [US.SP800-53](converted_examples/US.SP800-53/sp800-53-coverage-report.md) | NIST SP 800-53 Rev 5.2.0 catalog + four 800-53B baseline profiles, OSCAL 1.2.2 | 1,196 Requirements (1,600 statement-scoped ODP params; 1,122 statements with the label the catalogue prints beside them; the SP 800-53A objectives in the standard facet `assessment-criteria@1`, their 3,707 assessment-for links as addresses a validator holds) · 25 Sets (20 families + 4 baselines + root); the 182 withdrawn controls are Requirements with lifecycle `withdrawn` since 2026-11-14, and the 180 that name a successor stand in its `replaces[]` | 115,680 / 115,680 |
+| [US.CSF](converted_examples/US.CSF/csf-coverage-report.md) | NIST CSF 2.0, OSCAL 1.2.2 | 185 Requirements · 41 Sets (functions → categories → subcategories, 3-level nesting); the 91 withdrawn items (12 categories + 79 subcategories) are objects with lifecycle `withdrawn` since 2026-11-14, and the 87 that name a successor stand in its `replaces[]` | 4,726 / 4,726 |
+| [US.IFA-GoodRead](converted_examples/US.IFA-GoodRead/ifa-coverage-report.md) | OSCAL IFA GoodRead example set (SSP + AP + AR + POA&M) + leveraged/leveraging SSP pair + component-definition | 6 Components · 3 Implementations (D5 `inherited-from` with basis-ref) · 1 Assessment · 2 Findings (one approved risk-adjustment Deviation) · 2 Risks · 1 Attestation (the ATO) · 2 carried Requirements | 835 / 835 |
 
 Each conversion ships a computed coverage report that declares every rule with
 counts and **reports source defects rather than repairing them** — the BSI run
@@ -413,8 +580,11 @@ the five stages of the compliance graph *functional*, not diagrammatic:
   facets alike, auto-populated; free text is excluded by measurement (values
   that never repeat), and the log names what was excluded and why.
 - **Verify** — one click recomputes both SHA-256 digests of every object
-  against the manifest, entirely client-side; attestations get the bi-modal
-  verdict (Full Match / Semantic Match / Tamper).
+  against the manifest, entirely client-side. An Attestation beside the
+  manifest is held to the bundle when it is loaded, in the reference
+  validator's words: Full Match, Semantic Match, or it does not bind
+  (since reader 1.13.0; until then a button gave "Full Match / Semantic
+  Match / Tamper" by a rule of the reader's own).
 - **Tailor** — build a Tailoring against the loaded corpus with the weakening
   law enforced live: easings demand a Deviation, unit-class crossings are
   blocked, same-target conflicts refused, and the authority tier is derived
@@ -427,7 +597,11 @@ the five stages of the compliance graph *functional*, not diagrammatic:
   real Assessment and Finding objects.
 - **Export a real bundle** — the workspace leaves as a ZIP with a
   content-manifest carrying both digests per object: re-loadable here,
-  verifiable by `validate_core.py`. Authored objects persist across reloads.
+  verifiable by `validate_core.py`. The reader checks part of what the
+  validator checks (references that must resolve in the bundle and what
+  they resolve to, facet and method keys, Attestations), on a bundle it
+  loads and on one it exports, and says so; it runs no kernel schema.
+  Authored objects persist across reloads.
 
 ![Object browser on the Grundschutz++ corpus (content: BSI, CC BY-SA 4.0): fifteen auto-populated filter dimensions — modality, threats, target-object categories, tags, required documentation, C-I-A-Auth objectives, effort, class, security level — every vocabulary the corpus actually carries](docs/img/reader-browser-facets.png)
 
@@ -473,7 +647,8 @@ you switch on one of the two places that ask a language model (below).
 - **Import** reads an OSCAL catalog or profile; everything after it works on
   JASCON. The BSI Grundschutz++ rules reproduce the shipped `DE.BSI` bundle
   object for object, by semantic digest; the NIST SP 800-53 rules give what
-  `convert_nist.py` gives on the same source file; the CIS Benchmark rules
+  `convert_nist.py` gives on the same source file (1,217 of its 1,221
+  objects: the four baseline Sets come from importing the profiles); the CIS Benchmark rules
   give what `convert_cis_benchmark.py` gives, shown on a catalog of the same
   shape (the repository carries no CIS Benchmark).
 - **Checks** writes machine checks for technical rules (the Check type
@@ -581,7 +756,7 @@ Install by copying the directory into your skills folder, or unpack
 
 ## Read the spec
 
-- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.3.md`](drafts/jascon-specification-2.0.0-rc.3.md) — the candidate (Risk, Check and advice packs)
+- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.4.md`](drafts/jascon-specification-2.0.0-rc.4.md) — the candidate (Risk, Check, advice packs, who decided and when)
 - [`risk-catalogs/`](risk-catalogs/README.md) — prototype: two ready-made lists of typical risks (office IT, industrial plant; English and German) and a tool that imports them into `Risk` objects
 - [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
 - [`drafts/jascon-v0.5-specification.md`](drafts/jascon-v0.5-specification.md) — the v0.5 draft (history)

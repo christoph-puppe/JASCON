@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1290",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1290",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Archive files are unpacked in a controlled manner to ensure content filter performance or availability is not adversely affected."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1617",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1617",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CISO regularly reviews and updates their organisation’s cyber security program to ensure its relevance in addressing cyber threats and harnessing business and cyber security opportunities."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-10"
   }
  ]
 }

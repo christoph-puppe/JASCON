@@ -1,5 +1,5 @@
 {
- "description": "Facet-payload validation and fail-closed rules (D10; backlog #17 - run 1's Blocker P9-1). A stdlib facet payload MUST validate against the normative descriptor schema; a non-stdlib facet MUST be pinned in the bundle manifest (its stub schema then governs) or carry the private: prefix (ignored by definition); anything else is unregistered - dangerous-by-default, a validation error. The adversarial cases below are the P9-1 probes, now permanent.",
+ "description": "Facet-payload validation and fail-closed rules (D10; backlog #17 - run 1's Blocker P9-1). A stdlib facet payload MUST validate against the normative descriptor schema; a non-stdlib facet MUST be pinned in the bundle manifest (its stub schema then governs) or carry the private: prefix (ignored by definition); anything else is unregistered - dangerous-by-default, a validation error. The adversarial cases below are the P9-1 probes, now permanent. method-vectors (backlog #55, 2026-11-14): an Assessment's `method` is a facet payload. Its keys are facet ids, resolved as the keys of `facets` are - the standard library, then the schemas the bundle pins, then `private:`, else an error - and each payload is held to its schema. `expected-errors` is the number of errors for the object. Each of `expected-frags` must occur in some error: an error about a method names it as method '<key>', one about a facet as facet '<key>'. The name of a vector is no part of an error. Decided on 2026-11-14 (backlog #82 and #83): the standard library holds `references` 1.0.0 and two versions of `assessment-criteria`. An unpinned payload is held to the latest version of its facet; a payload whose bundle pins a version is held to that version (`pinned` carries the schema of 1.0.0 in two cases).",
  "vectors": [
   {
    "name": "stdlib-payload-valid",
@@ -211,6 +211,733 @@
    },
    "expected": "valid",
    "reason": "private: carries modifies-semantics [] by definition - preserved, never validated, ignored by compliance computation"
+  },
+  {
+   "name": "assessment-criteria-1.1.0-typed-objectives",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "objectives": [
+       {
+        "id": "ac-1_obj",
+        "label": "AC-01",
+        "assessment-for": [
+         {
+          "requirement-ref": "https://ns.auth.gov/fw/req/1"
+         }
+        ],
+        "children": [
+         {
+          "id": "ac-1_obj.a",
+          "label": "AC-01a.",
+          "assessment-for": [
+           {
+            "statement-id": "smt.a"
+           }
+          ],
+          "prose": {
+           "en": "a policy is developed;"
+          }
+         },
+         {
+          "id": "ac-1_obj.x",
+          "assessment-for": [
+           {
+            "href": "#ac-2_smt.a.5"
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      "methods": [
+       {
+        "method": "EXAMINE",
+        "label": "AC-01-Examine",
+        "objects": [
+         {
+          "en": "Access control policy"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "expected": "valid"
+  },
+  {
+   "name": "assessment-criteria-1.1.0-an-address-that-names-nothing",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "objectives": [
+       {
+        "id": "o1",
+        "assessment-for": [
+         {}
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "expected": "invalid",
+   "reason": "an address names a statement, a Requirement or carries the source's reference: one member at least"
+  },
+  {
+   "name": "assessment-criteria-1.1.0-an-address-with-a-member-the-facet-does-not-know",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "objectives": [
+       {
+        "id": "o1",
+        "assessment-for": [
+         {
+          "statement-id": "smt.a",
+          "part": "smt"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "expected": "invalid"
+  },
+  {
+   "name": "assessment-criteria-1.1.0-assessment-for-as-one-string",
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "objectives": [
+       {
+        "id": "1",
+        "prose": {
+         "en": "X."
+        },
+        "assessment-for": "https://ns.auth.gov/fw/req/1",
+        "objectives": [
+         {
+          "id": "1.1",
+          "prose": {
+           "en": "Y."
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "expected": "invalid",
+   "reason": "1.0.0 left the items of objectives open; 1.1.0 types assessment-for as a list of addresses, and an unpinned payload is held to the latest version"
+  },
+  {
+   "name": "assessment-criteria-pinned-at-1.0.0-is-held-to-1.0.0",
+   "pinned": {
+    "https://ns.jascon.net/stdlib/facet/assessment-criteria": {
+     "$schema": "https://json-schema.org/draft/2020-12/schema",
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "by-statement": {
+       "type": "object",
+       "minProperties": 1,
+       "additionalProperties": {
+        "type": "object"
+       }
+      },
+      "required-documentation": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "required-artifacts": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "default-artifacts": {
+       "type": "object"
+      },
+      "examples": {
+       "type": "array",
+       "items": {
+        "type": "object"
+       }
+      },
+      "objectives": {
+       "type": "array",
+       "items": {
+        "type": "object"
+       }
+      },
+      "audit": {
+       "type": "object"
+      },
+      "remediation": {
+       "type": "object"
+      },
+      "method": {
+       "enum": [
+        "automated",
+        "manual"
+       ]
+      },
+      "frequency": {
+       "type": "string"
+      },
+      "summary": {
+       "type": "object"
+      }
+     }
+    }
+   },
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "objectives": [
+       {
+        "id": "1",
+        "prose": {
+         "en": "X."
+        },
+        "assessment-for": "https://ns.auth.gov/fw/req/1",
+        "objectives": [
+         {
+          "id": "1.1",
+          "prose": {
+           "en": "Y."
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "expected": "valid",
+   "reason": "a version once published stays: the bundle that pins 1.0.0 is held to 1.0.0"
+  },
+  {
+   "name": "assessment-criteria-pinned-at-1.0.0-still-refuses-what-1.0.0-refuses",
+   "pinned": {
+    "https://ns.jascon.net/stdlib/facet/assessment-criteria": {
+     "$schema": "https://json-schema.org/draft/2020-12/schema",
+     "type": "object",
+     "additionalProperties": false,
+     "properties": {
+      "by-statement": {
+       "type": "object",
+       "minProperties": 1,
+       "additionalProperties": {
+        "type": "object"
+       }
+      },
+      "required-documentation": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "required-artifacts": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "default-artifacts": {
+       "type": "object"
+      },
+      "examples": {
+       "type": "array",
+       "items": {
+        "type": "object"
+       }
+      },
+      "objectives": {
+       "type": "array",
+       "items": {
+        "type": "object"
+       }
+      },
+      "audit": {
+       "type": "object"
+      },
+      "remediation": {
+       "type": "object"
+      },
+      "method": {
+       "enum": [
+        "automated",
+        "manual"
+       ]
+      },
+      "frequency": {
+       "type": "string"
+      },
+      "summary": {
+       "type": "object"
+      }
+     }
+    }
+   },
+   "object": {
+    "id": "https://ns.auth.gov/fw/req/1",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "objectives": "none"
+     }
+    }
+   },
+   "expected": "invalid"
+  },
+  {
+   "name": "references-resources-in-the-source-s-shape",
+   "object": {
+    "id": "https://ns.auth.gov/fw/set/root",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/references@1": {
+      "resources": [
+       {
+        "id": "36766a6f-e174-4292-a03e-fcb3b4b09201",
+        "title": "Strategies to mitigate incidents",
+        "rlinks": [
+         {
+          "href": "https://example.org/strategies",
+          "media-type": "text/html"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   },
+   "expected": "valid"
+  },
+  {
+   "name": "references-a-resource-without-an-id",
+   "object": {
+    "id": "https://ns.auth.gov/fw/set/root",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/references@1": {
+      "resources": [
+       {
+        "title": "Strategies to mitigate incidents"
+       }
+      ]
+     }
+    }
+   },
+   "expected": "invalid"
+  },
+  {
+   "name": "references-no-resource",
+   "object": {
+    "id": "https://ns.auth.gov/fw/set/root",
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/references@1": {
+      "resources": []
+     }
+    }
+   },
+   "expected": "invalid"
+  }
+ ],
+ "method-vectors": [
+  {
+   "name": "method-stdlib-valid",
+   "note": "The standard assessment-criteria facet, a payload its descriptor accepts.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "method": "manual",
+      "summary": {
+       "en": "Document review of the rotation records."
+      }
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "method-stdlib-payload-violates-its-schema",
+   "note": "`method` inside the payload is `automated` or `manual`. The descriptor refuses anything else, under `method` as under `facets`.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "method": "by-ear"
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'https://ns.jascon.net/stdlib/facet/assessment-criteria@1'"
+   ]
+  },
+  {
+   "name": "method-stdlib-payload-with-a-member-the-facet-does-not-know",
+   "note": "The descriptor is closed.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "kind": "review"
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'https://ns.jascon.net/stdlib/facet/assessment-criteria@1'"
+   ]
+  },
+  {
+   "name": "method-plain-key-is-no-facet",
+   "note": "The spelling older fixtures of this corpus used. `kind` is no facet id: not of the standard library, not pinned, not private. A tool that does not know what a method means must not guess at the verdict it produced (handbook 10.1).",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "kind": "review"
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'kind'"
+   ]
+  },
+  {
+   "name": "method-unregistered-facet-uri",
+   "note": "A facet id nobody registered: the bundle pins no schema for it.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://example.org/facet/our-method@1": {
+      "steps": 3
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'https://example.org/facet/our-method@1'"
+   ]
+  },
+  {
+   "name": "method-pinned-valid",
+   "note": "The assessor's own facet, pinned by the bundle; the payload is what the pin says.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://assessor.example/facet/review@1": {
+      "standard": "ISAE 3402",
+      "sample-size": 25
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "pinned": {
+    "https://assessor.example/facet/review": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "standard"
+     ],
+     "properties": {
+      "standard": {
+       "type": "string"
+      },
+      "sample-size": {
+       "type": "integer"
+      }
+     }
+    }
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "method-pinned-payload-violates-the-pin",
+   "note": "The pinned schema requires `standard` and types `sample-size`.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://assessor.example/facet/review@1": {
+      "sample-size": "twenty-five"
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "pinned": {
+    "https://assessor.example/facet/review": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "standard"
+     ],
+     "properties": {
+      "standard": {
+       "type": "string"
+      },
+      "sample-size": {
+       "type": "integer"
+      }
+     }
+    }
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'https://assessor.example/facet/review@1'"
+   ]
+  },
+  {
+   "name": "method-private-is-ignored-by-definition",
+   "note": "`private:` declares that it changes no semantics; it is kept and never validated, under `method` as under `facets`.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "private:lab-notes@1": {
+      "whatever": [
+       1,
+       2,
+       3
+      ]
+     }
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "method-two-facets-one-wrong",
+   "note": "Every key is held, and one error is reported for the one that is wrong.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "method": "automated"
+     },
+     "kind": "review"
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "invalid",
+   "expected-errors": 1,
+   "expected-frags": [
+    "method 'kind'"
+   ]
+  },
+  {
+   "name": "method-and-facets-are-both-held",
+   "note": "An Assessment whose method and whose facets are both unregistered has two errors: the check of the one does not stand in for the other.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {
+     "kind": "review"
+    },
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied",
+    "facets": {
+     "https://example.org/unregistered-facet@9": {
+      "x": 1
+     }
+    }
+   },
+   "expected": "invalid",
+   "expected-errors": 2,
+   "expected-frags": [
+    "method 'kind'",
+    "facet 'https://example.org/unregistered-facet@9'"
+   ]
+  },
+  {
+   "name": "a-member-called-method-inside-a-payload-is-no-assessments-method",
+   "note": "A Requirement that carries assessment criteria. The `method` inside that payload is a member of the facet, not the method of an Assessment.",
+   "object": {
+    "id": "https://ex.org/req/1",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ex.org/party/org"
+      ],
+      "prose": {
+       "en": "X."
+      }
+     }
+    ],
+    "facets": {
+     "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
+      "method": "automated"
+     }
+    }
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "an-object-called-method-inside-a-payload-is-no-assessments-method",
+   "note": "As the vector before, with an object where that one has a string: a pinned facet whose payload has a member `method` that is itself an object with a plain key. An implementation that looks for an object called `method` anywhere below an object, and not for the member of an Assessment, takes this for a method under the key `kind`. Found by a deliberate defect in the app's port, which the vector before this one did not catch.",
+   "object": {
+    "id": "https://ex.org/req/2",
+    "version": "1",
+    "lifecycle": "active",
+    "statements": [
+     {
+      "id": "s1",
+      "modality": "must",
+      "obligated-parties": [
+       "https://ex.org/party/org"
+      ],
+      "prose": {
+       "en": "Y."
+      }
+     }
+    ],
+    "facets": {
+     "https://assessor.example/facet/review@1": {
+      "standard": "ISAE 3402",
+      "method": {
+       "kind": "review"
+      }
+     }
+    }
+   },
+   "pinned": {
+    "https://assessor.example/facet/review": {
+     "type": "object",
+     "required": [
+      "standard"
+     ],
+     "properties": {
+      "standard": {
+       "type": "string"
+      },
+      "method": {
+       "type": "object"
+      }
+     }
+    }
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
+  },
+  {
+   "name": "an-empty-method-names-no-facet",
+   "note": "The rule holds the keys there are. Whether an Assessment may state no method at all is not this rule's question: the kernel schema asks for an object and accepts an empty one.",
+   "object": {
+    "id": "https://assessor.example/assessment/a1",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-refs": [
+     "https://org.example/component/app"
+    ],
+    "method": {},
+    "performer-ref": "https://assessor.example/party/lead",
+    "time": "2026-11-14",
+    "result": "satisfied"
+   },
+   "expected": "valid",
+   "expected-errors": 0,
+   "expected-frags": []
   }
  ]
 }

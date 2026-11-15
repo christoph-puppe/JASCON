@@ -8,59 +8,59 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-23b20a5",
-   "sequence": 2860
+   "sequence": 3030
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-1189b3b",
-   "sequence": 2880
+   "sequence": 3050
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-e673080",
-   "sequence": 2900
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-8dbf7bf",
-   "sequence": 2950
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-2e59bb9",
-   "sequence": 3000
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-633424f",
-   "sequence": 3040
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-9cb35e0",
    "sequence": 3070
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-b2c0d30",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-8dbf7bf",
+   "sequence": 3120
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-2e59bb9",
    "sequence": 3170
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-633424f",
+   "sequence": 3210
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-9cb35e0",
+   "sequence": 3240
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-b2c0d30",
+   "sequence": 3340
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-9b6d90f",
-   "sequence": 3200
+   "sequence": 3370
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-1c4defb",
-   "sequence": 3260
+   "sequence": 3430
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-c6780d2",
-   "sequence": 3280
+   "sequence": 3450
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-6d18711",
-   "sequence": 3310
+   "sequence": 3480
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-b8bace5",
-   "sequence": 3380
+   "sequence": 3550
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-access-to-systems-c4c8c3c",
-   "sequence": 3410
+   "sequence": 3580
   }
  ],
  "facets": {

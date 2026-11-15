@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1918",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1918",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The CISO regularly reports directly to their organisation’s audit, risk and compliance committee (or equivalent) on cyber security matters."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

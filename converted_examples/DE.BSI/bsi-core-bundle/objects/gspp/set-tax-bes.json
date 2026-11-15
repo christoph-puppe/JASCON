@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/bes",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Beschaffungsmanagement"
@@ -8,42 +8,42 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-1",
-   "sequence": 1850
+   "sequence": 2870
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-2",
-   "sequence": 1920
+   "sequence": 3060
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-3",
-   "sequence": 1960
+   "sequence": 3130
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-4",
-   "sequence": 2060
+   "sequence": 3350
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-5",
-   "sequence": 2210
+   "sequence": 3690
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-6",
-   "sequence": 2280
+   "sequence": 3780
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-7",
-   "sequence": 2330
+   "sequence": 4010
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/bes-8",
-   "sequence": 2390
+   "sequence": 4070
   }
  ],
  "label": "BES",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Beschaffungsmanagement sorgt für die frühzeitige Integration von Informationssicherheit in fachliche Anforderungs-, Planungs- und Beschaffungsverfahren, einschließlich angehender Projekte.  Dabei erfolgt keine Unterscheidung zwischen den Bereichen Organisation, Personal, Dienstleister, IT-Infrastruktur, Komponenten oder Gebäuden. Ziel ist es, Sicherheitsanforderungen frühzeitig in die strategische Planung einzubinden – von der \"Make-or-Buy\"-Entscheidung bis hin zur konkreten Beschaffung.  Während die Praktik Compliance sich explizit auf Anforderungen auf die Informationssicherheit konzentriert, umfasst das Beschaffungsmanagement alle fachlichen, regulatorischen und technischen Anforderungen, die in die Organisation, Personal-, Dienstleisterverträge, IT-Infrastruktur, Komponenten und Gebäude integriert werden müssen."
+    "de": "Die Praktik Beschaffungsmanagement sorgt für die frühzeitige Integration von Informationssicherheit in fachliche Anforderungs-, Planungs- und Beschaffungsverfahren, einschließlich angehender Projekte. Dabei erfolgt keine Unterscheidung zwischen den Bereichen Organisation, Personal, Dienstleister, IT-Infrastruktur, Komponenten oder Gebäuden. Ziel ist es, Sicherheitsanforderungen frühzeitig in die strategische Planung einzubinden – von der \"Make-or-Buy\"-Entscheidung bis hin zur konkreten Beschaffung. Während die Praktik Compliance sich explizit auf Anforderungen auf die Informationssicherheit konzentriert, umfasst das Beschaffungsmanagement alle fachlichen, regulatorischen und technischen Anforderungen, die in die Organisation, Personal-, Dienstleisterverträge, IT-Infrastruktur, Komponenten und Gebäude integriert werden müssen."
    }
   }
  },

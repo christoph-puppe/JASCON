@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.14",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.14",
  "lifecycle": "active",
  "title": {
-  "de": "Ereignisgesteuerte Deaktivierung"
+  "de": "Kein Recycling von Zugängen"
  },
  "statements": [
   {
@@ -14,17 +14,24 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE Zugangskonten ereignisgesteuert deaktivieren."
-   }
+    "de": "Berechtigung SOLLTE die Wiederverwendung von Zugangskonten für {param:ber.3.14-prm1} blockieren."
+   },
+   "parameters": [
+    {
+     "name": "ber.3.14-prm1",
+     "type": "string",
+     "label": "einen bestimmten Zeitraum"
+    }
+   ]
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "deaktivieren",
-     "result": "Zugangskonten",
-     "result-specification": "ereignisgesteuert"
+     "action": "blockieren",
+     "result": "die Wiederverwendung von Zugangskonten",
+     "result-specification": "für {{einen bestimmten Zeitraum}}"
     }
    }
   },
@@ -32,7 +39,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Ergebnisprotokoll"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -40,14 +47,14 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
-     "availability": "1",
+     "availability": "0",
      "authenticity": "1",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
       "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.32",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
      ]
     }
    }
@@ -55,7 +62,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -65,8 +72,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ungenutzte Zugangskonten stellen ein unnötiges Risiko für unberechtigte Zugriffe dar. Werden sie z.B. bei längerer Inaktivität, bei Personalweggang oder bei Verletzung von Richtlinien unverzüglich deaktiviert, so vermindert sich das Risiko eines Missbrauchs erheblich."
+      "de": "Wiederverwendung von Zugangskonten meint hier die erneute Vergabe oder Reaktivierung zuvor bereits verwendeter Zugangskonten für Einzelpersonen, Gruppen, Rollen, Dienste oder Geräte zu anderen Einzelpersonen, Gruppen, Rollen, Diensten oder Geräten (engl. account reuse, account recycling). Der Parameter „einen bestimmten Zeitraum“ beschreibt eine durch die Institution festgelegte Sperr- oder Karenzfrist, innerhalb derer ein deaktiviertes, entzogenes oder nicht mehr zugeordnetes Konto nicht erneut verwendet werden kann; sinnvolle Werte können je nach Schutzbedarf etwa 90 Tage, 180 Tage, ein Jahr oder bei besonders kritischen bzw. privilegierten Konten eine dauerhafte Nichtwiederverwendung sein. Ohne eine solche Sperrfrist könnte eine neue nutzende Person fälschlich Zugriff auf alte Berechtigungen, Protokollzuordnungen, Postfächer, Schlüssel, Tokens oder Anwendungskontexte erhalten, und ein Sicherheitsvorfall könnte später nicht mehr eindeutig einer handelnden Person oder einem technischen Vorgang zugeordnet werden."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.3.14-prm1": {
+     "alt-identifier": "0c414e50-07fe-49bb-b46e-3aa443bb76c6"
     }
    }
   }
@@ -74,7 +88,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "610f7bda-9051-44a0-bc6e-c8cbbac35af0"
+   "value": "8c097985-0fae-43eb-9f2e-2d36b5091dfb"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.3.15"
   }
  ]
 }

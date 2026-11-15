@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.7.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.7.2",
  "lifecycle": "active",
  "title": {
@@ -50,7 +50,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Diese Anforderung stellt den Aussprungpunkt in die Risikobetrachtung dar, deren konkrete Ausgestaltung nicht durch den GS++ vorgegeben wird.  Gängige Standards als Basis für ein Risikomanagement sind die ISO27005, die ISO31000 oder der BSI Standard 200-3."
+      "de": "Diese Anforderung stellt den Aussprungpunkt in die Risikobetrachtung dar, deren konkrete Ausgestaltung nicht durch den GS++ vorgegeben wird. Gängige Standards als Basis für ein Risikomanagement sind die ISO27005, die ISO31000 oder der BSI Standard 200-3."
      }
     }
    }

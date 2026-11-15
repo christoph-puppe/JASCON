@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0332",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0332",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Media, except for internally mounted fixed media within information technology equipment, is labelled with protective markings reflecting its sensitivity or classification."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

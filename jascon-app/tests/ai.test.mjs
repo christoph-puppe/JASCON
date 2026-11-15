@@ -368,6 +368,20 @@ test("risk page: nothing is sent without a key; the key stays in memory; a draft
     assert.ok(!sent[0].url.includes(KEY) && !JSON.stringify(sent[0].body).includes(KEY), "and in neither the URL nor the body");
     assert.ok(sent[0].prompt.includes("A small office with one file server."));
 
+    /* a draft taken while the owner field is empty: the kernel requires owner-ref on a Risk, so nothing is saved, and the
+       page says so in its own words. A short name typed then is a party under the namespace (backlog #70) */
+    await f.locator("#ai-owner").fill("");
+    await f.locator("#ai-owner").dispatchEvent("change");
+    await f.locator('[data-ai-save="0"]').click();
+    await f.locator("#ai-a .stmt .verdict-bad").first().waitFor({ timeout: 30000 });
+    assert.deepEqual(await f.locator("#ai-a .stmt .verdict-bad").allInnerTexts(),
+      ["✗ No owner is named. The kernel requires owner-ref on a Risk, so the risk cannot be saved. The field “Owner” is empty. Name a party: a URI, or a short name, which becomes a party under your namespace."]);
+    assert.equal(await f.locator("body").evaluate(() => [...jscSet.graph.objects.values()].filter(x => x.type === "risk" && (x.obj.annotations || {})["jascon-app"]).length), 0, "no draft was saved");
+    assert.equal(await f.locator("#ai-owner").inputValue(), "", "and the field stays empty");
+    await f.locator("#ai-owner").fill("ciso");
+    await f.locator("#ai-owner").dispatchEvent("change");
+    assert.equal(await f.locator("#ai-owner").inputValue(), "https://example.org/my/party/ciso");
+
     await f.locator('[data-ai-save="0"]').click();
     await f.locator("#ai-a .stmt .verdict-ok").waitFor({ timeout: 30000 });
     const saved = await f.locator("body").evaluate(async () => {

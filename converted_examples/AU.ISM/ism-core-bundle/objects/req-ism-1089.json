@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1089",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1089",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Protective marking tools do not allow users replying to or forwarding emails to select protective markings lower than previously used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

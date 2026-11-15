@@ -47,16 +47,5 @@
    "ref": "https://ns.nist.gov/csf/req/DE.AE-05",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/csf/req/DE.AE-05",
-    "mode": "renamed",
-    "label": "DE.AE-05",
-    "title": "DE.AE-05",
-    "prose": "Incident alert thresholds are established"
-   }
-  ]
- }
+ ]
 }

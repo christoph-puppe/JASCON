@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0443",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0443",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Temporary access is not granted to systems that process, store or communicate caveated or sensitive compartmented information."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.6",
  "lifecycle": "active",
  "title": {
-  "de": "Blockieren von Passwort Recycling"
+  "de": "Vorkonfigurierte Authentisierungsmittel von IT-Systemen"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für Nutzende SOLLTE die Wiederverwendung von Passwörtern blockieren."
+    "de": "Berechtigung für IT-Systeme SOLLTE vorkonfigurierte Authentisierungsmittel deaktivieren."
    }
   }
  ],
@@ -22,10 +22,10 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "blockieren",
-     "result": "die Wiederverwendung von Passwörtern",
+     "action": "deaktivieren",
+     "result": "vorkonfigurierte Authentisierungsmittel",
      "target-object-categories": [
-      "Nutzende"
+      "IT-Systeme"
      ]
     }
    }
@@ -34,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Konfigurationshistorie"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -48,8 +48,7 @@
      "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
      ]
     }
    }
@@ -57,13 +56,11 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3,
+     "effort": 1,
      "tags": [
-      "Credential Stuffing",
-      "Privilege Escalation",
-      "Password Policy"
+      "Advanced Persistent Threats (APT)"
      ]
     }
    }
@@ -72,7 +69,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die Wiederverwendung von Passwörtern („password reuse“) ist die Nutzung identischer oder bereits früher verwendeter Passwörter für verschiedene Konten, Systeme oder aufeinanderfolgende Authentifizierungsvorgänge. Die Blockierung der Passwortwiederverwendung bedeutet hier, dass das Berechtigungsmanagementsystem („access management system“) technisch verhindert, dass ein neues Passwort mit einem zuvor verwendeten identisch ist oder einer vordefinierten Anzahl früherer Passwörter entspricht. Dies könnte nicht nur bei Wiederverwendung einer Person problematisch sein, sondern auch bei einer systemübergreifenden Fehlkonfiguration: Ein typisches Szenario wäre, dass in einer Institution mehrere Arbeitsplatzrechner mit identischen lokalen Administratorpasswörtern konfiguriert sind („local admin password reuse“). Wird ein einzelner Rechner durch Schadsoftware oder physischen Zugriff kompromittiert, könnte ein Angreifer dieses Passwort anschließend nutzen, um sich mit denselben Anmeldeinformationen lateral auf weitere Systeme auszubreiten. Die Wiederverwendung des lokalen Administratorpassworts könnte somit eine vollständige Kompromittierung der internen IT-Infrastruktur ermöglichen. Diese Anforderung adressiert den Schutz vor solchen Angriffen, die sich aus der Wiederverwendung kompromittierter Anmeldeinformationen ergeben könnten, etwa durch Credential-Stuffing oder Brute-Force-Angriffe auf bekannte Passwortmuster. Blockieren kann das Risiko verringern, dass ein Angreifer durch bekannte Passwörter unbefugten Zugang zu Konten erhält. Hierzu können zum einen eine lokale Passworthistorie oder zum anderen elektronische Passwortmanager genutzt werden, die unabhängige sichere Passwörter generieren, wo die Wahrscheinlichkeit einer Passwortwiederholung ausgeschlossen werden kann."
+      "de": "Herstellerseitige Standardkonten und Default-Passwörter stellen ein beliebtes Eingangstor für Angreifer dar. Achten Sie hierbei nicht nur auf Passwörter, sondern auch auf andere Zugangsmittel wie Hardware-Zugangstoken, Zertifikate oder physische Zugangskontrollsysteme."
      }
     }
    }
@@ -81,7 +78,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "d7c76736-0c1d-4693-92d5-894a8b740204"
+   "value": "7e0edf55-22d6-42d8-973f-d3f8635a0913"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/BER.5.7"
   }
  ]
 }

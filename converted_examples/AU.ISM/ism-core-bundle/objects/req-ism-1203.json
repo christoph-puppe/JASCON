@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1203",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1203",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners, in consultation with each system’s authorising officer, conduct a threat and risk assessment for each system."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

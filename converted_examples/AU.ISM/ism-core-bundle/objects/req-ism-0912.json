@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0912",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0912",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Systems have a change and configuration management plan that includes:\n\n- the establishment and maintenance of authorised baseline configurations for systems\n- what constitutes routine and urgent changes to the configuration of systems\n- how changes to the configuration of systems will be requested, tracked and documented\n- who needs to be consulted prior to routine and urgent changes to the configuration of systems\n- who needs to approve routine and urgent changes to the configuration of systems\n- who needs to be notified of routine and urgent changes to the configuration of systems\n- what additional change management and configuration management processes and procedures need to be followed before, during and after routine and urgent changes to the configuration of systems."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

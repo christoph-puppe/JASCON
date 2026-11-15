@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1605",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1605",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When using a software-based isolation mechanism that consumes shared physical computing resources, the underlying operating system is hardened."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -2,7 +2,7 @@
 title: 模型：十一种对象类型 | JASCON
 description: 一页看懂 JASCON 内核：十一种浅层对象类型、情态动词的次序、类型化参数、带契约的分面（facet）、每个对象的两个摘要、三个一致性等级，以及每个 OSCAL 1.x 构造的去向。
 nav: model
-source: 20b1275c2e33
+source: 3632a143f8f5
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -23,8 +23,8 @@ source: 20b1275c2e33
         </div>
         <ul class="ticks">
           <li><b><code>id</code></b> 是权威机构自有域名下的 URI。它按字符串比较，从不联网获取，因此在封闭网络中也能进行校验。</li>
-          <li><b><code>version</code></b> 与清单中的两个摘要共同承载历史。ISM 为同一目的手工维护着 2,202 个修订 props。</li>
-          <li><b><code>statements</code></b> 是一个列表，因为条款确实存在：Grundschutz++ 中有 347 个嵌套的伪控制措施，它们存在的唯一目的就是让条款可以被寻址。</li>
+          <li><b><code>version</code></b> 是对象自身的版本，<b><code>history</code></b> 是发布者对其变更的记录；清单中的两个摘要封存每个版本。ISM 为同一目的手工维护着 2,202 个修订 props。</li>
+          <li><b><code>statements</code></b> 是一个列表，因为条款是逐条被引用的：SP 800-53 把一项控制措施写成 a.、b.、c. 等条目，实施逐条作答，评估目标逐条指明。</li>
           <li><b><code>modality</code></b> 和 <b><code>obligated-parties</code></b> 位于陈述上。同一个要求可以用 MUST 约束运营方，同时用 SHOULD 约束客户。</li>
           <li><b><code>prose</code></b> 是从语言标签到文本的映射。</li>
         </ul>
@@ -216,7 +216,7 @@ source: 20b1275c2e33
             <tbody>
               <tr><th scope="row">Full Match</th><td class="yes">相同</td><td class="yes">相同</td><td>正是当初被证明的那个包。</td></tr>
               <tr><th scope="row">Semantic Match</th><td class="no">不同</td><td class="yes">相同</td><td>已批准的内容，经过了重新打包。验证方会如实指出这一点。</td></tr>
-              <tr><th scope="row">Tamper</th><td class="no">任意</td><td class="no">不同</td><td>内容不是当初批准的内容。</td></tr>
+              <tr><th scope="row">不绑定</th><td class="no">任意</td><td class="no">不同或缺失</td><td>这是失败，而不是第三种状态。内容不是当初批准的内容，或者捆绑包中没有该内容。只要证明处于 <code>active</code> 状态，捆绑包就因此验证失败；处于草稿、已弃用或已撤回状态的证明只会被报告，不会使任何东西失败。</td></tr>
             </tbody>
           </table>
         </div>

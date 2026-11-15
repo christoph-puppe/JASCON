@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2017",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2017",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "DNS traffic is encrypted by clients and servers using ASD-approved cryptography."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1556",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1556",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "If returning from travelling overseas with mobile devices to high or extreme risk countries, personnel take the following additional actions:\n\n- reset credentials used with mobile devices, including those used for remote access to their organisation’s systems\n- monitor user accounts for any indicators of compromise, such as failed logon attempts."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

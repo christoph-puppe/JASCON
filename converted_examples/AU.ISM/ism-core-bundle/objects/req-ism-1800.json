@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1800",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1800",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Network devices are flashed with trusted firmware before they are used for the first time."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-09"
   }
  ]
 }

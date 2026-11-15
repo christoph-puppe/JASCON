@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1773",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1773",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System administrators for gateways that connect to Australian Government Access Only networks are Australian nationals or seconded foreign nationals."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

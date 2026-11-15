@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -31,6 +32,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -63,15 +65,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "si-4.22_obj",
      "label": "SI-04(22)",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-4.22"
+      }
+     ],
      "children": [
       {
        "id": "si-4.22_obj.a",
        "label": "SI-04(22)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "network services that have not been authorized or approved by {param:si-04.22_odp.01} are detected;"
        }
@@ -79,6 +91,11 @@
       {
        "id": "si-4.22_obj.b",
        "label": "SI-04(22)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:si-04.22_odp.02} is/are initiated when network services that have not been authorized or approved by authorization or approval processes are detected."
        }
@@ -180,12 +197,14 @@
      ],
      "alt-identifiers": [
       "si-4.22_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(22)_ODP[01]"
     },
     "si-04.22_odp.02": {
      "alt-identifiers": [
       "si-4.22_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(22)_ODP[02]"
     },
     "si-04.22_odp.03": {
      "guidelines": [
@@ -195,7 +214,8 @@
      ],
      "alt-identifiers": [
       "si-4.22_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "SI-04(22)_ODP[03]"
     }
    }
   },

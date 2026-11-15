@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1855",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1855",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Use of MFDs for printing, scanning and copying purposes, including the capture of shadow copies of documents, are centrally logged."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

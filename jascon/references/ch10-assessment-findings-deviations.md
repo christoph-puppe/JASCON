@@ -56,7 +56,14 @@ Chapter 1 (one framework's conventions enforced on everyone). So the
 method is **facet-typed**: whatever methodology you use, it arrives
 under a registered contract that declares itself assessment-modifying —
 which means, via Chapter 7's fail-closed rule, that no tool can
-half-understand your method and *guess* at your verdicts. Subjects
+half-understand your method and *guess* at your verdicts. A validator
+holds you to it: the keys of `method` are facet ids, a facet of the
+standard library is held to its descriptor and any other to the schema
+your bundle pins, a `private:` key is kept and ignored, and a key that
+no facet registers is an error (specification D10). That check is of
+2026-11-14. Until then the sentence above was a promise nothing kept:
+no validator read `method`, and two tools of this repository wrote
+`{"kind": "manual-check"}` there from their own forms. Subjects
 point at components and implementation edges (Chapter 9's chain is
 literally what gets tested, basis-refs and all); the performer is a
 party reference, with accreditation context living where party context
@@ -196,6 +203,37 @@ actually competent to approve this class of weakness; and do the
 > current American corpus — programs *will* build this channel; the
 > only question is whether it is typed, queryable, and attached where
 > the weakness lives, or reconstructed from inboxes at audit time.
+
+**A Deviation with a date ahead of it.** *(2.0.0-rc.4, specification
+D26.)* Through rc.3 a Deviation said when it was `opened` and who
+approved it, and nothing more: an exception approved once stayed
+approved, and nobody could list the weakenings that were due for another
+look. Two optional fields close that. `decided` is the day it was
+approved or withdrawn; `opened` stays the day it was asked for.
+`review-due` is typed like a Risk's: a date, a date-time, an elapsed
+duration counted from `decided`, or a calendar period with its
+calendar.
+
+```json
+{ "type": "false-positive", "state": "approved",
+  "rationale": { "en": "Scanner misread KMS export; monthly rotation evidenced in KMS logs." },
+  "approver-ref": "https://assessor.example/party/lead-assessor",
+  "opened": "2026-07-16", "decided": "2026-07-18",
+  "review-due": { "type": "date", "value": "2027-07-18" } }
+```
+
+A validator reads the date of the run and reports every approved
+Deviation whose `review-due` has passed (REVIEW-1). It reports, and
+that is all: the Deviation keeps licensing its weakening until a person
+renews it, withdraws it or lets the Tailoring go. The same report covers
+the `review-due` of a Risk that is still managed.
+
+> **Don't** expect the date to enforce itself. A tool that silently
+> stopped honouring an exception at midnight would change what a bundle
+> means without anyone deciding it. The report puts the overdue ones in
+> front of somebody; the decision stays theirs. And give `--as-of` a
+> date when the answer has to be the same tomorrow, in a test or in an
+> audit of last quarter.
 
 ## 10.6 Risk: the record that comes first
 

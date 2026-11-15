@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0447",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0447",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Foreign nationals, excluding seconded foreign nationals, do not have privileged access to systems that process, store or communicate AGAO data."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1579",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1579",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cloud service providers’ ability to scale resources dynamically in response to genuine spikes in demand is discussed and verified as part of capacity and availability planning for online services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

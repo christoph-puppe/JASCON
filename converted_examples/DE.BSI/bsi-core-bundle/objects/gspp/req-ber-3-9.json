@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.9",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.9",
  "lifecycle": "active",
  "title": {
-  "de": "Protokollierung von Änderungen"
+  "de": "Ereignisgesteuerte Deaktivierung"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE Aktionen an Zugangskonten revisionsfähig protokollieren."
+    "de": "Berechtigung SOLLTE Zugangskonten ereignisgesteuert deaktivieren."
    }
   }
  ],
@@ -22,9 +22,9 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "protokollieren",
-     "result": "Aktionen an Zugangskonten",
-     "result-specification": "revisionsfähig"
+     "action": "deaktivieren",
+     "result": "Zugangskonten",
+     "result-specification": "ereignisgesteuert"
     }
    }
   },
@@ -32,7 +32,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Audit Log"
+      "Ergebnisprotokoll"
      ]
     }
    }
@@ -40,15 +40,14 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "1",
+     "confidentiality": "2",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "2",
+     "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
       "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.37"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
      ]
     }
    }
@@ -56,7 +55,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -66,7 +65,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Werden Aktionen an Zugangskonten wie die Erstellung, Veränderung von Metadaten oder Berechtigungen, Aktivierung, Deaktivierung oder Löschung von Zugangskonten automatisch protokolliert, so können Sicherheitsverstöße erkannt und nachgewiesen werden. Siehe auch Praktik Detektion."
+      "de": "Ungenutzte Zugangskonten stellen ein unnötiges Risiko für unberechtigte Zugriffe dar. Werden sie z.B. bei längerer Inaktivität, bei Personalweggang oder bei Verletzung von Richtlinien unverzüglich deaktiviert, so vermindert sich das Risiko eines Missbrauchs erheblich."
      }
     }
    }
@@ -75,7 +74,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "744a1a50-616b-4092-91f6-b2b4b1b0aa01"
+   "value": "610f7bda-9051-44a0-bc6e-c8cbbac35af0"
   }
  ]
 }

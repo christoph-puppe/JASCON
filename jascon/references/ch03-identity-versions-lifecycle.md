@@ -116,7 +116,7 @@ which is exactly what the architecture wants you to say.
 Every object carries a `version` string. The specification does not
 impose a scheme; it imposes a *policy obligation*: pick one, document it
 in the prefix constitution, and never mix. The corpus shows three sane
-choices in the wild — CR26's dotted date-serial (`2026.07.14.01`), ISM's
+choices in the wild — CR26's dotted date-serial (`2026.11.02.01`), ISM's
 release date (`v2026.06.18`), the German ISO date — and any of them
 works, because addressability, not arithmetic, is the point: `id@version`
 names an immutable thing, forever.
@@ -127,16 +127,47 @@ instances** — with the dates encoded as strings like `"Jun-26"`: no day,
 no timezone, no machine meaning, hand-maintained beside the very
 `version` metadata that should own the job. The American corpus does the
 richer version of the same thing, an `updated[]{date, comment}` array on
-every object. In JASCON, both patterns collapse into the
-identity layer: each change is a new addressable version; the bundle's
-content manifest carries the release-notes narrative; `replaces` records
-(§3.5) carry structural lineage. Your authoring pipeline generates all of
-it — nobody hand-edits a month-string ever again.
+every object.
+
+The kernel has two members for this, and they do different jobs
+*(the author's decision of 2026-11-14, specification D27; until then
+this section said that the manifest carries the history, and a
+converter had nowhere to put what its source said)*:
+
+- **`version` is the object's own version.** If you count revisions per
+  requirement, as the ISM does, that count is the `version` of the
+  requirement: an object that did not change between two releases keeps
+  its version, and its digest with it. If you version only the
+  publication, every object carries the release. A Set that stands for
+  the publication carries the release either way.
+- **`history` is your record of the object's changes**: one entry per
+  change, oldest first, each with a `date`, and where you have them a
+  `comment` and a `ref` (an issue, a change request). The date is a day,
+  `2026-03-12`, or a month, `2025-06`, if a month is all you state. It is
+  part of the object, so it is part of the semantic digest: what you say
+  about a change is signed with the rest.
+
+```json
+"version": "4",
+"history": [ {"date": "2025-06"},
+             {"date": "2026-03-12", "comment": {"en": "Reworded."},
+              "ref": "https://github.com/example/rules/issues/41"} ]
+```
+
+A validator checks the shape and the order (HISTORY-1) and nothing more:
+it cannot know whether an entry is true. What it does check across
+releases is the promise of the identity layer: when two bundles are put
+together, one id with one version and two different semantic digests is
+an error. `replaces` records (§3.5) carry structural lineage, as before.
+Measured on the converted corpora: 1,101 ISM Requirements carry their
+revision as `version` and the month of their last change as one history
+entry; 291 rules and indicators of CR26 carry 390 entries, which the
+source lists newest first and the converter puts in the order of their
+dates.
 
 > **Don't** encode change history as object annotations. Measured cost:
 > 2,202 prop instances in one national catalog, with dates a machine
-> cannot even parse — duplicating information the identity layer holds
-> natively.
+> cannot even parse — where the kernel has `version` and `history`.
 
 Publication at the Authority tier also means shipping **two digests per
 object** in your content manifest: the `package-digest` over the
@@ -224,12 +255,27 @@ The heuristic, suitable for printing above the release manager's desk:
 ## 3.6 Lifecycle: four states, and whom each protects
 
 `draft → active → deprecated → withdrawn`, with one meaning each:
-**draft** may change without lineage records and must not be cited by
-anything claiming conformance; **active** is the promise in force;
+**draft** may change without lineage records and binds nobody yet. It may
+be implemented and assessed all the same, voluntarily: whoever does so
+answers a text that may still change (CR26 publishes one family as a
+placeholder; its rules convert as `draft` and can be answered like any
+other). A validator says where a Set in force lists a draft, and fails
+nothing by it (DRAFT-1, Chapter 12). **active** is the promise in force;
 **deprecated** remains fully consumable — implementations against it stay
 valid — but tools surface the warning and the `replaces` trail to
 successors; **withdrawn** exists for historical reference only, and new
-references to it fail validation. Deprecation windows are policy you owe
+references to it fail validation. A validator reads one bundle and
+cannot date a reference, so "new" is said by the bundle: one put
+together before the withdrawal holds the object as it was and stays
+valid, and in one that holds it as withdrawn nothing that is itself in
+force may lean on it. An Implementation that answers it, a Tailoring
+that selects, excludes or changes it, a Mapping that joins it, a
+Component that claims a capability for it, a Check that tests it and a
+live Risk about it fail the bundle until they are withdrawn too or
+point elsewhere (WITHDRAWN-1, Chapter 12). What keeps the record may
+name it for ever: `replaces`, `canonical-alias` and `relations`, the Set
+that lists what its catalogue withdrew, and the Assessments and Findings
+made while it was in force. Deprecation windows are policy you owe
 your ecosystem (put the default in the prefix constitution); the state
 machine is how a thousand downstream organizations learn about your
 changes from their tooling instead of from your newsletter.
@@ -264,5 +310,5 @@ still in 2040.
 Next: Chapter 4 — writing the requirements themselves. The modality
 lattice finally gives *DARF NUR* a machine-checkable meaning, the
 American force-field distribution shows you what a healthy modality mix
-looks like, and the 347 German pseudo-controls demonstrate exactly when
-one requirement should become several statements.
+looks like, and the lettered items of SP 800-53 show when one requirement
+carries several statements.

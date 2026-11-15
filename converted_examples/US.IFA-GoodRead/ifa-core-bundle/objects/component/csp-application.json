@@ -25,17 +25,49 @@
    "props": {
     "implementation-point": "internal"
    },
+   "listed-by-leveraging-plan": {
+    "uuid": "22222222-0000-4000-9001-000000000004",
+    "type": "application",
+    "title": "LEVERAGED APPLICATION",
+    "description": "Inherited from underlying IaaS.",
+    "props": [
+     {
+      "name": "implementation-point",
+      "value": "external"
+     },
+     {
+      "name": "leveraged-authorization-uuid",
+      "value": "22222222-0000-4000-9000-300000000001"
+     },
+     {
+      "name": "inherited-uuid",
+      "value": "11111111-0000-4000-9001-000000000002"
+     }
+    ]
+   },
    "responsible-roles": [
     {
-     "role": "admin"
+     "role": "admin",
+     "party-uuids": [
+      "11111111-0000-4000-9000-100000000001"
+     ]
     },
     {
-     "role": "poc-for-customers"
+     "role": "poc-for-customers",
+     "party-uuids": [
+      "11111111-0000-4000-9000-100000000001"
+     ]
     },
     {
-     "role": "customer"
+     "role": "customer",
+     "party-uuids": [
+      "11111111-0000-4000-9000-100000000002"
+     ]
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "11111111-0000-4000-9001-000000000002"
   }
  }
 }

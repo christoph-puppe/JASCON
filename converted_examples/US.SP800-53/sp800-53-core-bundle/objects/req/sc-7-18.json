@@ -26,11 +26,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sc-7.18_obj",
      "label": "SC-07(18)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "systems are prevented from entering unsecure states in the event of an operational failure of a boundary protection device."
      }
@@ -123,15 +128,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SC-7.6",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SC-7.6",
-    "mode": "merged-into",
-    "label": "SC-07(06)",
-    "title": "Response to Recognized Failures"
-   }
-  ]
- }
+ ]
 }

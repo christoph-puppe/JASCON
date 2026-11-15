@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-11",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Sensibilisierung der Leitungsebene"
@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.1",
-   "sequence": 4200
+   "sequence": 6760
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.2",
-   "sequence": 4210
+   "sequence": 6770
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.11.3",
-   "sequence": 4220
+   "sequence": 6780
   }
  ],
  "label": "11",

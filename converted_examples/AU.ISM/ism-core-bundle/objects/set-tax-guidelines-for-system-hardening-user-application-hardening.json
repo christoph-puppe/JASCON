@@ -8,39 +8,39 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-c0333f3",
-   "sequence": 7990
+   "sequence": 8160
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-906d94a",
-   "sequence": 8010
+   "sequence": 8180
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-2b03575",
-   "sequence": 8080
+   "sequence": 8250
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-453d5d4",
-   "sequence": 8120
+   "sequence": 8290
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-7fec9ee",
-   "sequence": 8140
+   "sequence": 8310
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-7d85c95",
-   "sequence": 8320
+   "sequence": 8490
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-13f7a5a",
-   "sequence": 8360
+   "sequence": 8530
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-8350e56",
-   "sequence": 8380
+   "sequence": 8550
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-system-hardening-user-application-har-8d1c878",
-   "sequence": 8430
+   "sequence": 8600
   }
  ],
  "facets": {

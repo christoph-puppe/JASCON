@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2121",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2121",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Software developers that lack sufficient cyber security knowledge and skills required for their projects or tasks are not used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

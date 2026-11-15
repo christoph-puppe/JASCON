@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0325",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0325",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Any media connected to a system with a higher sensitivity or classification than the media is reclassified to the higher sensitivity or classification, unless the media is read-only or the system has a mechanism through which read-only access can be ensured."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-04"
   }
  ]
 }

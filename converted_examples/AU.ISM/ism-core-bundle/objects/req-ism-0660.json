@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0660",
- "version": "2026.06.18",
+ "version": "9",
  "label": "ISM-0660",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Data transfer logs for SECRET and TOP SECRET systems are fully verified at least monthly."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

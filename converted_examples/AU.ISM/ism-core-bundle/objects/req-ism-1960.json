@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1960",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1960",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Event logs from internet-facing network devices are analysed in a timely manner to detect cyber security events."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

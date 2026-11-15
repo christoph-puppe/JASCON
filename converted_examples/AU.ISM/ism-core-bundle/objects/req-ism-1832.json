@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1832",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1832",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Only service accounts and computer accounts are configured with Service Principal Names (SPNs)."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

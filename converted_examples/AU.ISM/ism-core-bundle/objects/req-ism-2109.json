@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2109",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2109",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Pre-boot authentication using passwords, or managed network-based key release, is implemented for media containing encrypted system volumes."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

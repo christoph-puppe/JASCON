@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/gc-8",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Ressourcen"
@@ -8,7 +8,7 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GC.8.1",
-   "sequence": 190
+   "sequence": 320
   }
  ],
  "label": "8",

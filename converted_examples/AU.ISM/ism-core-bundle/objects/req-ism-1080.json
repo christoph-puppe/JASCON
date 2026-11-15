@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1080",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1080",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "An AACA or high assurance cryptographic algorithm is used when encrypting data at rest."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

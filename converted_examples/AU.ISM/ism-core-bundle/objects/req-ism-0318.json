@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0318",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0318",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When unable to sanitise printer cartridges or MFD print drums, they are destroyed as per electrostatic memory devices."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

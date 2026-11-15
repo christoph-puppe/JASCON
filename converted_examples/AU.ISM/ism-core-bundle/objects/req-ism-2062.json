@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2062",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2062",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Unit testing and integration testing, covering both positive and negative use cases, are used for software components to ensure code quality and correctness."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -1,46 +1,42 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/ber-4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Berechtigungsmanagement"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.1",
-   "sequence": 5120
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-4-1",
+   "sequence": 8060
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.2",
-   "sequence": 5130
+   "sequence": 8070
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.3",
-   "sequence": 5140
+   "sequence": 8080
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.4",
-   "sequence": 5150
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/ber-4-4",
+   "sequence": 8110
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.5",
-   "sequence": 5160
+   "sequence": 8120
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.6",
-   "sequence": 5170
+   "sequence": 8130
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.7",
-   "sequence": 5180
+   "sequence": 8140
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.8",
-   "sequence": 5190
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/req/BER.4.9",
-   "sequence": 5200
+   "sequence": 8150
   }
  ],
  "label": "4",

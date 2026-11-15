@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1703",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1703",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A vulnerability scanner is used at least fortnightly to identify missing patches or updates for vulnerabilities in drivers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

@@ -9,12 +9,23 @@
  },
  "objects-emitted": {
   "requirements": 1150,
-  "sets": 561,
-  "total-objects": 1711
+  "sets": 581,
+  "total-objects": 1731
  },
  "modality-word-rule": {
   "unspecified": 1149,
   "may": 1
+ },
+ "obligated-party": {
+  "value": "https://ns.cyber.gov.au/ism/party/organisation",
+  "origin": "converter-default",
+  "converter-default": "https://ns.cyber.gov.au/ism/party/organisation"
+ },
+ "lifecycle-default": {
+  "value": "active",
+  "origin": "converter-default",
+  "objects": 1731,
+  "source-states": 0
  },
  "labels": {
   "from-label-prop": 49,
@@ -36,326 +47,742 @@
   "ISM-control": 1101,
   "ISM-principle": 49
  },
- "empty-narrative-groups-skipped": 2,
+ "group-sets": {
+  "groups": 570,
+  "with-no-member": 16,
+  "with-no-member-and-an-overview-part": 16,
+  "with-no-member-a-heading-only": 0
+ },
+ "nested-controls": 0,
+ "ledger": {
+  "file": "ism-conversion-ledger.json",
+  "leaf-values": 36161,
+  "totals": {
+   "copied": 5896,
+   "transformed": 15665,
+   "not-content": 14600,
+   "intentionally-dropped": 0,
+   "unaccounted": 0
+  },
+  "verification-failures": 0,
+  "rules": [
+   {
+    "rule": "Requirement id from the control id",
+    "source-values": 1150,
+    "destinations": 3450
+   },
+   {
+    "rule": "author of the source: the party its document names as its author (the role `creator`, else `prepared-by`, else the one party it names); a landmark URI from the party's name",
+    "source-values": 1,
+    "destinations": 1
+   },
+   {
+    "rule": "baseline Set id from the prop name (its kind) and the marker",
+    "source-values": 11114,
+    "destinations": 22228
+   },
+   {
+    "rule": "baseline Set title from the prop name (its kind) and the marker",
+    "source-values": 11114,
+    "destinations": 11114
+   },
+   {
+    "rule": "category Set id from the class",
+    "source-values": 1150,
+    "destinations": 2300
+   },
+   {
+    "rule": "category Set title from the class",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "date of the source: the day of the document's last-modified",
+    "source-values": 1,
+    "destinations": 1
+   },
+   {
+    "rule": "entry in the baseline Set that the control's marker names: the Requirement of the control",
+    "source-values": 12264,
+    "destinations": 16671
+   },
+   {
+    "rule": "entry in the category Set that the control's class names: the Requirement of the control",
+    "source-values": 2300,
+    "destinations": 2300
+   },
+   {
+    "rule": "file name of the Requirement from the control id",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "file name of the baseline Set from the prop name (its kind) and the marker",
+    "source-values": 11114,
+    "destinations": 11114
+   },
+   {
+    "rule": "file name of the category Set from the class",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "file name of the taxonomy Set from the titles of the group and of the groups above it",
+    "source-values": 570,
+    "destinations": 1585
+   },
+   {
+    "rule": "label from the control id (ism-1234 -> ISM-1234; an id of another form as it is)",
+    "source-values": 1101,
+    "destinations": 1101
+   },
+   {
+    "rule": "modality word-rule over the statement prose",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "month of a control's last change: Mon-YY as the source prints it, written YYYY-MM (the century is 20)",
+    "source-values": 1101,
+    "destinations": 1101
+   },
+   {
+    "rule": "statement id: the part id after its last underscore",
+    "source-values": 1150,
+    "destinations": 1150
+   },
+   {
+    "rule": "taxonomy Set id from the titles of the group and of the groups above it",
+    "source-values": 570,
+    "destinations": 4755
+   }
+  ],
+  "not-content": [
+   {
+    "kind": "namespace",
+    "rule": "the namespace of a prop: the one this mapping reads the prop's name in",
+    "values": 7759
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "a sort-id is its parent's sort-id, the kind of the element and its position among its siblings, written with as many digits as their number has",
+    "values": 1720
+   },
+   {
+    "kind": "selector",
+    "rule": "the name `statement` of a control's part selects the member `statements` for its prose",
+    "values": 1150
+   },
+   {
+    "kind": "selector",
+    "rule": "the name of a prop selects the member its value is written to, or the rule that reads it",
+    "values": 3971
+   }
+  ],
+  "declared-drops": [],
+  "path-map-and-ledger-disagree": [],
+  "read-back-from-the-written-bundle": {
+   "requirements": 1150,
+   "sets": 581,
+   "sets-with-no-member": 16,
+   "requirements-with-revision": 1101,
+   "requirements-with-updated": 1101,
+   "requirements-with-revision-or-updated-in-compat": 0,
+   "resources": 246,
+   "links-in-texts": 481,
+   "links-that-name-a-resource-of-the-bundle": 481,
+   "texts-with-a-link": 76,
+   "objects-with-a-link": 76,
+   "resources-a-link-names": 241,
+   "sort-ids-in-the-source": 1720,
+   "sort-ids-rebuilt-from-the-bundle": 1720
+  },
+  "written-without-a-source-value": [
+   {
+    "in": "Requirement",
+    "pointer": "/lifecycle",
+    "count": 1150,
+    "example": "active"
+   },
+   {
+    "in": "Requirement",
+    "pointer": "/statements/[]/obligated-parties/[]",
+    "count": 1150,
+    "example": "https://ns.cyber.gov.au/ism/party/organisation"
+   },
+   {
+    "in": "Set",
+    "pointer": "/id",
+    "count": 1,
+    "example": "https://ns.cyber.gov.au/ism/set/tax/ism"
+   },
+   {
+    "in": "Set",
+    "pointer": "/lifecycle",
+    "count": 581,
+    "example": "active"
+   },
+   {
+    "in": "Set",
+    "pointer": "/members/[]/sequence",
+    "count": 8427,
+    "example": 10
+   },
+   {
+    "in": "manifest",
+    "pointer": "/facet-schemas/[]/digest",
+    "count": 2,
+    "example": "sha256:0a7ed521490142ab833530eccf31f6708ea93f1837522e6cd434c75065b20ce8"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/facet-schemas/[]/exact-version",
+    "count": 2,
+    "example": "1.2.0"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/facet-schemas/[]/id",
+    "count": 2,
+    "example": "https://ns.jascon.net/compat/oscal-1x"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/facet-schemas/[]/path",
+    "count": 2,
+    "example": "schemas/oscal-1x-compat-1.2.0.json"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/kernel-version",
+    "count": 1,
+    "example": "2.0.0"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/manifest-version",
+    "count": 1,
+    "example": "1"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/objects/[]/id",
+    "count": 1,
+    "example": "https://ns.cyber.gov.au/ism/set/tax/ism"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/objects/[]/package-digest",
+    "count": 1731,
+    "example": "sha256:fa10ee1c4e3d2ee297d453e384bcead0d14225ea438e90c1d4468de6454a7301"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/objects/[]/path",
+    "count": 1,
+    "example": "objects/set-tax-root.json"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/objects/[]/semantic-digest",
+    "count": 1731,
+    "example": "sha256:96d8a55cf7e5547857f8d3b81c9eac4ff739d0920d696802aee36431518b18e4"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/provenance/converter",
+    "count": 1,
+    "example": "convert_ism.py v0.5"
+   },
+   {
+    "in": "manifest",
+    "pointer": "/provenance/sources/[]/format",
+    "count": 1,
+    "example": "OSCAL"
+   }
+  ]
+ },
  "unmapped-paths": [],
  "path-map": [
   {
    "path": "catalog.back-matter.resources[].props[].name",
    "count": 2,
-   "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "level": "L2",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
+   "ledger": {
+    "copied": 2
+   }
   },
   {
    "path": "catalog.back-matter.resources[].props[].value",
    "count": 2,
-   "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "level": "L2",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
+   "ledger": {
+    "copied": 2
+   }
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].href",
    "count": 254,
-   "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "level": "L2",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
+   "ledger": {
+    "copied": 254
+   }
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].media-type",
    "count": 13,
-   "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "level": "L2",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
+   "ledger": {
+    "copied": 13
+   }
   },
   {
    "path": "catalog.back-matter.resources[].title",
    "count": 246,
-   "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "level": "L2",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
+   "ledger": {
+    "copied": 246
+   }
   },
   {
    "path": "catalog.back-matter.resources[].uuid",
    "count": 246,
-   "level": "declared-drop",
-   "destination": "source-document references (guideline PDFs/links) - not requirement data"
+   "level": "L2",
+   "destination": "standard facet references@1 on the root Set: resources[], in the source's own shape, the uuid as `id`, which a `(#uuid)` link in a text names",
+   "ledger": {
+    "copied": 246
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].class",
    "count": 1150,
-   "level": "L1",
-   "destination": "category Sets: set/tax/principles | set/tax/controls"
+   "level": "L1 by rule",
+   "destination": "category Sets set/tax/by-class-<class>: id, title, file name and membership",
+   "ledger": {
+    "transformed": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].id",
    "count": 1150,
-   "level": "L1",
-   "destination": "Requirement id (URI mint) + label derivation"
+   "level": "L1 by rule",
+   "destination": "Requirement id (URI mint) and file name; label where the control has no `label` prop; `ref` of its entry in every Set it is a member of",
+   "ledger": {
+    "transformed": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].parts[].id",
    "count": 1150,
-   "level": "L1",
-   "destination": "statement id (part-id suffix)"
+   "level": "L1 by rule",
+   "destination": "statement id (part-id suffix)",
+   "ledger": {
+    "transformed": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].parts[].name",
    "count": 1150,
-   "level": "L1",
-   "destination": "statement (the one part kind present)"
+   "level": "not-content",
+   "destination": "the name `statement` selects the member `statements` for the part's prose",
+   "ledger": {
+    "not-content": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].parts[].prose",
    "count": 1150,
    "level": "L1",
-   "destination": "statements[].prose.en (+ modality word-rule, documented)"
+   "destination": "statements[].prose.en (+ modality word-rule, documented)",
+   "ledger": {
+    "copied": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].props[].name",
    "count": 8958,
-   "level": "L1",
-   "destination": "dispatch (see per-prop rows)"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "transformed": 5557,
+    "not-content": 3401
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].props[].ns",
    "count": 7759,
-   "level": "L1",
-   "destination": "prop namespace: absorbed (kernel fields need none)"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "not-content": 7759
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].props[].value",
    "count": 8958,
-   "level": "L1",
-   "destination": "dispatch (see per-prop rows)"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "copied": 1150,
+    "transformed": 6658,
+    "not-content": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].controls[].title",
    "count": 1150,
    "level": "L1",
-   "destination": "Requirement title"
+   "destination": "Requirement title",
+   "ledger": {
+    "copied": 1150
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].parts[].name",
    "count": 470,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set"
+   "destination": "compat facet oscal-1x@1 on the Set of the group: group-parts[].name",
+   "ledger": {
+    "copied": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].parts[].prose",
    "count": 470,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set (language-tagged {en})"
+   "destination": "compat facet oscal-1x@1 on the Set of the group: group-parts[].prose (language-tagged {en})",
+   "ledger": {
+    "copied": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].props[].name",
    "count": 470,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "not-content": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].props[].value",
    "count": 470,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "not-content": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].groups[].title",
    "count": 470,
    "level": "L1",
-   "destination": "Set title"
+   "destination": "Set title; with the titles of the groups above it, the Set id and file name; `group` of its overview parts in the compat facet",
+   "ledger": {
+    "copied": 470
+   }
   },
   {
    "path": "catalog.groups[].groups[].parts[].name",
    "count": 69,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set"
+   "destination": "compat facet oscal-1x@1 on the Set of the group: group-parts[].name",
+   "ledger": {
+    "copied": 69
+   }
   },
   {
    "path": "catalog.groups[].groups[].parts[].prose",
    "count": 69,
    "level": "L2",
-   "destination": "compat facet oscal-1x@1: guideline overview narrative on the Set (language-tagged {en})"
+   "destination": "compat facet oscal-1x@1 on the Set of the group: group-parts[].prose (language-tagged {en})",
+   "ledger": {
+    "copied": 69
+   }
   },
   {
    "path": "catalog.groups[].groups[].props[].name",
    "count": 75,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "not-content": 75
+   }
   },
   {
    "path": "catalog.groups[].groups[].props[].value",
    "count": 75,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "not-content": 75
+   }
   },
   {
    "path": "catalog.groups[].groups[].title",
    "count": 75,
    "level": "L1",
-   "destination": "Set title"
+   "destination": "Set title; with the titles of the groups above it, the Set id and file name; `group` of its overview parts in the compat facet",
+   "ledger": {
+    "copied": 75
+   }
   },
   {
    "path": "catalog.groups[].props[].name",
    "count": 25,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "not-content": 25
+   }
   },
   {
    "path": "catalog.groups[].props[].value",
    "count": 25,
-   "level": "L1",
-   "destination": "group sort-id: absorbed by document order -> sequence"
+   "level": "dispatch",
+   "destination": "see per-prop rows",
+   "ledger": {
+    "not-content": 25
+   }
   },
   {
    "path": "catalog.groups[].title",
    "count": 25,
    "level": "L1",
-   "destination": "Set title"
+   "destination": "Set title; with the titles of the groups above it, the Set id and file name; `group` of its overview parts in the compat facet",
+   "ledger": {
+    "copied": 25
+   }
   },
   {
    "path": "catalog.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata; its day is the manifest's provenance.sources[0].date",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.links[].href",
    "count": 5,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 5
+   }
   },
   {
    "path": "catalog.metadata.links[].rel",
    "count": 5,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 5
+   }
   },
   {
    "path": "catalog.metadata.oscal-version",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata; manifest provenance.sources[0].format-version",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].addr-lines[]",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 3
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].city",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].country",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].postal-code",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].state",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].addresses[].type",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].email-addresses[]",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].links[].href",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].links[].rel",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata; the name of the party the document names as its author makes the manifest's provenance.sources[0].author-ref",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].short-name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].type",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.parties[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.published",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.responsible-parties[].role-id",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.roles[].id",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.roles[].title",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (publisher identity)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set: metadata, in the source's own shape",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "title of the root Set (set/tax/ism); manifest provenance.sources[0].title",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "`version` of every Set and of a Requirement whose control states no revision; manifest provenance.sources[0].version",
+   "ledger": {
+    "copied": 1
+   }
   },
   {
    "path": "catalog.uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "manifest provenance.sources[0].uuid (the uuid of the source document)",
+   "ledger": {
+    "copied": 1
+   }
   }
  ]
 }

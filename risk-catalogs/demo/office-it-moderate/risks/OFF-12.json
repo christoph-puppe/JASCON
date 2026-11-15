@@ -13,6 +13,10 @@
  },
  "owner-ref": "https://org.example/party/ciso",
  "state": "identified",
+ "provenance": {
+  "author-ref": "https://github.com/christoph-puppe",
+  "date": "2026-11-10"
+ },
  "tailoring-refs": [
   "https://org.example/tailoring/soa-office-it"
  ],

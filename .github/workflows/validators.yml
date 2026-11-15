@@ -1,16 +1,29 @@
 # Runs the reference validators on every change to what they read.
 #
 # Four jobs, one per implementation and one for the pages:
-#   python      validate_core.py, the reference (Ubuntu, Python 3.12), and the
-#               tests of the converter library (test_oscal_conv_lib.py)
-#               and a re-run of the IFA conversion from its pinned sources,
-#               which must reproduce what is committed
+#   python      validate_core.py, the reference (Ubuntu, Python 3.12), the
+#               tests of the converter library (test_oscal_conv_lib.py), the
+#               attestation check end to end (test_attestation_binds.py),
+#               a re-run of the IFA conversion and of the four shipped
+#               catalogue conversions (AU.ISM, DE.BSI, US.CSF, US.SP800-53)
+#               from their pinned sources, each of which must reproduce
+#               what is committed, the nine catalogue converters on an
+#               invented catalogue (test_convert_obligated_party.py), the
+#               conversion ledgers of the IFA converter and of the four
+#               catalogue converters, where a lost value must end a run
+#               with 1 (test_convert_*_ledger.py), and a
+#               run of the CR26 conversion on its pinned source, which is
+#               downloaded and not committed: the bundle must validate and
+#               the two coverage reports must be the committed ones
 #   powershell  validate_core.ps1, the twin, on WINDOWS POWERSHELL 5.1
-#               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7)
+#               (windows-latest; `shell: powershell` is 5.1, `pwsh` would be 7),
+#               after .github/scripts/lint-twin.ps1 has read its source: no
+#               PowerShell operator may compare two strings (backlog #58);
+#               then the attestation check end to end, on changed bundles
 #   app         the JavaScript port in jascon-app/ against the same vectors
-#   browser     the app's pages and the pack builder (one-page-apps/) in
-#               Chromium, driven by Playwright, their output held to the
-#               reference validator
+#   browser     the app's pages, the pack builder and the reader
+#               (one-page-apps/) in Chromium, driven by Playwright, their
+#               output held to the reference validator
 #
 # Each job fails unless its validator ends ALL GREEN. The counts are written
 # to the job summary, so a run is a dated record of what passed where
@@ -27,6 +40,7 @@ on:
       - "one-page-apps/**"
       - ".gitattributes"
       - ".github/workflows/validators.yml"
+      - ".github/scripts/**"
   pull_request:
     paths:
       - "jascon/**"
@@ -35,6 +49,7 @@ on:
       - "one-page-apps/**"
       - ".gitattributes"
       - ".github/workflows/validators.yml"
+      - ".github/scripts/**"
   workflow_dispatch:
 
 permissions:
@@ -61,6 +76,15 @@ jobs:
           python jascon/scripts/validate_core.py | tee run.log
       - name: Converter library (the value-level measurement of the coverage reports)
         run: python jascon/scripts/test_oscal_conv_lib.py
+      - name: attestation-binds on a bundle, end to end
+        # The vectors hold the primitive. This holds what a vector cannot: that
+        # the Attestation beside a manifest is found, typed and counted, and
+        # that a bundle fails when a claimed Attestation does not bind.
+        run: python jascon/scripts/test_attestation_binds.py
+      - name: The example Attestation is what its folder says
+        # It binds the digest of the example manifest and three example objects;
+        # a change to any of them needs it issued again.
+        run: python drafts/phase-d/attest_example.py --check
       - name: The IFA conversion is reproducible from its pinned sources
         # The bundle, the coverage reports and the ledger under
         # converted_examples/US.IFA-GoodRead are a record of one conversion.
@@ -83,6 +107,168 @@ jobs:
             git --no-pager diff --stat -- converted_examples/US.IFA-GoodRead
             exit 1
           fi
+      - name: The IFA converter ends with 1 on a source value that is unaccounted
+        # The author's rule of 2026-11-14: real content is never dropped, what
+        # stays out of a bundle is no content by a rule the ledger checks, and
+        # a run with an unaccounted value exits non-zero. The reproduction
+        # above cannot hold that exit code, because the committed conversion
+        # has no unaccounted value: this changes one place of a copy of the
+        # converter at a time (a rule not stated, a rule that does not hold,
+        # a value not written, a declared reason taken away) and reads the
+        # exit code. It uses the sources the step above fetched.
+        run: python jascon/scripts/test_convert_ifa_ledger.py
+      - name: The nine catalogue converters and whom their statements bind (invented catalogue)
+        # Backlog #74. Each converter is run on a catalogue nobody published:
+        # without --obligated-party it writes its own party and reports it as
+        # its default, with it the caller's, and a party the source states
+        # stays the source's. Needs no source file.
+        run: python jascon/scripts/test_convert_obligated_party.py
+      - name: The four catalogue conversions are reproducible from their pinned sources
+        # AU.ISM, DE.BSI, US.CSF and US.SP800-53, held as the IFA conversion is
+        # held above: each source is fetched at its pinned tag or commit and
+        # checked against the SOURCES.sha256 of its folder, converted again,
+        # and the bundle and the two coverage reports must be byte for byte
+        # what is committed. This is where "without an argument a converter
+        # writes what it wrote before" is held (backlog #74).
+        #
+        # Until 2026-11-15 the SP 800-53 report counted the citations of its
+        # controls in every .json file under converted_examples/, and the count
+        # was the committed one only while that folder held nothing else. Since
+        # then it reads the objects that four named bundles list (backlog #79,
+        # point 6), and what else lies there does not change it. The step still
+        # says first, in its own words, if another step has left something in
+        # that folder: a difference after the conversions is then a converter's.
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain -- converted_examples)" ]; then
+            echo "converted_examples/ is not as committed before the conversions are run again:"
+            git status --porcelain -- converted_examples
+            exit 1
+          fi
+          while read -r corpus converter; do
+            bash .github/scripts/fetch-pinned-sources.sh "converted_examples/$corpus/SOURCES.sha256"
+            python "jascon/scripts/$converter"
+            if [ -n "$(git status --porcelain -- "converted_examples/$corpus")" ]; then
+              echo "$converter no longer reproduces the committed conversion:"
+              git --no-pager diff --stat -- "converted_examples/$corpus"
+              git status --porcelain -- "converted_examples/$corpus"
+              exit 1
+            fi
+          done <<'EOF'
+          AU.ISM convert_ism.py
+          DE.BSI convert_bsi.py
+          US.CSF convert_csf.py
+          US.SP800-53 convert_nist.py
+          EOF
+      - name: The conversion ledgers of the four catalogue converters (a lost value ends a run with 1)
+        # Backlog #41 and the author's rule of 2026-11-14: real content is
+        # never dropped, what stays out of a bundle is no content by a rule
+        # the ledger checks, and a run with an unaccounted value exits
+        # non-zero. Each test runs copies of its converter on catalogues
+        # nobody published and changes one thing at a time: a value that is
+        # lost, a rule that does not hold, a name that selects a value which
+        # is not written, a record that is not this run's. The reproduction
+        # above holds the records of the real corpora; it cannot hold the
+        # exit code, because the committed conversions have no unaccounted
+        # value. The step stands after it because the CSF test also counts
+        # the committed bundle against the pinned source, which the step
+        # above has fetched.
+        run: |
+          python jascon/scripts/test_convert_ism_ledger.py
+          python jascon/scripts/test_convert_bsi_ledger.py
+          python jascon/scripts/test_convert_csf_ledger.py
+          python jascon/scripts/test_convert_nist_ledger.py
+          if [ -n "$(git status --porcelain -- converted_examples)" ]; then
+            echo "a ledger test wrote into converted_examples/:"
+            git status --porcelain -- converted_examples
+            exit 1
+          fi
+      - name: One id and version is one schema (the pinned facet schemas of the bundles and the standard library)
+        # Backlog #88. A converter that changes a schema it pins must change
+        # the schema's version: the author decided it for the compat facet,
+        # and the converters' own facets had done the same thing in small.
+        # .github/pinned-schemas.json records, for every id and version a
+        # committed bundle or the standard library holds, the digest of what
+        # the schema says. The step fails when two files give one id and
+        # version two schemas, when a schema changed and kept its version,
+        # and when a schema or a version is not in the record. The CR26
+        # bundle is not committed; its step below holds its pins to the same
+        # record.
+        run: python .github/scripts/pinned-schemas.py
+      - name: The OSCAL exports of the four catalogue bundles are what export_oscal.py writes
+        # Backlog #90. export_oscal.py projects each catalogue bundle under
+        # converted_examples/ to an OSCAL 1.2.2 catalogue, validates it
+        # against NIST's schema and compares the re-import with the bundle,
+        # object by object, by semantic digest; it ends with 1 if a catalogue
+        # fails the schema or an object does not come back. Until this step
+        # nothing ran it, so the committed exports went stale with every
+        # change of a converter. The schema is fetched from the publisher's
+        # release and checked against .github/oscal-catalog-schema.sha256.
+        # The step stands after the reproduction, so the bundles it exports
+        # are the committed ones, and it fails if an export is not byte for
+        # byte what is committed. The schema uses Unicode property escapes,
+        # which the standard library's `re` does not compile: hence `regex`.
+        run: |
+          set -euo pipefail
+          bash .github/scripts/fetch-pinned-sources.sh .github/oscal-catalog-schema.sha256
+          pip install regex
+          python jascon/scripts/export_oscal.py | tee export.log
+          if [ -n "$(git status --porcelain -- converted_examples)" ]; then
+            echo "export_oscal.py no longer reproduces the committed exports:"
+            git --no-pager diff --stat -- converted_examples
+            git status --porcelain -- converted_examples
+            exit 1
+          fi
+      - name: The CR26 conversion runs on its pinned source and reproduces its coverage reports and its ledger
+        # FedRAMP's rules file is not redistributed (converted_examples/
+        # FedRAMP-CR26/NOT-REDISTRIBUTED.md): neither the source nor the
+        # bundle is in the repository, and the two coverage reports and the
+        # conversion ledger are the record of the conversion. The source is
+        # fetched at the publisher's tag, checked against SOURCES.sha256 and
+        # converted into a temporary directory. The converter must exit 0,
+        # which it does only when every source leaf has a declared
+        # destination and every claim of its ledger holds against the files
+        # it wrote; the reference validator must pass the bundle; and the
+        # two reports and the ledger record (one row per source path and
+        # outcome: copied, transformed, no content by a checked rule, dropped
+        # for a declared reason, unaccounted; backlog #41) must be byte for
+        # byte what is committed.
+        # The reports state the digest of the bundle's manifest, so a bundle
+        # that differs in one byte fails here too. The step writes the
+        # downloaded file under the git-ignored sources/ and a log beside
+        # run.log, nothing into the conversion's folder, and it commits
+        # nothing. Last, the converter's own test.
+        run: |
+          set -euo pipefail
+          dir=converted_examples/FedRAMP-CR26
+          list=$dir/SOURCES.sha256
+          base=$(sed -n 's/^# base: //p' "$list")
+          path=$(sed -n 's/^# path: //p' "$list")
+          name=$(awk '!/^#/ && NF == 2 { print $2 }' "$list")
+          mkdir -p sources
+          curl -sSfL --retry 3 -o "sources/$name" "$base$path"
+          (cd sources && sha256sum -c "$GITHUB_WORKSPACE/$list")
+          out=$(mktemp -d)
+          python jascon/scripts/convert_cr26.py --out "$out"
+          python jascon/scripts/validate_core.py "$out/cr26-core-bundle" | tee cr26.log
+          # one id and version is one schema: the bundle's pins against the record (backlog #88)
+          python .github/scripts/pinned-schemas.py "$out/cr26-core-bundle"
+          for f in cr26-coverage-report.md cr26-coverage-report.json cr26-conversion-ledger.json; do
+            if ! cmp "$out/$f" "$dir/$f"; then
+              echo "convert_cr26.py no longer reproduces the committed $f:"
+              diff "$dir/$f" "$out/$f" | head -40 || true
+              exit 1
+            fi
+          done
+          if [ -n "$(git status --porcelain -- "$dir")" ]; then
+            echo "the run wrote into the checkout:"
+            git status --porcelain -- "$dir"
+            exit 1
+          fi
+          # What the checks above cannot show: that the values stand where
+          # the report declares them, what each argument does, and that the
+          # run fails on a source it does not cover.
+          python jascon/scripts/test_convert_cr26.py
       - name: Summary
         if: always()
         run: |
@@ -91,6 +277,18 @@ jobs:
             echo '```'
             grep -E '^  [a-z-]+: [0-9]+ pass|: [0-9]+ pass, [0-9]+ fail|^ALL GREEN|FAILURES' run.log | cut -c1-160
             echo '```'
+            if [ -f export.log ]; then
+              echo '### export_oscal.py: bundle to OSCAL 1.2.2 and back, by semantic digest'
+              echo '```'
+              grep -E '^(AU|DE|US)\.|^ALL GREEN|FAILURES' export.log | cut -c1-160
+              echo '```'
+            fi
+            if [ -f cr26.log ]; then
+              echo '### validate_core.py on the CR26 bundle, converted from the pinned source'
+              echo '```'
+              grep -E 'cr26-core-bundle: [0-9]+ pass, [0-9]+ fail|^ALL GREEN|FAILURES' cr26.log | sed 's#^.*/cr26-core-bundle:#  cr26-core-bundle:#' | cut -c1-160
+              echo '```'
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
   powershell:
@@ -104,10 +302,25 @@ jobs:
           $v = $PSVersionTable.PSVersion.ToString()
           Write-Host "Windows PowerShell $v, edition $($PSVersionTable.PSEdition)"
           if ($PSVersionTable.PSVersion.Major -ne 5) { Write-Host 'not Windows PowerShell 5.x'; exit 1 }
+      - name: No operator compares two strings (lint-twin.ps1)
+        shell: powershell
+        run: |
+          powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File .github\scripts\lint-twin.ps1
+          exit $LASTEXITCODE
       - name: validate_core.ps1
         shell: powershell
         run: |
           powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File jascon\scripts\validate_core.ps1 | Tee-Object -FilePath run.log
+          exit $LASTEXITCODE
+      - name: attestation-binds on a bundle, end to end, with the twin
+        # The same nine changed copies the reference is run on, in one run of
+        # the twin: every repository bundle is a Full Match, so the lines for a
+        # Semantic Match, for an Attestation that does not bind and for a
+        # failure are printed on Windows PowerShell 5.1 only here.
+        shell: powershell
+        run: |
+          $env:JASCON_TWIN = 'powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File jascon\scripts\validate_core.ps1'
+          python jascon\scripts\test_attestation_binds.py
           exit $LASTEXITCODE
       - name: Summary
         if: always()
@@ -139,7 +352,7 @@ jobs:
         run: node --test "jascon-app/tests/*.test.mjs"
 
   browser:
-    name: Pages in a browser (app and pack builder)
+    name: Pages in a browser (app, pack builder and reader)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

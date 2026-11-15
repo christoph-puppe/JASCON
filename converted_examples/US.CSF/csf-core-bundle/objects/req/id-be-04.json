@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.BE-04",
+ "version": "2.0",
+ "label": "ID.BE-04",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.BE-04"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Dependencies and critical functions for delivery of critical services are established"
+   }
+  }
+ ]
+}

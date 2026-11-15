@@ -1,0 +1,26 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/det-4-11",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Anomalien in Netzen und am Perimeter"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.11",
+   "sequence": 9590
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.11.1",
+   "sequence": 9600
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.11.2",
+   "sequence": 9610
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/DET.4.11.3",
+   "sequence": 9620
+  }
+ ]
+}

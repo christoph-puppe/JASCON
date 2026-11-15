@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1096",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1096",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cables are labelled at each end with sufficient source and destination details to enable the physical identification and inspection of the cable."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-10"
   }
  ]
 }

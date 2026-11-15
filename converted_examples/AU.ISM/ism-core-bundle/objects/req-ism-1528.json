@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1528",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1528",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Evaluated firewalls are used between an organisation’s networks and public network infrastructure."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

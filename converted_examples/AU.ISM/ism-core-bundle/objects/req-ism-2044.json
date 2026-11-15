@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2044",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2044",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Software has no default credentials; however, if credentials are required, they are created on first install by the installing organisation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2123",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2123",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "All prompts and outputs associated with chat sessions are securely deleted when chat sessions are removed from AI applications."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

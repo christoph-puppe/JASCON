@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2009",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2009",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Unauthorised medical devices are not brought into SECRET and TOP SECRET areas."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

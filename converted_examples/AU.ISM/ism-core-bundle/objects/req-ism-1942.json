@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1942",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1942",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The Domain Computers security group is not a member of any privileged or highly privileged security groups."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

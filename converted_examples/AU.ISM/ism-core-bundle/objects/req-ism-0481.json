@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0481",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0481",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Only AACPs or high assurance cryptographic protocols are used by cryptographic equipment, applications and libraries."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09"
   }
  ]
 }

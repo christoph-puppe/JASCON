@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0047",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0047",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Organisational-level cyber security documentation is approved by the chief information security officer while system-specific cyber security documentation is approved by the system’s authorising officer."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

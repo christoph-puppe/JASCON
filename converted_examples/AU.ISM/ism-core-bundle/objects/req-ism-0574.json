@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0574",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0574",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "SPF is used to specify authorised email servers (or lack thereof) for an organisation’s domains (including subdomains)."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

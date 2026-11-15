@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/RS.CO-04",
+ "version": "2.0",
+ "label": "RS.CO-04",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "RS.CO-04"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Coordination with stakeholders occurs consistent with response plans"
+   }
+  }
+ ]
+}

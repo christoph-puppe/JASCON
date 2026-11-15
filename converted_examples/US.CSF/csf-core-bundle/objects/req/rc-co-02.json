@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/RC.CO-02",
+ "version": "2.0",
+ "label": "RC.CO-02",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "RC.CO-02"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Reputation is repaired after an incident"
+   }
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1220",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1220",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Printer and MFD platens are inspected and destroyed if any text or images are retained on the platen."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

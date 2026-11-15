@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.6",
  "lifecycle": "active",
  "title": {
-  "de": "Zentrales Management"
+  "de": "Privilegierte Zugangskonten"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE ein zentrales Managementsystem für Zugangskonten installieren."
+    "de": "Berechtigung für Administrierende SOLLTE separate Zugangskonten für administrative Tätigkeiten (Administrationskonten) verankern."
    }
   }
  ],
@@ -22,8 +22,11 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "installieren",
-     "result": "ein zentrales Managementsystem für Zugangskonten"
+     "action": "verankern",
+     "result": "separate Zugangskonten für administrative Tätigkeiten (Administrationskonten)",
+     "target-object-categories": [
+      "Administrierende"
+     ]
     }
    }
   },
@@ -31,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "IT-Betriebskonzept"
+      "Inventar Berechtigungen"
      ]
     }
    }
@@ -54,9 +57,14 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3
+     "effort": 2,
+     "tags": [
+      "Privilege Escalation",
+      "Insider Threat",
+      "Privilegierte Rechte"
+     ]
     }
    }
   },
@@ -64,7 +72,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Wenn Zugangskonten lokal auf jedem Gerät einzeln verwaltet werden, könnte es zu inkonsistenten und veralteten Zugängen und Berechtigungen kommen. Ein zentrales System steuert Benutzeridentitäten und Zugriffsrechte übergreifend – oft als Identity and Access Management (IAM) oder bei sensiblen Konten als Privileged Access Management (PAM) bezeichnet. Es kann die Nachvollziehbarkeit erhöhen, Audits erleichtern und gerade in komplexen IT-Umgebungen Transparenz schaffen. Umsetzbar ist dies etwa über Verzeichnisdienste wie LDAP oder Active Directory, ergänzt durch rollenbasierte Zugriffsmodelle (RBAC). Praktische Maßnahmen zum Management können Self-Service-Portale, automatische Genehmigungsworkflows und regelmäßige Rechteüberprüfungen umfassen. Für den Einstieg kann eine Institution kritische Systeme priorisieren und Prozesse schrittweise zentralisieren."
+      "de": "Zugangskonten mit privilegierten Rechten (Superuser wie z.B. root) könnten durch menschliche Fehler oder Schadcode weitreichende Probleme verursachen. Bewährt hat es sich daher für administrative Tätigkeiten wie die Installation von Anwendungen dedizierte Zugangskonten einzurichten und diese auch nur für derartige Tätigkeiten zu verwenden. Für normale Geschäftsaktivitäten wie E-Mail oder Webbrowser nutzen auch Administrierende dann ausschließlich Zugangskonten ohne administrative Berechtigungen."
      }
     }
    }
@@ -73,7 +81,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "0aec1964-0172-4194-836b-90fa6d8002ba"
+   "value": "4791c533-f811-48cf-9957-6e1d438028f5"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.10.5"
   }
  ]
 }

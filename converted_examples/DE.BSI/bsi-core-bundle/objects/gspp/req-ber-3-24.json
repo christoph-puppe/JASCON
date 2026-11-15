@@ -1,20 +1,20 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.24",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.24",
  "lifecycle": "active",
  "title": {
-  "de": "Gruppenkonten - Wechsel dokumentieren"
+  "de": "Alternative Authentifizierung am IT-System"
  },
  "statements": [
   {
    "id": "smt",
-   "modality": "should",
+   "modality": "may",
    "obligated-parties": [
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE für Gruppenkonten die Identitäten, welche die Möglichkeit zum Zugriff haben, zum Wechselzeitpunkt dokumentieren."
+    "de": "Berechtigung für IT-Systeme KANN ein ebenso vertrauenswürdiges, alternatives Verfahren zur Authentifizierung verankern."
    }
   }
  ],
@@ -22,9 +22,11 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "dokumentieren",
-     "result": "für Gruppenkonten die Identitäten, welche die Möglichkeit zum Zugriff haben,",
-     "result-specification": "zum Wechselzeitpunkt"
+     "action": "verankern",
+     "result": "ein ebenso vertrauenswürdiges, alternatives Verfahren zur Authentifizierung",
+     "target-object-categories": [
+      "IT-Systeme"
+     ]
     }
    }
   },
@@ -32,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Inventar Berechtigungen"
+      "Anwendungsdokumentation"
      ]
     }
    }
@@ -43,11 +45,10 @@
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "2",
+     "authenticity": "0",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
      ]
     }
    }
@@ -55,9 +56,12 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 3
+     "class": "BSI-Stand-der-Technik-Kernel",
+     "sec-level": "erhöht",
+     "effort": 5,
+     "tags": [
+      "Produktbeschreibung"
+     ]
     }
    }
   },
@@ -65,7 +69,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Es kann z.B. anhand von Dienst- oder Anwesenheitsplänen nachvollzogen werden, wer wann theoretisch Zugriff gehabt haben könnte. Werden keine Gruppenkonten verwendet, so ist die Anforderung entbehrlich."
+      "de": "Wenn Nutzende ein für die reguläre Authentisierung erforderliches Authentisierungsmittel verlieren oder nicht mehr verwenden können, kann eine alternative Möglichkeit zur Wiederherstellung des Zugangs relevant sein. Hierfür kommen sowohl bereits eingerichtete alternative Authentisierungsmittel als auch besondere Wiederherstellungsverfahren in Betracht. Ein vergleichbares Vertrauensniveau der alternativen Authentisierung oder Wiederherstellung trägt dazu bei, dass der Schutz der regulären Authentisierung nicht unangemessen herabgesetzt wird. Als alternative Authentisierungsmittel kommen beispielsweise ein zusätzlich registrierter kryptografischer Authenticator, eine Smartcard oder andere geeignete Authentisierungsverfahren in Betracht. Möglichkeiten zur Wiederherstellung sind beispielsweise sicher hinterlegte Recovery-Codes bzw. PUKs, die Verifikation über ein noch verfügbares Authentisierungsmittel oder eine bestehende vertrauenswürdige Sitzung sowie eine erneute Identitätsprüfung, etwa durch persönliche Vorstellung und Prüfung eines amtlichen Ausweisdokuments."
      }
     }
    }
@@ -74,7 +78,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "8a3e8298-6e99-4fe7-9924-72a910207f4f"
+   "value": "060c8ecc-d3c5-4777-954f-c4fa28708c66"
   }
  ]
 }

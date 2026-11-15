@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0810",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0810",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Classified systems are secured in facilities that meet the requirements for a security zone suitable for their classification."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

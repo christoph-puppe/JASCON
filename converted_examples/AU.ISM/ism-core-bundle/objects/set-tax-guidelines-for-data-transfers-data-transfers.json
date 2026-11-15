@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-data-transfers-data-transfers-data-tr-915f9a1",
-   "sequence": 16810
+   "sequence": 16980
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-data-transfers-data-transfers-user-re-b3587a3",
-   "sequence": 16830
+   "sequence": 17000
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-data-transfers-data-transfers-manual-6cf7d10",
-   "sequence": 16860
+   "sequence": 17030
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-data-transfers-data-transfers-authori-f43ea2c",
-   "sequence": 16900
+   "sequence": 17070
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-data-transfers-data-transfers-manual-b44d6ec",
-   "sequence": 16940
+   "sequence": 17110
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-data-transfers-data-transfers-monitor-df4b370",
-   "sequence": 16980
+   "sequence": 17150
   }
  ],
  "facets": {

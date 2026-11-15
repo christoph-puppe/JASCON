@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1634",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1634",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners, in consultation with each system’s authorising officer, select controls for each system and tailor them to achieve desired security and resilience objectives."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

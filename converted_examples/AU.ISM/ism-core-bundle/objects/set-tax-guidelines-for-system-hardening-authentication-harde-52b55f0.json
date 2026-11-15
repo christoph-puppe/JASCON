@@ -8,79 +8,79 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-1504",
-   "sequence": 9240
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1679",
-   "sequence": 9250
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1680",
-   "sequence": 9260
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1892",
-   "sequence": 9270
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1893",
-   "sequence": 9280
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1681",
-   "sequence": 9290
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1919",
-   "sequence": 9300
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1173",
-   "sequence": 9310
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-0974",
-   "sequence": 9320
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1505",
-   "sequence": 9330
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1401",
-   "sequence": 9340
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1872",
-   "sequence": 9350
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1873",
-   "sequence": 9360
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1874",
-   "sequence": 9370
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1682",
-   "sequence": 9380
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1894",
-   "sequence": 9390
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-2011",
-   "sequence": 9400
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1920",
    "sequence": 9410
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/req/ism-1683",
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1679",
    "sequence": 9420
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1680",
+   "sequence": 9430
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1892",
+   "sequence": 9440
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1893",
+   "sequence": 9450
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1681",
+   "sequence": 9460
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1919",
+   "sequence": 9470
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1173",
+   "sequence": 9480
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-0974",
+   "sequence": 9490
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1505",
+   "sequence": 9500
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1401",
+   "sequence": 9510
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1872",
+   "sequence": 9520
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1873",
+   "sequence": 9530
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1874",
+   "sequence": 9540
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1682",
+   "sequence": 9550
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1894",
+   "sequence": 9560
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-2011",
+   "sequence": 9570
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1920",
+   "sequence": 9580
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/req/ism-1683",
+   "sequence": 9590
   }
  ],
  "facets": {

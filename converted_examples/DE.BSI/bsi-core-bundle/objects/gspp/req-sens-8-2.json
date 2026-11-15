@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.8.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.8.2",
  "lifecycle": "active",
  "title": {
@@ -57,7 +57,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -67,7 +67,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Ein aufgeräumter Arbeitplatz („Clean Desk Policy“) kann dazu beitragen, Informationssicherheit und Datenschutz am Arbeitsplatz zu stärken, indem sie verhindert, dass vertrauliche Unterlagen, Datenträger oder elektronische Geräte unbefugt eingesehen oder entwendet werden. Durch konsequentes Aufräumen am Ende des Arbeitstages oder bei längeren Abwesenheiten kann das Risiko von Datenlecks, Industriespionage oder versehentlicher Offenlegung sensibler Informationen minimiert werden. Gleichzeitig kann eine aufgeräumte Arbeitsumgebung die Konzentration und Effizienz der Mitarbeitenden fördern, da unnötige Ablenkungen reduziert werden und das Wiederfinden wichtiger Unterlagen beschleunigt wird.  Hierzu gehören sowohl physische Unterlagen wie Akten, Notizzettel oder Ausdrucke mit personenbezogenen oder geschäftskritischen Daten, als auch elektronische Datenträger oder Bildschirminhalte."
+      "de": "Ein aufgeräumter Arbeitplatz („Clean Desk Policy“) kann dazu beitragen, Informationssicherheit und Datenschutz am Arbeitsplatz zu stärken, indem sie verhindert, dass vertrauliche Unterlagen, Datenträger oder elektronische Geräte unbefugt eingesehen oder entwendet werden. Durch konsequentes Aufräumen am Ende des Arbeitstages oder bei längeren Abwesenheiten kann das Risiko von Datenlecks, Industriespionage oder versehentlicher Offenlegung sensibler Informationen minimiert werden. Gleichzeitig kann eine aufgeräumte Arbeitsumgebung die Konzentration und Effizienz der Mitarbeitenden fördern, da unnötige Ablenkungen reduziert werden und das Wiederfinden wichtiger Unterlagen beschleunigt wird. Hierzu gehören sowohl physische Unterlagen wie Akten, Notizzettel oder Ausdrucke mit personenbezogenen oder geschäftskritischen Daten, als auch elektronische Datenträger oder Bildschirminhalte."
      }
     }
    }

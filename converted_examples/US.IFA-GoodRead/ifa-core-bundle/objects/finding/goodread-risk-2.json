@@ -24,8 +24,12 @@
   }
  ],
  "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "45d8a6c2-1368-4bad-9ba0-7141f0a32889"
+  },
   "https://ifa.gov/goodread/facet/finding-target@1": {
    "target-objective-id": "ac-6.1_obj",
+   "target-type": "objective-id",
    "implementation-statement-uuid": "d5f9b263-965d-440b-99e7-77f5df670a11",
    "description": {
     "en": "The assessor's security automation platform detected that the system engineer's role is permitted to perform the following actions in the SYSTEM1234 AwesomeCloud account.\n\n* Delete and reset account audit logs.\n* Add, change, or delete security monitoring configurations in the Awesome Security Monitor service used by the IFA Security Operations Center.\n\n\nThe system engineer is not permitted to modify these services and their role was incorrectly configured."
@@ -37,6 +41,7 @@
     "https://ifa.gov/goodread/evidence/obs-8807eb6e"
    ],
    "poam-item": {
+    "uuid": "48c8368d-43ff-4736-9b28-64b1b1284c03",
     "title": "SYSTEM1234 System Engineers Have Over-Privileged Access to Cloud Infrastructure Account",
     "description": {
      "en": "Budget and technical staff allocation are available and designated to fix a misconfiguration of the IAM roles for members of the SYSTEM1234 Product Team in their AwesomeCloud account to implement least privilege as designed."

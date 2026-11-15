@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2118",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2118",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Vulnerability assessments and penetration tests are conducted for systems prior to their deployment, including prior to the deployment of significant changes, and at least annually thereafter."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

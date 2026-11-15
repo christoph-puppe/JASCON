@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/KONF.11.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "KONF.11.3",
  "lifecycle": "active",
  "title": {
@@ -64,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3,
      "tags": [
@@ -79,7 +79,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Angreifer nutzen häufig DNS um das Netz zu erkunden (DNS-Reconnaissance). Veröffentlichen Sie Domain-Informationen nur, wenn diese zu einem Dienst gehören, der zur externen Nutzung gedacht ist. Nur intern benötigte DNS-Einträge dagegen bleiben intern.  Kriterien können z.B. Domains oder Subdomain sein (intern.domain.com vs www.domain.com)."
+      "de": "Angreifer nutzen häufig DNS um das Netz zu erkunden (DNS-Reconnaissance). Veröffentlichen Sie Domain-Informationen nur, wenn diese zu einem Dienst gehören, der zur externen Nutzung gedacht ist. Nur intern benötigte DNS-Einträge dagegen bleiben intern. Kriterien können z.B. Domains oder Subdomain sein (intern.domain.com vs www.domain.com)."
      }
     }
    }
@@ -87,7 +87,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "konf.11.3-prm1": {
-     "alt-identifier": "24d7bd4d-9ae9-4871-b6da-4c5186351b46"
+     "alt-identifier": "0d313e24-cc77-4656-a9d4-9423ebb48c3f"
     }
    }
   }

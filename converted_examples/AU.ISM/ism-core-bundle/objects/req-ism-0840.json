@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0840",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0840",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When outsourcing the destruction of media storing non-accountable material, a National Association for Information Destruction AAA certified destruction service with endorsements, as specified in ASIO’s Protective Security Circular-167, is used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-06"
   }
  ]
 }

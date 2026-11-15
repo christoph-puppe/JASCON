@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0271",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0271",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Protective marking tools do not automatically insert protective markings into emails."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-03"
   }
  ]
 }

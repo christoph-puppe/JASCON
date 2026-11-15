@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0459",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0459",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Full disk encryption, or partial encryption where access controls only allow writing to encrypted partitions or volumes, is implemented when encrypting media."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -42,11 +42,12 @@
       <div class="md" style="font-size:12.5px;color:var(--text-secondary);max-width:86ch;display:flex;flex-direction:column;gap:8px">
         <p data-i18n>A catalog. Each control becomes a Requirement, each group a Set, and the catalog itself the root Set. The text of the statement part becomes the clauses; an insert of a parameter becomes a {param:} token, and the parameter is declared on the clause that names it. A link to another control becomes a relation.</p>
         <p data-i18n>The generic rules make every nested control a Requirement of its own, with a relation to its parent. The modality is unspecified, because OSCAL has no field for the binding force. Props and parts the kernel has no field for are held verbatim in a facet under your namespace, with a pinned schema; nothing is dropped without a line in the report.</p>
-        <p data-i18n>The preset for the BSI Anwenderkatalog Grundschutz++ follows the converter of this repository: a nested control is a clause of its parent, the modal verb becomes the modality, the BSI props go to the standard facets, and the security level becomes baseline Sets. Its ids are minted under the namespace the converter uses.</p>
-        <p data-i18n>The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control is not converted and its successor names it; every statement item with prose is a clause with modality must; assessment objectives and methods, the administrative data of parameters and the guidance go to facets under the NIST namespace. The baselines are profiles and are imported as profiles.</p>
+        <p data-i18n>The preset for the BSI Anwenderkatalog Grundschutz++ follows the converter of this repository: every control, a nested one too, is a Requirement of its own with its own links, and a control with nested controls also gives a Set that groups it with them, because BSI nests controls for grouping only. The modal verb becomes the modality, the BSI props go to the standard facets, and the security level becomes baseline Sets. What the rules do not read is carried as the source holds it, in the compat facet. Its ids are minted under the namespace the converter uses.</p>
+        <p data-i18n>The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: every withdrawn control is a Requirement with lifecycle withdrawn, and a successor it names names it in replaces. Every statement item with prose is a clause with modality must; the assessment objectives, each with the statement it assesses, the methods, the administrative data of parameters with their formal labels, and the guidance go to facets under the NIST namespace; the back-matter resources and what the catalog says of itself stand on the root Set. The baselines are profiles and are imported as profiles.</p>
         <p data-i18n>The preset for a CIS Benchmark follows the converter of this repository: every rule is a Requirement with one clause, whose text is the rule's title because the export leaves the statement empty; the audit and remediation text and the marking automated or manual go to the facet assessment-criteria; the profiles become baseline Sets and the CIS Controls cross-references Mappings. The Checks tool drafts machine checks from the audit text.</p>
         <p data-i18n>A profile. The controls it includes become a Set, and a Tailoring selects that Set. Excluded controls become excludes. A set-parameter becomes an operation on every clause that declares the parameter, if the value lies in the declared space; a value outside it needs a Deviation and is listed, not written.</p>
-        <p data-i18n>Not carried, and counted in the report: alters, the merge directive, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it.</p>
+        <p data-i18n>Not carried, and counted in the report: alters, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it. What the profile says of itself and its merge directive stand on its Set, in the compat facet; where the set pins no schema for that facet, the import brings one.</p>
+        <p data-i18n>A profile's Tailoring names who wrote the profile and when, as the source states it: the party its metadata names as creator, as prepared-by or as author, else the one party that holds any role, else its one party, else its one organisation; and the day of its last change. The two fields above the import show both and can be typed over. Without an author or without a day nothing is written about who decided, and the import goes ahead. A CIS Benchmark's cross-references keep CIS as their author.</p>
         <p data-i18n>Imported content stays under its publisher's terms. State them in the field for the licence; they are written into the provenance of the bundle.</p>
       </div>
     </section>
@@ -71,6 +72,12 @@
    there. Writing the same import twice gives the same set: ids and paths
    follow from the source, not from the clock.
 
+   Who decided, and when (D26): an import pre-fills both from the source and
+   the user may type over either. The two fields show what jscOscalStated
+   reads from the document; a field the user leaves alone is not handed to
+   the import, so the report can say how many records got their author from
+   the source, from the user, or not at all.
+
    The rules are jascon-oscal.js; this page only collects the options and
    shows the report. */
 jscI18n.add("de", {
@@ -83,12 +90,15 @@ jscI18n.add("de", {
     "Ein Katalog. Jedes Control wird eine Anforderung, jede Gruppe ein Set und der Katalog selbst das Wurzel-Set. Der Text des Statement-Parts wird zu den Klauseln; ein Parameter-Insert wird ein {param:}-Token, und der Parameter wird an der Klausel deklariert, die ihn nennt. Ein Link auf ein anderes Control wird eine Relation.",
   "The generic rules make every nested control a Requirement of its own, with a relation to its parent. The modality is unspecified, because OSCAL has no field for the binding force. Props and parts the kernel has no field for are held verbatim in a facet under your namespace, with a pinned schema; nothing is dropped without a line in the report.":
     "Die generischen Regeln machen jedes geschachtelte Control zu einer eigenen Anforderung mit einer Relation zum Eltern-Control. Die Modalität ist unspecified, weil OSCAL kein Feld für die Bindungswirkung hat. Props und Parts, für die der Kernel kein Feld hat, werden wörtlich in einem Facet unter Ihrem Namensraum gehalten, mit gepinntem Schema; nichts entfällt ohne Zeile im Bericht.",
-  "The preset for the BSI Anwenderkatalog Grundschutz++ follows the converter of this repository: a nested control is a clause of its parent, the modal verb becomes the modality, the BSI props go to the standard facets, and the security level becomes baseline Sets. Its ids are minted under the namespace the converter uses.":
-    "Die Voreinstellung für den BSI-Anwenderkatalog Grundschutz++ folgt dem Konverter dieses Repositorys: Ein geschachteltes Control ist eine Klausel seines Eltern-Controls, das Modalverb wird die Modalität, die BSI-Props gehen in die Standard-Facets, und das Sicherheitsniveau wird zu Baseline-Sets. Die Ids entstehen unter dem Namensraum, den der Konverter verwendet.",
+  "The preset for the BSI Anwenderkatalog Grundschutz++ follows the converter of this repository: every control, a nested one too, is a Requirement of its own with its own links, and a control with nested controls also gives a Set that groups it with them, because BSI nests controls for grouping only. The modal verb becomes the modality, the BSI props go to the standard facets, and the security level becomes baseline Sets. What the rules do not read is carried as the source holds it, in the compat facet. Its ids are minted under the namespace the converter uses.":
+    "Die Voreinstellung für den BSI-Anwenderkatalog Grundschutz++ folgt dem Konverter dieses Repositorys: Jedes Control, auch ein geschachteltes, wird eine eigene Anforderung mit seinen eigenen Links, und ein Control mit geschachtelten Controls ergibt zusätzlich ein Set, das es mit ihnen gruppiert, denn das BSI schachtelt Controls nur zur Gruppierung. Das Modalverb wird die Modalität, die BSI-Props gehen in die Standard-Facets, und das Sicherheitsniveau wird zu Baseline-Sets. Was die Regeln nicht lesen, wird so mitgeführt, wie die Quelle es enthält, im Compat-Facet. Die Ids entstehen unter dem Namensraum, den der Konverter verwendet.",
+  "controls with nested controls, each also a Set that groups it with them": "Controls mit geschachtelten Controls, jedes zusätzlich ein Set, das es mit ihnen gruppiert",
+  "carried as the source holds it, in the compat facet (objects, by member)": "so mitgeführt, wie die Quelle es enthält, im Compat-Facet (Objekte, nach Element)",
   "A profile. The controls it includes become a Set, and a Tailoring selects that Set. Excluded controls become excludes. A set-parameter becomes an operation on every clause that declares the parameter, if the value lies in the declared space; a value outside it needs a Deviation and is listed, not written.":
     "Ein Profil. Die eingeschlossenen Controls werden ein Set, und ein Tailoring wählt dieses Set. Ausgeschlossene Controls werden Excludes. Ein set-parameter wird eine Operation auf jeder Klausel, die den Parameter deklariert, sofern der Wert im deklarierten Raum liegt; ein Wert außerhalb braucht eine Deviation und wird aufgelistet, nicht geschrieben.",
-  "Not carried, and counted in the report: alters, the merge directive, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it.":
-    "Nicht übernommen und im Bericht gezählt: alters, die merge-Direktive, Musterabgleich, das Einschließen von Kind-Controls. Ein alter ändert Text, und jemand muss entscheiden, ob das redaktionell oder inhaltlich ist; dafür das Tailoring-Werkzeug verwenden.",
+  "Not carried, and counted in the report: alters, pattern matching, the inclusion of child controls. An alter changes text, and somebody has to decide whether that is editorial or substantive; use the Tailor tool for it. What the profile says of itself and its merge directive stand on its Set, in the compat facet; where the set pins no schema for that facet, the import brings one.":
+    "Nicht übernommen und im Bericht gezählt: alters, Musterabgleich, das Einschließen von Kind-Controls. Ein alter ändert Text, und jemand muss entscheiden, ob das redaktionell oder inhaltlich ist; dafür das Tailoring-Werkzeug verwenden. Was das Profil über sich selbst sagt, und seine merge-Direktive stehen an seinem Set, im Compat-Facet; pinnt das Set kein Schema für dieses Facet, bringt der Import eines mit.",
+  "carried on the profile's Set, in the compat facet": "am Set des Profils mitgeführt, im Compat-Facet",
   "Imported content stays under its publisher's terms. State them in the field for the licence; they are written into the provenance of the bundle.":
     "Importierte Inhalte bleiben unter den Bedingungen ihres Herausgebers. Bitte im Feld für die Lizenz angeben; sie werden in die Herkunftsangabe des Bundles geschrieben.",
   "{name}: not JSON ({msg})": "{name}: kein JSON ({msg})", "{name}: an OSCAL {kind}. This page imports catalogs and profiles.": "{name}: ein OSCAL-{kind}. Diese Seite importiert Kataloge und Profile.",
@@ -96,13 +106,14 @@ jscI18n.add("de", {
   "Catalog": "Katalog", "Profile": "Profil", "title": "Titel", "version": "Version", "OSCAL version": "OSCAL-Version", "controls": "Controls", "groups": "Gruppen", "imports": "Importe",
   "Rules": "Regeln", "BSI Grundschutz++ (the repository's converter)": "BSI Grundschutz++ (der Konverter des Repositorys)",
   "NIST SP 800-53 Rev 5 (the repository's converter)": "NIST SP 800-53 Rev 5 (der Konverter des Repositorys)",
-  "withdrawn controls, not converted; the successor names them in replaces": "zurückgezogene Controls, nicht konvertiert; der Nachfolger nennt sie in replaces",
   "parameters no clause inserts (declared on the first clause)": "Parameter, die keine Klausel einsetzt (an der ersten Klausel deklariert)",
   "clauses that insert another control's parameter": "Klauseln, die den Parameter eines anderen Controls einsetzen",
-  "links to a withdrawn or missing control (dropped)": "Verweise auf ein zurückgezogenes oder fehlendes Control (entfallen)",
+  "links of a control that become no relation, by rel": "Links eines Controls, die keine Relation werden, nach rel",
+  "props the rules do not read (not carried), by name, class and namespace": "Props, die die Regeln nicht lesen (nicht übernommen), nach Name, Klasse und Namensraum",
+  "withdrawn controls that name no successor: Requirements with lifecycle withdrawn": "zurückgezogene Controls ohne Nachfolger: Anforderungen mit dem Lebenszyklus withdrawn",
   "withdrawn controls whose successor is withdrawn or missing": "zurückgezogene Controls, deren Nachfolger zurückgezogen ist oder fehlt",
-  "The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: a withdrawn control is not converted and its successor names it; every statement item with prose is a clause with modality must; assessment objectives and methods, the administrative data of parameters and the guidance go to facets under the NIST namespace. The baselines are profiles and are imported as profiles.":
-    "Das Preset für NIST SP 800-53 Rev 5 folgt dem Konverter dieses Repositorys: Ein zurückgezogenes Control wird nicht konvertiert, sein Nachfolger nennt es; jedes Statement-Element mit Text ist eine Klausel mit Modalität must; Prüfziele und -methoden, die Verwaltungsdaten der Parameter und die Guidance gehen in Facets unter dem NIST-Namensraum. Die Baselines sind Profile und werden als Profile importiert.", "generic": "generisch",
+  "The preset for NIST SP 800-53 Rev 5 follows the converter of this repository: every withdrawn control is a Requirement with lifecycle withdrawn, and a successor it names names it in replaces. Every statement item with prose is a clause with modality must; the assessment objectives, each with the statement it assesses, the methods, the administrative data of parameters with their formal labels, and the guidance go to facets under the NIST namespace; the back-matter resources and what the catalog says of itself stand on the root Set. The baselines are profiles and are imported as profiles.":
+    "Das Preset für NIST SP 800-53 Rev 5 folgt dem Konverter dieses Repositorys: Jedes zurückgezogene Control wird eine Anforderung mit dem Lebenszyklus withdrawn, und ein Nachfolger, den es nennt, nennt es in replaces. Jedes Statement-Element mit Text ist eine Klausel mit Modalität must; die Prüfziele, jedes mit dem Statement, das es prüft, die Prüfmethoden, die Verwaltungsdaten der Parameter mit ihren formalen Labels und die Guidance gehen in Facets unter dem NIST-Namensraum; die Back-Matter-Ressourcen und was der Katalog über sich selbst sagt, stehen am Wurzel-Set. Die Baselines sind Profile und werden als Profile importiert.", "generic": "generisch",
   "Namespace for the ids": "Namensraum für die Ids",
   "The preset for a CIS Benchmark follows the converter of this repository: every rule is a Requirement with one clause, whose text is the rule's title because the export leaves the statement empty; the audit and remediation text and the marking automated or manual go to the facet assessment-criteria; the profiles become baseline Sets and the CIS Controls cross-references Mappings. The Checks tool drafts machine checks from the audit text.":
     "Das Preset für einen CIS Benchmark folgt dem Konverter dieses Repositorys: Jede Regel wird eine Anforderung mit einer Klausel, deren Text der Titel der Regel ist, weil der Export das Statement leer lässt; Audit- und Remediation-Text und die Kennzeichnung automated oder manual gehen in das Facet assessment-criteria; die Profile werden Baseline-Sets und die Querverweise auf die CIS Controls Mappings. Das Werkzeug Prüfungen entwirft aus dem Audit-Text maschinelle Prüfungen.",
@@ -140,12 +151,49 @@ jscI18n.add("de", {
   "wrote {n} object(s) and {s} pinned schema(s) to set \"{set}\"; it is now the active set": "{n} Objekt(e) und {s} gepinnte(s) Schema(s) in Set „{set}“ geschrieben; es ist jetzt das aktive Set",
   "import failed: {msg}": "Import fehlgeschlagen: {msg}", "and {n} more": "und {n} weitere", "A namespace is an http(s) URI.": "Ein Namensraum ist eine http(s)-URI.",
   "{n} of {total} objects are not valid; nothing was written.": "{n} von {total} Objekten sind nicht gültig; nichts wurde geschrieben.",
+  "Author (party URI)": "Autor (Party-URI)", "Day": "Tag", "Who decided, and when": "Wer entschieden hat, und wann",
+  "Who the statements bind (party)": "Wen die Statements binden (Partei)", "needed: an http(s) URI": "nötig: eine http(s)-URI",
+  "Use the preset's default": "Standard der Voreinstellung verwenden", "Whom the statements bind": "Wen die Statements binden",
+  "This is the preset's default and not a value of the source: {party}. A catalog seldom says whom it binds, so the preset names one party for it, as its converter does. Type another party, an http(s) URI, to put it in its place.":
+    "Das ist der Standard der Voreinstellung und kein Wert der Quelle: {party}. Ein Katalog sagt selten, wen er bindet; deshalb nennt die Voreinstellung dafür eine Partei, wie ihr Konverter. Eine andere Partei, eine http(s)-URI, eintippen, um sie an seine Stelle zu setzen.",
+  "Entered here, in the place of the preset's default {party}. The import report and the manifest of the set say that it was entered.":
+    "Hier eingetragen, an Stelle des Standards der Voreinstellung {party}. Der Importbericht und das Manifest des Sets sagen, dass sie eingetragen wurde.",
+  "Where a control states an implementation level, the source names the party itself and that one is written, whatever stands here.":
+    "Wo ein Control einen Implementation Level nennt, nennt die Quelle die Partei selbst, und diese wird geschrieben, was auch immer hier steht.",
+  "No party is named that the statements bind. The kernel requires obligated-parties on every statement, so the import did not run. The field “Who the statements bind” is empty. Name a party, an http(s) URI, or use the preset's default, {party}.":
+    "Es ist keine Partei genannt, die die Statements binden. Der Kernel verlangt obligated-parties an jedem Statement; deshalb lief der Import nicht. Das Feld „Wen die Statements binden“ ist leer. Eine Partei nennen, eine http(s)-URI, oder den Standard der Voreinstellung verwenden, {party}.",
+  "“{typed}” is not an http(s) URI of a party, so the import did not run. A preset writes under its publisher's namespace and does not make a party from a short name. Name a party by its URI, or use the preset's default, {party}.":
+    "„{typed}“ ist keine http(s)-URI einer Partei; deshalb lief der Import nicht. Eine Voreinstellung schreibt unter dem Namensraum ihres Herausgebers und macht aus einem Kurznamen keine Partei. Eine Partei mit ihrer URI nennen oder den Standard der Voreinstellung verwenden, {party}.",
+  "the preset's default, not a value of the source": "der Standard der Voreinstellung, kein Wert der Quelle",
+  "entered here, in the place of the preset's default {party}": "hier eingetragen, an Stelle des Standards der Voreinstellung {party}",
+  "entered here; these rules have no default": "hier eingetragen; diese Regeln haben keinen Standard",
+  "{n} control(s) state no implementation level and bind this party; the others bind the level they state": "{n} Control(s) nennen keinen Implementation Level und binden diese Partei; die anderen binden den Level, den sie nennen",
+  "the statements bind {party}, entered here": "die Statements binden {party}, hier eingetragen",
+  "the statements bind {party}, the preset's default and not a value of the source": "die Statements binden {party}, den Standard der Voreinstellung und keinen Wert der Quelle", "needed: a URI, or a short name": "nötig: eine URI oder ein Kurzname",
+  "The kernel requires on every statement who it binds, and OSCAL has no field for it. A short name becomes a party under the namespace above. Without a party the import does not run. The presets for a publisher's catalog have a default of their own, which you may replace.":
+    "Der Kernel verlangt an jedem Statement, wen es bindet, und OSCAL hat dafür kein Feld. Ein Kurzname wird zu einer Partei unter dem Namensraum oben. Ohne Partei läuft der Import nicht. Die Voreinstellungen für den Katalog eines Herausgebers haben einen eigenen Standard, den Sie ersetzen können.",
+  "No party is named that the statements bind. The kernel requires obligated-parties on every statement and OSCAL has no field for it, so the import did not run. Name a party in the field “Who the statements bind”: a URI, or a short name, which becomes a party under the namespace of the import.":
+    "Es ist keine Partei genannt, die die Statements binden. Der Kernel verlangt obligated-parties an jedem Statement, und OSCAL hat dafür kein Feld; deshalb lief der Import nicht. Im Feld „Wen die Statements binden“ eine Partei nennen: eine URI oder einen Kurznamen, der zu einer Partei unter dem Namensraum des Imports wird.",
+  "From the source: the cross-references are CIS's own, dated with the day the catalog was last changed. Type over either field to overwrite it. A Mapping cannot be written without both.":
+    "Aus der Quelle: Die Querverweise stammen von CIS selbst, datiert mit dem Tag der letzten Änderung des Katalogs. Jedes der beiden Felder lässt sich überschreiben. Ohne beide kann ein Mapping nicht geschrieben werden.",
+  "From the source: {party} is the author by the roles and parties of the document's metadata; the day is that of its last change. Type over either field to overwrite it. With one of them empty the Tailoring names no author.":
+    "Aus der Quelle: {party} ist nach den Rollen und Parteien der Metadaten des Dokuments der Autor; der Tag ist der seiner letzten Änderung. Jedes der beiden Felder lässt sich überschreiben. Ist eines leer, nennt das Tailoring keinen Autor.",
+  "The source does not say who wrote it: its metadata names no single party as creator, prepared-by or author, in any role, or as its one party or one organisation. Enter an author, or the Tailoring names none and is written all the same.":
+    "Die Quelle sagt nicht, wer sie geschrieben hat: Ihre Metadaten nennen keine einzelne Partei als creator, prepared-by oder author, in irgendeiner Rolle, oder als einzige Partei oder einzige Organisation. Einen Autor eintragen, sonst nennt das Tailoring keinen und wird trotzdem geschrieben.",
+  "of {n} record(s) that can name an author: {s} as the source states it, {c} as entered here, {x} not stated":
+    "von {n} Eintrag/Einträgen, die einen Autor nennen können: {s} wie die Quelle es nennt, {c} wie hier eingetragen, {x} nicht genannt",
+  "A profile's Tailoring names who wrote the profile and when, as the source states it: the party its metadata names as creator, as prepared-by or as author, else the one party that holds any role, else its one party, else its one organisation; and the day of its last change. The two fields above the import show both and can be typed over. Without an author or without a day nothing is written about who decided, and the import goes ahead. A CIS Benchmark's cross-references keep CIS as their author.":
+    "Das Tailoring eines Profils nennt, wer das Profil geschrieben hat und wann, so wie die Quelle es sagt: die Partei, die seine Metadaten als creator, als prepared-by oder als author nennen, sonst die eine Partei, die irgendeine Rolle hält, sonst seine eine Partei, sonst seine eine Organisation; und den Tag seiner letzten Änderung. Die beiden Felder über dem Import zeigen beides und lassen sich überschreiben. Ohne Autor oder ohne Tag wird nichts darüber geschrieben, wer entschieden hat, und der Import läuft trotzdem. Die Querverweise eines CIS Benchmarks behalten CIS als Autor.",
 });
 
 const $ = id => document.getElementById(id);
 const V = jscView, esc = jscEsc;
 let G = jscSet.graph, doc = null, kind = null, fileName = "", result = null, opts = {};
 const KIND_LABEL = { catalog: N("Catalog"), profile: N("Profile") };
+const PARTY_ENTERED = N("the statements bind {party}, entered here"), PARTY_DEFAULT = N("the statements bind {party}, the preset's default and not a value of the source");
+const NO_PRESET_PARTY = N("No party is named that the statements bind. The kernel requires obligated-parties on every statement, so the import did not run. The field “Who the statements bind” is empty. Name a party, an http(s) URI, or use the preset's default, {party}.");
+const BAD_PRESET_PARTY = N("“{typed}” is not an http(s) URI of a party, so the import did not run. A preset writes under its publisher's namespace and does not make a party from a short name. Name a party by its URI, or use the preset's default, {party}.");
+const NO_OBLIGATED = N("No party is named that the statements bind. The kernel requires obligated-parties on every statement and OSCAL has no field for it, so the import did not run. Name a party in the field “Who the statements bind”: a URI, or a short name, which becomes a party under the namespace of the import.");
 const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
 const chip = (n, label) => `<span class="chip"><b>${esc(n)}</b>${esc(T(label))}</span>`;
 const capped = (list, n = 12) => list.slice(0, n).map(x => V.badge(typeof x === "string" ? x : JSON.stringify(x))).join(" ") + (list.length > n ? ` <span class="hint">${esc(T("and {n} more", { n: list.length - n }))}</span>` : "");
@@ -165,10 +213,11 @@ async function read(file) {
   doc = parsed; kind = k;
   const meta = doc[k].metadata || {}, slug = jscOscalSlug(meta.title || file.name.replace(/\.json$/i, ""));
   opts = k === "catalog"
-    ? { preset: jscOscalGuessPreset(doc), ns: jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + slug, lang: jscI18n.contentLang(), key: slug.slice(0, 24), licence: "", set: slug.slice(0, 40),
+    ? { preset: jscOscalGuessPreset(doc), ns: jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + slug, lang: jscI18n.contentLang(), key: slug.slice(0, 24), party: "", licence: "", set: slug.slice(0, 40),
         checks: false, runtime: "bash" }
     : { ns: jscCfg.get("org:ns").replace(/\/+$/, ""), lang: jscI18n.contentLang(), catalogSet: "" };
   if (opts.preset === "cis-benchmark") opts.ns = jscCisNamespace(doc.catalog);
+  if (k === "catalog" && opts.preset !== "generic") delete opts.party;   // a preset starts from its default; only the generic rules start empty
   render();
 }
 /* rules a CIS export marks automated: the ones a check can be drafted for */
@@ -190,6 +239,14 @@ function invalid(objects) {
     .map(x => `${x.o.obj.id}: ${(jscShapeErrors(x.o.obj.statements ? "requirement" : x.o.obj.selects ? "tailoring" : "requirementSet", x.o.obj)[0] || "matches no shape")}`);
 }
 const FIXED = { "bsi-gspp": JSC_BSI, "nist-sp800-53": JSC_NIST };
+/* Who chose the party the statements bind (backlog #74): the report says it in words, beside the party. */
+function partyRow(rec, r) {
+  if (!rec) return "";
+  const who = rec.origin !== "caller" ? T("the preset's default, not a value of the source")
+    : rec["converter-default"] ? T("entered here, in the place of the preset's default {party}", { party: rec["converter-default"] }) : T("entered here; these rules have no default");
+  const source = rec["source-states"] ? " · " + T("{n} control(s) state no implementation level and bind this party; the others bind the level they state", { n: r["controls-without-a-stated-party"] }) : "";
+  return `<span class="mono" data-party-value>${esc(rec.value)}</span> <span class="hint" data-party-origin="${esc(rec.origin)}">${esc(who + source)}</span>`;
+}
 function reportHtml() {
   if (!result) return "";
   const r = result.report, objs = result.objects, bad = result.invalid;
@@ -198,19 +255,23 @@ function reportHtml() {
   const maps = objs.filter(o => o.obj["source-ref"]).length;
   const body = kind === "catalog"
     ? `<div>${chip(n("requirement"), "requirements")}${chip(n("set"), "sets")}${maps ? chip(maps, "mappings") : ""}${chip(r.statements, "clauses")}${chip(result.facetSchemas.length, "pinned facet schemas")}</div><div class="kv">
+        ${row("Whom the statements bind", partyRow(r["obligated-party"], r))}
         ${row("rules by their marking (automated rules can get a check)", r.methods && Object.keys(r.methods).length ? counts(r.methods) : "")}
         ${row("CIS Controls cross-references, as Mappings (supports, draft)", r.mappings && (r.mappings.v7 + r.mappings.v8) ? counts({ v8: r.mappings.v8, v7: r.mappings.v7 }) : "")}
         ${row("profiles, as baseline Sets", r.profiles && Object.keys(r.profiles).length ? counts(r.profiles) : "")}
         ${row("clause prose minted from the rule title (the statement of the source is empty)", r["minted-prose"] ? String(r["minted-prose"]) : "")}
         ${row("links that resolve to nothing", r["unresolved-links"] ? String(r["unresolved-links"]) : "")}
         ${row("controls without statement prose (carried with their title)", (r["controls-without-prose"] || []).length ? capped(r["controls-without-prose"]) : "")}
+        ${row("controls with nested controls, each also a Set that groups it with them", r["controls-with-nested-controls"] ? String(r["controls-with-nested-controls"]) : "")}
+        ${row("carried as the source holds it, in the compat facet (objects, by member)", Object.keys(r["carried-as-the-source-holds-it"] || {}).length ? counts(r["carried-as-the-source-holds-it"]) : "")}
         ${row("lists packed into one comma-separated value (split, reported)", (r["packed-list-values"] || []).length ? `<b>${r["packed-list-values"].length}</b> ` + capped(r["packed-list-values"].map(d => `${d.control} ${d.prop}`), 6) : "")}
         ${row("parameter slots not where the prose inserts a parameter", (r["parameter-slots-not-at-insert"] || []).length ? capped(r["parameter-slots-not-at-insert"].map(d => `${d.control} ${d.prop}`), 6) : "")}
         ${row("parameters no clause names", r["parameters-unreferenced"] ? String(r["parameters-unreferenced"]) : "")}
-        ${row("withdrawn controls, not converted; the successor names them in replaces", r["withdrawn-not-converted"] ? String(r["withdrawn-not-converted"]) : "")}
+        ${row("withdrawn controls that name no successor: Requirements with lifecycle withdrawn", (r["withdrawn-without-successor"] || []).length ? capped(r["withdrawn-without-successor"]) : "")}
         ${row("parameters no clause inserts (declared on the first clause)", r["parameters-without-insertion"] ? String(r["parameters-without-insertion"]) : "")}
         ${row("clauses that insert another control's parameter", (r["parameters-from-another-control"] || []).length ? capped(r["parameters-from-another-control"].map(x => x.join(" ← "))) : "")}
-        ${row("links to a withdrawn or missing control (dropped)", r["related-to-withdrawn-or-missing"] ? String(r["related-to-withdrawn-or-missing"]) : "")}
+        ${row("links of a control that become no relation, by rel", Object.keys(r["links-not-written"] || {}).length ? counts(r["links-not-written"]) : "")}
+        ${row("props the rules do not read (not carried), by name, class and namespace", Object.keys(r["props-not-read"] || {}).length ? counts(r["props-not-read"]) : "")}
         ${row("withdrawn controls whose successor is withdrawn or missing", [...(r["withdrawn-into-withdrawn"] || []), ...(r["withdrawn-target-missing"] || [])].length ? capped([...r["withdrawn-into-withdrawn"], ...r["withdrawn-target-missing"]].map(x => x.join(" → "))) : "")}
         ${row("links without a target", r["links-without-target"] ? String(r["links-without-target"]) : "")}
         ${row("Props held in the facet", Object.keys(r["props-held"] || {}).length ? counts(r["props-held"]) : "")}
@@ -222,8 +283,13 @@ function reportHtml() {
         ${row("Controls that match more than one requirement", r.ambiguous.length ? capped(r.ambiguous) : "")}
         ${row("Parameters not found", r["parameters-not-found"].length ? capped(r["parameters-not-found"]) : "")}
         ${row("Values outside the declared space (need a Deviation; not written)", r["parameters-outside-declared-space"].length ? capped(r["parameters-outside-declared-space"].map(x => `${x.parameter} = ${JSON.stringify(x.value)}`)) : "")}
+        ${row("carried on the profile's Set, in the compat facet", (r["held-in-compat"] || []).length ? capped(r["held-in-compat"]) : "")}
         ${row("Not carried", Object.keys(r["not-carried"]).length ? counts(r["not-carried"]) : "")}</div>`;
-  return `<div class="nano sectionlabel">${esc(T("Report"))}</div>${body}
+  /* who decided and when, on the records of this import that can carry it: where it came from */
+  const who = r.provenance.records, carrying = who["from-source"] + who["from-caller"] + who.none;
+  const whoRow = carrying ? `<div class="kv" id="report-provenance">${row("Who decided, and when", esc(T("of {n} record(s) that can name an author: {s} as the source states it, {c} as entered here, {x} not stated",
+    { n: carrying, s: who["from-source"], c: who["from-caller"], x: who.none })))}</div>` : "";
+  return `<div class="nano sectionlabel">${esc(T("Report"))}</div>${body}${whoRow}
     ${bad.length ? `<div class="nano sectionlabel verdict-bad">${esc(T("Objects that are not valid kernel objects"))} (${bad.length})</div>${bad.slice(0, 8).map(m => `<div class="verdict-bad">✗ ${esc(m)}</div>`).join("")}` : ""}
     <div class="wbrow" style="margin-top:10px"><button type="button" class="primary" id="write" ${objs.length && !bad.length ? "" : "disabled"}>${esc(T("Write to the set"))}</button><span class="verdict-bad" id="write-err" role="alert"></span></div>`;
 }
@@ -236,12 +302,24 @@ function render() {
     const c = countControls(doc.catalog), fixed = FIXED[opts.preset];   // a preset of the repository mints under its publisher's namespace
     head = kv("title", meta.title || "") + kv("version", meta.version || "") + kv("OSCAL version", meta["oscal-version"] || "") + kv("controls", String(c.controls)) + kv("groups", String(c.groups));
     const cis = opts.preset === "cis-benchmark", auto = cis ? countAutomated(doc.catalog) : 0;
+    /* Whom the statements bind where the source does not say (backlog #74). A preset has a default, shown before
+       anything is imported and named as the preset's own; `opts.party` undefined means it was left alone. The generic
+       rules have none: there the field starts empty and the import is refused without a party (#70). */
+    const presetParty = jscOscalPartyDefault(doc, opts);
     form = `<label for="o-preset">${esc(T("Rules"))}</label><div><select id="o-preset">${opt("generic", T("generic"), opts.preset)}${opt("bsi-gspp", T("BSI Grundschutz++ (the repository's converter)"), opts.preset)}${opt("nist-sp800-53", T("NIST SP 800-53 Rev 5 (the repository's converter)"), opts.preset)}${opt("cis-benchmark", T("CIS Benchmark (the repository's converter)"), opts.preset)}</select>
         ${fixed ? `<div class="hint">${esc(T("The preset mints ids under {ns} and reads the text as {lang}.", { ns: fixed.ns, lang: fixed.lang }))}</div>` : ""}</div>
       ${fixed ? "" : `<label for="o-ns">${esc(T("Namespace for the ids"))}</label><div><input type="url" id="o-ns" value="${esc(opts.ns)}">
           <div class="hint">${esc(cis ? T("The repository's converter mints this namespace for the CIS Ubuntu 24.04 Benchmark and derives it from the title for any other, pending a namespace CIS publishes.") : T("Use the publisher's namespace if it has one. Ids under your own domain make you the claimed authority of this catalog: a Tailoring of yours may then weaken it without a Deviation."))}</div></div>
         ${cis ? "" : `<label for="o-lang">${esc(T("Language of the text"))}</label><div><input type="text" id="o-lang" value="${esc(opts.lang)}" style="max-width:90px"></div>
-        <label for="o-key">${esc(T("Short name (used in file paths)"))}</label><div><input type="text" id="o-key" value="${esc(opts.key)}" style="max-width:260px"></div>`}`}
+        <label for="o-key">${esc(T("Short name (used in file paths)"))}</label><div><input type="text" id="o-key" value="${esc(opts.key)}" style="max-width:260px"></div>
+        <label for="o-party">${esc(T("Who the statements bind (party)"))}</label><div><input type="text" id="o-party" aria-required="true" value="${esc(jscPartyRef(opts.party, opts.ns))}" placeholder="${esc(T("needed: a URI, or a short name"))}">
+          <div class="hint">${esc(T("The kernel requires on every statement who it binds, and OSCAL has no field for it. A short name becomes a party under the namespace above. Without a party the import does not run. The presets for a publisher's catalog have a default of their own, which you may replace."))}</div></div>`}`}
+      ${presetParty ? `<label for="o-party">${esc(T("Who the statements bind (party)"))}</label><div><input type="text" id="o-party" aria-required="true" data-party="${opts.party === undefined ? "default" : "entered"}" value="${esc(opts.party === undefined ? presetParty.default : opts.party)}" placeholder="${esc(T("needed: an http(s) URI"))}">
+          ${opts.party === undefined ? "" : `<button type="button" class="small" id="o-party-default">${esc(T("Use the preset's default"))}</button>`}
+          <div class="hint" id="o-party-hint">${esc(opts.party === undefined
+            ? T("This is the preset's default and not a value of the source: {party}. A catalog seldom says whom it binds, so the preset names one party for it, as its converter does. Type another party, an http(s) URI, to put it in its place.", { party: presetParty.default })
+            : T("Entered here, in the place of the preset's default {party}. The import report and the manifest of the set say that it was entered.", { party: presetParty.default }))}
+            ${presetParty["source-states"] ? esc(T("Where a control states an implementation level, the source names the party itself and that one is written, whatever stands here.")) : ""}</div></div>` : ""}
       ${cis ? `<label for="o-checks">${esc(T("Checks"))}</label><div><label><input type="checkbox" id="o-checks" ${opts.checks ? "checked" : ""}> ${esc(T("Afterwards, draft checks for the {n} automated rules with a model, in the Checks tool", { n: auto }))}</label>
           <select id="o-runtime" aria-label="${esc(T("Language of the collector code"))}">${JSC_CHECKS.RUNTIMES.map(x => opt(x, x, opts.runtime)).join("")}</select>
           <div class="hint">${esc(T("Nothing is sent now. After the write the Checks tool opens with these rules, shows what would be sent, and asks for a key and a click. Without this, every check can still be written by hand or drafted one by one there."))}</div></div>` : ""}
@@ -255,20 +333,40 @@ function render() {
       <label for="o-lang">${esc(T("Language of the text"))}</label><div><input type="text" id="o-lang" value="${esc(opts.lang)}" style="max-width:90px"></div>
       <label for="o-catset">${esc(T("The catalogue Set an include-all stands for"))}</label><div><select id="o-catset">${opt("", T("(none)"), opts.catalogSet)}${roots.map(r => opt(r.obj.id, V.titleOf(r), opts.catalogSet)).join("")}</select></div>`;
   }
+  /* Who decided, and when: what the source states, in two fields that can be typed over. Shown where the
+     import makes a record that can carry it (the Tailoring of a profile, the Mappings of a CIS Benchmark). */
+  const stated = jscOscalStated(doc, opts), shown = (given, from) => (given !== undefined ? given : from || "");
+  if (stated.applies) {
+    const hint = kind === "catalog" ? T("From the source: the cross-references are CIS's own, dated with the day the catalog was last changed. Type over either field to overwrite it. A Mapping cannot be written without both.")
+      : stated["author-ref"] ? T("From the source: {party} is the author by the roles and parties of the document's metadata; the day is that of its last change. Type over either field to overwrite it. With one of them empty the Tailoring names no author.", { party: stated.party })
+      : T("The source does not say who wrote it: its metadata names no single party as creator, prepared-by or author, in any role, or as its one party or one organisation. Enter an author, or the Tailoring names none and is written all the same.");
+    form += `<label for="o-author">${esc(T("Author (party URI)"))}</label><div><input type="url" id="o-author" value="${esc(shown(opts.authorRef, stated["author-ref"]))}"><div class="hint">${esc(hint)}</div></div>
+      <label for="o-date">${esc(T("Day"))}</label><div><input type="date" id="o-date" value="${esc(shown(opts.date, stated.date))}" style="max-width:190px"></div>`;
+  }
   el.innerHTML = `<div class="nano sectionlabel" style="margin-top:0">${esc(T(KIND_LABEL[kind]))} · <span class="mono">${esc(fileName)}</span></div>
     <div class="kv" style="margin-bottom:12px">${head}</div>
     <div class="form">${form}<div class="wide wbrow"><button type="button" class="primary" id="run">${esc(T("Run the import"))}</button><span class="verdict-bad" id="run-err" role="alert"></span></div></div>
     ${reportHtml()}`;
-  for (const [id, key] of [["o-preset", "preset"], ["o-ns", "ns"], ["o-lang", "lang"], ["o-key", "key"], ["o-licence", "licence"], ["o-set", "set"], ["o-catset", "catalogSet"], ["o-runtime", "runtime"]]) {
+  for (const [id, key] of [["o-preset", "preset"], ["o-ns", "ns"], ["o-lang", "lang"], ["o-key", "key"], ["o-party", "party"], ["o-licence", "licence"], ["o-set", "set"], ["o-catset", "catalogSet"], ["o-runtime", "runtime"]]) {
     const n = $(id);
     if (n) n.addEventListener("change", () => {
       const before = opts.preset;
       opts[key] = n.value.trim(); result = null;
+      /* the party of one set of rules is not the party of another: the generic rules start empty, a preset from its default */
+      if (key === "preset") { if (opts.preset === "generic") opts.party = ""; else delete opts.party; }
+      /* a preset's field left as the default is not given; one that was changed is, also when it is now empty */
+      if (key === "party" && opts.preset !== "generic" && (jscOscalPartyDefault(doc, opts) || {}).default === opts.party) delete opts.party;
       /* the CIS preset mints under the benchmark's namespace; leaving it gives the namespace of the other rules back */
       if (key === "preset" && opts.preset === "cis-benchmark") opts.ns = jscCisNamespace(doc.catalog);
       else if (key === "preset" && before === "cis-benchmark") opts.ns = jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + jscOscalSlug(doc.catalog.metadata.title || "catalog");
-      render();
+      jscRedraw(render);   // not under a press: a click on "Run the import" right after typing waits for the new form (backlog #71)
     });
+  }
+  if ($("o-party-default")) $("o-party-default").addEventListener("click", () => { delete opts.party; result = null; render(); });
+  /* a field left as the source states it is not given; one that was changed is, also when it is now empty */
+  for (const [id, key, from] of [["o-author", "authorRef", stated["author-ref"]], ["o-date", "date", stated.date]]) {
+    const n = $(id);
+    if (n) n.addEventListener("change", () => { const v = n.value.trim(); if (v === (from || "")) delete opts[key]; else opts[key] = v; result = null; jscRedraw(render); });
   }
   if ($("o-checks")) $("o-checks").addEventListener("change", e => { opts.checks = e.target.checked; });
   $("run").addEventListener("click", run);
@@ -277,9 +375,19 @@ function render() {
 function run() {
   const needsNs = kind === "profile" || !FIXED[opts.preset];
   if (needsNs && !/^https?:\/\/./.test(opts.ns)) { $("run-err").textContent = T("A namespace is an http(s) URI."); return; }
+  /* The generic rules write who the statements bind, which the kernel requires and OSCAL does not state: refused while
+     nobody is named (backlog #70). The rules refuse too (jscImportGeneric); the page says it in the user's language first. */
+  if (kind === "catalog" && opts.preset === "generic" && !jscPartyRef(opts.party, opts.ns)) { $("run-err").textContent = T(NO_OBLIGATED); return; }
+  /* A preset's party (backlog #74): the default unless the field was changed. Emptied, or changed to something that
+     is no http(s) URI, the import does not run; the default does not come back by itself. The rules refuse too. */
+  const presetParty = kind === "catalog" ? jscOscalPartyDefault(doc, opts) : null;
+  if (presetParty && opts.party !== undefined) {
+    if (!opts.party.trim()) { $("run-err").textContent = T(NO_PRESET_PARTY, { party: presetParty.default }); return; }
+    if (!/^https?:\/\/[^\s]+$/.test(opts.party.trim())) { $("run-err").textContent = T(BAD_PRESET_PARTY, { typed: opts.party.trim(), party: presetParty.default }); return; }
+  }
   try {
     result = kind === "catalog" ? jscOscalImportCatalog(doc, opts)
-      : { ...jscOscalImportProfile(doc, { ...opts, catalogSet: opts.catalogSet || null, objs: G.objects }), facetSchemas: [] };
+      : jscOscalImportProfile(doc, { ...opts, catalogSet: opts.catalogSet || null, objs: G.objects, facetSchemas: G.facetSchemas.map(x => x.def) });
     result.invalid = invalid(result.objects);
   } catch (e) { result = null; jscLog.err(T("import failed: {msg}", { msg: e.message })); }
   render();
@@ -287,17 +395,27 @@ function run() {
 async function write() {
   if (!result.objects.length) { $("write-err").textContent = T("The import produced nothing to write."); return; }
   if (result.invalid.length) { $("write-err").textContent = T("{n} of {total} objects are not valid; nothing was written.", { n: result.invalid.length, total: result.objects.length }); return; }
-  if (kind === "profile") { await jscSet.saveObjects(result.objects.map(o => o.obj)); result = null; await jscPage.refresh(); return; }
+  /* a profile joins the active set; where its Set carries the compat facet and the set pins no schema for it, the
+     schema comes first, so that the Set never stands in the set without it */
+  if (kind === "profile") {
+    if (result.facetSchemas.length) await jscSet.saveFacetSchemas(result.facetSchemas);
+    await jscSet.saveObjects(result.objects.map(o => o.obj)); result = null; await jscPage.refresh(); return;
+  }
   /* a catalog is a bundle of its own: its files, and a manifest whose provenance names the source */
   const set = (opts.set || "catalog").slice(0, 60), held = (await jscStore.files(set)).length;
   if (held && !confirm(T("Set \"{set}\" holds {n} file(s). Replace them with this catalog?", { set, n: held }))) return;
   const files = [...result.objects.map(o => ({ path: o.path, text: jscSerialize(o.obj) })), ...result.facetSchemas.map(f => ({ path: f.path, text: jscSerialize(f.def) }))];
-  const provenance = { ...result.provenance, "source-file": fileName, ...(opts.licence ? { "source-licence": opts.licence } : {}) };
+  /* The manifest of the new set keeps who named the party where somebody did. With a preset's default left alone it
+     says nothing about it, as before this build, and the objects are byte for byte what they were (backlog #74). */
+  const party = result.report["obligated-party"], named = party && party.origin === "caller" ? { "obligated-party": party } : {};
+  const provenance = { ...result.provenance, "source-file": fileName, ...(opts.licence ? { "source-licence": opts.licence } : {}), ...named };
   const built = await jscBuildBundle(jscGraphFrom(jscClassifyFiles(files).records), provenance);
   built.problems.forEach(m => jscLog.warn(m));
   await jscSet.importFiles(set, built.files, { replace: true });
   jscStore.setActiveSet(set);
   jscLog.ok(T("wrote {n} object(s) and {s} pinned schema(s) to set \"{set}\"; it is now the active set", { n: result.objects.length, s: result.facetSchemas.length, set }));
+  const partyLine = party && party.origin === "caller" ? PARTY_ENTERED : PARTY_DEFAULT;
+  if (party) jscLog.info(T(partyLine, { party: party.value }));
   const handOver = opts.preset === "cis-benchmark" && opts.checks;
   if (handOver) localStorage.setItem(JSC_CHECKS.QUEUE, JSON.stringify({ set, runtime: opts.runtime, source: fileName, only: "automated", at: new Date().toISOString() }));
   result = null; doc = null;

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1970",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1970",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Malicious code processing for cyber security incident response or research purposes is conducted in a dedicated analysis environment segregated from other systems."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -5,8 +5,9 @@
 field by field — with the evidence column that makes this appendix
 different from a schema dump: which measured corpus reality each field
 answers to. Counts cite the three-authority census and the gate-item-1
-converter runs (ISM 36,161 · BSI 49,804 · CR26 7,294 leaf values, all
-at 100 % declared coverage).
+converter runs (ISM 36,161 · BSI 49,804 · CR26 7,532 leaf values, CR26
+in publication 2026.11.02.01 of 2026-11-02, all at 100 % declared
+coverage).
 **Convention:** ● required · ○ optional. Field names are normative;
 prose here is explanatory, the conformance corpus is definitive.
 
@@ -17,14 +18,15 @@ prose here is explanatory, the conformance corpus is definitive.
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
 | `id` | ● | URI string | Globally unique, authority-minted, never resolved by tools (string comparison only, D2). Evidence: the twin-catalog collision — 11 shared id strings across two BSI publications, only 1 prose-identical. |
-| `version` | ● | string | Object-level version; format is the authority's (dates, semver, timestamps all observed). Absorbs `revision`/`updated` props (ISM ×2,202; CR26 `updated[]` ×377+). |
+| `version` | ● | string | The object's own version; format is the authority's (dates, semver, timestamps, counters all observed). Where a source states a version for the single object, that is it (the ISM's `revision`, ×1,101); where it states none, the object carries the release it was published in (decided 2026-11-14, D27; until then a converted bundle carried the release on every object). |
+| `history` | ○ | [{date ●, comment, ref}] | *(2026-11-14, D27; 2.0.0 content, KERNEL-1.)* The publisher's record of the object's changes, one entry per change, **oldest first** (HISTORY-1). `date` is a day `YYYY-MM-DD` or a month `YYYY-MM` (DATE-6); `comment` is a text; `ref` is a URI. Part of the semantic digest. A validator holds shape and order; it cannot know whether an entry is true. Evidence: ISM `updated` ×1,101 (a month each), CR26 `updated[]` on 291 rules and indicators, 390 entries. |
 | `label` | ○ | string | Human display handle. Evidence: ISM `label` ×49 + 1,101 id-derived; BSI group labels ×162; CR26 rule ids as labels. |
 | `aliases` | ○ | [{scheme, value}] | Other names, with provenance. Absorbs `alt-identifier` (BSI ×1,219 incl. params), FRD `alts` (×188, in-payload). |
-| `lifecycle` | ● | code (A → C.2) | draft · active · deprecated · withdrawn. |
+| `lifecycle` | ● | code (A → C.2) | draft · active · deprecated · withdrawn. An object in force does not lean on one the bundle holds as withdrawn (WITHDRAWN-1, Chapter 12). |
 | `title` | ○ | text | Display title — `text` = `{BCP-47: string}` (#12 delivered; D9 rev 2: EU standards must be available in all 27 official languages). All kernel human-readable fields (title, rationale, description) are `text`; identifiers and labels stay strings. |
 | `relations` | ○ | [{type, ref}] | Typed outbound links: base codes `related`, `required`, `uses-term`, `reference`, `schema` (C.8; `supersedes` removed v0.6 — backlog #20); extension types SHOULD be namespaced URIs (schema constraint pending the converter rerun that migrates the corpus's bare-word `sharpens` ×28). Evidence: BSI links ×197+67; CR26 `related` ×23, `schema` ×24, `terms` ×222. |
 | `facets` | ○ | {facet-uri@major: payload} | Registered extensions; schema-pinned via manifest; semantics per declaration (D10). |
-| `annotations` | ○ | {string: any} | Chrome. Compliance-invisible, digest-excluded, strippable. Evidence: `web_name`, `do_not_link` (CR26). |
+| `annotations` | ○ | {string: any} | Chrome. Compliance-invisible, digest-excluded, strippable. Evidence: `web_name` (CR26). |
 
 **Canonical-alias & replaces** (identity events, on the *new* object):
 `canonical-alias` ○ {of: URI} — same content, new home (rebrand/domain
@@ -38,13 +40,14 @@ registry-rot corpse; ISM's own OCR→ISM renumbering history.
 
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
-| `statements` | ● | [Statement] | The clause layer. Evidence: 347 BSI nested pseudo-controls (nesting measured to depth 3–4) → 1,015 statements in the converted bundle. |
+| `statements` | ● | [Statement] | The clause layer. Evidence: SP 800-53, where 284 of 1,196 Requirements carry more than one statement (2,100 statements in the bundle) and implementations and 3,707 assessment objectives address them one at a time. (Until 2026-11-14 the evidence named here was Grundschutz++'s nested controls; they are Requirements of their own.) |
 
 **Statement:**
 
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
 | `id` | ● | string | Unique within the Requirement; stable and citable (tailoring ops, findings, mapping scopes, statement-refs all address it). Converters mint `smt` for the own-clause, child-control ids for flattened clauses. |
+| `label` | ○ | string | *(2026-11-14, D27; 2.0.0 content, KERNEL-1.)* What is printed beside the statement (`a.`, `1.`, `(a)`). No rule computes on it; it is there so that a tool can show what the publication prints without a rule its converter knew. Evidence: SP 800-53 ×1,122. |
 | `modality` | ● | code (C.1 lattice) | unspecified · may · should · must · should-not · must-not · may-only. Evidence: BSI `modal_verb` ×1,006 (should 626 / may 225 / must 155); CR26 `force` 246 layered; ISM structurally modal-free → honest `unspecified` ×1,149. |
 | `obligated-parties` | ● | [code/ref] | Who the clause binds. Evidence: CR26 `affects[]` (Providers 159 / Agencies 24 / Assessors 23 / FedRAMP 16 / Advisors 3); BSI/ISM: documented single-party defaults. |
 | `parameters` | ○ | [Parameter] | Declared insertion points; prose references them as `{param:name}` — an unbound token is a validation error (`prose-params-resolve`). |
@@ -90,9 +93,13 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 | `excludes` | ○ | [{ref, rationale?}] | **Selection, never Deviation** (D13) — scoping out is not weakening. `ref` names a Requirement **or a RequirementSet, whose members it excludes**; any other type is an error. |
 | `operations` | ○ | [Operation] | Ordered; identity-addressed; same-target twice = error; chaining only via explicit `override`. |
 | `deviations` | ○ | [Deviation] | Ex-ante channel — a weakening op **must** reference one. Evidence: CR26's 111 class-variant modality ops needed **zero** (every published delta tightens — measured, not assumed). |
+| `provenance` | ○ | {author-ref ●, date ●} | *(2.0.0-rc.4, D26.)* Who wrote this version and when. Each select, each exclude and each operation MAY carry its own; **an entry without one has the Tailoring's.** AUTHOR-1 reports a Tailoring at consumer tier that leaves an entry without an author; an authority's Tailoring is not asked. Evidence: none counted; entered on the author's decision. |
 
 **Operations (D13, closed set of 8):** each op carries
-`requirement-ref` ● + `statement-id` ● where it touches a statement.
+`requirement-ref` ● + `statement-id` ● where it touches a statement:
+`set-modality`, `set-parameter` and `replace-prose` do, and a
+`set-parameter` names a parameter that statement declares. The schema
+does not ask for it; OPERATION-1 does, since 2026-11-15 (Chapter 12).
 
 | op | payload | law |
 |---|---|---|
@@ -115,7 +122,7 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 | `direction` | ● | code | source-to-target · bidirectional. |
 | `confidence` | ● | code (C.7) | draft · reviewed · authoritative. |
 | `rationale` | ○ | string | Why the relationship holds. |
-| `provenance` | ● | {author-ref ●, date ●} | **Whose claim this is** — the third-party-crosswalk ownership answer. Evidence: 373 Mapping objects minted from CR26 KSI links at honest `supports`/`draft` (8.6 untyped-import rule). Contradictory mappings coexist by design. |
+| `provenance` | ● | {author-ref ●, date ●} | `date` is `YYYY-MM-DD` since 2.0.0-rc.4 (**DATE-3**); until then any string. **Whose claim this is** — the third-party-crosswalk ownership answer. Evidence: 652 Mapping objects minted from CR26 control links (558 of KSIs, 94 of rules; publication 2026.11.02.01 of 2026-11-02) at honest `supports`/`draft` (8.6 untyped-import rule). Contradictory mappings coexist by design. |
 
 ---
 
@@ -127,7 +134,7 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 | `members` | ○ | [{component-ref ●, context ○}] | Composition. |
 | `product-version` | ○ | string | *(2.0.0, CP-ADVICE-1.)* The version of the product this Component describes: one opaque string, never parsed, ordered or compared. `version` counts the revisions of the object, this field names the product's. A Component that carries it needs kernel 2.0.0 (KERNEL-1). Evidence: none counted; entered on the author's decision (specification D22). |
 | `capabilities` | ○ | [{id ●, requirement-ref ○, statement-ids ○, description ○, parameter-bindings ○}] | What the vendor claims — comp-def's replacement (the PR-#8 duplication axis, deleted). Ids are unique within the Component (ADVICE-4). `requirement-ref` names the requirement a capability is about and **resolves if present**: the component asserts support, no system binds it, and a vendor ships without the catalog. In the bundle it is a Requirement, and `statement-ids` *(2.0.0, CP-ADVICE-1, proposed)* name its clauses (ADVICE-5); `statement-ids` without `requirement-ref` is refused. `parameter-bindings` are the values the vendor suggests: each names a parameter declared once on the covered clauses and lies in its declared space (ADVICE-6). Evidence: one component definition in the corpus (IFA, 3 capabilities); the worked advice pack. |
-| `authorizations` | ○ | [{id ●, authority-ref ●, scope-label ○, includes ○[]}] | **Identified** trust contexts; `includes` scopes; absence is silence, and silence is silence (Ch. 9). |
+| `authorizations` | ○ | [{id ●, authority-ref ●, date ○, scope-label ○, includes ○[]}] | **Identified** trust contexts; `includes` scopes; absence is silence, and silence is silence (Ch. 9). `date` *(2.0.0-rc.4, D26)* is the day the authorization was given; AUTHOR-4 reports one without it. |
 
 ## A.6 Implementation
 
@@ -140,13 +147,16 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 | `parameter-bindings` | ○ | {param: value} | Bound within declared bounds. |
 | `status` | ● | code | planned · partial · implemented · not-applicable. |
 | `evidence-refs` | ○ | [ref] | Pointers, not blobs. |
+| `provenance` | ○ | {author-ref ●, date ●} | *(2.0.0-rc.4, D26.)* Who stated this status and when; `not-applicable` is a decision like any other. AUTHOR-2 reports an Implementation without it. |
 
 ## A.7 Assessment · A.8 Finding
 
 **Assessment:** `subject-refs` ● [URI] · `method` ● {facet payload —
 assessment-criteria absorbs ISM/BSI documentation duties ×966 and the
 CR26 artifacts/key-tests/examples shape} · `performer-ref` ● ·
-`time` ● · `result` ● code · `evidence-refs` ○ ·
+`time` ● (a date or an RFC 3339 date-time with an offset since
+2.0.0-rc.4, **DATE-4**; until then any string) · `result` ● code ·
+`evidence-refs` ○ ·
 `check-results` ○ [row] *(2.0.0)* — one row per check run: `check-ref` ●,
 `check-digest` ● (the Check's semantic digest), `collector-id` ○,
 `outcome` ● (C.14), `time` ● (RFC 3339), `parameters` ○ (the values the
@@ -173,6 +183,9 @@ duration `{type, num, unit}` plus `calendar-ref` for a calendar period.
 2.0.0 bundle ·
 `deviations` ○ [Deviation] — the ex-post channel; the four historical
 FedRAMP deviation props are its `type` values ·
+`provenance` ○ {author-ref ●, date ●} *(2.0.0-rc.4, D26)* — who wrote
+this version and when: who raised it, and in a later version who closed
+it. AUTHOR-2 reports a Finding without it ·
 `check-ref` ○ URI *(2.0.0)* — the Check that raised the finding; typed
 if in the bundle, and held to the same requirement and a covered clause
 (CHECK-14).
@@ -184,7 +197,7 @@ if in the bundle, and held to the same requirement and a covered clause
 | `subject-semantic-digests` | ● | [digest] | *Meaning* bound (JCS minus annotations). |
 | `content-manifest-digest` | ● | digest | *Package state* bound — enables bi-modal verification (Full vs Semantic Match). |
 | `rendering` | ● | {artifact-digest ●, media-type ●, template-ref{id,version,digest} ●, renderer ●} | *Paper* bound; templates are pinned TCB citizens; chrome-only annotation use is the renderer's law. |
-| `signer` ● · `timestamp` ● · `envelope-ref` ● | | | DSSE profile (stdlib); attestations live **beside** the manifest — nothing signed contains its own signature (D3). |
+| `signer` ● · `timestamp` ● · `envelope-ref` ● | | | `timestamp` is a date or an RFC 3339 date-time with an offset since 2.0.0-rc.4 (**DATE-5**). DSSE profile (stdlib); attestations live **beside** the manifest — nothing signed contains its own signature (D3). |
 
 ## A.9b Risk *(kernel 2.0.0 — CP-RISK-1)*
 
@@ -197,17 +210,18 @@ Common fields (A.0) plus:
 |---|---|---|---|
 | `scenario` | ● | text | The risk statement — event and consequence (ISO 27005 event-based; BSI 200-3 Gefährdung am Zielobjekt). Multilingual like every normative text. |
 | `owner-ref` | ● | URI | The risk owner (ISO 6.1.2 c 2). Landmark ref — a party, not a bundle object. |
+| `provenance` | ○ | {author-ref ●, date ●} | *(2.0.0-rc.4, D26.)* Who wrote this version and when; the owner answers for the risk, which is another question. A change is a new version, and who changed it is that version's `provenance`: there is no log inside the object. `rating` and `residual-rating` MAY carry their own; one without has the Risk's. AUTHOR-2 reports a Risk without it. |
 | `state` | ● | code (C.3c) | identified · assessed · treated · retired. |
 | `threat-refs` | ○ | [URI] | Threat catalog entries (G 0.x, ATT&CK techniques, 800-30 threat events). Landmark. |
 | `component-refs` | ○ | [URI] | The assets at risk — Components of this bundle. Closure-required (RISK-7) and typed: each names a Component (RISK-12). |
 | `tailoring-refs` | ○ | [URI] | The Statement(s) of Applicability this risk's treatment belongs to — Tailorings of this bundle. Closure-required (RISK-7), typed (RISK-12). Present: the Risk justifies, and is held to RISK-11, only there. Absent: it applies to every Tailoring of the bundle (noted where there is more than one — RISK-14). |
-| `rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○, override-rationale ○} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). `likelihood` and `impact` are each `{level ●, scale-ref ●}` — the two inputs ISO/IEC 27001 6.1.2 d, BSI 200-3 and SP 800-30 name; opaque like the level. The kernel defines no way of combining them; where the level scale's pinned definition carries a matrix, the level is the matrix cell or the rating carries `override-rationale` (text) saying why not (SCALE-4). One impact; impact per dimension is the facet's. |
-| `residual-rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○, override-rationale ○} | The level after treatment, with its own likelihood and impact. Presupposes `rating`, on the **same** `scale-ref`; a likelihood or impact carried on both sides names the same scale as its counterpart (RISK-13). |
+| `rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○, override-rationale ○, provenance ○} | Inherent/current level on a named scale. **Required** once `state` ∈ assessed · treated (RISK-2). `likelihood` and `impact` are each `{level ●, scale-ref ●}` — the two inputs ISO/IEC 27001 6.1.2 d, BSI 200-3 and SP 800-30 name; opaque like the level. The kernel defines no way of combining them; where the level scale's pinned definition carries a matrix, the level is the matrix cell or the rating carries `override-rationale` (text) saying why not (SCALE-4). One impact; impact per dimension is the facet's. |
+| `residual-rating` | ○ | {level ●, scale-ref ●, likelihood ○, impact ○, override-rationale ○, provenance ○} | The level after treatment, with its own likelihood and impact. Presupposes `rating`, on the **same** `scale-ref`; a likelihood or impact carried on both sides names the same scale as its counterpart (RISK-13). |
 | `treatment` | ○ | code (C.10) | modify · retain · avoid · share. **Required** once treated (RISK-3). |
 | `treatments` | ○ | [{requirement-ref ●, statement-ids ○}] | **The ISO 6.1.3 b edge**: the controls determined for this risk, to the clause. requirement-ref closure-required (RISK-7) and typed — it names a Requirement, never a Set (RISK-12); statement-ids must address the target (RISK-8). **Required** for `modify` (RISK-4). |
 | `shared-with-ref` | ○ | URI | Who carries the shared risk. **Required** for `share` (RISK-5). |
 | `acceptance` | ○ | {approver-ref ●, date ●, rationale ●} | The owner's acceptance of the residual (ISO 6.1.3 f). `date` is an ISO 8601 calendar date (`YYYY-MM-DD`), schema-checked. **Required** for `retain` (RISK-6) and once treated (RISK-3). |
-| `review-due` | ○ | date \| datetime \| elapsed-duration \| calendar-period | ISO 8.2 "at planned intervals". A point in time is `{type: date \| datetime, value}` — `date` is `YYYY-MM-DD`, `datetime` is RFC 3339 with an explicit offset, both schema-checked; durations as in `Finding.actions[].due` with `num` a positive integer, fail-closed without the named calendar. `datetime` is measured, not designed: OSCAL's `deadline` is date-time-with-timezone and both corpus deadlines are (IFA ×2). |
+| `review-due` | ○ | date \| datetime \| elapsed-duration \| calendar-period | ISO 8.2 "at planned intervals". A point in time is `{type: date \| datetime, value}` — `date` is `YYYY-MM-DD`, `datetime` is RFC 3339 with an explicit offset, both schema-checked; durations as in `Finding.actions[].due` with `num` a positive integer, fail-closed without the named calendar. `datetime` is measured, not designed: OSCAL's `deadline` is date-time-with-timezone and both corpus deadlines are (IFA ×2). *(2.0.0-rc.4.)* **REVIEW-1** reports a Risk still managed whose `review-due` has passed, against the date of the run; a duration counts from `acceptance.date`, and a calendar period is not evaluated without its calendar. Nothing fails by it. |
 
 **Shape-disjointness:** `scenario` + `owner-ref` occur in no other type.
 **Closure:** `treatments[].requirement-ref`, `component-refs` and
@@ -256,10 +270,22 @@ the example bundle, `check-vectors.json` (203).
 `type` ● ∈ false-positive · operational-requirement · risk-adjustment ·
 vendor-dependency · derogation · `state` ● (C.3b: investigating →
 pending → approved | withdrawn) · `rationale` ● · `approver-ref` ● ·
-`opened` ● date · `refs` ○. One channel, three moments (Tailoring ·
-Implementation · Finding); Excel dies of enumerated states. `opened` is
-`YYYY-MM-DD` since 2.0.0 (**DATE-1**); 1.0.0 accepted any string. The
-five values in the shipped bundles and the example folder conform.
+`opened` ● date · `decided` ○ date · `review-due` ○ · `refs` ○. One
+channel, three moments (Tailoring · Implementation · Finding); Excel
+dies of enumerated states. `opened` is `YYYY-MM-DD` since 2.0.0
+(**DATE-1**); 1.0.0 accepted any string. The five values in the shipped
+bundles and the example folder conform.
+
+*(2.0.0-rc.4, D26.)* `decided` is the day the Deviation was approved or
+withdrawn; `opened` stays the day it was asked for. AUTHOR-3 reports an
+approved or withdrawn Deviation without it. `review-due` is typed as on
+a Risk (a date, a date-time, an elapsed duration, or a calendar period
+with its calendar). **REVIEW-1** reports an approved Deviation whose
+`review-due` has passed, against the date of the run; a duration counts
+from `decided`, else `opened`. The report fails nothing, and the
+Deviation keeps licensing its weakening until someone acts. Before
+rc.4 an exception approved once stayed approved with no date ahead of
+it.
 
 ## A.11 Bundle artifacts
 
@@ -268,12 +294,17 @@ five values in the shipped bundles and the example folder conform.
 content was written against; absent means 1.0.0; **required** once the
 bundle carries content a 1.0.0 tool cannot type — a Risk, a Finding with
 `risk-refs`, a Check, an Assessment with `check-results` or
-`tailoring-ref`, a Finding with `check-ref` — KERNEL-1; a tool that does not implement the pinned kernel
+`tailoring-ref`, a Finding with `check-ref`, and since 2026-11-14 an
+object with `history` or a statement with `label` — KERNEL-1; a tool that does not implement the pinned kernel
 stops and names both versions — KERNEL-2) · `objects[]`
 {id, version, **package-digest**, **semantic-digest**, path} ● ·
 `facet-schemas[]` {id, **exact-version**, digest, path} ● (exact pins,
 never ranges — D3) · `scales[]` ○ {id, **exact-version**, digest, path}
-(2.0.0 — pinned scale definitions, below) · `renderings[]` ○ · provenance ○ ·
+(2.0.0 — pinned scale definitions, below) · `renderings[]` ○ · provenance ○
+(open; *2026-11-14, D27:* `sources[]` ○ is typed, one entry per source
+document: `title`, `version`, `uuid`, `author-ref`, `date` (a day),
+`format`, `format-version`, each optional, and an entry may hold more.
+Evidence: six converters' manifests, five shapes until that day) ·
 `pack` ○ (2.0.0, CP-ADVICE-1 — the pack header, below). The manifest is
 the sealed resolver: every reference lands here or validation fails
 with a rationale.
@@ -346,7 +377,8 @@ Honesty ledger for this appendix: **exercised at scale** — statements
 measured), obligated-parties, choice/string/calendar-period/
 elapsed-duration parameters, aliases, sequence, nested Sets &
 sets-of-sets, relations, facets & annotations, both digests,
-set-modality/set-parameter ops, Mapping at scale (×373), authorizations
+set-modality/set-parameter ops, Mapping at scale (×652, CR26
+publication 2026.11.02.01 of 2026-11-02), authorizations
 + basis-ref (example bundle). **Declared, not yet corpus-exercised** —
 predicate selects, excludes, set-field/replace-prose/relation/facet
 ops, uri/date/integer/decimal parameters, canonical-alias/replaces

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1109",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1109",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Wall outlet box covers are clear plastic."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-12"
   }
  ]
 }

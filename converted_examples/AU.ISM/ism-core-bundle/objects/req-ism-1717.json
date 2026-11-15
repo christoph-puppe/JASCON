@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1717",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1717",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A ‘security.txt’ file is hosted for each of an organisation’s internet-facing website domains to assist in the responsible disclosure of vulnerabilities in the organisation’s products and services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

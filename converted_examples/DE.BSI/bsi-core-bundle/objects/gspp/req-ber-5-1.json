@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.1",
  "lifecycle": "active",
  "title": {
-  "de": "Passwortmanager"
+  "de": "Ausgabe, Registrierung und Zuordnung"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für Nutzende SOLLTE einen Passwortmanager installieren."
+    "de": "Berechtigung SOLLTE eine Vorgehensweise zur initialen Ausgabe oder Registrierung von Authentifizierungsmitteln und ihrer Zuordnung zu den vorgesehenen Zugangskonten oder Berechtigungsumfängen verankern."
    }
   }
  ],
@@ -22,11 +22,8 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "installieren",
-     "result": "einen Passwortmanager",
-     "target-object-categories": [
-      "Nutzende"
-     ]
+     "action": "verankern",
+     "result": "eine Vorgehensweise zur initialen Ausgabe oder Registrierung von Authentifizierungsmitteln und ihrer Zuordnung zu den vorgesehenen Zugangskonten oder Berechtigungsumfängen"
     }
    }
   },
@@ -42,14 +39,12 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
+     "availability": "0",
+     "authenticity": "2",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.42"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
      ]
     }
    }
@@ -57,12 +52,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
-     "tags": [
-      "Password Policy"
-     ]
+     "effort": 2
     }
    }
   },
@@ -70,7 +62,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Der Einsatz eines Passwortmanagers, der von der Institution den Nutzenden zur Verfügung gestellt wird, erleichtert die Generierung von sicheren Passwörtern und deren sicherer Verwahrung, indem eine verschlüsselte Datenbank genutzt wird und der Zugang zu dem Passwortmanager mit einem Masterpasswort oder Multi-Faktor Authentisierung geschützt ist."
+      "de": "Die initiale Ausgabe von Authentifizierungsmitteln ist die erstmalige, kontrollierte Bereitstellung von Mitteln, mit denen eine natürliche Person oder ein technischer Dienst seine Identität nachweisen kann; hierzu zählen beispielsweise Passwörter oder Einmalpasswörter, Hardware- oder Software-Token, Smartcards, Zertifikate, kryptografische Schlüssel, Passkeys, initiale MFA-Faktoren sowie Aktivierungs- oder Registrierungsinformationen (engl. authentication credentials, authentication factors, authenticators). Die Vorgehensweise zur initialen Ausgabe umfasst dabei insbesondere die nachvollziehbare Feststellung der berechtigten empfangenden Person oder Instanz, die Zuordnung zum vorgesehenen Zugangskonto oder Berechtigungsumfang, einen geschützten Übergabeweg, die Vermeidung unkontrollierter Mehrfachausgaben sowie eine dokumentierbare Bestätigung, dass das Authentifizierungsmittel nur der vorgesehenen empfangenden Stelle zugänglich gemacht wurde. Sinn und Zweck der Vorschrift ist, bereits beim ersten Zugang zu verhindern, dass Authentifizierungsmittel an falsche, nicht hinreichend identifizierte oder nicht mehr berechtigte Empfänger gelangen; andernfalls könnte ein Konto von Beginn an kompromittiert, ein Initialpasswort abgefangen, ein Token an eine falsche Person ausgegeben oder ein Zertifikat missbräuchlich zur Anmeldung verwendet werden."
      }
     }
    }
@@ -79,7 +71,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "c1cfa733-340c-497d-a3b6-8480d78e1278"
+   "value": "42e113c2-4f86-4e82-9785-67ac6eb9d43b"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.6"
   }
  ]
 }

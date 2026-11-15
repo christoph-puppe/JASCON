@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sr-7_obj",
      "label": "SR-07",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sr-07_odp} are employed to protect supply chain-related information for the system, system component, or system service."
      }
@@ -132,7 +137,8 @@
      "alt-identifiers": [
       "sr-7_prm_1"
      ],
-     "alt-label": "Operations Security (OPSEC) controls"
+     "alt-label": "Operations Security (OPSEC) controls",
+     "sp800-53a-label": "SR-07_ODP"
     }
    }
   },
@@ -171,15 +177,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.9",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.9",
-    "mode": "renamed",
-    "label": "SA-12(09)",
-    "title": "Operations Security"
-   }
-  ]
- }
+ ]
 }

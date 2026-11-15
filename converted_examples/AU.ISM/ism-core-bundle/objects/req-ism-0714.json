@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0714",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0714",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A CISO is appointed to provide cyber security leadership and guidance for their organisation (covering IT and OT)."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

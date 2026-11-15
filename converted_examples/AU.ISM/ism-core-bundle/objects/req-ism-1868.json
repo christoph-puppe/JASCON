@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1868",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1868",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "SECRET and TOP SECRET mobile devices do not use removable media unless approved beforehand by ASD."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

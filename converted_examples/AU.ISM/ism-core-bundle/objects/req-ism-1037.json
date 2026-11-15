@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1037",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-1037",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Gateways undergo testing following configuration changes, and at regular intervals no more than six months apart, to validate that they conform to expected security configurations."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-telephone-syst-bc0c704",
-   "sequence": 4350
+   "sequence": 4520
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-telephone-syst-df60b2e",
-   "sequence": 4390
+   "sequence": 4560
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-telephone-syst-68ebe79",
-   "sequence": 4410
+   "sequence": 4580
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-telephone-syst-1836d04",
-   "sequence": 4430
+   "sequence": 4600
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-telephone-syst-965a73b",
-   "sequence": 4450
+   "sequence": 4620
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-communications-systems-telephone-syst-c8d99cf",
-   "sequence": 4480
+   "sequence": 4650
   }
  ],
  "facets": {

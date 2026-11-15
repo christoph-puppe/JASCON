@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2039",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2039",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The software threat model is reviewed throughout the software development life cycle to ensure it reflects the as-built software and any changes to the threat environment."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

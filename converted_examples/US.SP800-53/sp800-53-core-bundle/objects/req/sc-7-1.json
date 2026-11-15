@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SC-7.1",
+ "version": "5.2.0",
+ "label": "SC-7(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Physically Separated Subnetworks"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SC-7."
+   }
+  }
+ ]
+}

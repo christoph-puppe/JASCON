@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-mobile-device-man-8c2d2fe",
-   "sequence": 5070
+   "sequence": 5240
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-mobile-device-man-e5a9272",
-   "sequence": 5100
+   "sequence": 5270
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-mobile-device-man-f0c4923",
-   "sequence": 5130
+   "sequence": 5300
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-mobile-device-man-7c2f093",
-   "sequence": 5160
+   "sequence": 5330
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-mobile-device-man-f92a775",
-   "sequence": 5260
+   "sequence": 5430
   }
  ],
  "facets": {

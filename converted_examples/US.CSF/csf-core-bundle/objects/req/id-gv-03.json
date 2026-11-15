@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/ID.GV-03",
+ "version": "2.0",
+ "label": "ID.GV-03",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "ID.GV-03"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Legal and regulatory requirements regarding cybersecurity, including privacy and civil liberties obligations, are understood and managed"
+   }
+  }
+ ]
+}

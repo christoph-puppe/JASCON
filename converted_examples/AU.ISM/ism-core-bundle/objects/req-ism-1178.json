@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1178",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1178",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Network documentation provided to a third party, or published in public tender documentation, only contains details necessary for other parties to undertake contractual services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1869",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1869",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A non-networked IT equipment register is developed, implemented, maintained and regularly verified."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

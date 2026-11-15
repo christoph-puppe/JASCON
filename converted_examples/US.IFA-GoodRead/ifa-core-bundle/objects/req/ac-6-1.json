@@ -41,6 +41,7 @@
   },
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -58,6 +59,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -82,19 +84,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-6.1_obj",
      "label": "AC-06(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "ac-6.1_obj.a",
        "label": "AC-06(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ac-6.1_obj.a-1",
          "label": "AC-06(01)(a)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "access is authorized for {param:ac-06.01_odp.01} to {param:ac-06.01_odp.02};"
          }
@@ -102,6 +119,11 @@
         {
          "id": "ac-6.1_obj.a-2",
          "label": "AC-06(01)(a)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "access is authorized for {param:ac-06.01_odp.01} to {param:ac-06.01_odp.03};"
          }
@@ -109,6 +131,11 @@
         {
          "id": "ac-6.1_obj.a-3",
          "label": "AC-06(01)(a)[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "access is authorized for {param:ac-06.01_odp.01} to {param:ac-06.01_odp.04};"
          }
@@ -118,6 +145,11 @@
       {
        "id": "ac-6.1_obj.b",
        "label": "AC-06(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "access is authorized for {param:ac-06.01_odp.01} to {param:ac-06.01_odp.05}."
        }
@@ -197,28 +229,32 @@
      "alt-identifiers": [
       "ac-6.1_prm_1"
      ],
-     "alt-label": "individuals or roles"
+     "alt-label": "individuals or roles",
+     "sp800-53a-label": "AC-06(01)_ODP[01]"
     },
     "ac-06.01_odp.02": {
      "guidelines": [
       {
        "en": "security functions (deployed in hardware) for authorized access are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-06(01)_ODP[02]"
     },
     "ac-06.01_odp.03": {
      "guidelines": [
       {
        "en": "security functions (deployed in software) for authorized access are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-06(01)_ODP[03]"
     },
     "ac-06.01_odp.04": {
      "guidelines": [
       {
        "en": "security functions (deployed in firmware) for authorized access are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AC-06(01)_ODP[04]"
     },
     "ac-06.01_odp.05": {
      "guidelines": [
@@ -228,7 +264,8 @@
      ],
      "alt-identifiers": [
       "ac-6.1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AC-06(01)_ODP[05]"
     }
    }
   }

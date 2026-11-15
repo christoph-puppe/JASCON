@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-17.9_obj",
      "label": "AC-17(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the capability to disconnect or disable remote access to the system within {param:ac-17.09_odp} is provided."
      }
@@ -107,7 +112,8 @@
      ],
      "alt-identifiers": [
       "ac-17.9_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-17(09)_ODP"
     }
    }
   }

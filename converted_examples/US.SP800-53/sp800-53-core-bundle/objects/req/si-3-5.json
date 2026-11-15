@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SI-3.5",
+ "version": "5.2.0",
+ "label": "SI-3(5)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Portable Storage Devices"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into MP-7."
+   }
+  }
+ ]
+}

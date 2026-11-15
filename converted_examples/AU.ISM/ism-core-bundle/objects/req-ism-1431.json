@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1431",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1431",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Denial-of-service attack mitigation strategies are discussed with cloud service providers, specifically:\n\n- their capacity to withstand denial-of-service attacks\n- costs likely to be incurred as a result of denial-of-service attacks\n- availability monitoring and thresholds for notification of denial-of-service attacks\n- thresholds for turning off any online services or functionality during denial-of-service attacks\n- pre-approved actions that can be undertaken during denial-of-service attacks\n- any arrangements with upstream service providers to block malicious network traffic as far upstream as possible."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

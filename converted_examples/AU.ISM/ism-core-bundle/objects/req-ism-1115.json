@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1115",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1115",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cables from cable trays to wall outlet boxes are run in flexible or plastic conduit."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-12"
   }
  ]
 }

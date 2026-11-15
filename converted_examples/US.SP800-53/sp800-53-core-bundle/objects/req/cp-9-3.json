@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cp-9.3_obj",
      "label": "CP-09(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "backup copies of {param:cp-09.03_odp} are stored in a separate facility or in a fire rated container that is not collocated with the operational system."
      }
@@ -101,7 +106,8 @@
      ],
      "alt-identifiers": [
       "cp-9.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-09(03)_ODP"
     }
    }
   }

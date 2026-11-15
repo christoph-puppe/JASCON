@@ -32,80 +32,108 @@
    "sequence": 60
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.6",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.1",
    "sequence": 70
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.7",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.2",
    "sequence": 80
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-5",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.3",
    "sequence": 90
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-5.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.4",
    "sequence": 100
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-6",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.5",
    "sequence": 110
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-6.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.6",
    "sequence": 120
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-6.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-3.7",
    "sequence": 130
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-7",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-4",
    "sequence": 140
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-5",
    "sequence": 150
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-5.1",
    "sequence": 160
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.4",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-6",
    "sequence": 170
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.5",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-6.1",
    "sequence": 180
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.6",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-6.2",
    "sequence": 190
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-8",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-7",
    "sequence": 200
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-8.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.1",
    "sequence": 210
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-8.2",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.2",
    "sequence": 220
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-8.3",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.3",
    "sequence": 230
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-9",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.4",
    "sequence": 240
   },
   {
-   "ref": "https://ns.nist.gov/sp800-53/req/CA-9.1",
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.5",
    "sequence": 250
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-7.6",
+   "sequence": 260
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-8",
+   "sequence": 270
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-8.1",
+   "sequence": 280
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-8.2",
+   "sequence": 290
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-8.3",
+   "sequence": 300
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-9",
+   "sequence": 310
+  },
+  {
+   "ref": "https://ns.nist.gov/sp800-53/req/CA-9.1",
+   "sequence": 320
   }
  ]
 }

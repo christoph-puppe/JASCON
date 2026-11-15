@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.5.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.5.2",
  "lifecycle": "active",
  "title": {
-  "de": "Vorkonfigurierte Authentisierungsmittel"
+  "de": "Zurücksetzung und Ersetzung von Authentifizierungsmitteln"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE vorkonfigurierte Authentisierungsmittel deaktivieren."
+    "de": "Berechtigung SOLLTE eine Vorgehensweise zur Zurücksetzung oder Ersetzung von Authentifizierungsmitteln verankern."
    }
   }
  ],
@@ -22,8 +22,8 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "deaktivieren",
-     "result": "vorkonfigurierte Authentisierungsmittel"
+     "action": "verankern",
+     "result": "eine Vorgehensweise zur Zurücksetzung oder Ersetzung von Authentifizierungsmitteln"
     }
    }
   },
@@ -41,11 +41,10 @@
     "smt": {
      "confidentiality": "1",
      "integrity": "1",
-     "availability": "1",
-     "authenticity": "1",
+     "availability": "0",
+     "authenticity": "2",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
      ]
     }
    }
@@ -53,12 +52,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 1,
-     "tags": [
-      "Advanced Persistent Threats (APT)"
-     ]
+     "effort": 3
     }
    }
   },
@@ -66,7 +62,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Herstellerseitige Standardkonten und Default-Passwörter stellen ein beliebtes Eingangstor für Angreifer dar. Wenn vorhanden können auch andere Zugangsmittel wie Hardware-Zugangstoken, Zertifikate oder physische Zugangskontrollsysteme als Authentisierungsmittel verstanden werden."
+      "de": "Zurücksetzung meint hier die geregelte Wiederherstellung, Erneuerung, Sperrung und Neuvergabe solcher Mittel, wenn sie vergessen, verloren, kompromittiert, technisch unbrauchbar oder aus anderen nachvollziehbaren Gründen nicht mehr sicher verwendbar sind; sie umfasst insbesondere die Prüfung der Identität der berechtigten Person, die Verhinderung unberechtigter Übernahmeversuche und die nachvollziehbare Durchführung des Vorgangs. Eine verankerte Vorgehensweise kann verhindern, dass der Reset selbst zum Einfallstor wird: Ohne klare Regeln könnte ein Angreifer über Social Engineering, manipulierte Helpdesk-Anfragen, abgefangene Wiederherstellungslinks oder missbrauchte Sicherheitsfragen Zugriff auf fremde Konten erhalten. Ebenso könnte eine uneinheitliche Behandlung verlorener Token, vergessener Passwörter oder kompromittierter Zertifikate dazu führen, dass alte Authentifizierungsmittel weiterverwendet werden oder neue Mittel an die falsche Person gelangen."
      }
     }
    }
@@ -75,7 +71,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "7e0edf55-22d6-42d8-973f-d3f8635a0913"
+   "value": "ae227c3a-d871-45ae-bec4-d0ecad83f73b"
   }
  ]
 }

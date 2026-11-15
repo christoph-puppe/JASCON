@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-6645565",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Monitor the system"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Monitor the system",
+     "name": "overview",
+     "prose": {
+      "en": "**Continuously monitor the system and associated cyber threats, security risks and controls.**\n\nReal-time monitoring of cyber threats, security risks and controls associated with a system and its operating environment, as outlined in a continuous monitoring plan, is essential to maintaining its security posture. In doing so, specific events may necessitate additional risk management activities. Such events may include:\n\n- changes in security policies relating to the system\n- detection of new or emerging cyber threats to the system or its operating environment\n- the discovery that controls for the system are not as effective as planned\n- a major cyber security incident involving the system\n- major architectural changes to the system.\n\nFollowing the implementation or modification of any controls as a result of risk management activities, another security assessment should be completed. In doing so, the system’s authorisation package should be updated. This in turn allows the authorising officer to make an informed decision as to whether the security risks associated with the system’s operation are still acceptable. If the security risks are no longer acceptable, the authorising officer may choose to either place constraints on the system’s use, such as introducing or amending an expiration date for an authorisation to operate or revoke an authorisation to operate altogether."
+     }
+    }
+   ]
+  }
+ }
+}

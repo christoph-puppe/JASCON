@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0475",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0475",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When using ECDSA for digital signatures, a base point order and key size of at least 224 bits is used, preferably the P-384 curve."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

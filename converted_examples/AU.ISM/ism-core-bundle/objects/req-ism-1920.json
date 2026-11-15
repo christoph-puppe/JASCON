@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1920",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1920",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When multi-factor authentication is used to authenticate users to online services, online customer services, systems or data repositories – that process, store or communicate their organisation’s sensitive data or sensitive customer data – users are prevented from self-enrolling into multi-factor authentication from untrustworthy devices."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

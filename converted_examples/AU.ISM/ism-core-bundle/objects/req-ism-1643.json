@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1643",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1643",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Software registers contain versions and patch histories of applications, drivers, operating systems and firmware."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-06"
   }
  ]
 }

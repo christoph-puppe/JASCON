@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -20,6 +21,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -31,6 +33,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -49,11 +52,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "si-2.7_obj",
      "label": "SI-02(07)",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/SI-2.7"
+      }
+     ],
      "prose": {
       "en": "Determine if:"
      },
@@ -61,6 +69,11 @@
       {
        "id": "si-2.7_obj.a",
        "label": "SI-02(07)a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "Root cause analysis is conducted to identify underlying causes of issues or failures"
        }
@@ -68,6 +81,11 @@
       {
        "id": "si-2.7_obj.b",
        "label": "SI-02(07)b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "Actions to address the root cause of the issue of failure are developed"
        }
@@ -78,12 +96,22 @@
        "children": [
         {
          "id": "si-2.7_obj.c-1",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
-          "en": "The actions (defined in SI-02(07)b.) are implemented"
+          "en": "The actions (defined in [SI-02(07)b.](#si-2.7_smt.b)) are implemented"
          }
         },
         {
          "id": "si-2.7_obj.c-2",
+         "assessment-for": [
+          {
+           "statement-id": "smt.c"
+          }
+         ],
          "prose": {
           "en": "The implementation of actions is monitored for effectiveness."
          }

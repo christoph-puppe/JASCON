@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-ide-01",
-   "sequence": 160
+   "sequence": 330
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-ide-05",
-   "sequence": 170
+   "sequence": 340
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-ide-02",
-   "sequence": 180
+   "sequence": 350
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-ide-03",
-   "sequence": 190
+   "sequence": 360
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-ide-06",
-   "sequence": 200
+   "sequence": 370
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-ide-04",
-   "sequence": 210
+   "sequence": 380
   }
  ],
  "facets": {

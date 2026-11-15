@@ -37,16 +37,68 @@ Runs, in order:
    hold the vendor's manifest a set keeps under packs/sha256/ to the
    objects in the set; 11 is import. `--import-advice SET PACK` prints
    what an import would do and its receipt, and writes nothing.
+6. WHO DECIDED, AND WHEN (CP-AUTHOR-1): `provenance` {author-ref, date} on
+   a Tailoring and its selects, excludes and operations, on a Risk and
+   its ratings, on an Implementation and a Finding; `decided` and
+   `review-due` on a Deviation; `date` on an authorization. The schema
+   leaves all of it optional. AUTHOR-1..4 REPORT what is missing, one
+   line per object and rule, and `--require-authors` turns the lines
+   into failures. REVIEW-1 reports a `review-due` that has passed, on an
+   approved Deviation and on a Risk still managed. It reads the date of
+   the run (UTC); `--as-of YYYY-MM-DD` sets the date instead. This is the
+   one place where the file reads a clock, and nothing fails by it.
+   DRAFT-1 (backlog #86) reports an active Set that lists draft members,
+   one line per Set. A draft may be used (the author, 2026-11-14), so
+   nothing fails by it either.
+7. ATTESTATION-BINDS ON A BUNDLE (Appendix B.1.7; backlog #46): every
+   Attestation read with a bundle - beside its manifest, where D3.1 puts
+   it, and any a manifest lists - is held to its subjects and to the
+   manifest it binds: Full Match, Semantic Match (another manifest, every
+   subject matches: reported) or fail. A fail fails the bundle when the
+   Attestation is still claimed (lifecycle active). The example folder is
+   read the same way; conformance/fixture-trusted-keys.json holds the
+   public key of the corpus fixture for a run in verification mode.
+8. MANIFEST-1 (D3.11; backlog #75, author 2026-11-14: "refusal in all"):
+   an object a content manifest lists is no Attestation. D3.1 excludes
+   Attestations from the manifest "by definition"; until that day only a
+   pack's manifest was held to it (ADVICE-1), and an ordinary bundle
+   that listed its own Attestation passed. One failure per listed
+   Attestation, in every bundle and in the example folder, whatever the
+   Attestation binds and whatever its lifecycle.
+9. AN ASSESSMENT'S METHOD IS A FACET PAYLOAD (backlog #55): the keys of
+   `method` are facet ids, resolved as the keys of `facets` are (the
+   standard library, the schemas the bundle pins, `private:`, else an
+   error), and each payload is held to its schema. Until 2026-11-14
+   `method` was not read.
+10. WITHDRAWN-1 (backlog #93, author 2026-11-14: "Regel bauen"): in a
+   bundle that holds an object as withdrawn, a Tailoring, a Mapping, a
+   Component, an Implementation, a Check or a live Risk that is not
+   withdrawn itself does not name it by one of twelve edges
+   (WITHDRAWN_EDGES). Lineage, relations, the members of a Set and the
+   records of an act (Assessment, Finding, Attestation) are not held.
+   The handbook had stated the rule since 1.0.0; nothing held it.
+11. FRAGMENT-1 (backlog #82; D9): a report of what the references of the
+   form `#id` name - a resource of references@1, an object, a statement,
+   a parameter, a source document of the manifest - and of those that
+   name nothing. Nothing fails by it.
+12. OPERATION-1 (backlog #96, author 2026-11-15: "Do it"): a set-modality,
+   a set-parameter and a replace-prose name the statement they change, and
+   a set-parameter names a parameter that statement declares. Before it
+   such an operation without a statement-id passed, and with it the checks
+   of a modality against its order and of a value against its declaration
+   asked nothing.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
-import json, hashlib, os, re, sys, copy, collections, base64
+import json, hashlib, os, re, sys, copy, collections, base64, datetime
 from decimal import Decimal
 import jsonschema
 
 # canonical decimal string (D3.4; rev P10 #37: leading zeros AND negative
 # zero are non-canonical spellings — one value, one spelling)
-DECIMAL_RE = r"^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)$"
+# `\Z`, not `$`: Python's `$` also matches before a line break that ends the
+# value, so "1.5\n" would be a decimal here and in no ECMA-262 engine (#68).
+DECIMAL_RE = r"^(-?[1-9][0-9]*(\.[0-9]+)?|0(\.[0-9]+)?|-0\.[0-9]*[1-9][0-9]*)\Z"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.normpath(os.path.join(HERE, "..", ".."))
@@ -56,28 +108,88 @@ CONF = os.path.join(SKILL, "conformance")
 
 TYPES = ["requirement", "requirementSet", "tailoring", "mapping", "component",
          "implementation", "assessment", "finding", "attestation", "risk", "check"]
-REGISTRY = jsonschema.validators.Draft202012Validator
+
+# A `pattern` of a JSON Schema is an ECMA-262 regular expression (JSON Schema
+# 2020-12, Core 6.4 with Validation 6.3.3), and jsonschema hands it to
+# Python's `re` unchanged. The two dialects read two things differently that
+# the kernel's patterns use (backlog #68):
+#   `$`  ECMA-262: the end of the value.  Python: also before one line break
+#        that ends the value - so "2026-11-13\n" was a date here, and a
+#        digest with a line break at its end a digest.
+#   `.`  ECMA-262: any character but U+000A, U+000D, U+2028, U+2029.
+#        Python: any character but U+000A.
+# ecma_pattern() writes the pattern so that `re` reads both as ECMA-262 does.
+# Nothing else is translated: a class escape (\d \w \s \b) keeps the meaning
+# its host gives it, and no pattern of the kernel schema or of the standard
+# library uses one. The PowerShell twin does the same for .NET; the app runs
+# the patterns in the dialect they were written in.
+def ecma_pattern(p):
+    out, i, in_class = [], 0, False
+    while i < len(p):
+        c = p[i]
+        if c == "\\":                       # an escape: the next character is not an operator
+            out.append(p[i:i + 2]); i += 2; continue
+        if in_class: in_class = c != "]"
+        elif c == "[": in_class = True
+        elif c == "$": c = r"\Z"
+        elif c == ".": c = "[^\n\r\u2028\u2029]"
+        out.append(c); i += 1
+    return "".join(out)
+
+_ECMA_RX = {}
+def _pattern(validator, pattern, instance, schema):
+    if not validator.is_type(instance, "string"): return
+    rx = _ECMA_RX.get(pattern)
+    if rx is None: rx = _ECMA_RX[pattern] = re.compile(ecma_pattern(pattern))
+    if not rx.search(instance):
+        yield jsonschema.ValidationError(f"{instance!r} does not match {pattern!r}")
+
+REGISTRY = jsonschema.validators.extend(jsonschema.validators.Draft202012Validator, {"pattern": _pattern})
 VALIDATORS = {t: REGISTRY({"$ref": f"#/$defs/{t}", "$defs": SCHEMA["$defs"]}) for t in TYPES}
 VALIDATORS["contentManifest"] = REGISTRY({"$ref": "#/$defs/contentManifest", "$defs": SCHEMA["$defs"]})
 VALIDATORS["scale"] = REGISTRY({"$ref": "#/$defs/scale", "$defs": SCHEMA["$defs"]})
 VALIDATORS["due"] = REGISTRY({"$ref": "#/$defs/due", "$defs": SCHEMA["$defs"]})
 VALIDATORS["date"] = REGISTRY({"$ref": "#/$defs/date", "$defs": SCHEMA["$defs"]})
+VALIDATORS["dateTime"] = REGISTRY({"$ref": "#/$defs/dateTime", "$defs": SCHEMA["$defs"]})
+VALIDATORS["dayOrMonth"] = REGISTRY({"$ref": "#/$defs/dayOrMonth", "$defs": SCHEMA["$defs"]})
 # CP-CHECK-1: file shapes beside the bundle, not object types
 VALIDATORS["evidenceRecord"] = REGISTRY({"$ref": "#/$defs/evidenceRecord", "$defs": SCHEMA["$defs"]})
 VALIDATORS["checkObservation"] = REGISTRY({"$ref": "#/$defs/checkObservation", "$defs": SCHEMA["$defs"]})
 
 # normative stdlib facet descriptors (gate 2); payload validation per backlog #17
-STDLIB, STDLIB_RAW = {}, {}
+# A facet of the library may have several versions (2026-11-14, backlog #83:
+# assessment-criteria 1.1.0 beside 1.0.0). One id and version is one schema,
+# and a version once published stays: a bundle that pins 1.0.0 is held to
+# 1.0.0. STDLIB and STDLIB_RAW hold the latest version of each facet, which
+# is what an unpinned payload is held to; STDLIB_VERSIONS holds them all.
+STDLIB, STDLIB_RAW, STDLIB_VERSIONS = {}, {}, {}
 for _fn in sorted(os.listdir(os.path.join(SKILL, "schemas", "stdlib"))):
     if _fn.endswith(".json"):
         _d = json.load(open(os.path.join(SKILL, "schemas", "stdlib", _fn), encoding="utf-8"))
-        STDLIB[_d["id"]] = REGISTRY(_d["schema"])
-        STDLIB_RAW[_d["id"]] = _d["schema"]
+        STDLIB_VERSIONS.setdefault(_d["id"], {})[_d["version"]] = _d["schema"]
+for _id, _vs in STDLIB_VERSIONS.items():
+    _latest = max(_vs, key=lambda v: tuple(int(x) for x in v.split(".")))
+    STDLIB[_id] = REGISTRY(_vs[_latest])
+    STDLIB_RAW[_id] = _vs[_latest]
 
 # reference taxonomy (backlog #16): closure-required refs MUST land in-bundle;
 # landmark refs (Mapping endpoints, party/authority URIs, evidence, external
 # schema/reference URLs, attestation subjects — self-verifying via digest)
 # resolve outside the bundle by design.
+def facet_statement_addresses(payload):
+    """-> [(statement-id, requirement-ref or None)] for every object inside a
+    facet payload that has a member `statement-id`, in the order met."""
+    out = []
+    def walk(x):
+        if isinstance(x, dict):
+            if isinstance(x.get("statement-id"), str):
+                out.append((x["statement-id"], x.get("requirement-ref") if isinstance(x.get("requirement-ref"), str) else None))
+            for v in x.values(): walk(v)
+        elif isinstance(x, list):
+            for v in x: walk(v)
+    walk(payload)
+    return out
+
 def closure_errors(objs):
     """objs: id -> (type, obj). Returns list of error strings."""
     errs = []
@@ -85,6 +197,31 @@ def closure_errors(objs):
         if ref not in objs:
             errs.append(f"{oid}: closure-required {what} does not resolve in-bundle: {ref}")
     for oid, (t, o) in objs.items():
+        # D10 (2026-11-14, backlog #83): a `statement-id` anywhere inside a
+        # facet payload of a Requirement is held as a `by-statement` key is
+        # held. Alone it names a statement of the host; beside a
+        # `requirement-ref` it names a statement of that Requirement, which
+        # is a landmark and binds where the bundle holds it. `private:`
+        # facets are not read (D10). Measured on SP 800-53A: 3,707
+        # objectives say which statement they assess, inside a tree, where
+        # the rule for `by-statement` keys did not look.
+        if t == "requirement":
+            own = {s["id"] for s in o["statements"]}
+            for fid, payload in (o.get("facets") or {}).items():
+                if fid.startswith("private:"): continue
+                for sid, rref in facet_statement_addresses(payload):
+                    if rref is None:
+                        if sid not in own:
+                            errs.append(f"{oid}: facet {fid} statement-id '{sid}' names no statement of its Requirement "
+                                        f"(D10: a statement-id inside a facet payload is held as a by-statement key is)")
+                        continue
+                    tgt = objs.get(rref)
+                    if tgt and tgt[0] != "requirement":
+                        errs.append(f"{oid}: facet {fid} requirement-ref beside a statement-id resolves to a {tgt[0]}, "
+                                    f"not a Requirement: {rref} (D10)")
+                    elif tgt and sid not in {s["id"] for s in tgt[1]["statements"]}:
+                        errs.append(f"{oid}: facet {fid} statement-id '{sid}' names no statement of {rref} "
+                                    f"(D10: a statement-id inside a facet payload is held as a by-statement key is)")
         for ca in o.get("canonical-alias", []) or []:   # backlog #14: same-content is checkable
             tgt = objs.get(ca.get("of"))
             if tgt and content_digest(o) != content_digest(tgt[1]):
@@ -225,7 +362,16 @@ def closure_errors(objs):
 def facet_errors(objs_or_obj, pinned, path="?"):
     """Validate facet payloads (backlog #17): stdlib facets against the
     normative descriptors, others against the bundle-pinned schemas;
-    private: is ignored by definition; anything else is unregistered."""
+    private: is ignored by definition; anything else is unregistered.
+
+    An Assessment's `method` is a facet payload too (handbook 10.1, appendix
+    A.7; backlog #55): its keys are facet ids and are resolved as the keys
+    of `facets` are, and each payload is held to its schema. Until
+    2026-11-14 `method` was not read at all - the kernel schema says only
+    that it is an object - so a method under a key nobody registered, or a
+    payload its own facet refuses, passed. Of the eleven kernel types only
+    the Assessment has a member `method`; a `method` inside a facet payload
+    is that facet's business."""
     errs = []
     items = objs_or_obj if isinstance(objs_or_obj, list) else [(path, objs_or_obj)]
     for pth, obj in items:
@@ -233,13 +379,26 @@ def facet_errors(objs_or_obj, pinned, path="?"):
             base = key.rsplit("@", 1)[0]
             if key.startswith("private:") or base.startswith("private:"):
                 continue   # modifies-semantics [] by definition (D10)
-            v = STDLIB.get(base) or pinned.get(base)
+            v = pinned.get(base) or STDLIB.get(base)   # a pin of a library facet is one of its versions, verbatim (D26)
             if v is None:
                 errs.append(f"{pth}: unregistered facet '{key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)")
                 continue
             err = next(iter(v.iter_errors(payload)), None)
             if err:
                 errs.append(f"{pth}: facet '{key}' payload violates its schema: {err.message[:110]} @ {'/'.join(map(str, err.absolute_path))}")
+        method = obj.get("method")
+        for key, payload in (method.items() if isinstance(method, dict) else ()):
+            base = key.rsplit("@", 1)[0]
+            if key.startswith("private:") or base.startswith("private:"):
+                continue
+            v = pinned.get(base) or STDLIB.get(base)
+            if v is None:
+                errs.append(f"{pth}: method '{key}' is no registered facet - not stdlib, not pinned in the manifest, not private: "
+                            f"(an Assessment's method is a facet payload and fails closed, D10)")
+                continue
+            err = next(iter(v.iter_errors(payload)), None)
+            if err:
+                errs.append(f"{pth}: method '{key}' payload violates its schema: {err.message[:110]} @ {'/'.join(map(str, err.absolute_path))}")
     return errs
 
 # tier anchor (backlog #19, layered - D13 rev 2): id-prefix derivation gives
@@ -534,8 +693,16 @@ def verify_envelope(env, att, trusted):
 # deterministically to the highest pinned minor with both payload sets
 # re-validated — incompatibility is a reported error, never a silent pick."
 def _semver(v):
-    m = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", str(v))
-    return tuple(int(x) for x in m.groups()) if m else None
+    """-> the three numbers of a pin version, or None where it is no semver
+    pin. Each number is held to the number domain of D3.9 (backlog #72):
+    Python reads a number of any length, the twin read 32 bits and stopped
+    the run at 2^31, and JavaScript reads beyond 2^53 inexactly, so that
+    two versions could compare equal. A larger number is no version in any
+    of the three."""
+    m = re.fullmatch(r"([0-9]+)\.([0-9]+)\.([0-9]+)", str(v))
+    if not m: return None
+    parts = tuple(int(x) for x in m.groups())
+    return parts if max(parts) <= NUMBER_MAX else None
 
 def compose(a_objs, a_pins, b_objs, b_pins):
     """objs: [(oid, obj)]; pins: {facet-base-id: {"version", "schema"}}.
@@ -913,6 +1080,30 @@ def run_attestation():
         else: got = "semantic-match"
         if got == case["expected"]: ok("attestation")
         else: fail("attestation", f"{case['name']}: expected {case['expected']}, got {got}")
+    # the primitive applied to a bundle (backlog #46): the verdict, which
+    # manifest is bound, and what became of every subject
+    for case in v.get("binds-vectors", []):
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        r = attestation_binds(case["attestation"], case["manifest-digest"], objs, case.get("kept-packs") or [])
+        got = (r["verdict"], r["manifest"], [st for st, *_ in r["subjects"]], r["fails"])
+        want = (case["expected"], case["expected-manifest"], case["expected-subjects"], case["expected-failure"])
+        if got == want and len(objs) == len(case["objects"]): ok("attestation")
+        else: fail("attestation", f"binds {case['name']}: expected {want}, got {got}")
+    # MANIFEST-1 (backlog #75): one failure per Attestation a manifest lists, each naming the rule and the id
+    for case in v.get("listed-vectors", []):
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        errs = listed_attestation_errors(objs)
+        okc = (len(objs) == len(case["objects"]) and len(errs) == case["expected-fails"]
+               and len(errs) == len(case["expected-ids"])
+               and all("MANIFEST-1" in e and e.startswith(i + ": ") for e, i in zip(errs, case["expected-ids"])))
+        if okc: ok("attestation")
+        else: fail("attestation", f"listed {case['name']}: expected {case['expected-fails']} {case['expected-ids']}, got {errs}")
 
 def run_facets():
     v = json.load(open(os.path.join(CONF, "facet-vectors.json"), encoding="utf-8"))
@@ -922,6 +1113,15 @@ def run_facets():
         got = "invalid" if errs else "valid"
         if got == case["expected"]: ok("facet")
         else: fail("facet", f"{case['name']}: expected {case['expected']}, got {got} ({errs[:1]})")
+    # an Assessment's `method` is a facet payload (backlog #55): the number of
+    # errors, and a fragment of each
+    for case in v.get("method-vectors", []):
+        pinned = {k: REGISTRY(s) for k, s in (case.get("pinned") or {}).items()}
+        errs = facet_errors(case["object"], pinned, case["name"])
+        okc = (len(errs) == case["expected-errors"] and ("invalid" if errs else "valid") == case["expected"]
+               and all(any(frag in e for e in errs) for frag in case["expected-frags"]))
+        if okc: ok("facet")
+        else: fail("facet", f"method {case['name']}: expected {case['expected-errors']} {case['expected-frags']}, got {errs}")
 
 def run_references():
     v = json.load(open(os.path.join(CONF, "reference-vectors.json"), encoding="utf-8"))
@@ -933,6 +1133,22 @@ def run_references():
         errs = closure_errors(objs)
         if len(errs) == case["expected-errors"]: ok("reference")
         else: fail("reference", f"{case['name']}: expected {case['expected-errors']} errors, got {len(errs)} ({errs[:2]})")
+    for case in v["fragment-references"]:               # FRAGMENT-1 (backlog #82): a report, never a failure
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        got = None if len(objs) != len(case["objects"]) else fragment_report(objs, case.get("manifest"))
+        if got == case["expected"]: ok("reference")
+        else: fail("reference", f"fragment-references {case['name']}: expected {case['expected']}, got {got}")
+    for case in v["operation-targets"]:                 # OPERATION-1 (backlog #96)
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        got = None if len(objs) != len(case["objects"]) else [list(x) for x in operation_targets(objs)]
+        if got == case["expected"]: ok("reference")
+        else: fail("reference", f"operation-targets {case['name']}: expected {case['expected']}, got {got}")
 
 def inferType_single(o):
     m = [t for t in TYPES if VALIDATORS[t].is_valid(o)]
@@ -998,17 +1214,32 @@ def run_composition():
 KERNEL_VERSION = "2.0.0"
 KERNEL_SUPPORTED = ("1.0.0", "2.0.0")      # 2.0.0 is a superset of 1.0.0, measured
 
+def deviations_of(t, o):
+    """-> [(where, Deviation)]: every Deviation an object carries - in its
+    `deviations` list and, on a Tailoring, inline on an operation."""
+    out = [(f"deviations[{i}]", d) for i, d in enumerate(o.get("deviations") or []) if isinstance(d, dict)]
+    if t == "tailoring":
+        out += [(f"operations[{i}].deviation", op["deviation"]) for i, op in enumerate(o.get("operations") or [])
+                if isinstance(op, dict) and isinstance(op.get("deviation"), dict)]
+    return out
+
 def kernel_needed(objs, manifest=None):
     """-> (minimum kernel version the content needs, the first object that
     needs it). 2.0.0 added the Risk type, Finding.risk-refs, pinned
     scale definitions, the Check type, Assessment.check-results and
     .tailoring-ref, Finding.check-ref, the pack header of a manifest,
-    statement-ids on a capability (CP-ADVICE-1) and product-version on a
-    Component (author decision 2026-11-12)."""
+    statement-ids on a capability (CP-ADVICE-1), product-version on a
+    Component (author decision 2026-11-12), and the fields of CP-AUTHOR-1:
+    `provenance` where 1.0.0 had none, `decided` and `review-due` on a
+    Deviation, `date` on an authorization. Decided on 2026-11-14 (backlog
+    #81 and #84): `history` on any object and `label` on a statement."""
     if manifest and manifest.get("scales"): return "2.0.0", "the manifest pins scale definitions"
     if manifest and manifest.get("pack"): return "2.0.0", "the manifest carries a pack header"
     for oid in sorted(objs):
         t, o = objs[oid]
+        if "history" in o: return "2.0.0", f"{oid} carries the record of its changes (history)"
+        if t == "requirement" and any(isinstance(s, dict) and "label" in s for s in o.get("statements", []) or []):
+            return "2.0.0", f"{oid} labels a statement (label)"
         if t == "risk": return "2.0.0", f"{oid} is a Risk"
         if t == "finding" and o.get("risk-refs"): return "2.0.0", f"{oid} carries risk-refs"
         if t == "check": return "2.0.0", f"{oid} is a Check"
@@ -1019,7 +1250,37 @@ def kernel_needed(objs, manifest=None):
             return "2.0.0", f"{oid} names clauses on a capability (statement-ids)"
         if t == "component" and "product-version" in o:
             return "2.0.0", f"{oid} names the product version it describes (product-version)"
+        if t in ("tailoring", "implementation", "finding") and "provenance" in o:
+            return "2.0.0", f"{oid} names its author (provenance)"
+        if t == "tailoring" and any("provenance" in e for k in ("selects", "excludes", "operations")
+                                    for e in o.get(k, []) or [] if isinstance(e, dict)):
+            return "2.0.0", f"{oid} names the author of a select, an exclude or an operation (provenance)"
+        if any("decided" in d or "review-due" in d for _, d in deviations_of(t, o)):
+            return "2.0.0", f"{oid} carries a Deviation with `decided` or `review-due`"
+        if t == "component" and any("date" in a for a in o.get("authorizations", []) or [] if isinstance(a, dict)):
+            return "2.0.0", f"{oid} dates an authorization"
     return "1.0.0", None
+
+def listed_attestation_errors(objs):
+    """MANIFEST-1 (D3.11) -> [error], one per Attestation among the objects a
+    content manifest lists. objs: those objects, id -> (type, obj).
+
+    D3.1 excludes Attestations from the content manifest by definition. For
+    an Attestation that binds this manifest the reason is arithmetic: it
+    binds the digest of the manifest's bytes, so a manifest that lists it
+    cannot be the manifest it binds. For one that binds another manifest -
+    a vendor's, which the bundle keeps under packs/ - there is no such
+    cycle, and the rule holds all the same: it is about where an
+    Attestation lies and asks nothing else of it. What it binds, whether it
+    names an envelope and what its lifecycle is change nothing. The binding
+    of a listed Attestation is still computed and reported
+    (attestation_binds). It is never a Full Match of the manifest that
+    lists it; one that binds a kept pack manifest is a Full Match of that,
+    and is refused here beside it."""
+    return [f"{oid}: an Attestation is listed in the content manifest (MANIFEST-1: Attestations are excluded "
+            f"from the content manifest by definition, D3.1 - an Attestation lies beside a manifest and is "
+            f"never an entry of one)"
+            for oid in by_code_unit(objs) if objs[oid][0] == "attestation"]
 
 def kernel_pin_errors(manifest, objs):
     """-> [error] for the manifest's kernel-version pin against this tool
@@ -1058,6 +1319,12 @@ def run_kernel():
         named = sorted({r for r, _ in date_rule_violations(case["document"])})
         if got == case["expected"] and named == sorted(case.get("expected-rules", [])): ok("kernel")
         else: fail("kernel", f"shape {case['name']}: expected {case['expected']} {case.get('expected-rules', [])}, got {got} {named}")
+    for case in v.get("history-vectors", []):           # HISTORY-1 (backlog #81): one object of valid shape each
+        o = case["object"]
+        errs = history_errors(o) if inferType_single(o) else ["the object has no single type"]
+        got = "invalid" if errs else "valid"
+        if got == case["expected"] and all(case.get("expected-rule", "") in e for e in errs): ok("kernel")
+        else: fail("kernel", f"history {case['name']}: expected {case['expected']} {case.get('expected-rule', '')}, got {got} {errs}")
 
 # ---------------- pinned scale definitions (SCALE-1..3) ----------------
 # A scale is the organisation's own: how many levels, and what they are
@@ -1234,14 +1501,22 @@ RISK_RULES = {
     "RISK-6": "retention IS acceptance - no silent retention (ISO/IEC 27001 6.1.3 f)",
     "RISK-13": "a residual level is what remains of a level - it presupposes a rating, on the same scale (D23: levels never compare across scales)",
 }
-# ---------------- DATE-1/2: two fields 1.0.0 left as free text ----------------
+# ---------------- DATE-1..5: fields 1.0.0 left as free text ----------------
 # 2.0.0 types them (author decision 2026-11-12, backlog #47a and #52). The
 # schema enforces; this names the rule when an object matches no type, so
 # that a 1.0.0 bundle with a free-text date is told what to correct.
 DATE_RULES = {
-    "DATE-1": "a Deviation's `opened` is a date, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
+    "DATE-1": "a Deviation's `opened` and `decided` are dates, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
     "DATE-2": "the `due` of a Finding's action is a typed point in time or duration (date, datetime, elapsed-duration, calendar-period) - a deadline a machine cannot read is prose",
+    # CP-AUTHOR-1: the "when" of who-and-when
+    "DATE-3": "the `date` of a Mapping's provenance is a date, YYYY-MM-DD",
+    "DATE-4": "the `time` of an Assessment is a date or an RFC 3339 date-time with an offset",
+    "DATE-5": "the `timestamp` of an Attestation is a date or an RFC 3339 date-time with an offset",
+    "DATE-6": "the `date` of an entry of `history` is a day or a month, YYYY-MM-DD or YYYY-MM - a publisher that states only the month of a change states a month",
 }
+def is_when(v):
+    """a date, or an RFC 3339 date-time with an offset"""
+    return VALIDATORS["date"].is_valid(v) or VALIDATORS["dateTime"].is_valid(v)
 def date_rule_violations(o):
     """-> [(rule id, what is wrong)] for an object that carries Deviations or
     actions. Never used to ACCEPT an object (the schema decides), only to
@@ -1251,8 +1526,9 @@ def date_rule_violations(o):
     def deviations(x, at):
         if isinstance(x, dict):
             for i, dv in enumerate(x.get("deviations") or [] if isinstance(x.get("deviations"), list) else []):
-                if isinstance(dv, dict) and "opened" in dv and not VALIDATORS["date"].is_valid(dv["opened"]):
-                    out.append(("DATE-1", f"{at}deviations[{i}].opened is {dv['opened']!r}"))
+                for field in ("opened", "decided"):
+                    if isinstance(dv, dict) and field in dv and not VALIDATORS["date"].is_valid(dv[field]):
+                        out.append(("DATE-1", f"{at}deviations[{i}].{field} is {dv[field]!r}"))
             for k, v in x.items():
                 if k != "deviations": deviations(v, f"{at}{k}.")
         elif isinstance(x, list):
@@ -1261,7 +1537,38 @@ def date_rule_violations(o):
     for i, a in enumerate(o.get("actions") or [] if isinstance(o.get("actions"), list) else []):
         if isinstance(a, dict) and "due" in a and not VALIDATORS["due"].is_valid(a["due"]):
             out.append(("DATE-2", f"actions[{i}].due is {json.dumps(a['due'], ensure_ascii=False)}"))
+    # the three fields are told apart by the signature of their type
+    prov = o.get("provenance")
+    if "relationship" in o and isinstance(prov, dict) and "date" in prov and not VALIDATORS["date"].is_valid(prov["date"]):
+        out.append(("DATE-3", f"provenance.date is {prov['date']!r}"))
+    if "performer-ref" in o and "time" in o and not is_when(o["time"]):
+        out.append(("DATE-4", f"time is {o['time']!r}"))
+    if "signer" in o and "timestamp" in o and not is_when(o["timestamp"]):
+        out.append(("DATE-5", f"timestamp is {o['timestamp']!r}"))
+    for i, e in enumerate(o.get("history") or [] if isinstance(o.get("history"), list) else []):
+        if isinstance(e, dict) and "date" in e and not VALIDATORS["dayOrMonth"].is_valid(e["date"]):
+            out.append(("DATE-6", f"history[{i}].date is {e['date']!r}"))
     return out
+
+# The record of an object's changes (2026-11-14, backlog #81, the author:
+# "Versionierung ist wichtig und gehört in den Kernel"). `version` is the
+# object's own version; `history` is what its publisher says about how it
+# came to be what it is, one entry per change, oldest first. A day and a
+# month are compared as they are written: a month stands before its days,
+# and two entries may carry one date. The kernel checks the order and
+# nothing else: whether an entry is true no validator can know.
+HISTORY_RULES = {
+    "HISTORY-1": "the entries of `history` stand in the order of their dates, oldest first - a record that a reader has to sort is read in two ways",
+}
+def history_errors(o):
+    """HISTORY-1 -> [message] for one object whose shape is valid."""
+    h = o.get("history") if isinstance(o, dict) else None
+    if not isinstance(h, list): return []
+    dates = [e.get("date") for e in h if isinstance(e, dict)]
+    for i in range(1, len(dates)):
+        if isinstance(dates[i - 1], str) and isinstance(dates[i], str) and dates[i] < dates[i - 1]:
+            return [f"history[{i}].date {dates[i]} stands after {dates[i - 1]} (HISTORY-1: {HISTORY_RULES['HISTORY-1']})"]
+    return []
 
 def risk_rule_violations(o):
     """-> [(rule id, what is wrong)] for an object carrying the Risk
@@ -1472,6 +1779,389 @@ def risk_link_notes(objs):
                 notes.append(f"{oid}: risk-adjustment Deviation references no Risk of this bundle "
                              f"(RISK-9, SHOULD: the adjustment names the risk it accepts)")
     return notes
+
+# ---------------- who decided, and when (CP-AUTHOR-1) ----------------
+# The schema leaves every one of these fields optional: a catalogue
+# authority's content needs none. What is missing is REPORTED, one line per
+# object and rule, and fails nothing unless --require-authors asks for it.
+AUTHOR_RULES = {
+    "AUTHOR-1": "a consumer's Tailoring says who decided each select, exclude and operation - on the entry, or once on the Tailoring",
+    "AUTHOR-2": "a Risk, a Finding and an Implementation say who wrote this version and when (provenance): each records a judgement",
+    "AUTHOR-3": "an approved or withdrawn Deviation says when it was decided (decided); `opened` is when it was asked for",
+    "AUTHOR-4": "an authorization says on which day it was given (date); it already names the authority",
+    "REVIEW-1": "a review-due that has passed is reported, on an approved Deviation and on a Risk still managed - the date exists to be looked at",
+}
+
+def by_code_unit(ids):
+    """ids in the order of their UTF-16 code units - the order RFC 8785 gives
+    the members of the canonical form, and the one a JavaScript or a .NET
+    tool gets from an ordinal sort. Python's own order is by code point,
+    which differs for ids with characters beyond U+FFFF."""
+    return sorted(ids, key=lambda s: s.encode("utf-16-be"))
+
+def author_report(objs, sdig_fn=None, envelopes=None, trusted=None):
+    """-> [(rule, object id, count, message)], in the order of the ids.
+    AUTHOR-1 asks only a Tailoring at consumer tier (D13: duties bind
+    there; an authority's Tailoring is attributed by its origin and its
+    Attestation). An entry without `provenance` has its Tailoring's."""
+    out = []
+    for oid in by_code_unit(objs):
+        t, o = objs[oid]
+        if t == "tailoring":
+            tier = derive_tier(o, objs, sdig_fn or sdig, envelopes=envelopes, trusted=trusted)
+            if tier == "consumer" and "provenance" not in o:
+                parts, n = [], 0
+                for key, word in (("selects", "select"), ("excludes", "exclude"), ("operations", "operation")):
+                    entries = [e for e in o.get(key, []) or [] if isinstance(e, dict)]
+                    bare = sum(1 for e in entries if "provenance" not in e)
+                    if bare:
+                        n += bare
+                        parts.append(f"{bare} of {len(entries)} {word}(s)")
+                if n:
+                    out.append(("AUTHOR-1", oid, n, f"{oid}: {', '.join(parts)} name no author, and the Tailoring names none (AUTHOR-1)"))
+        if t in ("risk", "finding", "implementation") and "provenance" not in o:
+            out.append(("AUTHOR-2", oid, 1, f"{oid}: this {t.capitalize()} does not say who wrote it and when (AUTHOR-2)"))
+        undated = [w for w, d in deviations_of(t, o) if d.get("state") in ("approved", "withdrawn") and "decided" not in d]
+        if undated:
+            out.append(("AUTHOR-3", oid, len(undated), f"{oid}: {len(undated)} Deviation(s) approved or withdrawn without `decided`: {', '.join(undated)} (AUTHOR-3)"))
+        if t == "component":
+            auths = [a for a in o.get("authorizations", []) or [] if isinstance(a, dict)]
+            bare = [str(a.get("id")) for a in auths if "date" not in a]
+            if bare:
+                out.append(("AUTHOR-4", oid, len(bare), f"{oid}: {len(bare)} authorization(s) without a date: {', '.join(bare)} (AUTHOR-4)"))
+    return out
+
+_DT = re.compile(r"^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([0-9]{2})(?:\.[0-9]+)?(Z|[+-][0-9]{2}:[0-9]{2})\Z")
+_ELAPSED = {"seconds": 1, "minutes": 60, "hours": 3600}
+
+def _utc_day(due, start):
+    """-> (the UTC calendar day a `review-due` falls on, None) or (None, why
+    it cannot be evaluated). `start` is the date a duration counts from."""
+    kind = due.get("type")
+    try:
+        if kind == "date":
+            return datetime.date.fromisoformat(due["value"]), None
+        if kind == "datetime":
+            y, mo, d, h, mi, sec, off = _DT.match(due["value"]).groups()
+            minutes = 0 if off == "Z" else (1 if off[0] == "+" else -1) * (int(off[1:3]) * 60 + int(off[4:6]))
+            at = datetime.datetime(int(y), int(mo), int(d), int(h), int(mi), int(sec),
+                                   tzinfo=datetime.timezone(datetime.timedelta(minutes=minutes)))
+            return at.astimezone(datetime.timezone.utc).date(), None
+        if kind == "elapsed-duration":
+            if start is None: return None, "a duration, and no date to count it from"
+            at = datetime.datetime.combine(datetime.date.fromisoformat(start), datetime.time(0), tzinfo=datetime.timezone.utc)
+            return (at + datetime.timedelta(seconds=due["num"] * _ELAPSED[due["unit"]])).date(), None
+        if kind == "calendar-period":
+            return None, f"a calendar period, and this tool has no calendar {due.get('calendar-ref')} (D9: fail-closed without the named calendar)"
+    except (ValueError, OverflowError):
+        return None, "not a day of the calendar"
+    return None, "not a typed review-due"
+
+def review_report(objs, as_of):
+    """REVIEW-1 -> {"dated": n, "overdue": [(object id, where, day)],
+    "not-evaluable": [(object id, where, why)]}. A point in time has passed
+    when its UTC calendar day is before `as_of`; due today is not overdue.
+    A duration counts from `decided`, else `opened`, on a Deviation, and
+    from `acceptance.date` on a Risk. Asked of an approved Deviation and of
+    a Risk still managed; nothing fails by it."""
+    dated, overdue, blind = 0, [], []
+    for oid in by_code_unit(objs):
+        t, o = objs[oid]
+        asked = [(w, d["review-due"], d.get("decided") or d.get("opened")) for w, d in deviations_of(t, o)
+                 if d.get("state") == "approved" and isinstance(d.get("review-due"), dict)]
+        if t == "risk" and risk_is_live(o) and isinstance(o.get("review-due"), dict):
+            asked.append(("review-due", o["review-due"], (o.get("acceptance") or {}).get("date")))
+        for where, due, start in asked:
+            dated += 1
+            day, why = _utc_day(due, start)
+            if day is None: blind.append((oid, where, why))
+            elif day < as_of: overdue.append((oid, where, day.isoformat()))
+    return {"dated": dated, "overdue": overdue, "not-evaluable": blind}
+
+# A draft among the members of an active Set (backlog #86). A draft may be
+# used, voluntarily (the author, 2026-11-14), so nothing fails: that a Set
+# in force lists one is said, one line per Set. CR26 is the measured case:
+# its family AGU is a placeholder of the publisher, draft in the bundle,
+# and seven active Sets list AGU's draft Sets.
+DRAFT_RULES = {
+    "DRAFT-1": "an active Set that lists draft members is reported, with their number - a draft may be used, and a reader of the Set is told that it holds one",
+}
+
+def draft_member_report(objs):
+    """DRAFT-1 -> [(Set id, number of draft members)], in the order of the
+    ids. An entry of `members` counts when the bundle holds the object it
+    names and that object's lifecycle is `draft`, whether it is a
+    Requirement or a Set."""
+    out = []
+    for sid in by_code_unit(objs):
+        t, o = objs[sid]
+        if t != "requirementSet" or o.get("lifecycle") != "active": continue
+        n = sum(1 for m in o.get("members", [])
+                if m.get("ref") in objs and objs[m["ref"]][1].get("lifecycle") == "draft")
+        if n: out.append((sid, n))
+    return out
+
+# WITHDRAWN-1 (2026-11-14, backlog #93). The handbook has said since 1.0.0
+# that new references to a withdrawn object fail validation, and no
+# validator held it. A validator reads one bundle and takes the state of an
+# object as the bundle holds it: a bundle put together before the withdrawal
+# holds the object as it was and stays valid. In a bundle that holds it as
+# withdrawn, an object that says what is in force does not lean on it.
+# Held: the edges below, on an object whose own lifecycle is not `withdrawn`
+# (a Risk: on a live one). Not held, each for its reason: `replaces`,
+# `canonical-alias` and `relations` keep the record of what went and point
+# at it; a Set lists what its catalogue withdrew (the author's decision E1;
+# measured: 220 such members in the CSF and SP 800-53 bundles); an
+# Assessment, a Finding and an Attestation record what was found or signed
+# at a time and stay true when their subject is withdrawn later; a Risk's
+# `treatments` are RISK-11's; facet payloads are not read.
+WITHDRAWN_RULES = {
+    "WITHDRAWN-1": "an object in force does not lean on a withdrawn one - what a Tailoring selects, excludes or changes, "
+                   "what a Mapping joins, what a Component claims or contains, what an Implementation answers, what a "
+                   "Check tests and what a live Risk is about is not withdrawn in the bundle that holds both",
+}
+WITHDRAWN_EDGES = {     # type -> [(the array the entries are in, or None; the member; the edge's name in a message)]
+    "tailoring":      [("selects", "set-ref", "selects set-ref"), ("excludes", "ref", "excludes ref"),
+                       ("operations", "requirement-ref", "operation requirement-ref")],
+    "mapping":        [(None, "source-ref", "source-ref"), (None, "target-ref", "target-ref")],
+    "component":      [("capabilities", "requirement-ref", "capability requirement-ref"),
+                       ("members", "component-ref", "member component-ref")],
+    "implementation": [(None, "component-ref", "component-ref"), (None, "requirement-ref", "requirement-ref"),
+                       ("satisfied-by", "inherited-from/component-ref", "inherited-from component-ref")],
+    "check":          [(None, "requirement-ref", "requirement-ref")],
+    "risk":           [(None, "component-refs", "component-refs"), (None, "tailoring-refs", "tailoring-refs")],
+}
+
+def withdrawn_references(objs):
+    """WITHDRAWN-1 -> [(object id, edge name, id of the withdrawn object)],
+    the objects in the order of their ids, the edges in the order of the
+    table, the entries in the order of the document."""
+    gone = {i for i, (t, o) in objs.items() if o.get("lifecycle") == "withdrawn"}
+    out = []
+    if not gone: return out
+    for oid in by_code_unit(objs):
+        t, o = objs[oid]
+        if t not in WITHDRAWN_EDGES or o.get("lifecycle") == "withdrawn": continue
+        if t == "risk" and not risk_is_live(o): continue
+        for arr, member, name in WITHDRAWN_EDGES[t]:
+            for entry in ([o] if arr is None else (o.get(arr) or [])):
+                v = entry
+                for part in member.split("/"):
+                    v = v.get(part) if isinstance(v, dict) else None
+                for ref in (v if isinstance(v, list) else [v]):
+                    if isinstance(ref, str) and ref in gone: out.append((oid, name, ref))
+    return out
+
+def withdrawn_reference_errors(objs):
+    return [f"{oid}: {name} names {ref}, which is withdrawn (WITHDRAWN-1: {WITHDRAWN_RULES['WITHDRAWN-1']})"
+            for oid, name, ref in withdrawn_references(objs)]
+
+# OPERATION-1 (2026-11-15, backlog #96; D13). A modality, a parameter and a
+# prose are a statement's. The kernel schema asks an operation for `op` and
+# `requirement-ref` only, and the checks that hold a modality to its order
+# and a value to its declaration look the statement up and asked nothing
+# where they found none. Measured on copies of the example folder before
+# this rule: a set-modality from must to may without a statement-id passed
+# at consumer tier without a Deviation, where the same operation with the
+# statement-id failed; a set-parameter with a text for an integer passed the
+# check of its value without a statement-id, and CHECK-12 took it as bound
+# all the same; a set-parameter on a parameter its statement does not
+# declare passed. An empty statement-id names no statement: an id has at
+# least one character.
+OPERATION_RULES = {
+    "OPERATION-1": "an operation that changes a statement names it - set-modality, set-parameter and replace-prose "
+                   "carry a statement-id, and a set-parameter names a parameter that statement declares",
+}
+OPERATION_ON_STATEMENT = ("set-modality", "set-parameter", "replace-prose")
+
+def operation_targets(objs):
+    """OPERATION-1 -> [(tailoring id, index of the operation, "statement" or
+    "parameter")], the Tailorings in the order of their ids, the operations in
+    the order of the document. "statement": the operation names no statement.
+    "parameter": a set-parameter names a statement the bundle holds and a
+    parameter that statement does not declare. A statement-id that names no
+    statement of the Requirement is the closure check's, and a Requirement
+    the bundle does not hold is closure-required: neither is said twice."""
+    out = []
+    for oid in by_code_unit(objs):
+        t, o = objs[oid]
+        if t != "tailoring": continue
+        for i, op in enumerate(o.get("operations") or []):
+            if op.get("op") not in OPERATION_ON_STATEMENT: continue
+            sid = op.get("statement-id")
+            if not isinstance(sid, str) or sid == "":
+                out.append((oid, i, "statement")); continue
+            if op["op"] != "set-parameter": continue
+            tgt = objs.get(op.get("requirement-ref"))
+            if not tgt or tgt[0] != "requirement": continue
+            stmt = next((x for x in tgt[1]["statements"] if x["id"] == sid), None)
+            if stmt is None: continue
+            if not any(d["name"] == op.get("parameter") for d in stmt.get("parameters") or []):
+                out.append((oid, i, "parameter"))
+    return out
+
+def operation_target_errors(objs):
+    errs = []
+    for oid, i, what in operation_targets(objs):
+        op = objs[oid][1]["operations"][i]
+        said = f"(OPERATION-1: {OPERATION_RULES['OPERATION-1']})"
+        if what == "statement":
+            errs.append(f"{oid}: operations[{i}]: {op['op']} names no statement {said}")
+        else:
+            errs.append(f"{oid}: operations[{i}]: set-parameter names the parameter '{op.get('parameter')}', which statement "
+                        f"'{op['statement-id']}' of {op['requirement-ref']} does not declare {said}")
+    return errs
+
+# FRAGMENT-1 (2026-11-14, backlog #82; D9). A text of a bundle refers to
+# something as `#id`: as the target of a link in a text, `(#id)`, or as the
+# whole value of a member named `href`. The form comes from the sources,
+# which use it for more than one kind of target. Measured on the SP 800-53
+# bundle: 541 such references, of which 118 name a resource, 348 another
+# control, 73 a statement, one a parameter and one nothing (the source's
+# own defect, an objective that names a statement AC-2 does not have); in
+# the ISM all 486 name a resource. The report says, per bundle, how many
+# name each kind and which name nothing. Nothing fails by it.
+REFERENCES_FACET = "https://ns.jascon.net/stdlib/facet/references@1"
+FRAGMENT_RULES = {
+    "FRAGMENT-1": "a reference of the form #id names a resource the bundle carries, an object, a statement, a parameter "
+                  "or a source document of the manifest; the ones that name nothing are reported",
+}
+FRAGMENT_KINDS = ("resource", "object", "statement", "parameter", "source")
+_FRAGMENT_IN_TEXT = re.compile(r"\(#([^) \t\r\n]+)\)")
+
+def ascii_lower(s):
+    """A to Z as a to z, and no other character changed - the same in every
+    language a validator is written in, which a locale's lower case is not."""
+    return "".join(chr(ord(c) + 32) if "A" <= c <= "Z" else c for c in s)
+
+def fragments_of(o):
+    """-> every `id` an object refers to as `#id`: each `(#id)` in a string
+    at any depth, and the whole of a string that begins with `#` under a
+    member named `href`. A `private:` facet is not read, under `facets` or
+    under an Assessment's `method`, whose keys are facet ids too (D10)."""
+    out = []
+    def walk(x, key):
+        if isinstance(x, dict):
+            for k, v in x.items(): walk(v, k)
+        elif isinstance(x, list):
+            for v in x: walk(v, key)
+        elif isinstance(x, str):
+            if key == "href" and x.startswith("#") and len(x) > 1: out.append(x[1:])
+            out.extend(_FRAGMENT_IN_TEXT.findall(x))
+    for k, v in o.items():
+        if k in ("facets", "method") and isinstance(v, dict):
+            for fid, payload in v.items():
+                if not fid.startswith("private:"): walk(payload, fid)
+        else:
+            walk(v, k)
+    return out
+
+def fragment_report(objs, manifest=None):
+    """FRAGMENT-1 -> {"total", "resource", "object", "statement",
+    "parameter", "source": numbers; "nothing": [[object id, id]]}. The first
+    kind that fits is counted, in this order:
+    resource   an entry of `resources` with that `id`, in the references@1
+               facet of the object itself or of a Set that lists it as a
+               member, directly or through nested Sets;
+    object     an object of the bundle whose id ends, after its last `/`,
+               in that id - A to Z compared as a to z;
+    statement  `<object>_<statement id>`, split at one of its `_`: the
+               object found as above, the statement one of its own;
+    parameter  the `name` of a parameter of a statement in the bundle;
+    source     the `uuid` of an entry of the manifest's provenance.sources.
+    `nothing` is in the order of the object ids, then of the ids named."""
+    parents, own, tail, stmts, params = {}, {}, {}, {}, set()
+    for oid, (t, o) in objs.items():
+        if t == "requirementSet":
+            for m in o.get("members", []):
+                parents.setdefault(m.get("ref"), []).append(oid)
+        payload = (o.get("facets") or {}).get(REFERENCES_FACET)
+        res = payload.get("resources") if isinstance(payload, dict) else None
+        own[oid] = {r["id"] for r in res if isinstance(r, dict) and isinstance(r.get("id"), str)} if isinstance(res, list) else set()
+        seg = oid.rsplit("/", 1)[-1]
+        if seg: tail.setdefault(ascii_lower(seg), []).append(oid)
+        if t == "requirement":
+            stmts[oid] = {s["id"] for s in o["statements"]}
+            params.update(p["name"] for s in o["statements"] for p in s.get("parameters", []) or [])
+    sources = {e["uuid"] for e in ((manifest or {}).get("provenance") or {}).get("sources", []) or []
+               if isinstance(e, dict) and isinstance(e.get("uuid"), str)}
+    def resources_in_reach(oid):
+        seen, todo, found = {oid}, [oid], set()
+        while todo:
+            cur = todo.pop()
+            found |= own.get(cur, set())
+            for p in parents.get(cur, []):
+                if p not in seen: seen.add(p); todo.append(p)
+        return found
+    def names_statement(x):
+        for k, c in enumerate(x):
+            if c != "_": continue
+            if any(x[k + 1:] in stmts.get(cand, ()) for cand in tail.get(ascii_lower(x[:k]), [])): return True
+        return False
+    r = {"total": 0, "nothing": []}
+    for k in FRAGMENT_KINDS: r[k] = 0
+    for oid in by_code_unit(objs):
+        named = fragments_of(objs[oid][1])
+        if not named: continue
+        reach = resources_in_reach(oid)
+        missing = []
+        for x in named:
+            r["total"] += 1
+            if x in reach: r["resource"] += 1
+            elif ascii_lower(x) in tail: r["object"] += 1
+            elif names_statement(x): r["statement"] += 1
+            elif x in params: r["parameter"] += 1
+            elif x in sources: r["source"] += 1
+            else: missing.append(x)
+        r["nothing"] += [[oid, x] for x in by_code_unit(missing)]
+    return r
+
+def report_fragments(objs, manifest=None):
+    r = fragment_report(objs, manifest)
+    if not r["total"]: return
+    print(f"    fragments: {r['total']} reference(s) of the form #id: {r['resource']} to a resource, {r['object']} to an object, "
+          f"{r['statement']} to a statement, {r['parameter']} to a parameter, {r['source']} to a source document, "
+          f"{len(r['nothing'])} to nothing (FRAGMENT-1)")
+    for oid, x in r["nothing"]:
+        print(f"    note: {oid}: #{x} names nothing the bundle carries (FRAGMENT-1: reported; nothing fails)")
+
+def report_authors_and_reviews(section, objs, envelopes=None):
+    """Prints the reports for one bundle. AUTHOR lines are notes, or
+    failures under --require-authors; REVIEW and DRAFT lines are always
+    notes."""
+    for rule, _, _, msg in author_report(objs, envelopes=envelopes, trusted=TRUSTED):
+        if REQUIRE_AUTHORS: fail(section, msg)
+        else: print(f"    note: {msg}")
+    r = review_report(objs, AS_OF)
+    if r["dated"]:
+        print(f"    review: {r['dated']} review date(s) asked as of {AS_OF.isoformat()}: "
+              f"{len(r['overdue'])} overdue, {len(r['not-evaluable'])} not evaluable (REVIEW-1)")
+    for oid, where, day in r["overdue"]:
+        print(f"    note: {oid}: {where} was due on {day} (REVIEW-1: overdue; it still holds until someone acts)")
+    for oid, where, why in r["not-evaluable"]:
+        print(f"    note: {oid}: {where} is not evaluated: {why} (REVIEW-1)")
+    for sid, n in draft_member_report(objs):
+        print(f"    note: {sid}: an active Set lists {n} draft member(s) (DRAFT-1: a draft may be used; nothing fails)")
+
+def run_author():
+    v = json.load(open(os.path.join(CONF, "author-vectors.json"), encoding="utf-8"))
+    def typed(case):
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        return objs if len(objs) == len(case["objects"]) else None
+    for case in v["author-vectors"]:
+        objs = typed(case)
+        got = None if objs is None else [[rule, oid, n] for rule, oid, n, _ in author_report(objs)]
+        if got == case["expected"]: ok("author")
+        else: fail("author", f"{case['name']}: expected {case['expected']}, got {got}")
+    for case in v["review-vectors"]:
+        objs = typed(case)
+        r = None if objs is None else review_report(objs, datetime.date.fromisoformat(case["as-of"]))
+        got = None if r is None else ([[o, w] for o, w, _ in r["overdue"]], [[o, w] for o, w, _ in r["not-evaluable"]])
+        if got == (case.get("expected-overdue", []), case.get("expected-not-evaluable", [])): ok("author")
+        else: fail("author", f"{case['name']}: expected overdue {case.get('expected-overdue', [])} / not evaluable {case.get('expected-not-evaluable', [])}, got {got}")
 
 def run_risk():
     v = json.load(open(os.path.join(CONF, "risk-vectors.json"), encoding="utf-8"))
@@ -2062,7 +2752,7 @@ def _evidence_chain(oid, at, a, row, read):
         # the store has one layout: a file is named by the SHA-256 of its bytes.
         # A relative ref anywhere else is refused before it is read, so no tool
         # that walks the store can miss a blob another tool accepted.
-        m = re.match(r"^evidence/sha256/([0-9a-f]{64})$", ref)
+        m = re.match(r"^evidence/sha256/([0-9a-f]{64})\Z", ref)      # \Z: a ref that ends in a line break is another ref (#68)
         if not m:
             bad(f"{what} ref {ref} is outside the store - a ref is evidence/sha256/<the 64 hex digits of its digest>"); return None
         if "sha256:" + m.group(1) != want:
@@ -2336,6 +3026,22 @@ def run_lifecycle():
         okv = got == case["composed"] or (case["composed"] == "supports" and got in ("supports", "intersects"))
         if okv: ok("lifecycle")
         else: fail("lifecycle", f"compose({case['a']},{case['b']}): expected {case['composed']}, got {got}")
+    for case in v["draft-members"]:                     # DRAFT-1 (backlog #86): a report, never a failure
+        objs = {}
+        for o in case["objects"]:
+            ty = inferType_single(o)
+            if ty: objs[o["id"]] = (ty, o)
+        got = None if len(objs) != len(case["objects"]) else [[sid, n] for sid, n in draft_member_report(objs)]
+        if got == case["expected"]: ok("lifecycle")
+        else: fail("lifecycle", f"draft-members {case['name']}: expected {case['expected']}, got {got}")
+    for case in v["withdrawn-references"]:              # WITHDRAWN-1 (backlog #93)
+        objs = {}
+        for o in case["objects"]:
+            ty = inferType_single(o)
+            if ty: objs[o["id"]] = (ty, o)
+        got = None if len(objs) != len(case["objects"]) else [list(x) for x in withdrawn_references(objs)]
+        if got == case["expected"]: ok("lifecycle")
+        else: fail("lifecycle", f"withdrawn-references {case['name']}: expected {case['expected']}, got {got}")
     # shape disjointness: eleven canonical minimal objects -> exactly one match each; garbage -> zero
     P = "https://ex.org"
     MINIMAL = {
@@ -2777,6 +3483,7 @@ def validate_object(section, path, obj):
     t = matches[0]
     viol = optional_empty_violations(obj)
     if viol: fail(section, f"{path}: optional empty containers present: {viol}")
+    for e in history_errors(obj): fail(section, f"{path}: {e}")
     if t == "requirement":
         sids = {s["id"] for s in obj["statements"]}
         if len(sids) != len(obj["statements"]):
@@ -2821,25 +3528,118 @@ def load_facet_pins(bdir, manifest, section):
                                            ["assessment", "tailoring", "selection", "rendering"])
             # #26 (D26 final): a pin of a STDLIB id must be the descriptor
             # VERBATIM - the pin and the normative schema cannot diverge
-            if sd["id"] in STDLIB_RAW and canonical(sd.get("schema")) != canonical(STDLIB_RAW[sd["id"]]):
-                fail(section, f"{fe['path']}: pin of stdlib facet {sd['id']} DIVERGES from the normative descriptor (D26)")
+            # The library may hold several versions of a facet: the pin is
+            # held to the one it states.
+            if sd["id"] in STDLIB_VERSIONS:
+                held = STDLIB_VERSIONS[sd["id"]].get(sd.get("version"))
+                if held is None:
+                    fail(section, f"{fe['path']}: pin of stdlib facet {sd['id']} states version {sd.get('version')!r}, "
+                                  f"which the standard library does not hold (it holds {', '.join(sorted(STDLIB_VERSIONS[sd['id']]))})")
+                elif canonical(sd.get("schema")) != canonical(held):
+                    fail(section, f"{fe['path']}: pin of stdlib facet {sd['id']} DIVERGES from the normative descriptor (D26)")
         except Exception as e:
             fail(section, f"{fe['path']}: pinned facet schema unreadable: {e}")
     return pinned, pinned_decl
 
-def beside_attestations(bdir, listed_paths):
-    """Attestations BESIDE the manifest (D3.1): JSON files in the manifest's
-    own folder that it does not list and that type as an Attestation. A pack
-    lists Components only (ADVICE-1), so its vendor's Attestation is here."""
-    out = {}
+def beside_attestation_files(bdir, listed_paths):
+    """-> [(file name, bytes, object)]: the Attestations BESIDE the manifest
+    (D3.1) - JSON files in the manifest's own folder that it does not list
+    and that type as an Attestation, in the order of their names. An
+    Attestation binds the digest of the manifest's bytes, so the manifest
+    cannot list it; this is where every bundle keeps one."""
+    out = []
     for fn in sorted(os.listdir(bdir)):
         if not fn.endswith(".json") or fn == "content-manifest.json" or fn in listed_paths: continue
         try:
-            o = json.load(open(os.path.join(bdir, fn), encoding="utf-8"))
+            raw = open(os.path.join(bdir, fn), "rb").read()
+            o = json.loads(raw.decode("utf-8"))
         except Exception:
             continue
-        if isinstance(o, dict) and inferType_single(o) == "attestation": out[o["id"]] = ("attestation", o)
+        if isinstance(o, dict) and inferType_single(o) == "attestation": out.append((fn, raw, o))
     return out
+
+def beside_attestations(bdir, listed_paths):
+    """The same as {id: ("attestation", object)}."""
+    return {o["id"]: ("attestation", o) for _, _, o in beside_attestation_files(bdir, listed_paths)}
+
+# ---------------- attestation-binds, applied to a bundle (Appendix B.1.7; backlog #46) ----------------
+# The primitive is (attestation, bundle) -> Full Match | Semantic Match |
+# fail. Until 2026-11-14 no tool applied it to a bundle. The vectors
+# exercised the two digests of one object; a bundle's Attestation was read
+# for its envelope, for a Tailoring's tier and for a pack's publisher, and
+# never held to its subjects. So the example folder shipped, from before
+# 1.0.0, an Attestation whose three subject digests matched no object and
+# whose manifest digest matched no manifest, and the IFA bundle one whose
+# digest of the system Component matched nothing - and every run was green.
+#
+# Each subject is judged against the objects the manifest lists:
+#   match    an object carries the signed semantic digest - the object of
+#            that id where the subject names one, any object where it is a
+#            bare digest;
+#   differs  the object of that id carries another digest: its normative
+#            content changed after signing;
+#   absent   no object of that id, or no object with that digest: what is
+#            not delivered cannot be recomputed.
+# The manifest the Attestation binds is `this` one (the digest of its bytes
+# as delivered), a `kept-pack` (a vendor's manifest the bundle keeps under
+# packs/sha256/, D25) or an`other`.
+#   Full Match      every subject matches, and the manifest is this one or a
+#                   kept pack's;
+#   Semantic Match  every subject matches, and the manifest is another: the
+#                   content is proven, the packaging was altered (D7) -
+#                   reported, never a failure and never Full;
+#   fail            anything else.
+# The verdict is about digests. Whether the signature is valid is the
+# envelope's matter and is reported beside it, as before.
+#
+# A `fail` verdict fails the bundle when the Attestation is still claimed:
+# lifecycle `active`. A draft is not issued yet, and a deprecated or
+# withdrawn one is kept for the record; each is reported with its verdict
+# and fails nothing. Otherwise a bundle whose attested object was changed
+# could never validate again, however openly the Attestation was withdrawn
+# (argued, 2026-11-14; the primitive does not speak of lifecycle).
+def attestation_binds(att, manifest_digest, objs, kept_packs=()):
+    """-> {"verdict", "manifest", "subjects": [(status, id or None, signed
+    digest, delivered digest or None)], "fails"}. objs: id -> (type,
+    object), the objects the manifest lists."""
+    delivered = {oid: sdig(o) for oid, (_, o) in objs.items()}
+    carried = set(delivered.values())
+    subjects = []
+    for sj in att.get("subject-semantic-digests") or []:
+        if isinstance(sj, dict):
+            sid, signed = sj.get("id"), sj.get("semantic-digest")
+            have = delivered.get(sid)
+            subjects.append(("absent" if have is None else "match" if have == signed else "differs", sid, signed, have))
+        else:
+            subjects.append(("match", None, sj, sj) if sj in carried else ("absent", None, sj, None))
+    bound = att.get("content-manifest-digest")
+    manifest = "this" if bound == manifest_digest else "kept-pack" if bound in set(kept_packs) else "other"
+    if not subjects or any(st != "match" for st, *_ in subjects): verdict = "fail"
+    else: verdict = "semantic-match" if manifest == "other" else "full-match"
+    return {"verdict": verdict, "manifest": manifest, "subjects": subjects,
+            "fails": verdict == "fail" and att.get("lifecycle") == "active"}
+
+BINDS_MANIFEST = {"this": "this manifest", "kept-pack": "a pack manifest this bundle keeps", "other": "another manifest"}
+def binds_report(section, atts, manifest_digest, objs, kept):
+    """One line per Attestation read with a bundle; a `fail` verdict fails
+    the bundle, in the words of Appendix B.1.7. atts: {id: object}."""
+    packs = ["sha256:" + name for name, _ in kept]
+    for aid in by_code_unit(atts):
+        r = attestation_binds(atts[aid], manifest_digest, objs, packs)
+        n, what = len(r["subjects"]), BINDS_MANIFEST[r["manifest"]]
+        if r["verdict"] == "full-match":
+            print(f"    binds: {aid} = FULL MATCH [{n} subject(s) of this bundle; {what}]")
+        elif r["verdict"] == "semantic-match":
+            print(f"    binds: {aid} = SEMANTIC MATCH [{n} subject(s) of this bundle; {what}: the content is proven, the packaging was altered]")
+        else:
+            lines = [f"subject {sid or signed}: " + ("recomputed semantic digest " + have + ", signed " + signed if st == "differs"
+                                                     else "not an object of this bundle" if sid else "no object of this bundle carries it")
+                     for st, sid, signed, have in r["subjects"] if st != "match"] or ["it names no subject"]
+            if r["fails"]:
+                fail(section, f"[attestation-binds] {aid}: {'; '.join(lines)} - {what} "
+                              f"(B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)")
+            else:
+                print(f"    binds: {aid} = DOES NOT BIND [lifecycle {atts[aid].get('lifecycle')}: reported, not a failure] {'; '.join(lines)} - {what}")
 
 def advice_report(section, bdir, manifest, raw_manifest, objs, pinned_decl, envelopes):
     """CP-ADVICE-1 for one bundle: ADVICE-1..10, and who published what."""
@@ -2907,11 +3707,28 @@ def validate_bundle(bdir):
         seen_ids[obj.get("id")] = rel
         if t: bundle_objs[obj["id"]] = (t, obj)
     pinned, pinned_decl = load_facet_pins(bdir, manifest, section)
+    # Attestations BESIDE the manifest (D3.1) are read with every bundle
+    # (backlog #46). Until 2026-11-14 they were read for a pack only, so a
+    # bundle's own Attestation - which cannot be listed, because it binds the
+    # manifest's digest - was not typed, not held to its envelope and never
+    # seen by the tier derivation. They are objects the run validates and
+    # counts; they are not objects of the manifest, so `bundle_objs` stays
+    # what the manifest lists and `with_atts` adds them where a rule asks
+    # who attested what.
+    beside = {}
+    for fn, raw, o in beside_attestation_files(bdir, set(listed)):
+        number_failures(section, fn, raw)
+        if validate_object(section, fn, o) != "attestation": continue
+        typec["attestation"] += 1
+        if o["id"] in seen_ids: fail(section, f"{fn}: object id already used by {seen_ids[o['id']]}")
+        seen_ids[o["id"]] = fn
+        beside[o["id"]] = ("attestation", o)
+    with_atts = {**bundle_objs, **beside}
     # DSSE envelopes (#24): envelope-ref resolves to a file BESIDE the
     # manifest (nothing signed contains its own signature, D3); with
     # --trusted-keys the run is in verification mode.
     envelopes = {}
-    for oid, (t2, o2) in bundle_objs.items():
+    for oid, (t2, o2) in with_atts.items():
         if t2 != "attestation" or not o2.get("envelope-ref"): continue
         ep = os.path.join(bdir, o2["envelope-ref"])
         if os.path.exists(ep):
@@ -2921,7 +3738,7 @@ def validate_bundle(bdir):
                 fail(section, f"{o2['envelope-ref']}: envelope unreadable: {e}")
         else:
             fail(section, f"{oid}: envelope-ref '{o2['envelope-ref']}' does not resolve beside the manifest")
-    for oid, (t2, o2) in sorted(bundle_objs.items()):
+    for oid, (t2, o2) in sorted(with_atts.items()):
         if t2 != "attestation": continue
         if o2.get("envelope-ref"):
             env = envelopes.get(o2["envelope-ref"])
@@ -2933,20 +3750,28 @@ def validate_bundle(bdir):
                 print(f"    dsse: {oid} = {tag}")
         else:
             print(f"    dsse: {oid} = no envelope (unsigned attestation)")
+    # attestation-binds (B.1.7): every Attestation read with the bundle is held to its subjects and its manifest
+    binds_report(section, {i: o for i, (t2, o) in with_atts.items() if t2 == "attestation"},
+                 pkg_digest(raw_manifest), bundle_objs, read_kept_packs(bdir))
     # reference taxonomy (#16) + facet payloads (#17) + tier duties (#19/#24)
     for e in closure_errors(bundle_objs):
         fail(section, e)
-    for e in tailoring_duty_errors(bundle_objs, pinned_decl=pinned_decl,
+    for e in withdrawn_reference_errors(bundle_objs): fail(section, e)      # WITHDRAWN-1
+    for e in operation_target_errors(bundle_objs): fail(section, e)         # OPERATION-1
+    for e in tailoring_duty_errors(with_atts, pinned_decl=pinned_decl,
                                    envelopes=envelopes, trusted=TRUSTED):
         fail(section, e)
     for e in kernel_pin_errors(manifest, bundle_objs): fail(section, e)
+    for e in listed_attestation_errors(bundle_objs): fail(section, e)       # MANIFEST-1
     s_errs, s_notes = scale_errors(load_scale_pins(bdir, manifest, section), bundle_objs)
     for e in s_errs: fail(section, e)
     for n in s_notes: print(f"    note: {n}")
     # CP-RISK-1: B.1.9 risk-coverage report (+ RISK-11 errors), RISK-9/10 notes
-    cov, cerrs, cnotes = risk_coverage(bundle_objs, envelopes=envelopes, trusted=TRUSTED)
+    cov, cerrs, cnotes = risk_coverage(with_atts, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(bundle_objs): print(f"    note: {n}")
+    report_authors_and_reviews(section, with_atts, envelopes)
+    report_fragments(bundle_objs, manifest)                                 # FRAGMENT-1
     # the report is printed where there is a register to report on; the
     # policy switch applies regardless - a bundle with a Tailoring and NO
     # Risk at all is the limiting case of "justified by no Risk", not an
@@ -2974,7 +3799,7 @@ def validate_bundle(bdir):
     for tid, (tt, tobj2) in sorted(bundle_objs.items()):
         if tt == "tailoring":
             tnotes = []
-            tr = derive_tier(tobj2, bundle_objs, sdig, envelopes=envelopes, trusted=TRUSTED, notes=tnotes)
+            tr = derive_tier(tobj2, with_atts, sdig, envelopes=envelopes, trusted=TRUSTED, notes=tnotes)
             note = {"authority-claimed": " [prefix claim - UNPROVEN]",
                     "authority-proven": (" [attestation digest-matched + signature VERIFIED]"
                                          if TRUSTED is not None else
@@ -2995,7 +3820,7 @@ def validate_examples():
     exdir = os.path.join(SKILL, "examples")
     section = "skill-examples"
     typec = collections.Counter()
-    exobjs = {}
+    exobjs, listed_objs = {}, {}        # every object of the folder; those the manifest lists
     # The example manifest is checked like any other (it was not, and at
     # 1.0.0 its package digests were a mix of CRLF and LF spellings - 8 of
     # 12 failed on an LF tree, the other 4 on a CRLF tree, unnoticed).
@@ -3026,27 +3851,55 @@ def validate_examples():
             if t != "attestation":
                 fail(section, f"{fn}: on disk but not in manifest")
             continue
+        if t: listed_objs[obj["id"]] = (t, obj)
         if pkg_digest(raw) != entry["package-digest"]:
             fail(section, f"{fn}: package-digest mismatch{eol_hint(raw, entry['package-digest'])}")
         if sdig(obj) != entry["semantic-digest"]:
             fail(section, f"{fn}: semantic-digest mismatch")
         if obj.get("id") != entry["id"]:
             fail(section, f"{fn}: manifest id != object id")
+    # The folder's Attestations are held to their envelopes and to what they
+    # bind, as a bundle's are (backlog #46). Until 2026-11-14 this pass read
+    # no envelope and compared no digest: the example Attestation named an
+    # envelope that did not exist and three subjects that matched nothing.
+    envelopes = {}
+    for oid in by_code_unit([i for i, (t, _) in exobjs.items() if t == "attestation"]):
+        att = exobjs[oid][1]
+        ref = att.get("envelope-ref")
+        if not ref:
+            print(f"    dsse: {oid} = no envelope (unsigned attestation)"); continue
+        ep = os.path.join(exdir, ref)
+        if not os.path.exists(ep):
+            fail(section, f"{oid}: envelope-ref '{ref}' does not resolve beside the manifest"); continue
+        try: envelopes[ref] = json.load(open(ep, encoding="utf-8"))
+        except Exception as e:
+            fail(section, f"{ref}: envelope unreadable: {e}"); continue
+        st, why = verify_envelope(envelopes[ref], att, TRUSTED)
+        if st == "error": fail(section, f"{oid}: dsse: {why}")
+        print(f"    dsse: {oid} = " + {"verified": "signature VERIFIED (Ed25519)",
+                                        "unverified": f"signature UNVERIFIED - {why}"}.get(st, f"FAIL - {why}"))
+    binds_report(section, {i: o for i, (t, o) in exobjs.items() if t == "attestation"},
+                 pkg_digest(raw_manifest), listed_objs, read_kept_packs(exdir))
     for e in closure_errors(exobjs): fail(section, e)
+    for e in withdrawn_reference_errors(exobjs): fail(section, e)           # WITHDRAWN-1
+    for e in operation_target_errors(exobjs): fail(section, e)              # OPERATION-1
     # facet payloads against stdlib / the pins just loaded (#17) - the
     # example pass loaded the pins and never applied them
     for e in facet_errors([(oid, o) for oid, (t, o) in exobjs.items()], pinned): fail(section, e)
     for e in kernel_pin_errors(manifest, exobjs): fail(section, e)
+    for e in listed_attestation_errors(listed_objs): fail(section, e)       # MANIFEST-1
     s_errs, s_notes = scale_errors(load_scale_pins(exdir, manifest, section), exobjs)
     for e in s_errs: fail(section, e)
     for n in s_notes: print(f"    note: {n}")
     c_errs, c_notes = check_errors(exobjs, read=store_reader(exdir))
     for _, e in c_errs: fail(section, e)
     for n in c_notes: print(f"    note: {n}")
-    advice_report(section, exdir, manifest, raw_manifest, exobjs, pinned_decl, None)
-    cov, cerrs, cnotes = risk_coverage(exobjs)
+    advice_report(section, exdir, manifest, raw_manifest, exobjs, pinned_decl, envelopes)
+    cov, cerrs, cnotes = risk_coverage(exobjs, envelopes=envelopes, trusted=TRUSTED)
     for e in cerrs: fail(section, e)
     for n in cnotes + risk_link_notes(exobjs): print(f"    note: {n}")
+    report_authors_and_reviews(section, exobjs, envelopes)
+    report_fragments(exobjs, manifest)                                      # FRAGMENT-1
     for tid, r in cov["tailorings"].items():
         print(f"    risk-coverage: {tid} [{r['tier']}] selected={r['selected']}"
               f"{'+ (open: predicate select)' if r['open-selection'] else ''} "
@@ -3062,7 +3915,18 @@ def validate_examples():
 # --compose DIR_A DIR_B runs the D3.5 composition engine over two bundles.
 TRUSTED = None
 REQUIRE_RISK_BASIS = False
+REQUIRE_AUTHORS = False
+AS_OF = datetime.datetime.now(datetime.timezone.utc).date()    # REVIEW-1: the date of the run, unless --as-of sets it
 _argv = sys.argv[1:]
+if "--require-authors" in _argv:         # policy switch: AUTHOR-1..4 lines become failures
+    REQUIRE_AUTHORS = True
+    _argv.remove("--require-authors")
+if "--as-of" in _argv:
+    _i = _argv.index("--as-of")
+    if not VALIDATORS["date"].is_valid(_argv[_i + 1]): sys.exit(f"--as-of {_argv[_i + 1]!r} is not a date, YYYY-MM-DD")
+    try: AS_OF = datetime.date.fromisoformat(_argv[_i + 1])
+    except ValueError: sys.exit(f"--as-of {_argv[_i + 1]!r} is not a day of the calendar")
+    _argv = _argv[:_i] + _argv[_i + 2:]
 if "--require-risk-basis" in _argv:      # policy switch: uncovered selections become failures
     REQUIRE_RISK_BASIS = True
     _argv.remove("--require-risk-basis")
@@ -3117,8 +3981,8 @@ if "--import-advice" in _argv:
     sys.exit(1 if R["result"] == "refused" else 0)
 
 print("== conformance corpus ==")
-run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale(); run_check(); run_advice()
-for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale", "check", "advice"):
+run_jcs(); run_modality(); run_parameters(); run_tailoring(); run_attestation(); run_facets(); run_references(); run_lifecycle(); run_tiers(); run_dsse(); run_composition(); run_conditional(); run_risk(); run_kernel(); run_scale(); run_check(); run_advice(); run_author()
+for k in ("jcs", "modality", "parameter", "tailoring", "attestation", "facet", "reference", "lifecycle", "tier", "dsse", "composition", "conditional", "risk", "kernel", "scale", "check", "advice", "author"):
     print(f"  {k}: {counts[k]} pass, {counts[k + ':FAIL']} fail")
 
 print("== bundles ==")

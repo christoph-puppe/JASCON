@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/gc",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Governance und Compliance"
@@ -16,50 +16,50 @@
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-3",
-   "sequence": 80
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-4",
-   "sequence": 110
-  },
-  {
-   "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-5",
    "sequence": 130
   },
   {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-4",
+   "sequence": 160
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-5",
+   "sequence": 230
+  },
+  {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-6",
-   "sequence": 150
+   "sequence": 250
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-7",
-   "sequence": 180
+   "sequence": 310
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-8",
-   "sequence": 200
+   "sequence": 330
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-9",
-   "sequence": 220
+   "sequence": 450
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-10",
-   "sequence": 240
+   "sequence": 500
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-11",
-   "sequence": 260
+   "sequence": 520
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/gc-12",
-   "sequence": 280
+   "sequence": 540
   }
  ],
  "label": "GC",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Governance und Compliance stellt sicher, dass Informationssicherheitsstrategien mit den übergeordneten Zielen der Institution und regulatorischen Anforderungen im Einklang stehen. Sie vereint die strategische Steuerung der Informationssicherheit mit der systematischen Identifikation und Integration externer sowie interner Anforderungen.  Diese Praktik definiert den strategischen Rahmen für die Informationssicherheit und beantwortet die Fragen nach dem \"Was\" und \"Warum\" von Anforderungen und Sicherheitsmaßnahmen. Sie gewährleistet die Einbindung der obersten Führungsebene in wichtige Entscheidungen zur Informationssicherheit und stellt sicher, dass alle relevanten gesetzlichen, regulatorischen und vertraglichen Vorgaben identifiziert und berücksichtigt werden.  Während Governance und Compliance die strategische Ausrichtung und die Anforderungen definiert, übernehmen die operativen Praktiken wie Strukturmodellierung und Umsetzung die konkrete Ausgestaltung."
+    "de": "Die Praktik Governance und Compliance stellt sicher, dass Informationssicherheitsstrategien mit den übergeordneten Zielen der Institution und regulatorischen Anforderungen im Einklang stehen. Sie vereint die strategische Steuerung der Informationssicherheit mit der systematischen Identifikation und Integration externer sowie interner Anforderungen. Diese Praktik definiert den strategischen Rahmen für die Informationssicherheit und beantwortet die Fragen nach dem \"Was\" und \"Warum\" von Anforderungen und Sicherheitsmaßnahmen. Sie gewährleistet die Einbindung der obersten Führungsebene in wichtige Entscheidungen zur Informationssicherheit und stellt sicher, dass alle relevanten gesetzlichen, regulatorischen und vertraglichen Vorgaben identifiziert und berücksichtigt werden. Während Governance und Compliance die strategische Ausrichtung und die Anforderungen definiert, übernehmen die operativen Praktiken wie Strukturmodellierung und Umsetzung die konkrete Ausgestaltung."
    }
   }
  },

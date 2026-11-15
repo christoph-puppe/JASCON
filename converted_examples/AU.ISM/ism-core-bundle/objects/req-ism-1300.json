@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1300",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1300",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Upon returning from travelling overseas with mobile devices, personnel take the following actions:\n\n- sanitise and reset mobile devices, including all removable media\n- decommission any credentials that left their possession during their travel\n- report if significant doubt exists as to the integrity of any mobile devices or removable media."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

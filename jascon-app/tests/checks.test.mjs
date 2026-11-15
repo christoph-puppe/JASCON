@@ -182,8 +182,11 @@ test("checks page: from a CIS import to saved checks, with a simulated model", {
     await f.locator("#pick").setInputFiles({ name: "cis-synthetic.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(cisSynthetic())) });
     assert.equal(await f.locator("#o-preset").inputValue(), "cis-benchmark", "the preset is guessed from the title");
     assert.equal(await f.locator("#o-ns").inputValue(), "https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts");
+    /* who states the cross-references and when, as the source has it: CIS, on the day the catalog was last changed; two fields that can be typed over */
+    assert.deepEqual([await f.locator("#o-author").inputValue(), await f.locator("#o-date").inputValue()], ["https://ns.cisecurity.org/benchmark/ubuntu-24.04-lts/party/cis", "2026-11-11"]);
     await f.locator("#o-checks").check();
     await f.locator("#run").click();
+    assert.match(await f.locator("#report-provenance").innerText(), /of 4 record\(s\) that can name an author: 4 as the source states it, 0 as entered here, 0 not stated/);
     await f.locator("#write").click();
     /* 2. the hub hands over to the Checks tool, on its drafting view, and nothing has been sent */
     await f.locator("#d-body .stmt .verdict-warn").waitFor({ timeout: 30000 });
@@ -198,6 +201,15 @@ test("checks page: from a CIS import to saved checks, with a simulated model", {
     await f.locator("#d-access .ai-key").dispatchEvent("change");
     await f.locator("#d-access .verdict-ok").waitFor();
     assert.deepEqual(sent, [], "typing the key sends nothing");
+    /* 3a. backlog #70: a draft is a Check, and the kernel requires its author. Nobody is named in this browser, so nothing
+       can be sent: until build 0.9.10 the page wrote <namespace>/party/check-author here, a party nobody had named */
+    assert.equal(await f.locator("#d-author").inputValue(), "", "the author field starts from the setting, and the setting is empty");
+    assert.ok(await f.locator("#d-run").isDisabled(), "with a key and no author nothing can be sent");
+    assert.match(await f.locator("#d-body").innerText(), /No author is named\. The kernel requires provenance\.author-ref on a Check, so a draft could not be saved, and nothing is sent\./);
+    await f.locator("#d-author").fill("Check team");
+    await f.locator("#d-author").blur();
+    assert.equal(await f.locator("#d-author").inputValue(), "https://example.org/my/party/check-team", "a short name the user typed is a party under the namespace; the field shows what will be written");
+    assert.deepEqual(sent, [], "naming the author sends nothing");
     await f.locator("#d-run").click();
     await f.locator("#log div", { hasText: "checks:" }).first().waitFor({ timeout: 30000 });
     assert.equal(sent.length, 3, "one call per automated rule, none for a manual one");
@@ -211,6 +223,17 @@ test("checks page: from a CIS import to saved checks, with a simulated model", {
     assert.match(await rowText("1.1.1"), /CHECK-6/);
     assert.match(await rowText("5.2.1"), /does not fit/);
     assert.ok(await f.locator('[data-drow$="/req/1.1.1"] [data-pick]').isDisabled(), "a draft the rules refuse cannot be ticked");
+    /* the author emptied before a draft is taken: the kernel requires it, so nothing is saved, and the page says which field is empty */
+    await f.locator("#d-author").fill("");
+    await f.locator("#d-author").blur();
+    await f.locator("#d-tick").click();
+    await f.locator("#d-save").click();
+    assert.match(await f.locator("#d-err").innerText(), /^No author is named\. The kernel requires provenance\.author-ref on a Check, so the check cannot be saved\. The field “Author” is empty\./);
+    assert.equal(await f.locator("body").evaluate(async () => (await jscStore.files(jscStore.activeSet())).filter(r => r.type === "check").length), 0, "no draft was saved");
+    assert.equal(await f.locator("#d-author").inputValue(), "", "and the field stays empty");
+    /* whoever takes a draft answers for it: the author named when it is taken is written, not the one named when it was drafted */
+    await f.locator("#d-author").fill("Reviewer");
+    await f.locator("#d-author").blur();
     await f.locator("#d-tick").click();
     await f.locator("#d-save").click();
     await f.locator("#log .l-ok", { hasText: "saved 1 check(s)" }).waitFor({ timeout: 30000 });
@@ -233,6 +256,9 @@ test("checks page: from a CIS import to saved checks, with a simulated model", {
     });
     assert.equal(state.checks.length, 2);
     assert.ok(state.checks.every(c => c.confidence === "draft" && c.annotations["jascon-app"]["drafted-by"] === "model"));
+    /* the author is the party that was named, on the draft that was taken and on the one written in the editor; the model is in the annotations */
+    assert.deepEqual(state.checks.map(c => c.provenance["author-ref"]), ["https://example.org/my/party/reviewer", "https://example.org/my/party/reviewer"]);
+    assert.ok(state.checks.every(c => /^\d{4}-\d{2}-\d{2}$/.test(c.provenance.date)));
     assert.ok(state.checks.some(c => c["requirement-ref"].endsWith("/req/5.1.1")) && state.checks.some(c => c["requirement-ref"].endsWith("/req/5.2.1")));
     assert.deepEqual(state.errors, [], "the app's rules have nothing against the set");
     assert.equal(state.kernel, "2.0.0");

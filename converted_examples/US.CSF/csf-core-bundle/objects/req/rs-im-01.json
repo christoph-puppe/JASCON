@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/RS.IM-01",
+ "version": "2.0",
+ "label": "RS.IM-01",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "RS.IM-01"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Response plans incorporate lessons learned"
+   }
+  }
+ ]
+}

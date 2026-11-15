@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1330",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1330",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The PMK caching period is not set to greater than 1440 minutes (24 hours)."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0677",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0677",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Files imported or exported via gateways or CDSs that have a digital signature or cryptographic checksum are validated."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

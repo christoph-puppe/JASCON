@@ -59,6 +59,12 @@
    system as a Set of components; a Component with members is the kernel's
    shape for it.
 
+   Who decided (D26): both forms that write an Implementation show the
+   author they will write, from the setting "Who am I", and write him with
+   today's date. Without an author the edges are saved all the same and
+   name none. The page shows the authorizations of a Component and does not
+   edit them, so it has no field for the day of an authorization.
+
    The view Advice (CP-ADVICE-1) lists the advice packs the set holds and
    adopts a recommendation: it makes a product a member of one of the user's
    components and writes an Implementation of that component which cites
@@ -87,6 +93,8 @@ jscI18n.add("de", {
   "of {n} requirements match": "von {n} Anforderungen passen", "selected": "ausgewählt", "Select all that match": "Alle passenden auswählen",
   "Clear the selection": "Auswahl leeren", "Attach the {n} selected": "Die {n} ausgewählten anhängen", "Close": "Schließen",
   "nothing matches": "nichts passt", "{n} more match; all of them are included in “Select all that match”": "{n} weitere passen; alle sind in „Alle passenden auswählen“ enthalten",
+  "The author is written on every Implementation: each records a judgement, who is responsible and how far it is done. A Component names no author; the kernel has no field for one.":
+    "Der Autor wird an jeder Implementation geschrieben: Jede hält ein Urteil fest, wer verantwortlich ist und wie weit sie umgesetzt ist. Eine Komponente nennt keinen Autor; der Kernel hat dafür kein Feld.",
 });
 jscI18n.add("de", {
   "Advice": "Empfehlungen",
@@ -240,8 +248,11 @@ function renderBuild() {
     <div class="wbrow" style="border-top:1px solid var(--border-1);padding-top:10px">
       <span class="chip"><b>${d.components.length}</b>${esc(T("assets"))}</span><span class="chip"><b>${d.implementations.length}</b>${esc(T("implementation edges"))}</span>
       <button type="button" class="primary" id="sys-save">${esc(T("Save the system to the set"))}</button><button type="button" id="sys-clear">${esc(T("Clear"))}</button>
-      <span class="verdict-bad" id="sys-err" role="alert"></span></div></div>`;
+      <span class="verdict-bad" id="sys-err" role="alert"></span></div>
+    <div class="wbrow">${V.authorLabel("sys-author")}${V.authorInput("sys-author")}</div>
+    <p class="hint">${esc(T("The author is written on every Implementation: each records a judgement, who is responsible and how far it is done. A Component names no author; the kernel has no field for one."))}</p></div>`;
   V.wireRefs(el);
+  V.wireAuthor(el);
   const again = () => { draft.save(); renderBuild(); };
   const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
   on("#sys-title", "change", n => { d.title = n.value.trim() || d.title; draft.save(); });
@@ -292,8 +303,11 @@ function renderBuild() {
     });
     const system = { id: jscSet.mintId("comp", d.title), version: "1", lifecycle: "draft", title: { [lang]: d.title }, kind: "system",
       members: d.components.map(c => ({ "component-ref": c.id })) };
-    const impls = d.implementations.map(e => ({ id: e.id, version: "1", lifecycle: "draft", "component-ref": e["component-ref"],
-      "requirement-ref": e["requirement-ref"], responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": capOf.get(e) }], status: e.status }));
+    /* Who wrote these edges and when; null when the author field is empty, and then none is written. The workbench writes
+       every edge of the system on each save; an edge that comes out as it is stored keeps the author it names. */
+    const who = V.provenance(), was = id => { const r = G.objects.get(id); return r && r.type === "implementation" ? r.obj : null; };
+    const impls = d.implementations.map(e => jscAuthorRecord({ id: e.id, version: "1", lifecycle: "draft", "component-ref": e["component-ref"],
+      "requirement-ref": e["requirement-ref"], responsibility: e.responsibility, "satisfied-by": [{ "capability-ref": capOf.get(e) }], status: e.status }, who, was(e.id)));
     await jscSet.saveObjects([...comps, system, ...impls]);
     await jscPage.refresh();
     jscPage.show("system");
@@ -363,10 +377,12 @@ function renderAdvice() {
   const adopt = !own.length ? `<div class="empty">${esc(T("This set holds no component of your own. Build a system in the other view; its components can adopt advice."))}</div>`
     : `<div class="wbrow"><label for="adv-own">${esc(T("Your component"))}</label><select id="adv-own" style="max-width:340px">${own.map(c => `<option value="${esc(c.obj.id)}" ${c.obj.id === adv.own ? "selected" : ""}>${esc(V.titleOf(c))}</option>`).join("")}</select>
         <label for="adv-resp">${esc(T("Responsibility"))}</label>${sel("adv-resp", RESPONSIBILITIES, adv.resp)}<label for="adv-stat">${esc(T("Status"))}</label>${sel("adv-stat", STATUSES, adv.stat)}</div>
+      <div class="wbrow">${V.authorLabel("adv-author")}${V.authorInput("adv-author")}</div>
       ${products.map(product).join("") || `<div class="hint">${esc(T("No other component of this set declares a capability."))}</div>`}`;
   el.innerHTML = `<div class="nano sectionlabel">${esc(T("Advice packs in this set ({n})", { n: HELD.packs.length }))}</div>${packs}
     <div class="nano sectionlabel">${esc(T("Adopt a recommendation"))}</div>${adopt}`;
   V.wireRefs(el);
+  V.wireAuthor(el);
   const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
   on("#adv-own", "change", n => { adv.own = n.value; renderAdvice(); });
   on("#adv-resp", "change", n => { adv.resp = n.value; });
@@ -386,8 +402,9 @@ function renderAdvice() {
     let id = base;
     for (let k = 2; G.objects.has(id); k++) id = `${base}-${k}`;
     const copy = Object.keys(adv.copy).filter(key => adv.copy[key] && key.startsWith(ref + "|")).map(key => key.slice(ref.length + 1));
-    const edge = jscAdviceEdge(objs, adv.own, pid, cap, { id, responsibility: adv.resp, status: adv.stat, copy });
-    if (!edge) return;
+    const adopted = jscAdviceEdge(objs, adv.own, pid, cap, { id, responsibility: adv.resp, status: adv.stat, copy });
+    if (!adopted) return;
+    const edge = jscAuthorRecord(adopted, V.provenance());   // adopting is the user's judgement, not the vendor's: the author is who adopts
     await jscSet.saveObjects([edge]);
     jscLog.ok(T("{edge} cites {ref}", { edge: edge.id, ref }) + (edge["parameter-bindings"] ? " · " + JSON.stringify(edge["parameter-bindings"]) : ""));
     await jscPage.refresh();

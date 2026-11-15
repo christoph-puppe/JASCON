@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1796",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1796",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Files containing executable content are digitally signed by a certificate with a verifiable chain of trust as part of software development."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

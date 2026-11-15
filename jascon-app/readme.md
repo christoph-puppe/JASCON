@@ -7,12 +7,38 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.6. This build has the frame (the hub, the settings page and
+State: build 0.9.24. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
 the app does, and nothing needs one. Since 0.9.3 the app reads advice packs:
 a vendor's recommendations as one published bundle (see "Advice packs").
+Since 0.9.9 the pages write who decided and when, and the Validate page
+shows where that is missing (see "Who decided, and when"). Since 0.9.10 no
+page writes a party that nobody named: where the kernel requires a party
+and the field is empty, the page refuses the save and says which field it
+is. Since 0.9.11 every Attestation of a set is held to what it binds, in the
+reference validator's words (see "What an Attestation binds"). Since 0.9.12
+a manifest that lists an Attestation is refused (MANIFEST-1), and the party
+a preset writes where its source names none is shown as the preset's
+default and can be replaced (see "Importing OSCAL"). Since 0.9.13 the method
+of an Assessment is held to its facet, and the Assess page writes one that
+is (see "The method of an Assessment"). Since 0.9.14 the Grundschutz++
+preset makes every control, a nested one too, a Requirement of its own with
+its own links, and carries what it does not read as the source holds it
+(see "Importing OSCAL"). Since 0.9.15 the SP 800-53 preset follows
+`convert_nist.py` v0.2 and no longer loses content, and an imported
+profile's Set carries the profile's metadata and merge directive. Since
+0.9.16 both presets follow the author's decisions of phase E: every
+withdrawn SP 800-53 control is a Requirement, the document's uuid stands
+on the root Set, a back-matter resource nothing refers to is not carried,
+and the compat facet has one schema. Since 0.9.19 both presets follow
+`convert_bsi.py` v0.5 and `convert_nist.py` v0.3: the resources a text
+refers to stand in the standard facet references@1, the document's uuid in
+the manifest's `provenance.sources`, the compat schema is 1.2.0, and in SP
+800-53 a statement carries its print label and the assessment objectives
+stand in assessment-criteria@1. The object view shows a statement's label
+and an object's history.
 
 ## Start
 
@@ -66,15 +92,15 @@ is saved to the set at once; the other open tools reload.
 | Tool | Shows | Writes |
 |---|---|---|
 | Import | An OSCAL catalog or profile and the report of its import | Requirements and Sets from a catalog, as a set of its own; a Set and a Tailoring from a profile |
-| Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics | A Requirement (every `{param:}` token is declared as a parameter), a Set |
+| Browse | The catalogue as a tree of Sets, every object with type filters and with the filters found in the loaded requirements, statistics. An object whose lifecycle is `withdrawn` is left out of the tree and the list until the switch "withdrawn" shows it; it stays in the set (build 0.9.18). The object view shows a statement's `label` beside its id and an object's `history` as a list of date, comment and reference (build 0.9.19) | A Requirement (every `{param:}` token is declared as a parameter), a Set |
 | Risk | The register with a heat map, the scales and their matrix, the coverage of the selected requirements, the risk catalogues | A Risk; a scale; the record of catalogue entries that do not apply |
-| Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the resolved requirements as a package of their own |
+| Tailor | Each Tailoring resolved: selection, operations with before and after, lattice verdict, derived tier | A Tailoring; the decision on a Deviation it carries; the resolved requirements as a package of their own |
 | Map | The mappings as a table, with targets outside the set marked | A Mapping, also to a target outside the set |
 | Implement | Components and Implementation edges; whether the authorization an inherited edge names is found; the advice packs of the set and the recommendations of each product | Components with the capabilities their edges cite, a system Component that lists them, Implementations; a product as a member of one of your components, and an Implementation that adopts a recommendation |
 | Checks | The rules that carry assessment criteria (audit text, automated or manual) and their machine checks; a tester that computes the verdict for an observation you paste | A Check, written in the form or drafted by a model, one at a time or for many rules |
-| Assess | Assessments, Findings by state, Attestations with a Full Match / Semantic Match / Tamper verdict | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding |
+| Assess | Assessments, Findings by state, Attestations with what each binds (Full Match, Semantic Match, or it does not bind) | An Assessment with one Finding per requirement that is not satisfied; the state of a Finding; the decision on a Deviation of a Finding; an Attestation taken out of the set, or an unsigned one set to withdrawn |
 
-| Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about; signatures against keys you trust; what composing the set with another set would report | A report as JSON, on request |
+| Validate | What the ported kernel rules say about the whole set, by area, with the object each finding is about; who is not named as an author and which review date has passed; signatures against keys you trust; what composing the set with another set would report | A report as JSON, on request |
 
 Clicking a reference opens the object in a drawer on the right; Escape closes
 it.
@@ -87,6 +113,134 @@ kind is refused; a second operation on one target is refused.
 Running the same check again in Assess overwrites its Assessment and removes
 a Finding that no longer applies while it is still open. A Finding that was
 moved on is kept.
+
+## Who decided, and when
+
+Since release candidate 4 the kernel has one optional place for who decided
+and when: `provenance` with an `author-ref` (a party URI) and a `date`
+(specification D26, `drafts/CP-AUTHOR-1.md`). A Tailoring and each of its
+selects, excludes and operations may carry it, a Risk and its two ratings,
+an Implementation and a Finding. A Deviation may say when it was decided
+(`decided`) and when it is due for review (`review-due`). A Mapping and a
+Check had `provenance` before, and must have it.
+
+**Who am I.** One setting, *Who am I* (`org:me`), holds your own party URI.
+It is empty until you set it. Every form that writes one of these objects
+shows the author it will write, taken from the setting, and you can change
+it there for the page you are on. The date written is today's, in UTC.
+
+**A missing author is never a refusal** where the kernel leaves the author
+optional: on a Tailoring, a Risk, an Implementation and a Finding. With the
+field empty a page writes no `provenance` and saves all the same. What is
+missing shows as a line on the Validate page (below).
+
+**A party the kernel requires is never made up.** Some parties are not
+optional: an object without them is not valid. For these the rule is the
+other way round. While the field is empty the page refuses the save, says
+which field is empty and that the kernel requires it, and changes nothing
+in the set. No page fills such a field with a party of its own. Until build
+0.9.10 five places did: they wrote a party made from a fixed word under
+your namespace (`…/party/author`, `…/party/check-author`,
+`…/party/assessor`, `…/party/ciso`, `…/party/organisation`), and the
+generic OSCAL import wrote `…/party/organization` on every clause. The
+objects were valid and named somebody nobody had named (author decision of
+2026-11-14, backlog #70).
+
+| Party the kernel requires | Page | The field starts from | Empty |
+|---|---|---|---|
+| `provenance.author-ref` of a Mapping | Map | *Who am I* | the mapping is not added |
+| `provenance.author-ref` of a Check | Checks | *Who am I*; for a check of the set that names an author, that author when the setting is empty | the check cannot be saved; no draft is asked of a model, and none is taken |
+| `performer-ref` of an Assessment | Assess | *Who am I* | the check is not written, and no Finding is |
+| `approver-ref` of a Deviation | Tailor | nothing, always | the operation is not added |
+| `obligated-parties` of a statement | Browse, and Import with the generic rules | nothing | the requirement is not added; the import does not run |
+| `obligated-parties` of a statement | Import with a preset | the preset's default, named as that | the import does not run; the default does not come back by itself |
+| `owner-ref` of a Risk | Risk | *Default risk owner* | the risk cannot be saved; nothing is imported from a catalogue; a model's draft is not taken |
+| `approver-ref` of a Risk's acceptance | Risk | nothing, always | the risk cannot be saved once an acceptance is begun |
+
+An approver field starts empty also when *Who am I* is set: who approves an
+exception or accepts a risk is not whoever types it, and a field filled in
+advance would record self-approval by default. A field you empty stays
+empty; the setting does not come back into it while the page is open.
+
+**A name you type.** Every party field reads what you type in the same way,
+the optional author field too. A URI (a scheme, a colon, no blank) is
+written as it is. A short name is your word for a party of your own and
+becomes a party under your namespace: `Jane Roe` is written as
+`<namespace>/party/jane-roe`, and the field shows that URI as soon as you
+leave it. In the Import page the namespace is the one of the import. A
+name you typed is a party you named; a word a page supplies is not, and no
+page supplies one.
+
+**What each page writes.**
+
+| Page | Writes |
+|---|---|
+| Tailor | `provenance` on the Tailoring. A Deviation the page wrote as pending is decided in the first view; the day is written as `decided`, and an approved one may get a `review-due` |
+| Risk | `provenance` on the Risk, and on `rating` or `residual-rating` when that rating is set or changed |
+| Implement | `provenance` on every Implementation of the workbench and on an edge that adopts a recommendation |
+| Assess | `provenance` on a Finding it raises or moves; `decided` and `review-due` on a Deviation of a Finding |
+| Map, Checks | `provenance` on the Mapping or Check, which the kernel requires: starting from the setting, and refused while the field is empty. A draft check a model wrote is saved under the author named when it is taken, with that day |
+
+**Nobody's decision changes hands.** `provenance` on a record names who
+wrote this version. An entry of a Tailoring that has none of its own has
+its Tailoring's, and a rating its Risk's. When you save a Tailoring that
+somebody else saved before, or that you saved on another day, the entries
+you did not change keep the author they had: the page writes the earlier
+author onto each of them before it writes you on the Tailoring. An entry
+that carries an author of its own keeps it. New and changed entries are
+yours. The Risk page does the same for a rating you leave as it is. The
+Implement workbench writes every edge of its system on each save, and a
+check that is run again writes its open Findings again; an edge or a
+Finding that comes out as it is stored keeps the author it names. A
+version you save without an author names none; it does not keep the name of
+whoever wrote the version before. A decision recorded on a Deviation is
+not undone by a save from the Tailor form, which may still hold the
+Deviation as it was written. One case cannot be kept apart: entries of
+a Tailoring that never named anybody become yours with the first save that
+names you, because the kernel cannot say "unknown" on an entry of a
+Tailoring that names its author.
+
+**A Deviation.** Where the kernel's state machine allows a next state, the
+Tailor and Assess pages offer it. When a Deviation becomes approved or
+withdrawn the form offers today as the day it was decided; you can change
+or empty it. An approved Deviation may get a review date, on a date or
+every so many units of a named calendar. A Deviation that is decided and
+states no day can be given one; no day is suggested for it. Approved and
+withdrawn are final. The app does not edit the authorizations of a
+Component, so it has no field for the date of an authorization.
+
+**Imports pre-fill, and you may overwrite.** An import reads who and when
+from its source and shows both in two fields before anything is written.
+What you type over a field replaces the source's, each field on its own;
+an emptied field says "nobody" or "no day". A record gets `provenance` only
+when both are known, and the report says how many records got theirs from
+the source, from you, or not at all. See "Importing OSCAL" and "Risk
+analysis" for what each source states.
+
+**The two reports** are on the Validate page, each line in the words of the
+reference validator:
+
+- *Authors* (AUTHOR-1 to AUTHOR-4): a Tailoring at consumer tier with
+  entries nobody signed, a Risk, Finding or Implementation without
+  `provenance`, an approved or withdrawn Deviation without `decided`, an
+  authorization without a date. Whether that is a failure is your
+  programme's policy. The switch *Require authors* turns each line into an
+  error, as `--require-authors` does for the reference; without it a line
+  is a note.
+- *Review dates* (REVIEW-1): every `review-due` of an approved Deviation or
+  a managed Risk that has passed on the day asked about, and those that
+  cannot be evaluated (a calendar period: the app has no calendar). The day
+  is the field *Review dates as of*, today in UTC when you leave it alone;
+  it is the reference's `--as-of`. An overdue review is never an error.
+
+Measured: on the example folder and on the IFA bundle the page shows the
+lines `validate_core.py` prints, for 2026-11-13 and for 2023-06-24, with
+the switch off and on; a test compares the two on every run. For build
+0.9.9 that was no AUTHOR line and one review date that cannot be evaluated
+on the example folder, and 10 AUTHOR lines on the IFA bundle with 2 overdue
+reviews on the first day and 1 on the second. The IFA bundle was converted
+again since; on 2026-11-14 the reference prints 7 AUTHOR lines for it and
+the same review dates.
 
 ## Advice packs
 
@@ -201,30 +355,73 @@ written until you choose *Write to the set*.
 into a set you name, with a manifest whose provenance names the source file
 and the licence you state. Three sets of rules:
 
-- *BSI Grundschutz++* follows `jascon/scripts/convert_bsi.py`: a nested
-  control is a clause of its parent, the modal verb becomes the modality, the
-  BSI props go to the standard facets and two BSI facets, the security level
-  becomes baseline Sets. Every object it makes from the Anwenderkatalog of
-  2026-07-16 has the semantic digest of the bundle under
-  `converted_examples/DE.BSI`.
+- *BSI Grundschutz++* follows `jascon/scripts/convert_bsi.py` v0.6. Every
+  control, at every depth, is a Requirement of its own, with one statement,
+  its own parameters, props and links. BSI nests controls for grouping only
+  (the author, 2026-11-14), so a control that has nested controls also gives
+  a Set that groups it with them: its own Requirement first, then what
+  stands for each nested control, in the order of the source; no relation is
+  made from the nesting. The modal verb becomes the modality, the BSI props
+  (each read in its BSI namespace, since build 0.9.21 under
+  `.../tree/main/documentation/namespaces/`, where the catalogue of
+  2026-10-29 has them) go to the standard facets and two BSI facets, and the
+  security level of each control becomes baseline Sets. The taxonomy facet
+  has a typed schema, `gspp-taxonomy-1.1.0.json`: per statement `class`,
+  `sec-level` (`normal-SdT` or `erhöht`), `effort` (an integer from 0 to 5)
+  and `tags`, nothing else. Two cases refuse the import, with the
+  converter's sentence, and nothing is imported: a `sec_level` or
+  `effort_level` outside the publisher's lists, and a name the rules read
+  of which every prop stands in another namespace (the publisher has moved
+  its list).
+  What the rules do not read (a prop of another name or namespace, a part of
+  another name, a member they have no place for, what the document says of
+  itself) is carried as the source holds it, in the compat facet
+  `oscal-1x@1`. The one resource the document refers to stands in the
+  standard facet references@1 on the root Set, and the document's uuid in
+  the manifest's source entry (since build 0.9.19, `convert_bsi.py` v0.5).
+  Every object it makes from the Anwenderkatalog of
+  2026-10-29, 1,289 of them (1,000 Requirements, 289 Sets), has the semantic
+  digest and the bytes of the bundle under `converted_examples/DE.BSI`, and the source
+  entry of the manifest is the converter's. Until build 0.9.13 a nested control was a clause of its parent, and
+  its links were lost (`ERRATA.md`).
 - *generic*, for any other catalog: every control, nested ones included, is a
   Requirement; every part of the statement that carries prose is a clause;
   the modality is `unspecified`, because OSCAL has no field for it. Props and
   other parts are held verbatim in a facet under your namespace, with a
   pinned schema. A control without statement prose is carried with its title
-  and listed in the report.
+  and listed in the report. The kernel requires on every clause who it binds
+  (`obligated-parties`), and OSCAL has no field for that, so the form asks:
+  *Who the statements bind*, a URI or a short name, which becomes a party
+  under the namespace of the import. The field starts empty, and the import
+  does not run without it. Until build 0.9.10 these rules wrote
+  `<namespace>/party/organization` on every clause without asking.
 
-- *NIST SP 800-53 Rev 5*, the rules of `convert_nist.py`: a withdrawn control
-  is not converted, and its successor names it in `replaces`; every statement
-  item with prose is a clause with modality `must`; SP 800-53A objectives and
-  methods, the administrative data of parameters and the guidance go to
-  facets under the NIST namespace. On the same source file its 1,035 objects
-  equal the Python converter's. Against the shipped
-  `converted_examples/US.SP800-53` bundle four objects differ, because NIST
-  republished its 5.2.0 file after that bundle was converted (the statement
-  of SA-15(13), objectives of SA-24, labels of SI-2(7), one back-matter
-  resource). The preset makes no baseline Sets: a baseline is a profile, and
-  you import it as one.
+- *NIST SP 800-53 Rev 5*, the rules of `convert_nist.py`: every withdrawn
+  control (182 in 5.2.0) is a Requirement with lifecycle `withdrawn` in its
+  family Set, whose statement is `unspecified`; a successor it names names
+  it in `replaces`, and where the source gives it no statement, its one
+  statement is made from its links ("Incorporated into AC-2k.").
+  Every statement item with prose is a clause with modality `must`, and
+  carries its print label (`a.`, `(1)`) as its `label` (1,122 statements in
+  5.2.0). The SP 800-53A objectives, each with the address of what it
+  assesses (`assessment-for`), and methods stand in the standard facet
+  assessment-criteria@1; the administrative data of parameters with their
+  formal SP 800-53A labels and the guidance go to facets under the NIST
+  namespace; a markdown link in a text stays as NIST wrote it. The root Set
+  carries the back-matter resources something in the catalog refers to, as
+  the source writes them with the uuid as `id`, in the standard facet
+  references@1 (178 of 201; an orphan is not carried), and, in the compat
+  facet, what the catalog says of itself. Its uuid stands in the manifest's
+  entry for it (`provenance.sources`). A prop is read in
+  exactly the class and namespace the converter reads; any other prop is
+  not carried, as by the converter, whose ledger then fails its run, and
+  the report counts it. On the pinned source
+  file (`converted_examples/US.SP800-53/SOURCES.sha256`) every one of its
+  1,217 objects has the semantic digest and the bytes of the committed
+  bundle, and the manifest's source entry names the author and the day as
+  the converter's does. Until build 0.9.14 the preset followed v0.1 of the
+  converter and lost content on the way (`ERRATA.md`). The preset makes no
+  baseline Sets: a baseline is a profile, and you import it as one.
 
 - *CIS Benchmark*, the rules of `convert_cis_benchmark.py`: every rule is a
   Requirement with one clause whose text is the rule's title (the export
@@ -244,6 +441,51 @@ The generic rules read the NIST catalog too (1,196 requirements, valid for
 the reference validator), with a different result: withdrawn controls are
 kept as requirements, and assessment objectives stay in the holding facet.
 
+**Whom the statements bind, with a preset.** A catalog seldom says whom its
+controls bind, and the kernel requires it on every statement. So each of
+the three presets names one party for its corpus, as the Python converter
+of that corpus does: BSI `…/party/institution`, a CIS Benchmark
+`…/party/system-administrator`, and NIST `…/party/organization` for a
+control that states no implementation level. That party is the preset's
+reading of the framework and not a value of the source. Until build 0.9.11
+the presets wrote it without a word. Since 0.9.12 it is an argument with a
+named default (author decision of 2026-11-14, backlog #74; the converters
+got `--obligated-party` for the same):
+
+- The form shows the party in the field *Who the statements bind* before
+  anything is imported, and says that it is the preset's default and not a
+  value of the source.
+- You may type another party in its place: an http(s) URI, written as
+  typed. A preset mints its ids under the publisher's namespace, so it does
+  not make a party out of a short name, as the generic rules do under a
+  namespace of yours.
+- An emptied field stays empty and the import does not run; something that
+  is no http(s) URI is refused in the same way. *Use the preset's default*
+  puts the default back. Nothing is imported without a party.
+- Where the source names a party itself, that one is written whatever the
+  field holds: a control of SP 800-53 that states an implementation level
+  binds that level.
+- The import report says who chose: the party, and either "the preset's
+  default, not a value of the source" or "entered here", with the default
+  beside it. Its record is the converters' (`obligated-party` with `value`,
+  `origin` `converter-default` or `caller`, and `converter-default`). A
+  party that was entered is also kept in the manifest of the new set, under
+  `provenance`. With the default left alone the manifest says nothing about
+  it, as before.
+
+With the default left as it is, an import writes the objects it wrote
+before, byte for byte. Measured: one SHA-256 over every file of an import,
+held by a test, taken with build 0.9.11 for a catalog of a CIS Benchmark's
+shape written for the tests (17 objects), and with build 0.9.16 for the
+BSI catalog the repository carries (1,360 objects, 999 statements) and the
+NIST catalog there (1,217 objects, 2,100 statements). The BSI and NIST
+digests were taken anew because the presets and those catalogs changed on
+2026-11-14 (first BSI 811 objects and 651 statements, NIST 1,035 and
+1,918; then NIST 1,037 and 1,920). The manifest of the new set differs from an
+earlier build's in the line that names the tool and its build, as with
+every build. CIS as the author of its Mappings (`…/party/cis`) is another
+matter: the source states it, and the author fields above overwrite it.
+
 Choose the namespace with care. Ids under your own domain make you the
 claimed authority of the catalog in the tier rule, and a Tailoring of yours
 may then weaken it without a Deviation. Use the publisher's namespace where
@@ -260,7 +502,37 @@ the control's id, without regard to case.
 | `exclude-controls` with ids | excludes of the Tailoring |
 | `set-parameters` | one `set-parameter` operation per clause that declares the parameter, if the value lies in its declared space |
 | a value outside the declared space | listed in the report, not written: it needs a Deviation |
-| `alters`, `merge`, pattern matching, child controls | counted in the report, not carried |
+| `alters`, pattern matching, child controls | counted in the report, not carried |
+| `metadata`: parties, their roles, `last-modified` | `provenance` on the Tailoring: who wrote the profile and when |
+| `metadata` beside the title and version, the `href` of each import, and `merge` | on the profile's Set, in the compat facet `oscal-1x@1`, as the source holds them, as `convert_nist.py` writes them on a baseline Set (metadata and merge since 0.9.15, imports since 0.9.16). A set that pins no compat schema 1.2.0 gets it. A profile without a Set of its own (an `include-all` only) carries none of them, and the report says so |
+| the back-matter resources | on the profile's Set, in the standard facet references@1, each as the source writes it with its uuid as `id` (since 0.9.19). A set that pins no schema for that facet gets it |
+| the `uuid`, with title, version, author, day and OSCAL version | the manifest's entry for the profile (`provenance.sources[]`), returned in the import's report as `provenance-source`: the set keeps the provenance of the manifest it came with, and the app has no place to add the entry to it (build 0.9.19) |
+
+**Who wrote an OSCAL document, and when.** The page shows both before the
+import, in two fields you can type over. The author is one party of the
+document's `metadata`, found by this rule:
+
+1. the one party named as `creator`, else the one named as `prepared-by`,
+   else the one named as `author` (since build 0.9.19, backlog #91)
+   (the `party-uuids` of all `responsible-parties` entries of that role
+   together, without those `parties` does not define);
+2. else the one party that holds any role at all;
+3. else the one party the document defines;
+4. else its one party of type `organization`;
+5. else nobody.
+
+A party without a name cannot be named by a URI; where the rule lands on
+one, the answer is nobody. The party becomes `<namespace>/party/<name>`,
+under the namespace of the import, with the converters' slug. The day is
+the first ten characters of `last-modified`, as the document writes them,
+if they are a date. The Python converters of this repository are written
+to the same rule.
+
+A CIS Benchmark's cross-references keep the author they had: CIS
+(`<namespace>/party/cis`), on the day the catalog was last changed. You can
+type over either; a Mapping cannot be written without both, because the
+kernel requires its `provenance`. The Requirements and Sets of a catalog
+carry no `provenance`: their publisher is the origin of their ids.
 
 ## Risk analysis
 
@@ -317,8 +589,21 @@ failures; without it they are a line of the report.
 industrial plant. Importing an entry copies it into a risk of your own with
 state identified and lifecycle draft, keeps the suggested requirements the
 selection contains and names the entry it came from. A risk that exists is
-never overwritten by an import. An entry that does not apply is recorded with
-its reason in `risk-catalogs/not-applicable.json` beside the manifest.
+never overwritten by an import. An imported risk says who wrote it and
+when: the catalogue's publisher and the day the catalogue says this version
+was released (2026-11-10 for both shipped catalogues). The two fields
+*Author of the imported risks* and *Day* show them; what you type over a
+field replaces it, and with one of them empty the risk is imported without
+an author. The log says how many imported risks got theirs from the
+catalogue, from you, or not at all. Once you assess an imported risk and
+save it, that version and its rating are yours.
+
+An entry that does not apply is recorded in
+`risk-catalogs/not-applicable.json` beside the manifest: the entry and its
+version, the reason, and who decided on which day. The party in the Owner
+field of the view is written as the one who decided. A file from before
+build 0.9.7, a map from an entry to a sentence, is still read; its rows show
+"no author recorded" until they are recorded again.
 
 ## Checks
 
@@ -445,6 +730,147 @@ A pack manifest the set keeps under `packs/sha256/` is named by the SHA-256
 of its bytes; the same button checks each one against its name, and the
 Validate page reports a mismatch as ADVICE-8.
 
+## The method of an Assessment
+
+An Assessment says how it was done in `method`, and a method is a facet
+payload: each of its keys is a facet id, of the standard library, of a
+schema the bundle pins, or `private:`, and each payload is held to that
+facet's schema. Since build 0.9.13 the Validate page checks this, as the
+reference validator does since 2026-11-14 (backlog #55). Until then neither
+read `method` at all; the kernel schema says only that it is an object.
+
+**What the app writes.** One page writes an Assessment: the Assess page,
+for a check a person did. Its method is the standard facet
+`https://ns.jascon.net/stdlib/facet/assessment-criteria@1` with `method:
+"manual"`. The name of the app is not written into the Assessment. A method
+says how something was assessed, and which program recorded the answer is
+no part of that; the manifest of an exported bundle names the tool that
+wrote it. No import writes an Assessment (OSCAL catalogs and profiles, risk
+catalogues, advice packs), and the Checks page writes Checks, not runs of
+them.
+
+**Assessments that exist already.** Until build 0.9.13 the Assess page
+wrote `method: {kind: "manual-check", tool: "JASCON-App …"}`. Neither key
+is a facet, so such an Assessment fails now, in a set a browser stored and
+in a bundle an earlier build exported: two errors, one for each key. The
+app does not rewrite it when a set is loaded, checked or looked at. The
+Validate page reports the errors and says what can be done. The Assess page
+shows them at the Assessment and offers *Write its method as the standard
+facet (manual)*, for this shape only, because only there does the app know
+what was meant. The rewrite changes the object and so its semantic digest:
+an Attestation that names the Assessment no longer binds afterwards. A
+method of any other making that fails is reported and left alone; it is put
+right where the Assessment comes from.
+
+Measured for this build: a set with one Assessment of each kind, exported,
+gets from `validate_core.py` exactly the three failures the Validate page
+shows after the folder is loaded again (two for the app's old method, one
+for a method under a facet nobody registered); the stored Assessment is the
+same text after loading, checking and opening the Assess page; after the
+rewrite was asked for, one failure is left on the page and in the
+reference, the one that is not the app's to change. A check done on the
+Assess page exports to a folder the reference accepts.
+
+## What an Attestation binds
+
+An Attestation names subjects, each by id and semantic digest or by a
+digest alone, and the digest of a content manifest. Since build 0.9.11 the
+Validate page holds every Attestation of the set to both, as the reference
+validator does since 2026-11-14 (Appendix B.1.7, backlog #46), and the
+Assess page shows the same for one Attestation at a time.
+
+- Each subject is compared with the objects the manifest lists. It
+  *matches* (the object of that id carries the signed digest; a bare digest
+  matches when any listed object carries it), it *differs* (the object of
+  that id has another digest: it was changed after signing), or it is
+  *absent*. An Attestation beside the manifest is no object of the manifest
+  and so no subject of anything.
+- The manifest it names is *this* one, *a pack manifest the set keeps*
+  (`packs/sha256/`), or *another*.
+- All subjects match and the manifest is this one or a kept pack's: **Full
+  Match**. All match and the manifest is another: **Semantic Match**, which
+  is reported and never a failure. Anything else does not bind.
+- An Attestation that does not bind is a failure while its lifecycle is
+  `active`. A draft, deprecated or withdrawn one is reported with the same
+  words and fails nothing.
+
+The page shows one line per Attestation, in the order of the ids, and the
+line is the reference's, character for character; a failure is the
+reference's failure with `error:` before it.
+
+**MANIFEST-1.** No content manifest lists an Attestation, in any bundle
+(specification D3.11, backlog #75, since build 0.9.12; until then only a
+pack's manifest was held to it, by ADVICE-1). For a set whose manifest
+lists one the Validate page shows the reference's failure beside the
+Attestation's line, and the Assess page the same; the Attestation is still
+held to what it binds: never a Full Match of the manifest that lists it,
+because a manifest that lists it cannot be the one it binds (one that
+binds a pack manifest the set keeps is a Full Match of that, and is
+refused all the same). The app repairs nothing
+in silence. When such a bundle arrives the hub says so and keeps it as it
+came. Since build 0.9.24 the Validate and the Assess page offer to take
+the Attestation out of the manifest's list (backlog #71, point 11): an
+explicit act, which marks the record and says before it is done what the
+Attestation binds of the manifest an export writes then. What an export
+does with it is said under "Export". On the Validate
+page a set that listed an Attestation and was then changed is compared, as
+always after a change, with the bundle an export would write: that one
+lists no Attestation, so there is no failure, and a line says that the
+manifest the set came with listed it and that the export leaves it out.
+
+**Which bundle is meant.** The reference validator reads a folder. A set is
+a bundle that was loaded and may have been written to since, so the page
+says first what it compared with:
+
+- *The bundle as it was loaded.* Nothing in the set was written in the app.
+  The manifest is the one the set came with, whose bytes the set keeps, and
+  the objects are the ones it lists. This is what the reference says about
+  the folder, also where the folder is damaged.
+- *The bundle an export would write now.* An object, a scale or a pack was
+  written here, or the set never had a manifest. The manifest the set came
+  with no longer describes it, and none has been written yet. The page
+  computes the manifest an export writes (the same bytes on every export of
+  the same set) and compares with that and with the objects it lists. This
+  is what the reference will say about the exported folder.
+
+Two things follow, and both are meant. An Attestation that bound the
+manifest the set came with is a Semantic Match after you change something
+else: its subjects are as signed, only the manifest is a new one. And an
+object you wrote here counts as an object of the bundle, although the
+manifest the set came with never listed it; held to that manifest, an
+Attestation naming it would fail for no reason but that the app had not
+written a manifest yet.
+
+**When a subject was changed.** That is a real failure, on the page and for
+the reference, while the Attestation is active. What can be done depends on
+whether the Attestation is signed, which is to say whether it names an
+envelope:
+
+- The signer issues it again for the content as it is now. The app cannot
+  do that: it does not sign.
+- It is taken out of the set, with the envelope it names (Assess page,
+  *Take it out of this set*).
+- An unsigned Attestation can be set to withdrawn (Assess page). It is then
+  reported and fails nothing. This is not offered for a signed one: the
+  payload of its envelope is the Attestation's canonical form, so a change
+  of its lifecycle breaks the signature in every mode, and withdrawing a
+  signed Attestation is the signer's act.
+
+Measured for this build, with `validate_core.py --as-of 2026-11-14`: for
+`jascon/examples` (two signed Attestations: Full Match against this manifest
+and against a kept pack manifest; 27 counted), for the IFA bundle (one
+unsigned: Full Match; 18 counted, the reference's count being the objects
+and the manifest) and for `jascon/example-packs/dbvendor-server-7-advice`
+(Full Match; 3 counted) the check gives the reference's lines, envelope
+lines and counts by type, without keys and with the fixture keys of
+`jascon/conformance/fixture-trusted-keys.json`, under which both signatures
+of the example folder verify. The hub does not load a pack over a set, so
+the pack folder was held to the reference on the rules and, imported into a
+set and exported, in the browser. After an edit the page's lines were
+compared with what the reference prints for the exported folder: a Semantic
+Match, a failure for a changed subject, nothing once the Attestation was
+taken out, and the reported line once an unsigned one was withdrawn.
+
 ## Export
 
 **Export the set as a bundle** downloads a ZIP with the objects, the pinned
@@ -455,9 +881,25 @@ files and a `content-manifest.json`.
   the pins for its scales and facet schemas, and `kernel-version` 2.0.0 when
   the content needs it (a Risk, a Check, check results, a Finding that names
   risks or a check, a pinned scale, a Component with `product-version` or
-  with clauses on a capability). Its provenance gains the line `edited-with`.
-- An attestation the original manifest did not list stays beside the manifest
-  and is not added to it.
+  with clauses on a capability; `provenance` on a Tailoring, on one of its
+  selects, excludes or operations, on an Implementation or a Finding; a
+  Deviation with `decided` or `review-due`; an authorization with a `date`).
+  Its provenance gains the line `edited-with`.
+- An attestation stays beside the manifest and is not added to it: it
+  binds the digest of the manifest's bytes, so the manifest cannot list it
+  (D3.1). Its envelope travels with it. No manifest the app writes lists
+  one. Where the manifest a set came with lists one, which MANIFEST-1
+  refuses, two things hold. A set nobody changed leaves as it came, with
+  that manifest: the export passes on what it was given, and the Validate
+  page reports the failure. Once the set was changed, or the Attestation
+  was taken out of the list on the Validate or the Assess page (since
+  build 0.9.24), the export writes a
+  new manifest, which leaves the Attestation out; its file leaves beside
+  the manifest, moved there if it lay in a folder, and the log says so.
+- After a change the manifest is a new one, so an Attestation that bound
+  the old one is a Semantic Match for the reference while its subjects are
+  unchanged, and a failure where a subject was changed (see "What an
+  Attestation binds").
 - The pack manifests under `packs/sha256/`, a pack's attestation and its
   envelope leave as they came, beside the manifest; none of them is listed
   in it, and the manifest of a set never carries a pack header.
@@ -483,6 +925,7 @@ of a model service is not a setting.
 | `ui:style` | Style | (empty), `classic`, `ledger`, `engraving`, `still-life` | (empty) | Empty follows the style picked on jascon.net in this browser. Classic is the original look; the other three take the palette and type of the website's styles. |
 | `org:ns` | Namespace for new objects | text | `https://example.org/my` | The URI under which this app mints ids, for example https://your.example. Use a name you control. |
 | `org:owner` | Default risk owner | text | (empty) | A party URI, for example https://your.example/party/ciso. Prefilled when a risk is created. |
+| `org:me` | Who am I | text | (empty) | Your own party URI, for example https://your.example/party/jane-doe. Prefilled as the author of what you write (a Tailoring, a Risk, an Implementation, a Finding, a Mapping, a Check) and as the performer of a check you run. Each form shows it and lets you change it. Empty: a page names nobody unless you type a party. Where the kernel requires the party (the author of a Mapping or a Check, the performer of an Assessment) nothing is saved without one; elsewhere the page saves all the same and names no author. |
 | `ai:backend` | Model service | `gemini`, `openrouter`, `openai` | `gemini` | gemini is Google's API, openrouter is OpenRouter, openai is an endpoint of your own that speaks the OpenAI chat-completions protocol. No model is called until you type a key on a page that offers suggestions. |
 | `ai:model:gemini` | Model at Google Gemini | text | `gemini-3.8-flash` | A model id of the Gemini API, for example gemini-3.8-flash, gemini-3.5-flash-lite or gemini-4-argon (no free tier). Check the id against Google's model list; ids are retired. |
 | `ai:model:openrouter` | Model at OpenRouter | text | (empty) | A model slug in the form vendor/model. The model must support structured outputs. |
@@ -503,48 +946,96 @@ text in that language, the English text is shown, then whatever is there.
 
 ## Limits of this build
 
-- The Validate page is not the reference validator. All seventeen rule
+- The Validate page is not the reference validator. All eighteen rule
   families of `validate_core.py` are ported and run against their conformance
   vectors: canonical form (with the number domain, NUMBER-1: the text of
   every file is held to it, because the browser's parser reads `1.0` as 1
   and rounds an integer beyond 2^53), modality, parameter, tier, tailoring (the
-  operation law), reference, lifecycle, kernel (with the typed fields
-  `Finding.actions[].due` and `Deviation.opened`, named DATE-2 and DATE-1
-  when an object matches no type), facet, attestation, risk,
+  operation law), reference, lifecycle, kernel (with the typed dates and
+  times, from `Finding.actions[].due` to `Attestation.timestamp`, named
+  DATE-1 to DATE-5 when an object matches no type), facet, attestation (the
+  two digests of one object; since build 0.9.11 attestation-binds on a
+  bundle with its nineteen vectors; since 0.9.12 MANIFEST-1 with its eight),
+  risk,
   scale, DSSE signatures, the composition of two bundles,
   conditional-apply, the Check type of `drafts/CP-CHECK-1.md`
   (I-Regexp, check-verdict, CHECK-1 to CHECK-15 with the evidence chain),
-  and advice packs of `drafts/CP-ADVICE-1.md` (ADVICE-1 to ADVICE-11 with
-  the publisher verdict and the import plan). What the page does not judge:
+  advice packs of `drafts/CP-ADVICE-1.md` (ADVICE-1 to ADVICE-11 with
+  the publisher verdict and the import plan), and who decided and when of
+  `drafts/CP-AUTHOR-1.md` (AUTHOR-1 to AUTHOR-4, what is missing, and
+  REVIEW-1, which review date has passed on a given day; two reports, shown
+  on the page since build 0.9.9). Since build 0.9.20: WITHDRAWN-1, an
+  error where an object in force leans on an object the set holds as
+  withdrawn (area `lifecycle`), and FRAGMENT-1, a report of what the
+  references of the form `#id` name and which name nothing (area
+  `reference`). Since build 0.9.23: OPERATION-1, an error where a
+  `set-modality`, a `set-parameter` or a `replace-prose` names no
+  statement, or a `set-parameter` a parameter its statement does not
+  declare (area `reference`). What the page does not judge:
   conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line
-  ends, files the manifest does not list). In a case of doubt run the Python
-  validator on the export; where the two disagree, the app is wrong.
+  ends, files the manifest does not list). In
+  a case of doubt run the Python validator on the export; where the two
+  disagree, the app is wrong.
+- Who decided: the app knows who you are only from the setting *Who am I*;
+  it does not log anybody in, and an author is a claim inside the object,
+  not a proof. The pages do not raise an object's `version` when they save
+  it, so "this version" is the stored object. A Tailoring is written from
+  the form of the second view, which does not load a stored Tailoring; a
+  save under the same label replaces it, and the entries that are the same
+  keep their authors. The authorizations of a Component, and a Deviation on
+  anything but a Tailoring's operation or a Finding, are shown and not
+  edited. A review date is offered on a date or as a calendar period, not as
+  an elapsed duration.
+- A party the kernel requires: the pages refuse an empty field; they do not
+  look for the parties an earlier build made up. A set that was written
+  with build 0.9.9 or older may hold `…/party/author`, `…/party/check-author`,
+  `…/party/assessor`, `…/party/ciso`, `…/party/organisation` or
+  `…/party/organization`; nothing in the object tells such a party from one
+  a user named, so the app neither marks nor rewrites it. A form's draft
+  that an earlier build stored with one of these words is not read any
+  more. The record of catalogue entries that do not apply still writes the
+  owner field of the catalogue view as who decided, and asks for it.
 - Signatures: Ed25519 over a DSSE envelope, verification only. A key is
   trusted because you say so on the Validate page, never because a bundle
-  carries it. The app cannot sign. The reference validator looks at the
-  envelope of an attestation only when the manifest lists the attestation;
-  the app looks at every attestation of the set and reports a missing
-  envelope of an unlisted one as a note.
+  carries it. The app cannot sign, so it cannot issue an Attestation again
+  or withdraw a signed one. The envelope of every attestation of the set is
+  looked at, beside the manifest or listed in it, and one that is named and
+  not there is an error, as for the reference since 2026-11-14.
+- MANIFEST-1: taking a listed Attestation out of the manifest's list
+  (since build 0.9.24) has no undo in the app; loading the bundle again
+  brings the listing back.
+- What an Attestation binds: a set that was changed is compared with the
+  bundle an export would write, which the page says. Two cases are read as
+  "as loaded" although something happened: an object removed in the app
+  leaves no trace in the set, so the comparison still names the manifest
+  the set came with (the missing object is an error of its own, and the
+  export writes a new manifest); and a file that was only saved again
+  without a change. The page states the verdict about digests; whether the
+  signer may attest is not a question it can answer.
 - The other pages still take an object's type from its fields when a set is
   loaded; the Validate page says where the kernel schema disagrees.
 - Loading from a URL fetches what the manifest lists, the envelope a
   listed attestation names, and the evidence store the check results of an
   Assessment name (`evidence/sha256/<hex>`: the records and the outputs they
-  list). A file beside the manifest that nothing listed names, such as an
-  attestation over the manifest, is not fetched; load the folder or a ZIP for
-  those.
-- The pack manifests a set keeps (`packs/sha256/`) and the attestation of a
-  pack's publisher are named by nothing a manifest lists, and a URL names
-  files, not folders. Loading from a URL finds them only where the server
-  lists the folder, as `python -m http.server` does. A request for a listing
-  that is not there shows as an error in the browser's console, so the app
-  asks only where it has a reason: the manifest carries a pack header, or it
-  lists Components under an origin from which it lists nothing else (a pack
-  brings Components and nothing else, all under its publisher's origin).
-  Without a listing nothing is found, a pack from a URL is then *claimed*,
-  and a folder or a ZIP carries these files.
+  list).
+- What lies beside the manifest and is named by nothing it lists (an
+  Attestation over the manifest, the pack manifests a set keeps under
+  `packs/sha256/`, the attestation of a pack's publisher) is found only
+  where the server lists the folder, as `python -m http.server` does and
+  as a static site does with an index page of links: a URL names files,
+  not folders. Since build 0.9.24 the folder is asked for once with every
+  load (backlog #71, point 8). Until then the app asked only where a
+  bundle keeps a pack, so the Attestation beside any other bundle's
+  manifest did not arrive. A page counts as a listing only when it links
+  `content-manifest.json`. On a server that lists nothing the request
+  shows as one error in the browser's console; nothing is found, the hub
+  says so, a pack from a URL is then *claimed*, and the Validate page
+  holds no Attestation to what it binds. Load the folder or a ZIP for
+  those. Where the folder is read, every Attestation beside the manifest
+  is taken, the set's own too (until build 0.9.11 only one that binds a
+  kept pack manifest).
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.
@@ -597,13 +1088,17 @@ answer, the key in no storage), the Checks tool goes from a CIS import to
 saved checks against a simulated model and the exported bundle passes the
 reference validator, an advice pack goes from its preview through import and
 adoption to an export the reference validator accepts (in node on the files,
-and in a browser through the pages), every page starts in a browser without a script error, every
+and in a browser through the pages), the pages that write who decided are
+driven in a browser and each exported set is handed to the reference
+validator with `--require-authors`, the Validate page shows the reference's
+AUTHOR and REVIEW lines for the example folder and the IFA bundle, the
+author of an OSCAL document follows the table of its rule, every page starts in a browser without a script error, every
 interface string has a German text, and what is generated (the settings table
 above, `jascon-schema.js`, `jascon-presets.js`) matches its source. The second lists
 strings without a German text. The third rewrites the settings table from
 `JSC_CFG` in `jascon-core.js`.
 
-Three tests of the OSCAL import compare with the publishers' source files,
+Five tests of the OSCAL import compare with the publishers' source files,
 which the repository does not carry (`sources/` is ignored); without the
 files they are skipped. The files are the Anwenderkatalog Grundschutz++ of
 2026-07-16 from `BSI-Bund/Stand-der-Technik-Bibliothek` (commit `39a1193`,

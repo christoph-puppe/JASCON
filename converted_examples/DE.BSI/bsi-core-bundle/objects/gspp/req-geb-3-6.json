@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.3.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.3.6",
  "lifecycle": "active",
  "title": {
@@ -58,7 +58,8 @@
       "https://ns.bsi.bund.de/gspp/threat/G-0.44",
       "https://ns.bsi.bund.de/gspp/threat/G-0.16",
       "https://ns.bsi.bund.de/gspp/threat/G-0.24",
-      "https://ns.bsi.bund.de/gspp/threat/G-0.19"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.19",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.41"
      ]
     }
    }
@@ -66,7 +67,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -84,7 +85,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "geb.3.6-prm1": {
-     "alt-identifier": "01193c74-a4fc-4669-816c-651fcdca362e"
+     "alt-identifier": "948afb4d-36b1-4cc5-8726-98b78f1f95ae"
     }
    }
   }

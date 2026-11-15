@@ -3,6 +3,10 @@
  "version": "2026-11",
  "label": "R-2026-007",
  "lifecycle": "active",
+ "provenance": {
+  "author-ref": "https://cso.example/party/ciso",
+  "date": "2026-11-05"
+ },
  "title": {
   "en": "Tenant data exposure through long-lived KMS keys",
   "de": "Offenlegung von Mandantendaten durch langlebige KMS-Schlüssel"
@@ -30,6 +34,10 @@
   "impact": {
    "level": "existenzbedrohend",
    "scale-ref": "https://cso.example/scale/bsi-200-3-schadenshoehe"
+  },
+  "provenance": {
+   "author-ref": "https://cso.example/party/secops",
+   "date": "2026-10-28"
   }
  },
  "residual-rating": {

@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-physical-security-facilities-and-syst-304546f",
-   "sequence": 2350
+   "sequence": 2520
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-physical-security-facilities-and-syst-8918180",
-   "sequence": 2420
+   "sequence": 2590
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-physical-security-facilities-and-syst-3b4c625",
-   "sequence": 2440
+   "sequence": 2610
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-physical-security-facilities-and-syst-523364e",
-   "sequence": 2480
+   "sequence": 2650
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-physical-security-facilities-and-syst-b1a3e36",
-   "sequence": 2510
+   "sequence": 2680
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-physical-security-facilities-and-syst-6c14893",
-   "sequence": 2550
+   "sequence": 2720
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-physical-security-facilities-and-syst-45d43e9",
-   "sequence": 2570
+   "sequence": 2740
   }
  ],
  "facets": {

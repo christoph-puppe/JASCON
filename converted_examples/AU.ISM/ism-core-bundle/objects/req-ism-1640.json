@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1640",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1640",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cables for foreign systems installed in Australian facilities are labelled at inspection points."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-03"
   }
  ]
 }

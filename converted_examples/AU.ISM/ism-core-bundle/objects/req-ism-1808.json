@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1808",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1808",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A vulnerability scanner with an up-to-date vulnerability database is used for vulnerability scanning activities."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-12"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GEB.8.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GEB.8.4",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Gebäudemanagement für Datenträgerarchiv KANN für die Datenträger schonende Temperatur und Luftfeuchtigkeit anhand von {param:geb.8.4-prm1} überwachen."
+    "de": "Gebäudemanagement für Archiv KANN für die Datenträger schonende Temperatur und Luftfeuchtigkeit anhand von {param:geb.8.4-prm1} überwachen."
    },
    "parameters": [
     {
@@ -33,7 +33,7 @@
      "result": "für die Datenträger schonende Temperatur und Luftfeuchtigkeit",
      "result-specification": "anhand von {{Schwellwerten}}",
      "target-object-categories": [
-      "Datenträgerarchiv"
+      "Archiv"
      ]
     }
    }
@@ -63,7 +63,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5,
      "tags": [
@@ -84,7 +84,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "geb.8.4-prm1": {
-     "alt-identifier": "b76d96fa-3c33-470e-a624-1fe1aff44cc9"
+     "alt-identifier": "663f0210-c2db-4df2-ac58-88d2182b0414"
     }
    }
   }

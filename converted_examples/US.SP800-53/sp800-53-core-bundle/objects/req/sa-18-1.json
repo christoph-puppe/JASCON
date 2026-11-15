@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-18.1",
+ "version": "5.2.0",
+ "label": "SA-18(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Multiple Phases of System Development Life Cycle"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to SR-9(1)."
+   }
+  }
+ ]
+}

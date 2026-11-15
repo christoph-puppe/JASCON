@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2041",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2041",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Memory-safe programming languages, or less preferably memory-safe programming practices, are used for software development."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

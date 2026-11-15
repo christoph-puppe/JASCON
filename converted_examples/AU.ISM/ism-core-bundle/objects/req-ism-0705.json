@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0705",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0705",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "When accessing an organisation’s network via a VPN connection, split tunnelling is disabled."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-3fa59b3",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Assess controls"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Assess controls",
+     "name": "overview",
+     "prose": {
+      "en": "**Assess controls for the system and its operating environment to determine if they have been implemented correctly and are operating as intended.**\n\nIn conducting a security assessment, it is important that the assessor, system owner and authorising officer first agree to the scope, type and extent of assessment activities, which may be documented in a security assessment plan, such that any risks associated with the security assessment can be appropriately managed. Generally, the scope of the security assessment will be determined by the type of system and the controls implemented for the system and its operating environment.\n\nFor TOP SECRET systems, including sensitive compartmented information systems, security assessments can be undertaken by ASD assessors (or their delegates). For non-classified, OFFICIAL: Sensitive, PROTECTED and SECRET systems, security assessments can be undertaken by an organisation’s own assessors or Infosec Registered Assessors Program (IRAP) assessors. In all cases, assessors should hold an appropriate security clearance and have an appropriate level of experience and understanding of the type of system they are assessing.\n\nAt the conclusion of a security assessment, a security assessment report should be produced outlining the scope of the security assessment, the system’s strengths and weaknesses, security risks associated with the operation of the system, the effectiveness of the implementation of controls, and any recommended remediation actions. This will assist in performing any initial remediation actions as well as guiding the development of the system’s plan of action and milestones."
+     }
+    }
+   ]
+  }
+ }
+}

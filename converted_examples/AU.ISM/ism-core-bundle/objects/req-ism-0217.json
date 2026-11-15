@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0217",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0217",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Where spatial constraints demand non-TOP SECRET patch panels be installed in the same cabinet as a TOP SECRET patch panel:\n\n- a physical barrier in the cabinet is provided to separate patch panels\n- only personnel holding a Positive Vetting security clearance have access to the cabinet\n- approval from the TOP SECRET system’s authorising officer is obtained prior to installation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

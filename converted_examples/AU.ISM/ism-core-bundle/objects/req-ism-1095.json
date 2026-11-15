@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1095",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1095",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Wall outlet boxes denote the systems, cable identifiers and wall outlet box identifier."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

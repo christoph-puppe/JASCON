@@ -52,8 +52,10 @@ A translation changes words, not the page.
   Implementation, Assessment, Finding, Attestation, Check, Set), the type
   name stays English; the plain word ("a requirement", "the risk") is
   translated.
-- **Verdicts.** Full Match, Semantic Match and Tamper are the names the
-  specification defines; they stay English. The explanation is translated.
+- **Verdicts.** Full Match and Semantic Match are the names the
+  specification defines for its two states; they stay English. What is
+  neither is a failure and has no name of its own (D7): "does not bind" is
+  translated, like the explanation.
 - **Numbers and dates.** `{{ n.* }}` and `{{ facts.* }}` are filled by the
   build with the language's separator. Numbers typed in the text follow the
   language: German `5.886`, the others `5,886`. Dates: `13. November 2026`,

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1221",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1221",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Printers and MFDs are checked to ensure no pages are trapped in the paper path due to a paper jam."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

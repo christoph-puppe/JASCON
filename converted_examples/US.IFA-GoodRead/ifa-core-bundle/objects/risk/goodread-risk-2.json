@@ -44,12 +44,16 @@
       }
      ],
      "origin-actors": [
-      "e7730080-71ce-4b20-bec4-84f33136fd58"
+      {
+       "type": "party",
+       "actor-uuid": "e7730080-71ce-4b20-bec4-84f33136fd58"
+      }
      ]
     }
    ],
    "responses": [
     {
+     "uuid": "4676b126-ba6d-40cc-9dc8-f2aa677b03ee",
      "type": "mitigate",
      "lifecycle": "planned",
      "title": "IFA-GOODREAD-RISK1-RESPONSE: IFA SYSTEM1234 Product Team Response",
@@ -58,6 +62,7 @@
      },
      "tasks": [
       {
+       "uuid": "a0bb457d-0d14-4a74-801a-ffc9bc4cd636",
        "type": "milestone",
        "title": "Completion of SYSTEM1234 Sprint Ending June 23, 2023",
        "description": {
@@ -71,7 +76,15 @@
    ],
    "observations": [
     "https://ifa.gov/goodread/evidence/obs-8807eb6e"
-   ]
+   ],
+   "assessment-results-state": {
+    "title": "SYSTEM1234 System Engineers Have Over-Privileged Access to Cloud Infrastructure Account",
+    "statement": "An account without proper least privilege design and implementation can be used to surreptitiously add, change, or delete cloud infrastructure to the too managing all links to IFA's communication to public citizens, potentially causing significant harm with no forensic evidence to recover the system. Regardless of the extent and duration of a potential incident, such a configuration greatly increases the risk of an insider threat if there were likely to a potential insider threat in the SYSTEM1234 Product Team.\n\nIf such an insider threat existed and acted with this misconfigruation, the resulting event could cause significant financial and reputational risk to IFA's Administrator, executive staff, and the agency overall.",
+    "status": "investigating"
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "1c65d2d3-7735-47fa-8f68-a236744beab7"
   }
  }
 }

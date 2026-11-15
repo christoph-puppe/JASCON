@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0296",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0296",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "ASD’s approval is sought before applying labels to external surfaces of high assurance IT equipment."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

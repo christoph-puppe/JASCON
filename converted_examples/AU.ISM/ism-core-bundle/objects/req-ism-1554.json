@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1554",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1554",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "If travelling overseas with mobile devices to high or extreme risk countries, personnel are:\n\n- issued with newly provisioned user accounts, mobile devices and removable media from a pool of dedicated travel devices which are used solely for work-related activities\n- advised on how to apply and inspect tamper seals to key areas of mobile devices\n- advised to avoid taking any personal mobile devices, especially if rooted or jailbroken."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

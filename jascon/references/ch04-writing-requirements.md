@@ -28,20 +28,29 @@ the way, the census's ugliest defect class — lists packed into
 comma-separated strings that no validator can see — loses its hiding
 place, which is the whole point of the machinery.
 
-## 4.1 One clause or several? The 347-control lesson
+## 4.1 One clause or several? What the corpora show
 
-The statements field is a *list*, and the reason is a number: the German
-catalog contains **347 nested pseudo-controls** (plus 10 more in its TLS
-sibling) — controls inside controls, most of them one sentence long. The
-authors were not confused; they needed independently addressable
-*clauses* — a piece of a requirement you can tailor by itself, assign to
-a different party, map to a different foreign control — and the old model
-offered no unit between "whole control" and "undifferentiated prose." So
-they minted fake controls. The American corpus tells the same story in
-its own accent: statements that vary by certification class, and
-`following_information` bullet lists that are really enumerable
-sub-obligations. Meanwhile the Australians write one statement per
-control, 1,150 times, and that is *also* correct — for their content.
+The statements field is a *list*, and the reason is what readers do with
+a control: they address pieces of it. SP 800-53 writes a control as
+items — a., b., c., with numbered items below them — and everything
+downstream names them one at a time. An implementation in the lifecycle
+corpus answers statement by statement, and SP 800-53A hangs each of its
+3,707 assessment objectives on the statement it assesses. 284 of the
+1,196 converted controls carry more than one statement. FedRAMP's rules
+tell the same story in their own accent: statements that vary by
+certification class, and `following_information` bullet lists that are
+really enumerable sub-obligations. Meanwhile the Australians write one
+statement per control, 1,150 times, and the Germans 999 times, and that
+is *also* correct — for their content.
+
+> **Corrected 2026-11-14.** Earlier editions drew this lesson from
+> Grundschutz++: 347 controls nested inside other controls, read as
+> clauses that had no home. That reading was wrong. BSI nests controls to
+> group them. A nested control is a full control, with its own title,
+> parameters, guidance and links, and the converter writes it as a
+> Requirement of its own and the nesting as a Set (Chapter 5). While it
+> wrote nested controls as statements of their parent, their own links
+> were lost.
 
 So the craft question is real: when does one requirement carry several
 statements? The heuristic that survived the corpus:
@@ -51,6 +60,16 @@ statements? The heuristic that survived the corpus:
 > assessment, or mapping. Do not split for mere enumeration** — a list of
 > examples or sub-items with one shared obligation is a GFM list inside
 > one statement's prose.
+
+One thing the corpora do not show, and it is said here rather than
+implied: no converted corpus uses the first two criteria. In each of the
+284 SP 800-53 Requirements with several statements, all statements have
+one modality and one party (measured 2026-11-14). That a statement
+carries its own modality and its own parties is a decision of the
+design, kept by the author on that day, so that one requirement can bind
+the operator with MUST and the customer with SHOULD (the example in
+Appendix E.1). The corpora made the list necessary; they did not make
+this use of it necessary.
 
 Each statement gets an `id` — short and permanently stable (`s1`, or
 semantic letters `a`, `b`). Stability is not cosmetic: tailoring

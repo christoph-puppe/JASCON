@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -19,6 +20,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -29,6 +31,7 @@
   },
   {
    "id": "smt.b.1",
+   "label": "(1)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -39,6 +42,7 @@
   },
   {
    "id": "smt.b.2",
+   "label": "(2)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -49,6 +53,7 @@
   },
   {
    "id": "smt.b.3",
+   "label": "(3)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -59,6 +64,7 @@
   },
   {
    "id": "smt.b.4",
+   "label": "(4)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -76,6 +82,7 @@
   },
   {
    "id": "smt.c",
+   "label": "(c)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -100,15 +107,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-19.4_obj",
      "label": "AC-19(04)",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/AC-19.4"
+      }
+     ],
      "children": [
       {
        "id": "ac-19.4_obj.a",
        "label": "AC-19(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the use of unclassified mobile devices in facilities containing systems processing, storing, or transmitting classified information is prohibited unless specifically permitted by the authorizing official;"
        }
@@ -116,10 +133,20 @@
       {
        "id": "ac-19.4_obj.b",
        "label": "AC-19(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ac-19.4_obj.b.1",
          "label": "AC-19(04)(b)(01)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.1"
+          }
+         ],
          "prose": {
           "en": "prohibition of the connection of unclassified mobile devices to classified systems is enforced on individuals permitted by an authorizing official to use unclassified mobile devices in facilities containing systems processing, storing, or transmitting classified information;"
          }
@@ -127,6 +154,11 @@
         {
          "id": "ac-19.4_obj.b.2",
          "label": "AC-19(04)(b)(02)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.2"
+          }
+         ],
          "prose": {
           "en": "approval by the authorizing official for the connection of unclassified mobile devices to unclassified systems is enforced on individuals permitted to use unclassified mobile devices in facilities containing systems processing, storing, or transmitting classified information;"
          }
@@ -134,6 +166,11 @@
         {
          "id": "ac-19.4_obj.b.3",
          "label": "AC-19(04)(b)(03)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.3"
+          }
+         ],
          "prose": {
           "en": "prohibition of the use of internal or external modems or wireless interfaces within unclassified mobile devices is enforced on individuals permitted by an authorizing official to use unclassified mobile devices in facilities containing systems processing, storing, or transmitting classified information;"
          }
@@ -141,10 +178,20 @@
         {
          "id": "ac-19.4_obj.b.4",
          "label": "AC-19(04)(b)(04)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.4"
+          }
+         ],
          "children": [
           {
            "id": "ac-19.4_obj.b.4-1",
            "label": "AC-19(04)(b)(04)[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.4"
+            }
+           ],
            "prose": {
             "en": "random review and inspection of unclassified mobile devices and the information stored on those devices by {param:ac-19.04_odp.01} are enforced;"
            }
@@ -152,6 +199,11 @@
           {
            "id": "ac-19.4_obj.b.4-2",
            "label": "AC-19(04)(b)(04)[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.b.4"
+            }
+           ],
            "prose": {
             "en": "following of the incident handling policy is enforced if classified information is found during a random review and inspection of unclassified mobile devices;"
            }
@@ -163,6 +215,11 @@
       {
        "id": "ac-19.4_obj.c",
        "label": "AC-19(04)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the connection of classified mobile devices to classified systems is restricted in accordance with {param:ac-19.04_odp.02}."
        }
@@ -246,7 +303,8 @@
      ],
      "alt-identifiers": [
       "ac-19.4_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-19(04)_ODP[01]"
     },
     "ac-19.04_odp.02": {
      "guidelines": [
@@ -256,7 +314,8 @@
      ],
      "alt-identifiers": [
       "ac-19.4_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-19(04)_ODP[02]"
     }
    }
   }

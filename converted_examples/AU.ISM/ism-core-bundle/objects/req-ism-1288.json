@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1288",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1288",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Files imported or exported via gateways or CDSs undergo antivirus scanning using multiple different scanning engines."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0499",
- "version": "2026.06.18",
+ "version": "12",
  "label": "ISM-0499",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Communications security doctrine and policy produced by ASD for the management and operation of HACE is complied with."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

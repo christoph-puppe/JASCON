@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1546",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1546",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Users are authenticated before they are granted access to a system and its resources."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-08"
   }
  ]
 }

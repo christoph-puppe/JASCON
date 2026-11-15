@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0233",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-0233",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cordless telephone handsets and headsets are not used for sensitive or classified conversations unless all communications are encrypted using ASD-approved cryptography."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

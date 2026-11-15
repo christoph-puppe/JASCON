@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sa-17.9_obj",
      "label": "SA-17(09)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "different designs are used for {param:sa-17.09_odp} to satisfy a common set of requirements or to provide equivalent functionality."
      }
@@ -120,7 +125,8 @@
      "alt-identifiers": [
       "sa-17.9_prm_1"
      ],
-     "alt-label": "critical systems or system components"
+     "alt-label": "critical systems or system components",
+     "sp800-53a-label": "SA-17(09)_ODP"
     }
    }
   },

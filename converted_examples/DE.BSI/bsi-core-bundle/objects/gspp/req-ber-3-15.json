@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.15",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.15",
  "lifecycle": "active",
  "title": {
-  "de": "Anmeldeversuchsgrenze am System"
+  "de": "Zugang löschen nach Fristablauf"
  },
  "statements": [
   {
@@ -14,27 +14,17 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für IT-Systeme SOLLTE weitere Anmeldeversuche nach Erreichen von {param:ber.3.15-prm1} fehlgeschlagenen Versuchen vorübergehend blockieren."
-   },
-   "parameters": [
-    {
-     "name": "ber.3.15-prm1",
-     "type": "string",
-     "label": "einem maximalen Schwellwert an"
-    }
-   ]
+    "de": "Berechtigung SOLLTE nicht mehr benötigte Zugangskonten nach Ablauf der Löschfristen löschen."
+   }
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "blockieren",
-     "result": "weitere Anmeldeversuche nach Erreichen von {{einem maximalen Schwellwert an}} fehlgeschlagenen Versuchen",
-     "result-specification": "vorübergehend",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
+     "action": "löschen",
+     "result": "nicht mehr benötigte Zugangskonten",
+     "result-specification": "nach Ablauf der Löschfristen"
     }
    }
   },
@@ -42,7 +32,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Konfigurationshistorie"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -65,9 +55,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
+     "effort": 1,
      "tags": [
       "Credential Stuffing",
       "Brute-Force-Attacke"
@@ -79,15 +69,8 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Betrifft sowohl die lokale Anmeldung über eine Benutzeroberfläche als auch den Zugriff über Fernwartungsprotokolle oder -anwendungen wie RDP, SNMP, wenn diese vorhanden sind.  Die Umsetzung erfolgt im einfachsten Fall durch ein Login, bzw. eine Bildschirmsperre für das IT-System. Biometrische Daten wie Fingerabdrücke können gefälscht werden und sind nicht so leicht zu ändern wie Passwörter. Setzen Sie Biometrie daher nicht als einzigen Authentifizierungsfaktor ein, sondern wenn, dann nur zur Ergänzung (Mehr-Faktor-Authentifizierung). Die Anforderung ist entbehrlich, wenn das System keinen Zugriff auf schützenswerte Daten erlaubt, z.B. bei Nutzung als Kiosk."
+      "de": "Die Löschfristen ergeben sich aus gesetzlichen Aufbewahrungs- und Löschfristen, die dem Compliance-Management entnommen werden können. Sicheres Löschen bedeutet, Daten so zu entfernen, dass sie mit vertretbarem Aufwand (auch forensisch) nicht mehr rekonstruierbar sind. Je nach Medium geschieht das z. B. durch verifizierbares Überschreiben, kryptografisches Löschen (Schlüsselvernichtung) oder physische Zerstörung (inklusive zugehöriger Metadaten, Caches und Datensicherungen)."
      }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.3.15-prm1": {
-     "alt-identifier": "c37f30d1-8fd7-4497-b3f1-07d8f54b717c"
     }
    }
   }
@@ -95,7 +78,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "c37f30d1-8fd7-4497-b3f1-07d8f54b717c"
+   "value": "04d6a7fe-9e5a-424b-b647-3e95ce943ce9"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/ASST.7.2"
   }
  ]
 }

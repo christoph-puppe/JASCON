@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SI-7.11",
+ "version": "5.2.0",
+ "label": "SI-7(11)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Confined Environments with Limited Privileges"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to CM-7(6)."
+   }
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1939",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1939",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The number of user accounts that are members of the Domain Admins, Enterprise Admins or other highly privileged security groups is minimised."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

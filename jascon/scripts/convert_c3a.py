@@ -4,14 +4,29 @@ GS++ grammar family (modal_verb / action_word / result props, sec_level,
 effort_level, tags, alt-identifier, typed params): 30 criteria in 6 SOV
 domains. First converter to use the D9-rev first-class parameter
 `label` + `default` - the param-extras residue class never opens here.
-Coverage target: 0."""
-import json, os, re, collections
+Coverage target: 0.
+
+    convert_c3a.py [--obligated-party URI] [--out DIR]
+
+The converter reads no party from the catalogue: it writes one of its own
+on every statement, `<namespace>/party/cloud-dienstanbieter`.
+--obligated-party writes the caller's party in its place, and the coverage
+report says which of the two it was (backlog #74). --out writes the bundle
+and the two reports to DIR. The bundle of this corpus is not redistributed
+and must not be committed, so a run belongs in a DIR outside the repository."""
+import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report
+from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 SRC = os.path.join(ROOT, "sources", "c3a_oscal_catalog.json")
-OUTDIR = os.path.join(ROOT, "converted_examples", "DE.C3A")
+ARGV = sys.argv[1:]
+known_arguments(ARGV, ("--obligated-party", "--out"))
+OUTDIR = out_dir(ARGV, os.path.join(ROOT, "converted_examples", "DE.C3A"))
 NS = "https://ns.bsi.bund.de/c3a"   # minted by converter; pending a BSI-published URI
+# Whom a statement binds is not a value of this source (backlog #74)
+PARTY_DEFAULT = f"{NS}/party/cloud-dienstanbieter"
+PARTY, PARTY_ORIGIN = obligated_party(ARGV, PARTY_DEFAULT)      # (party, "converter-default" | "caller")
 F_GRAM = "https://ns.jascon.net/stdlib/facet/statement-grammar@1"
 F_TAX = f"{NS}/facet/taxonomy@1"
 F_NARR = f"{NS}/facet/narrative@1"
@@ -71,7 +86,7 @@ def convert_control(c):
     if re.search(r"\bC1:", prose) and re.search(r"\bC2:", prose):
         fused_variants.append(c["id"])
     st = {"id": sid, "modality": mod,
-          "obligated-parties": [f"{NS}/party/cloud-dienstanbieter"],
+          "obligated-parties": [PARTY],
           "prose": {"de": prose}}
     params = []
     for p in c.get("params", []) or []:
@@ -168,7 +183,7 @@ j = report(
      f"baseline Set ({', '.join(f'{k} ({len(set(v))})' for k, v in sorted(sec_members.items()))}); "
      f"effort_level/tags -> c3a/taxonomy@1; alt-identifier -> aliases (scheme bsi-uuid); CSV-link prop "
      f"namespaces absorbed - pinned stubs replace them (the GS++ lesson).",
-     f"- **Obligated party**: documented default {NS}/party/cloud-dienstanbieter.",
+     obligated_party_line(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      f"- **Payload free text language-tagged** per corpus language ({{de: ...}}): "
      + ", ".join(f"{k} x{v}" for k, v in sorted(lang_wraps.items())) + ". Harmonized from the start (backlog #12)."],
     [f"- **Fused class variants x{len(fused_variants)}**: statement prose interleaves 'C1: ... C2: ...' "
@@ -183,6 +198,7 @@ j = report(
     {"source": cat["metadata"]["title"], "source-version": VER,
      "objects-emitted": {"requirements": len(req_ids), "sets": nset, "parameters": nparams},
      "modality": dict(mod_count),
+     "obligated-party": obligated_party_record(PARTY, PARTY_ORIGIN, PARTY_DEFAULT),
      "sec-level-baselines": {k: len(set(v)) for k, v in sec_members.items()},
      "fused-class-variants": fused_variants, "multi-modal-statements": multi_modal,
      "multi-value-params": multi_value_params, "lang-wraps": dict(lang_wraps)})

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERS.5.3",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERS.5.3",
  "lifecycle": "active",
  "title": {
@@ -65,7 +65,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 4,
      "tags": [
@@ -86,10 +86,10 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "pers.5.3-prm1": {
-     "alt-identifier": "76a4233a-f1b4-4e5c-9c53-8c6b7d10ec88"
+     "alt-identifier": "4a11fac2-9582-4291-986c-204418e5227e"
     },
     "pers.5.3-prm2": {
-     "alt-identifier": "76a4233a-f1b4-4e5c-9c53-8c6b7d10ec88"
+     "alt-identifier": "58cfca8b-1fd6-4809-9e50-ddced7db1cd6"
     }
    }
   }

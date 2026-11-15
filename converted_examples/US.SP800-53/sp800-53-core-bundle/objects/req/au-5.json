@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -31,6 +32,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -55,15 +57,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-5_obj",
      "label": "AU-05",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/AU-5"
+      }
+     ],
      "children": [
       {
        "id": "au-5_obj.a",
        "label": "AU-05a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:au-05_odp.01} are alerted in the event of an audit logging process failure within {param:au-05_odp.02};"
        }
@@ -71,6 +83,11 @@
       {
        "id": "au-5_obj.b",
        "label": "AU-05b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:au-05_odp.03} are taken in the event of an audit logging process failure."
        }
@@ -151,7 +168,8 @@
      ],
      "alt-identifiers": [
       "au-5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-05_ODP[01]"
     },
     "au-05_odp.02": {
      "guidelines": [
@@ -161,7 +179,8 @@
      ],
      "alt-identifiers": [
       "au-5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AU-05_ODP[02]"
     },
     "au-05_odp.03": {
      "guidelines": [
@@ -171,7 +190,8 @@
      ],
      "alt-identifiers": [
       "au-5_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AU-05_ODP[03]"
     }
    }
   }

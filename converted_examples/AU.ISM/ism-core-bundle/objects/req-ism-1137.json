@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1137",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1137",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners deploying SECRET or TOP SECRET systems within fixed facilities contact ASD for an emanation security risk assessment."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

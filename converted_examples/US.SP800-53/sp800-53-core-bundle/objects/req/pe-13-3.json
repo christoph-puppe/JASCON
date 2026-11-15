@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/PE-13.3",
+ "version": "5.2.0",
+ "label": "PE-13(3)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Automatic Fire Suppression"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into PE-13(2)."
+   }
+  }
+ ]
+}

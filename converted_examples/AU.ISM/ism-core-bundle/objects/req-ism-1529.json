@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1529",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1529",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Only community or private clouds are used for outsourced SECRET and TOP SECRET cloud services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

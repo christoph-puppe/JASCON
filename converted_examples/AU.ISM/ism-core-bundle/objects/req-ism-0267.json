@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0267",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0267",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Access to non-approved webmail services is blocked."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-03"
   }
  ]
 }

@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.7",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.7",
  "lifecycle": "active",
  "title": {
-  "de": "Autorisierung neuer Zugangskonten"
+  "de": "Single-Sign-On"
  },
  "statements": [
   {
@@ -14,24 +14,19 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE die Einrichtung von Zugangskonten durch {param:ber.3.7-prm1} autorisieren."
-   },
-   "parameters": [
-    {
-     "name": "ber.3.7-prm1",
-     "type": "string",
-     "label": "bestimmte Personen oder Rollen"
-    }
-   ]
+    "de": "Berechtigung für Anwendungen SOLLTE die Anmeldung über einen zentralen Identitätsprovider aktivieren."
+   }
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "autorisieren",
-     "result": "die Einrichtung von Zugangskonten",
-     "result-specification": "durch {{bestimmte Personen oder Rollen}}"
+     "action": "aktivieren",
+     "result": "die Anmeldung über einen zentralen Identitätsprovider",
+     "target-object-categories": [
+      "Anwendungen"
+     ]
     }
    }
   },
@@ -39,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "IT-Betriebskonzept"
+      "Konfigurationshistorie"
      ]
     }
    }
@@ -49,7 +44,7 @@
     "smt": {
      "confidentiality": "1",
      "integrity": "1",
-     "availability": "0",
+     "availability": "1",
      "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
@@ -62,12 +57,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 3,
-     "tags": [
-      "Change Management"
-     ]
+     "effort": 3
     }
    }
   },
@@ -75,15 +67,8 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Gemeint ist hier die Entscheidungsbefugnis für die Freigabe neuer Zugangskonten. Dies können je nach Organissationsstruktur beispielsweise fachliche Vorgesetzte, Systemverantwortliche, Anwendungseigentümer, Rollenverantwortliche, Personalverantwortliche, Sicherheitsbeauftragte oder benannte Administratoren mit Freigabekompetenz sein. Eine geregelte Autorisierung stellt sicher, dass Zugänge nur auf Grundlage eines legitimen geschäftlichen oder technischen Bedarfs entstehen. Ohne eine solche Autorisierung könnte ein Zugangskonto \"auf Zuruf\" ohne gültigen Auftrag eingerichtet werden, z.B. für hier nicht berechtigte Personen, ehemalige Beschäftigte oder externe Dienstleister. Dies könnte unbefugte Zugriffe, Berechtigungsausweitung, Umgehung von Verantwortlichkeiten oder nicht erkennbare Schattenkonten begünstigen."
+      "de": "Bei Single Sign-on authentifizieren sich Nutzende bei einem zentralen Identity Provider, der auch die Berechtigungen zur Nutzung der Anwendung prüft. Bei erfolgreicher Authentifizierung und passenden Berechtigungen wird für die Sitzung ein Token ausgestellt, das den Zugang zur Anwendung ermöglicht. Da Nutzende durch Single-Sign-On weniger Anmeldeinformationen benötigen, wird es leichter, sich komplexe Passwörter zu merken oder zentrale gepflegte Schutzmaßnahmen, wie eine Mehr-Faktor-Authentifizierung oder Überwachung von Anmeldeinformationen, auch auf die Anwendung anzuwenden. Zudem erschwert Single-Sign-On auch Phishing-Angriffe, da Anmeldeinformationen nur noch an zentraler Stelle und nicht mehr verstreut in einzelne Anwendungen oder Webseiten abgefragt werden. Andererseits ist bei der Kompromittierung des Single-Sign-On-Logins auch die Authentifizierung an der Anwendung kompromittiert und die Verfügbarkeit der Anwendung hängt auch von der Verfügbarkeit des zentralen Logins ab. Dies kann unter Windows durch Nutzung eines Windows Server Domain Controllers und unter Linux durch Samba mit aktiviertem Heimdal Kerberos Key Distribution Center (KDC) umgesetzt werden."
      }
-    }
-   }
-  },
-  "https://ns.jascon.net/compat/oscal-1x@1": {
-   "param-extras": {
-    "ber.3.7-prm1": {
-     "alt-identifier": "48b77493-1bc3-4296-9e77-0460841d6914"
     }
    }
   }
@@ -91,7 +76,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "48b77493-1bc3-4296-9e77-0460841d6914"
+   "value": "494391e7-774c-4cc4-b9ed-dc8ab652e83b"
   }
  ]
 }

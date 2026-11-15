@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -20,6 +21,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -38,15 +40,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cm-7.8_obj",
      "label": "CM-07(08)",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-7.8"
+      }
+     ],
      "children": [
       {
        "id": "cm-7.8_obj.a",
        "label": "CM-07(08)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "the use of binary or machine-executable code is prohibited when it originates from sources with limited or no warranty or without the provision of source code;"
        }
@@ -54,10 +66,20 @@
       {
        "id": "cm-7.8_obj.b",
        "label": "CM-07(08)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "cm-7.8_obj.b-1",
          "label": "CM-07(08)(b)[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "exceptions to the prohibition of binary or machine-executable code from sources with limited or no warranty or without the provision of source code are allowed only for compelling mission or operational requirements;"
          }
@@ -65,6 +87,11 @@
         {
          "id": "cm-7.8_obj.b-2",
          "label": "CM-07(08)(b)[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "exceptions to the prohibition of binary or machine-executable code from sources with limited or no warranty or without the provision of source code are allowed only with the approval of the authorizing official."
          }
@@ -175,15 +202,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SI-7.14",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SI-7.14",
-    "mode": "renamed",
-    "label": "SI-07(14)",
-    "title": "Binary or Machine Executable Code"
-   }
-  ]
- }
+ ]
 }

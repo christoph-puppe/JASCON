@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-12.14",
+ "version": "5.2.0",
+ "label": "SA-12(14)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Identity and Traceability"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SR-4(1) and SR-4(2)."
+   }
+  }
+ ]
+}

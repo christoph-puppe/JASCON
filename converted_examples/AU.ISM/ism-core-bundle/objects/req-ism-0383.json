@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0383",
- "version": "2026.06.18",
+ "version": "11",
  "label": "ISM-0383",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Default user accounts or credentials for operating systems, including for any pre-configured user accounts, are changed, disabled or removed during initial setup."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

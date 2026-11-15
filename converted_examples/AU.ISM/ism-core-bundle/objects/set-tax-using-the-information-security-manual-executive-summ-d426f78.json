@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-d426f78",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Legislation and legal considerations"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Legislation and legal considerations",
+     "name": "overview",
+     "prose": {
+      "en": "An organisation is not required as a matter of law to comply with the ISM, unless legislation, or a direction given under legislation or by some other lawful authority, compels them to comply. Furthermore, the ISM does not override any obligations imposed by legislation or law. Finally, if the ISM conflicts with legislation or law, the latter takes precedence.\n\nWhile the ISM contains examples of when legislation or laws may be relevant for an organisation, there is no comprehensive consideration of such issues. When designing, operating and decommissioning systems, an organisation is encouraged to familiarise themselves with relevant legislation, such as the [Archives Act 1983](#e0d3b5ea-6a5a-400c-8daa-8a8059816a06), [Privacy Act 1988](#6fac5a84-b86e-405f-b2b3-8c13ecee4a02), [Security of Critical Infrastructure Act 2018](#c0558477-3987-493c-99de-eeceff99847d) and [Telecommunications (Interception and Access) Act 1979](#e4c07309-9ca8-40b7-9571-4f6c032180a1)."
+     }
+    }
+   ]
+  }
+ }
+}

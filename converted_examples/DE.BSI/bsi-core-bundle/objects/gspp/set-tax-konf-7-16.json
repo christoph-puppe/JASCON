@@ -1,0 +1,18 @@
+{
+ "id": "https://ns.bsi.bund.de/gspp/set/tax/konf-7-16",
+ "version": "2026-10-29T08:03:12.736989+00:00",
+ "lifecycle": "active",
+ "title": {
+  "de": "Anti-Exploit"
+ },
+ "members": [
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.16",
+   "sequence": 11410
+  },
+  {
+   "ref": "https://ns.bsi.bund.de/gspp/req/KONF.7.16.1",
+   "sequence": 11420
+  }
+ ]
+}

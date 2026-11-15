@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-cyber-security-awa-5cb61bf",
-   "sequence": 2660
+   "sequence": 2830
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-cyber-security-awa-734d63b",
-   "sequence": 2680
+   "sequence": 2850
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-cyber-security-awa-71a8db5",
-   "sequence": 2700
+   "sequence": 2870
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-cyber-security-awa-b0cda66",
-   "sequence": 2720
+   "sequence": 2890
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-cyber-security-awa-9933670",
-   "sequence": 2770
+   "sequence": 2940
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-cyber-security-awa-3d8c253",
-   "sequence": 2810
+   "sequence": 2980
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-personnel-security-cyber-security-awa-9a32b4d",
-   "sequence": 2830
+   "sequence": 3000
   }
  ],
  "facets": {

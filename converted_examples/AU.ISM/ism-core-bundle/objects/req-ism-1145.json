@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1145",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1145",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Privacy filters are applied to the screens of SECRET and TOP SECRET mobile devices."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

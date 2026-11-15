@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1827",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1827",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Microsoft AD DS domain controllers are administered using dedicated domain administrator user accounts that are not used to administer other systems."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

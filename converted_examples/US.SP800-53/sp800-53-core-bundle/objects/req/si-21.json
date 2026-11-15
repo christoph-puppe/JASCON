@@ -39,11 +39,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "si-21_obj",
      "label": "SI-21",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the {param:si-21_odp.01} is refreshed {param:si-21_odp.02} or is generated on demand and deleted when no longer needed."
      }
@@ -131,7 +136,8 @@
      ],
      "alt-identifiers": [
       "si-21_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-21_ODP[01]"
     },
     "si-21_odp.02": {
      "guidelines": [
@@ -141,7 +147,8 @@
      ],
      "alt-identifiers": [
       "si-21_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SI-21_ODP[02]"
     }
    }
   },

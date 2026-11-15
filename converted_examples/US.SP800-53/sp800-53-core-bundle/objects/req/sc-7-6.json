@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SC-7.6",
+ "version": "5.2.0",
+ "label": "SC-7(6)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Response to Recognized Failures"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SC-7(18)."
+   }
+  }
+ ]
+}

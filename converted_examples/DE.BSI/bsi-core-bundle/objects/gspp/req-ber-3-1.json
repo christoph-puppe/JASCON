@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.1",
  "lifecycle": "active",
  "title": {
-  "de": "Vorgehensweise zur Ausgabe"
+  "de": "Zentrales Management"
  },
  "statements": [
   {
@@ -14,17 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE eine Vorgehensweise zur initialen Ausgabe von Authentifizierungsmitteln verankern."
-   }
-  },
-  {
-   "id": "BER.3.1.1",
-   "modality": "should",
-   "obligated-parties": [
-    "https://ns.bsi.bund.de/gspp/party/institution"
-   ],
-   "prose": {
-    "de": "Berechtigung SOLLTE vor der Verteilung von Authentifizierungsmitteln die Identität authentifizieren."
+    "de": "Berechtigung SOLLTE ein zentrales Managementsystem für Zugangskonten installieren."
    }
   }
  ],
@@ -32,23 +22,14 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "verankern",
-     "result": "eine Vorgehensweise zur initialen Ausgabe von Authentifizierungsmitteln"
-    },
-    "BER.3.1.1": {
-     "action": "authentifizieren",
-     "result": "vor der Verteilung von Authentifizierungsmitteln die Identität"
+     "action": "installieren",
+     "result": "ein zentrales Managementsystem für Zugangskonten"
     }
    }
   },
   "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "by-statement": {
     "smt": {
-     "required-documentation": [
-      "IT-Betriebskonzept"
-     ]
-    },
-    "BER.3.1.1": {
      "required-documentation": [
       "IT-Betriebskonzept"
      ]
@@ -60,19 +41,12 @@
     "smt": {
      "confidentiality": "1",
      "integrity": "1",
-     "availability": "0",
-     "authenticity": "2",
+     "availability": "1",
+     "authenticity": "1",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
-     ]
-    },
-    "BER.3.1.1": {
-     "confidentiality": "1",
-     "integrity": "1",
-     "availability": "0",
-     "authenticity": "2",
-     "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.32"
      ]
     }
    }
@@ -80,16 +54,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2
-    },
-    "BER.3.1.1": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "normal-SdT",
-     "effort": 2,
-     "title": "Initiale Ausgabe",
-     "alt-identifier": "46f20b63-b07f-4c25-bdcc-b58239432290"
+     "effort": 3
     }
    }
   },
@@ -97,12 +64,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Die initiale Ausgabe von Authentifizierungsmitteln ist die erstmalige, kontrollierte Bereitstellung von Mitteln, mit denen eine natürliche Person oder ein technischer Dienst seine Identität nachweisen kann; hierzu zählen beispielsweise Passwörter oder Einmalpasswörter, Hardware- oder Software-Token, Smartcards, Zertifikate, kryptografische Schlüssel, Passkeys, initiale MFA-Faktoren sowie Aktivierungs- oder Registrierungsinformationen (engl. authentication credentials, authentication factors, authenticators). Die Vorgehensweise zur initialen Ausgabe umfasst dabei insbesondere die nachvollziehbare Feststellung der berechtigten empfangenden Person oder Instanz, die Zuordnung zum vorgesehenen Zugangskonto oder Berechtigungsumfang, einen geschützten Übergabeweg, die Vermeidung unkontrollierter Mehrfachausgaben sowie eine dokumentierbare Bestätigung, dass das Authentifizierungsmittel nur der vorgesehenen empfangenden Stelle zugänglich gemacht wurde.  Sinn und Zweck der Vorschrift ist, bereits beim ersten Zugang zu verhindern, dass Authentifizierungsmittel an falsche, nicht hinreichend identifizierte oder nicht mehr berechtigte Empfänger gelangen; andernfalls könnte ein Konto von Beginn an kompromittiert, ein Initialpasswort abgefangen, ein Token an eine falsche Person ausgegeben oder ein Zertifikat missbräuchlich zur Anmeldung verwendet werden."
-     }
-    },
-    "BER.3.1.1": {
-     "guidance": {
-      "de": "Identität meint hier die natürliche Person, Gruppe, Rolle, Anwendung oder das IT-System, welches das Authentifizierungsmittel erhält. Verteilung meint hier die initiale Ausgabe, Weiterleitung oder Speicherung des Authentifizierungsfaktors, z.B. die Ausgabe eines initialen Passwortes an Nutzende oder die Speicherung eines X.509-Zertifikates zu einem neuen Hostsystem als vertrauenswürdig in einem Trust Store."
+      "de": "Wenn Zugangskonten lokal auf jedem Gerät einzeln verwaltet werden, könnte es zu inkonsistenten und veralteten Zugängen und Berechtigungen kommen. Ein zentrales System steuert Benutzeridentitäten und Zugriffsrechte übergreifend – oft als Identity and Access Management (IAM) oder bei sensiblen Konten als Privileged Access Management (PAM) bezeichnet. Es kann die Nachvollziehbarkeit erhöhen, Audits erleichtern und gerade in komplexen IT-Umgebungen Transparenz schaffen. Umsetzbar ist dies etwa über Verzeichnisdienste wie LDAP oder Active Directory, ergänzt durch rollenbasierte Zugriffsmodelle (RBAC). Praktische Maßnahmen zum Management können Self-Service-Portale, automatische Genehmigungsworkflows und regelmäßige Rechteüberprüfungen umfassen. Für den Einstieg kann eine Institution kritische Systeme priorisieren und Prozesse schrittweise zentralisieren."
      }
     }
    }
@@ -111,7 +73,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "42e113c2-4f86-4e82-9785-67ac6eb9d43b"
+   "value": "0aec1964-0172-4194-836b-90fa6d8002ba"
   }
  ]
 }

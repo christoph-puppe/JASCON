@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0201",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0201",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Labels for TOP SECRET conduits are a minimum size of 2.5 cm x 1 cm, attached at five-metre intervals and marked as ‘TS RUN’."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-03"
   }
  ]
 }

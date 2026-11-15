@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0407",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0407",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A secure record is maintained for the life of systems and their resources that covers the following for each user:\n\n- their user identification\n- their signed agreement to abide by system usage policies\n- who authorised their access\n- when their access was granted\n- the level of access they were granted\n- when their access, and their level of access, was last reviewed\n- when their level of access was changed, and to what extent (if applicable)\n- when their access was withdrawn (if applicable)."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

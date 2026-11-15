@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2057",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2057",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "All input validation rules are documented, implemented in code, and tested using both positive and negative unit tests and integration tests."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

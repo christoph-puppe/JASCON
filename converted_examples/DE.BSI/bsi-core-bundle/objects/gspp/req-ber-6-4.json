@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.6.4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.6.4",
  "lifecycle": "active",
  "title": {
-  "de": "Erzeugung auf sicheren IT-Systemen"
+  "de": "Kriterien für die Qualität von Passwörtern"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE die Verwendung eines IT-Systems, welches mindestens dasselbe Schutzniveau bietet, für das der Schlüssel eingesetzt werden soll, bei der Schlüsselerzeugung verankern."
+    "de": "Berechtigung SOLLTE Kriterien für die Qualität von Passwörtern anhand von Lebensdauer und Angriffsmöglichkeiten verankern."
    }
   }
  ],
@@ -23,8 +23,8 @@
    "by-statement": {
     "smt": {
      "action": "verankern",
-     "result": "die Verwendung eines IT-Systems, welches mindestens dasselbe Schutzniveau bietet, für das der Schlüssel eingesetzt werden soll,",
-     "result-specification": "bei der Schlüsselerzeugung"
+     "result": "Kriterien für die Qualität von Passwörtern",
+     "result-specification": "anhand von Lebensdauer und Angriffsmöglichkeiten"
     }
    }
   },
@@ -40,12 +40,13 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "0",
+     "authenticity": "1",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30"
      ]
     }
    }
@@ -53,10 +54,14 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
+     "effort": 3,
      "tags": [
+      "Privilege Escalation",
+      "Credential Stuffing",
+      "Brute-Force-Attacke",
+      "Password Policy",
       "Cryptography"
      ]
     }
@@ -66,7 +71,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Wird ein Schlüssel auf einem System erzeugt, dass einen geringeren Schutz bietet als auf dem späteren Einsatzsystem, dann könnte der Schlüssel bereits kompromittiert sein."
+      "de": "Kriterien für die Qualität von Passwörtern können z.B. eine minimale Entropie, Passwortlänge oder Verwendung verschiedener Symbole sein. Die Lebensdauer meint die erwartete Nutzungsdauer des Passwortes. Die erforderliche Qualität hängt von den Angriffsmöglichkeiten ab, z.B. Anzahl der Zugangskonten, verwendetes kryptografisches Verfahren (vgl. BSI TR-02102) und begleitenden Sicherheitsmaßnahmen wie maximale Passwortversuche oder Mehr-Faktor-Authentifizierung. Für Zugänge ohne begleitende Maßnahmen ist eine Passwortlänge nicht unter 14 Zeichen empfehlenswert. Die Kriterien können einmalig festgelegt werden oder zwischen Zugängen oder Anwendungen differenzieren."
      }
     }
    }
@@ -75,7 +80,13 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "f99e7db6-714a-4fd8-94dd-e27cce24f0a7"
+   "value": "af5ba77a-8d77-4a4f-8842-23ba9dedb829"
+  }
+ ],
+ "relations": [
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1.3"
   }
  ]
 }

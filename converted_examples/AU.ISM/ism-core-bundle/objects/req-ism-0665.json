@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0665",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-0665",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Trustworthy sources for SECRET and TOP SECRET systems are limited to people and services that have been verified and authorised as such by the chief information security officer."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09"
   }
  ]
 }

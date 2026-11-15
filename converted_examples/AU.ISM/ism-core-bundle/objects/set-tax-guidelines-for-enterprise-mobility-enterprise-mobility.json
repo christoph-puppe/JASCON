@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-enterprise-mobili-6d3ecd7",
-   "sequence": 4980
+   "sequence": 5150
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-enterprise-mobili-f51a0d7",
-   "sequence": 5000
+   "sequence": 5170
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-enterprise-mobili-b61c431",
-   "sequence": 5030
+   "sequence": 5200
   }
  ],
  "facets": {

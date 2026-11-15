@@ -7,7 +7,7 @@
 # ledger are therefore a reproducible record: a change of the kernel, of
 # oscal_conv_lib.py or of the converter that would alter them is noticed.
 #
-# base: https://raw.githubusercontent.com/usnistgov/oscal-content/9402f031/
+# base: https://raw.githubusercontent.com/usnistgov/oscal-content/9402f031489092246f2c27391bad452b85604140/
 # path: examples/component-definition/json/example-component-definition.json
 # path: examples/ap/json/ifa_assessment-plan.json
 # path: examples/ar/json/ifa_assessment-results.json

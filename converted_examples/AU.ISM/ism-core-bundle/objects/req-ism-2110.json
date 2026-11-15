@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2110",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2110",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "User applications are hardened using ASD and vendor hardening guidance, with the most restrictive guidance taking precedence when conflicts occur."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

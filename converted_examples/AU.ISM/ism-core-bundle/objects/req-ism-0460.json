@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0460",
- "version": "2026.06.18",
+ "version": "13",
  "label": "ISM-0460",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "HACE is used when encrypting media that contains SECRET or TOP SECRET data."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

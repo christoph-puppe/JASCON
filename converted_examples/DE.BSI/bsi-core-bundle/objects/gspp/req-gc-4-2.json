@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/GC.4.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "GC.4.2",
  "lifecycle": "active",
  "title": {
@@ -41,7 +41,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Alle relevanten externen interessierten Parteien werden ermittelt. Die internen interessierten Parteien umfassen beispielsweise: Geschäftsführung, ISB, DSB, Mitarbeiter, Führungskräfte, Betriebsrat/Personalrat."
+      "de": "Alle relevanten internen interessierten Parteien werden ermittelt. Die internen interessierten Parteien umfassen beispielsweise: Geschäftsführung, ISB, DSB, Mitarbeiter, Führungskräfte, Betriebsrat/Personalrat."
      }
     }
    }

@@ -38,11 +38,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ra-5.5_obj",
      "label": "RA-05(05)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "privileged access authorization is implemented to {param:ra-05.05_odp.01} for {param:ra-05.05_odp.02}."
      }
@@ -139,7 +144,8 @@
      ],
      "alt-identifiers": [
       "ra-5.5_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(05)_ODP[01]"
     },
     "ra-05.05_odp.02": {
      "guidelines": [
@@ -149,7 +155,8 @@
      ],
      "alt-identifiers": [
       "ra-5.5_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "RA-05(05)_ODP[02]"
     }
    }
   },

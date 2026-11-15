@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1682",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1682",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Multi-factor authentication used for authenticating users of systems is phishing-resistant."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

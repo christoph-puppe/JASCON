@@ -1,0 +1,34 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summary",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Executive summary"
+ },
+ "members": [
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-58f5230",
+   "sequence": 10
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-48f2bfd",
+   "sequence": 20
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-ffa176a",
+   "sequence": 30
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-d426f78",
+   "sequence": 40
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-cdadd57",
+   "sequence": 50
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-executive-summ-a6e744a",
+   "sequence": 60
+  }
+ ]
+}

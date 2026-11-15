@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1289",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1289",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Archive files imported or exported via gateways or CDSs are unpacked to undergo content filtering checks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

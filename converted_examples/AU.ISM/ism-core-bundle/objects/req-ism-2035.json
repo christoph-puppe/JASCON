@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2035",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2035",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Security roles, responsibilities and knowledge required to support the software development life cycle are identified and documented."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

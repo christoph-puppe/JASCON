@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.7.19",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.7.19",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Sensibilisierung für Nutzende von Mobiltelefonen KANN den Versand von SMS oder MMS untersagen."
+    "de": "Sensibilisierung für Nutzende von Mobilen Endgeräten KANN die Kommunikation über SMS oder MMS untersagen."
    }
   }
  ],
@@ -23,10 +23,10 @@
    "by-statement": {
     "smt": {
      "action": "untersagen",
-     "result": "den Versand von SMS oder MMS",
+     "result": "die Kommunikation über SMS oder MMS",
      "target-object-categories": [
       "Nutzende",
-      "Mobiltelefone"
+      "Mobile Endgeräte"
      ]
     }
    }
@@ -56,7 +56,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -66,7 +66,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "SMS und MMS werden in der Regel unverschlüsselt übertragen und daher nicht für sensible Informationen geeignet. Stattdessen kann oft auf verschlüsselte Anwendungen zurückgegriffen werden."
+      "de": "SMS und MMS werden in der Regel unverschlüsselt übertragen und sind daher nicht für sensible Informationen geeignet. Stattdessen kann oft auf verschlüsselte Anwendungen wie Messenger oder VoIP zurückgegriffen werden."
      }
     }
    }

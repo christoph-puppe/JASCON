@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0294",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-0294",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "IT equipment, except for high assurance IT equipment, is labelled with protective markings reflecting its sensitivity or classification."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

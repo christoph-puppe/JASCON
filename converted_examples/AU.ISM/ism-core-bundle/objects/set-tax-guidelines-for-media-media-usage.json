@@ -8,43 +8,43 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-media-management-policy",
-   "sequence": 6410
+   "sequence": 6580
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-removable-media-usa-e516903",
-   "sequence": 6430
+   "sequence": 6600
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-removable-media-register",
-   "sequence": 6450
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-labelling-media",
-   "sequence": 6470
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-classifying-media",
-   "sequence": 6500
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-reclassifying-media",
-   "sequence": 6530
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-encrypting-media",
-   "sequence": 6570
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-handling-media",
-   "sequence": 6590
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-sanitising-media-be-47f79b1",
    "sequence": 6620
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-labelling-media",
+   "sequence": 6640
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-classifying-media",
+   "sequence": 6670
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-reclassifying-media",
+   "sequence": 6700
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-encrypting-media",
+   "sequence": 6740
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-handling-media",
+   "sequence": 6760
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-sanitising-media-be-47f79b1",
+   "sequence": 6790
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-media-media-usage-using-media-for-dat-e1de7e7",
-   "sequence": 6650
+   "sequence": 6820
   }
  ],
  "facets": {

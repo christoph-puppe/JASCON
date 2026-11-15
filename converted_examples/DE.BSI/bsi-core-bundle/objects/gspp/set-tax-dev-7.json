@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/dev-7",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Bereitstellung und Betrieb"
@@ -8,11 +8,11 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.7.1",
-   "sequence": 8070
+   "sequence": 12830
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/DEV.7.2",
-   "sequence": 8080
+   "sequence": 12840
   }
  ],
  "label": "7",

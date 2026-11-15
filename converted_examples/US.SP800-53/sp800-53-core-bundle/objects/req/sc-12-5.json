@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SC-12.5",
+ "version": "5.2.0",
+ "label": "SC-12(5)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PKI Certificates / Hardware Tokens"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SC-12(3)."
+   }
+  }
+ ]
+}

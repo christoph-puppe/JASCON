@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/arch-2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Netzdesign"
@@ -8,27 +8,27 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.1",
-   "sequence": 4300
+   "sequence": 6900
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.2",
-   "sequence": 4310
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/arch-2-2",
+   "sequence": 7040
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.3",
-   "sequence": 4320
+   "sequence": 7050
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.4",
-   "sequence": 4330
+   "sequence": 7060
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.5",
-   "sequence": 4340
+   "sequence": 7070
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/ARCH.2.6",
-   "sequence": 4350
+   "sequence": 7080
   }
  ],
  "label": "2",

@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.3.23",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.3.23",
  "lifecycle": "active",
  "title": {
-  "de": "Gruppenkonten - MFA"
+  "de": "Notfallzugang Verzeichnisdienst"
  },
  "statements": [
   {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE für Gruppenkonten die Mehr-Faktor-Authentisierung aktivieren."
+    "de": "Berechtigung für Verzeichnisdienste SOLLTE ein Notfallzugangskonto installieren."
    }
   }
  ],
@@ -22,8 +22,11 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "aktivieren",
-     "result": "für Gruppenkonten die Mehr-Faktor-Authentisierung"
+     "action": "installieren",
+     "result": "ein Notfallzugangskonto",
+     "target-object-categories": [
+      "Verzeichnisdienste"
+     ]
     }
    }
   },
@@ -31,7 +34,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "IT-Betriebskonzept"
+      "Inventar Berechtigungen"
      ]
     }
    }
@@ -39,7 +42,7 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
      "authenticity": "1",
@@ -54,11 +57,11 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 4,
+     "effort": 5,
      "tags": [
-      "Insider Threat"
+      "BCM"
      ]
     }
    }
@@ -67,7 +70,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Werden trotz des damit verbundenen Risikos Gruppenkonten genutzt, so kann mit Mehr-Faktor-Authentifizierung der Mißbrauch von Zugangsdaten erschwert werden. Kann zum Beispiel durch mehrere dem Zugangskonto zugewiesene Hardwaretoken oder durch OTP-Apps umgesetzt werden. Falls keine Gruppenkonten verwendet werden, so ist die Anforderung entbehrlich."
+      "de": "Ein Notfallzugangskonto (sog. Break Glass Account) ist ein Zugang mit privilegierten Berechtigungen, der bei Notfällen als letztes Mittel zum Zugang zu wichtigen Systemen verwendet werden kann, z.B. Verzeichnisdienste, Cloud-Infrastrukturen. Verwenden Sie für diese Konten lange Passwörter und bewahren Sie diese z.B. in einem Safe oder aufgeteilt auf mehrere Administrierende auf."
      }
     }
    }
@@ -76,7 +79,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "d59c4b33-c1d6-446a-bb0f-047fe832974d"
+   "value": "7cd7ca02-458d-4348-ae2f-0b096d4078e3"
   }
  ]
 }

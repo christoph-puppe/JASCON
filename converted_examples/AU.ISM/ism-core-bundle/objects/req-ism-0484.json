@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0484",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0484",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The SSH daemon is configured to:\n\n- only listen on the required interfaces (ListenAddress xxx.xxx.xxx.xxx)\n- have a suitable login banner (Banner x)\n- have a login authentication timeout of no more than 60 seconds (LoginGraceTime 60)\n- disable host-based authentication (HostbasedAuthentication no)\n- disable rhosts-based authentication (IgnoreRhosts yes)\n- disable the ability to log in directly as root (PermitRootLogin no)\n- disable empty passwords (PermitEmptyPasswords no)\n- disable connection forwarding (AllowTCPForwarding no)\n- disable gateway ports (GatewayPorts no)\n- disable X11 forwarding (X11Forwarding no)."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

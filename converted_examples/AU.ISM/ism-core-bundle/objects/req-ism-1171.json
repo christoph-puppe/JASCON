@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1171",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1171",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Attempts to access websites through their IP addresses instead of their domain names are blocked by web content filters."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

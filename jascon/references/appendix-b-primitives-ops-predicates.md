@@ -185,10 +185,33 @@ FAIL [attestation-binds] <attestation-id>
   rationale: normative content changed after signing; packaging-only
   deltas would have produced Semantic Match instead.
 ```
-**Exercised:** real two-digest computation across all bundles; the
-example bundle's differing package/semantic digests are the
-reproducible demo. Envelope verification awaits the DSSE profile
-(gate item 2).
+**Applied to a bundle *(2.0.0 — backlog #46, 2026-11-14)*.** The
+bundle's side of the signature is: the objects the manifest lists, the
+digest of the manifest's bytes as delivered, and the digests of the
+pack manifests it keeps (`packs/sha256/`, D25). A subject that names an
+id is compared with the object of that id; a bare digest matches when
+any listed object carries it. Per subject: `match`, `differs` (the
+object of that id carries another digest) or `absent` (no such object,
+or no object with that digest). The manifest bound: `this`, `kept-pack`
+or `other`. Full = all subjects match and the manifest is this one or a
+kept pack's; Semantic = all match and the manifest is another; fail =
+anything else. A tool applies the primitive to every Attestation it
+reads with a bundle: those beside the manifest (D3.1) and any a manifest
+lists. A `fail` fails the bundle when the Attestation's lifecycle is
+`active`; for `draft`, `deprecated` and `withdrawn` the verdict is
+reported and nothing fails *(argued: the primitive does not speak of
+lifecycle, and without this a bundle whose attested object changed could
+never validate again)*. The signature is the envelope's matter (B.1.7
+DSSE profile) and is reported beside the verdict.
+**Exercised:** `attestation-vectors.json` — five vectors on the two
+digests of one object, and nineteen `binds-vectors` on a bundle, each
+expecting the verdict, the manifest bound, the status of every subject
+and whether the bundle fails. In the repository: the example folder's
+own Attestation (Full Match; signature verified under the public
+fixture key in verification mode), the vendor's beside it (Full Match
+against the kept pack manifest), the worked pack's and the IFA
+bundle's. `scripts/test_attestation_binds.py` runs the reference on
+eight changed copies of the IFA bundle.
 
 ### 8 · `conditional-apply(trigger, enforcement)` — *P+*
 

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2000",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2000",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The board of directors or executive committee seeks regular briefings or reporting on the cyber security posture of their organisation, as well as the threat environment in which they operate, from internal and external subject matter experts."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

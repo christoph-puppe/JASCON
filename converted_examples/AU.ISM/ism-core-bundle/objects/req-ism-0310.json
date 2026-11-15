@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0310",
- "version": "2026.06.18",
+ "version": "9",
  "label": "ISM-0310",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "IT equipment maintained or repaired off site is handled at facilities approved for handling the sensitivity or classification of the IT equipment."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

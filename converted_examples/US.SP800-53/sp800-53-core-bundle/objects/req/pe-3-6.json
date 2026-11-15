@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/PE-3.6",
+ "version": "5.2.0",
+ "label": "PE-3(6)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Facility Penetration Testing"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into CA-8."
+   }
+  }
+ ]
+}

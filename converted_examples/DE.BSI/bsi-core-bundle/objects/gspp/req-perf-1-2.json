@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/PERF.1.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "PERF.1.2",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Monitoring-Evaluation MUSS die {param:perf.1.2-prm1} Überprüfung und Fortschreibung des Umsetzungsplans in Bezug auf Fortschritt,  Fristeinhaltung und inhaltlicher Korrektheit verankern."
+    "de": "Monitoring-Evaluation MUSS die {param:perf.1.2-prm1} Überprüfung und Fortschreibung des Umsetzungsplans in Bezug auf Fortschritt, Fristeinhaltung und inhaltlicher Korrektheit verankern."
    },
    "parameters": [
     {
@@ -31,7 +31,7 @@
     "smt": {
      "action": "verankern",
      "result": "die {{regelmäßige}} Überprüfung und Fortschreibung des Umsetzungsplans",
-     "result-specification": "in Bezug auf Fortschritt,  Fristeinhaltung und inhaltlicher Korrektheit"
+     "result-specification": "in Bezug auf Fortschritt, Fristeinhaltung und inhaltlicher Korrektheit"
     }
    }
   },
@@ -56,7 +56,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "perf.1.2-prm1": {
-     "alt-identifier": "ffabec9a-1a60-4edc-bdbb-adc79c43d7c8"
+     "alt-identifier": "36840492-0e82-4cba-906d-0b111400b6db"
     }
    }
   }

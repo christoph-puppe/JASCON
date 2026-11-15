@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0829",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0829",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Security measures are used to detect and respond to unauthorised RF devices in SECRET and TOP SECRET areas."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-03"
   }
  ]
 }

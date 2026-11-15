@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1614",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1614",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Break glass account credentials are changed by the account custodian after they are accessed by any other party."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-08"
   }
  ]
 }

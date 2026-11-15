@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0643",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-0643",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Evaluated diodes are used for controlling the data flow of unidirectional gateways between an organisation’s networks and public network infrastructure."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

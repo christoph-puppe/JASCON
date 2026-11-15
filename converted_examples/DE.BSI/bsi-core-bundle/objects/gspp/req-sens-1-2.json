@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/SENS.1.2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "SENS.1.2",
  "lifecycle": "active",
  "title": {
@@ -65,7 +65,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
      "effort": 3
     }
@@ -83,10 +83,10 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "sens.1.2-prm1": {
-     "alt-identifier": "9d6cd1f9-6aa0-4042-a9dd-9d696a75a6de"
+     "alt-identifier": "3387f68e-35e1-4d10-afb1-3fb7facb2bdb"
     },
     "sens.1.2-prm2": {
-     "alt-identifier": "9d6cd1f9-6aa0-4042-a9dd-9d696a75a6de"
+     "alt-identifier": "55aa9322-b3eb-4d44-a30f-bc28c6b60cd7"
     }
    }
   }

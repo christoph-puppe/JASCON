@@ -1,20 +1,20 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.4.8",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.4.8",
  "lifecycle": "active",
  "title": {
-  "de": "IT-System-Zugangskonto"
+  "de": "Entzug von Berechtigungen"
  },
  "statements": [
   {
    "id": "smt",
-   "modality": "may",
+   "modality": "should",
    "obligated-parties": [
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung für IT-Systeme KANN diese genau einem Zugangskonto zuweisen."
+    "de": "Berechtigung SOLLTE eine Vorgehensweise zum Entzug von Berechtigungen verankern."
    }
   }
  ],
@@ -22,11 +22,8 @@
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "zuweisen",
-     "result": "diese genau einem Zugangskonto",
-     "target-object-categories": [
-      "IT-Systeme"
-     ]
+     "action": "verankern",
+     "result": "eine Vorgehensweise zum Entzug von Berechtigungen"
     }
    }
   },
@@ -34,7 +31,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "Inventar Berechtigungen"
+      "IT-Betriebskonzept"
      ]
     }
    }
@@ -45,7 +42,7 @@
      "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "2",
+     "authenticity": "1",
      "threat-refs": [
       "https://ns.bsi.bund.de/gspp/threat/G-0.36",
       "https://ns.bsi.bund.de/gspp/threat/G-0.30",
@@ -57,9 +54,9 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
-     "sec-level": "erhöht",
-     "effort": 5
+     "class": "BSI-Stand-der-Technik-Kernel",
+     "sec-level": "normal-SdT",
+     "effort": 3
     }
    }
   },
@@ -67,7 +64,7 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Wenn ein besonders schützenswertes IT-System nur von einer Person oder Identität genutzt wird, empfiehlt es sich dieses mit genau einem zugehörigen Zugangskonto zu verknüpfen. Dadurch wird ausgeschlossen, dass weitere Konten unnötig Zugriff erhalten. Bei Revisionen ist auf diese Weise eindeutig nachvollziehbar, welche Identität Zugriff auf das System hatte. Das Vorgehen ist auch auf virtualisierte IT-Systeme übertragbar. Ein Beispiel ist eine spezielle Administrationskonsole, die ausschließlich einem dedizierten Admin-Konto zugeordnet ist."
+      "de": "Innerhalb der Institution ist ein Prozess etabliert, mit dem Berechtigungen system- und anwendungsübergreifend entzogen sowie Zugänge deaktiviert oder gelöscht werden, sobald diese nicht mehr benötigt werden. Dadurch wird sichergestellt, dass bei Personalwechseln oder Aufgabenänderungen keine Berechtigungen für einzelne Systeme oder Anwendungen bestehen bleiben. Der Entzug von Berechtigungen bei Kündigungen, Versetzungen oder Änderungen von Zuständigkeiten ist, soweit möglich, als automatisierter Ablauf umgesetzt."
      }
     }
    }
@@ -76,7 +73,17 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "7057a1f6-0804-49ac-9d7f-289ecc71fa33"
+   "value": "12ab3443-67a1-4ecd-9177-d9547f62d27e"
+  }
+ ],
+ "relations": [
+  {
+   "type": "required",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1"
+  },
+  {
+   "type": "related",
+   "ref": "https://ns.bsi.bund.de/gspp/req/PERS.6.1.1"
   }
  ]
 }

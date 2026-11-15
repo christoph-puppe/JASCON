@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/RC.CO-01",
+ "version": "2.0",
+ "label": "RC.CO-01",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "RC.CO-01"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Public relations are managed"
+   }
+  }
+ ]
+}

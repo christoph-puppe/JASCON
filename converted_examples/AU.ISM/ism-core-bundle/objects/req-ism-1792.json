@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1792",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1792",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The authenticity of operating systems, applications, IT equipment, OT equipment and services are assessed as part of acceptance of products and services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

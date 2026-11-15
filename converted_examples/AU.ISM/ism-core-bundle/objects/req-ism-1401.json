@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1401",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1401",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Multi-factor authentication uses either: something users have and something users know, or something users have that is unlocked by something users know or are."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-09"
   }
  ]
 }

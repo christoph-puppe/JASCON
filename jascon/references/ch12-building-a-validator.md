@@ -84,6 +84,23 @@ Requirement, because half the structural rules address them by id.
 > normalize. Model unknown facet payloads as opaque values you can
 > emit unchanged.
 
+> **Don't** hand a schema `pattern` to your language's regular
+> expressions as it stands. JSON Schema says a pattern is ECMA-262, and
+> the hosts differ where the kernel's patterns end: in Python's `re` and
+> in .NET's `Regex`, `$` also matches before one line break that ends
+> the value, and `.` excludes only U+000A where ECMA-262 also excludes
+> U+000D, U+2028 and U+2029. Until 2026-11-13 the reference validator
+> and its PowerShell twin both took `"2026-11-13\n"` for a date and a
+> digest with a line break at its end for a digest; the JavaScript port
+> did not (backlog #68, decided: refuse). Write `$` as the end of the
+> value (`\Z` in Python, `\z` in .NET) and `.` as the class of what is
+> no line terminator, and do the same in every expression of your own
+> that ends in `$`. A version is written in the digits 0-9: `\d` takes
+> the digits of every script in Python and .NET, and none but 0-9 in
+> ECMA-262. Twenty-two vectors hold an implementation to this (in the
+> families `kernel`, `parameter`, `check` and `composition`); fifteen of
+> them failed in both validators before the change.
+
 ## 12.3 Saturday morning: the manifest walk
 
 The bundle is a directory (or archive) plus a content manifest, and
@@ -294,6 +311,155 @@ and fourteen `shape-vectors` for three fields 2.0.0 typed or added: a
 Deviation's `opened` (DATE-1), the `due` of a Finding's action (DATE-2)
 and `product-version`. The schema refuses; your code only names the
 rule, as for RISK-1 to RISK-6.
+
+*(2.0.0-rc.4, specification D26.)* The pin also holds for the fields
+that say who decided and when: `provenance` on a Tailoring, on one of
+its entries, on an Implementation or a Finding; `decided` or
+`review-due` on a Deviation; `date` on an authorization. Three more
+times are typed and named: a Mapping's `provenance.date` (DATE-3), an
+Assessment's `time` (DATE-4), an Attestation's `timestamp` (DATE-5);
+DATE-1 covers a Deviation's `decided` too. `kernel-vectors.json` now
+has 18 cases for the pin and 36 `shape-vectors`.
+
+*(2026-11-14, specification D27.)* Two more members need the pin: an
+object's `history` and a statement's `label`. A manifest's
+`provenance.sources` needs none: the 1.0.0 schema took any object
+there. `history` brings one shape rule and one rule of your own. The
+date of an entry is a day or a month, `YYYY-MM-DD` or `YYYY-MM`; the
+schema refuses anything else and you name **DATE-6**. **HISTORY-1**: the
+entries stand oldest first. Compare the dates as the strings they are,
+so that a month stands before its days and two entries may carry one
+date, and report the first entry that stands after a later one. That is
+all a validator can hold about a history: whether an entry is true it
+cannot know. `kernel-vectors.json` has 25 cases for the pin, 64
+`shape-vectors` and 8 `history-vectors`.
+
+*(The same day, D10 as amended.)* **A `statement-id` inside a facet
+payload.** You already hold the keys of `by-statement`. Walk every
+facet payload of a Requirement as well, skip a `private:` facet, and
+for every object in it that has a string member `statement-id`: if no
+`requirement-ref` stands beside it, the id must name a statement of the
+host; if one does and the bundle holds that Requirement, the id must
+name a statement of it, and a `requirement-ref` that resolves to
+anything but a Requirement is an error; if the bundle does not hold it,
+say nothing, it is a landmark. This needs no knowledge of the facet.
+`reference-vectors.json` has nine cases for it.
+
+**The standard library has versions.** A facet of the library may have
+more than one descriptor (`assessment-criteria` 1.0.0 and 1.1.0). Load
+them all. Hold an unpinned payload to the latest version. Hold a pin of
+a library facet to the descriptor of the version it states, verbatim,
+and then hold the bundle's payloads to that pin: a bundle that pinned
+1.0.0 yesterday must pass tomorrow. A pin that states a version the
+library does not hold fails. And resolve a `$ref` of a facet schema in
+that schema's own `$defs`: the 1.1.0 descriptor defines an objective
+that holds objectives. The PowerShell twin looked such a reference up
+in the kernel schema, found nothing and let the payload pass; three of
+the nine new cases of `facet-vectors.json` found it.
+
+Two reports come with those fields, and neither is a verdict.
+`author-vectors.json` holds 18 cases for the first: one line per object
+and rule where an author or a date is missing (AUTHOR-1 to AUTHOR-4),
+objects in the order of their ids by UTF-16 code unit, the order of the
+canonical form. If your language sorts strings by code point, as Python
+does, sort by the UTF-16 encoding; one case holds an id beyond U+FFFF. Print them as notes, and offer a
+switch that makes them failures. The other 22 cases are for REVIEW-1: an
+approved Deviation or a Risk still managed whose `review-due` has
+passed. This is the one place where your validator reads a clock. Take
+the date of the run in UTC, and take a date from the caller instead when
+one is given; every vector gives one. Compare calendar days in UTC, so
+that a date-time with an offset lands on the right day; count a
+duration from `decided`, else `opened`, or from a Risk's
+`acceptance.date`; and report a calendar period as not evaluable rather
+than guess at a calendar you do not have. Nothing fails by REVIEW-1.
+
+A third report is about the lifecycle. A draft may be implemented and
+assessed, voluntarily (§3.6), so a Set in force may list one; what a
+reader of the Set is owed is that it is said. **DRAFT-1**: for every Set
+whose lifecycle is `active`, count the entries of `members` that name an
+object of the bundle whose lifecycle is `draft`, a Requirement or a Set,
+and print one line per Set with a count above zero, the Sets in the
+order of their ids. `lifecycle-vectors.json` holds four cases under
+`draft-members`: a member the bundle does not hold is not counted, a
+withdrawn or deprecated one is no draft, and what a draft Set lists is
+its own affair. Nothing fails by DRAFT-1, with any switch. The measured
+case is CR26, whose publisher marks one family as a placeholder: seven
+active Sets list its draft Sets.
+
+The lifecycle has one rule that fails, since 2026-11-14. **WITHDRAWN-1**:
+collect the ids of the objects whose lifecycle is `withdrawn`; if there
+are none you are done. Then go through the objects in the order of their
+ids and skip every one that is withdrawn itself, and every Risk that is
+not live. For the rest, read these edges and no others, in this order,
+and report each that names a withdrawn object as one error:
+
+| object | edge | name in the message |
+|---|---|---|
+| Tailoring | `selects[].set-ref` | `selects set-ref` |
+| | `excludes[].ref` | `excludes ref` |
+| | `operations[].requirement-ref` | `operation requirement-ref` |
+| Mapping | `source-ref`, `target-ref` | the member's name |
+| Component | `capabilities[].requirement-ref` | `capability requirement-ref` |
+| | `members[].component-ref` | `member component-ref` |
+| Implementation | `component-ref`, `requirement-ref` | the member's name |
+| | `satisfied-by[].inherited-from.component-ref` | `inherited-from component-ref` |
+| Check | `requirement-ref` | `requirement-ref` |
+| Risk | `component-refs`, `tailoring-refs` | the member's name |
+
+Do not widen the list by walking every member that ends in `-ref`. A
+Set lists what its catalogue withdrew, and the CSF and SP 800-53
+bundles do so 220 times; `replaces`, `canonical-alias` and `relations`
+exist to point at what went; an Assessment and a Finding record what
+was found at a time and stay true; a Risk's `treatments` already fail
+by RISK-11. A `deprecated` target is no failure, and a `draft` or
+`deprecated` object that leans is held as an active one is.
+`lifecycle-vectors.json` holds sixteen cases under
+`withdrawn-references`; each expects the list of `[object, edge,
+withdrawn object]`, in the order above.
+
+A Tailoring's operations have a rule of their own that fails, since
+2026-11-15. **OPERATION-1**: go through the Tailorings in the order of
+their ids, withdrawn ones too, and through the operations of each in
+the order of the document. Look only at `set-modality`, `set-parameter`
+and `replace-prose`. One that carries no `statement-id`, or an empty
+one, is an error, whether or not the bundle holds the Requirement. For
+a `set-parameter` with a `statement-id`, find the Requirement in the
+bundle and the statement in it; if both are there and the statement
+declares no parameter of that name, that is an error. Compare ids and
+names by code unit: `s1` and `S1` are two statements. Do not report a
+`statement-id` the Requirement does not have, or a Requirement the
+bundle does not hold: your closure check already does. The rule is not
+a nicety. Your checks of a modality against the lattice and of a value
+against its declaration look the statement up, and they have nothing
+to ask where there is none; without this rule an easing `set-modality`
+that leaves the statement out passes. `reference-vectors.json` holds
+fifteen cases under `operation-targets`; each expects the list of
+`[Tailoring, index of the operation, "statement" or "parameter"]`.
+
+A fourth report is about references of the form `#id`, which sources
+use in texts and links. **FRAGMENT-1**: in every object, take each
+`(#id)` inside a string at any depth, the id being at least one
+character and none of space, tab, CR, LF and `)`, and the whole of a
+string that begins with `#` under a member named `href`; do not read a
+`private:` facet, under `facets` or under an Assessment's `method`. For
+each, count the first kind that fits: a
+*resource*, an entry of `resources` with that `id` in the `references@1`
+facet of the object itself or of a Set that lists it, directly or
+through nested Sets, so walk the membership upwards with a seen-set; an
+*object* of the bundle whose id ends in it after the last `/`, with A
+to Z compared as a to z and nothing else folded (write that fold
+yourself: your language's lower-case function knows about Turkish and
+German, and the next implementation's knows something else); a
+*statement*, `<object>_<statement id>`, tried at every `_` of the id; a
+*parameter*, by its `name`, anywhere in the bundle; a *source*, the
+`uuid` of an entry of the manifest's `provenance.sources`. Print the
+total and the five counts on one line, where the total is above zero,
+and one note for each reference that names nothing, in the order of the
+object ids and then of the ids named. `reference-vectors.json` holds
+fourteen cases under `fragment-references`. Nothing fails by
+FRAGMENT-1. The measured case is SP 800-53: 541 references, 118 to a
+resource, 348 to another control, 73 to a statement, one to a parameter,
+and one that names nothing, which is a defect of the source.
 
 **Third, close and type the edges.** Four references on a Risk are
 closure-required and typed: `treatments[].requirement-ref` names a

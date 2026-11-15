@@ -1,3 +1,16 @@
 {
- "OFF-23": "Public AI services are blocked at the web proxy and no licence for one exists; reviewed 2026-11-10."
+ "record-version": 1,
+ "entries": [
+  {
+   "entry": "https://github.com/christoph-puppe/JASCON/risk-catalogs/office-it/entry/OFF-23",
+   "entry-version": "0.1.0",
+   "rationale": {
+    "en": "Public AI services are blocked at the web proxy and no licence for one exists."
+   },
+   "provenance": {
+    "author-ref": "https://org.example/party/ciso",
+    "date": "2026-11-10"
+   }
+  }
+ ]
 }

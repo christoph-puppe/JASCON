@@ -8,71 +8,71 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-01",
-   "sequence": 230
+   "sequence": 400
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-16",
-   "sequence": 240
+   "sequence": 410
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-13",
-   "sequence": 250
+   "sequence": 420
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-12",
-   "sequence": 260
+   "sequence": 430
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-05",
-   "sequence": 270
+   "sequence": 440
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-04",
-   "sequence": 280
+   "sequence": 450
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-06",
-   "sequence": 290
+   "sequence": 460
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-07",
-   "sequence": 300
+   "sequence": 470
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-08",
-   "sequence": 310
+   "sequence": 480
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-17",
-   "sequence": 320
+   "sequence": 490
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-10",
-   "sequence": 330
+   "sequence": 500
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-18",
-   "sequence": 340
+   "sequence": 510
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-19",
-   "sequence": 350
+   "sequence": 520
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-20",
-   "sequence": 360
+   "sequence": 530
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-09",
-   "sequence": 370
+   "sequence": 540
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-14",
-   "sequence": 380
+   "sequence": 550
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/req/ism-principle-pro-15",
-   "sequence": 390
+   "sequence": 560
   }
  ],
  "facets": {

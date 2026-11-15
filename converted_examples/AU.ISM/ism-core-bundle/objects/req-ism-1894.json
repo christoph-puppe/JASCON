@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1894",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1894",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Multi-factor authentication used for authenticating users of data repositories is phishing-resistant."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

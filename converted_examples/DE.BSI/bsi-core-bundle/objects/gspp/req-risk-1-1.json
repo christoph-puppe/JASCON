@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/RISK.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "RISK.1.1",
  "lifecycle": "active",
  "title": {
@@ -65,7 +65,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "risk.1.1-prm1": {
-     "alt-identifier": "b6f7870d-6113-4039-974b-df571540c2f3"
+     "alt-identifier": "b85addde-a440-4f51-bc63-5ec0dda1e38f"
     }
    }
   }

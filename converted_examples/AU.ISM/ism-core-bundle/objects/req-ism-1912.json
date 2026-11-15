@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1912",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1912",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Network documentation includes device settings for all critical servers, high-value servers, network devices and network security appliances."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

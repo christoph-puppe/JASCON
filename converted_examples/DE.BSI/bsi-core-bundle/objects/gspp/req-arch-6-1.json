@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/ARCH.6.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "ARCH.6.1",
  "lifecycle": "active",
  "title": {
@@ -14,7 +14,7 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Architektur für Externe Netzanschlüsse KANN eine  {param:arch.6.1-prm1} kontrollierte Verbindungsführung für Weitverkehrsverbindungen aktivieren."
+    "de": "Architektur für Externe Netzanschlüsse KANN eine {param:arch.6.1-prm1} kontrollierte Verbindungsführung für Weitverkehrsverbindungen aktivieren."
    },
    "parameters": [
     {
@@ -30,7 +30,7 @@
    "by-statement": {
     "smt": {
      "action": "aktivieren",
-     "result": "eine  {{physisch oder logisch}} kontrollierte Verbindungsführung",
+     "result": "eine {{physisch oder logisch}} kontrollierte Verbindungsführung",
      "result-specification": "für Weitverkehrsverbindungen",
      "target-object-categories": [
       "Externe Netzanschlüsse"
@@ -64,7 +64,7 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "erhöht",
      "effort": 5
     }
@@ -82,7 +82,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "arch.6.1-prm1": {
-     "alt-identifier": "acd884af-7aad-470c-bfcf-216cff90e9be"
+     "alt-identifier": "cb06ffe8-bef6-4b6f-88d9-5366934003af"
     }
    }
   }

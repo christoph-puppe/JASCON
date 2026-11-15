@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1569",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1569",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A shared responsibility model is created, documented and shared between suppliers and their customers to articulate the security responsibilities of each party."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

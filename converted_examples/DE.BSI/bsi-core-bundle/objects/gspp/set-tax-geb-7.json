@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/geb-7",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Schlüsselverwaltung"
@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.1",
-   "sequence": 3130
+   "sequence": 5290
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.2",
-   "sequence": 3140
+   "sequence": 5300
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/GEB.7.3",
-   "sequence": 3150
+   "sequence": 5310
   }
  ],
  "label": "7",

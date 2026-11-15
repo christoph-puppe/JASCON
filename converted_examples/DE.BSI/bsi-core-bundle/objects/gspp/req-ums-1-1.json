@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/UMS.1.1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "UMS.1.1",
  "lifecycle": "active",
  "title": {
@@ -56,7 +56,7 @@
   "https://ns.jascon.net/compat/oscal-1x@1": {
    "param-extras": {
     "ums.1.1-prm1": {
-     "alt-identifier": "e2c90fc0-e6e5-4a89-8099-39360b6e8eb9"
+     "alt-identifier": "5e16b7d0-1b96-4624-8a20-ab93a8f5269f"
     }
    }
   }

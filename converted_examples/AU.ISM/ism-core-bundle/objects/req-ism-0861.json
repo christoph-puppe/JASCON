@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0861",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0861",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "DKIM signing is enabled on emails originating from an organisation’s domains (including subdomains)."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0494",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0494",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Tunnel mode is used for IPsec connections; however, if using transport mode, an IP tunnel is used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

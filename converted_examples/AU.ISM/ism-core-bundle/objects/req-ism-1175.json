@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1175",
- "version": "2026.06.18",
+ "version": "6",
  "label": "ISM-1175",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Privileged user accounts (excluding those explicitly authorised to access online services) are prevented from accessing the internet, email and web services."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2113",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2113",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "AI applications are configured to flag organisationally defined risky actions for human approval prior to their execution."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

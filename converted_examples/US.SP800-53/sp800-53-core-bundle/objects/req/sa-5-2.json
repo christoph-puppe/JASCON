@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-5.2",
+ "version": "5.2.0",
+ "label": "SA-5(2)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Security-relevant External System Interfaces"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SA-4(2)."
+   }
+  }
+ ]
+}

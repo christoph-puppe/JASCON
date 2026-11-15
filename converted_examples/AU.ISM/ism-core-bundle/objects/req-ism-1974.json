@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1974",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1974",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Non-classified servers, network devices and cryptographic equipment are secured in suitably secure server rooms or communications rooms."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-12"
   }
  ]
 }

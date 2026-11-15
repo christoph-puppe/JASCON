@@ -12,12 +12,28 @@
    "sequence": 10
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/id-ra",
+   "ref": "https://ns.nist.gov/csf/set/category/id-be",
    "sequence": 20
   },
   {
-   "ref": "https://ns.nist.gov/csf/set/category/id-im",
+   "ref": "https://ns.nist.gov/csf/set/category/id-gv",
    "sequence": 30
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/id-ra",
+   "sequence": 40
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/id-rm",
+   "sequence": 50
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/id-sc",
+   "sequence": 60
+  },
+  {
+   "ref": "https://ns.nist.gov/csf/set/category/id-im",
+   "sequence": 70
   }
  ],
  "facets": {

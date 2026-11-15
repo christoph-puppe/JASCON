@@ -1,11 +1,11 @@
 {
  "measured": {
-  "date": "2026-11-13",
-  "commit": "30892353",
+  "date": "2026-11-15",
+  "commit": "a17f4cb1",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
-  "total": 568,
+  "total": 800,
   "families": [
    {
     "name": "jcs",
@@ -17,7 +17,7 @@
    },
    {
     "name": "parameter",
-    "vectors": 21
+    "vectors": 22
    },
    {
     "name": "tailoring",
@@ -25,23 +25,23 @@
    },
    {
     "name": "attestation",
-    "vectors": 5
+    "vectors": 32
    },
    {
     "name": "facet",
-    "vectors": 7
+    "vectors": 29
    },
    {
     "name": "reference",
-    "vectors": 13
+    "vectors": 56
    },
    {
     "name": "lifecycle",
-    "vectors": 38
+    "vectors": 58
    },
    {
     "name": "tier",
-    "vectors": 9
+    "vectors": 10
    },
    {
     "name": "dsse",
@@ -49,7 +49,7 @@
    },
    {
     "name": "composition",
-    "vectors": 7
+    "vectors": 11
    },
    {
     "name": "conditional",
@@ -61,7 +61,7 @@
    },
    {
     "name": "kernel",
-    "vectors": 25
+    "vectors": 97
    },
    {
     "name": "scale",
@@ -69,11 +69,15 @@
    },
    {
     "name": "check",
-    "vectors": 203
+    "vectors": 205
    },
    {
     "name": "advice",
     "vectors": 74
+   },
+   {
+    "name": "author",
+    "vectors": 40
    }
   ]
  },
@@ -81,37 +85,40 @@
   {
    "corpus": "AU.ISM",
    "path": "converted_examples/AU.ISM/ism-core-bundle",
-   "objects": 1711,
+   "objects": 1731,
+   "attestations": 0,
    "types": {
     "requirement": 1150,
-    "requirementSet": 561
+    "requirementSet": 581
    }
   },
   {
    "corpus": "DE.BSI",
    "path": "converted_examples/DE.BSI/bsi-core-bundle",
-   "objects": 813,
+   "objects": 1289,
+   "attestations": 0,
    "types": {
-    "requirement": 651,
-    "requirementSet": 162
+    "requirement": 1000,
+    "requirementSet": 289
    }
   },
   {
    "corpus": "US.CSF",
    "path": "converted_examples/US.CSF/csf-core-bundle",
-   "objects": 135,
+   "objects": 226,
+   "attestations": 0,
    "types": {
-    "requirement": 106,
-    "requirementSet": 29
+    "requirement": 185,
+    "requirementSet": 41
    }
   },
   {
    "corpus": "US.IFA-GoodRead",
    "path": "converted_examples/US.IFA-GoodRead/ifa-core-bundle",
-   "objects": 17,
+   "objects": 16,
+   "attestations": 1,
    "types": {
     "assessment": 1,
-    "attestation": 1,
     "component": 6,
     "finding": 2,
     "implementation": 3,
@@ -122,9 +129,10 @@
   {
    "corpus": "US.SP800-53",
    "path": "converted_examples/US.SP800-53/sp800-53-core-bundle",
-   "objects": 1039,
+   "objects": 1221,
+   "attestations": 0,
    "types": {
-    "requirement": 1014,
+    "requirement": 1196,
     "requirementSet": 25
    }
   }
@@ -148,11 +156,12 @@
  "example_packs": [
   {
    "path": "jascon/example-packs/dbvendor-server-7-advice",
-   "objects": 1
+   "objects": 1,
+   "attestations": 1
   }
  ],
  "validators": {
-  "python_lines": 2780,
-  "powershell_lines": 3669
+  "python_lines": 3472,
+  "powershell_lines": 4764
  }
 }

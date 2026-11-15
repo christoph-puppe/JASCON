@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1163",
- "version": "2026.06.18",
+ "version": "11",
  "label": "ISM-1163",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Systems have a continuous monitoring plan that includes:\n\n- conducting security assessment activities to identify vulnerabilities\n- analysing identified vulnerabilities to determine their potential impact\n- implementing mitigations based on risk, effectiveness and cost."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

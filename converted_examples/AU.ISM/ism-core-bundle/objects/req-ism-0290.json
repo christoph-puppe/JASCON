@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0290",
- "version": "2026.06.18",
+ "version": "9",
  "label": "ISM-0290",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "High assurance IT equipment is installed, configured, administered and operated in an evaluated configuration and in accordance with ASD guidance."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

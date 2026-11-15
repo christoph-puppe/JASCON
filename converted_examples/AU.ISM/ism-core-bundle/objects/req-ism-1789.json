@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1789",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1789",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Sufficient spares of critical IT equipment and OT equipment are sourced and kept in reserve."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

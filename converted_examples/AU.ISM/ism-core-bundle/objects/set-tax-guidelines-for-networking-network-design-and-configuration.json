@@ -8,87 +8,87 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-cb735ea",
-   "sequence": 13440
+   "sequence": 13610
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-430de9c",
-   "sequence": 13470
+   "sequence": 13640
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-01a367d",
-   "sequence": 13530
+   "sequence": 13700
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-e80426d",
-   "sequence": 13550
+   "sequence": 13720
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-b0170d3",
-   "sequence": 13570
+   "sequence": 13740
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-dae9938",
-   "sequence": 13600
+   "sequence": 13770
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-2aa3e35",
-   "sequence": 13620
+   "sequence": 13790
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-9ef6393",
-   "sequence": 13680
+   "sequence": 13850
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-807a219",
-   "sequence": 13710
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-b4ed259",
-   "sequence": 13730
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-53333d2",
-   "sequence": 13750
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-c26039c",
-   "sequence": 13780
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-494ae1f",
-   "sequence": 13810
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-0c2aae5",
-   "sequence": 13840
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-8803e6d",
-   "sequence": 13860
-  },
-  {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-c567dbc",
    "sequence": 13880
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-10bb0b7",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-b4ed259",
    "sequence": 13900
   },
   {
-   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-23ca31a",
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-53333d2",
    "sequence": 13920
   },
   {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-c26039c",
+   "sequence": 13950
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-494ae1f",
+   "sequence": 13980
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-0c2aae5",
+   "sequence": 14010
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-8803e6d",
+   "sequence": 14030
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-c567dbc",
+   "sequence": 14050
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-10bb0b7",
+   "sequence": 14070
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-23ca31a",
+   "sequence": 14090
+  },
+  {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-32c3386",
-   "sequence": 13940
+   "sequence": 14110
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-e63b9a1",
-   "sequence": 13960
+   "sequence": 14130
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-networking-network-design-and-configu-c09617d",
-   "sequence": 13990
+   "sequence": 14160
   }
  ],
  "facets": {

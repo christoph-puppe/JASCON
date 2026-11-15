@@ -8,39 +8,39 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-5c47906",
-   "sequence": 15550
+   "sequence": 15720
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-52a13e7",
-   "sequence": 15570
+   "sequence": 15740
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-0aa9555",
-   "sequence": 15590
+   "sequence": 15760
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-1692db9",
-   "sequence": 15610
+   "sequence": 15780
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-7f1cb38",
-   "sequence": 15630
+   "sequence": 15800
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-ba5b476",
-   "sequence": 15650
+   "sequence": 15820
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-3f9a419",
-   "sequence": 15670
+   "sequence": 15840
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-cd1ae23",
-   "sequence": 15690
+   "sequence": 15860
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-cryptography-internet-protocol-securi-efb2113",
-   "sequence": 15710
+   "sequence": 15880
   }
  ],
  "facets": {

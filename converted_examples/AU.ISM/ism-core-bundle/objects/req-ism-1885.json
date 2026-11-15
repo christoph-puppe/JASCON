@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1885",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1885",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Recommended actions contained within emanation security mitigation advice issued for systems are implemented by system owners."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-03"
   }
  ]
 }

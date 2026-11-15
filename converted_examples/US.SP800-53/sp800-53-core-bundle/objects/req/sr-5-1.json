@@ -38,11 +38,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sr-5.1_obj",
      "label": "SR-05(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sr-05.01_odp.01} are employed to ensure an adequate supply of {param:sr-05.01_odp.02}."
      }
@@ -145,7 +150,8 @@
      ],
      "alt-identifiers": [
       "sr-5.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "SR-05(01)_ODP[01]"
     },
     "sr-05.01_odp.02": {
      "guidelines": [
@@ -155,7 +161,8 @@
      ],
      "alt-identifiers": [
       "sr-5.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-05(01)_ODP[02]"
     }
    }
   },
@@ -178,15 +185,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.6",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.6",
-    "mode": "merged-into",
-    "label": "SA-12(06)",
-    "title": "Minimizing Procurement Time"
-   }
-  ]
- }
+ ]
 }

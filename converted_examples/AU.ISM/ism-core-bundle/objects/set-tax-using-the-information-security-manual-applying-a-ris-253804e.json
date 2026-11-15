@@ -1,0 +1,42 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-253804e",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Applying a risk-based approach to cyber security"
+ },
+ "members": [
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-9ae4659",
+   "sequence": 80
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-20c63e8",
+   "sequence": 90
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-c6b458a",
+   "sequence": 100
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-8353614",
+   "sequence": 110
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-3fa59b3",
+   "sequence": 120
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-8a91675",
+   "sequence": 130
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-6645565",
+   "sequence": 140
+  },
+  {
+   "ref": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-78b17a6",
+   "sequence": 150
+  }
+ ]
+}

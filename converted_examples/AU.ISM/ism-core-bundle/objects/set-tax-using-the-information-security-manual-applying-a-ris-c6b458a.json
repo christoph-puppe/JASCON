@@ -1,0 +1,22 @@
+{
+ "id": "https://ns.cyber.gov.au/ism/set/tax/using-the-information-security-manual-applying-a-ris-c6b458a",
+ "version": "2026.06.18",
+ "lifecycle": "active",
+ "title": {
+  "en": "Select controls"
+ },
+ "members": [],
+ "facets": {
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "group-parts": [
+    {
+     "group": "Select controls",
+     "name": "overview",
+     "prose": {
+      "en": "**Select controls for the system and tailor them to achieve desired security and resilience objectives.**\n\nEach cyber security guideline discusses security risks associated with the topics it covers. Paired with these discussions are controls that ASD considers to provide efficient and effective mitigations based on their suitability to achieve the security and resilience objectives for a system. To assist with selecting and tailoring controls for a system, each control is assigned an applicability marking. For example, ‘NC’ for the protection of non-classified systems (including both government and non-government systems), ‘OS’ for the protection of OFFICIAL: Sensitive systems, ‘P’ for the protection of PROTECTED systems, ‘S’ for the protection of SECRET systems and ‘TS’ for the protection of TOP SECRET systems.\n\nWhile security risks and controls are discussed in the cyber security guidelines, and act as a baseline, they should not be considered an exhaustive list for a specific system type or technology. As such, the cyber security guidelines provide an important input into an organisation’s risk identification and risk treatment activities however do not represent the full extent of such activities.\n\nWhile the cyber security guidelines can assist with risk identification and risk treatment activities, an organisation will still need to undertake their own risk analysis and risk evaluation activities due to the unique nature of each system, its operating environment and the organisation’s risk tolerances.\n\nFollowing the selection and tailoring of controls for a system, including the identification of any inherited common controls, they should be documented along with the details of their planned implementation in the system’s system security plan annex. In addition, and as appropriate, controls should also be documented in the system’s cyber security incident response plan, change and configuration management plan, and continuous monitoring plan.\n\nFinally, the selection of controls for a system, as documented in the system’s system security plan annex, should be approved by the system’s authorising officer."
+     }
+    }
+   ]
+  }
+ }
+}

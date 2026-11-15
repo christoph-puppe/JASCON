@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1293",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1293",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Encrypted files imported or exported via gateways or CDSs are decrypted to undergo content filtering checks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2025",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2025",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "An issue tracking solution is used to link software development tasks to security issues and decisions, change or feature requests, programming issues, or bug fixes."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

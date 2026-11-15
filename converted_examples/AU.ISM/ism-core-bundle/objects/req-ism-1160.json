@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1160",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1160",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "If using degaussers to destroy media, degaussers evaluated by the United States’ National Security Agency are used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2020-08"
   }
  ]
 }

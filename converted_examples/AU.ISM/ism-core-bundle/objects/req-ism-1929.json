@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1929",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1929",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Lightweight Directory Access Protocol signing is enabled on Microsoft AD DS domain controllers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

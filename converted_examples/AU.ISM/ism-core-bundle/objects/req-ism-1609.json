@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1609",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1609",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners are consulted before allowing intrusion activity to continue on a system for the purpose of collecting further data or evidence."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

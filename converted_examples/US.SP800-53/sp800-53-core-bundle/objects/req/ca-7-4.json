@@ -20,6 +20,7 @@
   },
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -31,6 +32,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -42,6 +44,7 @@
   },
   {
    "id": "smt.c",
+   "label": "(c)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization",
@@ -60,11 +63,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ca-7.4_obj",
      "label": "CA-07(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "risk monitoring is an integral part of the continuous monitoring strategy;"
      },
@@ -72,6 +80,11 @@
       {
        "id": "ca-7.4_obj.a",
        "label": "CA-07(04)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "effectiveness monitoring is included in risk monitoring;"
        }
@@ -79,6 +92,11 @@
       {
        "id": "ca-7.4_obj.b",
        "label": "CA-07(04)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "compliance monitoring is included in risk monitoring;"
        }
@@ -86,6 +104,11 @@
       {
        "id": "ca-7.4_obj.c",
        "label": "CA-07(04)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "change monitoring is included in risk monitoring."
        }

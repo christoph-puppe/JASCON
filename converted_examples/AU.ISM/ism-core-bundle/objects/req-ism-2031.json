@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2031",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2031",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Compilers, interpreters and build tools (including pipelines) that provide security features to improve executable file security are implemented and such security features are used."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/konf",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Konfiguration"
@@ -8,63 +8,63 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-1",
-   "sequence": 6500
+   "sequence": 10560
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-2",
-   "sequence": 6600
+   "sequence": 10730
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-3",
-   "sequence": 6690
+   "sequence": 10840
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-4",
-   "sequence": 6750
+   "sequence": 10940
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-5",
-   "sequence": 6780
+   "sequence": 11000
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-6",
-   "sequence": 6950
+   "sequence": 11250
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-7",
-   "sequence": 7120
+   "sequence": 11440
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-8",
-   "sequence": 7150
+   "sequence": 11490
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-9",
-   "sequence": 7190
+   "sequence": 11530
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-10",
-   "sequence": 7250
+   "sequence": 11630
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-11",
-   "sequence": 7340
+   "sequence": 11800
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-12",
-   "sequence": 7490
+   "sequence": 12070
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-13",
-   "sequence": 7610
+   "sequence": 12270
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-14",
-   "sequence": 7670
+   "sequence": 12360
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/konf-15",
-   "sequence": 7720
+   "sequence": 12410
   }
  ],
  "label": "KONF",

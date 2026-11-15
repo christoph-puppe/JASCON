@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2008",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2008",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Medical devices authorised to be brought into SECRET and TOP SECRET areas meet, at a minimum, the following criteria:\n\n- are listed on the Australian Register of Therapeutic Goods\n- have been prescribed by a legally qualified medical practitioner\n- have been commercially purchased within Australia\n- do not have inbuilt cellular connectivity\n- can operate independently of mobile devices\n- where possible, have Wi-Fi, Bluetooth and other forms of wireless connectivity disabled when operating within SECRET and TOP SECRET areas."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -26,6 +27,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -43,6 +45,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -67,15 +70,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cm-11_obj",
      "label": "CM-11",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/CM-11"
+      }
+     ],
      "children": [
       {
        "id": "cm-11_obj.a",
        "label": "CM-11a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:cm-11_odp.01} governing the installation of software by users are established;"
        }
@@ -83,6 +96,11 @@
       {
        "id": "cm-11_obj.b",
        "label": "CM-11b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "software installation policies are enforced through {param:cm-11_odp.02};"
        }
@@ -90,6 +108,11 @@
       {
        "id": "cm-11_obj.c",
        "label": "CM-11c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "compliance with {param:cm-11_odp.01} is monitored {param:cm-11_odp.03}."
        }
@@ -188,7 +211,8 @@
      ],
      "alt-identifiers": [
       "cm-11_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-11_ODP[01]"
     },
     "cm-11_odp.02": {
      "guidelines": [
@@ -198,7 +222,8 @@
      ],
      "alt-identifiers": [
       "cm-11_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-11_ODP[02]"
     },
     "cm-11_odp.03": {
      "guidelines": [
@@ -208,7 +233,8 @@
      ],
      "alt-identifiers": [
       "cm-11_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CM-11_ODP[03]"
     }
    }
   }
@@ -264,15 +290,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-7",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-7",
-    "mode": "merged-into",
-    "label": "SA-07",
-    "title": "User-installed Software"
-   }
-  ]
- }
+ ]
 }

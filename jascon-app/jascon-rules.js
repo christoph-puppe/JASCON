@@ -30,9 +30,17 @@
    sixteenth of the Check type (CP-CHECK-1): I-Regexp,
    check-verdict and CHECK-1..15 with the evidence chain, and the
    seventeenth of advice packs (CP-ADVICE-1): ADVICE-1..11 with the
-   publisher verdict and the import plan. The
+   publisher verdict and the import plan, and the eighteenth of who decided
+   and when (CP-AUTHOR-1): AUTHOR-1..4 and REVIEW-1, two reports. DRAFT-1
+   (backlog #86), a third report, has its vectors in the family `lifecycle`.
+   jscCheckGraph runs them with the rest: a missing author fails a set only
+   when the caller asks for that, an overdue review never. The
    conditional-apply engine is run by nothing but its vectors, here as in
    the reference: no bundle has a place to carry an instance yet.
+
+   Not a port: the section "what the pages and the imports write" holds the
+   functions that put an author, a decision date and a review date into an
+   object, so that every page does it the same way.
 
    Not ported: the reading of a bundle from disk with its end-of-line and
    file checks (jascon-core.js reads sets from the browser's store instead),
@@ -456,12 +464,44 @@ function jscContentCanonical(obj) {
   return jscRulesCanonical(x);
 }
 const jscRulesCanonical = jscRulesCore ? jscRulesCore.jscCanonical : o => jscCanonical(o);
+/* -> [[statement-id, requirement-ref or null]] for every object inside a facet
+   payload that has a member `statement-id`, in the order met */
+function jscFacetStatementAddresses(payload) {
+  const out = [];
+  const walk = x => {
+    if (Array.isArray(x)) x.forEach(walk);
+    else if (jscIsPlainObject(x)) {
+      if (typeof x["statement-id"] === "string") out.push([x["statement-id"], typeof x["requirement-ref"] === "string" ? x["requirement-ref"] : null]);
+      Object.values(x).forEach(walk);
+    }
+  };
+  walk(payload);
+  return out;
+}
 function jscClosureErrors(objs) {
   const errs = [];
   const need = (oid, ref, what) => { if (!objs.has(ref)) errs.push(`${oid}: closure-required ${what} does not resolve in-bundle: ${ref}`); };
   const typeOf = ref => (objs.get(ref) || {}).type;
   const statementIds = ref => new Set(objs.get(ref).obj.statements.map(s => s.id));
   for (const [oid, { type: t, obj: o }] of objs) {
+    /* D10 (2026-11-14, backlog #83): a `statement-id` anywhere inside a facet
+       payload of a Requirement is held as a `by-statement` key is held. Alone
+       it names a statement of the host; beside a `requirement-ref` it names a
+       statement of that Requirement, which binds where the set holds it.
+       `private:` facets are not read. */
+    if (t === "requirement") {
+      const own = statementIds(oid);
+      for (const [fid, payload] of Object.entries(o.facets || {})) {
+        if (fid.startsWith("private:")) continue;
+        for (const [sid, rref] of jscFacetStatementAddresses(payload)) {
+          const said = "(D10: a statement-id inside a facet payload is held as a by-statement key is)";
+          if (rref === null) { if (!own.has(sid)) errs.push(`${oid}: facet ${fid} statement-id '${sid}' names no statement of its Requirement ${said}`); continue; }
+          if (!objs.has(rref)) continue;
+          if (typeOf(rref) !== "requirement") errs.push(`${oid}: facet ${fid} requirement-ref beside a statement-id resolves to a ${typeOf(rref)}, not a Requirement: ${rref} (D10)`);
+          else if (!statementIds(rref).has(sid)) errs.push(`${oid}: facet ${fid} statement-id '${sid}' names no statement of ${rref} ${said}`);
+        }
+      }
+    }
     for (const ca of o["canonical-alias"] || []) {
       const tgt = objs.get(ca.of);
       if (tgt && jscContentCanonical(o) !== jscContentCanonical(tgt.obj)) {
@@ -584,16 +624,37 @@ function jscClosureErrors(objs) {
    Kernel pin (KERNEL-1, KERNEL-2)
    ==================================================================== */
 const JSC_RULES_KERNEL = "2.0.0", JSC_RULES_KERNEL_READS = ["1.0.0", "2.0.0"];
+/* -> [[where, Deviation]]: every Deviation an object carries - in its
+   `deviations` list and, on a Tailoring, inline on an operation. `where` is
+   the place inside the object, with the index the list gives it. */
+function jscDeviationsOf(type, obj) {
+  const out = [];
+  (Array.isArray(obj.deviations) ? obj.deviations : []).forEach((d, i) => { if (jscIsPlainObject(d)) out.push([`deviations[${i}]`, d]); });
+  if (type === "tailoring") {
+    (Array.isArray(obj.operations) ? obj.operations : []).forEach((op, i) => {
+      if (jscIsPlainObject(op) && jscIsPlainObject(op.deviation)) out.push([`operations[${i}].deviation`, op.deviation]);
+    });
+  }
+  return out;
+}
 /* -> [version the content needs, why]. 2.0.0 added the Risk type,
    Finding.risk-refs, pinned scale definitions, the Check type,
    Assessment.check-results and .tailoring-ref, Finding.check-ref, the pack
-   header of a manifest, statement-ids on a capability (CP-ADVICE-1) and
-   product-version on a Component (author decision 2026-11-12). */
+   header of a manifest, statement-ids on a capability (CP-ADVICE-1),
+   product-version on a Component (author decision 2026-11-12), and the
+   fields of CP-AUTHOR-1: `provenance` where 1.0.0 had none, `decided` and
+   `review-due` on a Deviation, `date` on an authorization. jscNeedsKernel2
+   in jascon-core.js decides the pin the export writes and names the same
+   reasons; tests/rules.test.mjs holds the two together. */
 function jscKernelNeeded(objs, manifest) {
+  const entries = v => (Array.isArray(v) ? v : []).filter(jscIsPlainObject);
   if (manifest && (manifest.scales || []).length) return ["2.0.0", "the manifest pins scale definitions"];
   if (manifest && manifest.pack) return ["2.0.0", "the manifest carries a pack header"];
   for (const oid of [...objs.keys()].sort()) {
     const { type, obj } = objs.get(oid);
+    /* decided on 2026-11-14 (backlog #81 and #84): `history` on any object, `label` on a statement */
+    if ("history" in obj) return ["2.0.0", `${oid} carries the record of its changes (history)`];
+    if (type === "requirement" && entries(obj.statements).some(s => "label" in s)) return ["2.0.0", `${oid} labels a statement (label)`];
     if (type === "risk") return ["2.0.0", `${oid} is a Risk`];
     if (type === "finding" && (obj["risk-refs"] || []).length) return ["2.0.0", `${oid} carries risk-refs`];
     if (type === "check") return ["2.0.0", `${oid} is a Check`];
@@ -601,6 +662,12 @@ function jscKernelNeeded(objs, manifest) {
     if (type === "finding" && obj["check-ref"]) return ["2.0.0", `${oid} carries a check-ref`];
     if (type === "component" && (obj.capabilities || []).some(c => (c["statement-ids"] || []).length)) return ["2.0.0", `${oid} names clauses on a capability (statement-ids)`];
     if (type === "component" && "product-version" in obj) return ["2.0.0", `${oid} names the product version it describes (product-version)`];
+    if (["tailoring", "implementation", "finding"].includes(type) && "provenance" in obj) return ["2.0.0", `${oid} names its author (provenance)`];
+    if (type === "tailoring" && ["selects", "excludes", "operations"].some(k => entries(obj[k]).some(e => "provenance" in e))) {
+      return ["2.0.0", `${oid} names the author of a select, an exclude or an operation (provenance)`];
+    }
+    if (jscDeviationsOf(type, obj).some(([, d]) => "decided" in d || "review-due" in d)) return ["2.0.0", `${oid} carries a Deviation with \`decided\` or \`review-due\``];
+    if (type === "component" && entries(obj.authorizations).some(a => "date" in a)) return ["2.0.0", `${oid} dates an authorization`];
   }
   return ["1.0.0", null];
 }
@@ -764,6 +831,578 @@ function jscRiskLinkNotes(objs) {
     }
   }
   return notes;
+}
+
+/* ====================================================================
+   Who decided, and when (CP-AUTHOR-1): AUTHOR-1..4 and REVIEW-1
+   ====================================================================
+   The port of the reference's section "who decided, and when
+   (CP-AUTHOR-1)". The schema leaves every one of these fields optional: a
+   catalogue authority's content needs none. Two reports say what a reader
+   would look for and not find:
+     jscAuthorReport  what is missing - `provenance` on a consumer's
+                      Tailoring and its entries, on a Risk, a Finding and an
+                      Implementation; `decided` on a decided Deviation; the
+                      `date` of an authorization (AUTHOR-1..4)
+     jscReviewReport  which `review-due` has passed on a given day (REVIEW-1)
+   Neither fails a set. Whether a missing author is a failure is the
+   caller's policy (the reference's --require-authors); an overdue review
+   never is: a Deviation past its review keeps licensing its weakening until
+   someone acts, and the report is how someone finds out.
+   Nothing here reads a clock. The day REVIEW-1 is asked about is an
+   argument, so a set gives the same report every time it is asked about the
+   same day. Days are UTC calendar days throughout, written YYYY-MM-DD. */
+const JSC_AUTHOR_RULES = {
+  "AUTHOR-1": "a consumer's Tailoring says who decided each select, exclude and operation - on the entry, or once on the Tailoring",
+  "AUTHOR-2": "a Risk, a Finding and an Implementation say who wrote this version and when (provenance): each records a judgement",
+  "AUTHOR-3": "an approved or withdrawn Deviation says when it was decided (decided); `opened` is when it was asked for",
+  "AUTHOR-4": "an authorization says on which day it was given (date); it already names the authority",
+  "REVIEW-1": "a review-due that has passed is reported, on an approved Deviation and on a Risk still managed - the date exists to be looked at",
+};
+/* -> [{rule, id, count, message}], one entry per object and rule: the
+   objects in the order of their ids (as strings, by code unit), the rules of
+   one object in the order AUTHOR-1..4. AUTHOR-1 asks only a Tailoring at
+   consumer tier (D13: duties bind there; an authority's Tailoring is
+   attributed by its origin and its Attestation). An entry without
+   `provenance` has its Tailoring's, so a Tailoring that names its author is
+   not asked about its entries. `verify` is jscDeriveTier's: with trusted
+   keys the tier is derived in verification mode. */
+async function jscAuthorReport(objs, verify) {
+  const out = [], entries = v => (Array.isArray(v) ? v : []).filter(jscIsPlainObject);
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    if (type === "tailoring" && !("provenance" in obj) && await jscDeriveTier(obj, objs, verify && { ...verify, notes: null }) === "consumer") {
+      const parts = [];
+      let count = 0;
+      for (const [key, word] of [["selects", "select"], ["excludes", "exclude"], ["operations", "operation"]]) {
+        const all = entries(obj[key]), bare = all.filter(e => !("provenance" in e)).length;
+        if (bare) { count += bare; parts.push(`${bare} of ${all.length} ${word}(s)`); }
+      }
+      if (count) out.push({ rule: "AUTHOR-1", id, count, message: `${id}: ${parts.join(", ")} name no author, and the Tailoring names none (AUTHOR-1)` });
+    }
+    if (["risk", "finding", "implementation"].includes(type) && !("provenance" in obj)) {
+      out.push({ rule: "AUTHOR-2", id, count: 1, message: `${id}: this ${type[0].toUpperCase() + type.slice(1)} does not say who wrote it and when (AUTHOR-2)` });
+    }
+    const undated = jscDeviationsOf(type, obj).filter(([, d]) => (d.state === "approved" || d.state === "withdrawn") && !("decided" in d)).map(([where]) => where);
+    if (undated.length) {
+      out.push({ rule: "AUTHOR-3", id, count: undated.length, message: `${id}: ${undated.length} Deviation(s) approved or withdrawn without \`decided\`: ${undated.join(", ")} (AUTHOR-3)` });
+    }
+    if (type === "component") {
+      const bare = entries(obj.authorizations).filter(a => !("date" in a)).map(a => String(a.id));
+      if (bare.length) out.push({ rule: "AUTHOR-4", id, count: bare.length, message: `${id}: ${bare.length} authorization(s) without a date: ${bare.join(", ")} (AUTHOR-4)` });
+    }
+  }
+  return out;
+}
+
+/* ---------- REVIEW-1: the day a review-due falls on ----------
+   The calendar is the reference's: the proleptic Gregorian one, years 0001
+   to 9999. A day outside it, or one no month has (the 31st of February), is
+   "not a day of the calendar" and is reported as not evaluable, never moved
+   to the next real day. */
+const JSC_DAY_RE = /^(\d{4})-(\d{2})-(\d{2})$/;
+const JSC_DATETIME_RE = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/;
+const JSC_ELAPSED_SECONDS = new Map([["seconds", 1], ["minutes", 60], ["hours", 3600]]);
+const JSC_NO_SUCH_DAY = "not a day of the calendar";
+/* -> the milliseconds of 00:00 UTC on a calendar day, or null where there is
+   no such day. Date.UTC is not used on purpose: it reads a year below 100 as
+   19xx. setUTCFullYear takes the year as written; like every Date setter it
+   rolls the 31st of February over into March, and the comparison of what
+   was set with what was asked for is what catches that. */
+function jscUtcMidnight(year, month, day) {
+  if (year < 1) return null;
+  const t = new Date(0);
+  t.setUTCFullYear(year, month - 1, day);
+  return t.getUTCFullYear() === year && t.getUTCMonth() === month - 1 && t.getUTCDate() === day ? t.getTime() : null;
+}
+/* YYYY-MM-DD -> the milliseconds of its 00:00 UTC, or null */
+function jscDayMs(text) {
+  const m = typeof text === "string" ? JSC_DAY_RE.exec(text) : null;
+  return m ? jscUtcMidnight(Number(m[1]), Number(m[2]), Number(m[3])) : null;
+}
+/* an instant -> [the UTC day it lies in, null], or [null, why] outside the
+   calendar. An instant beyond what a Date holds (some 270,000 years either
+   way) has no year at all, and is outside all the more. */
+function jscDayOfMs(ms) {
+  const t = new Date(ms), year = t.getUTCFullYear();
+  return Number.isNaN(year) || year < 1 || year > 9999 ? [null, JSC_NO_SUCH_DAY] : [t.toISOString().slice(0, 10), null];
+}
+/* -> [the UTC calendar day a `review-due` falls on, null] or [null, why it
+   cannot be evaluated]. `start` is the date a duration counts from: an
+   elapsed duration is added to 00:00 UTC of that day. A date-time is read
+   with its offset, so 01:00+02:00 lies in the day before. A calendar period
+   is never evaluated: this tool has no calendar (D9: fail-closed without
+   the named calendar). */
+function jscUtcDay(due, start) {
+  const kind = jscIsPlainObject(due) ? due.type : undefined;
+  if (kind === "date") return jscDayMs(due.value) === null ? [null, JSC_NO_SUCH_DAY] : [due.value, null];
+  if (kind === "datetime") {
+    const m = typeof due.value === "string" ? JSC_DATETIME_RE.exec(due.value) : null;
+    if (!m) return [null, "not a typed review-due"];
+    const [year, month, day, hour, minute, second] = m.slice(1, 7).map(Number), off = m[7];
+    const east = off === "Z" ? 0 : (off[0] === "+" ? 1 : -1) * (Number(off.slice(1, 3)) * 60 + Number(off.slice(4, 6)));   // minutes east of UTC
+    const midnight = jscUtcMidnight(year, month, day);
+    if (midnight === null || hour > 23 || minute > 59 || second > 59 || Math.abs(east) >= 1440) return [null, JSC_NO_SUCH_DAY];
+    return jscDayOfMs(midnight + (hour * 3600 + minute * 60 + second) * 1000 - east * 60000);
+  }
+  if (kind === "elapsed-duration") {
+    if (start === undefined || start === null) return [null, "a duration, and no date to count it from"];
+    const from = jscDayMs(start), per = JSC_ELAPSED_SECONDS.get(due.unit);
+    if (typeof due.num !== "number" || !Number.isFinite(due.num) || per === undefined) return [null, "not a typed review-due"];
+    return from === null ? [null, JSC_NO_SUCH_DAY] : jscDayOfMs(from + due.num * per * 1000);
+  }
+  if (kind === "calendar-period") {
+    return [null, `a calendar period, and this tool has no calendar ${due["calendar-ref"]} (D9: fail-closed without the named calendar)`];
+  }
+  return [null, "not a typed review-due"];
+}
+/* REVIEW-1 -> { dated: how many review dates were asked, overdue: [{id,
+   where, day}], "not-evaluable": [{id, where, why}] }, the objects in the
+   order of their ids. `asOf` is the day the question is asked about,
+   YYYY-MM-DD; the caller passes today's UTC date (jscToday of the core)
+   when the user names none. A point in time has passed when its UTC
+   calendar day is before `asOf`; due today is not overdue. A duration counts
+   from `decided`, else `opened`, on a Deviation, and from `acceptance.date`
+   on a Risk. Asked of an approved Deviation and of a Risk still managed. */
+function jscReviewReport(objs, asOf) {
+  if (jscDayMs(asOf) === null) throw new Error(`REVIEW-1 is asked about a day, YYYY-MM-DD; got ${JSON.stringify(asOf)}`);
+  const overdue = [], blind = [];
+  let dated = 0;
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    const asked = jscDeviationsOf(type, obj).filter(([, d]) => d.state === "approved" && jscIsPlainObject(d["review-due"]))
+      .map(([where, d]) => [where, d["review-due"], d.decided || d.opened]);
+    if (type === "risk" && jscRiskIsLive(obj) && jscIsPlainObject(obj["review-due"])) asked.push(["review-due", obj["review-due"], (obj.acceptance || {}).date]);
+    for (const [where, due, start] of asked) {
+      dated++;
+      const [day, why] = jscUtcDay(due, start);
+      /* `day` and `asOf` are YYYY-MM-DD with a four-digit year, so the order of the strings is the order of the days */
+      if (day === null) blind.push({ id, where, why });
+      else if (day < asOf) overdue.push({ id, where, day });
+    }
+  }
+  return { dated, overdue, "not-evaluable": blind };
+}
+/* The two reports as the lines the reference prints for one bundle
+   (report_authors_and_reviews of validate_core.py), in its order and its
+   words: the AUTHOR lines, then a summary of REVIEW-1 where a review date
+   was asked, the overdue ones and those that cannot be evaluated.
+   -> [{ kind, rule, object, text }]. `kind` of an AUTHOR line is "note", or
+   "error" when the caller requires authors (the reference's
+   --require-authors); a REVIEW line is "summary" or "note" and never an
+   error, with any switch. `text` is the line without its prefix; the
+   reference prints `note: ` before a note and lists an error as a failure. */
+function jscAuthorReviewLines(authors, review, asOf, requireAuthors) {
+  const lines = authors.map(e => ({ kind: requireAuthors ? "error" : "note", rule: e.rule, object: e.id, text: e.message }));
+  if (review.dated) {
+    lines.push({ kind: "summary", rule: "REVIEW-1", object: null,
+      text: `review: ${review.dated} review date(s) asked as of ${asOf}: ${review.overdue.length} overdue, ${review["not-evaluable"].length} not evaluable (REVIEW-1)` });
+  }
+  for (const e of review.overdue) lines.push({ kind: "note", rule: "REVIEW-1", object: e.id, text: `${e.id}: ${e.where} was due on ${e.day} (REVIEW-1: overdue; it still holds until someone acts)` });
+  for (const e of review["not-evaluable"]) lines.push({ kind: "note", rule: "REVIEW-1", object: e.id, text: `${e.id}: ${e.where} is not evaluated: ${e.why} (REVIEW-1)` });
+  return lines;
+}
+
+/* ---------- DRAFT-1: a draft among the members of an active Set (backlog #86) ----------
+   A draft may be used, voluntarily (the author, 2026-11-14), so nothing
+   fails: that a Set in force lists one is said, one line per Set. An entry
+   of `members` counts when the set holds the object it names and that
+   object's lifecycle is `draft`, whether it is a Requirement or a Set.
+   -> [{ id, count }], the Sets in the order of their ids. */
+const JSC_DRAFT_RULES = {
+  "DRAFT-1": "an active Set that lists draft members is reported, with their number - a draft may be used, and a reader of the Set is told that it holds one",
+};
+function jscDraftMemberReport(objs) {
+  const out = [];
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    if (type !== "requirementSet" || obj.lifecycle !== "active") continue;
+    const count = (Array.isArray(obj.members) ? obj.members : [])
+      .filter(m => jscIsPlainObject(m) && objs.has(m.ref) && objs.get(m.ref).obj.lifecycle === "draft").length;
+    if (count) out.push({ id, count });
+  }
+  return out;
+}
+/* The DRAFT lines as the reference prints them, after the two reports. */
+const jscDraftLines = drafts => drafts.map(e => ({ kind: "note", rule: "DRAFT-1", object: e.id,
+  text: `${e.id}: an active Set lists ${e.count} draft member(s) (DRAFT-1: a draft may be used; nothing fails)` }));
+
+/* ---------- WITHDRAWN-1: an object in force leans on a withdrawn one (backlog #93) ----------
+   The handbook has said since 1.0.0 that new references to a withdrawn
+   object fail validation. A validator reads one set and takes the state of
+   an object as the set holds it: a bundle put together before the
+   withdrawal holds the object as it was and stays valid. Held: the edges
+   below, on an object whose own lifecycle is not `withdrawn` (a Risk: on a
+   live one). Not held: `replaces`, `canonical-alias` and `relations`, which
+   keep the record; the members of a Set, which lists what its catalogue
+   withdrew; an Assessment, a Finding and an Attestation, which record what
+   was found or signed at a time; a Risk's treatments, which are RISK-11's;
+   facet payloads.
+   -> [{ id, edge, ref }], the objects in the order of their ids, the edges
+   in the order of the table, the entries in the order of the document. */
+const JSC_WITHDRAWN_RULES = {
+  "WITHDRAWN-1": "an object in force does not lean on a withdrawn one - what a Tailoring selects, excludes or changes, " +
+    "what a Mapping joins, what a Component claims or contains, what an Implementation answers, what a " +
+    "Check tests and what a live Risk is about is not withdrawn in the bundle that holds both",
+};
+const JSC_WITHDRAWN_EDGES = {     // type -> [[the array the entries are in, or null; the member; the edge's name in a message]]
+  tailoring: [["selects", "set-ref", "selects set-ref"], ["excludes", "ref", "excludes ref"], ["operations", "requirement-ref", "operation requirement-ref"]],
+  mapping: [[null, "source-ref", "source-ref"], [null, "target-ref", "target-ref"]],
+  component: [["capabilities", "requirement-ref", "capability requirement-ref"], ["members", "component-ref", "member component-ref"]],
+  implementation: [[null, "component-ref", "component-ref"], [null, "requirement-ref", "requirement-ref"],
+    ["satisfied-by", "inherited-from/component-ref", "inherited-from component-ref"]],
+  check: [[null, "requirement-ref", "requirement-ref"]],
+  risk: [[null, "component-refs", "component-refs"], [null, "tailoring-refs", "tailoring-refs"]],
+};
+function jscWithdrawnReferences(objs) {
+  const gone = new Set([...objs].filter(([, r]) => r.obj.lifecycle === "withdrawn").map(([id]) => id));
+  const out = [];
+  if (!gone.size) return out;
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    if (!Object.prototype.hasOwnProperty.call(JSC_WITHDRAWN_EDGES, type) || obj.lifecycle === "withdrawn") continue;
+    if (type === "risk" && !jscRiskIsLive(obj)) continue;
+    for (const [arr, member, edge] of JSC_WITHDRAWN_EDGES[type]) {
+      for (const entry of (arr === null ? [obj] : (Array.isArray(obj[arr]) ? obj[arr] : []))) {
+        let v = entry;
+        for (const part of member.split("/")) v = jscIsPlainObject(v) ? v[part] : undefined;
+        for (const ref of (Array.isArray(v) ? v : [v])) if (typeof ref === "string" && gone.has(ref)) out.push({ id, edge, ref });
+      }
+    }
+  }
+  return out;
+}
+const jscWithdrawnReferenceErrors = objs => jscWithdrawnReferences(objs)
+  .map(e => `${e.id}: ${e.edge} names ${e.ref}, which is withdrawn (WITHDRAWN-1: ${JSC_WITHDRAWN_RULES["WITHDRAWN-1"]})`);
+
+/* ---------- OPERATION-1: an operation that changes a statement names it (backlog #96; D13) ----------
+   A modality, a parameter and a prose are a statement's: a set-modality, a
+   set-parameter and a replace-prose carry a statement-id, and a
+   set-parameter names a parameter that statement declares. An empty
+   statement-id names no statement. A statement-id that names no statement of
+   the Requirement is the closure check's and is not said twice, and an
+   operation on a Requirement the set does not hold is closure-required.
+   -> [{ id, index, what }], `what` being "statement" or "parameter"; the
+   Tailorings in the order of their ids, the operations in the order of the
+   document. */
+const JSC_OPERATION_RULES = {
+  "OPERATION-1": "an operation that changes a statement names it - set-modality, set-parameter and replace-prose " +
+    "carry a statement-id, and a set-parameter names a parameter that statement declares",
+};
+const JSC_OPERATION_ON_STATEMENT = ["set-modality", "set-parameter", "replace-prose"];
+function jscOperationTargets(objs) {
+  const out = [];
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    if (type !== "tailoring") continue;
+    (Array.isArray(obj.operations) ? obj.operations : []).forEach((op, index) => {
+      if (!jscIsPlainObject(op) || !JSC_OPERATION_ON_STATEMENT.includes(op.op)) return;
+      const sid = op["statement-id"];
+      if (typeof sid !== "string" || sid === "") { out.push({ id, index, what: "statement" }); return; }
+      if (op.op !== "set-parameter") return;
+      const tgt = objs.get(op["requirement-ref"]);
+      if (!tgt || tgt.type !== "requirement") return;
+      const stmt = tgt.obj.statements.find(x => x.id === sid);
+      if (!stmt) return;
+      if (!(stmt.parameters || []).some(d => d.name === op.parameter)) out.push({ id, index, what: "parameter" });
+    });
+  }
+  return out;
+}
+const jscOperationTargetErrors = objs => jscOperationTargets(objs).map(e => {
+  const op = objs.get(e.id).obj.operations[e.index], said = `(OPERATION-1: ${JSC_OPERATION_RULES["OPERATION-1"]})`;
+  return e.what === "statement" ? `${e.id}: operations[${e.index}]: ${op.op} names no statement ${said}`
+    : `${e.id}: operations[${e.index}]: set-parameter names the parameter '${op.parameter}', which statement '${op["statement-id"]}' of ${op["requirement-ref"]} does not declare ${said}`;
+});
+
+/* ---------- FRAGMENT-1: what a reference of the form #id names (backlog #82; D9) ----------
+   An object refers to something as `#id` in two forms: `(#id)` in a string
+   at any depth, and the whole of a string that begins with `#` under a
+   member named `href`. A `private:` facet is not read, under `facets` or
+   under an Assessment's `method`. The first kind that fits is counted, in
+   this order:
+   resource   an entry of `resources` with that `id`, in the references@1
+              facet of the object itself or of a Set that lists it as a
+              member, directly or through nested Sets;
+   object     an object of the set whose id ends, after its last `/`, in
+              that id - A to Z compared as a to z;
+   statement  `<object>_<statement id>`, split at one of its `_`;
+   parameter  the `name` of a parameter of a statement in the set;
+   source     the `uuid` of an entry of the manifest's provenance.sources.
+   What names nothing is listed, in the order of the object ids and then of
+   the ids named. Nothing fails by it.
+   -> { total, resource, object, statement, parameter, source, nothing: [[object id, id]] } */
+const JSC_REFERENCES_FACET = "https://ns.jascon.net/stdlib/facet/references@1";
+const JSC_FRAGMENT_RULES = {
+  "FRAGMENT-1": "a reference of the form #id names a resource the bundle carries, an object, a statement, a parameter " +
+    "or a source document of the manifest; the ones that name nothing are reported",
+};
+const JSC_FRAGMENT_KINDS = ["resource", "object", "statement", "parameter", "source"];
+/* A to Z as a to z, and no other character changed */
+const jscAsciiLower = s => s.replace(/[A-Z]/g, c => String.fromCharCode(c.charCodeAt(0) + 32));
+function jscFragmentsOf(o) {
+  const out = [];
+  const walk = (x, key) => {
+    if (Array.isArray(x)) for (const v of x) walk(v, key);
+    else if (jscIsPlainObject(x)) for (const k of Object.keys(x)) walk(x[k], k);
+    else if (typeof x === "string") {
+      if (key === "href" && x.startsWith("#") && x.length > 1) out.push(x.slice(1));
+      for (const m of x.matchAll(/\(#([^) \t\r\n]+)\)/g)) out.push(m[1]);
+    }
+  };
+  for (const k of Object.keys(o)) {
+    if ((k === "facets" || k === "method") && jscIsPlainObject(o[k])) {     // an Assessment's method has facet ids for keys too (D10)
+      for (const fid of Object.keys(o[k])) if (!fid.startsWith("private:")) walk(o[k][fid], fid);
+    } else walk(o[k], k);
+  }
+  return out;
+}
+function jscFragmentReport(objs, manifest) {
+  const parents = new Map(), own = new Map(), tail = new Map(), stmts = new Map(), params = new Set();
+  for (const [id, { type, obj }] of objs) {
+    if (type === "requirementSet") {
+      for (const m of (Array.isArray(obj.members) ? obj.members : [])) {
+        if (!jscIsPlainObject(m)) continue;
+        if (!parents.has(m.ref)) parents.set(m.ref, []);
+        parents.get(m.ref).push(id);
+      }
+    }
+    const payload = jscIsPlainObject(obj.facets) ? obj.facets[JSC_REFERENCES_FACET] : undefined;
+    const res = jscIsPlainObject(payload) && Array.isArray(payload.resources) ? payload.resources : [];
+    own.set(id, new Set(res.filter(r => jscIsPlainObject(r) && typeof r.id === "string").map(r => r.id)));
+    const seg = id.slice(id.lastIndexOf("/") + 1);
+    if (seg) { const k = jscAsciiLower(seg); if (!tail.has(k)) tail.set(k, []); tail.get(k).push(id); }
+    if (type === "requirement") {
+      const ss = new Set();
+      for (const st of (Array.isArray(obj.statements) ? obj.statements : [])) {
+        if (!jscIsPlainObject(st)) continue;
+        ss.add(st.id);
+        for (const pd of (Array.isArray(st.parameters) ? st.parameters : [])) if (jscIsPlainObject(pd)) params.add(pd.name);
+      }
+      stmts.set(id, ss);
+    }
+  }
+  const prov = jscIsPlainObject(manifest) && jscIsPlainObject(manifest.provenance) ? manifest.provenance : {};
+  const sources = new Set((Array.isArray(prov.sources) ? prov.sources : []).filter(e => jscIsPlainObject(e) && typeof e.uuid === "string").map(e => e.uuid));
+  const inReach = id => {
+    const seen = new Set([id]), todo = [id], found = new Set();
+    while (todo.length) {
+      const cur = todo.pop();
+      for (const x of own.get(cur) || []) found.add(x);
+      for (const p of parents.get(cur) || []) if (!seen.has(p)) { seen.add(p); todo.push(p); }
+    }
+    return found;
+  };
+  const namesStatement = x => {
+    for (let k = 0; k < x.length; k++) {
+      if (x[k] !== "_") continue;
+      const rest = x.slice(k + 1);
+      if ((tail.get(jscAsciiLower(x.slice(0, k))) || []).some(c => stmts.has(c) && stmts.get(c).has(rest))) return true;
+    }
+    return false;
+  };
+  const r = { total: 0, nothing: [] };
+  for (const k of JSC_FRAGMENT_KINDS) r[k] = 0;
+  for (const id of [...objs.keys()].sort()) {
+    const named = jscFragmentsOf(objs.get(id).obj);
+    if (!named.length) continue;
+    const reach = inReach(id), missing = [];
+    for (const x of named) {
+      r.total++;
+      if (reach.has(x)) r.resource++;
+      else if (tail.has(jscAsciiLower(x))) r.object++;
+      else if (namesStatement(x)) r.statement++;
+      else if (params.has(x)) r.parameter++;
+      else if (sources.has(x)) r.source++;
+      else missing.push(x);
+    }
+    for (const x of missing.sort()) r.nothing.push([id, x]);
+  }
+  return r;
+}
+/* The FRAGMENT lines as the reference prints them: the count, where there is a reference at all, and one note for
+   each that names nothing. */
+function jscFragmentLines(r) {
+  if (!r.total) return [];
+  return [{ kind: "note", rule: "FRAGMENT-1", object: null,
+    text: `fragments: ${r.total} reference(s) of the form #id: ${r.resource} to a resource, ${r.object} to an object, ${r.statement} to a statement, ` +
+      `${r.parameter} to a parameter, ${r.source} to a source document, ${r.nothing.length} to nothing (FRAGMENT-1)` },
+    ...r.nothing.map(([id, x]) => ({ kind: "note", rule: "FRAGMENT-1", object: id,
+      text: `${id}: #${x} names nothing the bundle carries (FRAGMENT-1: reported; nothing fails)` }))];
+}
+
+/* ====================================================================
+   Who decided, and when: what the pages and the imports write
+   ====================================================================
+   Not a port: the reference validator reads these fields and writes none.
+   This is the one place where the app decides what it puts into
+   `provenance`, `decided` and `review-due`, so that every page does it the
+   same way (backlog #69). Three things hold throughout:
+
+   - Nobody is invented. Without an author, or without a date, nothing is
+     written, and the save goes ahead: a missing author is a line of the
+     report (AUTHOR-1..4), never a refusal (author decision, 2026-11-13).
+   - `provenance` on a record names who wrote this version. A version saved
+     by somebody else, or by nobody the page knows, does not keep the name
+     of whoever wrote the version before.
+   - A decision inside a record that has no `provenance` of its own has its
+     record's (D26). When the record's changes, such a decision would change
+     hands without anybody having decided it again. So before the record
+     gets its new author, the old one is written onto every such decision
+     that is unchanged. */
+/* ---------- a party the user names (backlog #70) ----------
+   The app writes a party in two kinds of field, and they are kept apart on
+   purpose, because the kernel treats them differently:
+
+   - A party the kernel REQUIRES: the `provenance.author-ref` of a Mapping
+     and of a Check, the `performer-ref` of an Assessment, the
+     `approver-ref` of a Deviation, the `obligated-parties` of a statement.
+     The object is not valid without it. Where the user named nobody, the
+     page refuses the save, says which field the kernel requires, and
+     changes nothing (author decision of 2026-11-14: "refuse if no party is
+     named"). Until build 0.9.10 the pages wrote a party made from a word
+     of their own instead (`…/party/author`, `…/party/ciso`): an object
+     that validated and named somebody nobody had named.
+   - A party the kernel leaves OPTIONAL: the `provenance` of a Tailoring, a
+     Risk, an Implementation and a Finding. Where the user named nobody,
+     nothing is written and the save goes ahead; what is missing is a line
+     of the report (AUTHOR-1..4), never a refusal (author decision of
+     2026-11-13). See jscProvenance below.
+
+   Both read what was typed through this one function, so that a typed
+   party means the same in every field: a URI is taken as it is; a short
+   name is the user's word for a party of their own and becomes
+   <namespace>/party/<slug of the name>, the way the app mints every id;
+   nothing typed, or nothing a name could be made of, is no party. The
+   function has no default. A name the user typed is a party the user
+   named; a word the page supplies is not.
+   -> the party URI, or "" */
+function jscPartyRef(typed, ns) {
+  const v = typeof typed === "string" ? typed.trim() : "";
+  if (/^[a-z][a-z0-9+.-]*:\S*$/i.test(v)) return v;                 // a URI: a scheme, and no blank anywhere
+  const slug = v.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+  const base = typeof ns === "string" ? ns.trim().replace(/\/+$/, "") : "";
+  return slug && base ? `${base}/party/${slug}` : "";
+}
+
+const JSC_DATE_PATTERN = jscRegex(jscRulesSchema.JSC_SCHEMA.$defs.date.pattern);   // the kernel's own: YYYY-MM-DD
+const jscIsDate = v => typeof v === "string" && JSC_DATE_PATTERN.test(v);
+/* -> {author-ref, date}, or null when either is not known */
+function jscProvenance(author, date) {
+  const who = typeof author === "string" ? author.trim() : "";
+  return who && jscIsDate(date) ? { "author-ref": who, date } : null;
+}
+/* What an import writes as `provenance`. `stated` is what the source says,
+   {author-ref, date}, each a string or null; `given` is what the caller
+   says, with only the fields the caller gave. A field the caller gives
+   replaces the source's, also with nothing: an empty string says "nobody",
+   or "no day". Not given are undefined and null.
+   -> { provenance: {author-ref, date} | null, from: "source" | "caller" | "none" }
+   A source date that is no date counts as not stated. A date the caller
+   gives that is no date is an error: somebody typed it. */
+function jscImportProvenance(stated, given) {
+  const isGiven = k => !!given && given[k] !== undefined && given[k] !== null;
+  const pick = k => (isGiven(k) ? String(given[k]).trim() : typeof (stated || {})[k] === "string" ? stated[k].trim() : "");
+  const author = pick("author-ref"), date = pick("date");
+  if (isGiven("date") && date && !jscIsDate(date)) throw new Error(`the date given for the import, ${JSON.stringify(date)}, is not a date, YYYY-MM-DD`);
+  const provenance = jscProvenance(author, date);
+  return { provenance, from: !provenance ? "none" : isGiven("author-ref") || isGiven("date") ? "caller" : "source" };
+}
+const jscAuthorCopy = v => JSON.parse(JSON.stringify(v));
+/* one decision, compared: key order does not count, and neither does who is said to have made it */
+function jscAuthorKey(entry, skip) {
+  const sort = v => (Array.isArray(v) ? v.map(sort) : jscIsPlainObject(v) ? Object.fromEntries(Object.keys(v).sort().map(k => [k, sort(v[k])])) : v);
+  return JSON.stringify(sort(Object.fromEntries(Object.entries(entry).filter(([k]) => !skip.includes(k)))));
+}
+const jscSameProvenance = (a, b) => !!a && !!b && a["author-ref"] === b["author-ref"] && a.date === b.date;
+const jscSetProvenance = (obj, prov) => { if (prov) obj.provenance = { ...prov }; else delete obj.provenance; return obj; };
+/* A record without decisions of its own inside it (an Implementation, a
+   Finding): `prov` is who writes this version, or null. `prev` is the
+   stored record of the same id, where the page has one. A page that saves
+   many records at once (the system workbench, a check that is run again)
+   writes also those it did not change. Such a record is the version it
+   was: it keeps the author it names. One that names nobody gets `prov`.
+   -> a copy with the provenance of this save, or with none */
+function jscAuthorRecord(obj, prov, prev) {
+  const out = jscAuthorCopy(obj);
+  if (jscIsPlainObject(prev) && jscIsPlainObject(prev.provenance) && jscAuthorKey(prev, ["provenance"]) === jscAuthorKey(out, ["provenance"])) return jscSetProvenance(out, prev.provenance);
+  return jscSetProvenance(out, prov);
+}
+/* A Tailoring about to be saved. `next` is what the page built, `prev` the
+   stored version of the same id or null, `prov` who saves it or null.
+   An entry (select, exclude, operation) of `next` is unchanged when `prev`
+   holds the same one. The inline Deviation of an operation is not part of
+   that comparison: who approved it and when stands on the Deviation, and
+   deciding it does not make the operation somebody else's.
+   An unchanged entry keeps the provenance it had; where it had none and the
+   Tailoring's changes, the old Tailoring's is written onto it. A new or
+   changed entry stays as the page built it and so inherits `prov`.
+   Where the old Tailoring named nobody there is nothing to write, and the
+   entries nobody signed become the new author's with the Tailoring: the
+   kernel has no way to say "unknown" on an entry of a signed Tailoring.
+   A decision recorded on the stored Deviation of an unchanged operation is
+   not undone either: where `next` still holds that Deviation in an earlier
+   state (a form that was filled before the decision), the stored one
+   stands, with its state, its day and its review date.
+   -> a copy of `next` with the provenance of this save */
+function jscAuthorTailoring(next, prev, prov) {
+  const out = jscAuthorCopy(next), old = prev && jscIsPlainObject(prev.provenance) ? prev.provenance : null;
+  for (const [list, skip] of [["selects", ["provenance"]], ["excludes", ["provenance"]], ["operations", ["provenance", "deviation"]]]) {
+    const was = new Map((prev && Array.isArray(prev[list]) ? prev[list] : []).filter(jscIsPlainObject).map(e => [jscAuthorKey(e, skip), e]));
+    for (const e of (Array.isArray(out[list]) ? out[list] : []).filter(jscIsPlainObject)) {
+      const before = was.get(jscAuthorKey(e, skip));
+      if (!before) continue;                                         // new or changed: as the page built it
+      if (jscDeviationMovedOn(e.deviation, before.deviation)) e.deviation = jscAuthorCopy(before.deviation);
+      if (jscIsPlainObject(e.provenance)) continue;                  // the page states its author
+      if (jscIsPlainObject(before.provenance)) e.provenance = { ...before.provenance };
+      else if (old && !jscSameProvenance(old, prov)) e.provenance = { ...old };
+    }
+  }
+  return jscSetProvenance(out, prov);
+}
+/* Is `stored` the Deviation `held`, further along? The same request (type,
+   rationale, approver, the day it was opened, what it refers to) in a state
+   the kernel's state machine reaches from the state `held` is in. */
+function jscDeviationMovedOn(held, stored) {
+  if (!jscIsPlainObject(held) || !jscIsPlainObject(stored) || held.state === stored.state) return false;
+  const request = d => jscAuthorKey(d, ["state", "decided", "review-due"]);
+  const reaches = (from, to, seen = new Set()) => from === to || (!seen.has(from) && (JSC_NEXT.deviation[from] || []).some(n => reaches(n, to, seen.add(from))));
+  return request(held) === request(stored) && reaches(held.state, stored.state);
+}
+/* A Risk about to be saved; arguments as for a Tailoring. A rating that is
+   set or changed is the decision of who saves: it gets `prov`, or none, and
+   never keeps the author of the level it replaces. An unchanged rating
+   keeps what it had: its own provenance, or, where it had none and the
+   Risk's changes, the old Risk's written onto it.
+   -> a copy of `next` with the provenance of this save */
+function jscAuthorRisk(next, prev, prov) {
+  const out = jscAuthorCopy(next), old = prev && jscIsPlainObject(prev.provenance) ? prev.provenance : null;
+  for (const key of ["rating", "residual-rating"]) {
+    const r = out[key], before = prev && prev[key];
+    if (!jscIsPlainObject(r)) continue;
+    if (jscIsPlainObject(before) && jscAuthorKey(before, ["provenance"]) === jscAuthorKey(r, ["provenance"])) {
+      jscSetProvenance(r, jscIsPlainObject(before.provenance) ? before.provenance : old && !jscSameProvenance(old, prov) ? old : null);
+    } else jscSetProvenance(r, prov);
+  }
+  return jscSetProvenance(out, prov);
+}
+/* A Deviation after a decision. `to` is the state it moves to, by the
+   kernel's state machine; `to` equal to its state changes nothing but the
+   dates, which is how a decided Deviation that states no day gets one.
+   `decided` is written when the Deviation is, or becomes, approved or
+   withdrawn, and only where it is a date: the form offers today, and an
+   empty field leaves the day unsaid (AUTHOR-3 reports it). `reviewDue` is
+   a `review-due` or null; it is kept on an approved Deviation only, because
+   nothing reviews a Deviation that licenses nothing.
+   -> a copy; throws on a move the state machine does not have */
+function jscDecideDeviation(dev, to, decided, reviewDue) {
+  if (to !== dev.state && !jscCanMove("deviation", dev.state, to)) throw new Error(`a Deviation in state ${dev.state} may not move to ${to}`);
+  const out = jscAuthorCopy(dev);
+  out.state = to;
+  if ((to === "approved" || to === "withdrawn") && jscIsDate(decided)) out.decided = decided;
+  if (to === "approved" && jscIsPlainObject(reviewDue)) out["review-due"] = jscAuthorCopy(reviewDue);
+  else if (to !== "approved" || reviewDue === null) delete out["review-due"];
+  return out;
 }
 
 /* ====================================================================
@@ -963,15 +1602,20 @@ function jscOptionalEmptyViolations(obj, path = "$") {
   }
   return out;
 }
-/* DATE-1 and DATE-2: two fields 1.0.0 left as free text and 2.0.0 types
-   (author decision 2026-11-12). The schema enforces; this names the rule
-   when an object matches no type, so that a 1.0.0 bundle with a free-text
-   date is told what to correct. */
+/* DATE-1 to DATE-5: fields 1.0.0 left as free text and 2.0.0 types (author
+   decision 2026-11-12; DATE-3 to DATE-5 and `decided` with CP-AUTHOR-1, the
+   "when" of who-and-when). The schema enforces; this names the rule when an
+   object matches no type, so that a 1.0.0 bundle with a free-text date is
+   told what to correct. */
 const JSC_DATE_RULES = {
-  "DATE-1": "a Deviation's `opened` is a date, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
+  "DATE-1": "a Deviation's `opened` and `decided` are dates, YYYY-MM-DD - a date that any string satisfies cannot be compared, sorted or checked",
   "DATE-2": "the `due` of a Finding's action is a typed point in time or duration (date, datetime, elapsed-duration, calendar-period) - a deadline a machine cannot read is prose",
+  "DATE-3": "the `date` of a Mapping's provenance is a date, YYYY-MM-DD",
+  "DATE-4": "the `time` of an Assessment is a date or an RFC 3339 date-time with an offset",
+  "DATE-5": "the `timestamp` of an Attestation is a date or an RFC 3339 date-time with an offset",
+  "DATE-6": "the `date` of an entry of `history` is a day or a month, YYYY-MM-DD or YYYY-MM - a publisher that states only the month of a change states a month",
 };
-/* a value as Python's repr prints it, for the message of DATE-1 */
+/* a value as Python's repr prints it, for the messages of the DATE rules */
 function jscPyRepr(v) {
   if (typeof v === "string") return v.includes("'") && !v.includes('"') ? `"${v.replace(/\\/g, "\\\\")}"` : `'${v.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}'`;
   if (v === null || v === undefined) return "None";
@@ -980,16 +1624,20 @@ function jscPyRepr(v) {
   if (jscIsPlainObject(v)) return "{" + Object.entries(v).map(([k, x]) => jscPyRepr(k) + ": " + jscPyRepr(x)).join(", ") + "}";
   return String(v);
 }
-/* -> [[rule id, what is wrong]] for an object that carries Deviations or
-   actions. It explains a refusal; it never accepts (the schema decides). */
+/* -> [[rule id, what is wrong]] for an object that carries Deviations,
+   actions or one of the three typed times. It explains a refusal; it never
+   accepts (the schema decides). */
 function jscDateRuleViolations(o) {
   const out = [];
   if (!jscIsPlainObject(o)) return out;
   const valid = (shape, v) => !jscSchemaCheck({ $ref: "#/$defs/" + shape }, v, jscRulesSchema.JSC_SCHEMA).errors.length;
+  const isWhen = v => valid("date", v) || valid("dateTime", v);   // a date, or an RFC 3339 date-time with an offset
   const deviations = (x, at) => {
     if (jscIsPlainObject(x)) {
       (Array.isArray(x.deviations) ? x.deviations : []).forEach((dv, i) => {
-        if (jscIsPlainObject(dv) && "opened" in dv && !valid("date", dv.opened)) out.push(["DATE-1", `${at}deviations[${i}].opened is ${jscPyRepr(dv.opened)}`]);
+        for (const field of ["opened", "decided"]) {
+          if (jscIsPlainObject(dv) && field in dv && !valid("date", dv[field])) out.push(["DATE-1", `${at}deviations[${i}].${field} is ${jscPyRepr(dv[field])}`]);
+        }
       });
       for (const [k, v] of Object.entries(x)) if (k !== "deviations") deviations(v, `${at}${k}.`);
     } else if (Array.isArray(x)) x.forEach((v, i) => deviations(v, at ? `${at.slice(0, -1)}[${i}].` : `[${i}].`));
@@ -998,7 +1646,35 @@ function jscDateRuleViolations(o) {
   (Array.isArray(o.actions) ? o.actions : []).forEach((a, i) => {
     if (jscIsPlainObject(a) && "due" in a && !valid("due", a.due)) out.push(["DATE-2", `actions[${i}].due is ${jscPyJson(a.due, true)}`]);
   });
+  /* the three fields are told apart by the signature of their type */
+  const prov = o.provenance;
+  if ("relationship" in o && jscIsPlainObject(prov) && "date" in prov && !valid("date", prov.date)) out.push(["DATE-3", `provenance.date is ${jscPyRepr(prov.date)}`]);
+  if ("performer-ref" in o && "time" in o && !isWhen(o.time)) out.push(["DATE-4", `time is ${jscPyRepr(o.time)}`]);
+  if ("signer" in o && "timestamp" in o && !isWhen(o.timestamp)) out.push(["DATE-5", `timestamp is ${jscPyRepr(o.timestamp)}`]);
+  (Array.isArray(o.history) ? o.history : []).forEach((e, i) => {
+    if (jscIsPlainObject(e) && "date" in e && !valid("dayOrMonth", e.date)) out.push(["DATE-6", `history[${i}].date is ${jscPyRepr(e.date)}`]);
+  });
   return out;
+}
+/* ---------- HISTORY-1: the record of an object's changes (backlog #81) ----------
+   `version` is the object's own version; `history` is what its publisher
+   says about how it came to be what it is, one entry per change, oldest
+   first. A day and a month are compared as they are written: a month
+   stands before its days, and two entries may carry one date. The order is
+   all a validator can hold: whether an entry is true it cannot know.
+   -> [message] for one object of valid shape. */
+const JSC_HISTORY_RULES = {
+  "HISTORY-1": "the entries of `history` stand in the order of their dates, oldest first - a record that a reader has to sort is read in two ways",
+};
+function jscHistoryErrors(o) {
+  const h = jscIsPlainObject(o) && Array.isArray(o.history) ? o.history : [];
+  const dates = h.filter(jscIsPlainObject).map(e => e.date);
+  for (let i = 1; i < dates.length; i++) {
+    if (typeof dates[i - 1] === "string" && typeof dates[i] === "string" && dates[i] < dates[i - 1]) {
+      return [`history[${i}].date ${dates[i]} stands after ${dates[i - 1]} (HISTORY-1: ${JSC_HISTORY_RULES["HISTORY-1"]})`];
+    }
+  }
+  return [];
 }
 /* What is wrong with one object, without looking at any other.
    -> { type: its one kernel type or null, errors: [string] } */
@@ -1014,13 +1690,14 @@ function jscObjectErrors(obj) {
       if (jscIsPlainObject(obj) && ("scenario" in obj || "owner-ref" in obj)) {
         best += jscRiskRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_RISK_RULES[rule]}`).join("");
       }
-      /* two fields that 1.0.0 left as free text and 2.0.0 types */
+      /* the fields that 1.0.0 left as free text and 2.0.0 types */
       best += jscDateRuleViolations(obj).map(([rule, what]) => ` [${rule}] ${what} - ${JSC_DATE_RULES[rule]}`).join("");
     }
     return { type: null, errors: [...errors, `matches ${matches.length ? matches.join(" and ") : "NO type"}${best}`] };
   }
   const empty = jscOptionalEmptyViolations(obj);
   if (empty.length) errors.push(`optional empty containers present: ${empty.join(", ")}`);
+  errors.push(...jscHistoryErrors(obj));
   if (matches[0] === "requirement") {
     const sids = new Set(obj.statements.map(s => s.id));
     if (sids.size !== obj.statements.length) errors.push("duplicate statement ids (unique-within, B.1.3) — identity addressing becomes ambiguous");
@@ -1045,28 +1722,84 @@ function jscObjectErrors(obj) {
    ==================================================================== */
 const jscFacetBase = key => String(key).replace(/@[^@]*$/, "");
 const jscIsPrivateFacet = key => String(key).startsWith("private:");
-/* stdlib facet id -> its descriptor */
-const JSC_STDLIB_BY_ID = new Map(jscRulesSchema.JSC_STDLIB.map(d => [d.id, d]));
+/* The standard library may hold several versions of a facet (2026-11-14,
+   backlog #83: assessment-criteria 1.1.0 beside 1.0.0). One id and version
+   is one schema, and a version once published stays: a bundle that pins
+   1.0.0 is held to 1.0.0.
+   JSC_STDLIB_VERSIONS: stdlib facet id -> version -> descriptor.
+   JSC_STDLIB_BY_ID: stdlib facet id -> the descriptor of its latest
+   version, which is what an unpinned payload is held to. */
+const JSC_STDLIB_VERSIONS = new Map();
+for (const d of jscRulesSchema.JSC_STDLIB) {
+  if (!JSC_STDLIB_VERSIONS.has(d.id)) JSC_STDLIB_VERSIONS.set(d.id, new Map());
+  JSC_STDLIB_VERSIONS.get(d.id).set(d.version, d);
+}
+const jscVersionOrder = (a, b) => { const x = a.split(".").map(Number), y = b.split(".").map(Number); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; };
+const JSC_STDLIB_BY_ID = new Map([...JSC_STDLIB_VERSIONS].map(([id, versions]) => [id, versions.get([...versions.keys()].sort(jscVersionOrder).pop())]));
 /* A facet payload is checked against the stdlib descriptor of its id, or
    against the schema the bundle pins for it. A `private:` facet is not
    checked by definition. Anything else is unregistered and fails closed.
+
+   An Assessment's `method` is a facet payload too (handbook 10.1, appendix
+   A.7; backlog #55, in the reference since 2026-11-14): its keys are facet
+   ids, resolved as the keys of `facets` are, and each payload is held to
+   its schema. Until build 0.9.13 `method` was not read at all here, as in
+   the reference: the kernel schema says only that it is an object, so a
+   method under a key nobody registered passed. This app wrote one itself
+   (`{kind, tool}`; ERRATA.md). Of the kernel types only the Assessment has
+   a member `method`; a `method` inside a facet payload is that facet's
+   business and is not looked at.
    items: [[label, object]]; pinned: Map(facet id without version -> schema). */
 function jscFacetErrors(items, pinned) {
   const errs = [];
-  for (const [label, obj] of items) {
-    for (const [key, payload] of Object.entries((obj && obj.facets) || {})) {
-      const base = jscFacetBase(key);
-      if (jscIsPrivateFacet(key)) continue;
-      const schema = JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base).schema : pinned.get(base);
-      if (schema === undefined) { errs.push(`${label}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`); continue; }
-      let found;
-      try { found = jscSchemaCheck(schema, payload, schema).errors; }
-      catch (e) { errs.push(`${label}: facet '${key}' cannot be checked: ${e.message}`); continue; }
-      if (found.length) errs.push(`${label}: facet '${key}' payload violates its schema: ${found[0].message} @ ${found[0].path.replace(/^\//, "")}`);
+  /* what: "facet" for a key of `facets`, "method" for a key of an Assessment's `method`; the two sentences for a key
+     nobody registered are the reference's, each its own */
+  const held = (label, what, key, payload) => {
+    const base = jscFacetBase(key);
+    if (jscIsPrivateFacet(key)) return;
+    /* a pin of a library facet is one of its versions, verbatim (D26; jscCheckGraph holds it to that) */
+    const schema = pinned.has(base) ? pinned.get(base) : JSC_STDLIB_BY_ID.has(base) ? JSC_STDLIB_BY_ID.get(base).schema : undefined;
+    if (schema === undefined) {
+      errs.push(what === "facet" ? `${label}: unregistered facet '${key}' — not stdlib, not pinned in the manifest, not private: (dangerous-by-default, D10)`
+        : `${label}: method '${key}' is no registered facet - not stdlib, not pinned in the manifest, not private: (an Assessment's method is a facet payload and fails closed, D10)`);
+      return;
     }
+    let found;
+    try { found = jscSchemaCheck(schema, payload, schema).errors; }
+    catch (e) { errs.push(`${label}: ${what} '${key}' cannot be checked: ${e.message}`); return; }
+    if (found.length) errs.push(`${label}: ${what} '${key}' payload violates its schema: ${found[0].message} @ ${found[0].path.replace(/^\//, "")}`);
+  };
+  for (const [label, obj] of items) {
+    for (const [key, payload] of Object.entries((obj && obj.facets) || {})) held(label, "facet", key, payload);
+    if (obj && jscIsPlainObject(obj.method)) for (const [key, payload] of Object.entries(obj.method)) held(label, "method", key, payload);
   }
   return errs;
 }
+/* What a page writes as the `method` of an Assessment a person performed:
+   the standard facet assessment-criteria@1 with `method: "manual"`, which is
+   the member that facet has for exactly this. Nothing else is said: which
+   requirements were looked at is `subject-refs`, who looked is
+   `performer-ref`.
+   The name of this tool is no part of a method and is not written into the
+   Assessment at all. Until build 0.9.13 it stood there as `tool`, beside
+   `kind: "manual-check"`. A method says how something was assessed; which
+   program recorded the answer says nothing about that. The manifest of an
+   exported bundle names the tool that wrote it (`written-with`,
+   `edited-with`), which is where a reader looks for it. A `private:` key
+   under `method` would be kept and ignored by every validator, and would
+   still put under "method" what is none. */
+const JSC_ASSESSMENT_CRITERIA = "https://ns.jascon.net/stdlib/facet/assessment-criteria@1";
+const jscManualMethod = () => ({ [JSC_ASSESSMENT_CRITERIA]: { method: "manual" } });
+/* Is this the method this app wrote before build 0.9.13: exactly `kind:
+   "manual-check"` and a `tool` that names the app? Only then does the app
+   know what was meant, a check a person did, and may offer to write it as
+   the standard facet. It never does so by itself: an Assessment that came
+   with a set stays as it came until the user asks (jscRewriteAppMethod),
+   and a method of any other shape is somebody else's and is only reported. */
+const jscIsAppMethodBefore0913 = m => jscIsPlainObject(m) && Object.keys(m).sort().join() === "kind,tool" && m.kind === "manual-check" &&
+  typeof m.tool === "string" && m.tool.startsWith("JASCON-App ");
+/* -> the Assessment with its method written as the standard facet, or null where the method is not the app's own */
+const jscRewriteAppMethod = asmt => (jscIsPlainObject(asmt) && jscIsAppMethodBefore0913(asmt.method) ? { ...asmt, method: jscManualMethod() } : null);
 /* What an operation owes, by the tier of its Tailoring (D13, B.1.6). A
    weakening needs a Deviation at consumer tier: a non-monotone change of
    modality, a substantive change of prose, a parameter value outside its
@@ -1122,6 +1855,216 @@ async function jscTailoringDutyErrors(objs, pinnedDecl, verify) {
    intact and the bytes are not (semantic-match). */
 const jscAttestationVerdict = (signed, delivered) =>
   delivered.semantic !== signed.semantic ? "tamper" : delivered.package === signed.package ? "full-match" : "semantic-match";
+
+/* ====================================================================
+   attestation-binds, applied to a bundle (Appendix B.1.7; backlog #46)
+   ====================================================================
+   Port of attestation_binds and binds_report of validate_core.py, held to
+   the `binds-vectors` of attestation-vectors.json.
+
+   The primitive is (attestation, bundle) -> Full Match | Semantic Match |
+   fail. The bundle's side is three things: the semantic digests of the
+   objects the manifest lists, the digest of the manifest's bytes as
+   delivered, and the digests of the pack manifests the bundle keeps
+   (packs/sha256/, D25). An Attestation beside the manifest is no object of
+   the manifest and so no subject of anything.
+
+   Each subject is judged against the listed objects:
+     match    an object carries the signed semantic digest: the object of
+              that id where the subject names one, any object where it is a
+              bare digest;
+     differs  the object of that id carries another digest: its normative
+              content changed after signing;
+     absent   no object of that id, or no object with that digest.
+   The manifest the Attestation binds is `this` one, a `kept-pack` or an
+   `other`.
+     full-match      every subject matches, and the manifest is this one or
+                     a kept pack's;
+     semantic-match  every subject matches, and the manifest is another: the
+                     content is proven, the packaging was altered (D7).
+                     Reported, never a failure and never Full;
+     fail            anything else, an Attestation without a subject too.
+   The verdict is about digests. Whether the signature is valid is the
+   envelope's matter (jscVerifyEnvelope) and is reported beside it.
+
+   `fails`: a `fail` fails the bundle while the Attestation is still claimed,
+   lifecycle `active`. A draft is not issued yet, and a deprecated or
+   withdrawn one is kept for the record; each is reported with its verdict
+   and fails nothing. Otherwise a set whose attested object was changed could
+   never validate again, however openly the Attestation was withdrawn.
+
+   delivered: Map(id -> semantic digest) of the objects the manifest lists
+   (jscSemanticDigests); keptPacks: ["sha256:<hex>"].
+   -> { verdict, manifest, subjects: [{status, id or null, signed,
+        delivered or null}] in the Attestation's order, fails } */
+const jscBindsNone = v => (v === undefined ? null : v);
+function jscAttestationBinds(att, manifestDigest, delivered, keptPacks) {
+  const carried = new Set(delivered.values()), subjects = [];
+  const named = att["subject-semantic-digests"];
+  for (const sj of Array.isArray(named) ? named : []) {
+    if (jscIsPlainObject(sj)) {
+      const id = jscBindsNone(sj.id), signed = jscBindsNone(sj["semantic-digest"]);
+      const have = typeof id === "string" && delivered.has(id) ? delivered.get(id) : null;
+      subjects.push({ status: have === null ? "absent" : have === signed ? "match" : "differs", id, signed, delivered: have });
+    } else {
+      subjects.push(carried.has(sj) ? { status: "match", id: null, signed: sj, delivered: sj } : { status: "absent", id: null, signed: sj, delivered: null });
+    }
+  }
+  const bound = jscBindsNone(att["content-manifest-digest"]);
+  const manifest = bound === jscBindsNone(manifestDigest) ? "this" : (keptPacks || []).includes(bound) ? "kept-pack" : "other";
+  const verdict = !subjects.length || subjects.some(s => s.status !== "match") ? "fail" : manifest === "other" ? "semantic-match" : "full-match";
+  return { verdict, manifest, subjects, fails: verdict === "fail" && att.lifecycle === "active" };
+}
+/* objs: Map(id -> {type, obj}) -> Map(id -> semantic digest) */
+async function jscSemanticDigests(objs) {
+  const out = new Map();
+  for (const [id, r] of objs) out.set(id, await jscRulesSemanticDigest(r.obj));
+  return out;
+}
+/* One entry per Attestation, in the order of the ids (by UTF-16 code unit,
+   which is the order of a JavaScript sort), each with the line the reference
+   prints or the failure it lists, word for word.
+   atts: Map(id -> Attestation object).
+   -> [{ id, lifecycle, signed, verdict, manifest, subjects, fails,
+         kind: "line" | "failure", text }] */
+const JSC_BINDS_MANIFEST = { this: "this manifest", "kept-pack": "a pack manifest this bundle keeps", other: "another manifest" };
+function jscBindsReport(atts, manifestDigest, delivered, keptPacks) {
+  const out = [];
+  for (const id of [...atts.keys()].sort()) {
+    const att = atts.get(id), r = jscAttestationBinds(att, manifestDigest, delivered, keptPacks);
+    const n = r.subjects.length, what = JSC_BINDS_MANIFEST[r.manifest], lifecycle = jscBindsNone(att.lifecycle);
+    let kind = "line", text;
+    if (r.verdict === "full-match") text = `binds: ${id} = FULL MATCH [${n} subject(s) of this bundle; ${what}]`;
+    else if (r.verdict === "semantic-match") text = `binds: ${id} = SEMANTIC MATCH [${n} subject(s) of this bundle; ${what}: the content is proven, the packaging was altered]`;
+    else {
+      const lines = r.subjects.filter(s => s.status !== "match").map(s => `subject ${s.id || s.signed}: ` +
+        (s.status === "differs" ? `recomputed semantic digest ${s.delivered}, signed ${s.signed}` : s.id ? "not an object of this bundle" : "no object of this bundle carries it"));
+      const why = (lines.length ? lines : ["it names no subject"]).join("; ");
+      if (r.fails) {
+        kind = "failure";
+        text = `[attestation-binds] ${id}: ${why} - ${what} (B.1.7: an Attestation binds what is delivered, or it fails; a changed subject is normative content changed after signing)`;
+      } else text = `binds: ${id} = DOES NOT BIND [lifecycle ${lifecycle === null ? "None" : lifecycle}: reported, not a failure] ${why} - ${what}`;
+    }
+    /* `signed`: the Attestation names an envelope. Its canonical form is the envelope's payload, so a signed
+       Attestation cannot be changed without breaking the signature, its lifecycle included: withdrawing it is
+       the signer's act. A page offers that for an unsigned one only. */
+    out.push({ id, lifecycle, signed: typeof att["envelope-ref"] === "string" && att["envelope-ref"] !== "", ...r, kind, text });
+  }
+  return out;
+}
+/* MANIFEST-1 (D3.11; backlog #75, author decision of 2026-11-14: "refusal
+   in all"). Port of listed_attestation_errors of validate_core.py, held to
+   the `listed-vectors` of attestation-vectors.json.
+   An object a content manifest lists is no Attestation. D3.1 excludes
+   Attestations from the manifest by definition: an Attestation binds the
+   digest of the manifest's bytes, so a manifest that lists one cannot be
+   the manifest it binds. Until that day only a pack's manifest was held to
+   it (ADVICE-1), and an ordinary bundle that listed its own Attestation
+   passed. The rule is about where an Attestation lies and asks nothing else
+   of it: what it binds, whether it names an envelope and what its lifecycle
+   is change nothing. Its binding is still computed and reported.
+   objs: Map(id -> {type, obj}), the objects a manifest lists.
+   -> [error], one per listed Attestation, in the order of the ids */
+const JSC_MANIFEST_RULES = {
+  "MANIFEST-1": "Attestations are excluded from the content manifest by definition, D3.1 - an Attestation lies beside a manifest and is never an entry of one",
+};
+const jscListedAttestationErrors = objs => [...objs.keys()].sort().filter(id => objs.get(id).type === "attestation")
+  .map(id => `${id}: an Attestation is listed in the content manifest (MANIFEST-1: ${JSC_MANIFEST_RULES["MANIFEST-1"]})`);
+
+/* What the Attestations of a set bind: the primitive applied to the set a
+   page holds (jscCheckGraph, and the Assess page for one Attestation).
+
+   The reference only ever sees a bundle on disk. A set is a bundle that was
+   loaded and may have been written to since, so the first question is which
+   bundle the comparison is made against. `basis` answers it, and a page says
+   it beside the lines:
+
+     "loaded"  The set is the bundle as it was loaded: nothing in it was
+               written in this app. The manifest is the one it came with (the
+               set keeps its bytes) and the objects are those that manifest
+               lists. This is what the reference says about the folder.
+     "export"  Something was written here since (an object, a scale, a pack
+               that was imported), or the set never had a manifest. The
+               manifest it came with no longer describes it, and no manifest
+               has been written yet. The comparison is made against the
+               bundle an export would write now: the manifest jscBuildBundle
+               computes, which is the same bytes on every export of the same
+               set, and the objects it lists. This is what the reference will
+               say about the exported folder.
+
+   Why not hold an edited set to the manifest it came with: an object written
+   here is not listed there, so an Attestation that names it would be "absent"
+   and fail, for no other reason than that this app has not written a manifest
+   yet. And why not call an old Attestation a failure after an edit: it bound
+   the manifest that was loaded; against the next manifest that is "another
+   manifest", a Semantic Match while its subjects are unchanged, which is what
+   B.1.7 calls it. A subject that was changed is a real failure on either
+   basis, while the Attestation is active.
+
+   A set that is as loaded but damaged (a digest that does not match, a file
+   the manifest does not list) stays on "loaded": the reference judges that
+   folder against its own manifest too. An object removed here leaves no
+   trace in the set, so such a set is read as loaded as well; the missing
+   object is an error of its own.
+
+   MANIFEST-1 follows the same two bases. As loaded, the manifest is the one
+   the set came with, and an Attestation it lists is the reference's failure
+   (`listed: "refused"` on its line, the failure in `manifest-1`). The
+   manifest an export writes never lists an Attestation (jscBuildBundle), so
+   on "export" there is no such failure; an Attestation the earlier manifest
+   listed is marked `listed: "left-out"`, so that a page can say that the
+   export leaves it out of the manifest and puts the file beside it. A set
+   is never repaired without that being said.
+
+   A set nobody changed can be brought to the second basis by the user: an
+   Attestation the manifest lists is taken out of that list (`unlisted` on
+   its record; jscBuildBundle in jascon-core.js, backlog #71 point 11). That
+   counts as written here. A line that is "refused" says what the move would
+   do to the binding before it is made: `after-move` is the line the same
+   Attestation gets against the bundle an export writes once it is taken
+   out, in the reference's words.
+
+   g: the graph; objs: Map(id -> {type, obj}), the typed objects of the set.
+   -> { basis, "manifest-digest", "loaded-manifest-digest" (or null),
+        "kept-packs": [digest], lines: jscBindsReport, each with `listed`
+        (null | "refused" | "left-out"), `manifest-1` (the failure or null)
+        and, where `listed` is "refused", `after-move` (a line's text) }
+      A set without an Attestation has basis null and no line: nothing was
+      compared, and nothing is said.
+   `moved` is this function's own: true while it asks what a move would do,
+   so that the question is asked once and never of its own answer. */
+async function jscSetBinds(g, objs, moved) {
+  const atts = new Map([...objs].filter(([, r]) => r.type === "attestation").map(([id, r]) => [id, r.obj]));
+  /* no Attestation, nothing to compare: the digests of a large set are not computed for an empty answer */
+  if (!atts.size) return { basis: null, "manifest-digest": null, "loaded-manifest-digest": null, "kept-packs": [], lines: [] };
+  const built = await jscRulesBuildBundle(g);
+  const loaded = typeof g.manifestText === "string" ? await jscRulesPackageDigest(g.manifestText) : null;
+  /* written here, of what a manifest covers: an Attestation beside the manifest is not part of it, so one that was
+     written here (set to withdrawn, say) changes nothing about which manifest describes the set */
+  const written = [...g.objects.values()].some(r => (jscRulesAdded(r) && !jscRulesBeside(r)) || r.unlisted) || [...g.scales.values(), ...g.facetSchemas].some(jscRulesAdded);
+  const basis = g.manifest && (built.verbatim || !written) ? "loaded" : "export";
+  const digest = basis === "loaded" ? loaded : await jscRulesPackageDigest(built.files[0].text);
+  /* the objects the manifest lists: on "loaded" those with a line in it; on "export" every object but the Attestations,
+     because a manifest written here lists none of them, wherever the manifest the set came with had them */
+  const isListed = (r, type) => !!r && (basis === "loaded" ? !!r.entry : type !== "attestation");
+  const listed = new Map([...objs].filter(([id, x]) => isListed(g.objects.get(id), x.type)));
+  const kept = jscRulesKeptPacks(g).map(([name]) => "sha256:" + name);
+  const refused = new Map(jscListedAttestationErrors(listed).map(m => [[...atts.keys()].find(id => m.startsWith(id + ": ")), m]));
+  const lines = jscBindsReport(atts, digest, await jscSemanticDigests(listed), kept).map(l => {
+    const cameListed = !!(g.objects.get(l.id) || {}).entry;
+    return { ...l, listed: refused.has(l.id) ? "refused" : cameListed && basis === "export" ? "left-out" : null, "manifest-1": refused.get(l.id) || null };
+  });
+  /* what taking a refused Attestation out of the list would do to its binding: asked once, of the graph as it would be */
+  for (const l of moved ? [] : lines.filter(x => x.listed === "refused")) {
+    const then = (await jscSetBinds(jscUnlisted(g, [l.id]), objs, true)).lines.find(x => x.id === l.id);
+    l["after-move"] = then ? (then.kind === "failure" ? "error: " : "") + then.text : null;
+  }
+  return { basis, "manifest-digest": digest, "loaded-manifest-digest": loaded, "kept-packs": kept, lines };
+}
+/* the graph as it is once these Attestations are taken out of the manifest's list; nothing is written */
+function jscUnlisted(g, ids) {
+  return { ...g, objects: new Map([...g.objects].map(([id, r]) => [id, ids.includes(id) && r.type === "attestation" && r.entry ? { ...r, unlisted: true } : r])) };
+}
 
 /* ====================================================================
    Signatures: DSSE envelopes over attestations (backlog #24)
@@ -1250,7 +2193,12 @@ async function jscVerifyEnvelope(env, att, trusted) {
    -> { resolutions: {facet id: version}, errors } */
 function jscSemver(v) {
   const m = /^(\d+)\.(\d+)\.(\d+)$/.exec(String(v));
-  return m ? m.slice(1).map(Number) : null;
+  if (!m) return null;
+  /* Each number is held to the number domain of D3.9, at most 2^53 - 1 (backlog #72): beyond it a JavaScript number
+     is not exact, and 1.9007199254740993.0 read as 1.9007199254740992.0. The domain is asked of the digits. */
+  const digits = m.slice(1).map(d => d.replace(/^0+(?=\d)/, ""));
+  if (digits.some(d => d.length > 16 || (d.length === 16 && d > "9007199254740991"))) return null;
+  return digits.map(Number);
 }
 function jscCompose(aObjs, aPins, bObjs, bPins) {
   const errors = [], resolutions = {};
@@ -2580,9 +3528,16 @@ function jscAdviceEdge(objs, ownId, productId, capability, opts) {
    opts.trusted, a map of signer URI to public key in hex, puts the check in
    verification mode: an envelope is then judged against the signer's key,
    and a Tailoring is authority-proven only through a verifying envelope.
+   opts.asOf, a day YYYY-MM-DD, is the day REVIEW-1 is asked about; without
+   it no review date is asked. opts.requireAuthors turns the AUTHOR lines
+   into errors, as the reference's --require-authors does.
    -> { findings: [{ kind: "error"|"note", area, object: id or null, message }],
+        report: { as-of, require-authors, authors: jscAuthorReport, review: jscReviewReport or null,
+                  drafts: jscDraftMemberReport,
+                  lines: jscAuthorReviewLines and jscDraftLines, the reports in the reference's words },
         types: {type: count}, tiers: {tailoring id: tier}, coverage: report,
         signatures: {attestation id: "verified"|"unverified"|"error"|"missing"|"unsigned"},
+        binds: jscSetBinds, what every Attestation of the set binds and against which bundle that was asked,
         packs: [{ where, name: the kept file's name or null, id, version, title, publisher,
                   status: "claimed"|"proven", verified, label: "proven"|"attested"|"claimed",
                   why: [string], objects: [id] }] } */
@@ -2643,10 +3598,10 @@ async function jscCheckGraph(g, verified, opts) {
     if (verified.counts.missing) add("error", "manifest", null, `${verified.counts.missing} object(s) listed but missing`);
   }
   /* Envelopes: an attestation names a file beside the manifest; nothing signed contains its own signature.
-     The reference validator looks only at attestations the manifest lists, and an attestation over the
-     manifest cannot be listed in it (D3.1). This check looks at every attestation of the set. So that it
-     raises no error the reference does not, an envelope that is missing for an unlisted attestation is a
-     note; one that is there and does not bind or verify is an error in both cases. */
+     Every attestation of the set is looked at: those beside the manifest, where D3.1 puts them, and any the
+     manifest lists. The reference does the same since 2026-11-14 (backlog #46); until then it read the
+     envelope only of an attestation the manifest lists, and this check made a missing envelope of an
+     unlisted one a note so as to raise no error the reference did not. It is an error in both now. */
   const envelopes = new Map(), signatures = {};
   for (const id of [...objs.keys()].sort()) {
     const r = objs.get(id), ref = r.obj["envelope-ref"];
@@ -2654,9 +3609,8 @@ async function jscCheckGraph(g, verified, opts) {
     if (!ref) { signatures[id] = "unsigned"; add("note", "signature", id, "no envelope (unsigned attestation)"); continue; }
     const file = g.aux.find(a => a.path === ref);
     if (!file) {
-      const listed = !!(g.objects.get(id) || {}).entry;
       signatures[id] = "missing";
-      add(listed ? "error" : "note", "signature", id, `envelope-ref '${ref}' does not resolve beside the manifest`);
+      add("error", "signature", id, `envelope-ref '${ref}' does not resolve beside the manifest`);
       continue;
     }
     let env;
@@ -2667,15 +3621,32 @@ async function jscCheckGraph(g, verified, opts) {
     if (res.status === "error") add("error", "signature", id, `dsse: ${res.detail}`);
     else add("note", "signature", id, res.status === "verified" ? "signature VERIFIED (Ed25519)" : `signature UNVERIFIED - ${res.detail}`);
   }
+  /* attestation-binds (B.1.7; backlog #46): every Attestation of the set is held to its subjects and to the
+     manifest it binds. A line of the reference is a note; what the reference lists as a failure is an error. */
+  const binds = await jscSetBinds(g, objs);
+  for (const l of binds.lines) add(l.kind === "failure" ? "error" : "note", "attestation", l.id, l.kind === "failure" ? l.text : l.text.slice(`binds: ${l.id} = `.length));
+  /* MANIFEST-1: an Attestation the manifest lists, in the reference's words; where the set was written to since,
+     the manifest in question is the export's, which lists none, and that is said instead */
+  for (const l of binds.lines) {
+    if (l.listed === "refused") add("error", "manifest", l.id, strip(l["manifest-1"]));
+    else if (l.listed === "left-out") add("note", "manifest", l.id, "the manifest this set came with lists this Attestation, which MANIFEST-1 refuses; the manifest an export writes now does not list it, and the file leaves beside the manifest");
+  }
   const verify = trusted ? { envelopes, trusted } : null;
   pass("reference", "error")(jscClosureErrors(objs));
+  pass("reference", "error")(jscOperationTargetErrors(objs));          // OPERATION-1 (backlog #96)
+  pass("lifecycle", "error")(jscWithdrawnReferenceErrors(objs));       // WITHDRAWN-1 (backlog #93)
   const pinnedSchemas = new Map(), pinnedDecl = new Map();
   for (const f of g.facetSchemas) {
     if (!f.def || !f.def.id) continue;
     pinnedSchemas.set(f.def.id, f.def.schema || { type: "object" });
     pinnedDecl.set(f.def.id, f.def["modifies-semantics"] || ["assessment", "tailoring", "selection", "rendering"]);   // a pin that omits it is dangerous by default
-    const std = JSC_STDLIB_BY_ID.get(f.def.id);
-    if (std && jscRulesCanonical(f.def.schema || {}) !== jscRulesCanonical(std.schema)) add("error", "facet", null, `${f.path}: pin of stdlib facet ${f.def.id} DIVERGES from the normative descriptor (D26)`);
+    /* the library may hold several versions of a facet: the pin is held to the one it states */
+    const versions = JSC_STDLIB_VERSIONS.get(f.def.id);
+    if (versions) {
+      const std = versions.get(f.def.version);
+      if (!std) add("error", "facet", null, `${f.path}: pin of stdlib facet ${f.def.id} states version ${jscPyRepr(f.def.version)}, which the standard library does not hold (it holds ${[...versions.keys()].sort().join(", ")})`);
+      else if (jscRulesCanonical(f.def.schema || {}) !== jscRulesCanonical(std.schema)) add("error", "facet", null, `${f.path}: pin of stdlib facet ${f.def.id} DIVERGES from the normative descriptor (D26)`);
+    }
   }
   pass("tailoring", "error")(await jscTailoringDutyErrors(objs, pinnedDecl, verify));
   const pins = new Map([...g.scales.values()].filter(x => x.pin).map(x => [x.def.id, x.pin]));
@@ -2684,6 +3655,14 @@ async function jscCheckGraph(g, verified, opts) {
   const cov = await jscRiskCoverage(objs, verify);
   pass("risk", "error")(cov.errors); pass("risk", "note")([...cov.notes, ...jscRiskLinkNotes(objs)]);
   pass("facet", "error")(jscFacetErrors([...objs].map(([id, r]) => [id, r.obj]), pinnedSchemas));
+  /* An Assessment this app wrote before build 0.9.13 fails with the two errors above (`kind`, `tool`). Nothing rewrites
+     it when a set is loaded; what a user can do about it is said beside the errors. */
+  for (const [id, r] of objs) {
+    if (r.type === "assessment" && jscIsAppMethodBefore0913(r.obj.method)) {
+      add("note", "facet", id, "this Assessment was written by this app before build 0.9.13, with a method that names no facet (kind, tool). It is kept as it came. " +
+        "The Assess page can write its method as the standard facet for a manual check; that changes the object, so an Attestation that names it no longer binds");
+    }
+  }
   /* CP-CHECK-1: check shapes, recomputed verdicts, the evidence store beside the manifest */
   const store = new Map(g.aux.map(a => [a.path, a.text]));
   const checks = await jscCheckErrors(objs, ref => (store.has(ref) ? store.get(ref) : null));
@@ -2724,10 +3703,25 @@ async function jscCheckGraph(g, verified, opts) {
     why.forEach(m => add("note", "tailoring", id, "not proven by " + m));
     if (tiers[id] === "authority-proven" && !trusted) add("note", "tailoring", id, "authority-proven by a digest match; the signature is UNVERIFIED without trusted keys");
   }
-  return { findings, types, tiers, coverage: cov.report, signatures, packs };
+  /* CP-AUTHOR-1: who is not named, and which review date has passed. An AUTHOR line is a note, or an error
+     when the caller requires authors; a REVIEW line is never an error. The review is asked only when the
+     caller names the day: nothing in this file reads a clock. */
+  const asOf = (opts && opts.asOf) || null, requireAuthors = !!(opts && opts.requireAuthors);
+  const authors = await jscAuthorReport(objs, verify), review = asOf ? jscReviewReport(objs, asOf) : null;
+  /* DRAFT-1 (backlog #86): an active Set that lists draft members. A note, with any switch. */
+  const drafts = jscDraftMemberReport(objs);
+  /* FRAGMENT-1 (backlog #82): what the references of the form #id name, over what the manifest lists. A note, with any switch. */
+  const fragments = jscFragmentReport(new Map([...objs].filter(([, r]) => !jscRulesBeside(r))), g.manifest);
+  const lines = [...jscAuthorReviewLines(authors, review || { dated: 0, overdue: [], "not-evaluable": [] }, asOf, requireAuthors), ...jscDraftLines(drafts),
+    ...jscFragmentLines(fragments)];
+  const areaOf = { "REVIEW-1": "review", "DRAFT-1": "lifecycle", "FRAGMENT-1": "reference" };
+  for (const l of lines) add(l.kind === "error" ? "error" : "note", areaOf[l.rule] || "author", l.object, l.object ? strip(l.text) : l.text);
+  return { findings, types, tiers, coverage: cov.report, signatures, packs, binds,
+    report: { "as-of": asOf, "require-authors": requireAuthors, authors, review, drafts, fragments, lines } };
 }
 const jscRulesBeside = r => r.type === "attestation" && !r.entry;
 const jscRulesKeptPacks = jscRulesCore ? jscRulesCore.jscKeptPacks : g => jscKeptPacks(g);
+const jscRulesBuildBundle = jscRulesCore ? jscRulesCore.jscBuildBundle : (g, provenance) => jscBuildBundle(g, provenance);
 /* an object the set's manifest does not know yet because it was written here, or came with an advice pack */
 const jscRulesAdded = r => r.origin === "authored" || r.origin === "pack";
 
@@ -2736,9 +3730,16 @@ if (typeof module !== "undefined" && module.exports) {
     jscDecimalCompare, jscExpandRefs, jscSetParents, jscSelection, jscUriOrigin, jscDeriveTier, jscTargetKey,
     jscResolveTailoring, jscTextify, JSC_NEXT, jscCanMove, jscComposeRelationship,
     jscSchemaCheck, jscShapeErrors, jscMatchTypes, jscTypeOf, jscTypedObjects, JSC_KERNEL_TYPES, JSC_RISK_RULES, jscClosureErrors,
-    jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
-    jscRiskLinkNotes, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
-    jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, jscTailoringDutyErrors, jscAttestationVerdict, jscCheckGraph,
+    jscDeviationsOf, jscKernelNeeded, jscKernelPinErrors, jscRiskRuleViolations, jscRiskIsLive, jscRiskJustifies, JSC_NO_TAILORING, jscRiskCoverage,
+    jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
+    JSC_DRAFT_RULES, jscDraftMemberReport, jscDraftLines,
+    JSC_WITHDRAWN_RULES, JSC_WITHDRAWN_EDGES, jscWithdrawnReferences, jscWithdrawnReferenceErrors,
+    JSC_OPERATION_RULES, jscOperationTargets, jscOperationTargetErrors,
+    JSC_REFERENCES_FACET, JSC_FRAGMENT_RULES, jscAsciiLower, jscFragmentsOf, jscFragmentReport, jscFragmentLines,
+    JSC_HISTORY_RULES, jscHistoryErrors, jscFacetStatementAddresses, JSC_STDLIB_VERSIONS,
+    jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
+    jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, JSC_ASSESSMENT_CRITERIA, jscManualMethod, jscIsAppMethodBefore0913, jscRewriteAppMethod, jscTailoringDutyErrors, jscAttestationVerdict,
+    jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, JSC_MANIFEST_RULES, jscListedAttestationErrors, jscSetBinds, jscCheckGraph,
     JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors,

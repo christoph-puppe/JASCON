@@ -1,18 +1,18 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-1",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Grundlagen"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.1",
-   "sequence": 3370
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-1-1",
+   "sequence": 5830
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.1.2",
-   "sequence": 3380
+   "sequence": 5840
   }
  ],
  "label": "1",

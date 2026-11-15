@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sr-11.1_obj",
      "label": "SR-11(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:sr-11.01_odp} are trained to detect counterfeit system components (including hardware, software, and firmware)."
      }
@@ -122,7 +127,8 @@
      ],
      "alt-identifiers": [
       "sr-11.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SR-11(01)_ODP"
     }
    }
   },
@@ -145,15 +151,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-19.1",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-19.1",
-    "mode": "renamed",
-    "label": "SA-19(01)",
-    "title": "Anti-counterfeit Training"
-   }
-  ]
- }
+ ]
 }

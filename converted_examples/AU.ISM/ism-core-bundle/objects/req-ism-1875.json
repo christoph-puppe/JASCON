@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1875",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1875",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Networks are scanned at least monthly to identify any credentials that are being stored in the clear."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

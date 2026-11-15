@@ -34,11 +34,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "si-7.17_obj",
      "label": "SI-07(17)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:si-07.17_odp} are implemented for application self-protection at runtime."
      }
@@ -117,7 +122,8 @@
      ],
      "alt-identifiers": [
       "si-7.17_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "SI-07(17)_ODP"
     }
    }
   },

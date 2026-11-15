@@ -2,7 +2,7 @@
 title: 参与：带来一个校验器、一个目录或一条异议 | JASCON
 description: JASCON 目前只有一名维护者，尚无第三方用户。本项目需要框架权威机构、工具开发者、GRC 工程师和审核员提供什么，变更如何进入规范，以及从哪里入手。
 nav: join
-source: 1f1d09e6b9ec
+source: 9f1d33689e64
 ---
 <section class="page-hero">
   <div class="wrap">
@@ -40,8 +40,8 @@ source: 1f1d09e6b9ec
       <article class="card">
         <div class="card-top"><span class="card-no">测量</span></div>
         <h3>其余十个语料库上的值到达情况</h3>
-        <p>覆盖率按源路径测量。每个值是否完整到达，只在一个语料库上测量过，而在那里并非每个值都能到达。持有其他语料库源文件的人可以运行这项测量，并报告丢失了什么。</p>
-        <p class="how"><b>起点：</b>待办事项 41，<code>oscal_conv_lib.value_arrival()</code>。</p>
+        <p>覆盖率按源路径测量。每个值去了哪里，只在一个语料库上追踪过，所用的台账为每个源值给出目标位置、具名规则或说明的原因。持有其他语料库源文件的人可以为其中一个建立台账，并报告丢失了什么。</p>
+        <p class="how"><b>起点：</b>待办事项 41，<code>oscal_conv_lib.Ledger</code>；<code>convert_ifa.py</code> 展示了它的用法。</p>
       </article>
       <article class="card">
         <div class="card-top"><span class="card-no">实践</span></div>

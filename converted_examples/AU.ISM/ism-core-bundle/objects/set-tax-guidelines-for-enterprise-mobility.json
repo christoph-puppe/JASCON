@@ -8,15 +8,15 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-enterprise-mobility",
-   "sequence": 5040
+   "sequence": 5210
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-mobile-device-management",
-   "sequence": 5270
+   "sequence": 5440
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-enterprise-mobility-mobile-device-usage",
-   "sequence": 5660
+   "sequence": 5830
   }
  ]
 }

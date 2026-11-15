@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1540",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1540",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "DMARC records are configured for an organisation’s domains (including subdomains) such that emails are rejected if they do not pass DMARC checks."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-06"
   }
  ]
 }

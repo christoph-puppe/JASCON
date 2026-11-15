@@ -38,11 +38,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cp-12_obj",
      "label": "CP-12",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "a safe mode of operation is entered with {param:cp-12_odp.01} when {param:cp-12_odp.02} are detected."
      }
@@ -134,7 +139,8 @@
      "alt-identifiers": [
       "cp-12_prm_2"
      ],
-     "alt-label": "restrictions of safe mode of operation"
+     "alt-label": "restrictions of safe mode of operation",
+     "sp800-53a-label": "CP-12_ODP[01]"
     },
     "cp-12_odp.02": {
      "guidelines": [
@@ -144,7 +150,8 @@
      ],
      "alt-identifiers": [
       "cp-12_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CP-12_ODP[02]"
     }
    }
   },

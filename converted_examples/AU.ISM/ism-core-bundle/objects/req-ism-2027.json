@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2027",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2027",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "All software artefacts are verified by a digital signature, or a secure hash provided over a secure channel, before being imported into the authoritative source for software."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

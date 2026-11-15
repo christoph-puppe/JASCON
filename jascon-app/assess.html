@@ -52,11 +52,18 @@
    requirement is no longer "not satisfied" is removed again while it is
    still open. A Finding somebody already moved on is kept and said so.
 
-   An attestation is verified in two modes, as in the reader: Full Match (the
-   manifest is byte for byte the one that was signed), Semantic Match (the
-   meaning of every subject is intact, the package was repackaged), Tamper (a
-   subject's meaning changed). Signatures are not verified in this app.
-   Derives from the assess stage of the bundle reader. */
+   An Attestation is held to what it binds by the rule the Validate page
+   runs (attestation-binds of Appendix B.1.7, jscSetBinds in
+   jascon-rules.js): Full Match, Semantic Match, or it does not bind. The
+   signature is checked on the Validate page, where trusted keys are given.
+
+   Who decided (D26): a Finding the page writes or moves names the author
+   the form shows, from the setting "Who am I", with today's date; without
+   an author it is saved all the same and names none. A Deviation of a
+   Finding is decided on the board: when it becomes approved or withdrawn
+   the day is written with it (`decided`, today unless changed), and an
+   approved one may get a review date (`review-due`). An Assessment has its
+   own two fields for who and when (`performer-ref`, `time`). */
 jscI18n.add("de", {
   "Assess": "Prüfen", "Results and findings": "Ergebnisse und Feststellungen", "Run a check": "Prüfung durchführen",
   "An assessment records what was checked, how, by whom and with what result. A finding is raised against a requirement. A closed finding stays closed; a recurrence is a new finding.":
@@ -66,12 +73,16 @@ jscI18n.add("de", {
   "by {who}": "von {who}", "{n} subjects": "{n} Gegenstände", "against": "gegen", "Deviation": "Deviation", "due": "fällig",
   "move to {state}": "nach {state} verschieben", "names risks": "nennt Risiken",
   "signer {who}": "Unterzeichner {who}", "Verify": "Prüfen",
-  "Full Match: bytes and meaning as signed": "Full Match: Bytes und Bedeutung wie signiert",
-  "Semantic Match: the meaning is intact, the package was repackaged": "Semantic Match: Die Bedeutung ist intakt, das Paket wurde umgepackt",
-  "Semantic Match of the subjects; the manifest digest cannot be compared here": "Semantic Match der Gegenstände; der Manifest-Digest lässt sich hier nicht vergleichen",
-  "Tamper: the meaning of a subject changed after signing": "Tamper: Die Bedeutung eines Gegenstands hat sich nach dem Signieren geändert",
-  "Unknown: the subjects are not in this set": "Unbekannt: Die Gegenstände sind nicht in diesem Set",
-  "subjects: {ok} intact, {bad} changed, {unknown} not in this set; signatures are not verified": "Gegenstände: {ok} intakt, {bad} geändert, {unknown} nicht in diesem Set; Signaturen werden nicht geprüft",
+  "This object does not have the shape of an Attestation, so it is not held to what it binds. The Validate page says what is wrong with it.":
+    "Dieses Objekt hat nicht die Form einer Attestation und wird deshalb nicht an dem gemessen, was es bindet. Die Seite Validieren sagt, was daran falsch ist.",
+  "Whether the signature is valid is the envelope's matter; the Validate page checks it.": "Ob die Signatur gültig ist, ist Sache des Umschlags; die Seite Validieren prüft sie.",
+  "Take it out of this set": "Aus diesem Set nehmen", "Set it to withdrawn": "Auf withdrawn setzen",
+  "This app wrote this method before build 0.9.13: it names the kind of check and the tool, and neither is a facet. The Assessment is kept as it came. You can have its method written as the standard facet for a check a person did. That changes the object: an Attestation that names it no longer binds.":
+    "Diese App hat diese Methode vor Build 0.9.13 geschrieben: Sie nennt die Art der Prüfung und das Werkzeug, und beides ist kein Facet. Das Assessment bleibt, wie es kam. Sie können seine Methode als das Standard-Facet für eine von einer Person durchgeführte Prüfung schreiben lassen. Das ändert das Objekt: Eine Attestation, die es nennt, bindet dann nicht mehr.",
+  "This method is not one this app wrote, so the app does not know what was meant and changes nothing. It is put right where the Assessment comes from: every key of a method is a facet of the standard library, a facet the bundle pins, or private.":
+    "Diese Methode hat nicht diese App geschrieben; die App weiß also nicht, was gemeint war, und ändert nichts. Sie wird dort berichtigt, wo das Assessment herkommt: Jeder Schlüssel einer Methode ist ein Facet der Standardbibliothek, ein Facet, das das Bundle pinnt, oder privat.",
+  "Write its method as the standard facet (manual)": "Methode als Standard-Facet schreiben (manuell)",
+  "{id}: the method is now the standard facet for a manual check; the object changed": "{id}: Die Methode ist jetzt das Standard-Facet für eine manuelle Prüfung; das Objekt hat sich geändert",
   "Label of the check": "Bezeichnung der Prüfung", "Scope": "Umfang", "Performer": "Prüfer", "filter": "Filter",
   "every requirement with an implementation ({n})": "jede Anforderung mit einer Implementation ({n})",
   "Tailoring {name} ({n} selected)": "Tailoring {name} ({n} ausgewählt)", "Set {name}": "Set {name}", "all {n} requirements": "alle {n} Anforderungen",
@@ -87,6 +98,10 @@ jscI18n.add("de", {
   "assessment {id}: {result}, {n} finding(s)": "Assessment {id}: {result}, {n} Feststellung(en)",
   "kept {n} finding(s) of an earlier run that were already moved on": "{n} Feststellung(en) eines früheren Laufs behalten, die schon weiterbearbeitet wurden",
   "Remediate: {title}": "Beheben: {title}",
+  "No performer is named. The kernel requires performer-ref on an Assessment, so nothing was written. The field “Performer” is empty.":
+    "Es ist kein Prüfer genannt. Der Kernel verlangt performer-ref an einem Assessment; deshalb wurde nichts geschrieben. Das Feld „Prüfer“ ist leer.",
+  "Written on a Finding you move or whose Deviation you decide here: that is a new version of the Finding, and it is yours.":
+    "Wird an einer Feststellung geschrieben, die Sie hier verschieben oder deren Deviation Sie hier entscheiden: Das ist eine neue Version der Feststellung, und sie ist Ihre.",
 });
 
 const $ = id => document.getElementById(id);
@@ -94,8 +109,22 @@ const V = jscView, esc = jscEsc;
 const RESULTS = ["satisfied", "not-satisfied", "inconclusive"];
 const RESULT_COLOR = { satisfied: "var(--green)", "not-satisfied": "var(--red)", inconclusive: "var(--amber)" };
 const RESULT_LABEL = { satisfied: N("satisfied"), "not-satisfied": N("not satisfied"), inconclusive: N("inconclusive") };
-const draft = V.draft("assess", () => ({ label: "check-" + jscToday(), scope: "", performer: "assessor", results: {}, q: "" }));
+const draft = V.draft("assess", () => ({ label: "check-" + jscToday(), scope: "", results: {}, q: "" }));
 let G = jscSet.graph;
+/* The performer of a check. The kernel requires `performer-ref` on an
+   Assessment: without it the object is not valid, so the page refuses to
+   write the check while the field is empty, and writes nothing. The field
+   starts from the setting "Who am I", because whoever sits at this page
+   performs the check; it takes a URI or a short name, and an emptied field
+   stays empty. Until build 0.9.10 the field started from the word
+   "assessor" and the page wrote <namespace>/party/assessor, a party nobody
+   had named (backlog #70; ERRATA.md). A draft stored by an earlier build
+   may still hold that word; it is not read any more.
+   This is not the author field of the same form: that one is the optional
+   `provenance` of the Findings, and an empty author there writes none and
+   stops nothing. One field the kernel requires, the other it does not. */
+const PERFORMER = V.requiredParty(jscWhoAmI);
+const NO_PERFORMER = N("No performer is named. The kernel requires performer-ref on an Assessment, so nothing was written. The field “Performer” is empty.");
 const ofType = t => [...G.objects.values()].filter(r => r.type === t);
 const name = ref => (G.objects.has(ref) ? V.labelOf(G.objects.get(ref)) : V.last(ref));
 
@@ -104,49 +133,95 @@ function renderBoard() {
   const asmts = ofType("assessment"), finds = ofType("finding"), atts = ofType("attestation");
   $("nc-findings").textContent = finds.length || "";
   if (!asmts.length && !finds.length && !atts.length) { $("board").innerHTML = `<div class="empty">${esc(T("This set holds no assessment, finding or attestation. Run a check in the other view."))}</div>`; return; }
+  /* The method of an Assessment is a facet payload and is held to its facet (backlog #55). One that fails is shown
+     with the reference's sentence. Where it is the method this app wrote before build 0.9.13, the app knows what was
+     meant and offers to write it as the standard facet; it does not do that by itself, here or when a set is loaded. */
+  const pinned = new Map(G.facetSchemas.filter(f => f.def && f.def.id).map(f => [f.def.id, f.def.schema || { type: "object" }]));
+  const methodHtml = a => {
+    const errs = jscFacetErrors([[a.obj.id, a.obj]], pinned).filter(m => m.startsWith(`${a.obj.id}: method '`));
+    if (!errs.length) return "";
+    const own = jscIsAppMethodBefore0913(a.obj.method);
+    return `<div data-method-errors="${esc(a.obj.id)}">${errs.map(m => `<div class="mono verdict-bad" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere">${esc("error: " + m)}</div>`).join("")}
+      <div class="hint">${esc(T(own ? "This app wrote this method before build 0.9.13: it names the kind of check and the tool, and neither is a facet. The Assessment is kept as it came. You can have its method written as the standard facet for a check a person did. That changes the object: an Attestation that names it no longer binds."
+        : "This method is not one this app wrote, so the app does not know what was meant and changes nothing. It is put right where the Assessment comes from: every key of a method is a facet of the standard library, a facet the bundle pins, or private."))}</div>
+      ${own ? `<button type="button" class="small" data-method-rewrite="${esc(a.obj.id)}">${esc(T("Write its method as the standard facet (manual)"))}</button>` : ""}</div>`;
+  };
   const aCards = asmts.map(a => `<div class="stmt"><span class="badge" style="border-color:${RESULT_COLOR[a.obj.result] || "var(--border-2)"};color:${RESULT_COLOR[a.obj.result] || "inherit"}">${esc(a.obj.result)}</span>
-    <b>${V.refLink(a.obj.id, V.titleOf(a))}</b> <span class="hint">${esc(T("by {who}", { who: V.last(a.obj["performer-ref"] || "") }))} · ${esc(a.obj.time || "")} · ${esc(T("{n} subjects", { n: (a.obj["subject-refs"] || []).length }))}</span></div>`).join("");
+    <b>${V.refLink(a.obj.id, V.titleOf(a))}</b> <span class="hint">${esc(T("by {who}", { who: V.last(a.obj["performer-ref"] || "") }))} · ${esc(a.obj.time || "")} · ${esc(T("{n} subjects", { n: (a.obj["subject-refs"] || []).length }))}</span>${methodHtml(a)}</div>`).join("");
   const cols = { open: [], "in-remediation": [], closed: [] };
   finds.forEach(f => (cols[f.obj.state] || (cols[f.obj.state] = [])).push(f));
   const kanban = `<div class="kanban">${Object.entries(cols).map(([st, list]) => `<div class="col"><div class="nano" style="margin-bottom:6px">${esc(st)} · ${list.length}</div>
     ${list.slice(0, 150).map(f => `<div class="stmt" style="margin:6px 0"><b>${V.refLink(f.obj.id, V.labelOf(f))}</b>
       <div class="hint">${esc(T("against"))} ${V.refLink(f.obj["requirement-ref"], name(f.obj["requirement-ref"]))} ${f.obj["statement-ref"] ? V.badge(f.obj["statement-ref"]) : ""}</div>
       ${(f.obj.actions || []).map(ac => `<div class="hint">▸ ${esc(TT(ac.description))} ${ac.due ? V.badge(T("due") + " " + (ac.due.value || `${ac.due.num} ${ac.due.unit}`)) : ""} ${V.badge(ac.status)}</div>`).join("")}
-      ${(f.obj.deviations || []).map(d => `<div class="hint verdict-warn">⚑ ${esc(T("Deviation"))}: ${esc(d.type)} · ${esc(d.state)}</div>`).join("")}
+      ${(f.obj.deviations || []).map((d, i) => V.deviationHtml(d, f.obj.id + "|" + i)).join("")}
       ${(f.obj["risk-refs"] || []).length ? `<div class="hint">△ ${esc(T("names risks"))}: ${f.obj["risk-refs"].map(r => V.refLink(r, name(r))).join(", ")}</div>` : ""}
       <div style="margin-top:6px">${JSC_NEXT.finding[f.obj.state].map(to => `<button type="button" class="small" data-move="${esc(f.obj.id)}" data-to="${to}">${esc(T("move to {state}", { state: to }))}</button>`).join(" ")}</div></div>`).join("")}</div>`).join("")}</div>`;
-  const attCards = atts.map(a => `<div class="stmt">${V.typeBadge("attestation")} <b>${V.refLink(a.obj.id, V.titleOf(a))}</b>
+  const attCards = atts.map(a => `<div class="stmt" data-att-card="${esc(a.obj.id)}">${V.typeBadge("attestation")}${V.badge(a.obj.lifecycle || "?")} <b>${V.refLink(a.obj.id, V.titleOf(a))}</b>
     <span class="hint">${esc(T("signer {who}", { who: V.last(a.obj.signer || "") }))} · ${esc(a.obj.timestamp || "")}</span>
     <div style="margin-top:6px" data-att-out="${esc(a.obj.id)}"><button type="button" class="primary" data-att="${esc(a.obj.id)}">${esc(T("Verify"))}</button></div></div>`).join("");
+  const who = `<div class="wbrow">${V.authorLabel("b-author")}${V.authorInput("b-author")}</div>
+    <p class="hint">${esc(T("Written on a Finding you move or whose Deviation you decide here: that is a new version of the Finding, and it is yours."))}</p>`;
   $("board").innerHTML = (asmts.length ? V.section(T("Assessments ({n})", { n: asmts.length }), aCards) : "") +
-    (finds.length ? V.section(T("Findings ({n})", { n: finds.length }), kanban) : "") + (atts.length ? V.section(T("Attestations ({n})", { n: atts.length }), attCards) : "");
+    (finds.length ? V.section(T("Findings ({n})", { n: finds.length }), who + kanban) : "") + (atts.length ? V.section(T("Attestations ({n})", { n: atts.length }), attCards) : "");
   V.wireRefs($("board"));
+  V.wireAuthor($("board"));
+  /* a Deviation of a Finding, named on the page by the Finding's id and its place in the list */
+  const place = key => { const at = key.lastIndexOf("|"); return [G.objects.get(key.slice(0, at)), +key.slice(at + 1)]; };
+  V.wireDeviations($("board"), key => { const [f, i] = place(key); return f && (f.obj.deviations || [])[i]; }, renderBoard, async (key, deviation, show) => {
+    const [f, i] = place(key), next = JSON.parse(JSON.stringify(f.obj));
+    next.deviations[i] = deviation;
+    const saved = jscAuthorRecord(next, V.provenance()), wrong = jscShapeErrors("finding", saved);
+    if (wrong.length) { show(wrong[0]); return false; }
+    await jscSet.saveObjects([saved]);
+    await jscPage.refresh();
+  });
   $("board").querySelectorAll("[data-move]").forEach(b => b.addEventListener("click", async () => {
     const f = G.objects.get(b.dataset.move);
     if (!jscCanMove("finding", f.obj.state, b.dataset.to)) return;
-    await jscSet.saveObjects([{ ...f.obj, state: b.dataset.to }]);
+    await jscSet.saveObjects([jscAuthorRecord({ ...f.obj, state: b.dataset.to }, V.provenance())]);   // the moved Finding is a new version, by whoever moved it
     await jscPage.refresh();
   }));
   $("board").querySelectorAll("[data-att]").forEach(b => b.addEventListener("click", () => verifyAttestation(b.dataset.att)));
+  $("board").querySelectorAll("[data-method-rewrite]").forEach(b => b.addEventListener("click", async () => {
+    const next = jscRewriteAppMethod(G.objects.get(b.dataset.methodRewrite).obj);
+    if (!next) return;
+    await jscSet.saveObjects([next]);
+    jscLog.info(T("{id}: the method is now the standard facet for a manual check; the object changed", { id: next.id }));
+    await jscPage.refresh();
+  }));
 }
+/* What one Attestation binds: the rule of the Validate page (jscSetBinds), shown through the same function
+   (jscView.bindsHtml), so that the two pages cannot differ. Until build 0.9.11 this page had a judgement of its
+   own, which called an Attestation a Full Match when a subject was not in the set at all (ERRATA.md).
+
+   Where an active Attestation does not bind, two things can be done here. It can be taken out of the set, with
+   the envelope it names. And an unsigned one can be set to withdrawn, after which it is reported and fails
+   nothing. A signed one cannot: its canonical form is the payload of its envelope, so a change of its lifecycle
+   would break the signature, and withdrawing it is the signer's act. The third way, having it issued again, is
+   not this app's: it cannot sign. */
 async function verifyAttestation(id) {
-  const a = G.objects.get(id).obj, out = $("board").querySelector(`[data-att-out="${CSS.escape(id)}"]`);
-  let ok = 0, bad = 0, unknown = 0;
-  for (const s of a["subject-semantic-digests"] || []) {
-    const target = s && typeof s === "object" ? G.objects.get(s.id) : null;
-    if (!target) { unknown++; continue; }
-    (await jscSemanticDigest(target.obj)) === s["semantic-digest"] ? ok++ : bad++;
-  }
-  // the manifest digest binds the bytes of the manifest the bundle came with
-  const manifest = a["content-manifest-digest"] && G.manifestText ? (await jscPackageDigest(G.manifestText)) === a["content-manifest-digest"] : null;
-  const [verdict, cls] = bad ? [N("Tamper: the meaning of a subject changed after signing"), "verdict-bad"]
-    : unknown && !ok ? [N("Unknown: the subjects are not in this set"), "hint"]
-    : manifest === true ? [N("Full Match: bytes and meaning as signed"), "verdict-ok"]
-    : manifest === false ? [N("Semantic Match: the meaning is intact, the package was repackaged"), "verdict-warn"]
-    : [N("Semantic Match of the subjects; the manifest digest cannot be compared here"), "verdict-warn"];
-  out.innerHTML = `<span class="${cls}" style="font-weight:600">${esc(T(verdict))}</span>
-    <div class="hint">${esc(T("subjects: {ok} intact, {bad} changed, {unknown} not in this set; signatures are not verified", { ok, bad, unknown }))}</div>`;
-  jscLog[bad ? "err" : "ok"](`${id}: ${T(verdict)}`);
+  const out = $("board").querySelector(`[data-att-out="${CSS.escape(id)}"]`);
+  const binds = await jscSetBinds(G, jscTypedObjects([...G.objects.values()].map(r => r.obj)));
+  const l = binds.lines.find(x => x.id === id);
+  if (!l) { out.innerHTML = `<span class="verdict-bad">${esc(T("This object does not have the shape of an Attestation, so it is not held to what it binds. The Validate page says what is wrong with it."))}</span>`; return; }
+  out.innerHTML = V.bindsHtml(binds, id) + `<div class="hint">${esc(T("Whether the signature is valid is the envelope's matter; the Validate page checks it."))}</div>` +
+    (l.fails ? `<div style="margin-top:6px"><button type="button" class="small" data-att-remove>${esc(T("Take it out of this set"))}</button>
+      ${l.signed ? "" : `<button type="button" class="small" data-att-withdraw>${esc(T("Set it to withdrawn"))}</button>`}</div>` : "");
+  jscLog[l.kind === "failure" ? "err" : "ok"](l.text);
+  /* MANIFEST-1: the move of a listed Attestation is the user's act; after it the board is drawn again and this card verified again */
+  V.wireMove(out, async () => { await jscPage.refresh(); await verifyAttestation(id); });
+  const a = G.objects.get(id).obj, on = (sel, fn) => { const b = out.querySelector(sel); if (b) b.addEventListener("click", fn); };
+  on("[data-att-remove]", async () => {
+    const ref = a["envelope-ref"], shared = ofType("attestation").some(x => x.obj.id !== id && x.obj["envelope-ref"] === ref);
+    await jscSet.removeObjects([id]);
+    if (ref && !shared && G.aux.some(x => x.path === ref)) await jscSet.saveAux(ref, "");   // the envelope signs this Attestation and nothing else
+    await jscPage.refresh();
+  });
+  on("[data-att-withdraw]", async () => {
+    await jscSet.saveObjects([{ ...a, lifecycle: "withdrawn" }]);
+    await jscPage.refresh();
+  });
 }
 
 /* ---------- check ---------- */
@@ -187,8 +262,9 @@ function renderCheck() {
   el.innerHTML = `<div class="wb">
     <div class="wbrow"><label for="a-label">${esc(T("Label of the check"))}</label><input type="text" id="a-label" value="${esc(d.label)}" style="width:170px">
       <label for="a-scope">${esc(T("Scope"))}</label><select id="a-scope" style="max-width:380px">${all.map(s => `<option value="${esc(s.key)}" ${s.key === cur.key ? "selected" : ""}>${esc(s.label)}</option>`).join("")}</select>
-      <label for="a-perf">${esc(T("Performer"))}</label><input type="text" id="a-perf" value="${esc(d.performer)}" style="width:130px">
+      <label for="a-perf">${esc(T("Performer"))}</label>${PERFORMER.html("a-perf", "min-width:240px;max-width:360px")}
       <input type="search" id="a-q" placeholder="${esc(T("filter"))}" aria-label="${esc(T("filter"))}" value="${esc(d.q)}" style="width:150px"></div>
+    <div class="wbrow">${V.authorLabel("a-author")}${V.authorInput("a-author")}</div>
     <div class="wbrow"><span class="chip"><b>${answered}/${reqs.length}</b>${esc(T("checked"))}</span>
       ${RESULTS.map(x => `<span class="chip" style="color:${RESULT_COLOR[x]}"><b>${c[x]}</b>${esc(T(RESULT_LABEL[x]))}</span>`).join("")}
       <button type="button" id="a-rest">${esc(T("Mark the rest satisfied"))}</button><button type="button" id="a-reset">${esc(T("Reset the answers"))}</button></div>
@@ -198,10 +274,11 @@ function renderCheck() {
       <span class="verdict-bad" id="a-err" role="alert"></span></div>
     <p class="hint">${esc(T("One finding per requirement that is not satisfied. The result of the assessment is not-satisfied if any requirement is, inconclusive if any is inconclusive or unanswered, satisfied otherwise."))}</p></div>`;
   V.wireRefs(el);
+  V.wireAuthor(el);
   const again = () => { draft.save(); renderCheck(); };
   el.querySelector("#a-label").addEventListener("change", e => { d.label = e.target.value.trim() || d.label; draft.save(); });
   el.querySelector("#a-scope").addEventListener("change", e => { d.scope = e.target.value; again(); });
-  el.querySelector("#a-perf").addEventListener("change", e => { d.performer = e.target.value; draft.save(); });
+  PERFORMER.wire(el, "a-perf");
   let timer;
   el.querySelector("#a-q").addEventListener("input", e => { d.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { again(); $("a-q").focus(); }, 300); });
   el.querySelectorAll("[data-answer]").forEach(b => b.addEventListener("click", () => {
@@ -217,19 +294,25 @@ function renderCheck() {
 async function writeCheck(scope, reqs) {
   const d = draft.data, c = tally(reqs), lang = jscI18n.contentLang();
   if (!(c.satisfied + c["not-satisfied"] + c.inconclusive)) { $("a-err").textContent = T("Answer at least one requirement first."); return; }
+  /* required by the kernel: refused while nobody is named, before anything is written (backlog #70) */
+  const performer = PERFORMER.ref();
+  if (!performer) { $("a-err").textContent = V.missingParty(NO_PERFORMER); return; }
   const result = c["not-satisfied"] ? "not-satisfied" : (c.inconclusive || c.satisfied < reqs.length) ? "inconclusive" : "satisfied";
   const asmtId = jscSet.mintId("asmt", d.label);
   const asmt = { id: asmtId, version: "1", lifecycle: "draft", title: { [lang]: `${d.label}: ${scope.label}` }, "subject-refs": reqs,
-    method: { kind: "manual-check", tool: JSC_TOOL }, "performer-ref": jscSet.mintId("party", d.performer || "assessor"),
+    method: jscManualMethod(), "performer-ref": performer,   // the standard facet for a check a person did; the tool is no part of a method (jascon-rules.js)
     time: new Date().toISOString(), result };
   const failed = reqs.filter(id => (d.results[id] || {}).result === "not-satisfied");
   const findingId = rid => jscSet.mintId("finding", d.label + "-" + V.last(rid));
   /* a Finding of this check that somebody already moved on is not rewritten */
   const untouched = rid => { const old = G.objects.get(findingId(rid)); return !old || old.obj.state === "open"; };
+  /* Who raised the Findings and when; null when the author field is empty, and then none is written. A check that is
+     run again writes its open Findings again; one that comes out as it is stored keeps the author it names. */
+  const who = V.provenance(), was = id => { const old = G.objects.get(id); return old && old.type === "finding" ? old.obj : null; };
   const findings = failed.filter(untouched).map(rid => {
     const r = G.objects.get(rid), note = (d.results[rid] || {}).note;
-    return { id: findingId(rid), version: "1", label: "F-" + V.labelOf(r), lifecycle: "draft", "assessment-ref": asmtId, "requirement-ref": rid, state: "open",
-      actions: [{ description: { [lang]: T("Remediate: {title}", { title: V.titleOf(r) }) + (note ? " (" + note + ")" : "") }, status: "planned" }] };
+    return jscAuthorRecord({ id: findingId(rid), version: "1", label: "F-" + V.labelOf(r), lifecycle: "draft", "assessment-ref": asmtId, "requirement-ref": rid, state: "open",
+      actions: [{ description: { [lang]: T("Remediate: {title}", { title: V.titleOf(r) }) + (note ? " (" + note + ")" : "") }, status: "planned" }] }, who, was(findingId(rid)));
   });
   const keep = new Set(failed.map(findingId));
   const stale = ofType("finding").filter(f => f.obj["assessment-ref"] === asmtId && !keep.has(f.obj.id) && f.obj.state === "open").map(f => f.obj.id);

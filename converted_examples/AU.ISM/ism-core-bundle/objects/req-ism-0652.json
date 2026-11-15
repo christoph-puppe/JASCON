@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0652",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0652",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Files identified by content filtering checks as suspicious are quarantined until reviewed and subsequently approved or not approved for release."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

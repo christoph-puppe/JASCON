@@ -1,18 +1,18 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/det-6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Vorfallserkennung"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.1",
-   "sequence": 6270
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-6-1",
+   "sequence": 10080
   },
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/DET.6.2",
-   "sequence": 6280
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/det-6-2",
+   "sequence": 10120
   }
  ],
  "label": "6",

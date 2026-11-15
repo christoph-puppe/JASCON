@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -61,6 +62,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -78,19 +80,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "mp-6_obj",
      "label": "MP-06",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/MP-6"
+      }
+     ],
      "children": [
       {
        "id": "mp-6_obj.a",
        "label": "MP-06a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "mp-6_obj.a-1",
          "label": "MP-06a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-06_odp.01} is sanitized using {param:mp-06_odp.04} prior to disposal;"
          }
@@ -98,6 +115,11 @@
         {
          "id": "mp-6_obj.a-2",
          "label": "MP-06a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-06_odp.02} is sanitized using {param:mp-06_odp.05} prior to release from organizational control;"
          }
@@ -105,6 +127,11 @@
         {
          "id": "mp-6_obj.a-3",
          "label": "MP-06a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "{param:mp-06_odp.03} is sanitized using {param:mp-06_odp.06} prior to release for reuse;"
          }
@@ -114,6 +141,11 @@
       {
        "id": "mp-6_obj.b",
        "label": "MP-06b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "sanitization mechanisms with strength and integrity commensurate with the security category or classification of the information are employed."
        }
@@ -217,42 +249,48 @@
       {
        "en": "system media to be sanitized prior to disposal is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-06_ODP[01]"
     },
     "mp-06_odp.02": {
      "guidelines": [
       {
        "en": "system media to be sanitized prior to release from organizational control is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-06_ODP[02]"
     },
     "mp-06_odp.03": {
      "guidelines": [
       {
        "en": "system media to be sanitized prior to release for reuse is defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-06_ODP[03]"
     },
     "mp-06_odp.04": {
      "guidelines": [
       {
        "en": "sanitization techniques and procedures to be used for sanitization prior to disposal are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-06_ODP[04]"
     },
     "mp-06_odp.05": {
      "guidelines": [
       {
        "en": "sanitization techniques and procedures to be used for sanitization prior to release from organizational control are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-06_ODP[05]"
     },
     "mp-06_odp.06": {
      "guidelines": [
       {
        "en": "sanitization techniques and procedures to be used for sanitization prior to release for reuse are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "MP-06_ODP[06]"
     }
    }
   }
@@ -360,27 +398,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/MP-6.6",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-6.4",
-    "mode": "merged-into",
-    "label": "MP-06(04)",
-    "title": "Controlled Unclassified Information"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-6.5",
-    "mode": "merged-into",
-    "label": "MP-06(05)",
-    "title": "Classified Information"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/MP-6.6",
-    "mode": "merged-into",
-    "label": "MP-06(06)",
-    "title": "Media Destruction"
-   }
-  ]
- }
+ ]
 }

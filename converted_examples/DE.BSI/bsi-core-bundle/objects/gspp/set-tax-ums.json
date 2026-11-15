@@ -1,6 +1,6 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/ums",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Umsetzung"
@@ -8,38 +8,38 @@
  "members": [
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-1",
-   "sequence": 440
+   "sequence": 810
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-2",
-   "sequence": 470
+   "sequence": 840
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-3",
-   "sequence": 490
+   "sequence": 860
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-4",
-   "sequence": 510
+   "sequence": 880
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-5",
-   "sequence": 540
+   "sequence": 910
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-6",
-   "sequence": 570
+   "sequence": 940
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/set/tax/ums-7",
-   "sequence": 590
+   "sequence": 960
   }
  ],
  "label": "UMS",
  "facets": {
   "https://ns.bsi.bund.de/facet/gspp-narrative@1": {
    "description": {
-    "de": "Die Praktik Umsetzung sorgt für die systematische Planung, Implementierung und Dokumentation von Anforderungen bzw. der Sicherheitsmaßnahmen, die aus der Strukturmodellierung und Risikobewertung abgeleitet wurden. Sie stellt sicher, dass identifizierte Sicherheitsanforderungen effektiv in die organisatorischen und technischen Prozesse integriert werden. Diese Praktik umfasst die detaillierte Planung von Maßnahmen, die Festlegung von Verantwortlichkeiten und Zeitplänen sowie die Bereitstellung notwendiger Ressourcen. Zudem beinhaltet sie die Nachverfolgung der Implementierung und die Dokumentation der umgesetzten Maßnahmen.  Während die Praktik Strukturmodellierung die notwendigen Anforderungen identifiziert und die Praktik Monitoring-Evaluation die Wirksamkeit der Maßnahmen überprüft, konzentriert sich die Umsetzung auf die effiziente und effektive Realisierung der erforderlichen Sicherheitsmaßnahmen."
+    "de": "Die Praktik Umsetzung sorgt für die systematische Planung, Implementierung und Dokumentation von Anforderungen bzw. der Sicherheitsmaßnahmen, die aus der Strukturmodellierung und Risikobewertung abgeleitet wurden. Sie stellt sicher, dass identifizierte Sicherheitsanforderungen effektiv in die organisatorischen und technischen Prozesse integriert werden. Diese Praktik umfasst die detaillierte Planung von Maßnahmen, die Festlegung von Verantwortlichkeiten und Zeitplänen sowie die Bereitstellung notwendiger Ressourcen. Zudem beinhaltet sie die Nachverfolgung der Implementierung und die Dokumentation der umgesetzten Maßnahmen. Während die Praktik Strukturmodellierung die notwendigen Anforderungen identifiziert und die Praktik Monitoring-Evaluation die Wirksamkeit der Maßnahmen überprüft, konzentriert sich die Umsetzung auf die effiziente und effektive Realisierung der erforderlichen Sicherheitsmaßnahmen."
    }
   }
  },

@@ -1,10 +1,10 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/req/BER.6.6",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "label": "BER.6.6",
  "lifecycle": "active",
  "title": {
-  "de": "Etablierte Algorithmen beim Transport"
+  "de": "Monitoring von Zugangsdaten"
  },
  "statements": [
   {
@@ -14,17 +14,24 @@
     "https://ns.bsi.bund.de/gspp/party/institution"
    ],
    "prose": {
-    "de": "Berechtigung SOLLTE die ausschließliche Verwendung etablierter kryptografischer Algorithmen beim Transport geheimer Schlüssel verankern."
-   }
+    "de": "Berechtigung SOLLTE Zugangsdaten auf Kompromittierung durch {param:ber.6.6-prm1} überwachen."
+   },
+   "parameters": [
+    {
+     "name": "ber.6.6-prm1",
+     "type": "string",
+     "label": "einen automatisierten Mechanismus"
+    }
+   ]
   }
  ],
  "facets": {
   "https://ns.jascon.net/stdlib/facet/statement-grammar@1": {
    "by-statement": {
     "smt": {
-     "action": "verankern",
-     "result": "die ausschließliche Verwendung etablierter kryptografischer Algorithmen",
-     "result-specification": "beim Transport geheimer Schlüssel"
+     "action": "überwachen",
+     "result": "Zugangsdaten auf Kompromittierung",
+     "result-specification": "durch {{einen automatisierten Mechanismus}}"
     }
    }
   },
@@ -32,7 +39,7 @@
    "by-statement": {
     "smt": {
      "required-documentation": [
-      "IT-Betriebskonzept"
+      "Detektions-Konzept"
      ]
     }
    }
@@ -40,12 +47,15 @@
   "https://ns.jascon.net/stdlib/facet/security-objectives@1": {
    "by-statement": {
     "smt": {
-     "confidentiality": "2",
+     "confidentiality": "1",
      "integrity": "1",
      "availability": "1",
-     "authenticity": "0",
+     "authenticity": "1",
      "threat-refs": [
-      "https://ns.bsi.bund.de/gspp/threat/G-0.36"
+      "https://ns.bsi.bund.de/gspp/threat/G-0.36",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.30",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.18",
+      "https://ns.bsi.bund.de/gspp/threat/G-0.47"
      ]
     }
    }
@@ -53,11 +63,12 @@
   "https://ns.bsi.bund.de/facet/gspp-taxonomy@1": {
    "by-statement": {
     "smt": {
-     "class": "BSI-Stand-der-Technik-Kernel-G0",
+     "class": "BSI-Stand-der-Technik-Kernel",
      "sec-level": "normal-SdT",
-     "effort": 2,
+     "effort": 3,
      "tags": [
-      "Cryptography"
+      "Credential Stuffing",
+      "Password Policy"
      ]
     }
    }
@@ -66,8 +77,15 @@
    "by-statement": {
     "smt": {
      "guidance": {
-      "de": "Aktuelle etablierte Algorithmen sind in BSI TR-02102 zu finden. Der Transport kann mit Public Key Cryptography Standards (PKCS), z.B. PKCS#12 Dateiformat erfolgen. Für weitere Details zur Implementierung siehe Detailspezifikation kryptografischer Abläufe und Mechanismen des BSI."
+      "de": "Eine Kompromittierung meint hier, dass Zugangsdaten wie Benutzername und Passwort (englisch: credentials) von Unbefugten eingesehen, abgefangen oder manipuliert wurden, sodass ein Missbrauch für unautorisierte Zugriffe möglich wird. Dies könnte etwa durch Leaks in Datenbanken, durch Phishing-Angriffe oder durch das Abfangen unverschlüsselter Übertragungen entstehen. Ein automatisierter Mechanismus bezeichnet hierbei eine technische Lösung, die ohne manuelles Zutun kontinuierlich prüft, ob bekannte Indikatoren einer Kompromittierung vorliegen (englisch: credential monitoring system). Geeignete Mechanismen können etwa Credential-Leak-Monitoring-Dienste, Data Breach Checker oder Darknet-Scanning-Tools sein. Der Zweck dieser Vorgabe liegt darin, dass ein frühzeitiges Erkennen von kompromittierten Zugangsdaten helfen kann, unautorisierte Logins und den Missbrauch sensibler Systeme zu verhindern; ohne eine solche Überwachung könnte ein Angreifer über lange Zeit unentdeckt mit gestohlenen Daten arbeiten und kritische Schäden verursachen. Ergeben sich hierbei Anzeichen auf eine Kompromittierung oder einen Leak der Zugangsdaten, so kann als Reaktion ein Wechsel der Zugangsdaten über einen nicht kompromittierten Kommunikationskanal veranlasst oder schlicht das betroffene Zugangskonto gesperrt werden."
      }
+    }
+   }
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "param-extras": {
+    "ber.6.6-prm1": {
+     "alt-identifier": "137ac61d-6488-4194-b7ca-3a1efe35820b"
     }
    }
   }
@@ -75,7 +93,7 @@
  "aliases": [
   {
    "scheme": "bsi-uuid",
-   "value": "88e6ce16-583d-40b4-a0cc-8a31bbb8c62c"
+   "value": "4785649d-561d-4757-9421-4d0db14ee4df"
   }
  ]
 }

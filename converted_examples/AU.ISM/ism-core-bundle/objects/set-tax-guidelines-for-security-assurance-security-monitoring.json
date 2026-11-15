@@ -8,23 +8,23 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-security-assurance-security-monitorin-bc08eb6",
-   "sequence": 10840
+   "sequence": 11010
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-security-assurance-security-monitorin-e761e19",
-   "sequence": 10910
+   "sequence": 11080
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-security-assurance-security-monitorin-0827e00",
-   "sequence": 10940
+   "sequence": 11110
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-security-assurance-security-monitorin-1ada4af",
-   "sequence": 11060
+   "sequence": 11230
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-security-assurance-security-monitorin-45ab333",
-   "sequence": 11090
+   "sequence": 11260
   }
  ],
  "facets": {

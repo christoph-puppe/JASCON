@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-16.3_obj",
      "label": "AU-16(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:au-16.03_odp} are implemented to disassociate individuals from audit information transmitted across organizational boundaries."
      }
@@ -110,7 +115,8 @@
      ],
      "alt-identifiers": [
       "au-16.3_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-16(03)_ODP"
     }
    }
   }

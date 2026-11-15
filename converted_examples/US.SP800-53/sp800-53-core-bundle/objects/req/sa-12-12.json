@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-12.12",
+ "version": "5.2.0",
+ "label": "SA-12(12)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Inter-organizational Agreements"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Moved to SR-8."
+   }
+  }
+ ]
+}

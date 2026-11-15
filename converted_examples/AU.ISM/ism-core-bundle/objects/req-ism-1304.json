@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1304",
- "version": "2026.06.18",
+ "version": "7",
  "label": "ISM-1304",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Default user accounts or credentials for network devices, including for any pre-configured user accounts, are changed, disabled or removed during initial setup."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

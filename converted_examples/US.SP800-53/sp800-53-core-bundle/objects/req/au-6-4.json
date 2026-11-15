@@ -26,15 +26,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-6.4_obj",
      "label": "AU-06(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-6.4_obj-1",
        "label": "AU-06(04)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to centrally review and analyze audit records from multiple components within the system is provided;"
        }
@@ -42,6 +52,11 @@
       {
        "id": "au-6.4_obj-2",
        "label": "AU-06(04)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to centrally review and analyze audit records from multiple components within the system is implemented."
        }

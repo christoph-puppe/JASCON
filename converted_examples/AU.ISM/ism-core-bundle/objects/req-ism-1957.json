@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1957",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1957",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Private keys for Microsoft AD CS CA servers are protected by a hardware security module."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-09"
   }
  ]
 }

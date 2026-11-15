@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.IP-05",
+ "version": "2.0",
+ "label": "PR.IP-05",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.IP-05"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Policy and regulations regarding the physical operating environment for organizational assets are met"
+   }
+  }
+ ]
+}

@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -19,6 +20,7 @@
   },
   {
    "id": "smt.a.1",
+   "label": "(1)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -29,6 +31,7 @@
   },
   {
    "id": "smt.a.2",
+   "label": "(2)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -39,6 +42,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -49,6 +53,7 @@
   },
   {
    "id": "smt.b.1",
+   "label": "(1)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -59,6 +64,7 @@
   },
   {
    "id": "smt.b.2",
+   "label": "(2)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/system"
@@ -76,19 +82,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-5.2_obj",
      "label": "IA-05(02)",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/IA-5.2"
+      }
+     ],
      "children": [
       {
        "id": "ia-5.2_obj.a",
        "label": "IA-05(02)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "ia-5.2_obj.a.1",
          "label": "IA-05(02)(a)(01)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "prose": {
           "en": "authorized access to the corresponding private key is enforced for public key-based authentication;"
          }
@@ -96,6 +117,11 @@
         {
          "id": "ia-5.2_obj.a.2",
          "label": "IA-05(02)(a)(02)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "prose": {
           "en": "the authenticated identity is mapped to the account of the individual or group for public key-based authentication;"
          }
@@ -105,10 +131,20 @@
       {
        "id": "ia-5.2_obj.b",
        "label": "IA-05(02)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "ia-5.2_obj.b.1",
          "label": "IA-05(02)(b)(01)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.1"
+          }
+         ],
          "prose": {
           "en": "when public key infrastructure (PKI) is used, certificates are validated by constructing and verifying a certification path to an accepted trust anchor, including checking certificate status information;"
          }
@@ -116,6 +152,11 @@
         {
          "id": "ia-5.2_obj.b.2",
          "label": "IA-05(02)(b)(02)",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b.2"
+          }
+         ],
          "prose": {
           "en": "when public key infrastructure (PKI) is used, a local cache of revocation data is implemented to support path discovery and validation."
          }

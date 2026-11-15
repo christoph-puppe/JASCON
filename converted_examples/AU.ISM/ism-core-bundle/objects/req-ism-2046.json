@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2046",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2046",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Where software allows user impersonation, sensitive data is not logged and appropriate permissions are set."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

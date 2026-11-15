@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1642",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1642",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Media is sanitised before it is reused in a different security domain."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-04"
   }
  ]
 }

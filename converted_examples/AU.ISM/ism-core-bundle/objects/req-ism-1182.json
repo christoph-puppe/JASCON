@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1182",
- "version": "2026.06.18",
+ "version": "5",
  "label": "ISM-1182",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Network access controls are implemented to limit the flow of network traffic within and between network segments to only that required for business purposes."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

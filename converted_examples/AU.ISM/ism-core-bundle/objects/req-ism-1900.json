@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1900",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1900",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A vulnerability scanner is used at least fortnightly to identify missing patches or updates for vulnerabilities in firmware."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-12"
   }
  ]
 }

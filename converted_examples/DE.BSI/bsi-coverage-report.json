@@ -3,27 +3,42 @@
   {
    "key": "gspp",
    "title": "Anwenderkatalog Grundschutz++",
-   "version": "2026-07-16T05:11:52.605669+00:00"
+   "version": "2026-10-29T08:03:12.736989+00:00"
   }
  ],
  "totals": {
-  "leaf-values": 49431,
-  "mapped": 49431,
+  "leaf-values": 49521,
+  "mapped": 49521,
   "unmapped": 0,
   "coverage-pct": 100.0
  },
  "objects": {
-  "requirements": 651,
-  "statements": 999,
-  "sets": 162,
-  "total": 813
+  "requirements": 1000,
+  "statements": 1000,
+  "sets": 289,
+  "total": 1289,
+  "sets-of-a-group": 160,
+  "sets-of-a-control-with-nested-controls": 126,
+  "baseline-sets": 2,
+  "root-sets": 1
  },
  "modality": {
   "must": 149,
-  "should": 626,
+  "should": 627,
   "may": 224
  },
  "unknown-modal-verbs": {},
+ "obligated-party": {
+  "value": "https://ns.bsi.bund.de/gspp/party/institution",
+  "origin": "converter-default",
+  "converter-default": "https://ns.bsi.bund.de/gspp/party/institution"
+ },
+ "lifecycle-default": {
+  "value": "active",
+  "origin": "converter-default",
+  "objects": 1289,
+  "source-states": 0
+ },
  "packed-list-values": {
   "tags": {
    "props": 470,
@@ -31,7 +46,7 @@
    "values": [
     {
      "control": "GC.3.1.1",
-     "value": "Compliance Management, Inventories"
+     "value": "Compliance-Management, Inventories"
     },
     {
      "control": "ASST.3.10",
@@ -290,11 +305,19 @@
      "value": "Hochverfügbarkeit, DDoS"
     },
     {
-     "control": "BER.3.11",
+     "control": "BER.3.6",
      "value": "Privilege Escalation, Insider Threat, Privilegierte Rechte"
     },
     {
-     "control": "BER.3.13",
+     "control": "BER.3.8",
+     "value": "Credential Stuffing, Brute-Force-Attacke"
+    },
+    {
+     "control": "BER.3.10",
+     "value": "Credential Stuffing, Brute-Force-Attacke"
+    },
+    {
+     "control": "BER.3.11",
      "value": "Credential Stuffing, Brute-Force-Attacke"
     },
     {
@@ -302,15 +325,7 @@
      "value": "Credential Stuffing, Brute-Force-Attacke"
     },
     {
-     "control": "BER.3.16",
-     "value": "Credential Stuffing, Brute-Force-Attacke"
-    },
-    {
-     "control": "BER.3.20",
-     "value": "Credential Stuffing, Brute-Force-Attacke"
-    },
-    {
-     "control": "BER.3.28",
+     "control": "BER.3.22",
      "value": "BCM, Privilegierte Rechte"
     },
     {
@@ -318,27 +333,27 @@
      "value": "Security by Default, Privilegierte Rechte"
     },
     {
-     "control": "BER.5.4",
+     "control": "BER.5.8",
      "value": "MFA, Credential Stuffing, Brute-Force-Attacke"
     },
     {
-     "control": "BER.5.5",
+     "control": "BER.5.9",
      "value": "MFA, Living off the land, Privilege Escalation, Credential Stuffing, Brute-Force-Attacke"
     },
     {
-     "control": "BER.5.6",
+     "control": "BER.6.2",
      "value": "Credential Stuffing, Privilege Escalation, Password Policy"
     },
     {
-     "control": "BER.5.7",
+     "control": "BER.6.3",
      "value": "Credential Stuffing, Password Policy"
     },
     {
-     "control": "BER.5.8",
+     "control": "BER.6.4",
      "value": "Privilege Escalation, Credential Stuffing, Brute-Force-Attacke, Password Policy, Cryptography"
     },
     {
-     "control": "BER.5.10",
+     "control": "BER.6.6",
      "value": "Credential Stuffing, Password Policy"
     },
     {
@@ -532,8 +547,8 @@
    ]
   },
   "threats": {
-   "props": 900,
-   "packed": 616,
+   "props": 901,
+   "packed": 635,
    "values": [
     {
      "control": "ASST.1.1",
@@ -1100,8 +1115,12 @@
      "value": "G 0.18, G 0.26"
     },
     {
+     "control": "GEB.1.4",
+     "value": "G 0.5, G 0.6, G 0.7, G 0.18"
+    },
+    {
      "control": "GEB.2.1",
-     "value": "G 0.18, G 0.44, G 0.16, G 0.24"
+     "value": "G 0.18, G 0.44, G 0.16, G 0.24, G 0.34, G 0.41"
     },
     {
      "control": "GEB.2.2",
@@ -1117,7 +1136,7 @@
     },
     {
      "control": "GEB.3.1",
-     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19, G 0.34"
     },
     {
      "control": "GEB.3.1.1",
@@ -1125,15 +1144,15 @@
     },
     {
      "control": "GEB.3.1.2",
-     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19, G 0.34, G 0.41"
     },
     {
      "control": "GEB.3.2",
-     "value": "G 0.44, G 0.16, G 0.24"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.34"
     },
     {
      "control": "GEB.3.3",
-     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19, G 0.34, G 0.41"
     },
     {
      "control": "GEB.3.3.1",
@@ -1153,19 +1172,19 @@
     },
     {
      "control": "GEB.3.5",
-     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19, G 0.34, G 0.41"
     },
     {
      "control": "GEB.3.6",
-     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19, G 0.41"
     },
     {
      "control": "GEB.3.7",
-     "value": "G 0.44, G 0.16, G 0.24"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.34"
     },
     {
      "control": "GEB.4.1",
-     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19, G 0.34, G 0.41"
     },
     {
      "control": "GEB.4.2",
@@ -1177,7 +1196,7 @@
     },
     {
      "control": "GEB.4.4",
-     "value": "G 0.44, G 0.16, G 0.24, G 0.19"
+     "value": "G 0.44, G 0.16, G 0.24, G 0.19, G 0.34"
     },
     {
      "control": "GEB.5.1",
@@ -1200,6 +1219,10 @@
      "value": "G 0.2, G 0.4"
     },
     {
+     "control": "GEB.8.3",
+     "value": "G 0.1, G 0.18"
+    },
+    {
      "control": "GEB.9.1",
      "value": "G 0.25, G 0.8, G 0.10"
     },
@@ -1208,12 +1231,56 @@
      "value": "G 0.8, G 0.25, G 0.10"
     },
     {
+     "control": "GEB.9.2",
+     "value": "G 0.8, G 0.25, G 0.18"
+    },
+    {
      "control": "GEB.9.3",
      "value": "G 0.1, G 0.8, G 0.10, G 0.25"
     },
     {
+     "control": "GEB.9.4",
+     "value": "G 0.25, G 0.8"
+    },
+    {
      "control": "GEB.10.2",
-     "value": "G 0.18, G 0.29"
+     "value": "G 0.18, G 0.29, G 0.1"
+    },
+    {
+     "control": "GEB.10.2.1",
+     "value": "G 0.1, G 0.18"
+    },
+    {
+     "control": "GEB.10.2.2",
+     "value": "G 0.1, G 0.18"
+    },
+    {
+     "control": "GEB.10.2.3",
+     "value": "G 0.1, G 0.18"
+    },
+    {
+     "control": "GEB.10.2.5",
+     "value": "G 0.1, G 0.18"
+    },
+    {
+     "control": "GEB.10.2.6",
+     "value": "G 0.1, G 0.18"
+    },
+    {
+     "control": "GEB.10.2.7",
+     "value": "G 0.1, G 0.18"
+    },
+    {
+     "control": "GEB.10.3",
+     "value": "G 0.3, G 0.5"
+    },
+    {
+     "control": "GEB.10.3.2",
+     "value": "G 0.3, G 0.18"
+    },
+    {
+     "control": "GEB.10.4",
+     "value": "G 0.1, G 0.18"
     },
     {
      "control": "SENS.1.1.1",
@@ -1336,8 +1403,24 @@
      "value": "G 0.18, G 0.29"
     },
     {
+     "control": "SENS.8.4",
+     "value": "G 0.44, G 0.2, G 0.3"
+    },
+    {
+     "control": "SENS.8.10",
+     "value": "G 0.1, G 0.18"
+    },
+    {
+     "control": "SENS.8.11",
+     "value": "G 0.1, G 0.18"
+    },
+    {
      "control": "SENS.9.1",
      "value": "G 0.18, G 0.29"
+    },
+    {
+     "control": "SENS.9.7",
+     "value": "G 0.18, G 0.5"
     },
     {
      "control": "SENS.10.1",
@@ -1632,6 +1715,26 @@
      "value": "G 0.36, G 0.30, G 0.32"
     },
     {
+     "control": "BER.3.1",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.2",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.3",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.3.4",
+     "value": "G 0.36, G 0.30, G 0.32, G 0.37"
+    },
+    {
+     "control": "BER.3.5",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
      "control": "BER.3.6",
      "value": "G 0.36, G 0.30, G 0.32"
     },
@@ -1645,7 +1748,7 @@
     },
     {
      "control": "BER.3.9",
-     "value": "G 0.36, G 0.30, G 0.32, G 0.37"
+     "value": "G 0.36, G 0.30, G 0.32"
     },
     {
      "control": "BER.3.10",
@@ -1665,7 +1768,7 @@
     },
     {
      "control": "BER.3.14",
-     "value": "G 0.36, G 0.30, G 0.32"
+     "value": "G 0.30, G 0.32, G 0.36"
     },
     {
      "control": "BER.3.15",
@@ -1685,7 +1788,7 @@
     },
     {
      "control": "BER.3.19",
-     "value": "G 0.30, G 0.32, G 0.36"
+     "value": "G 0.36, G 0.30, G 0.32"
     },
     {
      "control": "BER.3.20",
@@ -1705,34 +1808,10 @@
     },
     {
      "control": "BER.3.24",
-     "value": "G 0.36, G 0.30, G 0.32"
-    },
-    {
-     "control": "BER.3.25",
-     "value": "G 0.36, G 0.30, G 0.32"
-    },
-    {
-     "control": "BER.3.26",
-     "value": "G 0.36, G 0.30, G 0.32"
-    },
-    {
-     "control": "BER.3.27",
-     "value": "G 0.36, G 0.30, G 0.32"
-    },
-    {
-     "control": "BER.3.28",
-     "value": "G 0.36, G 0.30, G 0.32"
-    },
-    {
-     "control": "BER.3.29",
-     "value": "G 0.36, G 0.30, G 0.32"
-    },
-    {
-     "control": "BER.3.30",
      "value": "G 0.36, G 0.30"
     },
     {
-     "control": "BER.3.31",
+     "control": "BER.3.25",
      "value": "G 0.36, G 0.30"
     },
     {
@@ -1780,71 +1859,79 @@
      "value": "G 0.36, G 0.30, G 0.32"
     },
     {
-     "control": "BER.4.9",
-     "value": "G 0.36, G 0.30, G 0.32"
-    },
-    {
-     "control": "BER.5.1",
-     "value": "G 0.36, G 0.30, G 0.42"
-    },
-    {
-     "control": "BER.5.2",
-     "value": "G 0.36, G 0.30"
-    },
-    {
-     "control": "BER.5.3",
-     "value": "G 0.36, G 0.30"
-    },
-    {
-     "control": "BER.5.4",
-     "value": "G 0.36, G 0.30, G 0.42"
-    },
-    {
      "control": "BER.5.5",
      "value": "G 0.36, G 0.30"
     },
     {
      "control": "BER.5.6",
-     "value": "G 0.36, G 0.30, G 0.42"
-    },
-    {
-     "control": "BER.5.7",
-     "value": "G 0.36, G 0.30, G 0.42"
-    },
-    {
-     "control": "BER.5.8",
      "value": "G 0.36, G 0.30"
     },
     {
-     "control": "BER.5.9",
+     "control": "BER.5.7",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.5.8",
      "value": "G 0.36, G 0.30, G 0.42"
     },
     {
-     "control": "BER.5.10",
+     "control": "BER.5.9",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.5.12",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.5.14",
+     "value": "G 0.36, G 0.30, G 0.32"
+    },
+    {
+     "control": "BER.6.1",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.6.2",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.6.3",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.6.4",
+     "value": "G 0.36, G 0.30"
+    },
+    {
+     "control": "BER.6.5",
+     "value": "G 0.36, G 0.30, G 0.42"
+    },
+    {
+     "control": "BER.6.6",
      "value": "G 0.36, G 0.30, G 0.18, G 0.47"
     },
     {
-     "control": "BER.6.10",
+     "control": "BER.7.10",
      "value": "G 0.36, G 0.19, G 0.22"
     },
     {
-     "control": "BER.6.11",
+     "control": "BER.7.11",
      "value": "G 0.36, G 0.19, G 0.22"
     },
     {
-     "control": "BER.6.14",
+     "control": "BER.7.14",
      "value": "G 0.19, G 0.22, G 0.36"
     },
     {
-     "control": "BER.6.15",
+     "control": "BER.7.15",
      "value": "G 0.19, G 0.22, G 0.36"
     },
     {
-     "control": "BER.6.16.2",
+     "control": "BER.7.16.2",
      "value": "G 0.36, G 0.19, G 0.22"
     },
     {
-     "control": "BER.6.16.4",
+     "control": "BER.7.16.4",
      "value": "G 0.19, G 0.22, G 0.36"
     },
     {
@@ -1893,7 +1980,7 @@
     },
     {
      "control": "NOT.4.6",
-     "value": "G 0.45, G 0.39, G 0.25"
+     "value": "G 0.45, G 0.39, G 0.25, G 0.1, G 0.3"
     },
     {
      "control": "NOT.4.7",
@@ -1913,7 +2000,11 @@
     },
     {
      "control": "NOT.4.11",
-     "value": "G 0.45, G 0.39"
+     "value": "G 0.45, G 0.39, G 0.1"
+    },
+    {
+     "control": "NOT.4.12",
+     "value": "G 0.39, G 0.5, G 0.6, G 0.7, G 0.45"
     },
     {
      "control": "NOT.4.13",
@@ -3002,8 +3093,8 @@
    ]
   },
   "target_object_categories": {
-   "props": 634,
-   "packed": 40,
+   "props": 636,
+   "packed": 39,
    "values": [
     {
      "control": "GEB.3.4",
@@ -3063,15 +3154,15 @@
     },
     {
      "control": "SENS.7.12",
-     "value": "Nutzende, Endgeräte"
+     "value": "Nutzende, Mobile Endgeräte"
     },
     {
      "control": "SENS.7.13",
-     "value": "Nutzende, Endgeräte"
+     "value": "Nutzende, Mobile Endgeräte"
     },
     {
      "control": "SENS.7.14",
-     "value": "Nutzende, Endgeräte"
+     "value": "Nutzende, Mobile Endgeräte"
     },
     {
      "control": "SENS.7.15",
@@ -3087,11 +3178,11 @@
     },
     {
      "control": "SENS.7.18",
-     "value": "Nutzende, Mobiltelefone"
+     "value": "Nutzende, Mobile Endgeräte"
     },
     {
      "control": "SENS.7.19",
-     "value": "Nutzende, Mobiltelefone"
+     "value": "Nutzende, Mobile Endgeräte"
     },
     {
      "control": "SENS.7.20",
@@ -3099,27 +3190,23 @@
     },
     {
      "control": "SENS.7.21",
-     "value": "Nutzende, Faxe"
+     "value": "Nutzende, Faxanwendungen"
     },
     {
      "control": "SENS.7.22",
-     "value": "Nutzende, Faxe"
+     "value": "Nutzende, Faxanwendungen"
     },
     {
      "control": "SENS.7.23",
-     "value": "Nutzende, Endgeräte"
+     "value": "Nutzende, Mobile Endgeräte"
     },
     {
      "control": "SENS.7.24",
      "value": "Nutzende, Webbrowser"
     },
     {
-     "control": "SENS.7.25",
-     "value": "Nutzende, Fahrzeuge"
-    },
-    {
      "control": "SENS.8.3",
-     "value": "Nutzende, Endgeräte"
+     "value": "Nutzende, Mobile Endgeräte"
     },
     {
      "control": "SENS.8.4",
@@ -3146,12 +3233,12 @@
      "value": "Administrierende, Netze"
     },
     {
-     "control": "BER.5.4",
+     "control": "BER.5.8",
      "value": "Anwendungen, Externe Netzanschlüsse"
     },
     {
      "control": "KONF.14.4",
-     "value": "Anwendungen, Endgeräte"
+     "value": "Anwendungen, Mobile Endgeräte"
     },
     {
      "control": "KONF.15.1",
@@ -3168,15 +3255,15 @@
    ]
   },
   "documentation": {
-   "props": 960,
+   "props": 961,
    "packed": 0,
    "values": []
   }
  },
  "parameter-slots": {
-  "slots": 221,
-  "at-insert": 221,
-  "label-of-a-parameter": 219,
+  "slots": 224,
+  "at-insert": 224,
+  "label-of-a-parameter": 222,
   "other-wording": [
    {
     "control": "GC.1.1",
@@ -3188,7 +3275,7 @@
    {
     "control": "NOT.1.1.4",
     "prop": "result",
-    "slot": "Reaktiv-, Aufbau- oder Standard-",
+    "slot": "einem anerkannten BCM-Standard",
     "at-insert": true,
     "label-of-a-parameter": false
    }
@@ -3197,10 +3284,10 @@
  },
  "census-delta": {
   "census-version": "2026-07-03",
-  "this-version": "2026-07-16T05:11:52.605669+00:00",
+  "this-version": "2026-10-29T08:03:12.736989+00:00",
   "controls": {
    "census": 998,
-   "now": 999
+   "now": 1000
   },
   "packed-tags": {
    "census-gspp": 125,
@@ -3208,53 +3295,247 @@
   }
  },
  "parameters": {
-  "total": 221,
+  "total": 224,
   "unreferenced-in-prose": 0,
   "multi-value": []
  },
  "mstls": "dropped by decision 2026-07-21 (reported to BSI; twin-catalog finding stays in census/handbook)",
  "baselines": {
-  "gspp:erhöht": 134,
-  "gspp:normal-SdT": 517
+  "gspp:erhöht": 227,
+  "gspp:normal-SdT": 773
  },
- "tag-value-inconsistencies": {
-  "Compliance Management": 6
+ "tag-value-inconsistencies": {},
+ "ledger": {
+  "file": "bsi-conversion-ledger.json",
+  "leaf-values": 49521,
+  "totals": {
+   "copied": 22679,
+   "transformed": 11822,
+   "not-content": 15020,
+   "intentionally-dropped": 0,
+   "unaccounted": 0
+  },
+  "verification-failures": 0,
+  "files-read-back": 1297,
+  "names-that-select-a-field": {
+   "copied-as-a-key-only": 6455,
+   "transformed-to-a-field-name-or-scheme": 8109
+  },
+  "rules": [
+   {
+    "rule": "requirement URI from the control id",
+    "source-values": 1000
+   },
+   {
+    "rule": "file path of a Requirement from the control id",
+    "source-values": 1000
+   },
+   {
+    "rule": "requirement URI from a link to a control (#id)",
+    "source-values": 277
+   },
+   {
+    "rule": "a link that names a back-matter resource (#uuid): the address the resource gives",
+    "source-values": 0
+   },
+   {
+    "rule": "taxonomy Set URI from the group id",
+    "source-values": 160
+   },
+   {
+    "rule": "file path of a taxonomy Set from the group id",
+    "source-values": 160
+   },
+   {
+    "rule": "URI of the Set that stands for a control with nested controls, from the control id",
+    "source-values": 126
+   },
+   {
+    "rule": "file path of the Set that stands for a control with nested controls, from the control id",
+    "source-values": 126
+   },
+   {
+    "rule": "baseline Set URI from the sec_level of a control",
+    "source-values": 1000
+   },
+   {
+    "rule": "baseline Set title from the sec_level of a control",
+    "source-values": 1000
+   },
+   {
+    "rule": "file path of a baseline Set from the sec_level of a control",
+    "source-values": 1000
+   },
+   {
+    "rule": "statement prose with every {{ insert: param, x }} rewritten to {param:x}",
+    "source-values": 211
+   },
+   {
+    "rule": "modality code from the modal verb (MODAL)",
+    "source-values": 1000
+   },
+   {
+    "rule": "one term of a list packed into one string (split on commas, trimmed)",
+    "source-values": 164
+   },
+   {
+    "rule": "threat URI from one term of the threats list (split on commas, trimmed, spaces to hyphens)",
+    "source-values": 901
+   },
+   {
+    "rule": "effort level as an integer",
+    "source-values": 1000
+   },
+   {
+    "rule": "field name from the prop name (FIELD)",
+    "source-values": 6949
+   },
+   {
+    "rule": "alias scheme from the prop name (ALIAS_SCHEME)",
+    "source-values": 1160
+   },
+   {
+    "rule": "author of the document: the one party its metadata names for it (as creator, else as prepared-by, else the one party it names), as a landmark URI from the party's name",
+    "source-values": 1
+   },
+   {
+    "rule": "date of the document: the day of its last-modified",
+    "source-values": 1
+   },
+   {
+    "rule": "a number that is no integer, written as a decimal string (the kernel's spelling of a fraction, NUMBER-1)",
+    "source-values": 0
+   }
+  ],
+  "not-content": [
+   {
+    "kind": "rebuilt-id",
+    "rule": "the id of a statement part is its control's id and `_stm`",
+    "source-values": 1000
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "the id of a guidance part is its control's id and `_gdn`",
+    "source-values": 998
+   },
+   {
+    "kind": "selector",
+    "rule": "the name `statement` of a part selects the part whose prose and props become the statement",
+    "source-values": 1000
+   },
+   {
+    "kind": "namespace",
+    "rule": "the namespace of a prop is the one this mapping is written for (PROP_NS)",
+    "source-values": 12022
+   },
+   {
+    "kind": "orphan",
+    "rule": "a back-matter resource that nothing in the document refers to: nobody can reach it, and it is not carried",
+    "source-values": 0
+   }
+  ],
+  "declared-drops": [],
+  "carried-as-the-source-holds-it": {
+   "metadata": 1
+  },
+  "bundle-read-back": {
+   "controls": 1000,
+   "controls-top-level": 652,
+   "controls-nested": 348,
+   "deepest-nesting": 3,
+   "controls-with-nested-controls": 126,
+   "requirements": 1000,
+   "requirements-of-a-control": 1000,
+   "requirements-with-one-statement": 1000,
+   "sets": 289,
+   "sets-that-group-a-control-with-its-nested-controls": 126,
+   "links": 277,
+   "links-of-nested-controls": 79,
+   "links-that-are-a-relation-of-their-own-requirement": 277,
+   "relations": 277,
+   "relations-that-name-no-object": 0,
+   "set-members": 2286,
+   "set-members-that-name-no-object": 0
+  },
+  "links-to-a-control-the-catalogue-does-not-define": 0,
+  "path-map-against-ledger": {
+   "values-whose-outcome-the-map-does-not-allow": 0,
+   "rows": [],
+   "values-at-a-place-the-map-does-not-name": 0,
+   "places": []
+  },
+  "written-without-a-source-value": {
+   "objects": {
+    "leaf-values": 33025,
+    "without-a-source-value": 5800,
+    "by-place": {
+     "/id": 1,
+     "/lifecycle": 1289,
+     "/members/[]/sequence": 2286,
+     "/statements/[]/id": 1000,
+     "/statements/[]/obligated-parties/[]": 1000,
+     "/statements/[]/parameters/[]/type": 224
+    }
+   },
+   "schemas": {
+    "leaf-values": 179,
+    "without-a-source-value": 179
+   },
+   "manifest": {
+    "leaf-values": 6482,
+    "without-a-source-value": 2611,
+    "by-place": {
+     "/facet-schemas/[]/digest": 7,
+     "/facet-schemas/[]/exact-version": 7,
+     "/facet-schemas/[]/id": 7,
+     "/facet-schemas/[]/path": 7,
+     "/manifest-version": 1,
+     "/objects/[]/id": 1,
+     "/objects/[]/package-digest": 1289,
+     "/objects/[]/path": 1,
+     "/objects/[]/semantic-digest": 1289,
+     "/provenance/converter": 1,
+     "/provenance/sources/[]/format": 1
+    }
+   }
+  },
+  "wiring-checks-failed": []
  },
  "unmapped-paths": [],
  "path-map": [
   {
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].algorithm",
    "count": 1,
-   "level": "L1",
-   "destination": "source-document reference (title/rlink) -> resolved into relations / dropped-declared"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].hashes[].value",
    "count": 1,
-   "level": "L1",
-   "destination": "source-document reference (title/rlink) -> resolved into relations / dropped-declared"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].rlinks[].href",
    "count": 1,
-   "level": "L1",
-   "destination": "source-document reference (title/rlink) -> resolved into relations / dropped-declared"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].title",
    "count": 1,
-   "level": "L1",
-   "destination": "source-document reference (title/rlink) -> resolved into relations / dropped-declared"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.back-matter.resources[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "resolution key for #uuid links -> external URL"
+   "level": "L2",
+   "destination": "a resource that something in the document refers to by #uuid (a link of a control, which also takes its address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried (a rule the ledger checks)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].class",
-   "count": 651,
+   "count": 652,
    "level": "L1",
    "destination": "gspp-taxonomy: class (by-statement)"
   },
@@ -3280,37 +3561,37 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].id",
    "count": 2,
    "level": "L1",
-   "destination": "Requirement id (top) / statement id (nested)"
+   "destination": "Requirement id, label and file of the control, at every depth, and where it is listed; a control with nested controls: also the id and the file of the Set that groups it with them"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].id",
    "count": 4,
-   "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "level": "-",
+   "destination": "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule does not give is carried (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].name",
    "count": 4,
    "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose prose and props become the statement, a rule the ledger checks. A part of another name is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].name",
    "count": 7,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].ns",
    "count": 7,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].props[].value",
    "count": 7,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].parts[].prose",
@@ -3322,55 +3603,55 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].name",
    "count": 6,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].ns",
    "count": 4,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `props`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].props[].value",
    "count": 6,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].controls[].title",
    "count": 2,
    "level": "L1",
-   "destination": "Requirement title (top) / kept in taxonomy by-statement (nested)"
+   "destination": "Requirement title; a control with nested controls: also the title of its grouping Set"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].id",
    "count": 19,
    "level": "L1",
-   "destination": "Requirement id (top) / statement id (nested)"
+   "destination": "Requirement id, label and file of the control, at every depth, and where it is listed; a control with nested controls: also the id and the file of the Set that groups it with them"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].links[].href",
    "count": 8,
    "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].links[].rel",
    "count": 8,
    "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].id",
    "count": 4,
    "level": "L1",
-   "destination": "statement parameter name (type string)"
+   "destination": "statement parameter name (type string); key of compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].label",
    "count": 4,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].params[].props[].name",
@@ -3387,32 +3668,32 @@
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].id",
    "count": 37,
-   "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "level": "-",
+   "destination": "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule does not give is carried (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].name",
    "count": 37,
    "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose prose and props become the statement, a rule the ledger checks. A part of another name is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].name",
    "count": 95,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].ns",
    "count": 95,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].props[].value",
    "count": 95,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].parts[].prose",
@@ -3424,55 +3705,55 @@
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].props[].name",
    "count": 131,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].props[].ns",
    "count": 112,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `props`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].props[].value",
    "count": 131,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].controls[].title",
    "count": 19,
    "level": "L1",
-   "destination": "Requirement title (top) / kept in taxonomy by-statement (nested)"
+   "destination": "Requirement title; a control with nested controls: also the title of its grouping Set"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].id",
    "count": 327,
    "level": "L1",
-   "destination": "Requirement id (top) / statement id (nested)"
+   "destination": "Requirement id, label and file of the control, at every depth, and where it is listed; a control with nested controls: also the id and the file of the Set that groups it with them"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].links[].href",
-   "count": 67,
+   "count": 71,
    "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].links[].rel",
-   "count": 67,
+   "count": 71,
    "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].params[].id",
    "count": 73,
    "level": "L1",
-   "destination": "statement parameter name (type string)"
+   "destination": "statement parameter name (type string); key of compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].params[].label",
    "count": 73,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].params[].props[].name",
@@ -3490,37 +3771,37 @@
    "path": "catalog.groups[].groups[].controls[].controls[].params[].values[]",
    "count": 1,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].id",
    "count": 653,
-   "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "level": "-",
+   "destination": "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule does not give is carried (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].name",
    "count": 653,
    "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose prose and props become the statement, a rule the ledger checks. A part of another name is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].name",
    "count": 1632,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].ns",
    "count": 1632,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].props[].value",
    "count": 1632,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].parts[].prose",
@@ -3532,65 +3813,65 @@
    "path": "catalog.groups[].groups[].controls[].controls[].props[].name",
    "count": 2589,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].props[].ns",
    "count": 2262,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "level": "-",
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `props`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].props[].value",
    "count": 2589,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].controls[].title",
    "count": 327,
    "level": "L1",
-   "destination": "Requirement title (top) / kept in taxonomy by-statement (nested)"
+   "destination": "Requirement title; a control with nested controls: also the title of its grouping Set"
   },
   {
    "path": "catalog.groups[].groups[].controls[].id",
-   "count": 651,
+   "count": 652,
    "level": "L1",
-   "destination": "Requirement id (top) / statement id (nested)"
+   "destination": "Requirement id, label and file of the control, at every depth, and where it is listed; a control with nested controls: also the id and the file of the Set that groups it with them"
   },
   {
    "path": "catalog.groups[].groups[].controls[].links[].href",
-   "count": 191,
+   "count": 198,
    "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].links[].rel",
-   "count": 191,
+   "count": 198,
    "level": "L1",
-   "destination": "relations[] {type=rel, ref} (#control -> req URI; #uuid -> back-matter URL)"
+   "destination": "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> back-matter URL)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].params[].id",
-   "count": 144,
+   "count": 147,
    "level": "L1",
-   "destination": "statement parameter name (type string)"
+   "destination": "statement parameter name (type string); key of compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].params[].label",
-   "count": 144,
+   "count": 147,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].params[].props[].name",
-   "count": 144,
+   "count": 147,
    "level": "L2",
    "destination": "compat oscal-1x: param-extras (param alt-identifier only)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].params[].props[].value",
-   "count": 144,
+   "count": 147,
    "level": "L2",
    "destination": "compat oscal-1x: param-extras (param alt-identifier only)"
   },
@@ -3598,97 +3879,97 @@
    "path": "catalog.groups[].groups[].controls[].params[].values[]",
    "count": 1,
    "level": "L1",
-   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); residue drained"
+   "destination": "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in compat param-extras; an empty label, which is no label of the kernel: compat param-extras"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].id",
-   "count": 1302,
-   "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "count": 1304,
+   "level": "-",
+   "destination": "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule does not give is carried (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].name",
-   "count": 1302,
+   "count": 1304,
    "level": "L1",
-   "destination": "statement/guidance part identity -> statement id / narrative key"
+   "destination": "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose prose and props become the statement, a rule the ledger checks. A part of another name is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].name",
-   "count": 3308,
+   "count": 3314,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].ns",
-   "count": 3308,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "count": 3314,
+   "level": "-",
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `parts`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].props[].value",
-   "count": 3308,
+   "count": 3314,
    "level": "L1",
-   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported)"
+   "destination": "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not read: compat `parts`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].parts[].prose",
-   "count": 1302,
+   "count": 1304,
    "level": "L1",
    "destination": "statements[].prose.de ({{insert}} -> {param:}) / gspp-narrative guidance"
   },
   {
    "path": "catalog.groups[].groups[].controls[].props[].name",
-   "count": 5240,
+   "count": 5248,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].props[].ns",
-   "count": 4589,
-   "level": "L1",
-   "destination": "absorbed: CSV-link namespaces replaced by pinned facet schemas"
+   "count": 4596,
+   "level": "-",
+   "destination": "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another namespace is not read and is carried whole (compat `props`)"
   },
   {
    "path": "catalog.groups[].groups[].controls[].props[].value",
-   "count": 5240,
+   "count": 5248,
    "level": "L1",
-   "destination": "dispatch by prop name (see per-prop table)"
+   "destination": "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`"
   },
   {
    "path": "catalog.groups[].groups[].controls[].title",
-   "count": 651,
+   "count": 652,
    "level": "L1",
-   "destination": "Requirement title (top) / kept in taxonomy by-statement (nested)"
+   "destination": "Requirement title; a control with nested controls: also the title of its grouping Set"
   },
   {
    "path": "catalog.groups[].groups[].id",
-   "count": 139,
+   "count": 140,
    "level": "L1",
-   "destination": "taxonomy Set id/title (per-catalog subtree)"
+   "destination": "taxonomy Set of the group: its id, its file, and where it is listed"
   },
   {
    "path": "catalog.groups[].groups[].props[].name",
-   "count": 278,
+   "count": 280,
    "level": "L1",
    "destination": "Set.label / Set.aliases (bsi-uuid)"
   },
   {
    "path": "catalog.groups[].groups[].props[].value",
-   "count": 278,
+   "count": 280,
    "level": "L1",
    "destination": "Set.label / Set.aliases (bsi-uuid)"
   },
   {
    "path": "catalog.groups[].groups[].title",
-   "count": 139,
+   "count": 140,
    "level": "L1",
-   "destination": "taxonomy Set id/title (per-catalog subtree)"
+   "destination": "taxonomy Set of the group: its title"
   },
   {
    "path": "catalog.groups[].id",
    "count": 20,
    "level": "L1",
-   "destination": "taxonomy Set id/title (per-catalog subtree)"
+   "destination": "taxonomy Set of the group: its id, its file, and where it is listed"
   },
   {
    "path": "catalog.groups[].props[].name",
@@ -3712,127 +3993,139 @@
    "path": "catalog.groups[].title",
    "count": 20,
    "level": "L1",
-   "destination": "taxonomy Set id/title (per-catalog subtree)"
+   "destination": "taxonomy Set of the group: its title"
+  },
+  {
+   "path": "catalog.metadata.document-ids[].identifier",
+   "count": 1,
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
+  },
+  {
+   "path": "catalog.metadata.document-ids[].scheme",
+   "count": 1,
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`, as the source holds it; its day -> manifest provenance.sources[].date"
   },
   {
    "path": "catalog.metadata.links[].href",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.links[].rel",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.links[].text",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.oscal-version",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`, as the source holds it; manifest provenance.sources[].format-version"
   },
   {
    "path": "catalog.metadata.parties[].email-addresses[]",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.parties[].name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`, as the source holds it; the name of the party the metadata names as author -> manifest provenance.sources[].author-ref (a landmark URI)"
   },
   {
    "path": "catalog.metadata.parties[].type",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.parties[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.props[].name",
-   "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "count": 2,
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.props[].ns",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.props[].value",
-   "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "count": 2,
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.remarks",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.responsible-parties[].party-uuids[]",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.responsible-parties[].role-id",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.roles[].id",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.roles[].title",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "root Set, compat oscal-1x `metadata`: the member as the source holds it"
   },
   {
    "path": "catalog.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "title of the root Set; manifest provenance.sources[].title"
   },
   {
    "path": "catalog.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "`version` of every object, and of its entry in the manifest; manifest provenance.sources[].version"
   },
   {
    "path": "catalog.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "manifest provenance.sources[].uuid: the uuid of the source document"
   }
  ]
 }

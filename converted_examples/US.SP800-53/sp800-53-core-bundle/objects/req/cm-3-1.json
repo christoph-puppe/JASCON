@@ -26,6 +26,7 @@
   },
   {
    "id": "smt.a",
+   "label": "(a)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,6 +37,7 @@
   },
   {
    "id": "smt.b",
+   "label": "(b)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -53,6 +55,7 @@
   },
   {
    "id": "smt.c",
+   "label": "(c)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -70,6 +73,7 @@
   },
   {
    "id": "smt.d",
+   "label": "(d)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -80,6 +84,7 @@
   },
   {
    "id": "smt.e",
+   "label": "(e)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -90,6 +95,7 @@
   },
   {
    "id": "smt.f",
+   "label": "(f)",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -114,15 +120,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "cm-3.1_obj",
      "label": "CM-03(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "cm-3.1_obj.a",
        "label": "CM-03(01)(a)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "prose": {
         "en": "{param:cm-03.01_odp.01} are used to document proposed changes to the system;"
        }
@@ -130,6 +146,11 @@
       {
        "id": "cm-3.1_obj.b",
        "label": "CM-03(01)(b)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "{param:cm-03.01_odp.01} are used to notify {param:cm-03.01_odp.02} of proposed changes to the system and request change approval;"
        }
@@ -137,6 +158,11 @@
       {
        "id": "cm-3.1_obj.c",
        "label": "CM-03(01)(c)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "{param:cm-03.01_odp.01} are used to highlight proposed changes to the system that have not been approved or disapproved within {param:cm-03.01_odp.03};"
        }
@@ -144,6 +170,11 @@
       {
        "id": "cm-3.1_obj.d",
        "label": "CM-03(01)(d)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "{param:cm-03.01_odp.01} are used to prohibit changes to the system until designated approvals are received;"
        }
@@ -151,6 +182,11 @@
       {
        "id": "cm-3.1_obj.e",
        "label": "CM-03(01)(e)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.e"
+        }
+       ],
        "prose": {
         "en": "{param:cm-03.01_odp.01} are used to document all changes to the system;"
        }
@@ -158,6 +194,11 @@
       {
        "id": "cm-3.1_obj.f",
        "label": "CM-03(01)(f)",
+       "assessment-for": [
+        {
+         "statement-id": "smt.f"
+        }
+       ],
        "prose": {
         "en": "{param:cm-03.01_odp.01} are used to notify {param:cm-03.01_odp.04} when approved changes to the system are completed."
        }
@@ -256,7 +297,8 @@
      ],
      "alt-identifiers": [
       "cm-3.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(01)_ODP[01]"
     },
     "cm-03.01_odp.02": {
      "guidelines": [
@@ -266,7 +308,8 @@
      ],
      "alt-identifiers": [
       "cm-3.1_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(01)_ODP[02]"
     },
     "cm-03.01_odp.03": {
      "guidelines": [
@@ -276,7 +319,8 @@
      ],
      "alt-identifiers": [
       "cm-3.1_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(01)_ODP[03]"
     },
     "cm-03.01_odp.04": {
      "guidelines": [
@@ -286,7 +330,8 @@
      ],
      "alt-identifiers": [
       "cm-3.1_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "CM-03(01)_ODP[04]"
     }
    }
   },

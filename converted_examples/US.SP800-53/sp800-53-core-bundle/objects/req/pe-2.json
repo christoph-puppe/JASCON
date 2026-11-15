@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -19,6 +20,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -29,6 +31,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -46,6 +49,7 @@
   },
   {
    "id": "smt.d",
+   "label": "d.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -63,19 +67,34 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "pe-2_obj",
      "label": "PE-02",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/PE-2"
+      }
+     ],
      "children": [
       {
        "id": "pe-2_obj.a",
        "label": "PE-02a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "pe-2_obj.a-1",
          "label": "PE-02a.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "a list of individuals with authorized access to the facility where the system resides has been developed;"
          }
@@ -83,6 +102,11 @@
         {
          "id": "pe-2_obj.a-2",
          "label": "PE-02a.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the list of individuals with authorized access to the facility where the system resides has been approved;"
          }
@@ -90,6 +114,11 @@
         {
          "id": "pe-2_obj.a-3",
          "label": "PE-02a.[03]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a"
+          }
+         ],
          "prose": {
           "en": "the list of individuals with authorized access to the facility where the system resides has been maintained;"
          }
@@ -99,6 +128,11 @@
       {
        "id": "pe-2_obj.b",
        "label": "PE-02b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "prose": {
         "en": "authorization credentials are issued for facility access;"
        }
@@ -106,6 +140,11 @@
       {
        "id": "pe-2_obj.c",
        "label": "PE-02c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "the access list detailing authorized facility access by individuals is reviewed {param:pe-02_odp};"
        }
@@ -113,6 +152,11 @@
       {
        "id": "pe-2_obj.d",
        "label": "PE-02d.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.d"
+        }
+       ],
        "prose": {
         "en": "individuals are removed from the facility access list when access is no longer required."
        }
@@ -190,7 +234,8 @@
      ],
      "alt-identifiers": [
       "pe-2_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "PE-02_ODP"
     }
    }
   }
@@ -278,21 +323,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/PE-8.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/PE-7",
-    "mode": "merged-into",
-    "label": "PE-07",
-    "title": "Visitor Control"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/PE-8.2",
-    "mode": "merged-into",
-    "label": "PE-08(02)",
-    "title": "Physical Access Records"
-   }
-  ]
- }
+ ]
 }

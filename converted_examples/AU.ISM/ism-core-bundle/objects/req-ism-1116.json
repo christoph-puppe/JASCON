@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1116",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1116",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A visible gap exists between TOP SECRET cabinets and non-TOP SECRET cabinets."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-03"
   }
  ]
 }

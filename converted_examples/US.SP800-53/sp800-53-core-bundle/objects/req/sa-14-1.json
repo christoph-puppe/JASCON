@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/SA-14.1",
+ "version": "5.2.0",
+ "label": "SA-14(1)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Critical Components with No Viable Alternative Sourcing"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into SA-20."
+   }
+  }
+ ]
+}

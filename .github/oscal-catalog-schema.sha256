@@ -1,0 +1,14 @@
+# NIST's JSON schema of the OSCAL catalogue model, pinned.
+#
+# export_oscal.py validates every catalogue it exports against this schema
+# and reads it from sources/nist/ (git-ignored). The Validators workflow
+# downloads it from the base below, checks it against this list with
+# `sha256sum -c`, runs the export and fails if an export under
+# converted_examples/ comes out different from the committed one.
+#
+# The base is the publisher's release v1.2.2 of OSCAL.
+#
+# base: https://github.com/usnistgov/OSCAL/releases/download/v1.2.2/
+# into: sources/nist
+# path: oscal_catalog_schema.json
+fdc559f5dff6848b1ebbe1898a69cc08263479f7c796e2f056412059e7489d0c  oscal_catalog_schema.json

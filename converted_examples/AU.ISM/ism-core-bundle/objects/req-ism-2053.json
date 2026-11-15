@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2053",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-2053",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "End of life procedures for software, including procedures for software removal and the archival or destruction of user accounts and data, are produced and made available to consumers."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

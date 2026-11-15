@@ -33,15 +33,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "au-7.1_obj",
      "label": "AU-07(01)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "au-7.1_obj-1",
        "label": "AU-07(01)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to process, sort, and search audit records for events of interest based on {param:au-07.01_odp} are provided;"
        }
@@ -49,6 +59,11 @@
       {
        "id": "au-7.1_obj-2",
        "label": "AU-07(01)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "the capability to process, sort, and search audit records for events of interest based on {param:au-07.01_odp} are implemented."
        }
@@ -129,7 +144,8 @@
      ],
      "alt-identifiers": [
       "au-7.1_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AU-07(01)_ODP"
     }
    }
   },
@@ -148,15 +164,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/AU-7.2",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/AU-7.2",
-    "mode": "merged-into",
-    "label": "AU-07(02)",
-    "title": "Automatic Sort and Search"
-   }
-  ]
- }
+ ]
 }

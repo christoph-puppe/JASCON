@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0181",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0181",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Cabling infrastructure is installed in accordance with relevant Australian Standards, as directed by the Australian Communications and Media Authority."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-03"
   }
  ]
 }

@@ -1,22 +1,22 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/sens-4",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Authentisierung"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.1",
-   "sequence": 3530
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/sens-4-1",
+   "sequence": 6100
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.2",
-   "sequence": 3540
+   "sequence": 6110
   },
   {
    "ref": "https://ns.bsi.bund.de/gspp/req/SENS.4.3",
-   "sequence": 3550
+   "sequence": 6120
   }
  ],
  "label": "4",

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1798",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1798",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Secure configuration guidance, in the form of a hardening guide or loosening guide, is produced and made available to consumers as part of software development."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

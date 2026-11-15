@@ -1,14 +1,14 @@
 {
  "id": "https://ns.bsi.bund.de/gspp/set/tax/stm-2",
- "version": "2026-07-16T05:11:52.605669+00:00",
+ "version": "2026-10-29T08:03:12.736989+00:00",
  "lifecycle": "active",
  "title": {
   "de": "Anforderungspaket"
  },
  "members": [
   {
-   "ref": "https://ns.bsi.bund.de/gspp/req/STM.2.1",
-   "sequence": 330
+   "ref": "https://ns.bsi.bund.de/gspp/set/tax/stm-2-1",
+   "sequence": 700
   }
  ],
  "label": "2",

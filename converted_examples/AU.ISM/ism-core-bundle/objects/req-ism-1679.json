@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1679",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1679",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Multi-factor authentication is used to authenticate users to third-party online services that process, store or communicate their organisation’s sensitive data."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2023-09"
   }
  ]
 }

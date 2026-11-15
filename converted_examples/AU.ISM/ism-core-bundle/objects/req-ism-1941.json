@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1941",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1941",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Computer accounts are not members of the Domain Admins, Enterprise Admins or other highly privileged security groups."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-06"
   }
  ]
 }

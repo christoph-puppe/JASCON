@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2071",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2071",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel dealing with user account details are advised of what social engineering attacks are, how to manage such situations and how to report them."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-09"
   }
  ]
 }

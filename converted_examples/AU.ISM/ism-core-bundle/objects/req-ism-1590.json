@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1590",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-1590",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Credentials for user accounts are changed if:\n\n- they are compromised\n- they are suspected of being compromised\n- they are discovered stored on networks in the clear\n- they are discovered being transferred across networks in the clear\n- membership of a shared user account changes."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

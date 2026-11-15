@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1560",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-1560",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Passwords used for multi-factor authentication on SECRET systems are a minimum of 8 characters."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-12"
   }
  ]
 }

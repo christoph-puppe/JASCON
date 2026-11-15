@@ -33,11 +33,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-5.10_obj",
      "label": "IA-05(10)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "identities and authenticators are dynamically bound using {param:ia-05.10_odp}."
      }
@@ -113,7 +118,8 @@
      ],
      "alt-identifiers": [
       "ia-5.10_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "IA-05(10)_ODP"
     }
    }
   }

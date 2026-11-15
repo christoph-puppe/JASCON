@@ -50,6 +50,7 @@
   "https://ifa.gov/goodread/facet/protocols@1": {
    "protocols": [
     {
+     "uuid": "2b4a1b3a-cbc5-4cc8-bde6-7437c28c4e54",
      "name": "mongodb",
      "title": "Primary daemon process for the MongoDB system.",
      "port-ranges": [
@@ -61,6 +62,7 @@
      ]
     },
     {
+     "uuid": "99d8d4e5-e734-4e05-a2f9-7353097b8b61",
      "name": "mongodb-shardsrv",
      "title": "MongoDB protocol for sharding with shardsrv option.",
      "port-ranges": [
@@ -72,6 +74,7 @@
      ]
     },
     {
+     "uuid": "6fa762f1-09ca-44d5-a94c-cfceb57debd5",
      "name": "mongodb-configsvr",
      "title": "MongoDB protocol for configsrv operation.",
      "port-ranges": [
@@ -93,10 +96,37 @@
    },
    "control-implementations": [
     {
+     "uuid": "49f0b690-ed9f-4f32-aae0-625b77aa6d27",
      "description": {
       "en": "MongoDB control implementations for NIST SP 800-53 revision 5."
      },
      "source": "../../../nist.gov/SP800-53/rev5/json/NIST_SP-800-53_rev5_MODERATE-baseline_profile.json"
+    }
+   ],
+   "capabilities": [
+    {
+     "capability": "cap-sc-8",
+     "uuid": "cf8338c5-fb6e-4593-a4a8-b3c4946ee080",
+     "statements": [
+      {
+       "statement": "smt",
+       "uuid": "bb9219b1-e51c-4680-abb0-616a43bbfbb1"
+      }
+     ]
+    },
+    {
+     "capability": "cap-sc-8-1",
+     "uuid": "cf8338c5-fb6e-4593-a4a8-b3c4946ee081",
+     "statements": [
+      {
+       "statement": "smt",
+       "uuid": "bb9219b1-e51c-4680-abb0-616a43bbfbb1"
+      }
+     ]
+    },
+    {
+     "capability": "cap-sa-4-9",
+     "uuid": "5227daf8-7a4b-4fe0-aea9-3547b7de2603"
     }
    ],
    "responsible-roles": [
@@ -110,6 +140,9 @@
      "role": "customer"
     }
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "91f646c5-b1b6-4786-9ec3-2305a044e217"
   }
  }
 }

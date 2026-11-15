@@ -38,11 +38,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ac-4.20_obj",
      "label": "AC-04(20)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "{param:ac-04.20_odp.01} are employed to control the flow of {param:ac-04.20_odp.02} across security domains."
      }
@@ -121,7 +126,8 @@
      ],
      "alt-identifiers": [
       "ac-4.20_prm_1"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(20)_ODP[01]"
     },
     "ac-04.20_odp.02": {
      "guidelines": [
@@ -131,7 +137,8 @@
      ],
      "alt-identifiers": [
       "ac-4.20_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AC-04(20)_ODP[02]"
     }
    }
   }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1563",
- "version": "2026.06.18",
+ "version": "1",
  "label": "ISM-1563",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "At the conclusion of a security assessment for a system, a security assessment report is produced by the assessor and covers:\n\n- the scope of the security assessment\n- the system’s strengths and weaknesses\n- security risks associated with the operation of the system\n- the effectiveness of the implementation of controls\n- any recommended remediation actions."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-06"
   }
  ]
 }

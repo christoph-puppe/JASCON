@@ -9,6 +9,7 @@
  "statements": [
   {
    "id": "smt.a",
+   "label": "a.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -36,6 +37,7 @@
   },
   {
    "id": "smt.a.1",
+   "label": "1.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -53,6 +55,7 @@
   },
   {
    "id": "smt.a.2",
+   "label": "2.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -63,6 +66,7 @@
   },
   {
    "id": "smt.b",
+   "label": "b.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -85,6 +89,7 @@
   },
   {
    "id": "smt.c",
+   "label": "c.",
    "modality": "must",
    "obligated-parties": [
     "https://ns.nist.gov/sp800-53/party/organization"
@@ -102,23 +107,43 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "at-3_obj",
      "label": "AT-03",
+     "assessment-for": [
+      {
+       "requirement-ref": "https://ns.nist.gov/sp800-53/req/AT-3"
+      }
+     ],
      "children": [
       {
        "id": "at-3_obj.a",
        "label": "AT-03a.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.a"
+        }
+       ],
        "children": [
         {
          "id": "at-3_obj.a.1",
          "label": "AT-03a.01",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.1"
+          }
+         ],
          "children": [
           {
            "id": "at-3_obj.a.1-1",
            "label": "AT-03a.01[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "role-based security training is provided to {param:at-03_odp.01} before authorizing access to the system, information, or performing assigned duties;"
            }
@@ -126,6 +151,11 @@
           {
            "id": "at-3_obj.a.1-2",
            "label": "AT-03a.01[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "role-based privacy training is provided to {param:at-03_odp.02} before authorizing access to the system, information, or performing assigned duties;"
            }
@@ -133,6 +163,11 @@
           {
            "id": "at-3_obj.a.1-3",
            "label": "AT-03a.01[03]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "role-based security training is provided to {param:at-03_odp.01} {param:at-03_odp.03} thereafter;"
            }
@@ -140,6 +175,11 @@
           {
            "id": "at-3_obj.a.1-4",
            "label": "AT-03a.01[04]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.1"
+            }
+           ],
            "prose": {
             "en": "role-based privacy training is provided to {param:at-03_odp.02} {param:at-03_odp.03} thereafter;"
            }
@@ -149,10 +189,20 @@
         {
          "id": "at-3_obj.a.2",
          "label": "AT-03a.02",
+         "assessment-for": [
+          {
+           "statement-id": "smt.a.2"
+          }
+         ],
          "children": [
           {
            "id": "at-3_obj.a.2-1",
            "label": "AT-03a.02[01]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "role-based security training is provided to personnel with assigned security roles and responsibilities when required by system changes;"
            }
@@ -160,6 +210,11 @@
           {
            "id": "at-3_obj.a.2-2",
            "label": "AT-03a.02[02]",
+           "assessment-for": [
+            {
+             "statement-id": "smt.a.2"
+            }
+           ],
            "prose": {
             "en": "role-based privacy training is provided to personnel with assigned security roles and responsibilities when required by system changes;"
            }
@@ -171,10 +226,20 @@
       {
        "id": "at-3_obj.b",
        "label": "AT-03b.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.b"
+        }
+       ],
        "children": [
         {
          "id": "at-3_obj.b-1",
          "label": "AT-03b.[01]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "role-based training content is updated {param:at-03_odp.04};"
          }
@@ -182,6 +247,11 @@
         {
          "id": "at-3_obj.b-2",
          "label": "AT-03b.[02]",
+         "assessment-for": [
+          {
+           "statement-id": "smt.b"
+          }
+         ],
          "prose": {
           "en": "role-based training content is updated following {param:at-03_odp.05};"
          }
@@ -191,6 +261,11 @@
       {
        "id": "at-3_obj.c",
        "label": "AT-03c.",
+       "assessment-for": [
+        {
+         "statement-id": "smt.c"
+        }
+       ],
        "prose": {
         "en": "lessons learned from internal or external security incidents or breaches are incorporated into role-based training."
        }
@@ -268,14 +343,16 @@
       {
        "en": "roles and responsibilities for role-based security training are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AT-03_ODP[01]"
     },
     "at-03_odp.02": {
      "guidelines": [
       {
        "en": "roles and responsibilities for role-based privacy training are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "AT-03_ODP[02]"
     },
     "at-03_odp.03": {
      "guidelines": [
@@ -285,7 +362,8 @@
      ],
      "alt-identifiers": [
       "at-3_prm_2"
-     ]
+     ],
+     "sp800-53a-label": "AT-03_ODP[03]"
     },
     "at-03_odp.04": {
      "guidelines": [
@@ -295,7 +373,8 @@
      ],
      "alt-identifiers": [
       "at-3_prm_3"
-     ]
+     ],
+     "sp800-53a-label": "AT-03_ODP[04]"
     },
     "at-03_odp.05": {
      "guidelines": [
@@ -305,7 +384,8 @@
      ],
      "alt-identifiers": [
       "at-3_prm_4"
-     ]
+     ],
+     "sp800-53a-label": "AT-03_ODP[05]"
     }
    }
   },

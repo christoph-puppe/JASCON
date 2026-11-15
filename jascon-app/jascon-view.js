@@ -72,9 +72,57 @@ jscI18n.add("de", {
 });
 
 jscI18n.add("de", {
+  "label of the statement in the source": "Bezeichnung des Statements in der Quelle",
+  "History": "Änderungsverlauf",
+});
+
+jscI18n.add("de", {
   "names no requirement": "nennt keine Anforderung", "suggested values": "vorgeschlagene Werte", "kind": "Art",
   "product version": "Produktversion", "describes": "beschreibt", "Capabilities ({n})": "Fähigkeiten ({n})",
   "Authorizations": "Autorisierungen", "from an advice pack": "aus einem Advice Pack",
+});
+
+jscI18n.add("de", {
+  "You can have the move made now. The Attestation is taken out of the manifest's list in this set; the next export writes a new manifest without it and puts the file beside the manifest. The Attestation itself is not changed, and its signature stays what it is.":
+    "Sie können den Umzug jetzt vornehmen lassen. Die Attestation wird in diesem Set aus der Liste des Manifests genommen; der nächste Export schreibt ein neues Manifest ohne sie und legt die Datei neben das Manifest. Die Attestation selbst wird nicht geändert, und ihre Signatur bleibt, was sie ist.",
+  "What the move does to the binding: the Attestation keeps naming the manifest it was issued over, and the manifest an export writes is a new one. Held to that bundle it reads:":
+    "Was der Umzug mit der Bindung macht: Die Attestation nennt weiter das Manifest, über das sie ausgestellt wurde, und das Manifest, das ein Export schreibt, ist ein neues. An diesem Bundle gemessen lautet sie:",
+  "A Full Match needs the manifest the Attestation names. Where the new manifest is another one, the signer issues the Attestation again over it; until then it is a Semantic Match while every subject is as it was signed.":
+    "Ein Full Match braucht das Manifest, das die Attestation nennt. Wo das neue Manifest ein anderes ist, stellt der Unterzeichner die Attestation darüber neu aus; bis dahin ist sie ein Semantic Match, solange jeder Gegenstand so ist, wie er signiert wurde.",
+  "Take it out of the manifest's list": "Aus der Liste des Manifests nehmen",
+  "The set changed since this was shown; nothing was done. Check again.": "Das Set hat sich geändert, seit dies gezeigt wurde; es wurde nichts getan. Bitte erneut prüfen.",
+  "{id}: taken out of the manifest's list in this set. The file ({path}) and the Attestation are unchanged; the next export writes a new manifest without it and puts the file beside the manifest.":
+    "{id}: in diesem Set aus der Liste des Manifests genommen. Die Datei ({path}) und die Attestation sind unverändert; der nächste Export schreibt ein neues Manifest ohne sie und legt die Datei neben das Manifest.",
+});
+jscI18n.add("de", {
+  "Author (party URI)": "Autor (Party-URI)", "written as the author, dated {date}": "wird als Autor geschrieben, mit Datum {date}",
+  "empty: no author is written, and saving works all the same. The setting “Who am I” prefills this field.":
+    "leer: Es wird kein Autor geschrieben, und das Speichern funktioniert trotzdem. Die Einstellung „Wer bin ich“ belegt dieses Feld vor.",
+  "Deviation": "Deviation", "decided on {date}": "entschieden am {date}", "decided on": "entschieden am", "move to": "verschieben nach",
+  "(leave as it is)": "(so lassen)", "no date": "kein Termin", "on a date": "an einem Datum", "every": "alle", "Calendar (URI)": "Kalender (URI)",
+  "Record the decision": "Entscheidung festhalten", "who decided": "wer entschieden hat",
+  "Compared with the bundle as it was loaded: the manifest this set came with ({digest}) and the objects it lists.":
+    "Verglichen mit dem Bundle, wie es geladen wurde: dem Manifest, mit dem dieses Set kam ({digest}), und den Objekten, die es listet.",
+  "This set was changed in this app after it was loaded, so the manifest it came with ({loaded}) no longer describes it. Compared with the bundle an export would write now: its manifest ({digest}) and the objects it lists. An Attestation that bound the manifest the set came with binds another manifest then: a Semantic Match while its subjects are unchanged, and no failure.":
+    "Dieses Set wurde in dieser App geändert, nachdem es geladen wurde; das Manifest, mit dem es kam ({loaded}), beschreibt es deshalb nicht mehr. Verglichen mit dem Bundle, das ein Export jetzt schriebe: seinem Manifest ({digest}) und den Objekten, die es listet. Eine Attestation, die das Manifest band, mit dem das Set kam, bindet dann ein anderes Manifest: ein Semantic Match, solange ihre Subjekte unverändert sind, und kein Fehler.",
+  "This set has no manifest yet. Compared with the bundle an export would write now: its manifest ({digest}) and the objects it lists.":
+    "Dieses Set hat noch kein Manifest. Verglichen mit dem Bundle, das ein Export jetzt schriebe: seinem Manifest ({digest}) und den Objekten, die es listet.",
+  "What can be done: the signer issues the Attestation again for the content as it is now, or the Attestation is taken out of the set (Assess page). It names an envelope, so it is signed: changing it here, its lifecycle included, would break the signature, and withdrawing it is the signer's act.":
+    "Was sich tun lässt: Der Signierer stellt die Attestation für den Inhalt, wie er jetzt ist, neu aus, oder die Attestation wird aus dem Set genommen (Seite Prüfen). Sie nennt einen Umschlag, ist also signiert: Sie hier zu ändern, auch ihren Lifecycle, bräche die Signatur, und sie zurückzuziehen ist Sache des Signierers.",
+  "What can be done: the Attestation is issued again for the content as it is now, or it is taken out of the set, or, because it names no envelope and is unsigned, it is set to withdrawn (both on the Assess page). A withdrawn Attestation that does not bind is reported and fails nothing.":
+    "Was sich tun lässt: Die Attestation wird für den Inhalt, wie er jetzt ist, neu ausgestellt, oder sie wird aus dem Set genommen, oder sie wird, weil sie keinen Umschlag nennt und unsigniert ist, auf withdrawn gesetzt (beides auf der Seite Prüfen). Eine zurückgezogene Attestation, die nicht bindet, wird gemeldet und lässt nichts durchfallen.",
+  "The manifest this set came with lists this Attestation. The app has not changed that: a set nobody changed leaves as it came, with that manifest. Once something in the set is changed, an export writes a new manifest, which leaves the Attestation out and puts its file beside the manifest.":
+    "Das Manifest, mit dem dieses Set kam, listet diese Attestation. Die App hat daran nichts geändert: Ein Set, das niemand geändert hat, geht hinaus, wie es kam, mit diesem Manifest. Sobald etwas im Set geändert wird, schreibt ein Export ein neues Manifest, das die Attestation auslässt und ihre Datei neben das Manifest legt.",
+  "The manifest this set came with lists this Attestation, which MANIFEST-1 refuses. The set was changed since, and the manifest an export writes now does not list it: the file leaves beside the manifest, and the export says so.":
+    "Das Manifest, mit dem dieses Set kam, listet diese Attestation, was MANIFEST-1 ablehnt. Das Set wurde seither geändert, und das Manifest, das ein Export jetzt schreibt, listet sie nicht: Die Datei liegt dann neben dem Manifest, und der Export sagt es.",
+  "Reported and no failure: the Attestation is not active, so nothing is claimed with it.":
+    "Gemeldet und kein Fehler: Die Attestation ist nicht aktiv, mit ihr wird also nichts behauptet.",
+  "No failure: every subject is as it was signed. Only the manifest is another than the one the Attestation names.":
+    "Kein Fehler: Jedes Subjekt ist so, wie es signiert wurde. Nur das Manifest ist ein anderes als das, das die Attestation nennt.",
+  "empty: the kernel requires an author here, so nothing can be saved without one. The setting “Who am I” prefills this field.":
+    "leer: Der Kernel verlangt hier einen Autor; ohne ihn lässt sich nichts speichern. Die Einstellung „Wer bin ich“ belegt dieses Feld vor.",
+  "Name a party: a URI, or a short name, which becomes a party under your namespace.":
+    "Eine Partei nennen: eine URI oder einen Kurznamen, der zu einer Partei unter Ihrem Namensraum wird.",
 });
 
 const esc = jscEsc;
@@ -155,7 +203,9 @@ function requirementBody(o) {
         p.choices && p.choices.map(c => c.value).join(" | ")].filter(Boolean);
       return badge("⚙ " + p.name, bits.join(" · "));
     }).join(" ");
-    return `<div class="stmt"><div>${badge(T("statement {id}", { id: s.id }))}${modBadge(s.modality)}
+    /* the statement's label (kernel 2.0.0, backlog #84), the print label a reader of the source sees, beside its id */
+    const label = typeof s.label === "string" && s.label ? `<span class="badge" data-stmt-label title="${esc(T("label of the statement in the source"))}">${esc(s.label)}</span>` : "";
+    return `<div class="stmt"><div>${badge(T("statement {id}", { id: s.id }))}${label}${modBadge(s.modality)}
       ${(s["obligated-parties"] || []).map(p => badge("◈ " + last(p), T("obligated party") + ": " + p)).join("")}${params}</div>
       ${langBlocks(s.prose, "prose")}</div>`;
   }).join("") + section(T("Deviations"), o.deviations ? prettyVal(o.deviations) : "");
@@ -171,15 +221,17 @@ function setBody(o) {
   return section(T("Members ({n})", { n: mem.length }) + (mem.length > cap ? " · " + T("first {n} shown", { n: cap }) : ""),
     rows || `<div class="hint">${esc(T("empty"))}</div>`);
 }
+/* who decided and when, as one short line; "" where nothing is stated */
+const whoHtml = p => (p && typeof p === "object" ? `<span class="hint" data-who>${esc(last(p["author-ref"] || ""))} · ${esc(p.date || "")}</span>` : "");
 function tailoringBody(o) {
-  const sel = (o.selects || []).map(s => s["set-ref"] ? refLink(s["set-ref"]) : `<span class="mono">${esc(JSON.stringify(s.predicate))}</span>`).join("<br>");
+  const sel = (o.selects || []).map(s => (s["set-ref"] ? refLink(s["set-ref"]) : `<span class="mono">${esc(JSON.stringify(s.predicate))}</span>`) + " " + whoHtml(s.provenance)).join("<br>");
   const ops = (o.operations || []).map(op => `<div class="stmt">
     <span class="badge" style="border-color:var(--amber);color:var(--amber)">${esc(op.op)}</span>
     ${op["statement-id"] ? badge(T("statement {id}", { id: op["statement-id"] })) : ""}${op.modality ? modBadge(op.modality) : ""}
     ${op.parameter ? badge(`⚙ ${op.parameter} = ${JSON.stringify(op.value)}`) : ""}
     ${op.deviation || op["deviation-ref"] ? `<span class="badge" style="border-color:var(--red);color:var(--red)">${esc(T("carries a Deviation"))}</span>` : ""}
-    <div style="margin-top:5px">${refLink(op["requirement-ref"])}</div></div>`).join("");
-  return section(T("Selects"), `<div>${sel || "—"}</div>`) +
+    <div style="margin-top:5px">${refLink(op["requirement-ref"])} ${whoHtml(op.provenance)}</div></div>`).join("");
+  return (o.provenance ? `<div class="kv">${kv(T("who decided"), whoHtml(o.provenance))}</div>` : "") + section(T("Selects"), `<div>${sel || "—"}</div>`) +
     section(T("Excludes"), o.excludes ? prettyVal(o.excludes.map(e => ({ ...e }))) : "") +
     section(T("Operations ({n})", { n: (o.operations || []).length }), ops || `<div class="hint">—</div>`) +
     section(T("Deviations"), o.deviations ? prettyVal(o.deviations) : "");
@@ -200,7 +252,8 @@ function ratingHtml(r) {
   const lv = x => `${badge(x.level)} <span class="hint mono">${esc(last(x["scale-ref"]))}</span>`;
   return `<div class="kv">${kv(T("level"), lv(r))}
     ${r.likelihood ? kv(T("likelihood"), lv(r.likelihood)) : ""}${r.impact ? kv(T("impact"), lv(r.impact)) : ""}
-    ${r["override-rationale"] ? kv(T("override rationale"), prettyVal(r["override-rationale"])) : ""}</div>`;
+    ${r["override-rationale"] ? kv(T("override rationale"), prettyVal(r["override-rationale"])) : ""}
+    ${r.provenance ? kv(T("who decided"), whoHtml(r.provenance)) : ""}</div>`;
 }
 function riskBody(o) {
   const refs = list => (list || []).map(u => `<div>${refLink(u)}</div>`).join("");
@@ -208,7 +261,8 @@ function riskBody(o) {
   return `<div class="kv">${kv(T("state"), badge(o.state))}${kv(T("owner"), esc(o["owner-ref"]))}
       ${o.treatment ? kv(T("treatment"), badge(o.treatment)) : ""}
       ${o["shared-with-ref"] ? kv(T("shared with"), esc(o["shared-with-ref"])) : ""}
-      ${o["review-due"] ? kv(T("review due"), prettyVal(o["review-due"], 1)) : ""}</div>` +
+      ${o["review-due"] ? kv(T("review due"), prettyVal(o["review-due"], 1)) : ""}
+      ${o.provenance ? kv(T("who decided"), whoHtml(o.provenance)) : ""}</div>` +
     section(T("Scenario"), `<div class="stmt">${langBlocks(o.scenario, "prose")}</div>`) +
     section(T("Rating"), ratingHtml(o.rating)) + section(T("Residual rating"), ratingHtml(o["residual-rating"])) +
     section(T("Treated by"), (o.treatments || []).map(t => `<div>${refLink(t["requirement-ref"])} ${(t["statement-ids"] || []).map(s => badge(T("statement {id}", { id: s }))).join("")}</div>`).join("")) +
@@ -257,7 +311,17 @@ function componentBody(o) {
     section(T("Capabilities ({n})", { n: (o.capabilities || []).length }), (o.capabilities || []).map(c => capabilityHtml(c)).join("")) +
     section(T("Authorizations"), o.authorizations ? prettyVal(o.authorizations) : "");
 }
-const GENERIC_SKIP = new Set(["id", "version", "label", "title", "lifecycle", "aliases", "relations", "facets", "annotations"]);
+/* An object's history (kernel 2.0.0, backlog #81): one line per entry, its date, its comment and its reference. A
+   reference to an object of the set opens it; any other http(s) URI is a link that opens in a new tab; anything else
+   is shown as text and is no link. */
+function historyHtml(list) {
+  if (!Array.isArray(list) || !list.length) return "";
+  const ref = u => (typeof u !== "string" || !u ? "" : objs().has(u) ? refLink(u)
+    : /^https?:\/\//i.test(u) ? `<a class="reflink" href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(u)}</a>` : `<span class="mono">${esc(u)}</span>`);
+  return `<ul data-history style="margin-left:18px">` + list.filter(h => h && typeof h === "object").map(h => `<li data-history-entry>
+      <span class="mono">${esc(h.date || "")}</span>${h.comment ? ` · ${esc(TT(h.comment))}` : ""}${h.ref ? ` · ${ref(h.ref)}` : ""}</li>`).join("") + `</ul>`;
+}
+const GENERIC_SKIP = new Set(["id", "version", "label", "title", "lifecycle", "aliases", "relations", "facets", "annotations", "history"]);
 function genericBody(o) {
   const rest = Object.fromEntries(Object.entries(o).filter(([k]) => !GENERIC_SKIP.has(k)));
   return Object.keys(rest).length ? section(T("Fields"), prettyVal(rest)) : "";
@@ -284,7 +348,7 @@ function objectHtml(r, verified) {
   const digests = r.entry ? section(T("Integrity (from the manifest)"), `<div class="kv">
       ${kv("package-digest", `<span class="mono" style="font-size:10.5px">${esc(r.entry["package-digest"])}</span>${mark(verified && verified.pkg)}`)}
       ${kv("semantic-digest", `<span class="mono" style="font-size:10.5px">${esc(r.entry["semantic-digest"])}</span>${mark(verified && verified.sem)}`)}</div>`) : "";
-  return head + (BODY[r.type] || genericBody)(o) +
+  return head + (BODY[r.type] || genericBody)(o) + section(T("History"), historyHtml(o.history)) +
     section(T("Aliases"), o.aliases ? o.aliases.map(a => badge(`${a.scheme}: ${a.value}`)).join(" ") : "") +
     section(T("Relations"), o.relations ? `<div class="kv">${o.relations.map(rel => kv(rel.type, refLink(rel.ref))).join("")}</div>` : "") +
     facets + section(T("Annotations (not part of the signed meaning)"), o.annotations ? `<div class="annbox">${prettyVal(o.annotations, 1)}</div>` : "") +
@@ -458,11 +522,216 @@ function draft(tool, initial) {
   };
 }
 
+/* ---------- who decides: the author a page writes ----------
+   Every form that writes a Tailoring, a Risk, an Implementation or a
+   Finding shows the party it will name as the author (`provenance`, D26).
+   The field starts from the setting "Who am I" (jscWhoAmI) and can be
+   changed; what is typed holds for this page while it is open and is not
+   stored, so the next visit starts from the setting again. An empty field
+   is allowed: then no author is written and the save goes ahead, because a
+   missing author is a line of the report on the Validate page and never a
+   refusal. The date written is today's, in UTC (jscToday).
+   A page with more than one form shows the same author in each.
+
+   The same field serves the two types whose author the kernel REQUIRES, a
+   Mapping and a Check (authorInput(id, true)). There an empty field writes
+   nothing at all: the page refuses the save and says that the kernel
+   requires the author (backlog #70). The field and what was typed are the
+   same; what an empty field means is the page's to enforce, and the hint
+   beside the field says which of the two it is. See jscPartyRef in
+   jascon-rules.js for why the two differ.
+
+   What is typed is read by jscPartyRef: a URI as it is, a short name as a
+   party under the namespace of the set. The field then shows the URI that
+   will be written. */
+const partyRef = typed => jscPartyRef(typed, jscCfg.get("org:ns"));
+let authorTyped = null;
+const author = () => partyRef(authorTyped === null ? jscWhoAmI() : authorTyped);
+/* what a save writes now: {author-ref, date}, or null when no author is known */
+const provenance = () => jscProvenance(author(), jscToday());
+const authorHint = required => (author() ? T("written as the author, dated {date}", { date: jscToday() })
+  : required ? T("empty: the kernel requires an author here, so nothing can be saved without one. The setting “Who am I” prefills this field.")
+  : T("empty: no author is written, and saving works all the same. The setting “Who am I” prefills this field."));
+const authorLabel = id => `<label for="${id}">${esc(T("Author (party URI)"))}</label>`;
+const authorInput = (id, required) => `<input type="text" id="${id}" data-author${required ? ' aria-required="true"' : ""} value="${esc(author())}" placeholder="https://your.example/party/…" style="min-width:260px;max-width:420px">
+  <span class="hint" data-author-hint="${required ? "required" : "optional"}">${esc(authorHint(required))}</span>`;
+function wireAuthor(root, onChange) {
+  root.querySelectorAll("[data-author]").forEach(n => n.addEventListener("change", () => {
+    authorTyped = n.value.trim();
+    document.querySelectorAll("[data-author]").forEach(m => { m.value = author(); });
+    document.querySelectorAll("[data-author-hint]").forEach(h => { h.textContent = authorHint(h.dataset.authorHint === "required"); });
+    if (onChange) jscRedraw(onChange);   // onChange draws a form again: not under a press (jscRedraw in jascon-core.js)
+  }));
+}
+
+/* ---------- a party the kernel requires ----------
+   One field of a page for a party an object is not valid without: the
+   performer of an Assessment, say. `start` gives where the field starts
+   while nothing was typed (the setting "Who am I" for a performer; nothing
+   for an approver, see the Tailor page). What is typed holds while the page
+   is open; an emptied field stays empty and is never filled again behind
+   the user's back. The page asks ref() when it saves and refuses where it
+   is "": no page writes a party nobody named (backlog #70).
+   -> { ref(): the party URI or "", html(id, style), wire(root, id, onChange) } */
+function requiredParty(start) {
+  let typed = null;
+  const ref = () => partyRef(typed === null ? (start ? start() : "") : typed);
+  return { ref,
+    html: (id, style) => `<input type="text" id="${id}" aria-required="true" value="${esc(ref())}" placeholder="https://your.example/party/…" style="${style || "min-width:240px;max-width:420px"}">`,
+    wire(root, id, onChange) {
+      const n = root.querySelector("#" + id);
+      if (n) n.addEventListener("change", () => { typed = n.value.trim(); n.value = ref(); if (onChange) onChange(); });
+    } };
+}
+/* A refusal for a missing party: the page's own sentence, which names the
+   field and what the kernel requires, and one sentence on how to name a
+   party that is the same everywhere. */
+const HOW_TO_NAME = N("Name a party: a URI, or a short name, which becomes a party under your namespace.");
+const missingParty = sentence => `${T(sentence)} ${T(HOW_TO_NAME)}`;
+
+/* ---------- a Deviation and its decision ----------
+   Shows one Deviation and, where the kernel's state machine has a next
+   state, lets it be moved. When it becomes approved or withdrawn the form
+   offers today as the day it was decided (`decided`); the day can be
+   changed, and emptied. An approved Deviation may get a review date
+   (`review-due`), in the two forms the Risk page offers: on a date, or
+   every so many units of a named calendar. A Deviation that is decided and
+   states no day can be given one; no day is suggested for it, because the
+   page does not know when that was.
+   `key` names the Deviation on the page. What is typed is kept per key
+   while the page is open. wireDeviations calls onSave(key, deviation, show)
+   with the Deviation after the decision (jscDecideDeviation); the page
+   writes the object that carries it and calls show(message) to refuse. */
+const devTyped = new Map();
+const DECIDED = ["approved", "withdrawn"];
+function devForm(dev, key) {
+  if (!devTyped.has(key)) devTyped.set(key, { to: "", decided: null, due: undefined });
+  const f = devTyped.get(key), to = f.to || dev.state, becomes = to !== dev.state;
+  /* the day offered: what was typed, else the stored one, else today when the decision is made here */
+  const decided = f.decided !== null ? f.decided : dev.decided || (becomes && DECIDED.includes(to) ? jscToday() : "");
+  const due = f.due !== undefined ? f.due : dev["review-due"] || null;
+  return { f, to, becomes, decided, due };
+}
+function dueText(due) {
+  if (!due) return "";
+  return due.type === "date" || due.type === "datetime" ? due.value : `${due.num} ${due.unit}${due["calendar-ref"] ? " · " + last(due["calendar-ref"]) : ""}`;
+}
+function deviationHtml(dev, key) {
+  const { to, becomes, decided, due } = devForm(dev, key), next = JSC_NEXT.deviation[dev.state] || [];
+  const opt = (value, text, current) => `<option value="${esc(value)}" ${value === current ? "selected" : ""}>${esc(text)}</option>`;
+  const head = `⚑ ${esc(T("Deviation"))}: ${esc(dev.type)} · ${badge(dev.state)}${dev.decided ? ` <span class="hint">${esc(T("decided on {date}", { date: dev.decided }))}</span>` : ""}
+    ${dev["review-due"] ? ` <span class="hint">${esc(T("review due"))} ${esc(dueText(dev["review-due"]))}</span>` : ""}`;
+  const isDecided = DECIDED.includes(to), kind = due ? due.type : "";
+  if (!next.length && !DECIDED.includes(dev.state)) return `<div class="hint verdict-warn" data-dev="${esc(key)}">${head}</div>`;
+  return `<div class="verdict-warn" data-dev="${esc(key)}" style="margin:4px 0">${head}
+    <div class="wbrow" style="margin:4px 0 0">
+      ${next.length ? `<label>${esc(T("move to"))} <select data-dev-to>${opt("", T("(leave as it is)"), becomes ? to : "")}${next.map(s => opt(s, s, becomes ? to : "")).join("")}</select></label>` : ""}
+      ${isDecided ? `<label>${esc(T("decided on"))} <input type="date" data-dev-decided value="${esc(decided)}" ${dev.decided && !becomes ? "disabled" : ""}></label>` : ""}
+      ${to === "approved" ? `<label>${esc(T("review due"))} <select data-dev-due>${opt("", T("no date"), kind)}${opt("date", T("on a date"), kind)}${opt("calendar-period", T("every"), kind)}</select></label>
+        ${kind === "date" ? `<input type="date" data-dev-duedate value="${esc(due.value || "")}" aria-label="${esc(T("review due"))}">` : ""}
+        ${kind === "calendar-period" ? `<input type="number" data-dev-duenum min="1" value="${esc(due.num || 12)}" style="width:76px;min-width:76px" aria-label="num">
+          <select data-dev-dueunit aria-label="unit">${JSC_CALENDAR_UNITS.map(u => opt(u, u, due.unit || "months")).join("")}</select>
+          <input type="url" data-dev-duecal placeholder="${esc(T("Calendar (URI)"))}" aria-label="${esc(T("Calendar (URI)"))}" value="${esc(due["calendar-ref"] || "")}" style="min-width:220px">` : ""}` : ""}
+      ${becomes || isDecided ? `<button type="button" class="small primary" data-dev-save>${esc(T("Record the decision"))}</button>` : ""}
+      <span class="verdict-bad" data-dev-err role="alert"></span></div></div>`;
+}
+/* devOf(key) -> the Deviation as stored; again() draws the page's view again */
+function wireDeviations(root, devOf, again, onSave) {
+  root.querySelectorAll("[data-dev]").forEach(box => {
+    const key = box.dataset.dev, dev = devOf(key);
+    if (!dev) return;
+    const on = (selector, fn, redraw) => box.querySelectorAll(selector).forEach(n => n.addEventListener("change", () => { fn(devForm(dev, key), n); if (redraw) again(); }));
+    on("[data-dev-to]", (s, n) => { s.f.to = n.value; s.f.decided = null; }, true);
+    on("[data-dev-decided]", (s, n) => { s.f.decided = n.value; });
+    on("[data-dev-due]", (s, n) => { s.f.due = n.value === "date" ? { type: "date", value: "" } : n.value ? { type: "calendar-period", num: 12, unit: "months", "calendar-ref": "" } : null; }, true);
+    on("[data-dev-duedate]", (s, n) => { s.f.due = { ...s.due, value: n.value }; });
+    on("[data-dev-duenum]", (s, n) => { s.f.due = { ...s.due, num: Number(n.value) || 0 }; });
+    on("[data-dev-dueunit]", (s, n) => { s.f.due = { ...s.due, unit: n.value }; });
+    on("[data-dev-duecal]", (s, n) => { s.f.due = { ...s.due, "calendar-ref": n.value.trim() }; });
+    const save = box.querySelector("[data-dev-save]");
+    if (save) save.addEventListener("click", async () => {
+      const s = devForm(dev, key), show = msg => { box.querySelector("[data-dev-err]").textContent = msg; };
+      let decided;
+      try { decided = jscDecideDeviation(dev, s.to, s.decided, s.to === "approved" ? s.due : undefined); } catch (e) { show(e.message); return; }
+      if (await onSave(key, decided, show) !== false) devTyped.delete(key);
+    });
+  });
+}
+
+/* ---------- what an Attestation binds (backlog #46) ----------
+   The Validate page shows every Attestation of the set, the Assess page one
+   at a time; both show the result of jscSetBinds (jascon-rules.js) through
+   this function, so that they cannot say two things. Three parts:
+   - what the comparison was made against. The reference validator sees a
+     bundle on disk; a set may have been written to since it was loaded,
+     and then the bundle to compare with is the one an export would write
+     (see jscSetBinds). The sentence says which, with the manifest's digest.
+   - the line of the reference, word for word, or its failure ("error: ").
+   - where an Attestation does not bind, what can be done about it. Which
+     of the ways are open depends on whether it is signed: an Attestation
+     that names an envelope cannot be changed here, its lifecycle included,
+     without breaking the signature, so withdrawing it is not offered. */
+const BINDS_BASIS = {
+  loaded: N("Compared with the bundle as it was loaded: the manifest this set came with ({digest}) and the objects it lists."),
+  changed: N("This set was changed in this app after it was loaded, so the manifest it came with ({loaded}) no longer describes it. Compared with the bundle an export would write now: its manifest ({digest}) and the objects it lists. An Attestation that bound the manifest the set came with binds another manifest then: a Semantic Match while its subjects are unchanged, and no failure."),
+  none: N("This set has no manifest yet. Compared with the bundle an export would write now: its manifest ({digest}) and the objects it lists."),
+};
+const BINDS_ADVICE = {
+  signed: N("What can be done: the signer issues the Attestation again for the content as it is now, or the Attestation is taken out of the set (Assess page). It names an envelope, so it is signed: changing it here, its lifecycle included, would break the signature, and withdrawing it is the signer's act."),
+  unsigned: N("What can be done: the Attestation is issued again for the content as it is now, or it is taken out of the set, or, because it names no envelope and is unsigned, it is set to withdrawn (both on the Assess page). A withdrawn Attestation that does not bind is reported and fails nothing."),
+  reported: N("Reported and no failure: the Attestation is not active, so nothing is claimed with it."),
+  semantic: N("No failure: every subject is as it was signed. Only the manifest is another than the one the Attestation names."),
+};
+/* MANIFEST-1 (backlog #75): no content manifest lists an Attestation. The failure is the reference's line. What
+   the app does about a set that came with such a manifest is said beside it, because it does nothing in silence:
+   an unchanged set leaves as it came; a changed one gets a manifest that leaves the Attestation out. */
+const LISTED_REFUSED = N("The manifest this set came with lists this Attestation. The app has not changed that: a set nobody changed leaves as it came, with that manifest. Once something in the set is changed, an export writes a new manifest, which leaves the Attestation out and puts its file beside the manifest.");
+const LISTED_LEFT_OUT = N("The manifest this set came with lists this Attestation, which MANIFEST-1 refuses. The set was changed since, and the manifest an export writes now does not list it: the file leaves beside the manifest, and the export says so.");
+/* The move, offered where the listing is refused (backlog #71, point 11): the user takes the Attestation out of the
+   manifest's list, and the export then writes the new manifest and puts the file beside it. What that does to the
+   binding is said before the button: the Attestation is not changed and names the manifest it was issued over, and
+   `after-move` of jscSetBinds is the line it gets against the manifest an export writes then. */
+const LISTED_MOVE = N("You can have the move made now. The Attestation is taken out of the manifest's list in this set; the next export writes a new manifest without it and puts the file beside the manifest. The Attestation itself is not changed, and its signature stays what it is.");
+const LISTED_MOVE_BINDS = N("What the move does to the binding: the Attestation keeps naming the manifest it was issued over, and the manifest an export writes is a new one. Held to that bundle it reads:");
+const LISTED_MOVE_NOTE = N("A Full Match needs the manifest the Attestation names. Where the new manifest is another one, the signer issues the Attestation again over it; until then it is a Semantic Match while every subject is as it was signed.");
+const LISTED_MOVE_DO = N("Take it out of the manifest's list");
+const bindsBasisKey = b => (b.basis === "loaded" ? "loaded" : b["loaded-manifest-digest"] ? "changed" : "none");
+const shortDigest = d => (typeof d === "string" && d.length > 24 ? d.slice(0, 19) + "…" : String(d || ""));
+const bindsBasis = b => T(BINDS_BASIS[bindsBasisKey(b)], { digest: shortDigest(b["manifest-digest"]), loaded: shortDigest(b["loaded-manifest-digest"]) });
+const bindsAdvice = l => (l.verdict === "fail" ? T(BINDS_ADVICE[l.fails ? (l.signed ? "signed" : "unsigned") : "reported"]) : l.verdict === "semantic-match" ? T(BINDS_ADVICE.semantic) : "");
+/* binds: the result of jscSetBinds; only: one Attestation's id, or nothing for all */
+function bindsHtml(binds, only) {
+  const lines = binds.lines.filter(l => !only || l.id === only);
+  return `<div class="hint" data-binds-basis="${bindsBasisKey(binds)}" title="${esc(binds["manifest-digest"] || "")}">${esc(bindsBasis(binds))}</div>` +
+    lines.map(l => `<div data-binds="${l.kind}" data-verdict="${l.verdict}" data-binds-id="${esc(l.id)}">
+      <div class="mono ${l.kind === "failure" ? "verdict-bad" : l.verdict === "full-match" ? "verdict-ok" : "verdict-warn"}" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere" data-binds-text>${esc((l.kind === "failure" ? "error: " : "") + l.text)}</div>
+      ${bindsAdvice(l) ? `<div class="hint" data-binds-advice>${esc(bindsAdvice(l))}</div>` : ""}
+      ${l.listed === "refused" ? `<div class="mono verdict-bad" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere" data-manifest-1="refused">${esc("error: " + l["manifest-1"])}</div>
+        <div class="hint" data-manifest-1-advice>${esc(T(LISTED_REFUSED))}</div>
+        <div class="hint" data-move-offer>${esc(T(LISTED_MOVE))} ${l["after-move"] ? `${esc(T(LISTED_MOVE_BINDS))} <span class="mono" data-move-after>${esc(l["after-move"])}</span> ` : ""}${esc(T(LISTED_MOVE_NOTE))}
+          <div style="margin-top:4px"><button type="button" class="small" data-move="${esc(l.id)}">${esc(T(LISTED_MOVE_DO))}</button> <span class="verdict-bad" data-move-err role="alert"></span></div></div>` : ""}
+      ${l.listed === "left-out" ? `<div class="hint" data-manifest-1="left-out">${esc(T(LISTED_LEFT_OUT))}</div>` : ""}</div>`).join("");
+}
+/* The button of the move. It marks the Attestation in the set (jscSet.unlistAttestation), says in the console what
+   was done, and calls after() so that the page shows the set as it is now. */
+function wireMove(root, after) {
+  root.querySelectorAll("[data-move]").forEach(b => b.addEventListener("click", async () => {
+    b.disabled = true;
+    const id = b.dataset.move, r = jscSet.graph.objects.get(id), done = await jscSet.unlistAttestation(id);
+    if (!done) { root.querySelector("[data-move-err]").textContent = T("The set changed since this was shown; nothing was done. Check again."); return; }
+    jscLog.ok(T("{id}: taken out of the manifest's list in this set. The file ({path}) and the Attestation are unchanged; the next export writes a new manifest without it and puts the file beside the manifest.", { id, path: r.path }));
+    await after();
+  }));
+}
+
 window.jscView = {
+  bindsHtml, wireMove,
   TYPE_VIEW, MODALITY_COLOR, VERDICT_CLASS, onOpen: null,
   open(id) { (this.onOpen || openDrawer)(id); },
   last, labelOf, titleOf, typeGlyph, typeBadge, badge, modBadge, refLink, wireRefs, prose, langBlocks, kv, prettyVal, section,
   objectHtml, capabilityHtml, pickerHtml, wirePicker, donut, hbars, dimIndex, dimOptLabel, reqMatches, draft,
+  author, provenance, authorLabel, authorInput, wireAuthor, deviationHtml, wireDeviations,
+  partyRef, requiredParty, missingParty,
 };
 
 })();

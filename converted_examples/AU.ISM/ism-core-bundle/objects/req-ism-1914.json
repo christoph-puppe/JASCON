@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1914",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1914",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Approved configurations for operating systems are developed, implemented and maintained."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-03"
   }
  ]
 }

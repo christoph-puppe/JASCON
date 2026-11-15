@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/csf/req/PR.IP-07",
+ "version": "2.0",
+ "label": "PR.IP-07",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "PR.IP-07"
+ },
+ "statements": [
+  {
+   "id": "statement",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/csf/party/organization"
+   ],
+   "prose": {
+    "en": "Protection processes are improved"
+   }
+  }
+ ]
+}

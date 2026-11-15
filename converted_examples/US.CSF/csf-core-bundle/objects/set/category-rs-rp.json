@@ -1,0 +1,15 @@
+{
+ "id": "https://ns.nist.gov/csf/set/category/rs-rp",
+ "version": "2.0",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Response Planning"
+ },
+ "label": "Response Planning (RS.RP)",
+ "members": [
+  {
+   "ref": "https://ns.nist.gov/csf/req/RS.RP-01",
+   "sequence": 10
+  }
+ ]
+}

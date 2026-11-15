@@ -10,1035 +10,1043 @@
   {
    "path": "high.profile.back-matter.resources[].description",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "high.profile.back-matter.resources[].rlinks[].href",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "high.profile.back-matter.resources[].rlinks[].media-type",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "high.profile.back-matter.resources[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "high.profile.imports[].href",
    "count": 1,
-   "level": "L3",
-   "destination": "OSCAL-profile resolution mechanics; the selection IS the Set (no semantic residue)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4) [ledger: copied 1]"
   },
   {
    "path": "high.profile.imports[].include-controls[].with-ids[]",
    "count": 370,
    "level": "L1",
-   "destination": "baseline Set members (minted URIs, catalog order)"
+   "destination": "baseline Set members (minted URIs, in the profile's order) [ledger: transformed 370]"
   },
   {
    "path": "high.profile.merge.as-is",
    "count": 1,
-   "level": "L3",
-   "destination": "OSCAL-profile resolution mechanics; the selection IS the Set (no semantic residue)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `merge` (`as-is`, a JSON boolean) [ledger: copied 1]"
   },
   {
    "path": "high.profile.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "high.profile.metadata.oscal-version",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "high.profile.metadata.parties[].addresses[].addr-lines[]",
    "count": 8,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 8]"
   },
   {
    "path": "high.profile.metadata.parties[].addresses[].city",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "high.profile.metadata.parties[].addresses[].postal-code",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "high.profile.metadata.parties[].addresses[].state",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "high.profile.metadata.parties[].email-addresses[]",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "high.profile.metadata.parties[].name",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "high.profile.metadata.parties[].short-name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "high.profile.metadata.parties[].type",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "high.profile.metadata.parties[].uuid",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "high.profile.metadata.responsible-parties[].party-uuids[]",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "high.profile.metadata.responsible-parties[].role-id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "high.profile.metadata.roles[].id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "high.profile.metadata.roles[].title",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "high.profile.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "baseline Set title [ledger: copied 1]"
   },
   {
    "path": "high.profile.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "baseline Set `version`; manifest `provenance.sources[]` `version` [ledger: copied 1]"
   },
   {
    "path": "high.profile.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "manifest `provenance.sources[]` `uuid` (E3, #80) [ledger: copied 1]"
   },
   {
    "path": "low.profile.back-matter.resources[].description",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "low.profile.back-matter.resources[].rlinks[].href",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "low.profile.back-matter.resources[].rlinks[].media-type",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "low.profile.back-matter.resources[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "low.profile.imports[].href",
    "count": 1,
-   "level": "L3",
-   "destination": "OSCAL-profile resolution mechanics; the selection IS the Set (no semantic residue)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4) [ledger: copied 1]"
   },
   {
    "path": "low.profile.imports[].include-controls[].with-ids[]",
    "count": 149,
    "level": "L1",
-   "destination": "baseline Set members (minted URIs, catalog order)"
+   "destination": "baseline Set members (minted URIs, in the profile's order) [ledger: transformed 149]"
   },
   {
    "path": "low.profile.merge.as-is",
    "count": 1,
-   "level": "L3",
-   "destination": "OSCAL-profile resolution mechanics; the selection IS the Set (no semantic residue)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `merge` (`as-is`, a JSON boolean) [ledger: copied 1]"
   },
   {
    "path": "low.profile.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "low.profile.metadata.oscal-version",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "low.profile.metadata.parties[].addresses[].addr-lines[]",
    "count": 8,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 8]"
   },
   {
    "path": "low.profile.metadata.parties[].addresses[].city",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "low.profile.metadata.parties[].addresses[].postal-code",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "low.profile.metadata.parties[].addresses[].state",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "low.profile.metadata.parties[].email-addresses[]",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "low.profile.metadata.parties[].name",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "low.profile.metadata.parties[].short-name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "low.profile.metadata.parties[].type",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "low.profile.metadata.parties[].uuid",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "low.profile.metadata.responsible-parties[].party-uuids[]",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "low.profile.metadata.responsible-parties[].role-id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "low.profile.metadata.roles[].id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "low.profile.metadata.roles[].title",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "low.profile.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "baseline Set title [ledger: copied 1]"
   },
   {
    "path": "low.profile.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "baseline Set `version`; manifest `provenance.sources[]` `version` [ledger: copied 1]"
   },
   {
    "path": "low.profile.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "manifest `provenance.sources[]` `uuid` (E3, #80) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.back-matter.resources[].description",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.back-matter.resources[].rlinks[].href",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "moderate.profile.back-matter.resources[].rlinks[].media-type",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "moderate.profile.back-matter.resources[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.imports[].href",
    "count": 1,
-   "level": "L3",
-   "destination": "OSCAL-profile resolution mechanics; the selection IS the Set (no semantic residue)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.imports[].include-controls[].with-ids[]",
    "count": 287,
    "level": "L1",
-   "destination": "baseline Set members (minted URIs, catalog order)"
+   "destination": "baseline Set members (minted URIs, in the profile's order) [ledger: transformed 287]"
   },
   {
    "path": "moderate.profile.merge.as-is",
    "count": 1,
-   "level": "L3",
-   "destination": "OSCAL-profile resolution mechanics; the selection IS the Set (no semantic residue)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `merge` (`as-is`, a JSON boolean) [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.metadata.oscal-version",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.metadata.parties[].addresses[].addr-lines[]",
    "count": 8,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 8]"
   },
   {
    "path": "moderate.profile.metadata.parties[].addresses[].city",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "moderate.profile.metadata.parties[].addresses[].postal-code",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "moderate.profile.metadata.parties[].addresses[].state",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "moderate.profile.metadata.parties[].email-addresses[]",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "moderate.profile.metadata.parties[].name",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "moderate.profile.metadata.parties[].short-name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.metadata.parties[].type",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "moderate.profile.metadata.parties[].uuid",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "moderate.profile.metadata.responsible-parties[].party-uuids[]",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "moderate.profile.metadata.responsible-parties[].role-id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "moderate.profile.metadata.roles[].id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "moderate.profile.metadata.roles[].title",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "moderate.profile.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "baseline Set title [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "baseline Set `version`; manifest `provenance.sources[]` `version` [ledger: copied 1]"
   },
   {
    "path": "moderate.profile.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "manifest `provenance.sources[]` `uuid` (E3, #80) [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].citation.text",
    "count": 192,
-   "level": "L1",
-   "destination": "reference-link resolution table + references@1 facet on the root Set (title/citation/url)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the root Set (#82): the resources something in the catalogue refers to, in the source's own shape (the uuid as `id`, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 169, not-content 23]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].rlinks[].href",
    "count": 201,
-   "level": "L1",
-   "destination": "reference-link resolution table + references@1 facet on the root Set (title/citation/url)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the root Set (#82): the resources something in the catalogue refers to, in the source's own shape (the uuid as `id`, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 178, not-content 23]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].rlinks[].media-type",
    "count": 2,
-   "level": "L1",
-   "destination": "reference-link resolution table + references@1 facet on the root Set (title/citation/url)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the root Set (#82): the resources something in the catalogue refers to, in the source's own shape (the uuid as `id`, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].title",
    "count": 201,
-   "level": "L1",
-   "destination": "reference-link resolution table + references@1 facet on the root Set (title/citation/url)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the root Set (#82): the resources something in the catalogue refers to, in the source's own shape (the uuid as `id`, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 178, not-content 23]"
   },
   {
    "path": "nist.catalog.back-matter.resources[].uuid",
    "count": 201,
-   "level": "L1",
-   "destination": "reference-link resolution table + references@1 facet on the root Set (title/citation/url)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the root Set (#82): the resources something in the catalogue refers to, in the source's own shape (the uuid as `id`, title, citation, rlinks with href and media-type); a markdown link `(#uuid)` in a text names one by its uuid, and a control's `reference` link is resolved to its first link (the uuid and the link are then also inputs of that rule); a resource nothing refers to -> not content, an orphan (E4) [ledger: copied 178, not-content 23]"
   },
   {
    "path": "nist.catalog.groups[].class",
    "count": 20,
-   "level": "L1",
-   "destination": "family Set id/title (D21 nesting under root)"
+   "level": "not content",
+   "destination": "`family`: selects that the group is written as a family Set [ledger: not-content 20]"
   },
   {
    "path": "nist.catalog.groups[].controls[].class",
    "count": 1196,
-   "level": "L1",
-   "destination": "encoded structurally: family Set membership + `required` base edge distinguishes enhancements"
+   "level": "not content",
+   "destination": "rebuilt from the control id (an id with a dot is an enhancement) [ledger: not-content 1,196]"
   },
   {
    "path": "nist.catalog.groups[].controls[].id",
    "count": 1196,
    "level": "L1",
-   "destination": "Requirement id (URI mint, dot form = corpus mapping endpoints) + title | withdrawn: dropped, lineage inverted"
+   "destination": "Requirement URI (dot form = corpus mapping endpoints); of a withdrawn control that names a successor also its URI in the successor's `replaces` [ledger: transformed 1,196]"
   },
   {
    "path": "nist.catalog.groups[].controls[].links[].href",
    "count": 5265,
    "level": "L1",
-   "destination": "related->related; required->required; reference->reference (resolved URL); incorporated-into/moved-to->successor replaces[] (merged-into/renamed) + nist-withdrawal annotation"
+   "destination": "related, required -> relation to the Requirement the link names; reference -> relation to the link of the back-matter resource, or, where the resource gives none, compat facet `links` as the source writes it (E14); incorporated-into, moved-to -> the successor's `replaces[]` and the statement of the withdrawn control (R2) [ledger: transformed 5,265]"
   },
   {
    "path": "nist.catalog.groups[].controls[].links[].rel",
    "count": 5265,
    "level": "L1",
-   "destination": "related->related; required->required; reference->reference (resolved URL); incorporated-into/moved-to->successor replaces[] (merged-into/renamed) + nist-withdrawal annotation"
+   "destination": "related, required, reference -> the relation type, the same word; incorporated-into, moved-to -> `mode` merged-into, renamed, and the verb of the withdrawn control's statement (R2) [ledger: copied 5,065, transformed 200]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].guidelines[].prose",
    "count": 1327,
    "level": "L2",
-   "destination": "odp@1 facet params.{name}.guidelines (language-tagged)"
+   "destination": "odp@1 params.{id}.guidelines (language-tagged) [ledger: copied 1,322, transformed 5]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].id",
    "count": 1600,
    "level": "L1",
-   "destination": "statement-scoped kernel parameter decl (name, label) on each inserting statement (per-statement parameter rule)"
+   "destination": "statement-scoped kernel parameter (name, label) on each inserting statement (per-statement parameter rule); the id is also the key of the parameter in odp@1 [ledger: copied 1,600]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].label",
    "count": 1467,
    "level": "L1",
-   "destination": "statement-scoped kernel parameter decl (name, label) on each inserting statement (per-statement parameter rule)"
+   "destination": "statement-scoped kernel parameter (name, label) on each inserting statement (per-statement parameter rule); the id is also the key of the parameter in odp@1 [ledger: copied 1,467]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].props[].class",
    "count": 1564,
-   "level": "L1",
-   "destination": "prop label (formal ODP id) -> L3-derivable (round-trip asserted); alt-identifier/alt-label/aggregates -> odp@1 facet"
+   "level": "not content",
+   "destination": "select the rule for the prop's value [ledger: not-content 1,564]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].props[].name",
    "count": 3021,
-   "level": "L1",
-   "destination": "prop label (formal ODP id) -> L3-derivable (round-trip asserted); alt-identifier/alt-label/aggregates -> odp@1 facet"
+   "level": "not content",
+   "destination": "select the rule for the prop's value [ledger: not-content 3,021]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].props[].ns",
    "count": 331,
-   "level": "L1",
-   "destination": "prop label (formal ODP id) -> L3-derivable (round-trip asserted); alt-identifier/alt-label/aggregates -> odp@1 facet"
+   "level": "not content",
+   "destination": "select the rule for the prop's value [ledger: not-content 331]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].props[].value",
    "count": 3021,
-   "level": "L1",
-   "destination": "prop label (formal ODP id) -> L3-derivable (round-trip asserted); alt-identifier/alt-label/aggregates -> odp@1 facet"
+   "level": "L2",
+   "destination": "odp@1 params.{id}: alt-identifier -> alt-identifiers, alt-label (class sp800-53) -> alt-label, aggregates -> aggregates, label (class sp800-53a, the formal ODP label) -> sp800-53a-label [ledger: copied 3,021]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].select.choice[]",
    "count": 355,
    "level": "L1",
-   "destination": "choice type + choices[] + cardinality many (one-or-more)"
+   "destination": "parameter type `choice` with `choices[]` (insertions as tokens) [ledger: copied 284, transformed 71]"
   },
   {
    "path": "nist.catalog.groups[].controls[].params[].select.how-many",
    "count": 97,
    "level": "L1",
-   "destination": "choice type + choices[] + cardinality many (one-or-more)"
+   "destination": "parameter `cardinality` many (one-or-more) [ledger: transformed 97]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].id",
    "count": 9798,
    "level": "L1",
-   "destination": "statement/item -> flattened statements[] (id suffix); guidance -> narrative@1; assessment-* -> sp800-53a@1"
+   "destination": "statement or item with text -> statement id (control prefix removed); assessment-objective -> its id in assessment-criteria@1; guidance, assessment-method and a statement part without text of its own -> not content, rebuilt from the control id [ledger: copied 3,715, transformed 1,920, not-content 4,163]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].links[].href",
    "count": 3707,
-   "level": "L1",
-   "destination": "in-prose citation links; resolved with the same reference table (md #-links -> text; target rides control-level reference relation)"
+   "level": "L2",
+   "destination": "`assessment-for` of an assessment objective -> assessment-criteria@1 objective `assessment-for[]`, an address (#83): `statement-id` (the statement part by the statement-id rule), with `requirement-ref` where the part is another control's; the statement part as a whole, which has no text of its own -> `requirement-ref` alone; a link that names nothing the catalogue defines -> `href`, as the source writes it (a defect of the source) [ledger: copied 1, transformed 3,706]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].links[].rel",
    "count": 3707,
-   "level": "L1",
-   "destination": "in-prose citation links; resolved with the same reference table (md #-links -> text; target rides control-level reference relation)"
+   "level": "not content",
+   "destination": "`assessment-for`: selects the member of that name [ledger: not-content 3,707]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].name",
    "count": 12729,
-   "level": "L1",
-   "destination": "statement/item -> flattened statements[] (id suffix); guidance -> narrative@1; assessment-* -> sp800-53a@1"
+   "level": "not content",
+   "destination": "selects where the part is written (statement, item -> statements[]; guidance -> narrative@1; assessment-* -> assessment-criteria@1) [ledger: not-content 12,729]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].props[].class",
    "count": 6644,
-   "level": "L1",
-   "destination": "item print labels -> L3-derivable (id-encoded); sp800-53a objective/method labels -> sp800-53a@1; method EXAMINE/INTERVIEW/TEST -> sp800-53a@1 methods"
+   "level": "not content",
+   "destination": "select the rule for the prop's value [ledger: not-content 6,644]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].props[].name",
    "count": 10697,
-   "level": "L1",
-   "destination": "item print labels -> L3-derivable (id-encoded); sp800-53a objective/method labels -> sp800-53a@1; method EXAMINE/INTERVIEW/TEST -> sp800-53a@1 methods"
+   "level": "not content",
+   "destination": "select the rule for the prop's value [ledger: not-content 10,697]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].props[].ns",
    "count": 2931,
-   "level": "L1",
-   "destination": "item print labels -> L3-derivable (id-encoded); sp800-53a objective/method labels -> sp800-53a@1; method EXAMINE/INTERVIEW/TEST -> sp800-53a@1 methods"
+   "level": "not content",
+   "destination": "select the rule for the prop's value [ledger: not-content 2,931]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].props[].value",
    "count": 10697,
-   "level": "L1",
-   "destination": "item print labels -> L3-derivable (id-encoded); sp800-53a objective/method labels -> sp800-53a@1; method EXAMINE/INTERVIEW/TEST -> sp800-53a@1 methods"
+   "level": "L2",
+   "destination": "sp800-53a label of an objective or a method -> assessment-criteria@1 `label`; method -> assessment-criteria@1 `method`; print label of a statement item -> the statement's kernel `label` (#84) [ledger: copied 10,697]"
   },
   {
    "path": "nist.catalog.groups[].controls[].parts[].prose",
    "count": 8652,
    "level": "L1",
-   "destination": "statement prose (insertions -> {param:} tokens); guidance/objectives/objects prose -> facets (language-tagged; md #-links -> text)"
+   "destination": "statement prose (insertions -> {param:} tokens); guidance, objectives, assessment objects -> facets (language-tagged); a markdown link stays as the source wrote it [ledger: copied 3,813, transformed 4,839]"
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].class",
    "count": 2391,
-   "level": "L1",
-   "destination": "label(plain)->label; zero-padded/sp800-53a->L3-derivable (equality asserted); sort-id->Set sequence; implementation-level->obligated-parties mint; contributes-to-assurance->rmf@1; status->tombstone drop + successor replaces[]"
+   "level": "not content",
+   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name [ledger: not-content 2,391]"
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].name",
    "count": 6557,
-   "level": "L1",
-   "destination": "label(plain)->label; zero-padded/sp800-53a->L3-derivable (equality asserted); sort-id->Set sequence; implementation-level->obligated-parties mint; contributes-to-assurance->rmf@1; status->tombstone drop + successor replaces[]"
+   "level": "not content",
+   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name [ledger: not-content 6,557]"
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].ns",
    "count": 1592,
-   "level": "L1",
-   "destination": "label(plain)->label; zero-padded/sp800-53a->L3-derivable (equality asserted); sort-id->Set sequence; implementation-level->obligated-parties mint; contributes-to-assurance->rmf@1; status->tombstone drop + successor replaces[]"
+   "level": "not content",
+   "destination": "select the rule for the prop's value: the name the member, the class which label, the namespace (http://csrc.nist.gov/ns/rmf) the meaning of the name [ledger: not-content 1,592]"
   },
   {
    "path": "nist.catalog.groups[].controls[].props[].value",
    "count": 6557,
    "level": "L1",
-   "destination": "label(plain)->label; zero-padded/sp800-53a->L3-derivable (equality asserted); sort-id->Set sequence; implementation-level->obligated-parties mint; contributes-to-assurance->rmf@1; status->tombstone drop + successor replaces[]"
+   "destination": "label (no class) -> `label` of the Requirement; zero-padded and sp800-53a label -> not content, rebuilt from that label; sort-id -> member sequence in the family Set; implementation-level -> obligated-parties; contributes-to-assurance -> rmf@1 (a JSON boolean); status -> `lifecycle` (E1) [ledger: copied 1,196, transformed 2,970, not-content 2,391]"
   },
   {
    "path": "nist.catalog.groups[].controls[].title",
    "count": 1196,
    "level": "L1",
-   "destination": "Requirement id (URI mint, dot form = corpus mapping endpoints) + title | withdrawn: dropped, lineage inverted"
+   "destination": "Requirement title [ledger: copied 1,196]"
   },
   {
    "path": "nist.catalog.groups[].id",
    "count": 20,
    "level": "L1",
-   "destination": "family Set id/title (D21 nesting under root)"
+   "destination": "family Set URI (D21 nesting under root) [ledger: transformed 20]"
   },
   {
    "path": "nist.catalog.groups[].parts[].id",
    "count": 1,
-   "level": "L2",
-   "destination": "pm overview part -> narrative@1 guidance on the pm family Set (language-tagged)"
+   "level": "not content",
+   "destination": "rebuilt from the group id (<group id>_ovw) [ledger: not-content 1]"
   },
   {
    "path": "nist.catalog.groups[].parts[].name",
    "count": 1,
-   "level": "L2",
-   "destination": "pm overview part -> narrative@1 guidance on the pm family Set (language-tagged)"
+   "level": "not content",
+   "destination": "`overview`: selects where the part is written [ledger: not-content 1]"
   },
   {
    "path": "nist.catalog.groups[].parts[].prose",
    "count": 1,
    "level": "L2",
-   "destination": "pm overview part -> narrative@1 guidance on the pm family Set (language-tagged)"
+   "destination": "pm overview part -> narrative@1 `overview` on the pm family Set: title and prose (language-tagged; a markdown link stays as the source wrote it) [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.groups[].parts[].title",
    "count": 1,
    "level": "L2",
-   "destination": "pm overview part -> narrative@1 guidance on the pm family Set (language-tagged)"
+   "destination": "pm overview part -> narrative@1 `overview` on the pm family Set: title and prose (language-tagged; a markdown link stays as the source wrote it) [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.groups[].props[].name",
    "count": 20,
-   "level": "L1",
-   "destination": "family Set label"
+   "level": "not content",
+   "destination": "selects the member the value is written to (the label) [ledger: not-content 20]"
   },
   {
    "path": "nist.catalog.groups[].props[].value",
    "count": 20,
    "level": "L1",
-   "destination": "family Set label"
+   "destination": "family Set label [ledger: copied 20]"
   },
   {
    "path": "nist.catalog.groups[].title",
    "count": 20,
    "level": "L1",
-   "destination": "family Set id/title (D21 nesting under root)"
+   "destination": "family Set title [ledger: copied 20]"
   },
   {
    "path": "nist.catalog.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.links[].href",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 3]"
   },
   {
    "path": "nist.catalog.metadata.links[].rel",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 3]"
   },
   {
    "path": "nist.catalog.metadata.oscal-version",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.parties[].addresses[].addr-lines[]",
    "count": 8,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 8]"
   },
   {
    "path": "nist.catalog.metadata.parties[].addresses[].city",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].addresses[].postal-code",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].addresses[].state",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].email-addresses[]",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].name",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].short-name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.parties[].type",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.parties[].uuid",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 2]"
   },
   {
    "path": "nist.catalog.metadata.props[].name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.props[].value",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.responsible-parties[].party-uuids[]",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 4]"
   },
   {
    "path": "nist.catalog.metadata.responsible-parties[].role-id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 4]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].last-modified",
    "count": 7,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].links[].href",
    "count": 7,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].links[].rel",
    "count": 7,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].oscal-version",
    "count": 7,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].remarks",
    "count": 7,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].title",
    "count": 7,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.revisions[].version",
    "count": 7,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 7]"
   },
   {
    "path": "nist.catalog.metadata.roles[].id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 4]"
   },
   {
    "path": "nist.catalog.metadata.roles[].title",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the root Set, member `metadata`, in the source's own shape: last-modified, oscal-version, revisions, props, links, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the name of the party the metadata names as the author -> `provenance.sources[]` `author-ref` (a landmark URI), the day of last-modified -> `provenance.sources[]` `date` [ledger: copied 4]"
   },
   {
    "path": "nist.catalog.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "root Set `title`; manifest `provenance.sources[]` `title` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "`version` of the root Set, of every family Set and of every Requirement; manifest `provenance.sources[]` `version` [ledger: copied 1]"
   },
   {
    "path": "nist.catalog.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance"
+   "destination": "manifest `provenance.sources[]` `uuid` (E3, #80) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.back-matter.resources[].description",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.back-matter.resources[].rlinks[].href",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "privacy.profile.back-matter.resources[].rlinks[].media-type",
    "count": 3,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 3]"
   },
   {
    "path": "privacy.profile.back-matter.resources[].uuid",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "the standard facet references@1 on the baseline Set (#82), in the source's own shape with the uuid as `id`: the resource its import names (E4) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.imports[].href",
    "count": 1,
-   "level": "L3",
-   "destination": "OSCAL-profile resolution mechanics; the selection IS the Set (no semantic residue)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `imports` (E4) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.imports[].include-controls[].with-ids[]",
    "count": 96,
    "level": "L1",
-   "destination": "baseline Set members (minted URIs, catalog order)"
+   "destination": "baseline Set members (minted URIs, in the profile's order) [ledger: transformed 96]"
   },
   {
    "path": "privacy.profile.merge.as-is",
    "count": 1,
-   "level": "L3",
-   "destination": "OSCAL-profile resolution mechanics; the selection IS the Set (no semantic residue)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `merge` (`as-is`, a JSON boolean) [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.metadata.last-modified",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.metadata.oscal-version",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.metadata.parties[].addresses[].addr-lines[]",
    "count": 8,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 8]"
   },
   {
    "path": "privacy.profile.metadata.parties[].addresses[].city",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "privacy.profile.metadata.parties[].addresses[].postal-code",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "privacy.profile.metadata.parties[].addresses[].state",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "privacy.profile.metadata.parties[].email-addresses[]",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "privacy.profile.metadata.parties[].name",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "privacy.profile.metadata.parties[].short-name",
    "count": 1,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.metadata.parties[].type",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "privacy.profile.metadata.parties[].uuid",
    "count": 2,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 2]"
   },
   {
    "path": "privacy.profile.metadata.responsible-parties[].party-uuids[]",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "privacy.profile.metadata.responsible-parties[].role-id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "privacy.profile.metadata.roles[].id",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "privacy.profile.metadata.roles[].title",
    "count": 4,
-   "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "level": "L2",
+   "destination": "compat facet oscal-1x@1 on the baseline Set, member `metadata`, in the source's own shape: last-modified, oscal-version, roles, parties, responsible-parties and whatever else the document states; oscal-version also manifest `provenance.sources[]` `format-version`; the author and the day of last-modified -> `provenance.sources[]` `author-ref` and `date`, by the rules for a source document [ledger: copied 4]"
   },
   {
    "path": "privacy.profile.metadata.title",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "baseline Set title [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.metadata.version",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "baseline Set `version`; manifest `provenance.sources[]` `version` [ledger: copied 1]"
   },
   {
    "path": "privacy.profile.uuid",
    "count": 1,
    "level": "L1",
-   "destination": "bundle manifest / L0 provenance (baseline documents)"
+   "destination": "manifest `provenance.sources[]` `uuid` (E3, #80) [ledger: copied 1]"
   }
  ],
  "source-version": "5.2.0",
  "objects-emitted": {
-  "requirements": 1014,
-  "sets": 25
+  "requirements": 1196,
+  "sets": 25,
+  "requirements-in-force": 1014,
+  "requirements-withdrawn": 182
  },
  "withdrawn": {
   "count": 182,
+  "name-a-successor": 180,
+  "named-in-lineage": 180,
   "successor-edges": 199,
   "family-set-edges": 1,
   "chains": [],
-  "dangling": []
+  "dangling": [],
+  "objects": [
+   "cp-10.3",
+   "sc-19"
+  ]
  },
  "cross-control-params": [
   {
@@ -1060,7 +1068,30 @@
   "nowhere": 73
  },
  "modality": {
-  "must": 1918
+  "must": 1918,
+  "unspecified": 182
+ },
+ "obligated-party": {
+  "value": "https://ns.nist.gov/sp800-53/party/organization",
+  "origin": "converter-default",
+  "converter-default": "https://ns.nist.gov/sp800-53/party/organization",
+  "source-states": "as the implementation level of a control"
+ },
+ "obligated-party-use": {
+  "controls": {
+   "source-states": 1014,
+   "not-stated": 182
+  },
+  "statements": {
+   "source-states": 1918,
+   "not-stated": 182
+  },
+  "implementation-levels": {
+   "organization": 613,
+   "system": 250,
+   "organization + system": 151,
+   "(none)": 182
+  }
  },
  "backlog-10": {
   "insertion-histogram": {
@@ -1070,17 +1101,320 @@
   "multi-declared": []
  },
  "endpoint-crosscheck": {
-  "resolved": 437,
-  "distinct": 217,
+  "resolved": 14,
+  "distinct": 5,
   "withdrawn-hits": {},
-  "unknown": {}
+  "unknown": {},
+  "corpora": [
+   {
+    "bundle": "AU.ISM/ism-core-bundle",
+    "found": true,
+    "objects": 1731,
+    "citations": 0
+   },
+   {
+    "bundle": "DE.BSI/bsi-core-bundle",
+    "found": true,
+    "objects": 1289,
+    "citations": 0
+   },
+   {
+    "bundle": "US.CSF/csf-core-bundle",
+    "found": true,
+    "objects": 226,
+    "citations": 0
+   },
+   {
+    "bundle": "US.IFA-GoodRead/ifa-core-bundle",
+    "found": true,
+    "objects": 14,
+    "citations": 14
+   }
+  ]
  },
  "baseline-missing": {},
  "lang-wraps": {
   "guidance": 1014,
   "objective": 2787,
   "assessment-objects": 14100,
-  "?": 1327,
+  "guideline": 1327,
+  "overview-title": 1,
   "overview": 1
+ },
+ "assessment-for": {
+  "links": 3707,
+  "names": {
+   "the statement part as a whole, which has no text of its own": 217,
+   "a statement of the same control": 3484,
+   "nothing the catalogue defines": 1,
+   "a statement of another control": 5
+  },
+  "names-nothing": [
+   {
+    "control": "sa-24",
+    "href": "#ac-2_smt.a.5"
+   }
+  ],
+  "objectives-that-name-another-statement-than-the-one-above": 1087
+ },
+ "formal-odp-labels": 1458,
+ "statement-labels": 1122,
+ "lifecycle-default": {
+  "value": "active",
+  "origin": "converter-default",
+  "objects": 1039,
+  "source-states": 182
+ },
+ "class-written": 0,
+ "document-metadata": {
+  "catalogue": 98,
+  "profiles": 164,
+  "merge": 4
+ },
+ "markdown-links": {
+  "links": 526,
+  "names": {
+   "another control": 340,
+   "a family": 3,
+   "a back-matter resource": 104,
+   "a statement of a control": 73,
+   "a withdrawn control": 5,
+   "a parameter": 1
+  },
+  "resources-named": 45,
+  "resources": 201
+ },
+ "ledger": {
+  "file": "sp800-53-conversion-ledger.json",
+  "leaf-values": 115680,
+  "totals": {
+   "copied": 34441,
+   "transformed": 21191,
+   "not-content": 60048,
+   "intentionally-dropped": 0,
+   "unaccounted": 0
+  },
+  "verification-failures": 0,
+  "rules": [
+   {
+    "rule": "requirement URI from the control a link names",
+    "source-values": 4227,
+    "destinations": 4227
+   },
+   {
+    "rule": "the statement part an `assessment-for` link names, as a statement id (the part id without the control prefix)",
+    "source-values": 3489,
+    "destinations": 3489
+   },
+   {
+    "rule": "statement id without the control prefix",
+    "source-values": 2936,
+    "destinations": 3840
+   },
+   {
+    "rule": "assessment objects: one entry per paragraph of the part's prose, trimmed (insertions as tokens)",
+    "source-values": 2491,
+    "destinations": 13660
+   },
+   {
+    "rule": "prose with each parameter insertion {{ insert: param, x }} written as the token {param:x}",
+    "source-values": 2424,
+    "destinations": 2424
+   },
+   {
+    "rule": "requirement URI from the control id",
+    "source-values": 2098,
+    "destinations": 4490
+   },
+   {
+    "rule": "member sequence: ten times the control's place in its family, ordered by sort-id",
+    "source-values": 1196,
+    "destinations": 1196
+   },
+   {
+    "rule": "obligated party URI from the implementation level",
+    "source-values": 1165,
+    "destinations": 2166
+   },
+   {
+    "rule": "a reference link resolved by uuid: the first link of the back-matter resource it names",
+    "source-values": 1158,
+    "destinations": 2514
+   },
+   {
+    "rule": "lineage inverted: the URI of a withdrawn control, written on the successor its link names",
+    "source-values": 523,
+    "destinations": 600
+   },
+   {
+    "rule": "the prop value `true` or `false`, written as a JSON boolean",
+    "source-values": 427,
+    "destinations": 427
+   },
+   {
+    "rule": "the statement of a withdrawn control that names a successor, from its links: `Incorporated into X.` or `Moved to X.`, the targets in source order (`X and Y`, `X, Y, and Z`), each by the label the source gives it for a reader (a statement item: its control's label and the item's label without the full stop)",
+    "source-values": 400,
+    "destinations": 400
+   },
+   {
+    "rule": "requirement URI from the control whose part an `assessment-for` link names, where that is another control or the statement part as a whole",
+    "source-values": 222,
+    "destinations": 222
+   },
+   {
+    "rule": "lineage mode from the link's rel (incorporated-into -> merged-into, moved-to -> renamed)",
+    "source-values": 200,
+    "destinations": 200
+   },
+   {
+    "rule": "lifecycle from the status the source states: `withdrawn`, the kernel's own word",
+    "source-values": 182,
+    "destinations": 182
+   },
+   {
+    "rule": "parameter cardinality `many` from the selection's how-many `one-or-more`",
+    "source-values": 97,
+    "destinations": 97
+   },
+   {
+    "rule": "family Set URI from the group id",
+    "source-values": 20,
+    "destinations": 60
+   },
+   {
+    "rule": "author of a source document: the party its metadata names as its author (the role `creator`, else `prepared-by`, else the one party it names; oscal_conv_lib.document_author), as a URI of its name under the namespace",
+    "source-values": 5,
+    "destinations": 5
+   },
+   {
+    "rule": "date of a source document: the day of its last-modified",
+    "source-values": 5,
+    "destinations": 5
+   }
+  ],
+  "not-content": [
+   {
+    "kind": "selector",
+    "rule": "the name of a prop selects the member its value is written to",
+    "count": 20295
+   },
+   {
+    "kind": "selector",
+    "rule": "the name of a part selects where the part's content is written",
+    "count": 12730
+   },
+   {
+    "kind": "selector",
+    "rule": "the class of a prop selects which value of that name it is; the mapping reads exactly this class",
+    "count": 10599
+   },
+   {
+    "kind": "namespace",
+    "rule": "the namespace of a prop qualifies its name; the mapping reads the name in exactly this namespace",
+    "count": 4854
+   },
+   {
+    "kind": "selector",
+    "rule": "the rel of a link of an assessment objective selects the member `assessment-for`",
+    "count": 3707
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "the id of an assessment method, rebuilt from the control id and the method: <control id>_asm-<method in lower case>",
+    "count": 2931
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "the class of a control, rebuilt from its id: `SP800-53-enhancement` where the id has a dot, else `SP800-53`",
+    "count": 1196
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "the zero-padded label of a control, rebuilt from its label: every number padded to two digits",
+    "count": 1196
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "the SP 800-53A label of a control, rebuilt from its label: every number padded to two digits",
+    "count": 1195
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "the id of a guidance part, rebuilt from the control id: <control id>_gdn",
+    "count": 1014
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "the id of a statement part without text of its own, rebuilt from the control id: <control id>_smt",
+    "count": 218
+   },
+   {
+    "kind": "orphan",
+    "rule": "a back-matter resource that nothing in the catalogue refers to (no `#uuid` outside it) is orphaned and not carried (author, 2026-11-14)",
+    "count": 92
+   },
+   {
+    "kind": "selector",
+    "rule": "the class `family` of a group selects that the group is written as a family Set",
+    "count": 20
+   },
+   {
+    "kind": "rebuilt-id",
+    "rule": "the id of a family's overview part, rebuilt from the group id: <group id>_ovw",
+    "count": 1
+   }
+  ],
+  "declared-drops": [],
+  "path-map-not-confirmed": [],
+  "written-without-a-source-value": [
+   {
+    "place": "/statements/[]/modality",
+    "count": 2100,
+    "example": "must",
+    "from": "the converter's: a statement of a control in force is read as `must` (corpus rule); the statement of a withdrawn control states no obligation and is `unspecified`"
+   },
+   {
+    "place": "/statements/[]/parameters/[]/type",
+    "count": 1603,
+    "example": "string",
+    "from": "decided by the shape of the source parameter: `choice` where it has a `select`, else `string`"
+   },
+   {
+    "place": "/lifecycle",
+    "count": 1039,
+    "example": "active",
+    "from": "the converter's default: `active` on an object the source gives no status (the kernel requires a lifecycle; E8). The source's own `withdrawn` is written by a rule and is not counted here"
+   },
+   {
+    "place": "/members/[]/sequence",
+    "count": 922,
+    "example": 10,
+    "from": "the member's position: in the catalogue (root Set) or in the profile's list (baseline Sets)"
+   },
+   {
+    "place": "/statements/[]/obligated-parties/[]",
+    "count": 182,
+    "example": "https://ns.nist.gov/sp800-53/party/organization",
+    "from": "the converter's default party or the caller's, where the source gives no implementation level"
+   },
+   {
+    "place": "/statements/[]/id",
+    "count": 180,
+    "example": "smt",
+    "from": "`smt`: the one statement of a withdrawn control the source gives no statement part (R2)"
+   },
+   {
+    "place": "/id",
+    "count": 5,
+    "example": "https://ns.nist.gov/sp800-53/set/baseline/high",
+    "from": "the URI of the root Set and of a baseline Set, the latter from the name of the profile's file"
+   },
+   {
+    "place": "/label",
+    "count": 4,
+    "example": "HIGH",
+    "from": "the label of a baseline Set, from the name of the profile's file"
+   }
+  ]
  }
 }

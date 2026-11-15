@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2012",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2012",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Systems are configured with a screen lock that:\n\n- activates after a maximum of 15 minutes of user inactivity, or when manually activated by users\n- conceals all content on the screen\n- ensures that the screen does not enter a power saving state before the screen lock is activated\n- requires users to re-authenticate using all authentication factors to unlock the system\n- denies users the ability to disable the screen locking mechanism."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-03"
   }
  ]
 }

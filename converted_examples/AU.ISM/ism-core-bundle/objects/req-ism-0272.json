@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0272",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0272",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Protective marking tools do not allow users to select protective markings that a system has not been authorised to process, store or communicate."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2019-03"
   }
  ]
 }

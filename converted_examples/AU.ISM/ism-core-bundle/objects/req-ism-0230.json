@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0230",
- "version": "2026.06.18",
+ "version": "3",
  "label": "ISM-0230",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Personnel are advised of security risks posed by non-secure telephone systems in areas where sensitive or classified conversations can occur."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2018-09"
   }
  ]
 }

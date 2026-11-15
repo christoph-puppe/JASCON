@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0316",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0316",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Following sanitisation, destruction or declassification, a formal administrative decision is made to release IT equipment, or its waste, into the public domain."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0361",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0361",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Magnetic media is destroyed using a degausser with a suitable magnetic field strength and magnetic orientation."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

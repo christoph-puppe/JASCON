@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-2048",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-2048",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Where software supports multiple user roles, non-administrative users are prevented from altering their profile permissions or privileges."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

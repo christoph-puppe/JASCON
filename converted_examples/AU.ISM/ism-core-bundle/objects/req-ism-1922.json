@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1922",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1922",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "The OWASP Mobile Application Security Verification Standard is used in the development of mobile applications."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2024-06"
   }
  ]
 }

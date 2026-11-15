@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-0009",
- "version": "2026.06.18",
+ "version": "4",
  "label": "ISM-0009",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "System owners, in consultation with each system’s authorising officer, identify any supplementary controls required based upon the unique nature of each system, its operating environment and the organisation’s risk tolerances."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

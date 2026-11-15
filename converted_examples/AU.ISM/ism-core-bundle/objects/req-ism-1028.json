@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1028",
- "version": "2026.06.18",
+ "version": "8",
  "label": "ISM-1028",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "A NIDS or NIPS is deployed in gateways between an organisation’s networks and other networks they do not manage."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2022-03"
   }
  ]
 }

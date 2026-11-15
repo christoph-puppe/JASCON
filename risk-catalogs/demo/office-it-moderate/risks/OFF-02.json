@@ -13,6 +13,10 @@
  },
  "owner-ref": "https://org.example/party/ciso",
  "state": "assessed",
+ "provenance": {
+  "author-ref": "https://org.example/party/ciso",
+  "date": "2026-11-12"
+ },
  "tailoring-refs": [
   "https://org.example/tailoring/soa-office-it"
  ],
@@ -67,6 +71,10 @@
   "impact": {
    "level": "hoch",
    "scale-ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/impact-3"
+  },
+  "provenance": {
+   "author-ref": "https://org.example/party/ciso",
+   "date": "2026-11-12"
   }
  },
  "residual-rating": {
@@ -79,6 +87,10 @@
   "impact": {
    "level": "hoch",
    "scale-ref": "https://github.com/christoph-puppe/JASCON/risk-catalogs/scale/impact-3"
+  },
+  "provenance": {
+   "author-ref": "https://org.example/party/ciso",
+   "date": "2026-11-12"
   }
  }
 }

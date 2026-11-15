@@ -20,13 +20,13 @@ and not tagged. Its rows are marked (2.0.0) below.*
 | 2 | RequirementSet | `set-crypto.json`, `set-baseline.json` | nesting (set-in-set), `sequence`, **multi-authority membership** (safe under global identity) |
 | 3 | Tailoring | `tailoring-elevated.json` | set selection; identity-addressed ops: monotone `set-modality` (KANN→MUSS, no Deviation needed) and in-bounds `set-parameter` |
 | 4 | Mapping | `mapping-konf-ism.json` | third-party crosswalk with statement scope, honest `supports`, provenance |
-| 5 | Component | `component-paas.json`, `component-acme-saas.json` | identified `authorizations[]`; members + capabilities |
+| 5 | Component | `component-paas.json`, `component-acme-saas.json` | identified `authorizations[]`; members + capabilities *(rc.4)* the PaaS authorization carries its `date`. |
 | 6 | Implementation | `implementation-acme-konf.json` | per-clause `statement-refs`, shared responsibility, capability + `inherited-from` with **basis-ref → authorization id** |
 | 7 | Assessment | `assessment-2026q3.json` | facet-typed method (stdlib `assessment-criteria@1`), subjects, result |
-| 8 | Finding | `finding-017.json` | statement-scoped finding, calendar-aware action, **Deviation sub-object** (false-positive, approved) |
-| 10 | Risk | `risk-acme-kms-key-rotation.json` | treated Risk on a BSI 200-3 scale, G 0.x threat refs, **treats KONF.14.1 s2** (the clause finding 017 is against — which now carries `risk-refs`), CISO acceptance of the residual, 12-month calendar review; `risk-coverage` on this bundle: 3 selected, 1 justified, 2 uncovered |
+| 8 | Finding | `finding-017.json` | statement-scoped finding, calendar-aware action, **Deviation sub-object** (false-positive, approved) *(rc.4)* `provenance` on the Finding; the Deviation says when it was `decided` and carries a `review-due`. |
+| 10 | Risk | `risk-acme-kms-key-rotation.json` | treated Risk on a BSI 200-3 scale, G 0.x threat refs, **treats KONF.14.1 s2** (the clause finding 017 is against — which now carries `risk-refs`), CISO acceptance of the residual, 12-month calendar review; `risk-coverage` on this bundle: 3 selected, 1 justified, 2 uncovered *(rc.4)* `provenance` on the Risk (the CISO) and another on its `rating` (who assessed). |
 | 11 *(2.0.0)* | Check | `check-acme-ssh-maxauthtries.json`, `check-acme-ssh-ciphers.json` | typed fact contract (`observes`) + closed comparators (`criteria`); s1 binds `{"param": "max-auth-tries"}` with `at-most` (the parameter tightens lower - CHECK-5); s2 uses `matches-not` with the I-Regexp `.*-cbc` over a list fact; one fact contract, **two collectors** (bash, python) in `collector@1` |
-| 1d *(2.0.0)* | Requirement + Set + Tailoring | `req-acme-lnx-ssh-1.json`, `set-acme-linux.json`, `tailoring-acme-linux-prod.json` | Acme's own SSH clause pair; the production Tailoring binds `max-auth-tries` = 4, and that bound value is what both runs used (CHECK-12) |
+| 1d *(2.0.0)* | Requirement + Set + Tailoring | `req-acme-lnx-ssh-1.json`, `set-acme-linux.json`, `tailoring-acme-linux-prod.json` | Acme's own SSH clause pair; the production Tailoring binds `max-auth-tries` = 4, and that bound value is what both runs used (CHECK-12) *(rc.4)* The Tailoring names its author, and its one operation names another. |
 | 5b *(2.0.0)* | Component | `component-acme-bastion.json` | the host under test |
 | 7b *(2.0.0)* | Assessment (automated runs) | `assessment-acme-bastion-2026-11-03.json`, `assessment-acme-bastion-2026-11-10.json` | `check-results`: observation inline, verdict **recomputed** by the validator (CHECK-9), result = aggregate (CHECK-10), `tailoring-ref`, `evidence-record` per row; run 1 fails s2 (`aes128-cbc` offered), run 2 passes |
 | 8b *(2.0.0)* | Finding | `finding-acme-bastion-ssh-cbc.json` | raised by a check (`check-ref`, CHECK-14), closed after the 2026-11-10 run (related) |
@@ -36,9 +36,9 @@ and not tagged. Its rows are marked (2.0.0) below.*
 | 6b *(2.0.0)* | Implementation (adopts advice) | `implementation-acme-konf-14-1-s2.json` | `capability-ref` in the form `<component-id>#<capability-id>`: Acme's edge, on Acme's component, cites the vendor's recommendation. `component-acme-saas.json` lists the product as a member, which ADVICE-7 requires |
 | 9b *(2.0.0)* | Attestation (the vendor's) | `attestation-dbvendor-server-7-advice.json` + `.dsse` | binds the digest of the kept manifest; the validator reports the pack's publisher **proven** (with `--trusted-keys`: signature verified). Signed with the corpus FIXTURE key, whose seed is public - the mechanism, not a vendor |
 | — *(2.0.0)* | The published pack | `../example-packs/dbvendor-server-7-advice/` | the file a vendor publishes: a bundle whose manifest carries the pack header and lists Components only. `validate_core.py --import-advice jascon/examples jascon/example-packs/dbvendor-server-7-advice` answers *already-imported* |
-| 9 | Attestation | `attestation-acme-2026.json` | subject **semantic** digests, content-manifest binding, rendering block — *beside* the manifest, never inside |
+| 9 | Attestation | `attestation-acme-2026.json` + `.dsse` | *beside* the manifest, never inside. Three subjects by id and **semantic** digest (the Acme SaaS Component, its Implementation of KONF.14.1, the 2026 Q3 Assessment), the digest of `content-manifest.json`, the rendering block, and a DSSE envelope. The validator reports **FULL MATCH**, and with `--trusted-keys jascon/conformance/fixture-trusted-keys.json` the signature verified. Signed with the corpus FIXTURE key, whose seed is public - the mechanism, not an agency. Issued by `drafts/phase-d/attest_example.py`; run it again after any change to this folder |
 | — | Content manifest | `content-manifest.json` | both digests per object, exact-pinned facet schemas, rendering digest |
-| — | Facet descriptors | `gspp-taxonomy-1.0.0.json`, `assessment-criteria-1.0.0.json` | a custom facet descriptor, and a stdlib descriptor pinned **verbatim** (D26) |
+| — | Facet descriptors | `gspp-taxonomy-1.1.0.json`, `assessment-criteria-1.0.0.json` | a custom facet descriptor (the one the Grundschutz++ converter pins; this folder keeps it with LF line ends), and a stdlib descriptor pinned **verbatim** (D26) |
 | — | Rendering (L4) | `authorization-summary.md` | the "document as view", digest-bound by the attestation |
 
 ## Self-consistency properties (deliberate)
@@ -96,14 +96,16 @@ and not tagged. Its rows are marked (2.0.0) below.*
    only the pin's digest. Both now load pins with one function. The
    assessment's `summary` became a language map with it: the normative
    schema types `summary` as an object, the stub had typed it as a string.
-6. **The attestation is illustrative end to end.** Its
-   `template-ref.digest` is a marked placeholder, the DSSE **envelope is
-   out of scope** (`envelope-ref` points at a path not included), and —
-   not marked until 2026-11-10 — its three `subject-semantic-digests` and
-   its `content-manifest-digest` **match no object and no manifest in this
-   folder** (they predate the `text` primitive re-run). It shows the
-   *shape* of an attestation; it binds nothing here. Making it real, and
-   having the validator hold it to that, is backlog #46.
+6. **The attestation is real since 2026-11-14, except for one field.**
+   It binds the digest of this folder's manifest and the semantic digests
+   of three of its objects, and its envelope is signed with the corpus
+   fixture key. The validator holds it to that with every run
+   (`attestation-binds`, Appendix B.1.7): change one of the three objects
+   or the manifest and the run says what no longer binds. Still a marked
+   placeholder: `template-ref.digest`. From before 1.0.0 until that day
+   the three subject digests and the manifest digest matched no object
+   and no manifest in this folder, the `envelope-ref` named a file that
+   was not there, and nothing checked any of it (backlog #46).
 7. One rendering stands in for real deliverables; real bundles list
    as many as they ship.
 8. **The check runs assessed no real host.** No runner exists yet

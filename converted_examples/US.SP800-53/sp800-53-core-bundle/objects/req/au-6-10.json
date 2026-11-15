@@ -1,0 +1,21 @@
+{
+ "id": "https://ns.nist.gov/sp800-53/req/AU-6.10",
+ "version": "5.2.0",
+ "label": "AU-6(10)",
+ "lifecycle": "withdrawn",
+ "title": {
+  "en": "Audit Level Adjustment"
+ },
+ "statements": [
+  {
+   "id": "smt",
+   "modality": "unspecified",
+   "obligated-parties": [
+    "https://ns.nist.gov/sp800-53/party/organization"
+   ],
+   "prose": {
+    "en": "Incorporated into AU-6."
+   }
+  }
+ ]
+}

@@ -26,11 +26,16 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "ia-12.4_obj",
      "label": "IA-12(04)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "prose": {
       "en": "the validation and verification of identity evidence is conducted in person before a designated registration authority."
      }
@@ -103,21 +108,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/IA-5.3",
    "mode": "merged-into"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-4.7",
-    "mode": "merged-into",
-    "label": "IA-04(07)",
-    "title": "In-person Registration"
-   },
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/IA-5.3",
-    "mode": "merged-into",
-    "label": "IA-05(03)",
-    "title": "In-person or Trusted External Party Registration"
-   }
-  ]
- }
+ ]
 }

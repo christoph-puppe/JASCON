@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1731",
- "version": "2026.06.18",
+ "version": "0",
  "label": "ISM-1731",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Planning and coordination of intrusion remediation activities are conducted on a separate system to that which has been compromised."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2021-12"
   }
  ]
 }

@@ -1,6 +1,6 @@
 {
  "id": "https://ns.cyber.gov.au/ism/req/ism-1790",
- "version": "2026.06.18",
+ "version": "2",
  "label": "ISM-1790",
  "lifecycle": "active",
  "title": {
@@ -16,6 +16,11 @@
    "prose": {
     "en": "Operating systems, applications, IT equipment, OT equipment and services are delivered in a manner that maintains their integrity."
    }
+  }
+ ],
+ "history": [
+  {
+   "date": "2025-06"
   }
  ]
 }

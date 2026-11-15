@@ -8,31 +8,31 @@
  "members": [
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-gateways-implementing-gateways",
-   "sequence": 15790
+   "sequence": 15960
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-gateways-system-administrato-0c0db68",
-   "sequence": 15860
+   "sequence": 16030
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-gateways-system-administrati-8faafa8",
-   "sequence": 15890
+   "sequence": 16060
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-gateways-authenticating-to-n-e07c71c",
-   "sequence": 15920
+   "sequence": 16090
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-gateways-border-gateway-prot-17b9368",
-   "sequence": 15950
+   "sequence": 16120
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-gateways-gateway-event-logging",
-   "sequence": 15970
+   "sequence": 16140
   },
   {
    "ref": "https://ns.cyber.gov.au/ism/set/tax/guidelines-for-gateways-gateways-assessment-of-gateways",
-   "sequence": 16010
+   "sequence": 16180
   }
  ],
  "facets": {

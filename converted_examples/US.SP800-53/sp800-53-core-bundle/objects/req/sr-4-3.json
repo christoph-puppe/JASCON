@@ -43,15 +43,25 @@
     }
    ]
   },
-  "https://ns.nist.gov/sp800-53/facet/sp800-53a@1": {
+  "https://ns.jascon.net/stdlib/facet/assessment-criteria@1": {
    "objectives": [
     {
      "id": "sr-4.3_obj",
      "label": "SR-04(03)",
+     "assessment-for": [
+      {
+       "statement-id": "smt"
+      }
+     ],
      "children": [
       {
        "id": "sr-4.3_obj-1",
        "label": "SR-04(03)[01]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sr-04.03_odp.01} are employed to validate that the system or system component received is genuine;"
        }
@@ -59,6 +69,11 @@
       {
        "id": "sr-4.3_obj-2",
        "label": "SR-04(03)[02]",
+       "assessment-for": [
+        {
+         "statement-id": "smt"
+        }
+       ],
        "prose": {
         "en": "{param:sr-04.03_odp.02} are employed to validate that the system or system component received has not been altered."
        }
@@ -160,14 +175,16 @@
       {
        "en": "controls to validate that the system or system component received is genuine are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SR-04(03)_ODP[01]"
     },
     "sr-04.03_odp.02": {
      "guidelines": [
       {
        "en": "controls to validate that the system or system component received has not been altered are defined;"
       }
-     ]
+     ],
+     "sp800-53a-label": "SR-04(03)_ODP[02]"
     }
    }
   },
@@ -202,15 +219,5 @@
    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.10",
    "mode": "renamed"
   }
- ],
- "annotations": {
-  "nist-withdrawal": [
-   {
-    "ref": "https://ns.nist.gov/sp800-53/req/SA-12.10",
-    "mode": "renamed",
-    "label": "SA-12(10)",
-    "title": "Validate as Genuine and Not Altered"
-   }
-  ]
- }
+ ]
 }

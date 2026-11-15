@@ -38,12 +38,16 @@
       }
      ],
      "origin-actors": [
-      "e7730080-71ce-4b20-bec4-84f33136fd58"
+      {
+       "type": "party",
+       "actor-uuid": "e7730080-71ce-4b20-bec4-84f33136fd58"
+      }
      ]
     }
    ],
    "responses": [
     {
+     "uuid": "d28873f7-0a45-476d-9cd3-1d2ec0b8bca1",
      "type": "accept",
      "lifecycle": "planned",
      "title": "IFA-GOODREAD-RISK1-RESPONSE: IFA SYSTEM1234 Product Team Response",
@@ -52,6 +56,7 @@
      },
      "tasks": [
       {
+       "uuid": "f8b1d4cb-d1a9-4932-9859-2e93b325f287",
        "type": "milestone",
        "title": "End of Year Project Management Report of Developed Remediations",
        "description": {
@@ -65,12 +70,18 @@
    ],
    "mitigating-factors": [
     {
-     "en": "The SYSTEM1234 application is designed and implemented to only allow access to the administrative functions for those with PAO staff role via the VPN via network configuration between the IFA Enterprise Support Systems and the SYSTEM1234 AwesomeCloud account. Additionally, the load balanacer configuration only allows access to view shortlinks from the public internet."
+     "uuid": "401c15c9-ad6b-4d4a-a591-7d53a3abb3b6",
+     "description": {
+      "en": "The SYSTEM1234 application is designed and implemented to only allow access to the administrative functions for those with PAO staff role via the VPN via network configuration between the IFA Enterprise Support Systems and the SYSTEM1234 AwesomeCloud account. Additionally, the load balanacer configuration only allows access to view shortlinks from the public internet."
+     }
     }
    ],
    "observations": [
     "https://ifa.gov/goodread/evidence/obs-0c4de4fc"
    ]
+  },
+  "https://ns.jascon.net/compat/oscal-1x@1": {
+   "uuid": "8b8bae66-b28c-4fa5-9a20-b79e7322fc00"
   }
  }
 }
