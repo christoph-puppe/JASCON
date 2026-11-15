@@ -98,6 +98,31 @@ The tone of the text follows the project's house rules: a claim is measured,
 designed for or proposed and says which; limits are stated where the claim is
 made.
 
+## Readers that are programs
+
+A language model or an agent reads the site as text. The build writes for
+it, from the same pages a person reads, so nothing has to be kept in step
+by hand:
+
+- **A Markdown twin of every page** beside it, `process.md` next to
+  `process.html`, in every language. `markdown_twin.py` makes it from the
+  built HTML with the standard library: headings, lists, tables, code
+  blocks with their language, absolute links, a diagram as its `<title>`
+  and `<desc>`, a state chain as `a → b → c`. Buttons, form fields and
+  everything marked `aria-hidden` are left out. The page names its twin in
+  the head (`<link rel="alternate" type="text/markdown">`).
+- **JSON-LD** in the head of every page: a schema.org `TechArticle` with
+  title, description, language, address, licence and the twin.
+- **`llms.txt`** at the root (the format of llmstxt.org): what the site is,
+  every English page with its description and its twin, and the sources an
+  agent reads next (specification, handbook, schema, example bundle, the
+  skill, the validator). The order of the pages is `LLMS_ORDER` in
+  `build.py`; a page it does not name is listed at the end.
+- **`llms-full.txt`**: every English twin in one file.
+
+A diagram is only as readable as its `<desc>`. When a page gets an SVG,
+write in the `<desc>` what the drawing says, in sentences.
+
 ## Languages
 
 English is the source. `site.json` lists the languages that are built
