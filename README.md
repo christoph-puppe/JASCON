@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (785 in 18 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (800 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -49,7 +49,7 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.20.0,
+key and has no word for a signature that holds. (Reader 1.21.0,
 2026-11-15, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage names Risk in its
 heading and lists none; the two Risk objects are in the object browser —
@@ -166,7 +166,7 @@ backlog #71.)*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 785 in 18 families since 2026-11-15) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 800 in 18 families since 2026-11-15) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped
@@ -317,6 +317,14 @@ backlog #71.)*
 >   members of a Set and the records of an assessment still name it.
 >   The handbook had said so since 1.0.0 and no validator held it. No
 >   committed bundle fails. 30 vectors.
+> - **Decided on 2026-11-15:** an operation of a Tailoring that changes
+>   a statement names it. `set-modality`, `set-parameter` and
+>   `replace-prose` carry a `statement-id`, and a `set-parameter` names
+>   a parameter that statement declares (OPERATION-1, an error).
+>   Measured before the rule: a `set-modality` from must to may that
+>   left the statement out passed without a Deviation. No committed
+>   bundle fails. 15 vectors. Also since that day a number of a facet
+>   pin's version is at most 2^53 − 1 in every validator (2 vectors).
 > - **Licences:** the repository is Apache-2.0; the converted corpora were
 >   checked against their publishers' terms and six bundles were removed
 >   ("What ships here", below).

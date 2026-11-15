@@ -39,7 +39,10 @@
 > WITHDRAWN-1, backlog #93). The second can fail a bundle that passed.
 > On 2026-11-15: each number of a facet pin's version is held to the
 > number domain, so that the three hosts read one version (D3.5, backlog
-> #72).
+> #72). The same day, on the author's word: an operation that changes a
+> statement names it, and a `set-parameter` names a parameter that
+> statement declares (D13, OPERATION-1, backlog #96). This can fail a
+> bundle that passed.
 > No new candidate was cut: the file keeps its name until the author
 > names the next one.
 
@@ -823,6 +826,21 @@ modality):**
 | `attach-facet` | Deviation when the attached facet's `modifies-semantics` ≠ [] (symmetric with detach — B.3; same registration rule — P10 #29) |
 | `add-relation` / `remove-relation` | informative edges are free; **removing a `required` edge ⇒ Deviation** (B.3 — dropping a dependency weakens the graph; enforced since backlog #25). Normative cross-framework claims are Mapping objects, D20, with their own lifecycle |
 | `excludes` | **selection, never weakening — no Deviation** |
+
+**An operation names what it changes *(2026-11-15, backlog #96;
+OPERATION-1)*.** A modality, a parameter and a prose are a statement's.
+`set-modality`, `set-parameter` and `replace-prose` MUST carry a
+`statement-id`, and a `set-parameter` MUST name a parameter that
+statement declares. An empty `statement-id` names no statement. The
+other five operations address the Requirement. The kernel schema asks an
+operation for `op` and `requirement-ref` only, and the rules of the
+table above look the statement and the declaration up; before this rule
+they asked nothing where they found none. Measured: an easing
+`set-modality` without a `statement-id` passed at consumer tier without
+a Deviation, and a `set-parameter` without one was not held to its
+declaration while CHECK-12 took its value as bound. A `statement-id`
+that names no statement of the Requirement, and a `requirement-ref` the
+bundle does not hold, were errors before and are not said twice.
 
 **A Tailoring names no Component *(2.0.0-rc.3 — author decision
 2026-11-12; closes backlog #51)*.** The Statement of Applicability is
@@ -2470,6 +2488,13 @@ of Check and of advice packs:
    the twin stopped the run. Two deliberate defects in the reference
    each turn one of the two red. The reference, the twin and the app's
    rules give what every vector expects.)*
+   *(2026-11-15, D13, backlog #96: 15 vectors for OPERATION-1, an
+   operation that names no statement or a parameter its statement does
+   not declare — `reference` 41 → 56: **800 vectors**. Nine deliberate
+   defects in the reference and two in the twin each turn a vector red.
+   The reference, the twin and the app's rules give what every vector
+   expects. No committed bundle fails, and neither does the CR26 bundle
+   the workflow converts.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2628,6 +2653,7 @@ history. The compact line:
 | What `#id` names is reported; an object in force does not lean on a withdrawn one | 2026-11-14 | The author's decisions on backlog #82 ("agreed") and #93 ("Regel bauen"). D9 says what a reference of the form `#id` may name: a resource of `references@1`, an object, a statement, a parameter, a source document of the manifest. FRAGMENT-1 is a report: per bundle the number of such references, of each kind, and which name nothing; nothing fails. WITHDRAWN-1 is an error: in a bundle that holds an object as withdrawn, a Tailoring, a Mapping, a Component, an Implementation, a Check or a live Risk that is not withdrawn itself does not name it by one of twelve edges (D27 point 7). Lineage, relations, the members of a Set, and the records of an act (Assessment, Finding, Attestation) are not held. No shape changes. A bundle that passed can fail; none of the committed ones does. `reference` 27 → 41 and `lifecycle` 42 → 58 vectors, 783 in all. In the reference, the twin and the app; WITHDRAWN-1 in the reader as well | D9 · D27 points 4 and 7 · handbook §3.6, chapter 12 |
 | Grundschutz++ on the publisher's catalogue of 2026-10-29; one typed taxonomy schema; every path map held against its record | 2026-11-14 | The author's answers to five questions ("1 ja, 2 ja, 3 ja, 4 jetzt, 5 ja"). No shape of the kernel changes and no vector. The Grundschutz++ bundle is converted from the catalogue of 2026-10-29 (1,000 Requirements, 289 Sets); its taxonomy facet has one schema, version 1.1.0, typed with the publisher's two security levels and an effort of 0 to 5, which the example folder pins as well (backlog #94). The converter library holds each converter's path map against the record of its run, outcome and place, in all six converters with a ledger (backlog #89). Found on the way: the publisher had renamed the namespaces of its props, and the converter of that morning ran on the new catalogue with exit code 0, read no prop and left every statement `unspecified`, with a ledger of 0 unaccounted; the converter and the app's preset end such a run now. Six ledgers: 214,455 values, 0 dropped, 0 unaccounted | register, "The last round of the day" · handbook §7.3 |
 | A pin's version is three numbers of the number domain | 2026-11-15 | Backlog #72, built on the author's word ("alle wie vorgeschlagen"). Composition (D3.5) compares the three numbers of a pin's version, and the three hosts read a long number three ways: the reference exactly, the twin in 32 bits, the app inexactly beyond 2^53. Each number is at most 2^53 − 1 now, asked of its digits before anything is converted; a larger one makes the pin a non-semver pin, which composition reports. `composition` 9 → 11 vectors, 785 in all. No shape changes, and no committed pin has such a version. The same word covered two things outside the kernel: the CR26 converter ends a run on a force word it does not know and writes nothing into the repository (backlog #79, points 3 and 5), and the reader (1.20.0) writes no resolved package while a Tailoring holds an operation the page does not apply (backlog #71, point 5) | "After the last round — #72, #79 and #71" |
+| An operation names the statement it changes | 2026-11-15 | Backlog #96, found while the reader was held to its operations and decided by the author ("Do it"). **OPERATION-1** (D13), an error: a `set-modality`, a `set-parameter` and a `replace-prose` carry a `statement-id`, and a `set-parameter` names a parameter that statement declares. The handbook's appendix A had asked for the `statement-id` since 2026-07-22 and nothing held it; without one, the modality order and the check of a value against its declaration asked nothing. `reference` 41 → 56 vectors, 800 in all. In the reference, the twin, the app (0.9.23) and the reader (1.21.0). No shape changes. A bundle that passed can fail; none of the committed ones does, and the 128 such operations of the earlier vectors all name a statement. With it, the reader's resolved scope follows D13: an exclude that names a Set removes its members, and a select by predicate is said not to be resolved (backlog #71, points 13 and 14) | "OPERATION-1 and the reader's resolved scope" |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2865,6 +2891,8 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    that its ledger contradicts ends the run, and a row of the IFA path
    map that no path reached is gone. The same day, on the author's word
    for what was proposed for before the tag: #72 is built (D3.5), and so
-   are points 2, 3 and 5 of #79 and point 5 of #71. Open: #62, the rest
-   of #71 and #79, #91, and #96, filed that day: the reference passes
-   two operations whose target the Requirement does not have.)*
+   are points 2, 3 and 5 of #79 and point 5 of #71. #96, filed on the
+   way, was decided at once ("Do it") and is built: an operation that
+   changes a statement names it (D13, OPERATION-1). So are points 13 and
+   14 of #71, the scope of the reader's resolved package. Open: #62, the
+   rest of #71 and #79, #91.)*

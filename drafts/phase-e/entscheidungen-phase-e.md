@@ -672,3 +672,35 @@ der Rest danach. Die Antwort, wörtlich:
 - Nicht gebaut und im Backlog abgelegt: zwei weitere Fehler derselben
   Funktion des Readers (#71, 13 und 14) und zwei Fälle, die die Referenz
   durchlässt (#96). Beide warten auf das Wort des Autors.
+
+## #96 und #71 Punkte 13 und 14 (2026-11-15, nach der Runde davor)
+
+Dem Autor vorgelegt, mit einem Vorschlag je Befund: (1) den
+Geltungsbereich des aufgelösten Pakets im Reader vor dem Tag an D13
+angleichen; (2) die zwei Operationen, die die Referenz durchlässt, vor
+dem Tag in allen drei Validatoren ablehnen. Die Antwort, wörtlich:
+
+> Do it
+
+1. **OPERATION-1 (#96):** Ein `set-modality`, ein `set-parameter` und
+   ein `replace-prose` nennen ihre Aussage (`statement-id`), und ein
+   `set-parameter` nennt einen Parameter, den diese Aussage deklariert.
+   Ein Fehler, in Referenz, Twin, App und Reader. 15 Vektoren, 800
+   insgesamt. Kein Bundle im Repository fällt.
+2. **Reader (#71, 13 und 14):** Ein Ausschluss, der ein Set nennt,
+   entfernt dessen Mitglieder. Eine Auswahl per Prädikat wird als nicht
+   aufgelöst gemeldet, und dann gibt es kein aufgelöstes Paket.
+
+### Was beim Bauen anders kam als vorgelegt
+
+- Vorgelegt waren zwei Fälle: `set-modality` ohne Aussage und ein nicht
+  deklarierter Parameter. Gebaut ist die Regel für alle drei Arten, die
+  eine Aussage ändern, also auch `set-parameter` und `replace-prose`
+  ohne Aussage. Ohne Aussage lässt sich nicht fragen, ob ein Parameter
+  deklariert ist.
+- Gemessen wurde dabei, dass es um mehr als die Form geht: Ein
+  `set-modality` von must nach may ohne `statement-id` bestand auf
+  Verbraucher-Stufe ohne Abweichung. Mit `statement-id` fiel dieselbe
+  Operation durch.
+- Nicht geändert: CHECK-12 liest ein `set-parameter` ohne `statement-id`
+  weiter als gebunden. Ein solches Bundle fällt jetzt vorher durch.

@@ -712,9 +712,10 @@ the register, "After the last round — #72, #79 and #71".
 | #79 (3) | the CR26 converter and a force word it does not know | built: the run ends before anything is written |
 | #79 (5) | a CR26 run without `--out` left a bundle in the repository | built: `--out` is required and may not be that folder |
 | #71 (5) | the reader's resolved package and the operations it does not apply | built (reader 1.20.0): each is named, and no package is written |
-| #96 | the reference passes two operations whose target the Requirement does not have | filed; the author's to decide |
+| #96 | the reference passes two operations whose target the Requirement does not have | decided the same day ("Do it") and built: OPERATION-1 in three validators and the reader, 15 vectors |
+| #71 (13), (14) | the reader's resolved scope: an exclude of a Set, a select by predicate | built on the same word (reader 1.21.0) |
 
-Measured at the end: 785 vectors in 18 families in the reference, the
-twin (PowerShell 7.4 on Linux) and the app. Left for after the tag, as
-proposed: #62, the rest of #71 (with its new points 13 and 14) and of
-#79, and #91.
+Measured at the end: 800 vectors in 18 families in the reference, the
+twin (PowerShell 7.4 on Linux) and the app (785 before OPERATION-1).
+Left for after the tag, as proposed: #62, the rest of #71 and of #79,
+and #91.

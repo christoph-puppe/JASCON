@@ -417,6 +417,25 @@ by RISK-11. A `deprecated` target is no failure, and a `draft` or
 `withdrawn-references`; each expects the list of `[object, edge,
 withdrawn object]`, in the order above.
 
+A Tailoring's operations have a rule of their own that fails, since
+2026-11-15. **OPERATION-1**: go through the Tailorings in the order of
+their ids, withdrawn ones too, and through the operations of each in
+the order of the document. Look only at `set-modality`, `set-parameter`
+and `replace-prose`. One that carries no `statement-id`, or an empty
+one, is an error, whether or not the bundle holds the Requirement. For
+a `set-parameter` with a `statement-id`, find the Requirement in the
+bundle and the statement in it; if both are there and the statement
+declares no parameter of that name, that is an error. Compare ids and
+names by code unit: `s1` and `S1` are two statements. Do not report a
+`statement-id` the Requirement does not have, or a Requirement the
+bundle does not hold: your closure check already does. The rule is not
+a nicety. Your checks of a modality against the lattice and of a value
+against its declaration look the statement up, and they have nothing
+to ask where there is none; without this rule an easing `set-modality`
+that leaves the statement out passes. `reference-vectors.json` holds
+fifteen cases under `operation-targets`; each expects the list of
+`[Tailoring, index of the operation, "statement" or "parameter"]`.
+
 A fourth report is about references of the form `#id`, which sources
 use in texts and links. **FRAGMENT-1**: in every object, take each
 `(#id)` inside a string at any depth, the id being at least one

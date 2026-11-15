@@ -95,7 +95,10 @@ track Sets (20x/Rev5) are built purely from subset-Set members.
 | `provenance` | ○ | {author-ref ●, date ●} | *(2.0.0-rc.4, D26.)* Who wrote this version and when. Each select, each exclude and each operation MAY carry its own; **an entry without one has the Tailoring's.** AUTHOR-1 reports a Tailoring at consumer tier that leaves an entry without an author; an authority's Tailoring is not asked. Evidence: none counted; entered on the author's decision. |
 
 **Operations (D13, closed set of 8):** each op carries
-`requirement-ref` ● + `statement-id` ● where it touches a statement.
+`requirement-ref` ● + `statement-id` ● where it touches a statement:
+`set-modality`, `set-parameter` and `replace-prose` do, and a
+`set-parameter` names a parameter that statement declares. The schema
+does not ask for it; OPERATION-1 does, since 2026-11-15 (Chapter 12).
 
 | op | payload | law |
 |---|---|---|

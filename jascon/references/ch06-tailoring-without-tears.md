@@ -91,6 +91,12 @@ Every operation shares the address shape:
   "value": {"type": "elapsed-duration", "num": 6, "unit": "hours"} }
 ```
 
+Three of the eight change something a statement owns: `set-modality`,
+`set-parameter` and `replace-prose`. They carry the `statement-id`, and
+a `set-parameter` names a parameter that statement declares; a
+validator refuses the operation otherwise (OPERATION-1, Chapter 12).
+The other five address the requirement as a whole and carry none.
+
 Pin the target's exact version when you can (the specification says
 SHOULD); pinned or not, a vanished address fails closed. And if you find
 yourself wishing for a ninth operation: that is a change request against

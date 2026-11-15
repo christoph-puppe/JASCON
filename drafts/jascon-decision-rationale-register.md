@@ -4942,3 +4942,118 @@ parameter its statement does not declare. It fails the two
 neighbouring cases, a `statement-id` the Requirement does not have and
 a `requirement-ref` the bundle does not hold. A rule here can fail a
 bundle that passes today, so nothing was built.
+
+## OPERATION-1 and the reader's resolved scope *(2026-11-15; closes #96; #71 points 13 and 14; no new candidate)*
+
+### What the author decided
+
+The two findings of the round before were put to the author with a
+proposal each: refuse both operations in the three validators, before
+the tag, because after it the rule would be a tightening of a released
+kernel; and bring the reader's resolved scope to D13. The answer: "Do
+it".
+
+### The rule
+
+**OPERATION-1** (D13), an error. A modality, a parameter and a prose
+are a statement's. A `set-modality`, a `set-parameter` and a
+`replace-prose` carry a `statement-id`, and a `set-parameter` names a
+parameter that statement declares. An empty `statement-id` names no
+statement: an id has at least one character. The other five operations
+address the Requirement and carry none.
+
+The handbook's appendix A has asked an operation for its `statement-id`
+"where it touches a statement" since 2026-07-22 (*measured* in the
+history of the file). The kernel schema asks for `op` and
+`requirement-ref` only, and no rule held the sentence.
+
+### Why it is more than a shape
+
+The checks of D13 look the statement up, and where they find none they
+ask nothing. *Measured* on copies of the example folder, on the
+reference as it stood:
+
+- a `set-modality` from must to may at consumer tier, without a
+  Deviation: with `statement-id` it fails ("non-monotone set-modality
+  (easing) without a Deviation at consumer tier"); without it the
+  bundle passes;
+- a `set-parameter` that binds a text to an integer parameter: with
+  `statement-id` it fails ("value fails the declared type/bounds");
+  without it that line is not printed, and CHECK-12 reads the value as
+  what the Tailoring binds;
+- a `replace-prose` without `statement-id`, and a `set-parameter` on a
+  parameter the statement does not declare: the bundle passes.
+
+So the first half of the rule closes a way around the modality order
+and the parameter check, which is the reason to build it before the
+tag and not after.
+
+### What was built
+
+`operation_targets` in the reference gives `[Tailoring, index of the
+operation, "statement" or "parameter"]`, the Tailorings in the order of
+their ids, the operations in the order of the document; the error
+sentences are made from it. Ported whole to the twin, the app (build
+0.9.23, area `reference`) and the reader (1.21.0, where it joins the
+closure errors of a loaded bundle and of an export). 15 vectors under
+`operation-targets` in the family `reference` (56; 800 in all). Not said
+twice: a `statement-id` that names no statement of the Requirement is
+the closure check's, and a Requirement the bundle does not hold is
+closure-required.
+
+The row in the backlog named a `set-modality` without a statement and an
+undeclared parameter. A `set-parameter` and a `replace-prose` without a
+statement are the same case, and a declared parameter cannot be asked
+for where no statement is named, so the three kinds are held alike.
+This is wider than the two cases the author was shown and is said here
+for that reason.
+
+### What it is measured by
+
+- The reference: 800 vectors, the five committed bundles, the worked
+  pack and the example folder, ALL GREEN. Nine deliberate defects in
+  the new function each turn at least one vector red (a kind left out;
+  the empty id taken for one; names or ids compared without regard to
+  case; a parameter looked for in every statement; the statement half
+  asked only where the bundle holds the Requirement; the order of the
+  ids; an unknown statement said twice; the parameter half asked of
+  every kind).
+- The twin under PowerShell 7.4 on Linux: the 56 vectors of the family,
+  and two deliberate defects (names without regard to case; the empty
+  id), each turning one vector red.
+- The app: the 15 vectors and a whole set with three errors in order;
+  194 tests.
+- The reader: the 15 vectors in node; in a browser, a loaded bundle
+  with a `set-modality` without a statement fails in the overview and
+  the console in the reference's words.
+- No committed bundle fails. The CR26 bundle, which is not
+  redistributed and which the workflow converts, has 5 Tailorings with
+  107 `set-modality` and 16 `set-parameter` operations, each with its
+  statement, and passes. The 128 such operations in the vectors that
+  existed all name a statement.
+
+### Left as it is
+
+`_tailoring_bindings` (CHECK-12) reads a `set-parameter` whose
+`statement-id` is absent as bound, in the three validators. Such an
+operation fails its bundle by OPERATION-1 now, so the reading no longer
+decides a verdict; it was not removed, because it is in three ports and
+no vector asks for the change.
+
+### The reader's resolved scope (#71, points 13 and 14)
+
+Reader 1.21.0. An exclude that names a Set removes the Set's members,
+to any depth, as D13 says and as the reference's risk-coverage counts.
+A select by predicate is not resolved by the page: it is an error of
+the resolution now, the scope shown is said to hold the members of the
+selected Sets only, and no resolved package is written. *Measured* in a
+browser on copies of the example folder: a second Set selected and
+then excluded leaves 3 requirements in the scope and in the exported
+package, which the reference passes, and the reference counts
+`selected=3`; with the earlier logic put back the scope is 4. With the
+earlier logic for a predicate the page offers the export and says
+nothing. An exclude of one Requirement removes it, as before. Three
+deliberate defects in the page turn these tests red.
+
+*Not built:* resolving a predicate. The reference does not either: it
+calls such a selection open and counts a lower bound.

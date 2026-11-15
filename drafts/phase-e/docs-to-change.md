@@ -124,3 +124,17 @@ proposal, and #89, both for the author.
 | Reader | 1.20.0; the screenshot in `docs/img/` taken again | done |
 | Website | `facts.json` measured after the commits | done with the last commit |
 | Register, backlog, plan, decisions | the author's word; #72 closed; #79 and #71 in part; #96 filed | done |
+
+## OPERATION-1 and the reader's resolved scope (2026-11-15: backlog #96 and #71 points 13 and 14)
+
+| Where | What | State |
+|---|---|---|
+| Specification | the banner; D13 (an operation names what it changes); IV.5b (800 vectors); IV.6 (one row); IV.9 | done |
+| Handbook | 6.2 (which operations carry a `statement-id`); appendix A (the sentence it had, and who holds it); chapter 12 (the rule for an implementer, the vectors) | done |
+| README | the vector count (800), one entry in the list of what was decided, the reader's version | done |
+| `jascon/SKILL.md` | the vector count and the rule's name | done |
+| `validate_core.py`, `validate_core.ps1` | the header's entry on the rule | done |
+| App `readme.md`, `PROGRESS.md` | build 0.9.23 | done |
+| Reader | 1.21.0; the screenshot in `docs/img/` taken again | done |
+| Website | no page names the rules; `facts.json` measured after the commits | done with the last commit |
+| Register, backlog, plan, decisions | the author's word; #96 closed; #71 points 13 and 14 | done |
