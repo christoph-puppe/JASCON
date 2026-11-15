@@ -1,0 +1,348 @@
+---
+title: 工作流程：从 ISMS 到关闭的发现项 | JASCON
+description: 在以 JASCON 运行的 ISMS 中，谁做什么，每一步写入哪个对象，哪些文件从一方交到另一方。从建立 ISMS 和首次测量，经过 Plan、Do、Check、Act，到审核及其发现项的处理。
+nav: process
+source: b29469ab3dd6
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">工作流程</p>
+    <h1>谁做什么：从第一个风险到关闭的发现项</h1>
+    <p class="lede">ISMS 以循环方式运行，每转一轮都会留下记录。本页借助 JASCON 跟随一轮循环走完：谁采取行动，每一步写入哪个对象，哪些文件从一方传递到另一方。凡内核对某一步没有提供任何记录之处，本页都会在该步骤中说明。</p>
+  </div>
+</section>
+
+<section class="section" id="roles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> 角色</p>
+      <h2>九种角色，每种都以一个标识符指明</h2>
+      <p class="lede">内核没有 Party 类型。参与方是其所属组织命名空间下的一个 URI，例如 <code>https://cso.example/party/ciso</code>，并在下列字段中指明。凡内核要求指明参与方而未指明之处，应用会拒绝保存，并说明缺少哪个字段。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>角色</th><th>通常是</th><th>指明于</th><th>写入</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">权威机构</th><td>BSI、NIST、ASD、监管机构、标准化组织</td><td>其发布的每个 id 所在的命名空间</td><td>Requirement、RequirementSet、作为基线的 Tailoring、Mapping，以及覆盖其捆绑包的 Attestation</td></tr>
+          <tr><th scope="row">最高管理层、风险责任人</th><td>董事会、某个流程或某项职责的责任人</td><td><code>Risk.owner-ref</code>、<code>Risk.acceptance.approver-ref</code></td><td>对残余风险的接受</td></tr>
+          <tr><th scope="row">ISMS 负责人</th><td>CISO、信息安全官</td><td><code>provenance.author-ref</code>；组织自身 Tailoring 上的 <code>Deviation.approver-ref</code></td><td>Risk、量表、作为适用性声明的 Tailoring、Mapping</td></tr>
+          <tr><th scope="row">系统责任人、运维</th><td>IT 运维、产品或平台团队</td><td>陈述的 <code>obligated-parties</code>；<code>provenance.author-ref</code></td><td>Component、Implementation</td></tr>
+          <tr><th scope="row">厂商、上游提供方</th><td>产品厂商、云或平台提供方</td><td>建议包清单中的发布方；<code>Component.authorizations</code></td><td>建议包；继承的边所依赖的授权</td></tr>
+          <tr><th scope="row">检查编写者</th><td>安全工程</td><td><code>Check.provenance.author-ref</code></td><td>Check，其采集器代码放在分面中</td></tr>
+          <tr><th scope="row">评估人</th><td>内部审核、外部审核员或评估机构</td><td><code>Assessment.performer-ref</code>；Finding 上的 <code>Deviation.approver-ref</code></td><td>Assessment、Finding</td></tr>
+          <tr><th scope="row">授权官员</th><td>认证人员、政府机构的授权官员</td><td>为信封签名的密钥</td><td>Attestation</td></tr>
+          <tr><th scope="row">客户、采购方</th><td>政府机构、客户、采购部门</td><td>无处指明：此角色只读取</td><td>不写入任何内容；它对收到的内容运行校验器</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">一个人可以担任多个角色。内核按字段而不是按人来区分角色：接受残余风险是 <code>Risk.acceptance</code>，因此而削弱某个条款则是一条 Deviation，即使由同一个人完成，这也是两项行为（手册 <a href="{{ blob }}/jascon/references/ch10-assessment-findings-deviations.md" rel="noopener">§10.6</a>）。</p>
+  </div>
+</section>
+
+<section class="section band" id="cycle">
+  <div class="wrap">
+    <div class="split flip">
+      <figure class="reveal">
+        <svg class="graph" viewBox="0 0 640 450" role="img" aria-labelledby="cycle-title cycle-desc">
+          <title id="cycle-title">JASCON 中的工作流程</title>
+          <desc id="cycle-desc">权威机构和厂商向组织交付目录捆绑包和建议包，组织据此建立其 ISMS：目录、范围、量表、首次测量。随后循环开始运行：Plan 写入 Risk 和 Tailoring，Do 写入 Implementation 和 Check，Check 写入 Assessment 和 Finding，Act 写入 Deviation 和新版本，并回到 Plan。组织从 Check 阶段将带有 Attestation 的捆绑包交给审核。审核返回一个 Assessment 和若干 Finding，它们被逐项处理，并汇入下一轮循环。</desc>
+          <defs>
+            <marker id="ph" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ph-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <text class="zone" x="30" y="16">组织</text>
+          <text class="zone" x="450" y="16">其他参与方</text>
+
+          <path class="edge accent" d="M450 53H402" marker-end="url(#ph-a)"/>
+          <path class="edge" d="M110 76V118" marker-end="url(#ph)"/>
+          <path class="edge" d="M190 148H238" marker-end="url(#ph)"/>
+          <path class="edge" d="M320 176V258" marker-end="url(#ph)"/>
+          <path class="edge" d="M240 288H192" marker-end="url(#ph)"/>
+          <path class="edge" d="M110 260V178" marker-end="url(#ph)"/>
+          <path class="edge accent" d="M400 288H448" marker-end="url(#ph-a)"/>
+          <path class="edge accent" d="M530 316V374" marker-end="url(#ph-a)"/>
+          <path class="edge" d="M450 402H110V318" marker-end="url(#ph)"/>
+
+          <text class="elabel accent" x="426" y="45" text-anchor="middle">捆绑包</text>
+          <text class="elabel accent" x="424" y="280" text-anchor="middle">捆绑包</text>
+          <text class="elabel accent" x="538" y="350">Findings</text>
+          <text class="elabel" x="280" y="394" text-anchor="middle">进入下一轮循环</text>
+          <text class="elabel" x="118" y="102">第一轮</text>
+
+          <g class="node content"><rect x="30" y="30" width="370" height="46" rx="10"/><text x="44" y="50">建立 ISMS</text><text class="sub" x="44" y="65">目录、范围、量表、首次测量</text></g>
+          <g class="node content"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">权威机构、厂商</text><text class="sub" x="464" y="65">目录、建议包</text></g>
+
+          <g class="node"><rect x="30" y="120" width="160" height="56" rx="10"/><text x="44" y="143">Plan</text><text class="sub" x="44" y="160">Risk, Tailoring</text></g>
+          <g class="node"><rect x="240" y="120" width="160" height="56" rx="10"/><text x="254" y="143">Do</text><text class="sub" x="254" y="160">Implementation, Check</text></g>
+          <g class="node"><rect x="240" y="260" width="160" height="56" rx="10"/><text x="254" y="283">Check</text><text class="sub" x="254" y="300">Assessment, Finding</text></g>
+          <g class="node"><rect x="30" y="260" width="160" height="56" rx="10"/><text x="44" y="283">Act</text><text class="sub" x="44" y="300">Deviation、新版本</text></g>
+
+          <g class="node attest"><rect x="450" y="260" width="160" height="56" rx="10"/><text x="464" y="283">审核</text><text class="sub" x="464" y="300">评估人、授权官员</text></g>
+          <g class="node org"><rect x="450" y="376" width="160" height="52" rx="10"/><text x="464" y="397">逐项处理</text><text class="sub" x="464" y="413">措施、截止日期</text></g>
+        </svg>
+        <div class="graph-legend">
+          <span><i></i>组织内部的步骤</span>
+          <span class="lg-att"><i></i>组织外部</span>
+          <span class="lg-org"><i></i>对审核的答复</span>
+        </div>
+      </figure>
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">02</span> 循环</p>
+          <h2>Plan、Do、Check、Act，以及两次交接</h2>
+          <p class="lede">ISO/IEC 27001 和 BSI Standard 200-1 将 ISMS 描述为一个循环。JASCON 并不运行这个循环。它为每一步提供一种类型化记录，使下一步和下一个参与方能读到上一步所作的决定。</p>
+        </div>
+        <ul class="ticks">
+          <li><b>每条记录都有一个 id、一个版本和两个摘要。</b>修改后的 Tailoring 是一个新版本，而不是一个被编辑过的文件，<code>history</code> 说明修改的原因。</li>
+          <li><b>每项决定都写明由谁作出、何时作出。</b><code>provenance</code> 承载作者和日期；校验器会列出未指明任何人的记录（AUTHOR-1 至 AUTHOR-4）。</li>
+          <li><b>交给另一方的内容是一个捆绑包。</b>一个文件夹，内含其对象、一份内容清单、以 SHA-256 命名的证据文件，以及在有人签名时放在清单旁边的 Attestation。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="build">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> 建立 ISMS</p>
+      <h2>第一轮之前的五个步骤</h2>
+      <p class="lede">建立过程以首次测量结束：测量目录所要求的与已落实的内容之间的差距。此后的每一轮都以它为基准进行测量。</p>
+    </div>
+    <div class="steps">
+
+      <div class="step reveal" id="namespace">
+        <div class="step-body">
+          <h2>选择命名空间并为参与方命名</h2>
+          <p>ISMS 负责人在组织控制的域名下选择一个前缀，并长期保持不变，例如 <code>https://grc.your.example/</code>。各参与方在其下获得标识符：CISO、风险责任人、运维、内部评估人。标识符按字符串比较，从不联网获取。此时尚未写入任何内容；之后的每个对象都取决于这一选择。</p>
+          <p class="small">执行者：ISMS 负责人。写入：无对象。<a href="{{ blob }}/jascon/references/ch03-identity-versions-lifecycle.md" rel="noopener">手册第 3 章</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="catalogue">
+        <div class="step-body">
+          <h2>接收目录</h2>
+          <p>权威机构的目录以捆绑包形式到达：Requirement、用于章节和基线的 RequirementSet、用于其各个变体的 Tailoring、指向其他目录的 Mapping。在以其为基础构建任何内容之前，校验器先对其进行检查；凡权威机构已签名之处，Attestation 会表明内容是否就是其所签署的内容（Full Match 或 Semantic Match），或者不绑定。仅以 OSCAL 形式存在的目录，经由导入（Import）页面及其报告处理。</p>
+          <p class="small">执行者：ISMS 负责人，接收自权威机构。接收：一个目录捆绑包。应用：首页（Home）、导入（Import）。<a class="link-arrow" href="start.html#open">随附的目录</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="scope">
+        <div class="step-body">
+          <h2>将范围绘制为一个系统</h2>
+          <p>ISMS 的范围是一个 kind 为 <code>system</code> 的 Component，其成员是它所覆盖的服务、软件、硬件、策略和流程。已获授权的系统在 Component 上指明其授权上下文；缺失的授权上下文不作任何断言。策略可以作为 kind 为 <code>policy</code> 的 Component 成为成员；其文本仍是内核之外的文档。</p>
+          <p class="small">执行者：系统责任人与 ISMS 负责人。写入：Component。应用：实施（Implement）。<a href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">手册第 9 章</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="scales">
+        <div class="step-body">
+          <h2>定义风险量表</h2>
+          <p>可能性、影响以及将二者组合起来的矩阵都由组织自行确定：使用多少个级别就定义多少个，用自己的措辞表述，每个量表都是一个由捆绑包锁定的小型定义文件。校验器会拒绝量表未定义的级别，也会拒绝与其自身矩阵相矛盾的评级，除非该评级说明了偏离的理由。示例捆绑包携带 BSI Standard 200-3 的量表。</p>
+          <p class="small">执行者：ISMS 负责人，供最高管理层批准。写入：三个量表定义。应用：风险（Risk），量表视图。<a href="{{ tree }}/jascon/examples" rel="noopener">示例量表</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="measure">
+        <div class="step-body">
+          <h2>进行首次测量</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">首次测量是一次以记录形式进行的差距分析。每个要求或条款一个 Implementation，说明其落实程度：<code>planned</code>、<code>partial</code>、<code>implemented</code> 或 <code>not-applicable</code>。第一个 Assessment 记录实际发现的情况，每个未得到满足的条款对应一个 Finding。</p>
+              <p class="muted">JASCON 不定义合规分数。可以统计的是状态：按状态统计的 Implementation、Assessment 的结果、按状态统计的 Finding、没有任何风险作为理由的已选要求。这些计数就是之后各轮用来比较的基线。</p>
+            </div>
+            <div class="window">
+              <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">jascon/examples/implementation-acme-konf-14-1-s2.json</span><span class="window-note">完整示例</span></div>
+              <pre><code data-lang="json">{{ file:jascon/examples/implementation-acme-konf-14-1-s2.json }}</code></pre>
+            </div>
+          </div>
+          <p class="small">执行者：系统责任人记录，内部评估人检查。写入：Implementation、Assessment、Finding。应用：实施（Implement）、评估（Assess）、校验（Validate）。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="pdca">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> 记录中的循环</p>
+      <h2>每个阶段写入什么，由谁写入</h2>
+      <p class="lede">四个阶段及其留下的记录、写入这些记录的应用页面，以及约束它们的规则。Risk 和 Check 位于 2.0.0 发布候选版中。</p>
+    </div>
+    <div class="grid g4 reveal">
+      <article class="card role">
+        <span class="who">Plan</span>
+        <h3>风险与适用性声明</h3>
+        <p>每个 Risk 都有一个场景、一名责任人、一个以具名量表表示的评级、四种处置选项之一，以及承载该处置的条款。Tailoring 选择要求并设定参数；它就是适用性声明。<code>risk-coverage</code> 会列出没有任何已评估风险作为理由的每一个已选要求。</p>
+        <p class="move"><b>由谁，在哪里</b>ISMS 负责人与风险责任人；由责任人接受残余风险。应用：风险（Risk）、裁剪（Tailor）。</p>
+      </article>
+      <article class="card role">
+        <span class="who">Do</span>
+        <h3>实施与机器检查</h3>
+        <p>Implementation 说明哪个组件满足哪个条款，以及由谁负责：<code>provider</code>、<code>customer</code>、<code>shared</code> 或 <code>inherited</code>。继承的边指明其所依赖的上游授权。厂商的建议一经某个 Implementation 采纳即被计入。Check 规定采集器报告哪些事实，以及怎样算通过。</p>
+        <p class="move"><b>由谁，在哪里</b>系统责任人、检查编写者；厂商提供建议。应用：实施（Implement）、检查（Checks）。</p>
+      </article>
+      <article class="card role">
+        <span class="who">Check</span>
+        <h3>评估与发现项</h3>
+        <p>Assessment 记录谁以何种方法、在何时检查了什么，结果如何。一次机器运行为每个 Check 记录一行，并附上观测值本身，校验器会重新计算每个判定。未得到满足的条款成为针对该条款的 Finding。内部审核就是执行者为内部人员的 Assessment。</p>
+        <p class="move"><b>由谁，在哪里</b>内部评估人；采集器在 JASCON 之外运行。应用：评估（Assess）、校验（Validate）。</p>
+      </article>
+      <article class="card role">
+        <span class="who">Act</span>
+        <h3>措施、偏离与新版本</h3>
+        <p>Finding 带有措施，其截止日期可由机器计算。凡有意不满足某条款之处，由 Deviation 记录原因以及由谁批准。Risk 获得其残余评级，Tailoring 获得一个新版本。校验器会列出每一条已批准的 Deviation，以及每一个 <code>review-due</code> 已过的 Risk。</p>
+        <p class="move"><b>由谁，在哪里</b>风险责任人、ISMS 负责人、最高管理层。应用：评估（Assess）、风险（Risk）、裁剪（Tailor）。</p>
+      </article>
+    </div>
+    <div class="table-wrap reveal" style="margin-top:32px">
+      <table>
+        <thead><tr><th>阶段</th><th>记录</th><th>校验器检查的内容</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Plan</th><td>Risk</td><td>级别位于具名量表上，并与其矩阵一致。已处置或已保留的 Risk 带有责任人的接受。只有已评估或已处置、且已选定处置选项的 Risk，才能作为某个要求的理由。</td></tr>
+          <tr><th scope="row">Plan</th><td>Tailoring</td><td>在使用方的 Tailoring 中，放宽情态或在义务与禁止之间移动，需要一条记录在案、带审批人的 Deviation。操作须指明其所修改的陈述。使用 <code>--require-risk-basis</code> 时，没有任何风险作为理由的已选要求即为失败。</td></tr>
+          <tr><th scope="row">Do</th><td>Implementation</td><td>继承的边所指明的授权存在于上游组件上。被采纳的建议属于一个作为该系统成员的产品。</td></tr>
+          <tr><th scope="row">Do</th><td>Check</td><td>事实是类型化的，判定标准使用十二种比较算子并以一个 AND 连接，采集器代码由 Check 的摘要覆盖。</td></tr>
+          <tr><th scope="row">Check</th><td>Assessment</td><td>方法受其所指明的分面约束。每个已记录的检查判定都根据其观测值和 Tailoring 的参数值重新计算。</td></tr>
+          <tr><th scope="row">Check</th><td>Finding</td><td>截止日期是一个日期、一段经过的时长，或一个注明所用日历的日历周期。没有日历，就不计算日期。</td></tr>
+          <tr><th scope="row">Act</th><td>Deviation</td><td>五种类型之一，四种状态之一，一经批准即须有具名审批人。已过的 <code>review-due</code> 会被报告，但不会因此关闭任何东西。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">管理评审：内核中没有对应的记录。其输入是校验器输出的报告以及上文统计的状态；其决定以 Risk 和 Tailoring 的新版本形式返回。手册<a href="{{ blob }}/jascon/references/ch06-tailoring-without-tears.md" rel="noopener">第 6 章</a>（裁剪）、<a href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">第 9 章</a>（实施）、<a href="{{ blob }}/jascon/references/ch10-assessment-findings-deviations.md" rel="noopener">第 10 章</a>（风险、评估、发现项）。</p>
+  </div>
+</section>
+
+<section class="section" id="audit">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">05</span> 审核</p>
+          <h2>审核员收到一个文件夹，并离线检查</h2>
+          <p class="lede">外部审核、认证或授权都始于一次交接。组织交出其捆绑包；评估人在自己的计算机上对其进行验证，无需访问组织的系统，也无需网络。</p>
+        </div>
+        <ul class="ticks">
+          <li><b>先查完整性。</b>校验器将每个对象的两个摘要与清单进行比较，并依据每个 Attestation 所绑定的内容对其作出判定。PowerShell 孪生实现在一台未加装任何软件的 Windows 计算机上做同样的事。</li>
+          <li><b>然后是决定。</b><code>--require-risk-basis</code> 提出 ISO/IEC 27001 6.1.3 的问题：哪个已选控制措施没有以任何风险为依据。<code>--as-of</code> 固定审核日期，因此逾期的复审就是当天逾期的那些。<code>--require-authors</code> 会把每一条未指明作者的记录判为失败。</li>
+          <li><b>然后是机器判定。</b>每个已记录的检查判定都根据其观测值重新计算。证据文件通过其 SHA-256 找到；按保留规则扣留的原始输出会被报告为已扣留。</li>
+          <li><b>然后是 Deviation，由人工审查。</b>类型是否符合事实？脱离了产生它的那次会议，理由是否仍然成立？审批人是否有权批准此事？引用是否指向外人可以重新审查的证据？</li>
+        </ul>
+        <p class="muted">评估人在自己的命名空间下编写 Assessment 和 Finding，并以捆绑包形式交回。授权官员签署一个 Attestation，它绑定各对象的语义摘要、清单的摘要，以及其所阅读的那份渲染文档的摘要。</p>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="chain-list">
+          <div class="chain-link"><b>对象</b><p>Component、Implementation、Risk、Tailoring、Check、带有其各行的 Assessment、Finding。每个都是一个 JSON 文件。</p></div>
+          <div class="chain-link"><b>内容清单</b><p>列出每个对象及其包摘要和语义摘要，并锁定分面 Schema。</p></div>
+          <div class="chain-link"><b>证据</b><p>位于 <code>evidence/sha256/</code> 下的文件，每个都以其字节的 SHA-256 命名，每次运行另有一条绑定观测值的记录。</p></div>
+          <div class="chain-link"><b>渲染件</b><p>由人阅读并签署的文档，例如示例捆绑包中的授权摘要。</p></div>
+          <div class="chain-link"><b>Attestation</b><p>放在清单旁边的 DSSE 信封，从不列在清单中。它绑定对象、清单和渲染件。</p></div>
+        </div>
+        <div class="window cmd">
+          <div class="window-bar"><span class="window-title">评估人的第一条命令</span></div>
+          <button class="copy" type="button" data-copy="cmd-audit">复制</button>
+          <pre id="cmd-audit"><code data-lang="sh">python jascon/scripts/validate_core.py path/to/received-bundle \
+    --require-risk-basis \
+    --as-of 2026-11-15 \
+    --require-authors \
+    --trusted-keys path/to/trusted-keys.json</code></pre>
+        </div>
+        <a class="link-arrow" href="{{ blob }}/jascon/references/ch11-integrity-attestation-airgaps.md" rel="noopener">手册第 11 章：完整性、证明、隔离网络</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="work-off">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">06</span> 处理发现项</p>
+          <h2>一个发现项，从头到尾</h2>
+          <p class="lede">手册中的完整示例：对一个 SaaS 的评估发现，某个要求的条款 s2 缺少密钥轮换的证据。条款 s1 已通过，不受影响。</p>
+        </div>
+        <div class="lattice">
+          <span class="chain-label">Finding</span>
+          <div class="chain"><span>open</span><i></i><span>in-remediation</span><i></i><span>closed</span></div>
+          <span class="chain-label">Deviation</span>
+          <div class="chain"><span>investigating</span><i></i><span>pending</span><i></i><span>approved</span></div>
+          <div class="chain"><span>pending</span><i></i><span>withdrawn</span></div>
+        </div>
+        <ul class="ticks">
+          <li><b>评估人开立 Finding。</b>针对陈述 <code>s2</code>，关联在其中成为现实的 Risk，并附一项措施：一份运行手册和轮换证据，期限为按具名日历计算的二十个工作日。</li>
+          <li><b>组织以证据作答。</b>轮换每月执行一次；扫描器误读了一份导出文件。这是 Finding 上的一条 Deviation，类型为 <code>false-positive</code>，附有指向日志的引用。</li>
+          <li><b>评估人作出决定。</b>该 Deviation 在评估人的标识符下变为 <code>approved</code>，并记录作出决定的日期和下一次复审的日期。措施和 Finding 随之关闭。</li>
+          <li><b>记录保留下来。</b>明年的审核员若问为何该发现项未经修复就结束了，只需阅读一个对象。当 <code>review-due</code> 已过时，校验器会一直列出该 Deviation，直到有人续期或撤回它。</li>
+        </ul>
+        <p class="muted">需要修复的发现项则走另一条路：措施完成，检查再次运行，新的 Assessment 满足该条款。在评估（Assess）页面上再次运行检查，会替换其 Assessment，并删除仍处于开放状态且不再适用的 Finding；已被推进到其他状态的 Finding 会被保留。</p>
+      </div>
+      <div class="window reveal">
+        <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">jascon/examples/finding-017.json</span><span class="window-note">虚构的参与方</span></div>
+        <pre><code data-lang="json">{{ file:jascon/examples/finding-017.json }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="hand-overs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> 交接的内容</p>
+      <h2>每一次交接，以及接收方检查什么</h2>
+      <p class="lede">在组织内部，记录是同一个仓库中的文件。在参与方之间，它们以捆绑包形式传递，接收方用发送方运行过的同样规则检查它们。</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>发送方</th><th>接收方</th><th>内容</th><th>在 JASCON 中</th><th>接收方检查</th></tr></thead>
+        <tbody>
+          <tr><td>权威机构</td><td>组织</td><td>目录及其基线</td><td>由 Requirement、RequirementSet、Tailoring、Mapping 组成的捆绑包；Attestation</td><td>Schema 和内核规则；两个摘要；Attestation 是否绑定</td></tr>
+          <tr><td>厂商</td><td>组织</td><td>针对某个产品的加固建议</td><td>建议包：带有能力的 Component，以及一份写明发布方的清单</td><td>ADVICE-1 至 ADVICE-11；发布方是仅为声称、有证明还是已证实</td></tr>
+          <tr><td>上游提供方</td><td>组织</td><td>某项服务赖以运行的授权</td><td><code>Component.authorizations</code></td><td>继承的 Implementation 所指明的授权确实存在</td></tr>
+          <tr><td>检查编写者</td><td>运维</td><td>一项机器检查</td><td>Check，其采集器代码位于 <code>collector@1</code> 中</td><td>Check 的摘要覆盖所运行的代码</td></tr>
+          <tr><td>运维</td><td>评估人</td><td>一次运行的观测值</td><td>Assessment 的各行、证据记录、位于 <code>evidence/sha256/</code> 下的文件</td><td>每个判定都被重新计算；每个文件都能通过其摘要找到</td></tr>
+          <tr><td>组织</td><td>评估人</td><td>供审核的 ISMS</td><td>整个捆绑包：系统、Implementation、Risk、Tailoring、Assessment、Finding</td><td>以上全部，以及风险覆盖、逾期的复审、缺失的作者</td></tr>
+          <tr><td>评估人</td><td>组织</td><td>审核结果</td><td>评估人命名空间下的 Assessment 和 Finding；已批准的 Deviation</td><td>同样的内核规则；评估人的 Attestation（如已签署）</td></tr>
+          <tr><td>授权官员</td><td>客户</td><td>已签署的授权</td><td>覆盖对象、清单和渲染件的 Attestation</td><td>Full Match、Semantic Match，或不绑定；以受信任密钥验证的签名</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> 局限</p>
+      <h2>本页所描述的是已设计的流程，尚未在实际使用中实测</h2>
+      <p class="lede"><span class="tier tier-designed">已设计</span> 尚无任何组织在 JASCON 上运行过其 ISMS 的完整循环。示例捆绑包以虚构的参与方，让一个要求、一个风险和一个发现项走完这一循环。</p>
+    </div>
+    <div class="grid g2 reveal">
+      <article class="card">
+        <h3>不在内核中</h3>
+        <p>ISMS 策略和范围声明的文本、管理评审的会议纪要、审核方案及其日程、培训记录。策略可以是 kind 为 <code>policy</code> 的 Component；其文本仍是文档。</p>
+      </article>
+      <article class="card">
+        <h3>不是工作流引擎</h3>
+        <p>没有任何东西会自行分派任务、发送提醒或推进状态。已过的复审日期会被报告；在有人作出决定之前，记录保持其含义。仓库中的任何工具都不运行采集器。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>在示例捆绑包上走一遍循环</h2>
+        <p>应用会打开示例，其中有它的 Risk、Tailoring、Implementation、两个 Check 及其运行记录、Finding 和 Attestation。应用的每个页面都是这一流程中的一个步骤。</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../jascon/examples/&amp;tool=risk">打开风险（Risk）页面 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="app/index.html#load=../jascon/examples/&amp;tool=assess">打开评估（Assess）页面 <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
