@@ -1,7 +1,7 @@
 {
  "measured": {
   "date": "2026-11-15",
-  "commit": "385f0fdf",
+  "commit": "a17f4cb1",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
@@ -162,6 +162,6 @@
  ],
  "validators": {
   "python_lines": 3472,
-  "powershell_lines": 4762
+  "powershell_lines": 4764
  }
 }
