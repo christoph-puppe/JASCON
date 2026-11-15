@@ -987,7 +987,7 @@ const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join(
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.19.0", READER_BUILD = "2026-11-14";
+const READER_VERSION = "1.20.0", READER_BUILD = "2026-11-15";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -3690,7 +3690,14 @@ function wireMapWb(el) {
   };
 }
 
-/* Tailoring resolution preview: Appendix B steps 3-4, in the browser */
+/* Tailoring resolution preview: Appendix B steps 3-4, in the browser.
+   Which operations this page applies (v1.20.0; backlog #71 point 5): the kernel names eight kinds of
+   operation and this page applies three of them. Until 1.19.0 an operation of one of the other five
+   was passed over without a word, and so was a set-parameter on a parameter its statement does not
+   declare (it was even shown as applied): the resolved package left without them and said nothing.
+   Since 1.20.0 each such operation is an error of the resolution that names what was not applied;
+   the preview shows it and no resolved package is written. */
+const RESOLVE_APPLIES = ["set-modality", "set-parameter", "replace-prose"];
 function resolveTailoring(tObj) {
   const scope = new Set();
   for (const s of tObj.selects || []) if (s["set-ref"]) expandSet(s["set-ref"]).forEach(id => scope.add(id));
@@ -3701,21 +3708,27 @@ function resolveTailoring(tObj) {
     const key = [op["requirement-ref"], op["statement-id"], op.parameter, op.field, op.facet].join("|");
     if (seen.has(key)) { errors.push(`same-target conflict on ${key}`); continue; }
     seen.add(key);
+    if (!RESOLVE_APPLIES.includes(op.op)) {
+      errors.push(`${op.op} on ${op["requirement-ref"]} is not applied: this page applies ${RESOLVE_APPLIES.join(", ")} and no other operation`);
+      continue; }
     const base = state.objects.get(op["requirement-ref"]);
     if (!base) { errors.push(`op targets unknown requirement ${op["requirement-ref"]}`); continue; }
     if (!resolved.has(base.obj.id)) resolved.set(base.obj.id, JSON.parse(JSON.stringify(base.obj)));
     const copy = resolved.get(base.obj.id);
     const stmt = copy.statements?.find(s => s.id === op["statement-id"]);
     if (!stmt) { errors.push(`op targets unknown statement ${op["statement-id"]} of ${copy.id}`); continue; }
+    const p = op.op === "set-parameter" ? (stmt.parameters || []).find(x => x.name === op.parameter) : null;
+    if (op.op === "set-parameter" && !p) {
+      errors.push(`set-parameter on ${copy.id} is not applied: statement ${stmt.id} declares no parameter ${op.parameter}`);
+      continue; }
     const notes = touched.get(copy.id) || []; touched.set(copy.id, notes);
     if (op.op === "set-modality") {
       notes.push({ what: `stmt ${stmt.id}: modality`, from: stmt.modality, to: op.modality,
         verdict: modalityVerdict(stmt.modality, op.modality) });
       stmt.modality = op.modality;
     } else if (op.op === "set-parameter") {
-      const p = (stmt.parameters || []).find(x => x.name === op.parameter);
-      notes.push({ what: `stmt ${stmt.id}: ⚙ ${op.parameter}`, from: JSON.stringify(p?.default ?? (p?.num !== undefined ? { num: p.num, unit: p.unit } : "unset")), to: JSON.stringify(op.value) });
-      if (p) { if (typeof op.value === "object" && op.value?.num !== undefined) { p.num = op.value.num; p.unit = op.value.unit; } else p.default = op.value; }
+      notes.push({ what: `stmt ${stmt.id}: ⚙ ${op.parameter}`, from: JSON.stringify(p.default ?? (p.num !== undefined ? { num: p.num, unit: p.unit } : "unset")), to: JSON.stringify(op.value) });
+      if (typeof op.value === "object" && op.value?.num !== undefined) { p.num = op.value.num; p.unit = op.value.unit; } else p.default = op.value;
     } else if (op.op === "replace-prose") {
       const lang = Object.keys(op.prose)[0];
       notes.push({ what: `stmt ${stmt.id}: prose (${lang}, ${op.intent})`, from: (stmt.prose[lang] || "").slice(0, 60) + "…", to: (op.prose[lang] || "").slice(0, 60) + "…" });
@@ -3752,7 +3765,7 @@ function resolvedPreviewHtml(tObj) {
     </div>`;
   }).join("");
   return `<div class="nano sectionlabel">Resolved preview — operations applied in list order to deep copies (Appendix B step 3)</div>
-    ${errors.length ? errors.map(e => `<div class="verdict-bad">✗ ${esc(e)}</div>`).join("") : ""}
+    ${errors.length ? errors.map(e => `<div class="verdict-bad" data-resolve-error>✗ ${esc(e)}</div>`).join("") + `<div class="hint" data-resolve-refused>No resolved package is written while the resolution has ${errors.length === 1 ? "this error" : "these errors"}: it would leave without what the Tailoring decides.</div>` : ""}
     <div class="wbrow"><span class="chip"><b>${scope.size}</b> requirements in resolved scope</span>
       <span class="chip"><b>${touched.size}</b> modified</span>
       <button class="primary" id="wb-t-export-resolved" ${errors.length ? "disabled" : ""}>⤓ Export resolved package (.zip)</button></div>

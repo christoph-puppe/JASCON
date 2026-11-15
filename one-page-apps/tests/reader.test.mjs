@@ -2443,3 +2443,49 @@ test("a loaded bundle that holds a requirement as withdrawn: what leans on it fa
     for (const e of shown) assert.ok(errs.some(x => x.endsWith(e)), "the console says it as an error: " + e);
     if (REFERENCE) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures.filter(IS_W1), shown, "the reference's lines, word for word and in its order"); }
   }));
+
+/* ---------- 19. the operations a resolved package applies (v1.20.0; backlog #71 point 5) ---------- */
+/* The kernel names eight kinds of operation; the page applies set-modality, set-parameter and replace-prose.
+   Each case adds one operation to the Tailoring of the example folder that the reference passes and the page
+   does not apply: one of the other five kinds (on the requirement, and one on a statement), or a set-parameter
+   on a parameter its statement does not declare. Until 1.19.0 the last two left the preview without a word and the
+   resolved package without the operation; the first five were stopped by a sentence about a statement
+   "undefined". */
+test("a Tailoring with an operation the page does not apply: the preview names it and no resolved package can be exported, for each of the five kinds, for one of them on a statement, and for a parameter the statement does not declare; the reference passes each bundle",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const T = "https://cso.example/tailoring/linux-prod", LNX = "https://cso.example/req/LNX-SSH-1", KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1";
+    const NOT = kind => `${kind} on ${LNX} is not applied: this page applies set-modality, set-parameter, replace-prose and no other operation`;
+    const CASES = [
+      [{ op: "set-field", field: "label", value: "LNX-SSH-1 (prod)" }, NOT("set-field")],
+      [{ op: "add-relation", relation: { type: "related", ref: KONF } }, NOT("add-relation")],
+      [{ op: "remove-relation", relation: { type: "related", ref: KONF } }, NOT("remove-relation")],
+      [{ op: "attach-facet", facet: "private:note@1", payload: { text: "prod only" } }, NOT("attach-facet")],
+      [{ op: "detach-facet", facet: "private:note@1" }, NOT("detach-facet")],
+      [{ op: "attach-facet", "statement-id": "s2", facet: "private:note@1", payload: { text: "prod only" } }, NOT("attach-facet")],
+      [{ op: "set-parameter", "statement-id": "s2", parameter: "no-such", value: 1 }, `set-parameter on ${LNX} is not applied: statement s2 declares no parameter no-such`],
+    ];
+    const shown = async () => {
+      await R.view("stage:tailor");
+      await page.locator(`[data-tsel="${T}"]`).click();
+      return { errors: (await page.locator("#view-stagefn [data-resolve-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")),
+        refused: await page.locator("#view-stagefn [data-resolve-refused]").count(), disabled: await page.locator("#wb-t-export-resolved").isDisabled() };
+    };
+    await R.load(EXAMPLES);
+    assert.deepEqual(await shown(), { errors: [], refused: 0, disabled: false }, "the Tailoring as committed resolves: its one operation is a set-parameter on a declared parameter");
+    for (const [op, sentence] of CASES) {
+      const name = op.op + (op.parameter ? "-" + op.parameter : op["statement-id"] ? "-" + op["statement-id"] : ""), copy = path.join(R.tmp, "resolve-" + name, "examples");
+      fs.cpSync(EXAMPLES, copy, { recursive: true });
+      const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === T);
+      const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+      obj.operations.push({ ...op, "requirement-ref": LNX, provenance: obj.operations[0].provenance });
+      const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+      fs.writeFileSync(path.join(copy, entry.path), bytes);
+      Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+      fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+      await R.load(copy);
+      assert.deepEqual(await shown(), { errors: [sentence], refused: 1, disabled: true }, name);
+      assert.equal(await page.locator("#view-stagefn .chip").filter({ hasText: "modified" }).textContent(), "1 modified", name + ": the operation the page applies is still shown as applied");
+      if (REFERENCE) { const ref = reference(copy); assert.ok(ref.ok, name + ": " + ref.out.slice(-1500)); assert.match(ref.line, / pass, 0 fail/, name); }
+    }
+  }));
