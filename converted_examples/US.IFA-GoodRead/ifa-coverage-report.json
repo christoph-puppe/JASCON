@@ -2315,13 +2315,13 @@
    "path": "poam.plan-of-action-and-milestones.system-id.id",
    "count": 1,
    "level": "L1",
-   "destination": "provenance / system id (system@1)"
+   "destination": "the POA&M's system-id names the SSP's system: its `id` -> `component-refs` of each Risk, as the URI of the system Component (by rule); its `identifier-type` -> no content, rebuilt from the SSP's system-id of that id (a rule the ledger checks)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.system-id.identifier-type",
    "count": 1,
    "level": "L1",
-   "destination": "provenance / system id (system@1)"
+   "destination": "the POA&M's system-id names the SSP's system: its `id` -> `component-refs` of each Risk, as the URI of the system Component (by rule); its `identifier-type` -> no content, rebuilt from the SSP's system-id of that id (a rule the ledger checks)"
   },
   {
    "path": "poam.plan-of-action-and-milestones.uuid",

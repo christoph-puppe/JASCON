@@ -1351,7 +1351,13 @@ RULES = [
   "risk-analysis@1 `assessment-results-state` on the Risk"),
  (r"^ar\.assessment-results\.local-definitions\.", "L2",
   "Assessment.method payload: the results' own activity (the TEST that was run) beside the plan's, marked source-doc ar"),
- (r"^poam\.plan-of-action-and-milestones\.(uuid$|system-id)", "L1", "provenance / system id (system@1)"),
+ # The sentence read "provenance / system id (system@1)" until 2026-11-15 (backlog #101, point 2). The record has
+ # the id at `component-refs` of the two Risks and nowhere else; system@1 holds the SSP's own system-ids, and the
+ # uuid of the POA&M is matched by the first row before this one is asked.
+ (r"^poam\.plan-of-action-and-milestones\.(uuid$|system-id)", "L1",
+  "the POA&M's system-id names the SSP's system: its `id` -> `component-refs` of each Risk, as the URI of the "
+  "system Component (by rule); its `identifier-type` -> no content, rebuilt from the SSP's system-id of that id (a "
+  "rule the ledger checks)"),
  (r"^poam\.plan-of-action-and-milestones\.observations\[\]\.", "L1",
   "observations@1 facet + landmark evidence URIs (deduped against AR by uuid; a field that differs from the "
   "AR's copy is kept under `variants`)"),
