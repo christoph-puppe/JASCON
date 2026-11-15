@@ -729,6 +729,35 @@ class ChangedSource(unittest.TestCase):
         def change_bound(src): self.rule(src, "timeframe_num_max")["timeframe_num_max"] = 10.5
         self.stops(change_bound, "NUMBER-1", "10.5")
 
+    def test_a_force_word_the_converter_does_not_know_stops_the_run(self):
+        """backlog #79 (3): until 2026-11-15 an unknown force was written as `unspecified` and the run ended with 0"""
+        def at_rule(src): self.rule(src, "force")["force"] = "SHALL"
+        self.stops(at_rule, "states the force 'SHALL', a word this converter does not know", "Nothing is written")
+        def in_a_variant(src):
+            r = next(r for _, r in rules(src) if any("force" in v for v in (r.get("varies_by_class") or {}).values()))
+            next(v for v in r["varies_by_class"].values() if "force" in v)["force"] = "OUGHT TO"
+        self.stops(in_a_variant, "states the force 'OUGHT TO'", ", class ")
+        # a rule that states no force is no refusal: it stays `unspecified`
+        def unspecified(out): return int(re.search(r"modality: \{[^}]*'unspecified': ([0-9]+)", out).group(1))
+        def without(src): self.rule(src, "force").pop("force")
+        code, out, err, d = self.run_on(without)
+        self.assertEqual(code, 0, err[-400:])
+        _, as_published, _, _ = self.run_on(lambda src: None)
+        self.assertEqual(unspecified(out), unspecified(as_published) + 1, "one rule more without a force than the publication has")
+
+    def test_a_run_leaves_no_bundle_in_the_repositorys_folder(self):
+        """backlog #79 (5): --out is required, and it may not name the repository's own folder of the conversion"""
+        own = os.path.join(self.root, "converted_examples", "FedRAMP-CR26")
+        with open(self.source, "w", encoding="utf-8") as f: json.dump(self.original, f, ensure_ascii=False, indent=1)
+        code, out, err = convert(converter=self.converter)
+        self.assertNotEqual(code, 0)
+        self.assertIn("--out DIR is required", err)
+        self.assertFalse(os.path.exists(own), "nothing was written into the repository's folder")
+        code, out, err = convert("--out", own, converter=self.converter)
+        self.assertNotEqual(code, 0)
+        self.assertIn("--out names the repository's own folder of this conversion", err)
+        self.assertFalse(os.path.exists(own))
+
     def test_an_optional_flag_other_than_true_stops_the_run(self):
         def change(src): self.rule(src, "notification")["notification"][0]["optional"] = False
         self.stops(change, "notification.optional")

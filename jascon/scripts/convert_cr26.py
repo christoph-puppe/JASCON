@@ -7,8 +7,8 @@ FRD -> terminology; CTL Rev5 overlay -> a set-parameter Tailoring over the
 carried Rev 5 Requirements, its guidance parked L2. Coverage target: 0.
 Depends on: convert_nist.py output (the US.SP800-53 bundle).
 
-    convert_cr26.py [--author-ref URI] [--date YYYY-MM-DD]
-                    [--obligated-party URI] [--out DIR]
+    convert_cr26.py --out DIR [--author-ref URI] [--date YYYY-MM-DD]
+                    [--obligated-party URI]
 
 The source is not in the repository and neither is the bundle: the
 publisher states no licence (converted_examples/FedRAMP-CR26/
@@ -19,8 +19,12 @@ Validators workflow downloads it, converts with --out, runs the reference
 validator on the bundle and compares the two coverage reports with the
 committed ones. The reports are the record of the conversion.
 
---out DIR writes the bundle (DIR/cr26-core-bundle) and the two reports to
-DIR, so that a run need not touch the repository.
+--out DIR writes the bundle (DIR/cr26-core-bundle), the two reports and the
+ledger record to DIR, and is required (backlog #79): the bundle is not
+redistributed, and until 2026-11-15 a run without --out left it in the
+repository's folder, where nothing ignored it and where the SP 800-53
+converter counts it. The three committed files are renewed by copying them
+from DIR to converted_examples/FedRAMP-CR26/.
 
 The conversion ledger (backlog #41). The path map above says where a source
 PATH is declared to go. The ledger follows every source VALUE, a flag and a
@@ -79,11 +83,19 @@ PARTY_SOURCE_STATES="in `affects` of a rule"
 
 ROOT=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..",".."))
 SRC=os.path.join(ROOT,"sources","cr_fedramp-consolidated-rules.json")
-OUTDIR=os.path.join(ROOT,"converted_examples","FedRAMP-CR26")
-if "--out" in ARGV:
-    if ARGV.count("--out")>1: raise SystemExit("--out is given more than once")
-    if ARGV.index("--out")+1>=len(ARGV): raise SystemExit("--out needs a directory")
-    OUTDIR=os.path.abspath(ARGV[ARGV.index("--out")+1])
+COMMITTED=os.path.join(ROOT,"converted_examples","FedRAMP-CR26")
+if "--out" not in ARGV:
+    raise SystemExit("convert_cr26.py: --out DIR is required. The bundle of this conversion is not redistributed "
+                     "(converted_examples/FedRAMP-CR26/NOT-REDISTRIBUTED.md), so a run writes nothing into the "
+                     "repository. To renew the committed reports and the record, copy cr26-coverage-report.md, "
+                     "cr26-coverage-report.json and cr26-conversion-ledger.json from DIR to "
+                     "converted_examples/FedRAMP-CR26/.")
+if ARGV.count("--out")>1: raise SystemExit("--out is given more than once")
+if ARGV.index("--out")+1>=len(ARGV): raise SystemExit("--out needs a directory")
+OUTDIR=os.path.abspath(ARGV[ARGV.index("--out")+1])
+if os.path.normcase(os.path.realpath(OUTDIR))==os.path.normcase(os.path.realpath(COMMITTED)):
+    raise SystemExit("convert_cr26.py: --out names the repository's own folder of this conversion. The bundle is not "
+                     "redistributed; write it elsewhere and copy the two reports and the record from there.")
 OUT=os.path.join(OUTDIR,"cr26-core-bundle")
 RMD=os.path.join(OUTDIR,"cr26-coverage-report.md")
 RJS=os.path.join(OUTDIR,"cr26-coverage-report.json")
@@ -430,7 +442,18 @@ mod_hist=collections.Counter(); synth_prose=0; dangling_related=0; mappings=0
 # change during a run; the ledger applies it to the source again after the
 # bundle is written and compares the result with the file. A rule's name is
 # what the record prints.
-def _modality(force): return FORCE.get(force,"unspecified")
+def _modality(force): return FORCE[force]
+def known_force(force,where):
+    """A force word this converter does not know ends the run (backlog #79).
+    Until 2026-11-15 it was written as `unspecified` at rule level and passed
+    over in a class variant, without a word; all forces of the publications
+    read so far are known. A rule that states no force is another case and
+    stays `unspecified`: what a source does not say is no refusal."""
+    if force not in FORCE:
+        raise SystemExit(f"convert_cr26.py: {where} states the force {force!r}, a word this converter does not know "
+                         f"({', '.join(FORCE)}). Nothing is written: a modality the converter guessed would read as "
+                         f"the publisher's.")
+    return force
 def _party(name): return f"{NS}/party/{slug(name)}"
 def _related_uri(rid): return f"{NS}/req/{rid}"
 def _map_id(owner,ctl): return f"{NS}/map/{slug(owner)}--{slug(ctl)}"
@@ -547,7 +570,8 @@ def convert_rule(fam,trk,subk,rid,r,status):
     uri=f"{NS}/req/{rid}"
     req={"id":uri,"version":VER,"label":rid,"lifecycle":lifecycle_of(status,R_MEMBER_LIFECYCLE),
          "title":r.get("name",rid),"statements":[]}
-    base_force=r.get("force"); mod=D(R_MODALITY,_modality,base_force) if base_force is not None else "unspecified"
+    base_force=r.get("force")
+    mod=D(R_MODALITY,_modality,known_force(base_force,f"rule {rid}")) if base_force is not None else "unspecified"
     prose=r.get("statement")
     if prose is None:
         prose=D(R_RULE_PROSE,_rule_prose,r.get("name",rid))
@@ -617,7 +641,7 @@ def convert_rule(fam,trk,subk,rid,r,status):
         counters["class-variant-rules"]+=1
         for cls,v in var.items():
             OPS=class_tailorings[cls]["operations"]
-            vf=FORCE.get(v.get("force"))
+            vf=FORCE[known_force(v["force"],f"rule {rid}, class {cls}")] if v.get("force") is not None else None
             if vf and vf!=mod:
                 op={"op":"set-modality","requirement-ref":uri,"statement-id":"s1","modality":D(R_MODALITY,_modality,v["force"])}
                 easing = AXIS[vf]!=AXIS[mod] or ORDER[vf]<ORDER[mod] or mod=="unspecified" and False
