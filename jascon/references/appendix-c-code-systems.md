@@ -115,8 +115,9 @@ Stewardship of the code system tracks upstream (the R13 standing
 duty). The composition arithmetic (what survives a two-hop chain)
 is Chapter 8's table; the short version: `equal` chains, everything
 else degrades honestly toward `intersects`/`supports`.
-**Observed:** 373 Mapping objects minted from CR26's untyped KSI
-links — all `supports` per the §8.6 import rule, because flattering
+**Observed:** 652 Mapping objects minted from CR26's untyped control
+links (558 of KSIs, 94 of rules; publication 2026.11.02.01 of
+2026-11-02) — all `supports` per the §8.6 import rule, because flattering
 an untyped link into `equal` is how crosswalk trust dies.
 
 **`supplements`** *(v0.6 cycle, 2026-07-21)* — the one code beyond the
@@ -139,7 +140,8 @@ Interconnections are **relations between Components**, not a kind.
 `draft · reviewed · authoritative` — on Mappings. The grade answers
 "how much diligence stands behind this claim," and provenance answers
 "whose diligence" — together they let contradictory mappings coexist
-without a fistfight (D20). **Observed:** 373 × `draft` — correctly
+without a fistfight (D20). **Observed:** 652 × `draft` (CR26
+publication 2026.11.02.01 of 2026-11-02) — correctly
 humble for machine-imported link lists; `reviewed` appears in the
 example bundle's hand-checked crosswalk; `authoritative` is reserved
 for the mapping's *owner-of-record*.

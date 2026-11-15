@@ -144,8 +144,8 @@ trigger (≤1 hop) gating an enforced primitive instantiation; facets
 instantiate it, never extend it. (App. B.1.8)
 
 **Confidence** — the diligence grade on a Mapping (`draft · reviewed
-· authoritative`); measured usage: 373 × draft for machine-imported
-links. (App. C.7)
+· authoritative`); measured usage: 652 × draft for machine-imported
+links (CR26 publication 2026.11.02.01 of 2026-11-02). (App. C.7)
 
 **Conformance corpus** — the golden bundles-with-verdicts that *are*
 the specification (test-suite-as-spec); release gated on two

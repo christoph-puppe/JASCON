@@ -5,8 +5,9 @@
 field by field — with the evidence column that makes this appendix
 different from a schema dump: which measured corpus reality each field
 answers to. Counts cite the three-authority census and the gate-item-1
-converter runs (ISM 36,161 · BSI 49,804 · CR26 7,294 leaf values, all
-at 100 % declared coverage).
+converter runs (ISM 36,161 · BSI 49,804 · CR26 7,532 leaf values, CR26
+in publication 2026.11.02.01 of 2026-11-02, all at 100 % declared
+coverage).
 **Convention:** ● required · ○ optional. Field names are normative;
 prose here is explanatory, the conformance corpus is definitive.
 
@@ -121,7 +122,7 @@ does not ask for it; OPERATION-1 does, since 2026-11-15 (Chapter 12).
 | `direction` | ● | code | source-to-target · bidirectional. |
 | `confidence` | ● | code (C.7) | draft · reviewed · authoritative. |
 | `rationale` | ○ | string | Why the relationship holds. |
-| `provenance` | ● | {author-ref ●, date ●} | `date` is `YYYY-MM-DD` since 2.0.0-rc.4 (**DATE-3**); until then any string. **Whose claim this is** — the third-party-crosswalk ownership answer. Evidence: 373 Mapping objects minted from CR26 KSI links at honest `supports`/`draft` (8.6 untyped-import rule). Contradictory mappings coexist by design. |
+| `provenance` | ● | {author-ref ●, date ●} | `date` is `YYYY-MM-DD` since 2.0.0-rc.4 (**DATE-3**); until then any string. **Whose claim this is** — the third-party-crosswalk ownership answer. Evidence: 652 Mapping objects minted from CR26 control links (558 of KSIs, 94 of rules; publication 2026.11.02.01 of 2026-11-02) at honest `supports`/`draft` (8.6 untyped-import rule). Contradictory mappings coexist by design. |
 
 ---
 
@@ -376,7 +377,8 @@ Honesty ledger for this appendix: **exercised at scale** — statements
 measured), obligated-parties, choice/string/calendar-period/
 elapsed-duration parameters, aliases, sequence, nested Sets &
 sets-of-sets, relations, facets & annotations, both digests,
-set-modality/set-parameter ops, Mapping at scale (×373), authorizations
+set-modality/set-parameter ops, Mapping at scale (×652, CR26
+publication 2026.11.02.01 of 2026-11-02), authorizations
 + basis-ref (example bundle). **Declared, not yet corpus-exercised** —
 predicate selects, excludes, set-field/replace-prose/relation/facet
 ops, uri/date/integer/decimal parameters, canonical-alias/replaces

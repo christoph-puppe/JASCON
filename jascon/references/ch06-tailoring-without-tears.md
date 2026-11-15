@@ -35,7 +35,7 @@ ordered list of operations to apply to the survivors.*
 
 ```json
 { "id": "https://ns.fedramp.gov/cr26/tailoring/class-a",
-  "version": "2026.07.14.01",
+  "version": "2026.11.02.01",
   "selects":  [ {"set-ref": "https://ns.fedramp.gov/cr26/set/all-20x"} ],
   "excludes": [ ],
   "operations": [ … ] }

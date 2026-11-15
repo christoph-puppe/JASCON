@@ -116,7 +116,7 @@ which is exactly what the architecture wants you to say.
 Every object carries a `version` string. The specification does not
 impose a scheme; it imposes a *policy obligation*: pick one, document it
 in the prefix constitution, and never mix. The corpus shows three sane
-choices in the wild — CR26's dotted date-serial (`2026.07.14.01`), ISM's
+choices in the wild — CR26's dotted date-serial (`2026.11.02.01`), ISM's
 release date (`v2026.06.18`), the German ISO date — and any of them
 works, because addressability, not arithmetic, is the point: `id@version`
 names an immutable thing, forever.
