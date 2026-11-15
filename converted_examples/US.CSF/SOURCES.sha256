@@ -7,8 +7,9 @@
 # therefore a reproducible record: a change of the kernel, of
 # oscal_conv_lib.py or of the converter that would alter them is noticed.
 #
-# The base is the publisher's repository at commit 9402f031, the commit the
-# IFA conversion is pinned to as well.
+# The base is the publisher's repository at commit
+# 9402f031489092246f2c27391bad452b85604140, the commit the IFA conversion is
+# pinned to as well.
 #
 # base: https://raw.githubusercontent.com/usnistgov/oscal-content/9402f031489092246f2c27391bad452b85604140/
 # into: sources/nist

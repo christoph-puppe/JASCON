@@ -8,11 +8,14 @@
 # oscal_conv_lib.py or of the converter that would alter them is noticed.
 #
 # One line of the coverage report is not a value of these files: the count
-# of citations of SP 800-53 in the other corpora is taken over the bundles
-# the repository holds when the converter runs.
+# of citations of SP 800-53 in the other corpora is taken over the objects of
+# four bundles of this repository, as they stand when the converter runs. The
+# converter names them (CITING_CORPORA) and the report lists them; nothing
+# else under converted_examples/ is read for it.
 #
-# The base is the publisher's repository at commit 9402f031, the commit the
-# IFA conversion is pinned to as well.
+# The base is the publisher's repository at commit
+# 9402f031489092246f2c27391bad452b85604140, the commit the IFA conversion is
+# pinned to as well.
 #
 # base: https://raw.githubusercontent.com/usnistgov/oscal-content/9402f031489092246f2c27391bad452b85604140/
 # into: sources/nist
