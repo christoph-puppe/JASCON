@@ -111,7 +111,7 @@ const P = (() => {
   assert.ok(a >= 0 && b > a, "jascon-reader.html carries the READER-PURE markers");
   return new Function(`"use strict";\n${HTML.slice(a, b)}\nreturn { inferType, kernelNeeded, kernelPinErrors, whoDecided, authorRecord, authorTailoring, partyUri, requiredParty,
     canonical, sha256Fallback, semanticDigest, attestationBinds, bindsLine, envelopeState, listedAttestationErrors,
-    STDLIB_FACETS, facetHome, methodKeyErrors, facetKeyErrors, facetAndMethodKeyErrors, closureErrors, withdrawnReferences, withdrawnReferenceErrors, manualMethod, isEarlierWorkbenchMethod };`)();
+    STDLIB_FACETS, facetHome, methodKeyErrors, facetKeyErrors, facetAndMethodKeyErrors, closureErrors, withdrawnReferences, withdrawnReferenceErrors, operationTargets, operationTargetErrors, manualMethod, isEarlierWorkbenchMethod };`)();
 })();
 
 /* ---------- 1. the pin vectors ---------- */
@@ -2444,14 +2444,31 @@ test("a loaded bundle that holds a requirement as withdrawn: what leans on it fa
     if (REFERENCE) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures.filter(IS_W1), shown, "the reference's lines, word for word and in its order"); }
   }));
 
+/* The reference's sentence for OPERATION-1 (backlog #96), and a copy of the example folder under `name` in which the
+   Tailoring `id` was changed by `change` and the manifest entry carries the digests of the changed file. -> the folder */
+const OPERATION_SAID = "an operation that changes a statement names it - set-modality, set-parameter and replace-prose carry a statement-id, and a set-parameter names a parameter that statement declares";
+async function tailoringCopy(R, name, id, change) {
+  const copy = path.join(R.tmp, name, "examples");
+  fs.cpSync(EXAMPLES, copy, { recursive: true });
+  const mp = path.join(copy, "content-manifest.json"), manifest = JSON.parse(fs.readFileSync(mp, "utf8")), entry = manifest.objects.find(e => e.id === id);
+  const obj = JSON.parse(fs.readFileSync(path.join(copy, entry.path), "utf8"));
+  change(obj);
+  const bytes = Buffer.from(JSON.stringify(obj, null, 1) + "\n");
+  fs.writeFileSync(path.join(copy, entry.path), bytes);
+  Object.assign(entry, { "package-digest": sha256(bytes), "semantic-digest": await P.semanticDigest(obj) });
+  fs.writeFileSync(mp, JSON.stringify(manifest, null, 1) + "\n");
+  return copy;
+}
+
 /* ---------- 19. the operations a resolved package applies (v1.20.0; backlog #71 point 5) ---------- */
 /* The kernel names eight kinds of operation; the page applies set-modality, set-parameter and replace-prose.
    Each case adds one operation to the Tailoring of the example folder that the reference passes and the page
    does not apply: one of the other five kinds (on the requirement, and one on a statement), or a set-parameter
    on a parameter its statement does not declare. Until 1.19.0 the last two left the preview without a word and the
    resolved package without the operation; the first five were stopped by a sentence about a statement
-   "undefined". */
-test("a Tailoring with an operation the page does not apply: the preview names it and no resolved package can be exported, for each of the five kinds, for one of them on a statement, and for a parameter the statement does not declare; the reference passes each bundle",
+   "undefined". Since 2026-11-15 the reference refuses the last case as well (OPERATION-1, backlog #96), and the
+   page (1.21.0) says so in the overview in the reference's words. */
+test("a Tailoring with an operation the page does not apply: the preview names it and no resolved package can be exported, for each of the five kinds, for one of them on a statement, and for a parameter the statement does not declare; the reference passes each bundle but the last, which OPERATION-1 refuses in both",
   OPTS, () => withReader(async R => {
     const { page } = R;
     const T = "https://cso.example/tailoring/linux-prod", LNX = "https://cso.example/req/LNX-SSH-1", KONF = "https://ns.bsi.bund.de/gspp/req/KONF.14.1";
@@ -2486,6 +2503,89 @@ test("a Tailoring with an operation the page does not apply: the preview names i
       await R.load(copy);
       assert.deepEqual(await shown(), { errors: [sentence], refused: 1, disabled: true }, name);
       assert.equal(await page.locator("#view-stagefn .chip").filter({ hasText: "modified" }).textContent(), "1 modified", name + ": the operation the page applies is still shown as applied");
-      if (REFERENCE) { const ref = reference(copy); assert.ok(ref.ok, name + ": " + ref.out.slice(-1500)); assert.match(ref.line, / pass, 0 fail/, name); }
+      const refused = op.parameter === "no-such" ? [`${T}: operations[1]: set-parameter names the parameter 'no-such', which statement 's2' of ${LNX} does not declare (OPERATION-1: ${OPERATION_SAID})`] : [];
+      await R.view("overview");
+      assert.deepEqual((await page.locator("#ov-kv [data-closure-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")), refused, name);
+      if (REFERENCE) {
+        if (refused.length) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures, refused, name + ": the reference's line, word for word"); }
+        else { const ref = reference(copy); assert.ok(ref.ok, name + ": " + ref.out.slice(-1500)); assert.match(ref.line, / pass, 0 fail/, name); }
+      }
     }
+  }));
+
+/* ---------- 20. OPERATION-1: an operation that changes a statement names it (v1.21.0; backlog #96) ---------- */
+/* operation_targets of the reference is ported whole, so every vector is decided here. `expected` lists
+   [id of the Tailoring, index of the operation, "statement" or "parameter"]; the sentences are the reference's. */
+const OPERATIONS = json("jascon/conformance/reference-vectors.json")["operation-targets"];
+test("OPERATION-1: each of the 15 vectors gets the reference's entries from the page's own function, in its order, and its sentences", () => {
+  assert.equal(OPERATIONS.length, 15);
+  for (const c of OPERATIONS) {
+    assert.deepEqual(P.operationTargets(c.objects), c.expected, c.name);
+    const errs = P.operationTargetErrors(c.objects);
+    assert.equal(errs.length, c.expected.length, c.name);
+    errs.forEach((e, i) => assert.ok(e.startsWith(`${c.expected[i][0]}: operations[${c.expected[i][1]}]: `) && e.endsWith(`(OPERATION-1: ${OPERATION_SAID})`)
+      && (c.expected[i][2] === "statement" ? / names no statement \(/.test(e) : / does not declare \(/.test(e)), `${c.name}: ${e}`));
+  }
+  assert.deepEqual(P.operationTargets([]), []);
+  assert.deepEqual(P.operationTargets(null), []);
+});
+test("a loaded bundle with a set-modality that names no statement: the overview and the console fail it in the reference's words, and the resolved preview says that it names no statement",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const T = "https://ns.bsi.bund.de/gspp/tailoring/erhoeht", ISM = "https://ns.cyber.gov.au/ism/req/ISM-1234";
+    const copy = await tailoringCopy(R, "operation-1", T, o => o.operations.push({ op: "set-modality", "requirement-ref": ISM, modality: "may" }));
+    await R.load(copy);
+    await R.view("overview");
+    const want = [`${T}: operations[2]: set-modality names no statement (OPERATION-1: ${OPERATION_SAID})`];
+    assert.deepEqual((await page.locator("#ov-kv [data-closure-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")), want);
+    const errs = await page.locator("#log > div.l-err").evaluateAll(l => l.map(x => x.textContent));
+    assert.ok(errs.some(x => x.endsWith(want[0])), "the console says it as an error");
+    await R.view("stage:tailor");
+    await page.locator(`[data-tsel="${T}"]`).click();
+    assert.deepEqual((await page.locator("#view-stagefn [data-resolve-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")), [`set-modality on ${ISM} names no statement`]);
+    assert.equal(await page.locator("#wb-t-export-resolved").isDisabled(), true);
+    if (REFERENCE) { const ref = referenceFailures(copy); assert.equal(ref.ok, false, ref.line); assert.deepEqual(ref.failures, want, "the reference's line, word for word"); }
+  }));
+
+/* ---------- 21. the scope of a resolved package (v1.21.0; backlog #71 points 13 and 14) ---------- */
+/* The example Tailoring selects a baseline of three requirements, one of them through a nested Set. Each case
+   changes its selection. `scope` is what the preview counts and what the resolved package holds. */
+test("the resolved scope: an exclude that names a Set removes its members, one that names a Requirement removes it; a select by predicate is said not to be resolved and no resolved package can be exported",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const T = "https://ns.bsi.bund.de/gspp/tailoring/erhoeht", LINUX = "https://cso.example/set/linux-baseline", ISM = "https://ns.cyber.gov.au/ism/req/ISM-1234";
+    const shown = async () => {
+      await R.view("stage:tailor");
+      await page.locator(`[data-tsel="${T}"]`).click();
+      return { scope: await page.locator("#view-stagefn .chip").filter({ hasText: "requirements in resolved scope" }).textContent(),
+        errors: (await page.locator("#view-stagefn [data-resolve-error]").evaluateAll(l => l.map(x => x.textContent))).map(t => t.replace(/^✗ /, "")),
+        disabled: await page.locator("#wb-t-export-resolved").isDisabled() };
+    };
+    const packed = async name => {
+      const dir = unzipTo(await R.download("#wb-t-export-resolved"), path.join(R.tmp, "scope-out-" + name));
+      if (REFERENCE) { const ref = reference(dir); assert.ok(ref.ok, name + ": " + ref.out.slice(-2500)); }
+      return JSON.parse(fs.readFileSync(path.join(dir, "content-manifest.json"), "utf8")).objects.map(e => e.id).sort();
+    };
+    const BASE = ["https://ns.bsi.bund.de/gspp/req/KONF.14.1", ISM, "https://ns.fedramp.gov/cr26/req/IEC-CSO-IIR"].sort();
+    const why = { rationale: { en: "Not in this scope." } };
+
+    /* a second Set is selected and then excluded as a Set: its one member leaves the scope */
+    let copy = await tailoringCopy(R, "scope-set", T, o => { o.selects.push({ "set-ref": LINUX }); o.excludes = [{ ref: LINUX, ...why }]; });
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "3 requirements in resolved scope", errors: [], disabled: false });
+    assert.deepEqual(await packed("set"), BASE);
+    if (REFERENCE) { const ref = reference(copy); assert.ok(ref.ok, ref.out.slice(-2500)); assert.ok(ref.notes.some(l => l.includes(`risk-coverage: ${T} `) && l.includes(" selected=3 ")), "the reference counts three selected requirements: " + ref.notes.join("\n").slice(-1500)); }
+
+    /* an exclude that names one Requirement removes that one */
+    copy = await tailoringCopy(R, "scope-one", T, o => { o.excludes = [{ ref: ISM, ...why }]; });
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "2 requirements in resolved scope", errors: [], disabled: false });
+    assert.deepEqual(await packed("one"), BASE.filter(id => id !== ISM));
+
+    /* a select by predicate beside the select of a Set */
+    copy = await tailoringCopy(R, "scope-predicate", T, o => o.selects.push({ predicate: { present: { path: "facets" } } }));
+    await R.load(copy);
+    assert.deepEqual(await shown(), { scope: "3 requirements in resolved scope",
+      errors: ["selects[1] is a select by predicate, which this page does not resolve: the scope below holds the members of the selected Sets only"], disabled: true });
+    if (REFERENCE) { const ref = reference(copy); assert.ok(ref.ok, "the reference passes a select by predicate: " + ref.out.slice(-2500)); }
   }));

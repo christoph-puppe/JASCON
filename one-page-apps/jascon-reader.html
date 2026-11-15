@@ -965,6 +965,44 @@ function withdrawnReferences(objs) {
 }
 const withdrawnReferenceErrors = objs => withdrawnReferences(objs)
   .map(([id, edge, ref]) => `${id}: ${edge} names ${ref}, which is withdrawn (WITHDRAWN-1: ${WITHDRAWN_RULE})`);
+/* ---------- OPERATION-1: an operation that changes a statement names it (v1.21.0; backlog #96) ----------
+   operation_targets of validate_core.py, ported whole. A modality, a parameter and a prose are a
+   statement's: a set-modality, a set-parameter and a replace-prose carry a statement-id, and a
+   set-parameter names a parameter that statement declares. An empty statement-id names no statement.
+   A statement-id that names no statement of the Requirement is closureErrors' and is not said twice,
+   and an operation on a Requirement the bundle does not hold is closure-required.
+   `objs`: the objects of the bundle. -> [[id of the Tailoring, index of the operation, "statement" or
+   "parameter"]], the Tailorings in the order of their ids, the operations in the order of the document */
+const OPERATION_RULE = "an operation that changes a statement names it - set-modality, set-parameter and replace-prose " +
+  "carry a statement-id, and a set-parameter names a parameter that statement declares";
+const OPERATION_ON_STATEMENT = ["set-modality", "set-parameter", "replace-prose"];
+function operationTargets(objs) {
+  const list = (objs || []).filter(isRecord), byId = new Map(list.map(o => [o.id, o])), out = [];
+  for (const id of [...byId.keys()].sort()) {
+    const o = byId.get(id);
+    if (inferType(o) !== "tailoring") continue;
+    (Array.isArray(o.operations) ? o.operations : []).forEach((op, i) => {
+      if (!isRecord(op) || !OPERATION_ON_STATEMENT.includes(op.op)) return;
+      const sid = op["statement-id"];
+      if (typeof sid !== "string" || sid === "") { out.push([id, i, "statement"]); return; }
+      if (op.op !== "set-parameter") return;
+      const tgt = byId.get(op["requirement-ref"]);
+      if (!tgt || inferType(tgt) !== "requirement") return;
+      const stmt = (Array.isArray(tgt.statements) ? tgt.statements : []).find(x => isRecord(x) && x.id === sid);
+      if (!stmt) return;
+      if (!(Array.isArray(stmt.parameters) ? stmt.parameters : []).some(d => isRecord(d) && d.name === op.parameter)) out.push([id, i, "parameter"]);
+    });
+  }
+  return out;
+}
+function operationTargetErrors(objs) {
+  const byId = new Map((objs || []).filter(isRecord).map(o => [o.id, o]));
+  return operationTargets(objs).map(([id, i, what]) => {
+    const op = byId.get(id).operations[i];
+    return what === "statement" ? `${id}: operations[${i}]: ${op.op} names no statement (OPERATION-1: ${OPERATION_RULE})`
+      : `${id}: operations[${i}]: set-parameter names the parameter '${op.parameter}', which statement '${op["statement-id"]}' of ${op["requirement-ref"]} does not declare (OPERATION-1: ${OPERATION_RULE})`;
+  });
+}
 /* The keys of `facets` and of `method` that no facet registers, object by object and for one object
    `facets` before `method`: the order of facet_errors in validate_core.py (v1.17.0; until 1.16.0 the
    page listed the methods of all objects and then the facets of all objects). */
@@ -987,7 +1025,7 @@ const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join(
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.20.0", READER_BUILD = "2026-11-15";
+const READER_VERSION = "1.21.0", READER_BUILD = "2026-11-15";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -1305,7 +1343,7 @@ function indexBundle() {
           manifest's order, against the standard library and the facet schemas this manifest pins. A key no
           facet registers is reported in the reference's words. The payloads are not checked here. */
     const listedObjs = state.order.map(id => state.objects.get(id)).filter(r => r && r.entry).map(r => r.obj);
-    state.closureErrors = [...closureErrors(listedObjs), ...withdrawnReferenceErrors(listedObjs)];     // WITHDRAWN-1 since 1.19.0
+    state.closureErrors = [...closureErrors(listedObjs), ...withdrawnReferenceErrors(listedObjs), ...operationTargetErrors(listedObjs)];     // WITHDRAWN-1 since 1.19.0, OPERATION-1 since 1.21.0
     for (const e of state.closureErrors) l.err(e);
     state.listedErrors = listedAttestationErrors([...state.objects.values()].filter(r => r.entry).map(r => r.obj));
     for (const e of state.listedErrors) l.err(e);
@@ -2920,7 +2958,7 @@ async function buildWorkspaceBundleFiles(objs, provenance) {
     }
   }
   const pins = pinnedFacets(manifest, path => { const f = files.find(x => x.name === path); return f && new TextDecoder().decode(f.bytes); });
-  for (const e of [...closureErrors(objs), ...withdrawnReferenceErrors(objs), ...facetAndMethodKeyErrors(objs, pins)]) { l.err("in this export — " + e); files.fails.push(e); }
+  for (const e of [...closureErrors(objs), ...withdrawnReferenceErrors(objs), ...operationTargetErrors(objs), ...facetAndMethodKeyErrors(objs, pins)]) { l.err("in this export — " + e); files.fails.push(e); }
   return files;
 }
 /* what the last line of an export says about the Attestations: those it wrote, and those of the loaded bundle it did not */
@@ -3696,13 +3734,22 @@ function wireMapWb(el) {
    was passed over without a word, and so was a set-parameter on a parameter its statement does not
    declare (it was even shown as applied): the resolved package left without them and said nothing.
    Since 1.20.0 each such operation is an error of the resolution that names what was not applied;
-   the preview shows it and no resolved package is written. */
+   the preview shows it and no resolved package is written.
+   The scope (v1.21.0; backlog #71 points 13 and 14): an exclude that names a Set removes the Set's
+   members, to any depth, as D13 says and as the reference's risk-coverage counts; until 1.20.0 it
+   removed nothing, and the resolved package held what the Tailoring excludes. A select by predicate
+   is not resolved by this page; until 1.20.0 it was passed over and the package left without what it
+   selects. Since 1.21.0 it is an error of the resolution, and the scope shown is said to be the
+   members of the selected Sets only. */
 const RESOLVE_APPLIES = ["set-modality", "set-parameter", "replace-prose"];
 function resolveTailoring(tObj) {
-  const scope = new Set();
-  for (const s of tObj.selects || []) if (s["set-ref"]) expandSet(s["set-ref"]).forEach(id => scope.add(id));
-  for (const ex of tObj.excludes || []) scope.delete(ex.ref);
-  const resolved = new Map(), touched = new Map(), errors = [];
+  const scope = new Set(), errors = [];
+  (tObj.selects || []).forEach((s, i) => {
+    if (s["set-ref"]) expandSet(s["set-ref"]).forEach(id => scope.add(id));
+    else errors.push(`selects[${i}] is a select by predicate, which this page does not resolve: the scope below holds the members of the selected Sets only`);
+  });
+  for (const ex of tObj.excludes || []) expandSet(ex.ref).forEach(id => scope.delete(id));
+  const resolved = new Map(), touched = new Map();
   const seen = new Set();
   for (const op of tObj.operations || []) {
     const key = [op["requirement-ref"], op["statement-id"], op.parameter, op.field, op.facet].join("|");
@@ -3716,7 +3763,7 @@ function resolveTailoring(tObj) {
     if (!resolved.has(base.obj.id)) resolved.set(base.obj.id, JSON.parse(JSON.stringify(base.obj)));
     const copy = resolved.get(base.obj.id);
     const stmt = copy.statements?.find(s => s.id === op["statement-id"]);
-    if (!stmt) { errors.push(`op targets unknown statement ${op["statement-id"]} of ${copy.id}`); continue; }
+    if (!stmt) { errors.push(op["statement-id"] ? `op targets unknown statement ${op["statement-id"]} of ${copy.id}` : `${op.op} on ${copy.id} names no statement`); continue; }
     const p = op.op === "set-parameter" ? (stmt.parameters || []).find(x => x.name === op.parameter) : null;
     if (op.op === "set-parameter" && !p) {
       errors.push(`set-parameter on ${copy.id} is not applied: statement ${stmt.id} declares no parameter ${op.parameter}`);
