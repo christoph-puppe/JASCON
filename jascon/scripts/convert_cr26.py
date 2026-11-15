@@ -879,7 +879,15 @@ for fam,entries in d["CTL"].items():
                 # FedRAMP flattens multi-selections into prose strings ("a; b",
                 # "a, b and c"); NIST declares cardinality-many choices. Split;
                 # if EVERY part is a declared choice it is pure serialization ->
-                # list value (counted); anything else is a real conflict (parked).
+                # list value (counted); anything else is a real conflict. A
+                # conflict is not parked: it becomes no operation, and its
+                # entry leaves the parked payload with the others below. Its
+                # parameterId and its value then stand nowhere, the ledger
+                # reads the two as unaccounted and the run ends with 1
+                # (measured 2026-11-15 on a changed source, for this kind and
+                # for an ODP the control does not declare; backlog #97, point
+                # 4). Until then this comment said "(parked)". No assignment
+                # of publication 2026.11.02.01 is a conflict.
                 parts=_selections(val)
                 allowed={c["value"] for c in decl.get("choices",[])}
                 if decl.get("cardinality")=="many" and parts and all(x in allowed for x in parts):
@@ -893,7 +901,8 @@ for fam,entries in d["CTL"].items():
             ctl_ops.append({"op":"set-parameter","requirement-ref":robj["id"],
                             "statement-id":sid,"parameter":pid,"value":val})
             ctl_carried[cid]=robj
-        # drained: strip the parameters from the parked payload (guidance stays L2)
+        # drained: strip the parameters from the parked payload (guidance stays L2).
+        # The whole list goes, an assignment that became no operation with it.
         ctl_payload[fam][label].pop("parameters",None)
         if not ctl_payload[fam][label]: del ctl_payload[fam][label]
 for cid,robj in sorted(ctl_carried.items()):
