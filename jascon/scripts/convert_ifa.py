@@ -1253,6 +1253,16 @@ manifest = bundle.write({"sources": source_documents,
 # took the system Component's digest before the bundle's free text was
 # language-tagged at the write, so one of its three subject digests matched
 # no object of the bundle (measured on the committed conversion, backlog #46).
+#
+# Its version (backlog #101, point 3). The Attestation is modelled from the
+# SSP and carries the SSP's version: V_SSP is `metadata.version` of
+# ifa_ssp.json, 1.1.1 in the pinned file. It kept that version when its
+# `content-manifest-digest` changed on 2026-11-15 (the manifest's
+# `source-commit` was written in full, backlog #97 point 6), as it had on
+# 2026-11-13 and 2026-11-14 with each change of the manifest: six contents
+# in the repository's history under one version. Nothing was released
+# before the tag v2.0.0, so one content stands under id and version in
+# every release. From the tag on, a changed content takes a new version.
 ATTESTATION_FILE = "attestation-ifa-ato.json"
 _written = {e["id"]: e["semantic-digest"] for e in manifest["objects"]}
 with open(os.path.join(bundle.out, "content-manifest.json"), "rb") as f:
