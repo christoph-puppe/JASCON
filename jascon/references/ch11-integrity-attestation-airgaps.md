@@ -303,8 +303,11 @@ and the profile is normative about seven questions. They double as the
 acceptance checklist for anyone *receiving* an attested package — and
 as the build sheet for anyone producing one:
 
-*Where is the envelope?* (`envelope-ref`, resolvable in the bundle's
-transport wrapper.) *Exactly which digest set is signed?* (The
+*Where is the envelope?* (`envelope-ref`: a file beside the manifest
+or in a folder below it — a relative path with no scheme, no leading
+slash, no backslash and no `..`. A ref that would leave the bundle does
+not resolve, and a named envelope that does not resolve fails the
+bundle.) *Exactly which digest set is signed?* (The
 attestation's three bindings — no ambiguity about bytes-versus-
 canonical.) *In what format is the signer's identity expressed?*
 *How are trust roots expressed and distributed* — sealed environments

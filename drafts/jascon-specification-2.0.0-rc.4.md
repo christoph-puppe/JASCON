@@ -49,6 +49,13 @@
 > of the handbook and the wording of the website did (IV.6). The request
 > format of an `http-api` collector is issue 37 of the repository's
 > tracker now, with the whole of API-based checks.
+> After that round a review of the code before the tag found that the two
+> validators read an Attestation's envelope wherever its `envelope-ref`
+> pointed, also outside the bundle. An `envelope-ref` names a file in the
+> manifest's folder or below it now, in all four tools, and the line of
+> D7 marks `rendering` and `envelope-ref` optional, as the schema always
+> had them (D7). A bundle whose envelope-ref leaves its folder fails
+> where it passed.
 > No new candidate was cut: the file keeps its name until the author
 > names the next one.
 
@@ -574,9 +581,9 @@ configure, and the vendor only described how.
 
 ## D7 — Attestation: content-manifest binding, **bi-modal verification**, verification contract, provenance map. *(rev. v0.5 — P7-B1 + P6-F1 merged)*
 **Decision.**
-`{subject-semantic-digests[], content-manifest-digest, rendering
-{artifact-digest, media-type, template-ref (pinned), renderer}, signer,
-timestamp, envelope-ref, provenance-map-ref?}` — the attestation binds the
+`{subject-semantic-digests[], content-manifest-digest, rendering?
+{artifact-digest, media-type, template-ref? (pinned), renderer?}, signer,
+timestamp, envelope-ref?, provenance-map-ref?}` — the attestation binds the
 **content-manifest digest** (which covers every object's package- and
 semantic-digest at signing time) and is itself outside that manifest (D3).
 Verification is a **normative two-state machine**:
@@ -628,6 +635,25 @@ so an edited lifecycle breaks the envelope — measured.)* Nothing in a
 shape changes. A bundle can fail today that
 passed yesterday: one that carries an active Attestation which does not
 bind what is delivered.
+
+*(2.0.0 — review of 2026-11-15)* **Where the envelope lies, and what is
+optional.** `envelope-ref` names a file in the manifest's folder or below
+it: a relative path with no scheme or drive letter, no leading slash, no
+backslash and no `..` segment. Any other ref does not resolve, whether or
+not the file it names exists, and a named envelope that does not resolve
+fails the bundle as a missing one does. The reader and the app had held a
+ref to that since they first fetched envelopes; the two validators joined
+it to the folder unchecked, so `../x`, an absolute path and, on Windows, a
+backslash path read a file the bundle does not hold — measured: a bundle
+whose envelope lay in the folder above it was read as signed. Sixteen
+`path-vectors` and six `bundle-vectors` in `dsse-vectors.json` hold all
+four tools to one pattern. The same review corrected this decision's
+line: since 1.0.0 the schema has required `rendering`, `envelope-ref`,
+and inside `rendering` `template-ref` and `renderer`, nowhere; an
+Attestation without an envelope is an unsigned one, and a rendering, where
+there is one, binds at least its artifact's digest and media type. The
+`?` marks above say so now. No shape changes. A bundle can fail that
+passed: one whose envelope-ref leaves its folder.
 
 ## D8 — `Deviation` sub-object.
 Unchanged: `{type (code system), state (investigating → pending → approved |
@@ -2501,6 +2527,14 @@ of Check and of advice packs:
    The reference, the twin and the app's rules give what every vector
    expects. No committed bundle fails, and neither does the CR26 bundle
    the workflow converts.)*
+   *(2026-11-15, D7, review: 16 vectors for where an `envelope-ref` may
+   point and 6 bundles on disk whose envelope lies beside the manifest,
+   below it, nowhere, above it, behind a `..` or behind a backslash —
+   `dsse` 5 → 27: **822 vectors**. Two deliberate defects in the
+   reference and one in the twin each turn vectors red; the old code of
+   both read the envelope above the bundle. The reference and the twin
+   (Windows PowerShell 5.1) give what every vector expects; the app's
+   test of them runs in the workflow. No committed bundle fails.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2661,6 +2695,7 @@ history. The compact line:
 | A pin's version is three numbers of the number domain | 2026-11-15 | Backlog #72, built on the author's word ("alle wie vorgeschlagen"). Composition (D3.5) compares the three numbers of a pin's version, and the three hosts read a long number three ways: the reference exactly, the twin in 32 bits, the app inexactly beyond 2^53. Each number is at most 2^53 − 1 now, asked of its digits before anything is converted; a larger one makes the pin a non-semver pin, which composition reports. `composition` 9 → 11 vectors, 785 in all. No shape changes, and no committed pin has such a version. The same word covered two things outside the kernel: the CR26 converter ends a run on a force word it does not know and writes nothing into the repository (backlog #79, points 3 and 5), and the reader (1.20.0) writes no resolved package while a Tailoring holds an operation the page does not apply (backlog #71, point 5) | "After the last round — #72, #79 and #71" |
 | An operation names the statement it changes | 2026-11-15 | Backlog #96, found while the reader was held to its operations and decided by the author ("Do it"). **OPERATION-1** (D13), an error: a `set-modality`, a `set-parameter` and a `replace-prose` carry a `statement-id`, and a `set-parameter` names a parameter that statement declares. The handbook's appendix A had asked for the `statement-id` since 2026-07-22 and nothing held it; without one, the modality order and the check of a value against its declaration asked nothing. `reference` 41 → 56 vectors, 800 in all. In the reference, the twin, the app (0.9.23) and the reader (1.21.0). No shape changes. A bundle that passed can fail; none of the committed ones does, and the 128 such operations of the earlier vectors all name a statement. With it, the reader's resolved scope follows D13: an exclude that names a Set removes its members, and a select by predicate is said not to be resolved (backlog #71, points 13 and 14) | "OPERATION-1 and the reader's resolved scope" |
 | The backlog is closed | 2026-11-15 | The author wished the backlog closed before 2.0.0 and took what was proposed for its 22 open points ("Rest wie vorgeschlagen"), but for #62, which moved to issue 37 of the tracker. No decision, no shape, no rule and no vector changes: 800 vectors in 18 families. Reader 1.22.0: a typed value is not lost to the button pressed next; authored objects stay across a load; a second check on a day is a second Assessment; stage 5 shows Risks; a file is an Attestation only with the members the kernel requires; ADVICE-1 to ADVICE-3 are ported; a resolved package leaves out a withdrawn Requirement and names an operation outside its scope. App build 0.9.24: the four open defects of #71. Website: no third verdict beside the two states of D7. Converters: the CR26 report prints its counters; the SP 800-53 citations are counted in four named bundles (14, where 21 were counted with files that only list carried copies); a record by path names the type of the object; the source lists name whole commit ids. Handbook: the CR26 figures are those of publication 2026.11.02.01. Register, "The backlog closed before the tag". |
+| Where an envelope lies | 2026-11-15 | A review of the code before the tag. The reference and the twin joined an Attestation's `envelope-ref` to the bundle's folder unchecked, so a ref of `../x`, an absolute path or, on Windows, a backslash path read a file outside the bundle; the reader and the app refused such a ref when they fetched, and the app looked it up among loaded files without the check. D7 amended: the ref names a file in the manifest's folder or below it, by one pattern in all four tools, and any other ref does not resolve. The line of D7 and appendix A.9 had marked `rendering`, `envelope-ref`, `template-ref` and `renderer` required, which the schema never did; they are optional there now. `dsse` 5 → 27 vectors, 822 in all. App build 0.9.25. A bundle whose envelope-ref leaves its folder fails where it passed; none of the committed ones does | D7 · register, "A review before the tag" |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
