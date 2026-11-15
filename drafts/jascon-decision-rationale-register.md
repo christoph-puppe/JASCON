@@ -5489,8 +5489,17 @@ is not the cause: alone, the unchanged test was red 1 of 30 times. A
 user cannot reach the state. With the page's write made 50 ms late the
 test is red 5 of 5 times, and three other tests of the same file fail
 for the same reason. Cause and plan are issue 39 of the repository's
-tracker; nothing is built. The reader's test file has no such wait
+tracker. The reader's test file has no such wait
 (*read*: `grep` finds none).
+
+*Built the same day, on the author's word ("Ja, fixe"), after the
+workflow's run 123 had failed at that statement and passed when run
+again:* the four tests wait for the page's write (its log line, the
+store asked again, one more log line, the pressed button gone), and a
+test refuses an async predicate in any browser test. The tests' server
+can hand out the app's core with every store write late
+(`JSC_TEST_LATE_WRITE`). *Measured* with 50 ms: an old wait put back is
+red; the 25 page tests are green. The app's code is unchanged.
 
 ### (9) What is left of the lost click in the app: measured only
 

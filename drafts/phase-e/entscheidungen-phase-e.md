@@ -854,3 +854,19 @@ wurde viermal mit einem Verbindungsabbruch abgewiesen); er steht auf
   „Forget the key" den ersten Druck. Beides steht als #101 im Backlog.
 - **Neu abgelegt, #101:** sieben Punkte aus dieser Runde.
 
+### Issue 39 (2026-11-15, nach dem Merge von `claude/carry-over-fixes`)
+
+Der CI-Lauf 123 fiel im ersten Versuch genau an der Stelle aus, die
+Issue 39 beschreibt, und bestand im zweiten. Gefragt, ob der Plan
+gebaut werden soll, der Autor, wörtlich:
+
+> Ja, fixe
+
+Gebaut: Die vier Tests warten auf das Schreiben der Seite; ein Test
+verweigert ein asynchrones Prädikat in jedem Browser-Test. Am Code der
+App ist nichts geändert.
+
+Am selben Tag ist `claude/carry-over-fixes` hier zusammengeführt
+(„merge it after inspection into here"). Dessen Backlog-Zeilen 98 bis
+100 bleiben; die Zeile, die dieser Branch als #98 abgelegt hatte, ist
+jetzt #101.
