@@ -30,7 +30,7 @@ equality against the official NIST schema, and a zero-dependency
 **single-file reader & authoring studio** that turns the whole thing into
 something you can click.
 
-> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.4 is the candidate, not
+> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.5 is the candidate, not
 > tagged** — evidence-gated, maintained in personal capacity. Where JASCON
 > sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
@@ -56,7 +56,7 @@ two Risks first, above the part of the page that is in the picture.)*
 
 ## Unreleased: JASCON 2.0.0 — Risk, Check and advice packs
 
-> **State 2026-11-14 — release candidate 2.0.0-rc.4; not tagged.**
+> **State 2026-11-15 — release candidate 2.0.0-rc.5; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
 > candidate adds two kernel types, Risk and Check, and advice packs.
 > Both reference validators are green on it, and no question waits for
@@ -336,7 +336,7 @@ two Risks first, above the part of the page that is in the picture.)*
 >   there; every bundle that ships does. A 1.0.0 *tool*
 >   cannot read a bundle that carries a Risk.
 > - **The specification text:**
->   [`jascon-specification-2.0.0-rc.4.md`](drafts/jascon-specification-2.0.0-rc.4.md)
+>   [`jascon-specification-2.0.0-rc.5.md`](drafts/jascon-specification-2.0.0-rc.5.md)
 >   — a release candidate; D23 carries Risk, D24 Check, D25 advice packs,
 >   D26 who decided and when.
 > - **The kernel names itself:** a manifest may carry `kernel-version`,
@@ -756,7 +756,7 @@ Install by copying the directory into your skills folder, or unpack
 
 ## Read the spec
 
-- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.4.md`](drafts/jascon-specification-2.0.0-rc.4.md) — the candidate (Risk, Check, advice packs, who decided and when)
+- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.5.md`](drafts/jascon-specification-2.0.0-rc.5.md) — the candidate (Risk, Check, advice packs, who decided and when)
 - [`risk-catalogs/`](risk-catalogs/README.md) — prototype: two ready-made lists of typical risks (office IT, industrial plant; English and German) and a tool that imports them into `Risk` objects
 - [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
 - [`drafts/jascon-v0.5-specification.md`](drafts/jascon-v0.5-specification.md) — the v0.5 draft (history)

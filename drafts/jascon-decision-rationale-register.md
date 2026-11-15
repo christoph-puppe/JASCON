@@ -5618,3 +5618,23 @@ The reference ALL GREEN on 822 vectors, the IFA Attestation a FULL
 MATCH; the app's suite and the pack builder, 207 tests; three converter
 test files after the commits were taken (the agent ran all eight); the
 website builds.
+
+## 2.0.0-rc.5 named *(2026-11-15)*
+
+With the backlog closed but for one scheduled point, the author asked
+for a pull request and a release for the next candidate ("ok, PR /
+release für den nächsten RC !"). The specification file is renamed to
+`jascon-specification-2.0.0-rc.5.md`. Its banner gets a block "What
+changed since rc.4", which is the text that had stood under rc.4 as
+"after rc.4, without a new candidate", under one summary: D27 new, seven
+decisions amended in place, five rules that can fail a bundle which
+passed rc.4, 822 vectors where rc.4 had 643. IV.6 has the row of the
+candidate, IV.7 the run it rests on (the workflow's run 125: both
+validators green on 822 vectors, the twin on Windows PowerShell 5.1).
+Nothing is amended with the renaming. The README's status lines and
+links, the website's badge and its link to the specification follow,
+in five languages. Sentences that say "since 2.0.0-rc.4" of a shape or
+a rule stay: they date when it came.
+
+*Not done:* the website's timeline has no entry for rc.5; its last
+entry is the one for rc.4.

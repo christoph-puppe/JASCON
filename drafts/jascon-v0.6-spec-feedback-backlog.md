@@ -234,6 +234,10 @@ point 4 measured that it was not closed, and it is built. **Closed:
 built, app build 0.9.26; points 3, 6 and 7 closed with their reasons).
 Issue 39 is built as well ("Ja, fixe"). Open now: #97 (3), which waits
 for the next change of the CR26 converter after the tag, as decided.
+**2026-11-15, the next candidate:** the author asked for a pull request
+and a release "für den nächsten RC". The specification is
+`drafts/jascon-specification-2.0.0-rc.5.md` now; nothing is amended with
+the renaming.
 **CP-CHECK-1 (2026-11-11, proposed)** adds
 #55-#57 (#56 closed the same day - the twin knows Check; the port left **#58 · #59**) and makes #48 a decision before the tag: Check would be the
 second consumer-side type admitted against D22 test 1. The eight review findings against the proposal

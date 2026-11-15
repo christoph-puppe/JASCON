@@ -920,3 +920,14 @@ Antwort, wörtlich:
   1 nie hatte und die sich im gepinnten Katalog geändert haben
   (`modal_verb` ×1.006 ist jetzt 1.000, `alt-identifier` ×1.219 ist
   1.224, documentation ×959 ist 961).
+
+## Der nächste Kandidat (2026-11-15)
+
+Der Autor, wörtlich:
+
+> ok, PR / release für den nächsten RC !
+
+Die Spezifikation heißt jetzt `jascon-specification-2.0.0-rc.5.md`.
+Mit der Umbenennung ist nichts geändert; der Banner fasst zusammen, was
+seit rc.4 ohne neuen Kandidaten dazukam. Der Pull Request geht von
+`claude/backlog-97-before-the-tag` nach `main`.

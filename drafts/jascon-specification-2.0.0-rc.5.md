@@ -1,22 +1,20 @@
 # JASCON — "Kernel + Registered Facets"
-## Specification 2.0.0-rc.4
-### release candidate, 2026-11-13 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh), CP-ADVICE-1 (advice packs) and CP-AUTHOR-1 (who decided, and when) · NOT tagged — both reference validators are green on this candidate, the PowerShell twin on Windows PowerShell 5.1 (IV.5b); the tag is the author's decision
+## Specification 2.0.0-rc.5
+### release candidate, 2026-11-15 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh), CP-ADVICE-1 (advice packs) and CP-AUTHOR-1 (who decided, and when), and by the decisions of 2026-11-13 to 2026-11-15 on the backlog before 2.0.0 (D27 among them) · NOT tagged — both reference validators are green on this candidate, the PowerShell twin on Windows PowerShell 5.1 (IV.5b); the tag is the author's decision
 
-> **What changed since rc.3 (2026-11-13).** One decision is new — **D26**:
-> who decided and when is spelled one way, `provenance`, and is optional on
-> the records and decisions that had no place for it; a Deviation may say
-> when it was decided and when it is due for review. No type and no
-> primitive is added. D8, D13 and D23 were amended in place and marked
-> *(2.0.0-rc.4)*. Fields were added to released shapes, and three fields
-> that accepted any string are typed (`Mapping.provenance.date`,
-> `Assessment.time`, `Attestation.timestamp`), so this is a new candidate.
-> After rc.3 and before this decision, three amendments landed without a
-> new candidate: the number domain (D3.9, NUMBER-1), the run rules of
-> CHECK-12, 13 and 15, and the code-point comparisons of the PowerShell
-> twin (IV.6). The proposal is `drafts/CP-AUTHOR-1.md`; the journal is the
-> register, "Amendments — the open backlog before 2.0.0" and "CP-AUTHOR-1
-> landed". The rc.3 file is gone from the tree (git keeps it).
-> After rc.4, on the same day and again without a new candidate: a
+> **What changed since rc.4 (2026-11-13).** One decision is new — **D27**:
+> versions and history, a statement's label, a manifest's sources,
+> references, and addresses inside a facet payload. D3.5, D3.10, D3.11,
+> D7, D9, D10 and D13 were amended in place. No type and no primitive is
+> added. Five rules can fail a bundle that rc.4 passed: no manifest lists
+> an Attestation (MANIFEST-1), an object in force does not lean on a
+> withdrawn one (WITHDRAWN-1), an operation names the statement it
+> changes (OPERATION-1), a `statement-id` inside a facet payload is held
+> (D10), and an `envelope-ref` stays in the bundle's folder (D7). The
+> corpus has 822 vectors in 18 families, where rc.4 had 643. All of it
+> landed between 2026-11-13 and 2026-11-15 without a new candidate, in
+> this order.
+> On the day of rc.4: a
 > pattern is read as its dialect says, so a value that ends in a line
 > break is refused by every tool (D3.10, backlog #68), and the tools
 > write who decided (backlog #69; IV.6). On 2026-11-14: every
@@ -56,8 +54,23 @@
 > D7 marks `rendering` and `envelope-ref` optional, as the schema always
 > had them (D7). A bundle whose envelope-ref leaves its folder fails
 > where it passed.
-> No new candidate was cut: the file keeps its name until the author
-> names the next one.
+> The author named this candidate on 2026-11-15, when the backlog before
+> 2.0.0 was closed. The rc.4 file is gone from the tree (git keeps it).
+
+> **What changed since rc.3 (2026-11-13).** One decision is new — **D26**:
+> who decided and when is spelled one way, `provenance`, and is optional on
+> the records and decisions that had no place for it; a Deviation may say
+> when it was decided and when it is due for review. No type and no
+> primitive is added. D8, D13 and D23 were amended in place and marked
+> *(2.0.0-rc.4)*. Fields were added to released shapes, and three fields
+> that accepted any string are typed (`Mapping.provenance.date`,
+> `Assessment.time`, `Attestation.timestamp`), so this is a new candidate.
+> After rc.3 and before this decision, three amendments landed without a
+> new candidate: the number domain (D3.9, NUMBER-1), the run rules of
+> CHECK-12, 13 and 15, and the code-point comparisons of the PowerShell
+> twin (IV.6). The proposal is `drafts/CP-AUTHOR-1.md`; the journal is the
+> register, "Amendments — the open backlog before 2.0.0" and "CP-AUTHOR-1
+> landed". The rc.3 file is gone from the tree (git keeps it).
 
 > **What changed since rc.2 (2026-11-12, the same day).** One decision is
 > new — **D25**, advice packs: a vendor's recommendations as one published
@@ -2699,10 +2712,11 @@ history. The compact line:
 | What closing the backlog found | 2026-11-15 | Backlog #97, decided by the author point by point. No decision, no shape, no rule and no vector changes. Reader 1.23.0: an authored object can be taken out of the workspace. Converters: a path map names the type of the object a value stands in, and the check holds it; every place names whole commit ids, the IFA manifest among them, whose Attestation is written again and binds it (FULL MATCH as before). Handbook chapter 1: its corpus figures are measured again on the pinned versions. Register, "#97: what was found while closing the backlog". |
 | The last open rows | 2026-11-15 | Backlog #100 (3) and #101, decided by the author; issue 39 of the tracker. No decision, no shape, no rule and no vector changes. App build 0.9.26: a press held while a filter field redraws makes its click, and each key field of the Checks page has its own id; four page tests wait for the page's write before they read the store. Texts: the README, the handbook and the website's home page quote the figures of the pinned corpora where they quoted those of July (799 packed lists, 12,096 namespaced props). Register, "#100 (3) and #101". |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
+| **2.0.0-rc.5** | 2026-11-15 | This text, named by the author when the backlog before 2.0.0 was closed. D27 new; D3.5, D3.10, D3.11, D7, D9, D10 and D13 amended in place, each recorded in the rows above this one that are dated 2026-11-13 to 2026-11-15. Five rules that can fail a bundle which passed rc.4 (MANIFEST-1, WITHDRAWN-1, OPERATION-1, a `statement-id` in a facet payload, an `envelope-ref` inside the bundle). 822 vectors in 18 families. No amendment is new with the renaming. | D27 · the register's sections of 2026-11-13 to 2026-11-15 |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
-In the repository at the rc.4 commit. "Green" below means the Python
+In the repository at the rc.5 commit. "Green" below means the Python
 reference validator; the PowerShell twin's state is IV.5b item 3.
 
 - **Kernel schema** `jascon-2.0.0.schema.json` — closed
@@ -2726,8 +2740,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   folder after importing it.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-14 on all 692 vectors of this candidate, on Windows
-  PowerShell 5.1 (IV.5b item 3). A workflow runs both, and the app's
+  — green on 2026-11-15 on all 822 vectors of this candidate, on Windows
+  PowerShell 5.1 (the workflow's run 125, on the tree this candidate was
+  cut from; IV.5b item 3). A workflow runs both, and the app's
   port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
@@ -2953,4 +2968,5 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    with a review's findings was merged (#98 to #100: an `envelope-ref`
    stays in the bundle's folder, D7; 822 vectors). The author then
    decided #100 (3) and #101, and they are closed; the tests of issue 39
-   are corrected. Open: #97 (3), scheduled for after the tag.)*
+   are corrected. Open: #97 (3), scheduled for after the tag. The same
+   day the author named this text **2.0.0-rc.5**.)*
