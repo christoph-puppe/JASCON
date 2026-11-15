@@ -276,7 +276,9 @@ set-parameter names a parameter its statement does not declare. An empty
 statement-id names no statement. Ids and names are compared by code unit.
 A statement-id the Requirement does not have stays with Closure-Errors
 and is not said twice. 15 `operation-targets` vectors in the family
-`reference` (56); 800 in all.
+`reference` (56); 800 in all. Run under PowerShell 7.4 on Linux over the
+vectors, the five bundles, the worked pack and the example folder: ALL
+GREEN in 101.7 s; the workflow runs it on Windows PowerShell 5.1.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors

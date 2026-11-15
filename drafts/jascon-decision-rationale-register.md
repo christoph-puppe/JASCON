@@ -5018,9 +5018,10 @@ for that reason.
   asked only where the bundle holds the Requirement; the order of the
   ids; an unknown statement said twice; the parameter half asked of
   every kind).
-- The twin under PowerShell 7.4 on Linux: the 56 vectors of the family,
-  and two deliberate defects (names without regard to case; the empty
-  id), each turning one vector red.
+- The twin under PowerShell 7.4 on Linux: 800 vectors, the five
+  committed bundles, the worked pack and the example folder, ALL GREEN
+  in 101.7 s; two deliberate defects (names without regard to case; the
+  empty id), each turning one vector red.
 - The app: the 15 vectors and a whole set with three errors in order;
   194 tests.
 - The reader: the 15 vectors in node; in a browser, a loaded bundle
