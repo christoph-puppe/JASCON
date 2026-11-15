@@ -8,6 +8,7 @@
 # oscal_conv_lib.py or of the converter that would alter them is noticed.
 #
 # base: https://raw.githubusercontent.com/usnistgov/oscal-content/9402f031489092246f2c27391bad452b85604140/
+# into: sources/nist
 # path: examples/component-definition/json/example-component-definition.json
 # path: examples/ap/json/ifa_assessment-plan.json
 # path: examples/ar/json/ifa_assessment-results.json

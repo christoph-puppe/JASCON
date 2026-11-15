@@ -27,7 +27,23 @@ expression:
   - -lt, -le, -gt, -ge are refused when one operand is provably a string:
     a string literal or a cast to [string].
 
-What it cannot see. Whether a variable holds a string. `$a -eq $b` is
+Two forms compare without a binary operator (review of 2026-11-15; until
+then this script did not see them):
+
+  - a `switch` compares its value with each clause as -eq does, and with
+    -Regex or -Wildcard as -match and -like do. A switch is refused when it
+    has one of those flags, or a clause whose condition is not provably a
+    number or a script block (a script block's own comparisons are read
+    as above);
+  - `Where-Object` (also `where` and `?`) in its parameter form,
+    `Where-Object Name -EQ 'x'`, compares as the operator of that name. Every
+    such parameter is refused.
+
+What it cannot see. Cmdlets that compare strings under a culture without
+naming a comparison: Sort-Object, Group-Object, Compare-Object,
+Select-Object -Unique. The twin sorts and compares rule ids, file names
+and byte arrays with them, and none of those differs by case or by an
+ignorable character. Whether a variable holds a string. `$a -eq $b` is
 refused even when both are numbers; write the cast (`[int]$a -eq [int]$b`).
 `$x -eq 5` is accepted although PowerShell compares as strings when $x is
 one; a digit string from data that differs from the number by an ignorable
@@ -108,6 +124,29 @@ foreach ($b in $ast.FindAll({ param($n) $n -is [System.Management.Automation.Lan
     $text = $b.Extent.Text -replace '\s+', ' '
     if ($text.Length -gt 110) { $text = $text.Substring(0, 110) + ' ...' }
     [void]$found.Add(('{0,5}:{1,-4} {2,-13} {3}' -f $b.Extent.StartLineNumber, $b.Extent.StartColumnNumber, $op, $text))
+}
+function Add-Finding($node, [string]$what) {
+    $text = ($node.Extent.Text -split "`n")[0].Trim() -replace '\s+', ' '
+    if ($text.Length -gt 110) { $text = $text.Substring(0, 110) + ' ...' }
+    [void]$found.Add(('{0,5}:{1,-4} {2,-13} {3}' -f $node.Extent.StartLineNumber, $node.Extent.StartColumnNumber, $what, $text))
+}
+foreach ($s in $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.SwitchStatementAst] }, $true)) {
+    $stringy = ($s.Flags.ToString() -match 'Regex|Wildcard')
+    foreach ($c in $s.Clauses) {
+        if ($c.Item1 -is [System.Management.Automation.Language.ScriptBlockExpressionAst]) { continue }
+        if (-not (Test-NotString $c.Item1)) { $stringy = $true }
+    }
+    if ($stringy) { Add-Finding $s 'switch' }
+}
+$WHERE = @('where-object', 'where', '?')
+$WHERE_OPS = '^[ci]?(eq|ne|gt|ge|lt|le|like|notlike|match|notmatch|contains|notcontains|in|notin)$'
+foreach ($c in $ast.FindAll({ param($n) $n -is [System.Management.Automation.Language.CommandAst] }, $true)) {
+    $name = $c.GetCommandName()
+    if (-not $name -or -not ($WHERE -contains $name.ToLowerInvariant())) { continue }
+    foreach ($e in $c.CommandElements) {
+        if (($e -is [System.Management.Automation.Language.CommandParameterAst]) -and ($e.ParameterName -match $WHERE_OPS)) {
+            Add-Finding $c ('Where -' + $e.ParameterName) }
+    }
 }
 if ($found.Count -gt 0) {
     $found | ForEach-Object { Write-Host $_ }

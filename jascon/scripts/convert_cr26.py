@@ -54,18 +54,16 @@ from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, needs_kernel_2
 from oscal_conv_lib import path_map_check, held_row, held_rows_match
 from oscal_conv_lib import COMPAT_FILE, compat_schema, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import ASSESSMENT_CRITERIA_FILE
+from oscal_conv_lib import known_arguments, out_dir
 
 NS="https://ns.fedramp.gov/cr26"; NIST="https://ns.nist.gov/sp800-53/req"
 ARGV=sys.argv[1:]
 # Every argument takes a value. One the converter does not know stops the
 # run: a misspelled --out would otherwise write into the repository, and a
-# misspelled overwrite would be dropped without a word.
-_i=0
-while _i<len(ARGV):
-    if ARGV[_i] not in ("--author-ref","--date","--obligated-party","--out"):
-        raise SystemExit(f"unknown argument {ARGV[_i]!r} (known: --author-ref URI, --date YYYY-MM-DD, "
-                         f"--obligated-party URI, --out DIR)")
-    _i+=2
+# misspelled overwrite would be dropped without a word. The library's check,
+# as in the other converters (review of 2026-11-15: this file had its own
+# copy, which let a last argument without a value through).
+known_arguments(ARGV,("--author-ref","--date","--obligated-party","--out"))
 
 # A Mapping's `provenance` is pre-filled from the source (FedRAMP, the day of
 # info.last_updated); --author-ref URI and --date YYYY-MM-DD overwrite either
@@ -84,15 +82,13 @@ PARTY_SOURCE_STATES="in `affects` of a rule"
 ROOT=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..",".."))
 SRC=os.path.join(ROOT,"sources","cr_fedramp-consolidated-rules.json")
 COMMITTED=os.path.join(ROOT,"converted_examples","FedRAMP-CR26")
-if "--out" not in ARGV:
+OUTDIR=out_dir(ARGV,None)
+if OUTDIR is None:
     raise SystemExit("convert_cr26.py: --out DIR is required. The bundle of this conversion is not redistributed "
                      "(converted_examples/FedRAMP-CR26/NOT-REDISTRIBUTED.md), so a run writes nothing into the "
                      "repository. To renew the committed reports and the record, copy cr26-coverage-report.md, "
                      "cr26-coverage-report.json and cr26-conversion-ledger.json from DIR to "
                      "converted_examples/FedRAMP-CR26/.")
-if ARGV.count("--out")>1: raise SystemExit("--out is given more than once")
-if ARGV.index("--out")+1>=len(ARGV): raise SystemExit("--out needs a directory")
-OUTDIR=os.path.abspath(ARGV[ARGV.index("--out")+1])
 if os.path.normcase(os.path.realpath(OUTDIR))==os.path.normcase(os.path.realpath(COMMITTED)):
     raise SystemExit("convert_cr26.py: --out names the repository's own folder of this conversion. The bundle is not "
                      "redistributed; write it elsewhere and copy the two reports and the record from there.")

@@ -361,7 +361,9 @@ class Backlog69WhoWroteItAndWhen(unittest.TestCase):
         self.assertEqual(provenance_override(["--date", "2026-11-13", "--author-ref", "https://org.example/party/ciso"]),
                          ("https://org.example/party/ciso", "2026-11-13"))
         for bad in (["--date", "13.11.2026"], ["--date", "2026-11-13\n"], ["--date", "2026-02-30"], ["--date", "2026-1-3"], ["--date"],
-                    ["--author-ref", "the CISO"], ["--author-ref", ""], ["--author-ref"]):
+                    ["--author-ref", "the CISO"], ["--author-ref", ""], ["--author-ref"],
+                    ["--date", "2026-11-13", "--date", "2026-11-14"],
+                    ["--author-ref", "https://org.example/party/a", "--author-ref", "https://org.example/party/b"]):
             with self.assertRaises(SystemExit, msg=repr(bad)): provenance_override(bad)
 
     def test_backlog_69_other_arguments_are_left_to_the_converter(self):
