@@ -1,0 +1,347 @@
+---
+title: The work process: from the ISMS to the closed finding | JASCON
+description: Who does what in an ISMS run on JASCON, which object each step writes and which files cross from one party to another. From building the ISMS and the first measurement through Plan, Do, Check, Act to the audit and the work on its findings.
+nav: process
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">The work process</p>
+    <h1>Who does what, from the first risk to the closed finding</h1>
+    <p class="lede">An ISMS runs in a cycle, and each turn of it leaves records. This page follows one turn through JASCON: who acts, which object each step writes, and which files pass from one party to another. Where the kernel holds nothing for a step, the page says so at that step.</p>
+  </div>
+</section>
+
+<section class="section" id="roles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> The roles</p>
+      <h2>Nine roles, each named by an identifier</h2>
+      <p class="lede">The kernel has no Party type. A party is a URI under the namespace of the organisation it belongs to, such as <code>https://cso.example/party/ciso</code>, and it is named in the fields below. Where the kernel requires a party and none is named, the app refuses the save and says which field is missing.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Role</th><th>Usually</th><th>Named in</th><th>Writes</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Authority</th><td>BSI, NIST, ASD, a regulator, a standards body</td><td>the namespace of every id it publishes</td><td>Requirement, RequirementSet, Tailoring as a baseline, Mapping, an Attestation over its bundle</td></tr>
+          <tr><th scope="row">Top management, risk owner</th><td>the board, the owner of a process or a duty</td><td><code>Risk.owner-ref</code>, <code>Risk.acceptance.approver-ref</code></td><td>the acceptance of a residual risk</td></tr>
+          <tr><th scope="row">ISMS owner</th><td>CISO, information security officer</td><td><code>provenance.author-ref</code>; <code>Deviation.approver-ref</code> on the organisation's own Tailoring</td><td>Risk, the scales, Tailoring as the Statement of Applicability, Mapping</td></tr>
+          <tr><th scope="row">System owner, operations</th><td>IT operations, a product or platform team</td><td><code>obligated-parties</code> of a statement; <code>provenance.author-ref</code></td><td>Component, Implementation</td></tr>
+          <tr><th scope="row">Vendor, upstream provider</th><td>a product vendor, a cloud or platform provider</td><td>the publisher in a pack's manifest; <code>Component.authorizations</code></td><td>an advice pack; the authorizations an inherited edge leans on</td></tr>
+          <tr><th scope="row">Check author</th><td>security engineering</td><td><code>Check.provenance.author-ref</code></td><td>Check, with its collector code in a facet</td></tr>
+          <tr><th scope="row">Assessor</th><td>internal audit, an external auditor or assessment body</td><td><code>Assessment.performer-ref</code>; <code>Deviation.approver-ref</code> on a Finding</td><td>Assessment, Finding</td></tr>
+          <tr><th scope="row">Authorizing official</th><td>certifier, authorizing official of an agency</td><td>the key that signs the envelope</td><td>Attestation</td></tr>
+          <tr><th scope="row">Customer, buyer</th><td>an agency, a customer, procurement</td><td>nowhere: this role reads</td><td>nothing; it runs the validator on what it receives</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">One person may hold several roles. The kernel keeps them apart by field, not by person: accepting a residual risk is <code>Risk.acceptance</code>, weakening a clause because of it is a Deviation, and the two are two acts even when one person does both (handbook <a href="{{ blob }}/jascon/references/ch10-assessment-findings-deviations.md" rel="noopener">§10.6</a>).</p>
+  </div>
+</section>
+
+<section class="section band" id="cycle">
+  <div class="wrap">
+    <div class="split flip">
+      <figure class="reveal">
+        <svg class="graph" viewBox="0 0 640 450" role="img" aria-labelledby="cycle-title cycle-desc">
+          <title id="cycle-title">The work process in JASCON</title>
+          <desc id="cycle-desc">An authority and a vendor deliver a catalogue bundle and an advice pack to the organisation, which builds its ISMS: catalogue, scope, scales, first measurement. Then the cycle runs: Plan writes Risk and Tailoring, Do writes Implementation and Check, Check writes Assessment and Finding, Act writes Deviations and new versions and leads back to Plan. From Check the organisation hands a bundle with an Attestation to the audit. The audit returns an Assessment and Findings, which are worked off and feed the next cycle.</desc>
+          <defs>
+            <marker id="ph" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ph-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <text class="zone" x="30" y="16">Organisation</text>
+          <text class="zone" x="450" y="16">Other parties</text>
+
+          <path class="edge accent" d="M450 53H402" marker-end="url(#ph-a)"/>
+          <path class="edge" d="M110 76V118" marker-end="url(#ph)"/>
+          <path class="edge" d="M190 148H238" marker-end="url(#ph)"/>
+          <path class="edge" d="M320 176V258" marker-end="url(#ph)"/>
+          <path class="edge" d="M240 288H192" marker-end="url(#ph)"/>
+          <path class="edge" d="M110 260V178" marker-end="url(#ph)"/>
+          <path class="edge accent" d="M400 288H448" marker-end="url(#ph-a)"/>
+          <path class="edge accent" d="M530 316V374" marker-end="url(#ph-a)"/>
+          <path class="edge" d="M450 402H110V318" marker-end="url(#ph)"/>
+
+          <text class="elabel accent" x="426" y="45" text-anchor="middle">bundle</text>
+          <text class="elabel accent" x="424" y="280" text-anchor="middle">bundle</text>
+          <text class="elabel accent" x="538" y="350">Findings</text>
+          <text class="elabel" x="280" y="394" text-anchor="middle">into the next cycle</text>
+          <text class="elabel" x="118" y="102">first turn</text>
+
+          <g class="node content"><rect x="30" y="30" width="370" height="46" rx="10"/><text x="44" y="50">Build the ISMS</text><text class="sub" x="44" y="65">catalogue, scope, scales, first measurement</text></g>
+          <g class="node content"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">Authority, vendor</text><text class="sub" x="464" y="65">catalogue, advice pack</text></g>
+
+          <g class="node"><rect x="30" y="120" width="160" height="56" rx="10"/><text x="44" y="143">Plan</text><text class="sub" x="44" y="160">Risk, Tailoring</text></g>
+          <g class="node"><rect x="240" y="120" width="160" height="56" rx="10"/><text x="254" y="143">Do</text><text class="sub" x="254" y="160">Implementation, Check</text></g>
+          <g class="node"><rect x="240" y="260" width="160" height="56" rx="10"/><text x="254" y="283">Check</text><text class="sub" x="254" y="300">Assessment, Finding</text></g>
+          <g class="node"><rect x="30" y="260" width="160" height="56" rx="10"/><text x="44" y="283">Act</text><text class="sub" x="44" y="300">Deviation, new version</text></g>
+
+          <g class="node attest"><rect x="450" y="260" width="160" height="56" rx="10"/><text x="464" y="283">Audit</text><text class="sub" x="464" y="300">assessor, official</text></g>
+          <g class="node org"><rect x="450" y="376" width="160" height="52" rx="10"/><text x="464" y="397">Work off</text><text class="sub" x="464" y="413">actions, due dates</text></g>
+        </svg>
+        <div class="graph-legend">
+          <span><i></i>a step inside the organisation</span>
+          <span class="lg-att"><i></i>outside the organisation</span>
+          <span class="lg-org"><i></i>the answer to an audit</span>
+        </div>
+      </figure>
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">02</span> The cycle</p>
+          <h2>Plan, Do, Check, Act, and two hand-overs</h2>
+          <p class="lede">ISO/IEC 27001 and BSI Standard 200-1 describe an ISMS as a cycle. JASCON does not run the cycle. It gives each step a typed record, so that the next step and the next party read what the last one decided.</p>
+        </div>
+        <ul class="ticks">
+          <li><b>Every record has an id, a version and two digests.</b> A changed Tailoring is a new version, not an edited file, and <code>history</code> says why.</li>
+          <li><b>Every decision names who made it and when.</b> <code>provenance</code> carries author and date; the validator lists the records that name nobody (AUTHOR-1 to AUTHOR-4).</li>
+          <li><b>What crosses to another party is a bundle.</b> A folder with its objects, a content manifest, evidence files named by their SHA-256 and, when someone signs, an Attestation beside the manifest.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="build">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> Building the ISMS</p>
+      <h2>Five steps before the first turn</h2>
+      <p class="lede">The build ends with a first measurement: the gap between what the catalogue asks and what is in place. Every later turn measures against it.</p>
+    </div>
+    <div class="steps">
+
+      <div class="step reveal" id="namespace">
+        <div class="step-body">
+          <h2>Choose a namespace and name the parties</h2>
+          <p>The ISMS owner chooses a prefix under a domain the organisation controls and keeps it, for example <code>https://grc.your.example/</code>. The parties get identifiers under it: the CISO, the risk owners, operations, the internal assessor. Identifiers are compared as strings and never fetched. Nothing is written yet; every later object depends on this choice.</p>
+          <p class="small">Who: ISMS owner. Writes: no object. <a href="{{ blob }}/jascon/references/ch03-identity-versions-lifecycle.md" rel="noopener">Handbook, chapter 3</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="catalogue">
+        <div class="step-body">
+          <h2>Take in the catalogue</h2>
+          <p>The authority's catalogue arrives as a bundle: Requirements, RequirementSets for chapters and baselines, Tailorings for its variants, Mappings to other catalogues. The validator checks it before anything is built on it, and where the authority has signed, the Attestation says whether the content is the one it signed (Full Match or Semantic Match) or does not bind. A catalogue that exists only in OSCAL goes through the Import page and its report.</p>
+          <p class="small">Who: ISMS owner, from the authority. Receives: a catalogue bundle. App: Home, Import. <a class="link-arrow" href="start.html#open">The shipped catalogues</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="scope">
+        <div class="step-body">
+          <h2>Draw the scope as a system</h2>
+          <p>The scope of the ISMS is a Component of kind <code>system</code> whose members are the services, software, hardware, policies and processes it covers. A system that is authorized names its authorization contexts on the Component; an absent one asserts nothing. A policy can be a member as a Component of kind <code>policy</code>; its text stays a document outside the kernel.</p>
+          <p class="small">Who: system owners with the ISMS owner. Writes: Component. App: Implement. <a href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">Handbook, chapter 9</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="scales">
+        <div class="step-body">
+          <h2>Define the risk scales</h2>
+          <p>Likelihood, impact and the matrix that combines them are the organisation's own: as many levels as it uses, in its own words, each scale a small definition file the bundle pins. The validator refuses a level a scale does not define and a rating that contradicts its own matrix, unless the rating says why it departs. The example bundle carries the scales of BSI Standard 200-3.</p>
+          <p class="small">Who: ISMS owner, for top management to approve. Writes: three scale definitions. App: Risk, view of the scales. <a href="{{ tree }}/jascon/examples" rel="noopener">The example scales</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="measure">
+        <div class="step-body">
+          <h2>Take the first measurement</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">The first measurement is a gap analysis in records. An Implementation per requirement or clause says how far it is in place: <code>planned</code>, <code>partial</code>, <code>implemented</code> or <code>not-applicable</code>. A first Assessment records what was actually found, with a Finding per clause that is not satisfied.</p>
+              <p class="muted">JASCON defines no compliance score. What can be counted are states: Implementations per status, Assessment results, Findings per state, the selected requirements that no risk justifies. Those counts are the baseline the later turns are compared with.</p>
+            </div>
+            <div class="window">
+              <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">jascon/examples/implementation-acme-konf-14-1-s2.json</span><span class="window-note">worked example</span></div>
+              <pre><code data-lang="json">{{ file:jascon/examples/implementation-acme-konf-14-1-s2.json }}</code></pre>
+            </div>
+          </div>
+          <p class="small">Who: system owners record, an internal assessor checks. Writes: Implementation, Assessment, Finding. App: Implement, Assess, Validate.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="pdca">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> The cycle in records</p>
+      <h2>What each phase writes, and who writes it</h2>
+      <p class="lede">The four phases with the records they leave, the app page that writes them and the rules that hold them. Risk and Check are in the 2.0.0 release candidate.</p>
+    </div>
+    <div class="grid g4 reveal">
+      <article class="card role">
+        <span class="who">Plan</span>
+        <h3>Risks and the Statement of Applicability</h3>
+        <p>Each Risk has a scenario, an owner, a rating on a named scale, one of four treatment options and the clauses that carry the treatment. The Tailoring selects the requirements and sets parameters; it is the Statement of Applicability. <code>risk-coverage</code> lists every selected requirement that no assessed risk justifies.</p>
+        <p class="move"><b>Who, and where</b>ISMS owner with the risk owners; the owner accepts the residual. App: Risk, Tailor.</p>
+      </article>
+      <article class="card role">
+        <span class="who">Do</span>
+        <h3>Implementations and machine checks</h3>
+        <p>An Implementation says which component satisfies which clause, and whose job it is: <code>provider</code>, <code>customer</code>, <code>shared</code> or <code>inherited</code>. An inherited edge names the upstream authorization it leans on. A vendor's recommendation counts once an Implementation adopts it. A Check states which facts a collector reports and what passes.</p>
+        <p class="move"><b>Who, and where</b>System owners, the check author; the vendor supplies advice. App: Implement, Checks.</p>
+      </article>
+      <article class="card role">
+        <span class="who">Check</span>
+        <h3>Assessments and findings</h3>
+        <p>An Assessment records who checked what, by which method, when and with which result. A machine run carries one row per Check with the observation itself, and the validator recomputes each verdict. A clause that is not satisfied becomes a Finding against that clause. An internal audit is an Assessment whose performer is internal.</p>
+        <p class="move"><b>Who, and where</b>Internal assessor; collectors run outside JASCON. App: Assess, Validate.</p>
+      </article>
+      <article class="card role">
+        <span class="who">Act</span>
+        <h3>Actions, deviations and new versions</h3>
+        <p>A Finding carries actions with a due date a machine can compute. Where a clause is not met on purpose, a Deviation records why and who approved it. The Risk gets its residual rating, the Tailoring a new version. The validator lists every approved Deviation and every Risk whose <code>review-due</code> has passed.</p>
+        <p class="move"><b>Who, and where</b>Risk owners, ISMS owner, top management. App: Assess, Risk, Tailor.</p>
+      </article>
+    </div>
+    <div class="table-wrap reveal" style="margin-top:32px">
+      <table>
+        <thead><tr><th>Phase</th><th>Record</th><th>What the validator holds</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Plan</th><td>Risk</td><td>The level is on the named scale and agrees with its matrix. A treated or retained Risk carries the owner's acceptance. Only an assessed or treated Risk with a chosen option justifies a requirement.</td></tr>
+          <tr><th scope="row">Plan</th><td>Tailoring</td><td>In a consumer's Tailoring, an easing of a modality or a move between obligation and prohibition needs a recorded Deviation with an approver. An operation names the statement it changes. With <code>--require-risk-basis</code>, a selected requirement no risk justifies is a failure.</td></tr>
+          <tr><th scope="row">Do</th><td>Implementation</td><td>An inherited edge names an authorization that exists on the upstream component. An adopted recommendation belongs to a product that is a member of the system.</td></tr>
+          <tr><th scope="row">Do</th><td>Check</td><td>Facts are typed, criteria use twelve comparators joined by one AND, the collector code is covered by the Check's digest.</td></tr>
+          <tr><th scope="row">Check</th><td>Assessment</td><td>The method is held to the facet it names. Each recorded check verdict is recomputed from its observation and the parameter value of the Tailoring.</td></tr>
+          <tr><th scope="row">Check</th><td>Finding</td><td>A due date is a date, an elapsed duration or a calendar period with its calendar. Without the calendar, no date is computed.</td></tr>
+          <tr><th scope="row">Act</th><td>Deviation</td><td>One of five types, one of four states, a named approver once approved. A passed <code>review-due</code> is reported, and nothing is switched off by it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">Management review: the kernel has no record for it. Its inputs are the reports the validator prints and the states counted above; its decisions return as new versions of Risks and Tailorings. Handbook <a href="{{ blob }}/jascon/references/ch06-tailoring-without-tears.md" rel="noopener">chapter 6</a> (tailoring), <a href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">chapter 9</a> (implementation), <a href="{{ blob }}/jascon/references/ch10-assessment-findings-deviations.md" rel="noopener">chapter 10</a> (risk, assessment, findings).</p>
+  </div>
+</section>
+
+<section class="section" id="audit">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">05</span> The audit</p>
+          <h2>The auditor receives a folder and checks it offline</h2>
+          <p class="lede">An external audit, a certification or an authorization starts with a hand-over. The organisation passes its bundle; the assessor verifies it on a machine of their own, without access to the organisation's systems and without a network.</p>
+        </div>
+        <ul class="ticks">
+          <li><b>Integrity first.</b> The validator compares both digests of every object with the manifest and judges each Attestation against what it binds. The PowerShell twin does the same on a stock Windows machine.</li>
+          <li><b>Then the decisions.</b> <code>--require-risk-basis</code> asks the question of ISO/IEC 27001 6.1.3: which selected control rests on no risk. <code>--as-of</code> fixes the date of the audit, so the overdue reviews are those of that day. <code>--require-authors</code> turns every record that names no author into a failure.</li>
+          <li><b>Then the machine verdicts.</b> Every recorded check verdict is recomputed from its observation. An evidence file is found by its SHA-256; a raw output withheld under a retention rule is reported as withheld.</li>
+          <li><b>Then the Deviations, by hand.</b> Does the type fit the facts, does the rationale carry without the meeting that produced it, may the approver approve this, do the references lead to evidence a stranger can re-examine.</li>
+        </ul>
+        <p class="muted">The assessor writes an Assessment and Findings under the assessor's own namespace, and hands them back as a bundle. The authorizing official signs an Attestation that binds the semantic digests of the objects, the digest of the manifest and the digest of the rendered document they read.</p>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="chain-list">
+          <div class="chain-link"><b>Objects</b><p>Components, Implementations, Risks, the Tailoring, Checks, Assessments with their rows, Findings. Each as one JSON file.</p></div>
+          <div class="chain-link"><b>Content manifest</b><p>lists every object with its package digest and its semantic digest, and pins the facet schemas.</p></div>
+          <div class="chain-link"><b>Evidence</b><p>files under <code>evidence/sha256/</code>, each named by the SHA-256 of its bytes, with a record per run that binds the observation.</p></div>
+          <div class="chain-link"><b>Rendering</b><p>the document a person reads and signs, such as the authorization summary of the example bundle.</p></div>
+          <div class="chain-link"><b>Attestation</b><p>a DSSE envelope beside the manifest, never listed in it. It binds the objects, the manifest and the rendering.</p></div>
+        </div>
+        <div class="window cmd">
+          <div class="window-bar"><span class="window-title">the assessor's first command</span></div>
+          <button class="copy" type="button" data-copy="cmd-audit">copy</button>
+          <pre id="cmd-audit"><code data-lang="sh">python jascon/scripts/validate_core.py path/to/received-bundle \
+    --require-risk-basis \
+    --as-of 2026-11-15 \
+    --require-authors \
+    --trusted-keys path/to/trusted-keys.json</code></pre>
+        </div>
+        <a class="link-arrow" href="{{ blob }}/jascon/references/ch11-integrity-attestation-airgaps.md" rel="noopener">Handbook, chapter 11: integrity, attestation, air gaps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="work-off">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">06</span> Working off the findings</p>
+          <h2>One finding, end to end</h2>
+          <p class="lede">The worked example of the handbook: an assessment of a SaaS finds no evidence of key rotation for clause s2 of a requirement. Clause s1 passed and is not touched.</p>
+        </div>
+        <div class="lattice">
+          <span class="chain-label">Finding</span>
+          <div class="chain"><span>open</span><i></i><span>in-remediation</span><i></i><span>closed</span></div>
+          <span class="chain-label">Deviation</span>
+          <div class="chain"><span>investigating</span><i></i><span>pending</span><i></i><span>approved</span></div>
+          <div class="chain"><span>pending</span><i></i><span>withdrawn</span></div>
+        </div>
+        <ul class="ticks">
+          <li><b>The assessor opens the Finding.</b> Against statement <code>s2</code>, with the Risk it materialised against and one action: a runbook and rotation evidence, due in twenty business days on a named calendar.</li>
+          <li><b>The organisation answers with evidence.</b> Rotation runs monthly; the scanner misread an export. That is a Deviation on the Finding, type <code>false-positive</code>, with references to the logs.</li>
+          <li><b>The assessor decides.</b> The Deviation becomes <code>approved</code> under the assessor's identifier, with the day it was decided and a date for its next review. The action and the Finding close.</li>
+          <li><b>The record stays.</b> Next year's auditor who asks why the finding ended without a fix reads one object. When <code>review-due</code> has passed, the validator lists the Deviation until someone renews or withdraws it.</li>
+        </ul>
+        <p class="muted">A finding that needs a fix runs the other way: the action is done, the check runs again, and the new Assessment satisfies the clause. Running a check again on the Assess page replaces its Assessment and removes a Finding that is still open and no longer applies; a Finding that was moved on is kept.</p>
+      </div>
+      <div class="window reveal">
+        <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">jascon/examples/finding-017.json</span><span class="window-note">fictional parties</span></div>
+        <pre><code data-lang="json">{{ file:jascon/examples/finding-017.json }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="hand-overs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> What crosses</p>
+      <h2>Every hand-over, with what the receiver checks</h2>
+      <p class="lede">Within the organisation the records are files in one repository. Between parties they travel as bundles, and the receiver checks them with the same rules the sender ran.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>From</th><th>To</th><th>What</th><th>In JASCON</th><th>The receiver checks</th></tr></thead>
+        <tbody>
+          <tr><td>Authority</td><td>Organisation</td><td>the catalogue and its baselines</td><td>bundle of Requirements, RequirementSets, Tailorings, Mappings; Attestation</td><td>schema and kernel rules; both digests; whether the Attestation binds</td></tr>
+          <tr><td>Vendor</td><td>Organisation</td><td>hardening advice for a product</td><td>advice pack: Components with capabilities, a manifest naming the publisher</td><td>ADVICE-1 to ADVICE-11; publisher claimed, attested or proven</td></tr>
+          <tr><td>Upstream provider</td><td>Organisation</td><td>the authorization a service runs under</td><td><code>Component.authorizations</code></td><td>that an inherited Implementation names one that exists</td></tr>
+          <tr><td>Check author</td><td>Operations</td><td>a machine check</td><td>Check with collector code in <code>collector@1</code></td><td>the Check's digest covers the code that runs</td></tr>
+          <tr><td>Operations</td><td>Assessor</td><td>observations of a run</td><td>Assessment rows, evidence records, files under <code>evidence/sha256/</code></td><td>every verdict recomputed; every file found by its digest</td></tr>
+          <tr><td>Organisation</td><td>Assessor</td><td>the ISMS for the audit</td><td>the whole bundle: system, Implementations, Risks, Tailoring, Assessments, Findings</td><td>all of the above, risk coverage, overdue reviews, missing authors</td></tr>
+          <tr><td>Assessor</td><td>Organisation</td><td>the audit result</td><td>Assessment and Findings under the assessor's namespace; approved Deviations</td><td>the same kernel rules; the assessor's Attestation, where one is signed</td></tr>
+          <tr><td>Authorizing official</td><td>Customer</td><td>the signed authorization</td><td>Attestation over objects, manifest and rendering</td><td>Full Match, Semantic Match, or it does not bind; signature under a trusted key</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> Limits</p>
+      <h2>What this page describes is designed, not measured in use</h2>
+      <p class="lede"><span class="tier tier-designed">designed for</span> No organisation has run a full cycle of its ISMS on JASCON. The example bundle walks one requirement, one risk and one finding through it, with fictional parties.</p>
+    </div>
+    <div class="grid g2 reveal">
+      <article class="card">
+        <h3>Not in the kernel</h3>
+        <p>The text of the ISMS policies and the scope statement, the minutes of the management review, the audit programme and its calendar, training records. A policy can be a Component of kind <code>policy</code>; its text stays a document.</p>
+      </article>
+      <article class="card">
+        <h3>Not a workflow engine</h3>
+        <p>Nothing assigns a task, sends a reminder or moves a state on its own. A passed review date is reported; the record keeps its meaning until a person decides. No tool of the repository runs a collector.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>Walk the cycle on the example bundle</h2>
+        <p>The app opens the example with its Risk, its Tailorings, the Implementations, two Checks with their runs, the Findings and the Attestation. Each page of the app is one step of this process.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../jascon/examples/&amp;tool=risk">Open the Risk page <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="app/index.html#load=../jascon/examples/&amp;tool=assess">Open the Assess page <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

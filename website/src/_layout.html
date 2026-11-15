@@ -10,6 +10,8 @@
 <meta name="robots" content="{{ page.robots }}">
 <link rel="canonical" href="{{ page.url }}">
 {{ html.alternates }}
+{{ html.md_link }}
+{{ html.jsonld }}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="JASCON">
 <meta property="og:locale" content="{{ lang.og_locale }}">
@@ -43,6 +45,7 @@
     <nav class="nav" id="nav" aria-label="{{ t.nav_label }}">
       <a href="model.html" data-nav="model">{{ t.nav_model }}</a>
       <a href="checks.html" data-nav="checks">{{ t.nav_checks }}</a>
+      <a href="process.html" data-nav="process">{{ t.nav_process }}</a>
       <a href="evidence.html" data-nav="evidence">{{ t.nav_evidence }}</a>
       <a href="start.html" data-nav="start">{{ t.nav_start }}</a>
       <a href="join.html" data-nav="join">{{ t.nav_join }}</a>
@@ -98,6 +101,7 @@
       <nav aria-label="{{ t.foot_use }}">
         <h2>{{ t.foot_use }}</h2>
         <a href="start.html">{{ t.nav_start }}</a>
+        <a href="process.html">{{ t.nav_process }}</a>
         <a href="app/index.html">{{ t.foot_app }}</a>
         <a href="reader/index.html">{{ t.foot_reader }}</a>
         <a href="{{ blob }}/drafts/jascon-specification-1.0.0.md" rel="noopener">{{ t.foot_spec }}</a>

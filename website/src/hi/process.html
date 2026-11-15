@@ -1,0 +1,348 @@
+---
+title: कार्य प्रक्रिया: ISMS से बंद निष्कर्ष तक | JASCON
+description: JASCON पर चलने वाले ISMS में कौन क्या करता है, हर चरण कौन-सा ऑब्जेक्ट लिखता है और कौन-सी फ़ाइलें एक पक्ष से दूसरे पक्ष तक जाती हैं। ISMS के निर्माण और पहले माप से लेकर Plan, Do, Check, Act होते हुए ऑडिट और उसके निष्कर्षों पर काम तक।
+nav: process
+source: b29469ab3dd6
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">कार्य प्रक्रिया</p>
+    <h1>कौन क्या करता है, पहले जोखिम से बंद निष्कर्ष तक</h1>
+    <p class="lede">ISMS एक चक्र में चलता है, और उसका हर दौर रिकॉर्ड छोड़ता है। यह पृष्ठ JASCON के माध्यम से एक दौर का अनुसरण करता है: कौन कार्य करता है, हर चरण कौन-सा ऑब्जेक्ट लिखता है, और कौन-सी फ़ाइलें एक पक्ष से दूसरे पक्ष तक जाती हैं। जहाँ किसी चरण के लिए कर्नेल में कुछ नहीं है, वहाँ पृष्ठ उसी चरण पर यह बताता है।</p>
+  </div>
+</section>
+
+<section class="section" id="roles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> भूमिकाएँ</p>
+      <h2>नौ भूमिकाएँ, हर एक का नाम एक पहचानकर्ता से</h2>
+      <p class="lede">कर्नेल में कोई Party टाइप नहीं है। पक्ष उस संगठन के नेमस्पेस के अंतर्गत एक URI होता है जिससे वह संबंधित है, जैसे <code>https://cso.example/party/ciso</code>, और उसका नाम नीचे दिए गए फ़ील्ड में होता है। जहाँ कर्नेल को किसी पक्ष की आवश्यकता है और किसी का नाम नहीं दिया गया, वहाँ ऐप सहेजने से इनकार करता है और बताता है कि कौन-सा फ़ील्ड गायब है।</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>भूमिका</th><th>आमतौर पर</th><th>किसमें नामित</th><th>लिखता है</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">प्राधिकरण</th><td>BSI, NIST, ASD, कोई नियामक, कोई मानक निकाय</td><td>हर उस id का नेमस्पेस जिसे वह प्रकाशित करता है</td><td>Requirement, RequirementSet, बेसलाइन के रूप में Tailoring, Mapping, अपने बंडल पर एक Attestation</td></tr>
+          <tr><th scope="row">शीर्ष प्रबंधन, जोखिम स्वामी</th><td>बोर्ड, किसी प्रक्रिया या दायित्व का स्वामी</td><td><code>Risk.owner-ref</code>, <code>Risk.acceptance.approver-ref</code></td><td>किसी अवशिष्ट जोखिम की स्वीकृति</td></tr>
+          <tr><th scope="row">ISMS स्वामी</th><td>CISO, सूचना सुरक्षा अधिकारी</td><td><code>provenance.author-ref</code>; संगठन के अपने Tailoring पर <code>Deviation.approver-ref</code></td><td>Risk, पैमाने, प्रयोज्यता विवरण (SoA) के रूप में Tailoring, Mapping</td></tr>
+          <tr><th scope="row">सिस्टम स्वामी, संचालन</th><td>IT संचालन, कोई उत्पाद या प्लेटफ़ॉर्म टीम</td><td>किसी कथन के <code>obligated-parties</code>; <code>provenance.author-ref</code></td><td>Component, Implementation</td></tr>
+          <tr><th scope="row">वेंडर, अपस्ट्रीम प्रदाता</th><td>कोई उत्पाद वेंडर, कोई क्लाउड या प्लेटफ़ॉर्म प्रदाता</td><td>किसी पैक के मैनिफ़ेस्ट में प्रकाशक; <code>Component.authorizations</code></td><td>एडवाइस पैक; वे प्राधिकार जिन पर कोई इनहेरिटेड एज निर्भर है</td></tr>
+          <tr><th scope="row">जाँच लेखक</th><td>सुरक्षा इंजीनियरिंग</td><td><code>Check.provenance.author-ref</code></td><td>Check, एक फ़ेसेट में उसके संग्राहक कोड के साथ</td></tr>
+          <tr><th scope="row">मूल्यांकनकर्ता</th><td>आंतरिक ऑडिट, कोई बाहरी ऑडिटर या मूल्यांकन निकाय</td><td><code>Assessment.performer-ref</code>; किसी Finding पर <code>Deviation.approver-ref</code></td><td>Assessment, Finding</td></tr>
+          <tr><th scope="row">प्राधिकृत करने वाला अधिकारी</th><td>प्रमाणनकर्ता, किसी एजेंसी का प्राधिकृत करने वाला अधिकारी</td><td>वह कुंजी जो एनवेलप पर हस्ताक्षर करती है</td><td>Attestation</td></tr>
+          <tr><th scope="row">ग्राहक, ख़रीदार</th><td>कोई एजेंसी, कोई ग्राहक, ख़रीद विभाग</td><td>कहीं नहीं: यह भूमिका पढ़ती है</td><td>कुछ नहीं; जो इसे मिलता है, उस पर यह वैलिडेटर चलाती है</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">एक व्यक्ति कई भूमिकाएँ निभा सकता है। कर्नेल उन्हें व्यक्ति से नहीं, फ़ील्ड से अलग रखता है: किसी अवशिष्ट जोखिम को स्वीकार करना <code>Risk.acceptance</code> है, उसके कारण किसी खंड को कमज़ोर करना एक Deviation है, और ये दो अलग कार्य हैं, भले ही दोनों एक ही व्यक्ति करे (हैंडबुक <a href="{{ blob }}/jascon/references/ch10-assessment-findings-deviations.md" rel="noopener">§10.6</a>)।</p>
+  </div>
+</section>
+
+<section class="section band" id="cycle">
+  <div class="wrap">
+    <div class="split flip">
+      <figure class="reveal">
+        <svg class="graph" viewBox="0 0 640 450" role="img" aria-labelledby="cycle-title cycle-desc">
+          <title id="cycle-title">JASCON में कार्य प्रक्रिया</title>
+          <desc id="cycle-desc">एक प्राधिकरण और एक वेंडर संगठन को एक कैटलॉग बंडल और एक एडवाइस पैक देते हैं, और संगठन अपना ISMS बनाता है: कैटलॉग, दायरा, पैमाने, पहला माप। फिर चक्र चलता है: Plan, Risk और Tailoring लिखता है; Do, Implementation और Check लिखता है; Check, Assessment और Finding लिखता है; Act, Deviations और नए संस्करण लिखता है और वापस Plan तक ले जाता है। Check से संगठन ऑडिट को Attestation सहित एक बंडल सौंपता है। ऑडिट एक Assessment और Findings लौटाता है, जिनका निपटान किया जाता है और जो अगले चक्र में जाते हैं।</desc>
+          <defs>
+            <marker id="ph" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ph-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <text class="zone" x="30" y="16">संगठन</text>
+          <text class="zone" x="450" y="16">अन्य पक्ष</text>
+
+          <path class="edge accent" d="M450 53H402" marker-end="url(#ph-a)"/>
+          <path class="edge" d="M110 76V118" marker-end="url(#ph)"/>
+          <path class="edge" d="M190 148H238" marker-end="url(#ph)"/>
+          <path class="edge" d="M320 176V258" marker-end="url(#ph)"/>
+          <path class="edge" d="M240 288H192" marker-end="url(#ph)"/>
+          <path class="edge" d="M110 260V178" marker-end="url(#ph)"/>
+          <path class="edge accent" d="M400 288H448" marker-end="url(#ph-a)"/>
+          <path class="edge accent" d="M530 316V374" marker-end="url(#ph-a)"/>
+          <path class="edge" d="M450 402H110V318" marker-end="url(#ph)"/>
+
+          <text class="elabel accent" x="426" y="45" text-anchor="middle">बंडल</text>
+          <text class="elabel accent" x="424" y="280" text-anchor="middle">बंडल</text>
+          <text class="elabel accent" x="538" y="350">Findings</text>
+          <text class="elabel" x="280" y="394" text-anchor="middle">अगले चक्र में</text>
+          <text class="elabel" x="118" y="102">पहला दौर</text>
+
+          <g class="node content"><rect x="30" y="30" width="370" height="46" rx="10"/><text x="44" y="50">ISMS बनाना</text><text class="sub" x="44" y="65">कैटलॉग, दायरा, पैमाने, पहला माप</text></g>
+          <g class="node content"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">प्राधिकरण, वेंडर</text><text class="sub" x="464" y="65">कैटलॉग, एडवाइस पैक</text></g>
+
+          <g class="node"><rect x="30" y="120" width="160" height="56" rx="10"/><text x="44" y="143">Plan</text><text class="sub" x="44" y="160">Risk, Tailoring</text></g>
+          <g class="node"><rect x="240" y="120" width="160" height="56" rx="10"/><text x="254" y="143">Do</text><text class="sub" x="254" y="160">Implementation, Check</text></g>
+          <g class="node"><rect x="240" y="260" width="160" height="56" rx="10"/><text x="254" y="283">Check</text><text class="sub" x="254" y="300">Assessment, Finding</text></g>
+          <g class="node"><rect x="30" y="260" width="160" height="56" rx="10"/><text x="44" y="283">Act</text><text class="sub" x="44" y="300">Deviation, नया संस्करण</text></g>
+
+          <g class="node attest"><rect x="450" y="260" width="160" height="56" rx="10"/><text x="464" y="283">ऑडिट</text><text class="sub" x="464" y="300">ऑडिटर, अधिकारी</text></g>
+          <g class="node org"><rect x="450" y="376" width="160" height="52" rx="10"/><text x="464" y="397">निपटान</text><text class="sub" x="464" y="413">कार्रवाई, समय-सीमा</text></g>
+        </svg>
+        <div class="graph-legend">
+          <span><i></i>संगठन के भीतर एक चरण</span>
+          <span class="lg-att"><i></i>संगठन से बाहर</span>
+          <span class="lg-org"><i></i>किसी ऑडिट का उत्तर</span>
+        </div>
+      </figure>
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">02</span> चक्र</p>
+          <h2>Plan, Do, Check, Act, और दो हस्तांतरण</h2>
+          <p class="lede">ISO/IEC 27001 और BSI Standard 200-1 ISMS को एक चक्र के रूप में वर्णित करते हैं। JASCON चक्र नहीं चलाता। वह हर चरण को एक टाइप्ड रिकॉर्ड देता है, ताकि अगला चरण और अगला पक्ष वह पढ़ सके जो पिछले ने तय किया था।</p>
+        </div>
+        <ul class="ticks">
+          <li><b>हर रिकॉर्ड की एक id, एक संस्करण और दो डाइजेस्ट होते हैं।</b> बदला हुआ Tailoring एक नया संस्करण है, संपादित फ़ाइल नहीं, और <code>history</code> बताता है कि क्यों।</li>
+          <li><b>हर निर्णय बताता है कि उसे किसने और कब लिया।</b> <code>provenance</code> में लेखक और तिथि होती है; वैलिडेटर उन रिकॉर्ड को सूचीबद्ध करता है जो किसी का नाम नहीं बताते (AUTHOR-1 से AUTHOR-4)।</li>
+          <li><b>जो किसी दूसरे पक्ष तक जाता है, वह एक बंडल है।</b> एक फ़ोल्डर, जिसमें उसके ऑब्जेक्ट, एक कंटेंट मैनिफ़ेस्ट, अपने SHA-256 से नामित साक्ष्य फ़ाइलें और, जब कोई हस्ताक्षर करता है, मैनिफ़ेस्ट के बगल में एक Attestation होता है।</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="build">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> ISMS का निर्माण</p>
+      <h2>पहले दौर से पहले पाँच चरण</h2>
+      <p class="lede">निर्माण एक पहले माप के साथ समाप्त होता है: कैटलॉग जो माँगता है और जो लागू है, उसके बीच का अंतर। बाद का हर दौर इसी के सापेक्ष मापता है।</p>
+    </div>
+    <div class="steps">
+
+      <div class="step reveal" id="namespace">
+        <div class="step-body">
+          <h2>एक नेमस्पेस चुनें और पक्षों के नाम तय करें</h2>
+          <p>ISMS स्वामी ऐसे डोमेन के अंतर्गत एक प्रीफ़िक्स चुनता है जिस पर संगठन का नियंत्रण हो, और उसे बनाए रखता है, उदाहरण के लिए <code>https://grc.your.example/</code>। पक्षों को इसके अंतर्गत पहचानकर्ता मिलते हैं: CISO, जोखिम स्वामी, संचालन, आंतरिक मूल्यांकनकर्ता। पहचानकर्ताओं की तुलना स्ट्रिंग के रूप में होती है और उन्हें कभी नेटवर्क से प्राप्त नहीं किया जाता। अभी कुछ भी नहीं लिखा जाता; बाद का हर ऑब्जेक्ट इसी चुनाव पर निर्भर करता है।</p>
+          <p class="small">कौन: ISMS स्वामी। लिखता है: कोई ऑब्जेक्ट नहीं। <a href="{{ blob }}/jascon/references/ch03-identity-versions-lifecycle.md" rel="noopener">हैंडबुक, अध्याय 3</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="catalogue">
+        <div class="step-body">
+          <h2>कैटलॉग ग्रहण करें</h2>
+          <p>प्राधिकरण का कैटलॉग एक बंडल के रूप में आता है: Requirements, अध्यायों और बेसलाइनों के लिए RequirementSets, उसके रूपांतरों के लिए Tailorings, अन्य कैटलॉग से Mappings। उस पर कुछ भी बनाने से पहले वैलिडेटर उसकी जाँच करता है, और जहाँ प्राधिकरण ने हस्ताक्षर किए हैं, वहाँ Attestation बताता है कि सामग्री वही है जिस पर उसने हस्ताक्षर किए थे (Full Match या Semantic Match) या वह नहीं बाँधता। जो कैटलॉग केवल OSCAL में मौजूद है, वह Import पेज और उसकी रिपोर्ट से होकर गुज़रता है।</p>
+          <p class="small">कौन: ISMS स्वामी, प्राधिकरण से। प्राप्त करता है: एक कैटलॉग बंडल। ऐप: Home, Import। <a class="link-arrow" href="start.html#open">साथ में दिए गए कैटलॉग</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="scope">
+        <div class="step-body">
+          <h2>दायरे को एक सिस्टम के रूप में परिभाषित करें</h2>
+          <p>ISMS का दायरा <code>system</code> प्रकार का एक Component है, जिसके सदस्य वे सेवाएँ, सॉफ़्टवेयर, हार्डवेयर, नीतियाँ और प्रक्रियाएँ हैं जिन्हें वह कवर करता है। प्राधिकृत सिस्टम अपने प्राधिकार-संदर्भों के नाम Component पर बताता है; जो दर्ज नहीं है, वह किसी बात का दावा नहीं करता। कोई नीति <code>policy</code> प्रकार के Component के रूप में सदस्य हो सकती है; उसका पाठ कर्नेल से बाहर एक दस्तावेज़ ही रहता है।</p>
+          <p class="small">कौन: सिस्टम स्वामी, ISMS स्वामी के साथ। लिखता है: Component। ऐप: Implement। <a href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">हैंडबुक, अध्याय 9</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="scales">
+        <div class="step-body">
+          <h2>जोखिम पैमाने परिभाषित करें</h2>
+          <p>संभावना, प्रभाव और उन्हें जोड़ने वाला मैट्रिक्स संगठन के अपने होते हैं: उतने स्तर जितने वह उपयोग करता है, उसके अपने शब्दों में, हर पैमाना एक छोटी परिभाषा फ़ाइल, जिसे बंडल पिन करता है। वैलिडेटर ऐसे स्तर को अस्वीकार करता है जिसे पैमाना परिभाषित नहीं करता, और ऐसी रेटिंग को जो अपने ही मैट्रिक्स का खंडन करती है, जब तक रेटिंग यह न बताए कि वह उससे क्यों हटती है। उदाहरण बंडल में BSI Standard 200-3 के पैमाने हैं।</p>
+          <p class="small">कौन: ISMS स्वामी, शीर्ष प्रबंधन के अनुमोदन के लिए। लिखता है: तीन पैमाना परिभाषाएँ। ऐप: Risk, पैमानों का व्यू। <a href="{{ tree }}/jascon/examples" rel="noopener">उदाहरण पैमाने</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="measure">
+        <div class="step-body">
+          <h2>पहला माप लें</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">पहला माप रिकॉर्ड के रूप में एक गैप विश्लेषण है। हर आवश्यकता या खंड के लिए एक Implementation बताता है कि वह किस हद तक लागू है: <code>planned</code>, <code>partial</code>, <code>implemented</code> या <code>not-applicable</code>। पहला Assessment दर्ज करता है कि वास्तव में क्या पाया गया, और हर उस खंड के लिए एक Finding जो संतुष्ट नहीं है।</p>
+              <p class="muted">JASCON कोई अनुपालन स्कोर परिभाषित नहीं करता। जो गिना जा सकता है, वे अवस्थाएँ हैं: स्थिति के अनुसार Implementations, Assessment के परिणाम, अवस्था के अनुसार Findings, वे चयनित आवश्यकताएँ जिनका औचित्य कोई जोखिम सिद्ध नहीं करता। ये गिनतियाँ वह बेसलाइन हैं जिससे बाद के दौरों की तुलना होती है।</p>
+            </div>
+            <div class="window">
+              <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">jascon/examples/implementation-acme-konf-14-1-s2.json</span><span class="window-note">तैयार उदाहरण</span></div>
+              <pre><code data-lang="json">{{ file:jascon/examples/implementation-acme-konf-14-1-s2.json }}</code></pre>
+            </div>
+          </div>
+          <p class="small">कौन: सिस्टम स्वामी दर्ज करते हैं, एक आंतरिक मूल्यांकनकर्ता जाँचता है। लिखता है: Implementation, Assessment, Finding। ऐप: Implement, Assess, Validate।</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="pdca">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> रिकॉर्ड में चक्र</p>
+      <h2>हर फ़ेज़ क्या लिखता है, और उसे कौन लिखता है</h2>
+      <p class="lede">चार फ़ेज़, वे रिकॉर्ड जो वे छोड़ते हैं, उन्हें लिखने वाला ऐप पेज और उन पर लागू नियम। Risk और Check 2.0.0 रिलीज़ कैंडिडेट में हैं।</p>
+    </div>
+    <div class="grid g4 reveal">
+      <article class="card role">
+        <span class="who">Plan</span>
+        <h3>जोखिम और प्रयोज्यता विवरण</h3>
+        <p>हर Risk का एक परिदृश्य, एक स्वामी, किसी नामित पैमाने पर एक रेटिंग, चार उपचार विकल्पों में से एक और वे खंड होते हैं जो उपचार को अमल में लाते हैं। Tailoring आवश्यकताओं का चयन करता है और पैरामीटर तय करता है; यही प्रयोज्यता विवरण है। <code>risk-coverage</code> हर उस चयनित आवश्यकता को सूचीबद्ध करता है जिसका औचित्य कोई मूल्यांकित जोखिम सिद्ध नहीं करता।</p>
+        <p class="move"><b>कौन, और कहाँ</b>ISMS स्वामी, जोखिम स्वामियों के साथ; स्वामी अवशिष्ट जोखिम स्वीकार करता है। ऐप: Risk, Tailor।</p>
+      </article>
+      <article class="card role">
+        <span class="who">Do</span>
+        <h3>कार्यान्वयन और मशीन जाँच</h3>
+        <p>Implementation बताता है कि कौन-सा कंपोनेंट किस खंड को पूरा करता है, और यह किसकी ज़िम्मेदारी है: <code>provider</code>, <code>customer</code>, <code>shared</code> या <code>inherited</code>। इनहेरिटेड एज उस अपस्ट्रीम प्राधिकार का नाम बताती है जिस पर वह निर्भर है। किसी वेंडर की अनुशंसा तभी गिनी जाती है जब कोई Implementation उसे अपनाता है। Check बताता है कि संग्राहक किन तथ्यों की रिपोर्ट करता है और क्या पास होता है।</p>
+        <p class="move"><b>कौन, और कहाँ</b>सिस्टम स्वामी, जाँच लेखक; वेंडर सलाह देता है। ऐप: Implement, Checks।</p>
+      </article>
+      <article class="card role">
+        <span class="who">Check</span>
+        <h3>मूल्यांकन और निष्कर्ष</h3>
+        <p>Assessment दर्ज करता है कि किसने क्या जाँचा, किस पद्धति से, कब और किस परिणाम के साथ। मशीन रन में हर Check के लिए एक पंक्ति होती है जिसमें स्वयं अवलोकन रहता है, और वैलिडेटर हर निर्णय की पुनर्गणना करता है। जो खंड संतुष्ट नहीं है, वह उस खंड के सापेक्ष एक Finding बन जाता है। आंतरिक ऑडिट एक ऐसा Assessment है जिसका निष्पादक (performer) आंतरिक है।</p>
+        <p class="move"><b>कौन, और कहाँ</b>आंतरिक मूल्यांकनकर्ता; संग्राहक JASCON के बाहर चलते हैं। ऐप: Assess, Validate।</p>
+      </article>
+      <article class="card role">
+        <span class="who">Act</span>
+        <h3>कार्रवाइयाँ, विचलन और नए संस्करण</h3>
+        <p>Finding में ऐसी नियत तिथि वाली कार्रवाइयाँ होती हैं जिसकी गणना मशीन कर सकती है। जहाँ कोई खंड जानबूझकर पूरा नहीं किया जाता, वहाँ एक Deviation दर्ज करता है कि क्यों, और किसने उसे अनुमोदित किया। Risk को उसकी अवशिष्ट रेटिंग मिलती है, Tailoring को एक नया संस्करण। वैलिडेटर हर अनुमोदित Deviation और हर उस Risk को सूचीबद्ध करता है जिसकी <code>review-due</code> बीत चुकी है।</p>
+        <p class="move"><b>कौन, और कहाँ</b>जोखिम स्वामी, ISMS स्वामी, शीर्ष प्रबंधन। ऐप: Assess, Risk, Tailor।</p>
+      </article>
+    </div>
+    <div class="table-wrap reveal" style="margin-top:32px">
+      <table>
+        <thead><tr><th>फ़ेज़</th><th>रिकॉर्ड</th><th>वैलिडेटर क्या सुनिश्चित करता है</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Plan</th><td>Risk</td><td>स्तर नामित पैमाने पर है और उसके मैट्रिक्स से मेल खाता है। उपचारित या स्वीकार कर रखे गए (retained) Risk में स्वामी की स्वीकृति होती है। केवल ऐसा मूल्यांकित या उपचारित Risk, जिसका विकल्प चुना जा चुका है, किसी आवश्यकता का औचित्य सिद्ध करता है।</td></tr>
+          <tr><th scope="row">Plan</th><td>Tailoring</td><td>उपभोक्ता के Tailoring में, किसी मोडैलिटी में ढील या दायित्व और निषेध के बीच बदलाव के लिए अनुमोदक सहित दर्ज Deviation चाहिए। हर ऑपरेशन उस कथन का नाम बताता है जिसे वह बदलता है। <code>--require-risk-basis</code> के साथ, ऐसी चयनित आवश्यकता जिसका औचित्य कोई जोखिम सिद्ध नहीं करता, विफलता है।</td></tr>
+          <tr><th scope="row">Do</th><td>Implementation</td><td>इनहेरिटेड एज ऐसे प्राधिकार का नाम बताती है जो अपस्ट्रीम कंपोनेंट पर मौजूद है। अपनाई गई अनुशंसा ऐसे उत्पाद की होती है जो सिस्टम का सदस्य है।</td></tr>
+          <tr><th scope="row">Do</th><td>Check</td><td>तथ्य टाइप्ड हैं, मानदंड एक ही AND से जुड़े बारह कम्पैरेटर का उपयोग करते हैं, संग्राहक का कोड Check के डाइजेस्ट में शामिल है।</td></tr>
+          <tr><th scope="row">Check</th><td>Assessment</td><td>पद्धति को उस फ़ेसेट के अनुसार परखा जाता है जिसका वह नाम बताती है। हर दर्ज जाँच निर्णय की पुनर्गणना उसके अवलोकन और Tailoring के पैरामीटर मान से होती है।</td></tr>
+          <tr><th scope="row">Check</th><td>Finding</td><td>नियत तिथि एक तिथि, बीती हुई अवधि या अपने कैलेंडर के साथ एक कैलेंडर अवधि होती है। कैलेंडर के बिना कोई तिथि गणना नहीं की जाती।</td></tr>
+          <tr><th scope="row">Act</th><td>Deviation</td><td>पाँच प्रकारों में से एक, चार अवस्थाओं में से एक, और अनुमोदित होने पर एक नामित अनुमोदक। बीती हुई <code>review-due</code> रिपोर्ट की जाती है, और उससे कुछ भी बंद नहीं होता।</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">प्रबंधन समीक्षा: कर्नेल में इसके लिए कोई रिकॉर्ड नहीं है। इसके इनपुट वे रिपोर्टें हैं जो वैलिडेटर प्रिंट करता है और ऊपर गिनी गई अवस्थाएँ; इसके निर्णय Risks और Tailorings के नए संस्करणों के रूप में लौटते हैं। हैंडबुक <a href="{{ blob }}/jascon/references/ch06-tailoring-without-tears.md" rel="noopener">अध्याय 6</a> (टेलरिंग), <a href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">अध्याय 9</a> (कार्यान्वयन), <a href="{{ blob }}/jascon/references/ch10-assessment-findings-deviations.md" rel="noopener">अध्याय 10</a> (जोखिम, मूल्यांकन, निष्कर्ष)।</p>
+  </div>
+</section>
+
+<section class="section" id="audit">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">05</span> ऑडिट</p>
+          <h2>ऑडिटर को एक फ़ोल्डर मिलता है और वह उसे ऑफ़लाइन जाँचता है</h2>
+          <p class="lede">बाहरी ऑडिट, प्रमाणन या प्राधिकार एक हस्तांतरण से शुरू होता है। संगठन अपना बंडल सौंपता है; मूल्यांकनकर्ता उसे अपनी ही मशीन पर सत्यापित करता है, संगठन के सिस्टम तक पहुँच के बिना और बिना नेटवर्क के।</p>
+        </div>
+        <ul class="ticks">
+          <li><b>पहले अखंडता।</b> वैलिडेटर हर ऑब्जेक्ट के दोनों डाइजेस्ट की तुलना मैनिफ़ेस्ट से करता है और हर Attestation को उस सामग्री के सापेक्ष परखता है जिसे वह बाँधता है। PowerShell समकक्ष यही काम किसी सामान्य Windows मशीन पर करता है।</li>
+          <li><b>फिर निर्णय।</b> <code>--require-risk-basis</code> ISO/IEC 27001 6.1.3 का प्रश्न पूछता है: कौन-सा चयनित नियंत्रण किसी जोखिम पर आधारित नहीं है। <code>--as-of</code> ऑडिट की तिथि तय करता है, ताकि अतिदेय समीक्षाएँ उसी दिन की हों। <code>--require-authors</code> हर उस रिकॉर्ड को विफलता बना देता है जो किसी लेखक का नाम नहीं बताता।</li>
+          <li><b>फिर मशीन के निर्णय।</b> हर दर्ज जाँच निर्णय की पुनर्गणना उसके अवलोकन से की जाती है। साक्ष्य फ़ाइल उसके SHA-256 से मिलती है; प्रतिधारण (retention) नियम के तहत रोका गया कच्चा आउटपुट रोके गए आउटपुट के रूप में रिपोर्ट किया जाता है।</li>
+          <li><b>फिर Deviations, हाथ से।</b> क्या प्रकार तथ्यों से मेल खाता है, क्या औचित्य उस बैठक के बिना भी टिकता है जिसमें वह बना, क्या अनुमोदक इसे अनुमोदित कर सकता है, क्या संदर्भ ऐसे साक्ष्य तक ले जाते हैं जिसकी कोई अजनबी दोबारा जाँच कर सके।</li>
+        </ul>
+        <p class="muted">मूल्यांकनकर्ता अपने ही नेमस्पेस के अंतर्गत एक Assessment और Findings लिखता है, और उन्हें एक बंडल के रूप में वापस सौंपता है। प्राधिकृत करने वाला अधिकारी एक Attestation पर हस्ताक्षर करता है, जो ऑब्जेक्टों के सिमेंटिक डाइजेस्ट, मैनिफ़ेस्ट के डाइजेस्ट और उस रेंडर किए गए दस्तावेज़ के डाइजेस्ट को बाँधता है जिसे उन्होंने पढ़ा।</p>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="chain-list">
+          <div class="chain-link"><b>ऑब्जेक्ट</b><p>Components, Implementations, Risks, Tailoring, Checks, अपनी पंक्तियों सहित Assessments, Findings। हर एक, एक JSON फ़ाइल के रूप में।</p></div>
+          <div class="chain-link"><b>कंटेंट मैनिफ़ेस्ट</b><p>हर ऑब्जेक्ट को उसके पैकेज डाइजेस्ट और सिमेंटिक डाइजेस्ट के साथ सूचीबद्ध करता है, और फ़ेसेट स्कीमा को पिन करता है।</p></div>
+          <div class="chain-link"><b>साक्ष्य</b><p><code>evidence/sha256/</code> के अंतर्गत फ़ाइलें, हर एक अपने बाइट्स के SHA-256 से नामित, साथ में हर रन का एक रिकॉर्ड जो अवलोकन को बाँधता है।</p></div>
+          <div class="chain-link"><b>रेंडरिंग</b><p>वह दस्तावेज़ जिसे कोई व्यक्ति पढ़ता है और जिस पर हस्ताक्षर करता है, जैसे उदाहरण बंडल का प्राधिकार सारांश।</p></div>
+          <div class="chain-link"><b>Attestation</b><p>मैनिफ़ेस्ट के बगल में एक DSSE एनवेलप, जो उसमें कभी सूचीबद्ध नहीं होता। यह ऑब्जेक्टों, मैनिफ़ेस्ट और रेंडरिंग को बाँधता है।</p></div>
+        </div>
+        <div class="window cmd">
+          <div class="window-bar"><span class="window-title">मूल्यांकनकर्ता का पहला कमांड</span></div>
+          <button class="copy" type="button" data-copy="cmd-audit">कॉपी</button>
+          <pre id="cmd-audit"><code data-lang="sh">python jascon/scripts/validate_core.py path/to/received-bundle \
+    --require-risk-basis \
+    --as-of 2026-11-15 \
+    --require-authors \
+    --trusted-keys path/to/trusted-keys.json</code></pre>
+        </div>
+        <a class="link-arrow" href="{{ blob }}/jascon/references/ch11-integrity-attestation-airgaps.md" rel="noopener">हैंडबुक, अध्याय 11: अखंडता, अनुप्रमाणन, एयर गैप</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="work-off">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">06</span> निष्कर्षों का निपटान</p>
+          <h2>एक निष्कर्ष, शुरू से अंत तक</h2>
+          <p class="lede">हैंडबुक का तैयार उदाहरण: किसी SaaS के मूल्यांकन में किसी आवश्यकता के खंड s2 के लिए कुंजी रोटेशन का कोई साक्ष्य नहीं मिलता। खंड s1 पास हुआ और उसे छुआ नहीं जाता।</p>
+        </div>
+        <div class="lattice">
+          <span class="chain-label">Finding</span>
+          <div class="chain"><span>open</span><i></i><span>in-remediation</span><i></i><span>closed</span></div>
+          <span class="chain-label">Deviation</span>
+          <div class="chain"><span>investigating</span><i></i><span>pending</span><i></i><span>approved</span></div>
+          <div class="chain"><span>pending</span><i></i><span>withdrawn</span></div>
+        </div>
+        <ul class="ticks">
+          <li><b>मूल्यांकनकर्ता Finding खोलता है।</b> कथन <code>s2</code> के सापेक्ष, उस Risk के साथ जिसके सापेक्ष वह साकार हुआ, और एक कार्रवाई के साथ: एक रनबुक और रोटेशन का साक्ष्य, एक नामित कैलेंडर पर बीस कार्य-दिवसों में देय।</li>
+          <li><b>संगठन साक्ष्य के साथ उत्तर देता है।</b> रोटेशन हर महीने चलता है; स्कैनर ने एक एक्सपोर्ट को गलत पढ़ा। यह Finding पर एक Deviation है, प्रकार <code>false-positive</code>, लॉग के संदर्भों के साथ।</li>
+          <li><b>मूल्यांकनकर्ता निर्णय करता है।</b> Deviation मूल्यांकनकर्ता के पहचानकर्ता के अंतर्गत <code>approved</code> हो जाता है, निर्णय के दिन और अगली समीक्षा की एक तिथि के साथ। कार्रवाई और Finding बंद हो जाते हैं।</li>
+          <li><b>रिकॉर्ड बना रहता है।</b> अगले वर्ष का ऑडिटर, जो पूछता है कि निष्कर्ष बिना सुधार के क्यों समाप्त हुआ, एक ही ऑब्जेक्ट पढ़ता है। जब <code>review-due</code> बीत जाती है, तो वैलिडेटर Deviation को तब तक सूचीबद्ध करता है जब तक कोई उसे नवीनीकृत न करे या वापस न ले।</li>
+        </ul>
+        <p class="muted">जिस निष्कर्ष को सुधार की ज़रूरत है, वह दूसरे रास्ते से चलता है: कार्रवाई पूरी होती है, जाँच फिर से चलती है, और नया Assessment खंड को संतुष्ट करता है। Assess पेज पर कोई जाँच फिर से चलाने से उसका Assessment बदल जाता है और ऐसा Finding हट जाता है जो अभी भी खुला है और अब लागू नहीं होता; जिस Finding को आगे बढ़ाया जा चुका है, वह रखा जाता है।</p>
+      </div>
+      <div class="window reveal">
+        <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">jascon/examples/finding-017.json</span><span class="window-note">काल्पनिक पक्ष</span></div>
+        <pre><code data-lang="json">{{ file:jascon/examples/finding-017.json }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="hand-overs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> क्या पार जाता है</p>
+      <h2>हर हस्तांतरण, और प्राप्तकर्ता क्या जाँचता है</h2>
+      <p class="lede">संगठन के भीतर रिकॉर्ड एक ही रिपॉज़िटरी में फ़ाइलें हैं। पक्षों के बीच वे बंडल के रूप में जाते हैं, और प्राप्तकर्ता उनकी जाँच उन्हीं नियमों से करता है जो भेजने वाले ने चलाए थे।</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>से</th><th>को</th><th>क्या</th><th>JASCON में</th><th>प्राप्तकर्ता जाँचता है</th></tr></thead>
+        <tbody>
+          <tr><td>प्राधिकरण</td><td>संगठन</td><td>कैटलॉग और उसकी बेसलाइनें</td><td>Requirements, RequirementSets, Tailorings, Mappings का बंडल; Attestation</td><td>स्कीमा और कर्नेल नियम; दोनों डाइजेस्ट; क्या Attestation बाँधता है</td></tr>
+          <tr><td>वेंडर</td><td>संगठन</td><td>किसी उत्पाद के लिए हार्डनिंग सलाह</td><td>एडवाइस पैक: क्षमताओं वाले Components, प्रकाशक का नाम बताने वाला एक मैनिफ़ेस्ट</td><td>ADVICE-1 से ADVICE-11; प्रकाशक दावा किया गया, अनुप्रमाणित या सिद्ध</td></tr>
+          <tr><td>अपस्ट्रीम प्रदाता</td><td>संगठन</td><td>वह प्राधिकार जिसके तहत कोई सेवा चलती है</td><td><code>Component.authorizations</code></td><td>कि कोई इनहेरिटेड Implementation ऐसे प्राधिकार का नाम बताता है जो मौजूद है</td></tr>
+          <tr><td>जाँच लेखक</td><td>संचालन</td><td>एक मशीन जाँच</td><td><code>collector@1</code> में संग्राहक कोड के साथ Check</td><td>Check का डाइजेस्ट उस कोड को कवर करता है जो चलता है</td></tr>
+          <tr><td>संचालन</td><td>मूल्यांकनकर्ता</td><td>किसी रन के अवलोकन</td><td>Assessment पंक्तियाँ, साक्ष्य रिकॉर्ड, <code>evidence/sha256/</code> के अंतर्गत फ़ाइलें</td><td>हर निर्णय की पुनर्गणना; हर फ़ाइल उसके डाइजेस्ट से मिली</td></tr>
+          <tr><td>संगठन</td><td>मूल्यांकनकर्ता</td><td>ऑडिट के लिए ISMS</td><td>पूरा बंडल: सिस्टम, Implementations, Risks, Tailoring, Assessments, Findings</td><td>ऊपर का सब कुछ, जोखिम कवरेज, अतिदेय समीक्षाएँ, अनुपस्थित लेखक</td></tr>
+          <tr><td>मूल्यांकनकर्ता</td><td>संगठन</td><td>ऑडिट का परिणाम</td><td>मूल्यांकनकर्ता के नेमस्पेस के अंतर्गत Assessment और Findings; अनुमोदित Deviations</td><td>वही कर्नेल नियम; मूल्यांकनकर्ता का Attestation, जहाँ उस पर हस्ताक्षर हुए हों</td></tr>
+          <tr><td>प्राधिकृत करने वाला अधिकारी</td><td>ग्राहक</td><td>हस्ताक्षरित प्राधिकार</td><td>ऑब्जेक्टों, मैनिफ़ेस्ट और रेंडरिंग पर Attestation</td><td>Full Match, Semantic Match, या वह नहीं बाँधता; किसी विश्वसनीय कुंजी के तहत हस्ताक्षर</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> सीमाएँ</p>
+      <h2>यह पृष्ठ जो वर्णन करता है, वह डिज़ाइन किया गया है, उपयोग में मापा नहीं गया</h2>
+      <p class="lede"><span class="tier tier-designed">डिज़ाइन किया गया</span> किसी भी संगठन ने अपने ISMS का पूरा चक्र JASCON पर नहीं चलाया है। उदाहरण बंडल एक आवश्यकता, एक जोखिम और एक निष्कर्ष को, काल्पनिक पक्षों के साथ, इसके माध्यम से ले जाता है।</p>
+    </div>
+    <div class="grid g2 reveal">
+      <article class="card">
+        <h3>कर्नेल में नहीं</h3>
+        <p>ISMS नीतियों और दायरा विवरण का पाठ, प्रबंधन समीक्षा का कार्यवृत्त, ऑडिट कार्यक्रम और उसका कैलेंडर, प्रशिक्षण रिकॉर्ड। कोई नीति <code>policy</code> प्रकार का Component हो सकती है; उसका पाठ एक दस्तावेज़ ही रहता है।</p>
+      </article>
+      <article class="card">
+        <h3>वर्कफ़्लो इंजन नहीं</h3>
+        <p>कुछ भी अपने आप कोई कार्य नहीं सौंपता, अनुस्मारक नहीं भेजता या कोई अवस्था आगे नहीं बढ़ाता। बीती हुई समीक्षा तिथि रिपोर्ट की जाती है; रिकॉर्ड अपना अर्थ तब तक बनाए रखता है जब तक कोई व्यक्ति निर्णय न ले। रिपॉज़िटरी का कोई भी टूल संग्राहक नहीं चलाता।</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>उदाहरण बंडल पर चक्र से गुज़रें</h2>
+        <p>ऐप उदाहरण को उसके Risk, उसके Tailorings, Implementations, अपने रन सहित दो Checks, Findings और Attestation के साथ खोलता है। ऐप का हर पेज इस प्रक्रिया का एक चरण है।</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../jascon/examples/&amp;tool=risk">Risk पेज खोलें <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="app/index.html#load=../jascon/examples/&amp;tool=assess">Assess पेज खोलें <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

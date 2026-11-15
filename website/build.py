@@ -29,7 +29,13 @@ Standard library only. What it does, in order:
    publishers' licence notes beside them, and the example bundle, the
    schemas and the conformance vectors to jascon/. The relative paths the
    app already uses (../converted_examples/...) keep working.
-4. Checks. Every local href and src in the pages must name a file in the
+4. Readers that are programs. Every page that is indexed gets a Markdown
+   twin beside it (process.html -> process.md), made from the built HTML by
+   markdown_twin.py and named in the page's head as rel="alternate"
+   type="text/markdown"; the head also carries the page as JSON-LD. The
+   site root gets llms.txt, the index of the English pages and the
+   sources, and llms-full.txt, every English twin in one file.
+5. Checks. Every local href and src in the pages must name a file in the
    output, or the build stops.
 """
 import argparse
@@ -46,6 +52,8 @@ import urllib.parse
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "i18n"))
 import check_translation  # noqa: E402  (website/i18n/check_translation.py)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import markdown_twin  # noqa: E402  (website/markdown_twin.py)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -509,7 +517,9 @@ def highlight(text):
 
     def sub(m):
         body = json_block(m.group(2)) if m.group(1) == "json" else sh_block(m.group(2))
-        return f"<code>{body}</code>"
+        # the language stays on the element, the way HTML names it, for
+        # readers that are programs (markdown_twin.py fences the block with it)
+        return f'<code class="language-{m.group(1)}">{body}</code>'
     return CODE.sub(sub, text)
 
 
@@ -686,6 +696,89 @@ def auto_language(name, lang, langs):
     return AUTO_LANGUAGE % json.dumps(targets, separators=(",", ":"))
 
 
+def md_name(name):
+    """The file of a page's Markdown twin: process.html -> process.md."""
+    return name[:-len(".html")] + ".md"
+
+
+def machine_head(page, T, site, folder, name):
+    """Two lines of the head for readers that are programs: the link to the
+    page's Markdown twin, and the page described as JSON-LD."""
+    e = html.escape
+    base = site["base_url"].rstrip("/")
+    md = md_name(name)
+    data = {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": page["title"],
+        "description": page["description"],
+        "inLanguage": T["meta"]["hreflang"],
+        "url": page["url"],
+        "isPartOf": {"@type": "WebSite", "name": site["name"], "url": base + "/"},
+        "author": {"@type": "Person", "name": site["publisher"]},
+        "license": "https://www.apache.org/licenses/LICENSE-2.0",
+        "encoding": {"@type": "MediaObject", "encodingFormat": "text/markdown",
+                     "contentUrl": f"{base}/{folder}{md}"},
+    }
+    return {
+        "md_link": f'<link rel="alternate" type="text/markdown" href="@root/{folder}{md}" title="{e(page["title"])}">',
+        "jsonld": '<script type="application/ld+json">'
+                  + json.dumps(data, ensure_ascii=False).replace("</", "<\\/") + "</script>",
+    }
+
+
+# The order of the English pages in llms.txt, and the sources an agent
+# should read next. A page the list does not name is added at its end, so
+# a new page is never left out.
+LLMS_ORDER = ["index.html", "model.html", "process.html", "checks.html", "start.html",
+              "evidence.html", "join.html", "legal.html"]
+LLMS_SOURCES = [
+    ("Specification", "drafts/jascon-specification-1.0.0.md", "blob",
+     "the released normative text"),
+    ("Handbook", "jascon/references", "tree",
+     "fifteen chapters and seven appendices; chapter 2 is the core in one hour"),
+    ("Kernel schema", "jascon/schemas/jascon-2.0.0.schema.json", "blob",
+     "JSON Schema 2020-12 of every object type"),
+    ("Worked example bundle", "jascon/examples", "tree",
+     "one object of every type, with its content manifest"),
+    ("Agent skill", "jascon/SKILL.md", "blob",
+     "the instructions a coding agent loads to write and validate JASCON"),
+    ("Reference validator", "jascon/scripts/validate_core.py", "blob",
+     "runs the conformance vectors and checks a bundle"),
+]
+
+
+def write_llms(out, pages, site):
+    """llms.txt (llmstxt.org): what the site is and where its plain-text
+    pages are; llms-full.txt: every English twin in one file."""
+    base = site["base_url"].rstrip("/")
+    blob, tree = site["repo_url"] + "/blob/main", site["repo_url"] + "/tree/main"
+    english = {n: h for n, h in pages
+               if "/" not in n and os.path.isfile(os.path.join(out, md_name(n)))}
+    order = [n for n in LLMS_ORDER if n in english] + sorted(n for n in english if n not in LLMS_ORDER)
+    home = english.get("index.html", {})
+    lines = [f"# {site['name']}", "",
+             f"> {home.get('description', '')}", "",
+             "Every page of this site has a Markdown twin at the same address with `.md` in "
+             "place of `.html`. Counts on the pages are measured by the reference validator; "
+             "claims say whether they are measured, designed for or proposed.", "",
+             "## Pages", ""]
+    for n in order:
+        lines.append(f"- [{english[n]['title']}]({base}/{md_name(n)}): {english[n]['description']}")
+    lines += ["", "## Sources", ""]
+    for label, path, kind, note in LLMS_SOURCES:
+        lines.append(f"- [{label}]({blob if kind == 'blob' else tree}/{path}): {note}")
+    langs = sorted({n.split("/")[0] for n, _ in pages if "/" in n})
+    if langs:
+        lines += ["", "## Optional", ""]
+        for code in langs:
+            lines.append(f"- [Pages in {code}]({base}/{code}/index.md): the translated pages, "
+                         f"each with its twin under {base}/{code}/")
+    write(os.path.join(out, "llms.txt"), "\n".join(lines) + "\n")
+    full = [read(os.path.join(out, md_name(n))) for n in order]
+    write(os.path.join(out, "llms-full.txt"), "\n\n".join(full))
+
+
 def build_pages(out, langs, facts, site):
     layout = read(os.path.join(SRC, "_layout.html"))
     english = {n: parse_page(os.path.join(SRC, n)) for n in page_names()}
@@ -731,8 +824,11 @@ def build_pages(out, langs, facts, site):
                     + render(T["layout"]["stale_html"], page_ctx, name) + "</p></div></div>",
             }
             links = language_links(name, lang, langs, site)
-            if head.get("base") or head.get("robots", "").startswith("noindex"):
+            indexed = not (head.get("base") or head.get("robots", "").startswith("noindex"))
+            if not indexed:
                 links["lang_auto"] = ""  # the 404 page stays where the visitor is
+            notes.update(machine_head(page_ctx["page"], T, site, folder, name) if indexed
+                         else {"md_link": "", "jsonld": ""})
             page_ctx["html"] = dict(ctx["html"], **notes, **links)
             page_ctx["content"] = highlight(render(body, page_ctx, folder + name))
             page = render(layout, page_ctx, "_layout.html")
@@ -743,6 +839,11 @@ def build_pages(out, langs, facts, site):
                           page)
             page = relink(page, lang, own_pages)
             write(os.path.join(out, folder, name), page)
+            if indexed:
+                meta = {"title": head["title"], "description": head["description"],
+                        "lang": T["meta"]["hreflang"]}
+                write(os.path.join(out, folder, md_name(name)),
+                      markdown_twin.to_markdown(page, page_ctx["page"]["url"], meta))
             pages.append((folder + name, head))
     if stale:
         print("build.py: note - these translations are older than their English page; they say so "
@@ -853,6 +954,7 @@ def write_meta(out, pages, site):
           f"Sitemap: {base}/sitemap.xml\n")
     # GitHub Pages: serve folders and files as they are, no Jekyll pass
     write(os.path.join(out, ".nojekyll"), "")
+    write_llms(out, pages, site)
 
 
 # ---------------------------------------------------------------- checks
