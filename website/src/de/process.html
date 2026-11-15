@@ -1,0 +1,348 @@
+---
+title: Der Arbeitsprozess: vom ISMS zur geschlossenen Feststellung | JASCON
+description: Wer in einem ISMS auf JASCON was tut, welches Objekt jeder Schritt schreibt und welche Dateien von einer Partei zur anderen gehen. Vom Aufbau des ISMS und der ersten Messung über Plan, Do, Check, Act bis zum Audit und zur Abarbeitung seiner Feststellungen.
+nav: process
+source: b29469ab3dd6
+---
+<section class="page-hero">
+  <div class="wrap">
+    <p class="eyebrow">Der Arbeitsprozess</p>
+    <h1>Wer was tut, vom ersten Risiko bis zur geschlossenen Feststellung</h1>
+    <p class="lede">Ein ISMS läuft im Kreis, und jede Runde hinterlässt Aufzeichnungen. Diese Seite folgt einer Runde durch JASCON: wer handelt, welches Objekt jeder Schritt schreibt und welche Dateien von einer Partei zur anderen gehen. Wo der Kern für einen Schritt nichts vorsieht, sagt die Seite das an diesem Schritt.</p>
+  </div>
+</section>
+
+<section class="section" id="roles">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">01</span> Die Rollen</p>
+      <h2>Neun Rollen, jede durch einen Bezeichner benannt</h2>
+      <p class="lede">Der Kern hat keinen Typ Party. Eine Partei ist eine URI im Namensraum der Organisation, zu der sie gehört, etwa <code>https://cso.example/party/ciso</code>, und sie wird in den Feldern unten genannt. Wo der Kern eine Partei verlangt und keine genannt ist, verweigert die App das Speichern und sagt, welches Feld fehlt.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Rolle</th><th>Meist</th><th>Genannt in</th><th>Schreibt</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Herausgeber</th><td>BSI, NIST, ASD, eine Aufsicht, ein Normungsgremium</td><td>dem Namensraum jeder id, die er veröffentlicht</td><td>Requirement, RequirementSet, Tailoring als Baseline, Mapping, eine Attestation über sein Bundle</td></tr>
+          <tr><th scope="row">Leitung, Risikoeigentümer</th><td>die Geschäftsführung, der Eigentümer eines Prozesses oder einer Pflicht</td><td><code>Risk.owner-ref</code>, <code>Risk.acceptance.approver-ref</code></td><td>die Akzeptanz eines Restrisikos</td></tr>
+          <tr><th scope="row">ISMS-Verantwortliche</th><td>CISO, Informationssicherheitsbeauftragte</td><td><code>provenance.author-ref</code>; <code>Deviation.approver-ref</code> im eigenen Tailoring der Organisation</td><td>Risk, die Skalen, Tailoring als Erklärung zur Anwendbarkeit (SoA), Mapping</td></tr>
+          <tr><th scope="row">Systemverantwortliche, Betrieb</th><td>IT-Betrieb, ein Produkt- oder Plattformteam</td><td><code>obligated-parties</code> einer Aussage; <code>provenance.author-ref</code></td><td>Component, Implementation</td></tr>
+          <tr><th scope="row">Hersteller, vorgelagerter Anbieter</th><td>ein Produkthersteller, ein Cloud- oder Plattformanbieter</td><td>der Herausgeber im Manifest eines Pakets; <code>Component.authorizations</code></td><td>ein Empfehlungspaket; die Autorisierungen, auf die sich eine geerbte Kante stützt</td></tr>
+          <tr><th scope="row">Autor eines Checks</th><td>Security Engineering</td><td><code>Check.provenance.author-ref</code></td><td>Check, mit dem Code seines Kollektors in einer Facette</td></tr>
+          <tr><th scope="row">Prüfer</th><td>interne Revision, ein externer Auditor oder eine Prüfstelle</td><td><code>Assessment.performer-ref</code>; <code>Deviation.approver-ref</code> an einem Finding</td><td>Assessment, Finding</td></tr>
+          <tr><th scope="row">Autorisierende Stelle</th><td>Zertifizierer, autorisierende Stelle einer Behörde</td><td>dem Schlüssel, der den Umschlag signiert</td><td>Attestation</td></tr>
+          <tr><th scope="row">Kunde, Einkäufer</th><td>eine Behörde, ein Kunde, der Einkauf</td><td>nirgends: diese Rolle liest</td><td>nichts; sie führt den Validator über das aus, was sie erhält</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">Eine Person kann mehrere Rollen haben. Der Kern hält sie nach Feld auseinander, nicht nach Person: ein Restrisiko zu akzeptieren ist <code>Risk.acceptance</code>, eine Klausel deswegen abzuschwächen ist eine Deviation, und das sind zwei Handlungen, auch wenn eine Person beide vornimmt (Handbuch <a href="{{ blob }}/jascon/references/ch10-assessment-findings-deviations.md" rel="noopener">§10.6</a>).</p>
+  </div>
+</section>
+
+<section class="section band" id="cycle">
+  <div class="wrap">
+    <div class="split flip">
+      <figure class="reveal">
+        <svg class="graph" viewBox="0 0 640 450" role="img" aria-labelledby="cycle-title cycle-desc">
+          <title id="cycle-title">Der Arbeitsprozess in JASCON</title>
+          <desc id="cycle-desc">Ein Herausgeber und ein Hersteller liefern der Organisation ein Katalog-Bundle und ein Empfehlungspaket. Die Organisation baut ihr ISMS auf: Katalog, Geltungsbereich, Skalen, erste Messung. Dann läuft der Kreis: Plan schreibt Risk und Tailoring, Do schreibt Implementation und Check, Check schreibt Assessment und Finding, Act schreibt Deviations und neue Versionen und führt zurück zu Plan. Aus Check übergibt die Organisation ein Bundle mit einer Attestation an das Audit. Das Audit gibt ein Assessment und Findings zurück, die abgearbeitet werden und in die nächste Runde eingehen.</desc>
+          <defs>
+            <marker id="ph" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+            <marker id="ph-a" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head accent" d="M0 0 10 5 0 10z"/></marker>
+          </defs>
+          <text class="zone" x="30" y="16">Organisation</text>
+          <text class="zone" x="450" y="16">Andere Parteien</text>
+
+          <path class="edge accent" d="M450 53H402" marker-end="url(#ph-a)"/>
+          <path class="edge" d="M110 76V118" marker-end="url(#ph)"/>
+          <path class="edge" d="M190 148H238" marker-end="url(#ph)"/>
+          <path class="edge" d="M320 176V258" marker-end="url(#ph)"/>
+          <path class="edge" d="M240 288H192" marker-end="url(#ph)"/>
+          <path class="edge" d="M110 260V178" marker-end="url(#ph)"/>
+          <path class="edge accent" d="M400 288H448" marker-end="url(#ph-a)"/>
+          <path class="edge accent" d="M530 316V374" marker-end="url(#ph-a)"/>
+          <path class="edge" d="M450 402H110V318" marker-end="url(#ph)"/>
+
+          <text class="elabel accent" x="426" y="45" text-anchor="middle">Bundle</text>
+          <text class="elabel accent" x="424" y="280" text-anchor="middle">Bundle</text>
+          <text class="elabel accent" x="538" y="350">Findings</text>
+          <text class="elabel" x="280" y="394" text-anchor="middle">in die nächste Runde</text>
+          <text class="elabel" x="118" y="102">erste Runde</text>
+
+          <g class="node content"><rect x="30" y="30" width="370" height="46" rx="10"/><text x="44" y="50">ISMS aufbauen</text><text class="sub" x="44" y="65">Katalog, Geltungsbereich, Skalen, erste Messung</text></g>
+          <g class="node content"><rect x="450" y="30" width="160" height="46" rx="10"/><text x="464" y="50">Herausgeber</text><text class="sub" x="464" y="65">Katalog, Empfehlungen</text></g>
+
+          <g class="node"><rect x="30" y="120" width="160" height="56" rx="10"/><text x="44" y="143">Plan</text><text class="sub" x="44" y="160">Risk, Tailoring</text></g>
+          <g class="node"><rect x="240" y="120" width="160" height="56" rx="10"/><text x="254" y="143">Do</text><text class="sub" x="254" y="160">Implementation, Check</text></g>
+          <g class="node"><rect x="240" y="260" width="160" height="56" rx="10"/><text x="254" y="283">Check</text><text class="sub" x="254" y="300">Assessment, Finding</text></g>
+          <g class="node"><rect x="30" y="260" width="160" height="56" rx="10"/><text x="44" y="283">Act</text><text class="sub" x="44" y="300">Deviation, neue Version</text></g>
+
+          <g class="node attest"><rect x="450" y="260" width="160" height="56" rx="10"/><text x="464" y="283">Audit</text><text class="sub" x="464" y="300">Prüfer, Autorisierung</text></g>
+          <g class="node org"><rect x="450" y="376" width="160" height="52" rx="10"/><text x="464" y="397">Abarbeiten</text><text class="sub" x="464" y="413">Maßnahmen, Fristen</text></g>
+        </svg>
+        <div class="graph-legend">
+          <span><i></i>ein Schritt in der Organisation</span>
+          <span class="lg-att"><i></i>außerhalb der Organisation</span>
+          <span class="lg-org"><i></i>die Antwort auf ein Audit</span>
+        </div>
+      </figure>
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">02</span> Der Kreis</p>
+          <h2>Plan, Do, Check, Act und zwei Übergaben</h2>
+          <p class="lede">ISO/IEC 27001 und BSI-Standard 200-1 beschreiben ein ISMS als Kreislauf. JASCON führt den Kreislauf nicht aus. Es gibt jedem Schritt eine typisierte Aufzeichnung, damit der nächste Schritt und die nächste Partei lesen, was der letzte entschieden hat.</p>
+        </div>
+        <ul class="ticks">
+          <li><b>Jede Aufzeichnung hat eine id, eine Version und zwei Digests.</b> Ein geändertes Tailoring ist eine neue Version, keine bearbeitete Datei, und <code>history</code> sagt, warum.</li>
+          <li><b>Jede Entscheidung nennt, wer sie getroffen hat und wann.</b> <code>provenance</code> trägt Autor und Datum; der Validator listet die Aufzeichnungen, die niemanden nennen (AUTHOR-1 bis AUTHOR-4).</li>
+          <li><b>Was zu einer anderen Partei geht, ist ein Bundle.</b> Ein Ordner mit seinen Objekten, einem Inhaltsmanifest, Nachweisdateien, die nach ihrem SHA-256 benannt sind, und, wenn jemand unterschreibt, einer Attestation neben dem Manifest.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="build">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">03</span> Aufbau des ISMS</p>
+      <h2>Fünf Schritte vor der ersten Runde</h2>
+      <p class="lede">Der Aufbau endet mit einer ersten Messung: dem Abstand zwischen dem, was der Katalog verlangt, und dem, was umgesetzt ist. Jede spätere Runde misst daran.</p>
+    </div>
+    <div class="steps">
+
+      <div class="step reveal" id="namespace">
+        <div class="step-body">
+          <h2>Einen Namensraum wählen und die Parteien benennen</h2>
+          <p>Die ISMS-Verantwortlichen wählen ein Präfix unter einer Domain, die die Organisation kontrolliert, und behalten es, zum Beispiel <code>https://grc.your.example/</code>. Die Parteien bekommen Bezeichner darunter: der CISO, die Risikoeigentümer, der Betrieb, die interne Prüfung. Bezeichner werden als Zeichenketten verglichen und nie abgerufen. Geschrieben wird noch nichts; jedes spätere Objekt hängt an dieser Wahl.</p>
+          <p class="small">Wer: ISMS-Verantwortliche. Schreibt: kein Objekt. <a href="{{ blob }}/jascon/references/ch03-identity-versions-lifecycle.md" rel="noopener">Handbuch, Kapitel 3</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="catalogue">
+        <div class="step-body">
+          <h2>Den Katalog übernehmen</h2>
+          <p>Der Katalog des Herausgebers kommt als Bundle: Requirements, RequirementSets für Kapitel und Baselines, Tailorings für seine Varianten, Mappings auf andere Kataloge. Der Validator prüft ihn, bevor etwas darauf gebaut wird, und wo der Herausgeber unterschrieben hat, sagt die Attestation, ob der Inhalt der unterschriebene ist (Full Match oder Semantic Match) oder ob sie nicht bindet. Ein Katalog, den es nur in OSCAL gibt, geht über die Seite Import und ihren Bericht.</p>
+          <p class="small">Wer: ISMS-Verantwortliche, vom Herausgeber. Erhält: ein Katalog-Bundle. App: Übersicht (Home), Import. <a class="link-arrow" href="start.html#open">Die mitgelieferten Kataloge</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="scope">
+        <div class="step-body">
+          <h2>Den Geltungsbereich als System zeichnen</h2>
+          <p>Der Geltungsbereich des ISMS ist eine Component der Art <code>system</code>, deren Mitglieder die Dienste, Software, Hardware, Richtlinien und Prozesse sind, die er umfasst. Ein autorisiertes System nennt seine Autorisierungskontexte an der Component; ein fehlender behauptet nichts. Eine Richtlinie kann als Component der Art <code>policy</code> Mitglied sein; ihr Text bleibt ein Dokument außerhalb des Kerns.</p>
+          <p class="small">Wer: Systemverantwortliche mit den ISMS-Verantwortlichen. Schreibt: Component. App: Umsetzen (Implement). <a href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">Handbuch, Kapitel 9</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="scales">
+        <div class="step-body">
+          <h2>Die Risikoskalen festlegen</h2>
+          <p>Eintrittshäufigkeit, Schadenshöhe und die Matrix, die beide verbindet, sind die der Organisation: so viele Stufen, wie sie verwendet, in ihren eigenen Worten, jede Skala eine kleine Definitionsdatei, die das Bundle pinnt. Der Validator lehnt eine Stufe ab, die eine Skala nicht definiert, und eine Bewertung, die ihrer eigenen Matrix widerspricht, es sei denn, die Bewertung sagt, warum sie abweicht. Das Beispiel-Bundle trägt die Skalen des BSI-Standards 200-3.</p>
+          <p class="small">Wer: ISMS-Verantwortliche, zur Freigabe durch die Leitung. Schreibt: drei Skalendefinitionen. App: Risiko (Risk), Ansicht der Skalen. <a href="{{ tree }}/jascon/examples" rel="noopener">Die Beispielskalen</a></p>
+        </div>
+      </div>
+
+      <div class="step reveal" id="measure">
+        <div class="step-body">
+          <h2>Die erste Messung vornehmen</h2>
+          <div class="step-cols">
+            <div class="stack">
+              <p class="muted">Die erste Messung ist eine Gap-Analyse in Aufzeichnungen. Eine Implementation je Anforderung oder Klausel sagt, wie weit sie umgesetzt ist: <code>planned</code>, <code>partial</code>, <code>implemented</code> oder <code>not-applicable</code>. Ein erstes Assessment hält fest, was tatsächlich vorgefunden wurde, mit einem Finding je Klausel, die nicht erfüllt ist.</p>
+              <p class="muted">JASCON definiert keinen Compliance-Wert. Zählen lassen sich Zustände: Implementations je Status, Ergebnisse der Assessments, Findings je Zustand, die ausgewählten Anforderungen, die kein Risiko begründet. Diese Zahlen sind die Ausgangslage, mit der die späteren Runden verglichen werden.</p>
+            </div>
+            <div class="window">
+              <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">jascon/examples/implementation-acme-konf-14-1-s2.json</span><span class="window-note">ausgearbeitetes Beispiel</span></div>
+              <pre><code data-lang="json">{{ file:jascon/examples/implementation-acme-konf-14-1-s2.json }}</code></pre>
+            </div>
+          </div>
+          <p class="small">Wer: Systemverantwortliche erfassen, eine interne Prüfung prüft. Schreibt: Implementation, Assessment, Finding. App: Umsetzen (Implement), Prüfen (Assess), Validieren (Validate).</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="pdca">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">04</span> Der Kreis in Aufzeichnungen</p>
+      <h2>Was jede Phase schreibt, und wer es schreibt</h2>
+      <p class="lede">Die vier Phasen mit den Aufzeichnungen, die sie hinterlassen, der Seite der App, die sie schreibt, und den Regeln, die sie halten. Risk und Check sind im Release-Kandidaten für 2.0.0.</p>
+    </div>
+    <div class="grid g4 reveal">
+      <article class="card role">
+        <span class="who">Plan</span>
+        <h3>Risiken und die Erklärung zur Anwendbarkeit</h3>
+        <p>Jedes Risk hat ein Szenario, einen Eigentümer, eine Bewertung auf einer benannten Skala, eine von vier Behandlungsoptionen und die Klauseln, die die Behandlung tragen. Das Tailoring wählt die Anforderungen aus und setzt Parameter; es ist die Erklärung zur Anwendbarkeit (SoA). <code>risk-coverage</code> listet jede ausgewählte Anforderung, die kein bewertetes Risiko begründet.</p>
+        <p class="move"><b>Wer, und wo</b>ISMS-Verantwortliche mit den Risikoeigentümern; der Eigentümer akzeptiert das Restrisiko. App: Risiko (Risk), Tailoring (Tailor).</p>
+      </article>
+      <article class="card role">
+        <span class="who">Do</span>
+        <h3>Umsetzungen und maschinelle Prüfungen</h3>
+        <p>Eine Implementation sagt, welche Komponente welche Klausel erfüllt und wessen Aufgabe das ist: <code>provider</code>, <code>customer</code>, <code>shared</code> oder <code>inherited</code>. Eine geerbte Kante nennt die vorgelagerte Autorisierung, auf die sie sich stützt. Die Empfehlung eines Herstellers zählt, sobald eine Implementation sie übernimmt. Ein Check sagt, welche Fakten ein Kollektor meldet und was besteht.</p>
+        <p class="move"><b>Wer, und wo</b>Systemverantwortliche, der Autor des Checks; der Hersteller liefert Empfehlungen. App: Umsetzen (Implement), Prüfungen (Checks).</p>
+      </article>
+      <article class="card role">
+        <span class="who">Check</span>
+        <h3>Prüfungen und Feststellungen</h3>
+        <p>Ein Assessment hält fest, wer was mit welcher Methode wann und mit welchem Ergebnis geprüft hat. Ein maschineller Lauf trägt eine Zeile je Check mit der Beobachtung selbst, und der Validator rechnet jedes Urteil nach. Eine Klausel, die nicht erfüllt ist, wird ein Finding gegen diese Klausel. Eine interne Revision ist ein Assessment, dessen Prüfer intern ist.</p>
+        <p class="move"><b>Wer, und wo</b>Interne Prüfung; Kollektoren laufen außerhalb von JASCON. App: Prüfen (Assess), Validieren (Validate).</p>
+      </article>
+      <article class="card role">
+        <span class="who">Act</span>
+        <h3>Maßnahmen, Abweichungen und neue Versionen</h3>
+        <p>Ein Finding trägt Maßnahmen mit einer Frist, die eine Maschine berechnen kann. Wo eine Klausel mit Absicht nicht erfüllt wird, hält eine Deviation fest, warum und wer sie genehmigt hat. Das Risk bekommt seine Restbewertung, das Tailoring eine neue Version. Der Validator listet jede genehmigte Deviation und jedes Risk, deren <code>review-due</code> verstrichen ist.</p>
+        <p class="move"><b>Wer, und wo</b>Risikoeigentümer, ISMS-Verantwortliche, die Leitung. App: Prüfen (Assess), Risiko (Risk), Tailoring (Tailor).</p>
+      </article>
+    </div>
+    <div class="table-wrap reveal" style="margin-top:32px">
+      <table>
+        <thead><tr><th>Phase</th><th>Aufzeichnung</th><th>Was der Validator verlangt</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Plan</th><td>Risk</td><td>Die Stufe liegt auf der benannten Skala und stimmt mit ihrer Matrix überein. Ein behandeltes oder getragenes Risiko trägt die Akzeptanz des Eigentümers. Nur ein bewertetes oder behandeltes Risiko mit gewählter Option begründet eine Anforderung.</td></tr>
+          <tr><th scope="row">Plan</th><td>Tailoring</td><td>Im Tailoring eines Anwenders braucht eine Lockerung der Modalität oder ein Wechsel zwischen Gebot und Verbot eine festgehaltene Deviation mit einem Genehmigenden. Eine Operation nennt die Aussage, die sie ändert. Mit <code>--require-risk-basis</code> ist eine ausgewählte Anforderung, die kein Risiko begründet, ein Fehler.</td></tr>
+          <tr><th scope="row">Do</th><td>Implementation</td><td>Eine geerbte Kante nennt eine Autorisierung, die es an der vorgelagerten Komponente gibt. Eine übernommene Empfehlung gehört zu einem Produkt, das Mitglied des Systems ist.</td></tr>
+          <tr><th scope="row">Do</th><td>Check</td><td>Fakten sind typisiert, Kriterien verwenden zwölf Vergleicher, verbunden durch ein UND, der Code des Kollektors ist vom Digest des Checks gedeckt.</td></tr>
+          <tr><th scope="row">Check</th><td>Assessment</td><td>Die Methode wird an der Facette gemessen, die sie nennt. Jedes festgehaltene Urteil eines Checks wird aus seiner Beobachtung und dem Parameterwert des Tailorings nachgerechnet.</td></tr>
+          <tr><th scope="row">Check</th><td>Finding</td><td>Eine Frist ist ein Datum, eine verstrichene Dauer oder ein Kalenderzeitraum mit seinem Kalender. Ohne den Kalender wird kein Datum berechnet.</td></tr>
+          <tr><th scope="row">Act</th><td>Deviation</td><td>Einer von fünf Typen, einer von vier Zuständen, ein benannter Genehmigender, sobald genehmigt. Ein verstrichenes <code>review-due</code> wird gemeldet, und nichts wird dadurch abgeschaltet.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source reveal">Managementbewertung: Der Kern hat dafür keine Aufzeichnung. Ihre Eingaben sind die Berichte, die der Validator ausgibt, und die oben gezählten Zustände; ihre Entscheidungen kommen als neue Versionen von Risks und Tailorings zurück. Handbuch <a href="{{ blob }}/jascon/references/ch06-tailoring-without-tears.md" rel="noopener">Kapitel 6</a> (Tailoring), <a href="{{ blob }}/jascon/references/ch09-systems-components-inheritance.md" rel="noopener">Kapitel 9</a> (Umsetzung), <a href="{{ blob }}/jascon/references/ch10-assessment-findings-deviations.md" rel="noopener">Kapitel 10</a> (Risiko, Prüfung, Feststellungen).</p>
+  </div>
+</section>
+
+<section class="section" id="audit">
+  <div class="wrap">
+    <div class="split even">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">05</span> Das Audit</p>
+          <h2>Der Auditor erhält einen Ordner und prüft ihn offline</h2>
+          <p class="lede">Ein externes Audit, eine Zertifizierung oder eine Autorisierung beginnt mit einer Übergabe. Die Organisation gibt ihr Bundle weiter; der Prüfer prüft es auf einem eigenen Rechner, ohne Zugang zu den Systemen der Organisation und ohne Netz.</p>
+        </div>
+        <ul class="ticks">
+          <li><b>Zuerst die Integrität.</b> Der Validator vergleicht beide Digests jedes Objekts mit dem Manifest und beurteilt jede Attestation nach dem, was sie bindet. Der PowerShell-Zwilling tut dasselbe auf einem unveränderten Windows-Rechner.</li>
+          <li><b>Dann die Entscheidungen.</b> <code>--require-risk-basis</code> stellt die Frage von ISO/IEC 27001 6.1.3: welche ausgewählte Maßnahme auf keinem Risiko ruht. <code>--as-of</code> legt das Datum des Audits fest, sodass die überfälligen Überprüfungen die dieses Tages sind. <code>--require-authors</code> macht jede Aufzeichnung, die keinen Autor nennt, zu einem Fehler.</li>
+          <li><b>Dann die maschinellen Urteile.</b> Jedes festgehaltene Urteil eines Checks wird aus seiner Beobachtung nachgerechnet. Eine Nachweisdatei wird über ihren SHA-256 gefunden; eine Rohausgabe, die nach einer Aufbewahrungsregel zurückgehalten wurde, wird als zurückgehalten gemeldet.</li>
+          <li><b>Dann die Deviations, von Hand.</b> Passt der Typ zu den Tatsachen, trägt die Begründung ohne die Besprechung, aus der sie stammt, darf der Genehmigende das genehmigen, führen die Verweise zu Nachweisen, die ein Fremder nachprüfen kann.</li>
+        </ul>
+        <p class="muted">Der Prüfer schreibt ein Assessment und Findings im eigenen Namensraum und gibt sie als Bundle zurück. Die autorisierende Stelle unterschreibt eine Attestation, die die semantischen Digests der Objekte bindet, den Digest des Manifests und den Digest des gerenderten Dokuments, das sie gelesen hat.</p>
+      </div>
+      <div class="stack-lg reveal">
+        <div class="chain-list">
+          <div class="chain-link"><b>Objekte</b><p>Components, Implementations, Risks, das Tailoring, Checks, Assessments mit ihren Zeilen, Findings. Jedes als eine JSON-Datei.</p></div>
+          <div class="chain-link"><b>Inhaltsmanifest</b><p>listet jedes Objekt mit seinem Paket-Digest und seinem semantischen Digest und pinnt die Schemas der Facetten.</p></div>
+          <div class="chain-link"><b>Nachweise</b><p>Dateien unter <code>evidence/sha256/</code>, jede nach dem SHA-256 ihrer Bytes benannt, mit einem Datensatz je Lauf, der die Beobachtung bindet.</p></div>
+          <div class="chain-link"><b>Darstellung</b><p>das Dokument, das ein Mensch liest und unterschreibt, etwa die Autorisierungszusammenfassung des Beispiel-Bundles.</p></div>
+          <div class="chain-link"><b>Attestation</b><p>ein DSSE-Umschlag neben dem Manifest, nie darin gelistet. Sie bindet die Objekte, das Manifest und die Darstellung.</p></div>
+        </div>
+        <div class="window cmd">
+          <div class="window-bar"><span class="window-title">der erste Befehl des Prüfers</span></div>
+          <button class="copy" type="button" data-copy="cmd-audit">kopieren</button>
+          <pre id="cmd-audit"><code data-lang="sh">python jascon/scripts/validate_core.py path/to/received-bundle \
+    --require-risk-basis \
+    --as-of 2026-11-15 \
+    --require-authors \
+    --trusted-keys path/to/trusted-keys.json</code></pre>
+        </div>
+        <a class="link-arrow" href="{{ blob }}/jascon/references/ch11-integrity-attestation-airgaps.md" rel="noopener">Handbuch, Kapitel 11: Integrität, Attestierung, Air Gaps</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="work-off">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-lg reveal">
+        <div class="section-head" style="margin-bottom:0">
+          <p class="eyebrow"><span class="no">06</span> Feststellungen abarbeiten</p>
+          <h2>Eine Feststellung, von Anfang bis Ende</h2>
+          <p class="lede">Das ausgearbeitete Beispiel des Handbuchs: Eine Prüfung eines SaaS findet für die Klausel s2 einer Anforderung keinen Nachweis der Schlüsselrotation. Klausel s1 hat bestanden und wird nicht berührt.</p>
+        </div>
+        <div class="lattice">
+          <span class="chain-label">Finding</span>
+          <div class="chain"><span>open</span><i></i><span>in-remediation</span><i></i><span>closed</span></div>
+          <span class="chain-label">Deviation</span>
+          <div class="chain"><span>investigating</span><i></i><span>pending</span><i></i><span>approved</span></div>
+          <div class="chain"><span>pending</span><i></i><span>withdrawn</span></div>
+        </div>
+        <ul class="ticks">
+          <li><b>Der Prüfer eröffnet das Finding.</b> Gegen die Aussage <code>s2</code>, mit dem Risiko, das sich darin verwirklicht hat, und einer Maßnahme: ein Runbook und Nachweise der Rotation, fällig in zwanzig Arbeitstagen nach einem benannten Kalender.</li>
+          <li><b>Die Organisation antwortet mit Nachweisen.</b> Die Rotation läuft monatlich; der Scanner hat einen Export falsch gelesen. Das ist eine Deviation am Finding, Typ <code>false-positive</code>, mit Verweisen auf die Logs.</li>
+          <li><b>Der Prüfer entscheidet.</b> Die Deviation wird <code>approved</code> unter dem Bezeichner des Prüfers, mit dem Tag der Entscheidung und einem Datum für die nächste Überprüfung. Die Maßnahme und das Finding werden geschlossen.</li>
+          <li><b>Die Aufzeichnung bleibt.</b> Der Auditor des nächsten Jahres, der fragt, warum die Feststellung ohne Behebung endete, liest ein Objekt. Wenn <code>review-due</code> verstrichen ist, listet der Validator die Deviation, bis jemand sie erneuert oder zurückzieht.</li>
+        </ul>
+        <p class="muted">Eine Feststellung, die eine Behebung braucht, läuft andersherum: Die Maßnahme wird erledigt, der Check läuft erneut, und das neue Assessment erfüllt die Klausel. Ein erneuter Lauf eines Checks auf der Seite Prüfen (Assess) ersetzt sein Assessment und entfernt ein Finding, das noch offen ist und nicht mehr zutrifft; ein Finding, das weiterbewegt wurde, bleibt erhalten.</p>
+      </div>
+      <div class="window reveal">
+        <div class="window-bar"><span class="window-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="window-title">jascon/examples/finding-017.json</span><span class="window-note">erfundene Parteien</span></div>
+        <pre><code data-lang="json">{{ file:jascon/examples/finding-017.json }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="hand-overs">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">07</span> Was übergeben wird</p>
+      <h2>Jede Übergabe, mit dem, was der Empfänger prüft</h2>
+      <p class="lede">Innerhalb der Organisation sind die Aufzeichnungen Dateien in einem Repository. Zwischen Parteien reisen sie als Bundles, und der Empfänger prüft sie mit denselben Regeln, die der Absender ausgeführt hat.</p>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>Von</th><th>An</th><th>Was</th><th>In JASCON</th><th>Der Empfänger prüft</th></tr></thead>
+        <tbody>
+          <tr><td>Herausgeber</td><td>Organisation</td><td>den Katalog und seine Baselines</td><td>Bundle aus Requirements, RequirementSets, Tailorings, Mappings; Attestation</td><td>Schema und Kernregeln; beide Digests; ob die Attestation bindet</td></tr>
+          <tr><td>Hersteller</td><td>Organisation</td><td>Härtungsempfehlungen für ein Produkt</td><td>Empfehlungspaket: Components mit Fähigkeiten, ein Manifest, das den Herausgeber nennt</td><td>ADVICE-1 bis ADVICE-11; Herausgeber behauptet, attestiert oder bewiesen</td></tr>
+          <tr><td>Vorgelagerter Anbieter</td><td>Organisation</td><td>die Autorisierung, unter der ein Dienst läuft</td><td><code>Component.authorizations</code></td><td>dass eine geerbte Implementation eine nennt, die es gibt</td></tr>
+          <tr><td>Autor eines Checks</td><td>Betrieb</td><td>eine maschinelle Prüfung</td><td>Check mit dem Code des Kollektors in <code>collector@1</code></td><td>der Digest des Checks deckt den Code, der läuft</td></tr>
+          <tr><td>Betrieb</td><td>Prüfer</td><td>Beobachtungen eines Laufs</td><td>Zeilen eines Assessments, Nachweisdatensätze, Dateien unter <code>evidence/sha256/</code></td><td>jedes Urteil nachgerechnet; jede Datei über ihren Digest gefunden</td></tr>
+          <tr><td>Organisation</td><td>Prüfer</td><td>das ISMS für das Audit</td><td>das ganze Bundle: System, Implementations, Risks, Tailoring, Assessments, Findings</td><td>alles oben Genannte, Risikoabdeckung, überfällige Überprüfungen, fehlende Autoren</td></tr>
+          <tr><td>Prüfer</td><td>Organisation</td><td>das Ergebnis des Audits</td><td>Assessment und Findings im Namensraum des Prüfers; genehmigte Deviations</td><td>dieselben Kernregeln; die Attestation des Prüfers, wo eine unterschrieben ist</td></tr>
+          <tr><td>Autorisierende Stelle</td><td>Kunde</td><td>die unterschriebene Autorisierung</td><td>Attestation über Objekte, Manifest und Darstellung</td><td>Full Match, Semantic Match, oder sie bindet nicht; Signatur unter einem vertrauten Schlüssel</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section band" id="limits">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="eyebrow"><span class="no">08</span> Grenzen</p>
+      <h2>Was diese Seite beschreibt, ist entworfen, nicht im Einsatz gemessen</h2>
+      <p class="lede"><span class="tier tier-designed">entworfen</span> Keine Organisation hat einen vollständigen Kreislauf ihres ISMS auf JASCON durchlaufen. Das Beispiel-Bundle führt eine Anforderung, ein Risiko und eine Feststellung hindurch, mit erfundenen Parteien.</p>
+    </div>
+    <div class="grid g2 reveal">
+      <article class="card">
+        <h3>Nicht im Kern</h3>
+        <p>Der Text der ISMS-Richtlinien und der Beschreibung des Geltungsbereichs, das Protokoll der Managementbewertung, das Auditprogramm und sein Kalender, Schulungsnachweise. Eine Richtlinie kann eine Component der Art <code>policy</code> sein; ihr Text bleibt ein Dokument.</p>
+      </article>
+      <article class="card">
+        <h3>Keine Workflow-Engine</h3>
+        <p>Nichts weist eine Aufgabe zu, verschickt eine Erinnerung oder schaltet einen Zustand von selbst weiter. Ein verstrichenes Überprüfungsdatum wird gemeldet; die Aufzeichnung behält ihre Bedeutung, bis ein Mensch entscheidet. Kein Werkzeug des Repositorys führt einen Kollektor aus.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="cta reveal">
+      <div>
+        <h2>Den Kreislauf am Beispiel-Bundle gehen</h2>
+        <p>Die App öffnet das Beispiel mit seinem Risk, seinen Tailorings, den Implementations, zwei Checks mit ihren Läufen, den Findings und der Attestation. Jede Seite der App ist ein Schritt dieses Prozesses.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="app/index.html#load=../jascon/examples/&amp;tool=risk">Die Seite Risiko (Risk) öffnen <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a class="btn btn-ghost" href="app/index.html#load=../jascon/examples/&amp;tool=assess">Die Seite Prüfen (Assess) öffnen <svg class="arrow" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h9.5M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>

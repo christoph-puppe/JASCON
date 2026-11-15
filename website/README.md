@@ -1,7 +1,7 @@
 # The jascon.net site
 
-The public site of the project: six pages (home, the model, checks, evidence,
-get started, join), a legal notice, and a 404 page, in English and in four
+The public site of the project: seven pages (home, the model, checks, the
+work process, evidence, get started, join), a legal notice, and a 404 page, in English and in four
 translations (German, Hindi, Japanese, Simplified Chinese). It is static, has
 no dependency beyond Python's standard library to build, and sends no request
 to another host when it is read.
