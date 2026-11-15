@@ -184,7 +184,8 @@ PROP_NS = {"modal_verb":CSV+"modal_verbs.csv","action_word":CSV+"action_words.cs
            "threats":CSV+"basethreats.csv","sec_level":CSV+"security_level.csv",
            "effort_level":CSV+"effort_level.csv","tags":CSV+"tags.csv"}
 # The values the publisher's lists hold, read on 2026-11-14 at commit
-# 10f3c22 of BSI-Bund/Stand-der-Technik-Bibliothek: security_level.csv and
+# 10f3c22898a4b15eb95fa228d78654cff32208e4 of
+# BSI-Bund/Stand-der-Technik-Bibliothek: security_level.csv and
 # effort_level.csv under documentation/namespaces/. The pinned taxonomy
 # schema lists exactly these. A control that states another value ends the
 # run: until v0.5 the schema's enum was made from the values the catalogue

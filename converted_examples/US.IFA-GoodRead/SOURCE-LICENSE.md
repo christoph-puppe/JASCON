@@ -1,7 +1,7 @@
 # US.IFA-GoodRead — source and licence
 
 **Source.** the OSCAL "IFA GoodRead" example set (SSP, assessment plan, assessment results, POA&M), the leveraged/leveraging SSP pair and the component-definition example — fictional example content — National Institute of Standards and Technology
-(NIST), published in <https://github.com/usnistgov/oscal-content>. Pinned to commit `9402f031` (2026-07-14).
+(NIST), published in <https://github.com/usnistgov/oscal-content>. Pinned to commit `9402f031489092246f2c27391bad452b85604140` (2026-07-14).
 
 **Licence.** Public domain in the United States as a work of the U.S.
 Government; NIST additionally waives copyright and related rights worldwide

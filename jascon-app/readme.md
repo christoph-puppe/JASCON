@@ -1101,7 +1101,7 @@ strings without a German text. The third rewrites the settings table from
 Five tests of the OSCAL import compare with the publishers' source files,
 which the repository does not carry (`sources/` is ignored); without the
 files they are skipped. The files are the Anwenderkatalog Grundschutz++ of
-2026-07-16 from `BSI-Bund/Stand-der-Technik-Bibliothek` (commit `39a1193`,
+2026-07-16 from `BSI-Bund/Stand-der-Technik-Bibliothek` (commit `39a1193f3d230828ea6614eb20c94a026c9f7df0`,
 `Anwenderkataloge/Grundschutz++/Grundschutz++-catalog.json`) as
 `sources/Grundschutz++-catalog.json`, and from `usnistgov/oscal-content`
 (`nist.gov/SP800-53/rev5/json/`) the catalog and the MODERATE baseline
