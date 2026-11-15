@@ -65,7 +65,7 @@ props that every tool has to learn to find.
 **`label`** exists because all three authorities, independently, maintain
 human display identifiers beside their canonical ones — and two of them
 also maintain *third* schemes, which is what the (optional) `aliases[]`
-field absorbs: 1,219 German `alt-identifier` props, 188 American glossary
+field absorbs: 1,219 German `alt-identifier` props, 190 American glossary
 aliases. Without a sanctioned channel, those props return on day one.
 
 **`statements[]`** is a list even when it holds one entry, because
@@ -75,7 +75,7 @@ a., b., c., an implementation answers them singly, and each of the
 assesses. Each
 statement carries its own **`modality`** — the census's strongest
 three-way convergence (German `modal_verb` ×1,006; the American `force`
-field, distribution MUST 189 / SHOULD 84 / MAY 39 / MUST NOT 11 /
+field, distribution MUST 186 / SHOULD 84 / MAY 38 / MUST NOT 11 /
 SHOULD NOT 5; Australian style-guide prose) — and its own
 **`obligated-parties`**, an array because the American corpus binds
 multiple parties per rule and shared responsibility is how cloud
@@ -112,7 +112,7 @@ verifies every token against a declared parameter, so a slot in the prose
 always names something declared and typed. Lists get the same treatment one
 layer out: the facets that carry the German grammar and taxonomy pin
 schemas that type `tags`, `threat-refs` and `target-object-categories` as
-arrays. That makes the census's ugliest measurement — 781 lists packed
+arrays. That makes the census's ugliest measurement — 799 lists packed
 into comma-separated strings inside schema-valid documents — **visible**:
 a string where the pinned schema wants an array fails. The type algebra
 is deliberately small (strings, integers, canonical decimals, booleans,

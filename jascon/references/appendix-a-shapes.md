@@ -21,7 +21,7 @@ prose here is explanatory, the conformance corpus is definitive.
 | `version` | ● | string | The object's own version; format is the authority's (dates, semver, timestamps, counters all observed). Where a source states a version for the single object, that is it (the ISM's `revision`, ×1,101); where it states none, the object carries the release it was published in (decided 2026-11-14, D27; until then a converted bundle carried the release on every object). |
 | `history` | ○ | [{date ●, comment, ref}] | *(2026-11-14, D27; 2.0.0 content, KERNEL-1.)* The publisher's record of the object's changes, one entry per change, **oldest first** (HISTORY-1). `date` is a day `YYYY-MM-DD` or a month `YYYY-MM` (DATE-6); `comment` is a text; `ref` is a URI. Part of the semantic digest. A validator holds shape and order; it cannot know whether an entry is true. Evidence: ISM `updated` ×1,101 (a month each), CR26 `updated[]` on 291 rules and indicators, 390 entries. |
 | `label` | ○ | string | Human display handle. Evidence: ISM `label` ×49 + 1,101 id-derived; BSI group labels ×162; CR26 rule ids as labels. |
-| `aliases` | ○ | [{scheme, value}] | Other names, with provenance. Absorbs `alt-identifier` (BSI ×1,219 incl. params), FRD `alts` (×188, in-payload). |
+| `aliases` | ○ | [{scheme, value}] | Other names, with provenance. Absorbs `alt-identifier` (BSI ×1,219 incl. params), FRD `alts` (×190, in-payload). |
 | `lifecycle` | ● | code (A → C.2) | draft · active · deprecated · withdrawn. An object in force does not lean on one the bundle holds as withdrawn (WITHDRAWN-1, Chapter 12). |
 | `title` | ○ | text | Display title — `text` = `{BCP-47: string}` (#12 delivered; D9 rev 2: EU standards must be available in all 27 official languages). All kernel human-readable fields (title, rationale, description) are `text`; identifiers and labels stay strings. |
 | `relations` | ○ | [{type, ref}] | Typed outbound links: base codes `related`, `required`, `uses-term`, `reference`, `schema` (C.8; `supersedes` removed v0.6 — backlog #20); extension types SHOULD be namespaced URIs (schema constraint pending the converter rerun that migrates the corpus's bare-word `sharpens` ×28). Evidence: BSI links ×197+67; CR26 `related` ×23, `schema` ×24, `terms` ×222. |
@@ -78,7 +78,7 @@ which direction counts as stricter (deadlines: lower).
 
 | Field | | Type | Meaning & evidence |
 |---|---|---|---|
-| `members` | ● | [{ref ●, sequence ○}] | Refs to Requirements **or Sets** (nesting = taxonomy & composition, D21). Evidence: membership was the #1 prop imitation — ISM applicability ×5,301 + E8 ×256; BSI sec_level ×998; CR26 subsets/classes/types — all now Sets (589 across the three bundles). `sequence` absorbs sort-id ×2,870. |
+| `members` | ● | [{ref ●, sequence ○}] | Refs to Requirements **or Sets** (nesting = taxonomy & composition, D21). Evidence: membership was the #1 prop imitation — ISM applicability ×5,301 + E8 ×256; BSI sec_level ×1,000; CR26 subsets/classes/types — all now Sets (589 across the three bundles). `sequence` absorbs sort-id ×2,870. |
 
 Sets-of-sets composition measured live: CR26 class Sets (a–d) and
 track Sets (20x/Rev5) are built purely from subset-Set members.

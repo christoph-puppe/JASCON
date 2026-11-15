@@ -116,7 +116,7 @@ no evaluation, which is why Core can run it.
 **Rationale:** a token is a contract or it is a defect; this
 primitive is the eyes. A slot in prose that names nothing has no
 value to insert, no type to check and nothing to tailor. The German
-catalog does this right in its own notation: its 221 insertions all
+catalog does this right in its own notation: its 224 insertions all
 name declared parameters, and its sentence template marks the same
 slots as `{{Label}}`, each where the prose inserts the parameter.
 **Failure:**
@@ -127,7 +127,7 @@ FAIL [prose-params-resolve] <req>/<statement>
   has no value, no type and nothing to tailor.
 ```
 **Exercised:** at scale (converter token conversion in every corpus;
-the BSI run binds all 221 parameters); the negative cases are the
+the BSI run binds all 224 parameters); the negative cases are the
 conformance corpus's.
 
 ### 6 · `modality-monotonic` — *P+*

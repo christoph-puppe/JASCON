@@ -43,7 +43,7 @@ Note the passenger: the template's parameter slot
 published, while the prose binds the same parameter as a token; the
 converter checks that the slot stands where the prose inserts it
 (§14.5). **Absorbs:** modal_verb/action_word/result/… ×~4,000 grammar
-props. **Status:** high confidence; exercised at 1,015 statements.
+props. **Status:** high confidence; exercised at 1,000 statements.
 
 ## D.2 `security-objectives@1`
 
@@ -77,7 +77,7 @@ metadata). **Field sample** (CR26, FRD-IIR):
   customers, ...", "tag": "Incident",
  "aliases": ["initial incident report", "IIR", ...]}
 ```
-**Absorbs:** 75 FRD terms, 188 aliases; `uses-term` relations ×264
+**Absorbs:** 81 FRD terms, 190 aliases; `uses-term` relations ×789
 point in. **Hosting rule (decided at gate 2, backlog #6):** the glossary is
 hosted on a **Set** — typically the corpus root — whose identity,
 version, and lifecycle govern it; a dedicated carrier was rejected via

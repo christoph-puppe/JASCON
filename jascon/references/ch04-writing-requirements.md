@@ -40,7 +40,7 @@ corpus answers statement by statement, and SP 800-53A hangs each of its
 tell the same story in their own accent: statements that vary by
 certification class, and `following_information` bullet lists that are
 really enumerable sub-obligations. Meanwhile the Australians write one
-statement per control, 1,150 times, and the Germans 999 times, and that
+statement per control, 1,150 times, and the Germans 1,000 times, and that
 is *also* correct — for their content.
 
 > **Corrected 2026-11-14.** Earlier editions drew this lesson from
@@ -119,7 +119,7 @@ with `should` and `must`). German normative drafting has distinguished
 these for decades; this is the first encoding a validator can check.
 
 **The American distribution is your health chart.** CR26's `force` field,
-across 328 occurrences: **MUST 189 · SHOULD 84 · MAY 39 · MUST NOT 11 ·
+across 324 occurrences: **MUST 186 · SHOULD 84 · MAY 38 · MUST NOT 11 ·
 SHOULD NOT 5.** Read it as editorial guidance: prohibitions are rare and
 precious (5 % of the corpus); a healthy framework keeps real room in
 `should` and `may` — a catalog that is wall-to-wall MUST is usually a
@@ -254,7 +254,7 @@ lint. The German catalog shows the same idea in its own notation: its
 sentence template marks the parameter slot of a `result` or
 `result_specification` prop as `{{einem anerkannten Standard}}`, the label
 of the parameter that the statement prose inserts at the same place. All
-221 such slots in the catalogue of 16 July 2026 stand where the prose
+224 such slots in the catalogue of 29 October 2026 stand where the prose
 inserts a parameter. They are parameters, and the statement model keeps
 them parameters: the prose cites each as a bound token, the grammar facet
 carries the template as published, and prose that names an undeclared
@@ -263,8 +263,8 @@ parameter does not validate. Multilingual authoring falls out for free
 renders MUSS or MUST as display, and the machine-readable truth is
 identical in every language.
 
-> **Don't** pack a list into a string. Measured cost: 781 values in one
-> professionally authored national corpus — 125 `tags`, 616 `threats`, 40
+> **Don't** pack a list into a string. Measured cost: 799 values in one
+> professionally authored national corpus — 125 `tags`, 635 `threats`, 39
 > target object categories — that every reader must know to split on the
 > comma and that no validator can check against their vocabulary, inside
 > documents every tool certified as flawless.

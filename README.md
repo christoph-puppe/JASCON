@@ -370,7 +370,7 @@ side of that paradox:
   program the standard was co-designed with, in the year machine-readability
   became its central theme.
 - **Valid and meaningless are compatible states.** The German Grundschutz++
-  catalogs carry **12,059 namespace-qualified props** whose "schema" is a set
+  catalogs carry **12,096 namespace-qualified props** whose "schema" is a set
   of CSV files behind mutable links. Inside them, **125 of the 470 `tags`
   values** pack several vocabulary terms into one comma-separated string
   (`"Data Leak, Shadow IT"` in ASST.3.11), and two thirds of the `threats`
@@ -552,9 +552,9 @@ changes forced):
 
 Each conversion ships a computed coverage report that declares every rule with
 counts and **reports source defects rather than repairing them** — the BSI run
-reports the 781 list values the GS++ catalog packs into single comma-separated
-strings (125 `tags`, 616 `threats`, 40 `target_object_categories`) for the
-authors' queue, and checks each of its 221 `{{…}}` sentence-template slots
+reports the 799 list values the GS++ catalog packs into single comma-separated
+strings (125 `tags`, 635 `threats`, 39 `target_object_categories`) for the
+authors' queue, and checks each of its 224 `{{…}}` sentence-template slots
 against the prose: all stand where a parameter is inserted, so they are
 parameters (until 2026-11-12 the converter miscounted them as 213 defects;
 erratum in the [register](drafts/jascon-decision-rationale-register.md));

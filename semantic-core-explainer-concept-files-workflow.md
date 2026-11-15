@@ -182,7 +182,7 @@ chrome).
 The old model spent its complexity budget on infrastructure — a
 meta-language, eight deep document models, a resolution algebra —
 and disclaimed meaning; the measured result was 22,000+ annotation
-props across three national corpora, 781 lists packed into single
+props across three national corpora, 799 lists packed into single
 strings inside schema-valid documents, and a flagship program routing around the
 standard entirely. This architecture inverts the spend: boring
 infrastructure (one serialization, shallow objects, a half-page

@@ -63,7 +63,7 @@ catalogs use, as their `ns` values, GitHub file paths of the form
 `…/tree/main/Dokumentation/namespaces/<file>.csv` — mutable branch
 locators pointing at spreadsheet files. Every repository reorganization,
 rename, or branch policy change silently breaks the identifier layer
-under **12,059 prop instances**. And the cautionary tale that should hang
+under **12,096 prop instances**. And the cautionary tale that should hang
 over every prefix decision: the authoritative registry of FedRAMP's own
 OSCAL extensions — the canonical definition of a national program's
 vocabulary — was **deleted along with its repository** in 2025. This
@@ -71,7 +71,7 @@ project recovered it only from a surviving fork. When the flagship's own
 definitions cannot keep a stable address, "just link to it" is exposed
 for what it is.
 
-> **Don't** use a locator as an identifier. Measured cost: 12,059
+> **Don't** use a locator as an identifier. Measured cost: 12,096
 > instances bound to mutable file paths in one national corpus, and one
 > national extension registry unreachable at its published address. An
 > id must outlive the server, the repository, the org chart, and — per
@@ -189,7 +189,7 @@ identifier — `KONF.14.1`, `ISM-1234` — the thing auditors say out loud.
 organization maintains, and the census says you maintain more than you
 think: the German corpus carries **1,219** `alt-identifier` props
 (internal UUIDs) plus a parallel `VER.x` numbering; the American glossary
-carries **188** alias entries; the Australians keep legacy ISM numbers
+carries **190** alias entries; the Australians keep legacy ISM numbers
 beside new-style labels. Give each scheme a name and a home:
 
 ```json
