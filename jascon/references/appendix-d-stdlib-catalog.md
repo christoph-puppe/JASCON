@@ -222,7 +222,8 @@ looked for and did not find is left out; a collector that could not
 look prints nothing. Credentials and target inventory never appear
 here: they are the runner's configuration.
 **Open:** the `source` of an `http-api` collector is free text, which no
-tool can execute as it stands (backlog #62).
+tool can execute as it stands (issue 37 of the repository's tracker;
+backlog #62 was moved there on 2026-11-15).
 
 ## D.7 `system-context@1` — *medium confidence*
 

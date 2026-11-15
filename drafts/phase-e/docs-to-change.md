@@ -138,3 +138,18 @@ proposal, and #89, both for the author.
 | Reader | 1.21.0; the screenshot in `docs/img/` taken again | done |
 | Website | no page names the rules; `facts.json` measured after the commits | done with the last commit |
 | Register, backlog, plan, decisions | the author's word; #96 closed; #71 points 13 and 14 | done |
+
+## The backlog closed before the tag (2026-11-15: backlog #62, #71, #79, #91)
+
+| Where | What | State |
+|---|---|---|
+| Specification | the banner (one sentence); IV.6 (one row); IV.9 (issue 37 for the request format; the note on the round). No decision, no rule, no vector | done |
+| Handbook | C.15 and D.6 name issue 37; the CR26 figures in appendix A, C, E.4 and G and in chapters 3 and 6 are those of publication 2026.11.02.01; chapter 1 keeps its dated figures | done |
+| README | the reader's version under the screenshot, and what stage 5 shows | done |
+| `jascon/SKILL.md` | names no open backlog item, no reader version and no CR26 figure | nothing to change |
+| `validate_core.py`, `validate_core.ps1` | no rule changed | nothing to change |
+| App `readme.md`, `PROGRESS.md` | build 0.9.24 | done |
+| Reader | 1.22.0; the screenshot in `docs/img/` taken again | done |
+| Website | the third verdict in five languages, stamped; `i18n/TRANSLATING.md`; `facts.json` measured after the commits | done with the last commit; Hindi, Japanese and Chinese wait for a second reader |
+| Workflow | the comment of the step that runs the four conversions again | done |
+| Register, backlog, plan, decisions | the author's words; #62 moved; #71, #79 and #91 closed; #97 filed | done |

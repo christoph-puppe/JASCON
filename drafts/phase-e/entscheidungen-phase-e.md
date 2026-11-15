@@ -704,3 +704,87 @@ dem Tag in allen drei Validatoren ablehnen. Die Antwort, wörtlich:
   Operation durch.
 - Nicht geändert: CHECK-12 liest ein `set-parameter` ohne `statement-id`
   weiter als gebunden. Ein solches Bundle fällt jetzt vorher durch.
+
+## Das Backlog schließen vor dem Tag (2026-11-15, letzte Runde)
+
+Gefragt, womit es weitergeht, der Autor, wörtlich:
+
+> Ich würde gerne das backlog schließen bis 2.0.0
+
+Offen waren #62, der Rest von #71 und von #79 und #91, mit den drei
+am selben Tag gemessenen Reader-Befunden (#71, 15 bis 17) 22 Punkte.
+Vorgelegt: zwölf Punkte zum Bauen, wie ihre Zeile es vorschlägt, und
+zehn Entscheidungen mit je einer Empfehlung. Die Antwort, wörtlich:
+
+> #62 move to issue for the whole feature of API based automated
+> assessments
+>
+> Rest wie vorgeschlagen
+
+1. **#62:** Nicht wie empfohlen (`http-api` aus der Codeliste nehmen),
+   sondern verschoben: Issue 37 des Trackers trägt das ganze Feature
+   der API-basierten Prüfungen. `collector@1` bleibt, wie es ist.
+2. **#71 (2):** Die App nennt vor dem Speichern eines Checks die
+   Assessments, die ihn ausgeführt haben, und fragt nach. Kein
+   „als neue Version daneben speichern".
+3. **#71 (9):** Der Reader prüft die Pflichtfelder einer Attestation
+   von Hand; eine Datei ohne sie zeigt er nicht als Attestation.
+4. **#71 (10):** Die Website nennt in fünf Sprachen kein drittes
+   Urteil mehr. Hindi, Japanisch und Chinesisch liest der Autor gegen.
+5. **#71 (11):** Die App bietet das Herausnehmen einer gelisteten
+   Attestation als ausdrückliche Aktion an und sagt, was das mit der
+   Bindung macht.
+6. **#71 (12):** ADVICE-1 bis ADVICE-3 sind in den Reader portiert.
+7. **#71 (15):** Zurückgezogene Anforderungen bleiben aus dem
+   aufgelösten Paket, mit Zahl.
+8. **#71 (17):** Nur der Reader nennt eine Operation auf etwas
+   außerhalb des Geltungsbereichs; keine Regel in den Validatoren.
+9. **#79 (1):** Ohne Änderung geschlossen; die Quellen der fünf
+   Berichte liegen nicht im Repository.
+10. **#91 (6):** Ohne Änderung geschlossen; der Konverter erklärt den
+    Satz als eigene Regel.
+
+Die zwölf Punkte ohne Wahl: #71 (1), (3), (4), (6), (7), (8), (16);
+#79 (4), (6), (7), (8); #91 (3), (5).
+
+### Was beim Bauen anders kam als vorgelegt
+
+- **#62:** Es gab das Issue schon (Nr. 37, vom 2026-11-13). Es ist
+  kein neues angelegt; die Backlog-Zeile verweist darauf.
+- **#71 (3):** Derselbe verlorene Klick steckte in den Suchfeldern
+  dreier Workbenches. Gemessen am Reader 1.21.0, im selben Zug
+  behoben, mit Test. Vorgelegt war nur der Tailor-Workbench.
+- **#71 (6):** Angekündigt war die Uhrzeit, gebaut ist ein Zähler; die
+  Zeile erlaubt beides. Nicht vorgelegt war die Folge: Noch einmal
+  erzeugen überschreibt eine Prüfung nicht mehr, eine korrigierte
+  steht neben der ersten, und der Reader kann Verfasstes nicht
+  löschen. Abgelegt als #97.
+- **#71 (4):** Hält das geladene Bundle ein Objekt gleicher Id, wird
+  das des Bundles gezeigt. Die verfassten Objekte bleiben auch dann im
+  Graphen, wenn das Bundle wegen KERNEL-2 nicht gelesen wird.
+- **#79 (6):** Die Zahl der Zitate ist 14, wo sie 21 war. Gezählt wird
+  in den Objekten, die die Manifeste von vier benannten Bundles
+  listen. Die sieben weggefallenen kamen aus Dateien, die getragene
+  Kopien eines Controls nur auflisten.
+- **#79 (7):** Außer den zwei genannten Zahlen (373, 7.294) standen im
+  Handbuch weitere Juli-Zahlen. Kapitel 6 und Anhang E.4 sind
+  nachgezogen; Kapitel 1 behält seine, weil sein Kopf sie auf Juli
+  datiert.
+- **#79 (8):** Kurz war nur die IFA-Liste in ihrer Basis; drei weitere
+  Listen nannten ihren Commit im Fließtext kurz. Alle vier nennen ihn
+  jetzt voll, jede Id ist an einer geholten Datei bewiesen.
+- **#71 (1):** Der verlorene Klick der App hat zwei Ursachen. Die
+  Zeile nennt zwei Mittel (den Wert beim Klick nehmen; nicht neu
+  zeichnen, solange ein Feld den Fokus hat); keines erreicht einen
+  Knopf, der noch gesperrt ist, weil das Formular den Wert nicht hat.
+  Gebaut ist: Das Neuzeichnen wartet, und der Klick wird danach an
+  dasselbe Bedienelement des neuen Formulars weitergegeben.
+- **#71 (2):** Die Nachfrage ist der Dialog des Browsers. Genannt
+  werden nur Assessments, deren Ergebnis den gespeicherten Digest
+  festhält.
+- **#71 (11):** Die Aktion markiert den Datensatz; das Manifest im Set
+  bleibt, der Export schreibt das neue. Es gibt kein Rückgängig außer
+  dem erneuten Laden.
+- **Neu abgelegt, #97:** neun Punkte, die beim Bauen aufgefallen und
+  nicht geändert sind. Sie stehen im Register unter „Found and not
+  changed".

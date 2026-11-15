@@ -721,6 +721,37 @@ and in `readme.md`; this file says only what is done and what is next.
   `statement-id` on every such operation (read in `tailor.html` and
   `jascon-oscal.js`; the suite's exports pass the reference).
 
+- The four open defects of backlog #71 (build 0.9.24; points 1, 2, 8
+  and 11, decided by the author on 2026-11-15).
+  (1) A click right after typing is not lost. Measured on build 0.9.23:
+  on the Tailor page a parameter value typed and "Add the operation"
+  pressed left 0 operations, the second press 1. Two causes: a form
+  that drew itself again on the field's change replaced the button
+  under the press, or the button was still disabled because the form
+  did not have the value yet. A redraw asked for by a field's change
+  goes through `jscRedraw` (`jascon-core.js`): under a press it waits,
+  then the form is drawn with the value and the click goes to the same
+  control of the new form, if that is there and enabled. Routed: the
+  Tailor workbench, the Checks editor with its tester, its list filter
+  and its drafting view, the Risk form, the scale editor, the options
+  of the Import page and the key field of the model access.
+  (2) Before a save that changes the digest of a Check, the Checks page
+  names the Assessments whose results recorded the stored digest
+  (CHECK-8) and asks; cancelling writes nothing. Measured before: the
+  save said nothing, and the reference failed the export twice.
+  (8) From a URL the server is asked once for the folder of every
+  bundle, as the reader does. A page counts as a listing only when it
+  links `content-manifest.json`. Measured on the IFA bundle: 16 objects
+  and no Attestation before; 17 and a FULL MATCH on a server that lists
+  the folder; on one that lists nothing the hub says so.
+  (11) Where a manifest lists an Attestation (MANIFEST-1), Validate and
+  Assess offer to take it out of the list and say what the binding is
+  after that. The act marks the record; the export then writes a new
+  manifest and puts the file beside it. Measured: the reference passes
+  the export, where it failed the set as loaded.
+  197 tests of the app's suite pass. Not built, by decision: saving a
+  Check as a new version beside the old one.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written

@@ -43,6 +43,12 @@
 > statement names it, and a `set-parameter` names a parameter that
 > statement declares (D13, OPERATION-1, backlog #96). This can fail a
 > bundle that passed.
+> In the last round of that day the open backlog was closed on the
+> author's word. Nothing in this text's shapes and rules changed by it:
+> the app and the reader, the converters' reports and records, figures
+> of the handbook and the wording of the website did (IV.6). The request
+> format of an `http-api` collector is issue 37 of the repository's
+> tracker now, with the whole of API-based checks.
 > No new candidate was cut: the file keeps its name until the author
 > names the next one.
 
@@ -2654,6 +2660,7 @@ history. The compact line:
 | Grundschutz++ on the publisher's catalogue of 2026-10-29; one typed taxonomy schema; every path map held against its record | 2026-11-14 | The author's answers to five questions ("1 ja, 2 ja, 3 ja, 4 jetzt, 5 ja"). No shape of the kernel changes and no vector. The Grundschutz++ bundle is converted from the catalogue of 2026-10-29 (1,000 Requirements, 289 Sets); its taxonomy facet has one schema, version 1.1.0, typed with the publisher's two security levels and an effort of 0 to 5, which the example folder pins as well (backlog #94). The converter library holds each converter's path map against the record of its run, outcome and place, in all six converters with a ledger (backlog #89). Found on the way: the publisher had renamed the namespaces of its props, and the converter of that morning ran on the new catalogue with exit code 0, read no prop and left every statement `unspecified`, with a ledger of 0 unaccounted; the converter and the app's preset end such a run now. Six ledgers: 214,455 values, 0 dropped, 0 unaccounted | register, "The last round of the day" · handbook §7.3 |
 | A pin's version is three numbers of the number domain | 2026-11-15 | Backlog #72, built on the author's word ("alle wie vorgeschlagen"). Composition (D3.5) compares the three numbers of a pin's version, and the three hosts read a long number three ways: the reference exactly, the twin in 32 bits, the app inexactly beyond 2^53. Each number is at most 2^53 − 1 now, asked of its digits before anything is converted; a larger one makes the pin a non-semver pin, which composition reports. `composition` 9 → 11 vectors, 785 in all. No shape changes, and no committed pin has such a version. The same word covered two things outside the kernel: the CR26 converter ends a run on a force word it does not know and writes nothing into the repository (backlog #79, points 3 and 5), and the reader (1.20.0) writes no resolved package while a Tailoring holds an operation the page does not apply (backlog #71, point 5) | "After the last round — #72, #79 and #71" |
 | An operation names the statement it changes | 2026-11-15 | Backlog #96, found while the reader was held to its operations and decided by the author ("Do it"). **OPERATION-1** (D13), an error: a `set-modality`, a `set-parameter` and a `replace-prose` carry a `statement-id`, and a `set-parameter` names a parameter that statement declares. The handbook's appendix A had asked for the `statement-id` since 2026-07-22 and nothing held it; without one, the modality order and the check of a value against its declaration asked nothing. `reference` 41 → 56 vectors, 800 in all. In the reference, the twin, the app (0.9.23) and the reader (1.21.0). No shape changes. A bundle that passed can fail; none of the committed ones does, and the 128 such operations of the earlier vectors all name a statement. With it, the reader's resolved scope follows D13: an exclude that names a Set removes its members, and a select by predicate is said not to be resolved (backlog #71, points 13 and 14) | "OPERATION-1 and the reader's resolved scope" |
+| The backlog is closed | 2026-11-15 | The author wished the backlog closed before 2.0.0 and took what was proposed for its 22 open points ("Rest wie vorgeschlagen"), but for #62, which moved to issue 37 of the tracker. No decision, no shape, no rule and no vector changes: 800 vectors in 18 families. Reader 1.22.0: a typed value is not lost to the button pressed next; authored objects stay across a load; a second check on a day is a second Assessment; stage 5 shows Risks; a file is an Attestation only with the members the kernel requires; ADVICE-1 to ADVICE-3 are ported; a resolved package leaves out a withdrawn Requirement and names an operation outside its scope. App build 0.9.24: the four open defects of #71. Website: no third verdict beside the two states of D7. Converters: the CR26 report prints its counters; the SP 800-53 citations are counted in four named bundles (14, where 21 were counted with files that only list carried copies); a record by path names the type of the object; the source lists name whole commit ids. Handbook: the CR26 figures are those of publication 2026.11.02.01. Register, "The backlog closed before the tag". |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2872,7 +2879,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
 7. **Not part of this candidate, named so that nobody reads it as more
    than it is** — a runner that executes collectors and writes evidence;
    a declared request format for `http-api` collectors in `collector@1`
-   (#62); a census of checks against cloud APIs; a census of OSCAL
+   (issue 37 of the repository's tracker, where backlog #62 was moved on
+   2026-11-15 with the whole of API-based checks); a census of checks
+   against cloud APIs; a census of OSCAL
    component definitions vendors published (NIST's own examples are
    counted, `drafts/cp-advice-1-census/`).
 8. **Tag `v2.0.0`** — on the author's go. Nothing in this list blocks it.
@@ -2895,4 +2904,8 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    way, was decided at once ("Do it") and is built: an operation that
    changes a statement names it (D13, OPERATION-1). So are points 13 and
    14 of #71, the scope of the reader's resolved package. Open: #62, the
-   rest of #71 and #79, #91.)*
+   rest of #71 and #79, #91. In the last round of the day the author
+   wished the backlog closed before the tag: #62 moved to issue 37 of the
+   tracker, and the rest of #71, #79 and #91 is built or closed with its
+   reason, as proposed. Filed in that round, as #97: what was found
+   while building and not changed.)*

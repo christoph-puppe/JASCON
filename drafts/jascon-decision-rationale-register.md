@@ -5058,3 +5058,228 @@ deliberate defects in the page turn these tests red.
 
 *Not built:* resolving a predicate. The reference does not either: it
 calls such a selection open and counts a lower bound.
+
+## The backlog closed before the tag *(2026-11-15; closes #62, #71, #79, #91; no new candidate)*
+
+### What the author decided
+
+The author wished the backlog closed before 2.0.0. Open were #62, the
+rest of #71 and of #79, and #91: 22 points with the three found on the
+day (#71, points 15 to 17). Proposed: twelve to build as their rows
+say, and ten decisions with a recommendation each. The answer:
+
+> #62 move to issue for the whole feature of API based automated
+> assessments
+>
+> Rest wie vorgeschlagen
+
+No shape, no rule and no vector of the specification changes: 800
+vectors in 18 families, as before. What changed is tools, the reports
+and records of the converters, figures of the handbook and the wording
+of the website.
+
+### #62: moved to the tracker
+
+Proposed was to take `http-api` out of the code list of `collector@1`
+until a runner comes. The author moved the question instead: issue 37
+of the repository's tracker (opened 2026-11-13) holds the whole of
+API-based checks: a declared request format, the editor, drafting with
+a model, a try in the browser, a worked example and a census of a cloud
+corpus. `collector@1` is unchanged, and `http-api` stays in its code
+list with a `source` of free text. The handbook (C.15, D.6) and IV.9
+name the issue. No new issue was opened.
+
+### The reader, 1.22.0 (#71, points 3, 4, 6, 7, 9, 12 and 15 to 17)
+
+- **(3) The lost click.** A text field of the Tailor workbench redrew
+  the workbench when it lost the focus to the button pressed next, and
+  the button was replaced under the pointer. The value is taken at once
+  and the redraw waits until the pointer is up; where the press itself
+  redrew, the waiting redraw is dropped. *Measured* on 1.21.0: a
+  parameter value typed and "Add operation" pressed left 0 operations.
+- **(4)** What was written in a workbench stays in the graph across a
+  load, also where the bundle is not read (KERNEL-2). Where the loaded
+  bundle holds an object of the same id, the bundle's object is shown,
+  the authored one stays stored, and the console says so.
+- **(6)** A second check on the same day is a second Assessment
+  (`check-<day>-2`) with Findings of its own; the first keeps its id.
+- **(7)** Stage 5 shows every Risk: state, level and residual level,
+  the treatment decided, the requirements that carry it, the author.
+- **(9)** A file the manifest does not list is read as an Attestation
+  only with the members the kernel requires of one (the `required` of
+  `base` and of `attestation`, and at least one subject). Otherwise the
+  overview names the file and what it lacks, as the reference does not
+  read it. The page still runs no kernel schema and says how far its
+  check goes.
+- **(12)** ADVICE-1 to ADVICE-3 are ported from `pack_errors`, in the
+  reference's order and words; what a pinned facet declares is read
+  from its file. The overview row is titled for a listed Attestation
+  too. At 1,000 px the pill takes two lines and keeps "(MANIFEST-1)".
+- **(15)** A withdrawn Requirement that a selected Set lists is left
+  out of the resolved scope and of the package, and the preview says
+  how many, as the reference's risk-coverage does.
+- **(16), (17)** An operation on a Requirement outside the scope is
+  named as not applied, with the reason, is no error and is not counted
+  as modified. No validator has a word for such an operation; the
+  author decided against a rule for it.
+
+*Measured:* the eight new tests and the two adapted ones are red on
+reader 1.21.0 and green on 1.22.0. The 15 pack vectors give the rules
+they expect from the page's own function, and Python's `pack_errors`
+gives the same messages on the same objects.
+
+### What came out differently in the reader
+
+- **The lost click was in the search fields too.** *Measured* on 1.21.0
+  in the Assess workbench: an answer pressed 200 ms after typing into
+  the search and held 150 ms was not recorded, because the delayed
+  redraw replaced the button. Closed there and in the two other search
+  fields that redraw, with the same means, and held by a test.
+- **(6) is a counter, not a time.** The row allows either; a counter
+  keeps the id of a day's first check as it was. The consequence was
+  not in what was put to the author: generating again no longer
+  rewrites a check, so a corrected check stands beside the first, and
+  the reader cannot remove an authored object. A Finding is never
+  rewritten, and the note that an unchanged one keeps its author is
+  gone for Findings. Three older tests had said that a second check
+  replaces the first; they say now what the page does. Filed as #97.
+- **A variable shadowed another** in the first version of the resolved
+  scope and broke the preview for a Tailoring with an operation outside
+  its scope. A test showed it before the commit.
+
+### The app, build 0.9.24 (#71, points 1, 2, 8, 11)
+
+Built by an agent in a worktree and read by the lead; the app's suite
+was run again after the commit was taken.
+
+- **(1) The lost click.** *Measured* on build 0.9.23, with real keys
+  and a real press: on the Tailor page 0 operations after the first
+  press and 1 after the second. Two causes: a form that drew itself
+  again on the field's change replaced the button under the press, and
+  a button that was still disabled, because the form did not have the
+  value yet, got no click. The backlog's own case is the second. A
+  redraw asked for by a field's change now goes through `jscRedraw`:
+  under a press it waits, then the form is drawn with the value and
+  the click goes to the same control of the new form, if that is there
+  and enabled. The same loss was measured and closed in the Checks
+  editor and list, the Risk form, the scale editor and the Import page.
+- **(2)** Before a save that changes the digest of a Check, the Checks
+  page names the Assessments whose results recorded the stored digest
+  and asks; cancelling writes nothing.
+- **(8)** From a URL the server is asked once for the folder of every
+  bundle. *Measured* on the IFA bundle: 16 objects and no Attestation
+  before; 17 objects and a FULL MATCH on a server that lists the
+  folder.
+- **(11)** Where a manifest lists an Attestation, Validate and Assess
+  offer to take it out of the list and say what it binds after that.
+  The act marks the record; the export writes a new manifest and puts
+  the file beside it. *Measured:* the reference passes that export
+  (18 pass, 0 fail) where it failed the set as loaded (MANIFEST-1).
+
+*Measured by the agent:* fourteen deliberate defects in copies (seven
+for the click, two for the question, two for the folder, three for
+the move), each turning a test red. *Choices the author did not make:* the click is
+handed on as a click the page makes itself, because neither means the
+row names (take the value on the click; do not redraw while a field
+has the focus) reaches a button that is still disabled; the question
+of (2) is the browser's own dialog; (11) is a mark on the record and
+has no undo but loading the bundle again.
+
+### The website (#71, point 10)
+
+The home page, the model page and the demo named a third verdict,
+"Tamper", in five languages. They now say what D7 says: a subject that
+differs or is absent does not bind; that is a failure, not a third
+state, and it fails the bundle while the Attestation is `active`. The
+four translations are changed, checked for structure and stamped.
+*Not done:* the Hindi, Japanese and Chinese wording has had no second
+reader.
+
+### The converters (#79, points 4, 6, 7, 8; #91, points 3, 5)
+
+Built by an agent in a worktree and read by the lead; the eight
+converter tests were run again after the commits were taken.
+
+- **#79 (4)** The CR26 report prints its two lines on the Rev 5 overlay
+  and its line on the pinned schemas from counters. *Measured:* of 21
+  ODP assignments 16 are operations of the Tailoring and 5 stand in the
+  parked payload; of the pinned schemas 2 are stubs, where the report
+  had counted the standard library's and the carried ones among them.
+- **#79 (6)** The SP 800-53 report counts citations in the objects
+  that four named bundles list (ISM, Grundschutz++, CSF, IFA). **The
+  count is 14 where it was 21:** all 21 came from the IFA folder, 14
+  from objects and 7 from files that list the carried copies of a
+  control (the manifest, a coverage report, the Attestation). What
+  else lies under `converted_examples/` no longer changes it.
+- **#79 (7)** The handbook's two figures of the July publication are
+  those of publication 2026.11.02.01 of 2026-11-02: 652 Mappings (558
+  from links of KSIs, 94 from links of rules) and 7,532 leaf values.
+  Chapter 6 (28 variant-only rules, 107 modality moves) and the
+  specimen of appendix E.4 follow. Chapter 1 keeps its figures: its
+  header dates them to the corpus versions of July.
+- **#79 (8)** Four source lists name their commits by all 40
+  characters. Each id is proved: files fetched at the full id have the
+  digests the list pins. One id of the Grundschutz++ list is proved
+  against the digest the list pinned at an earlier commit.
+- **#91 (3)** *Measured:* the publisher's schema at tag 2026.11.02.01
+  defines `document_status` as stable, placeholder, empty. The map
+  carries exactly these; the publication uses stable 27 times,
+  placeholder once and empty never. The comment says so now; the
+  schema is not among the pinned sources.
+- **#91 (5)** A record by path writes the type of the object beside
+  each pointer. Five records are renewed and no bundle changed; in the
+  ISM record `/version` is now two rows, 49 of a Requirement and 581
+  of a Set.
+
+*Measured by the agent:* ten deliberate defects in copies (four in the
+CR26 report, three in the citation count, three in the record by
+path), each turning a test red. Every converter reproduces the committed bundles
+byte for byte.
+
+### Closed without a change
+
+- **#79 (1)** The reports of C3A, C5, CyFun, the CIS Benchmark and the
+  CIS Controls keep the line "documented default". Their sources are
+  not in the repository, so the reports cannot be written again.
+- **#91 (6)** The statements of withdrawn SP 800-53 controls keep the
+  converter's wording. The converter declares the sentence as a rule
+  of its own (`R_WITHDRAWN`).
+
+### What it is measured by
+
+- The reference: ALL GREEN, 800 vectors in 18 families, the committed
+  bundles, the worked pack and the example folder.
+- The reader and the pack builder: 56 tests in a browser (49 and 7).
+- The app: 197 tests, none skipped.
+- The converters: eight test files (61, 14, 20, 32, 33, 25, 83 and 8
+  tests), and the check of the pinned schemas.
+- The twin was not run in this round: no rule changed, and the session
+  had no PowerShell. The workflow's Windows job is its run.
+
+### Found and not changed (filed as #97)
+
+1. Reader: generating a check again makes a second Assessment, and an
+   authored object cannot be removed (the consequence of #71, point 6).
+2. Website: the Hindi, Japanese and Chinese wording of the third row
+   has had no second reader.
+3. CR26: the titles of the overlay's objects still say "ODP
+   assignments drained" for the overlay as a whole; they are bytes of
+   the bundle.
+4. CR26: an assignment the converter cannot address ends the run with
+   two values unaccounted, where a comment says it is parked (*measured
+   by the agent* on a changed source).
+5. The library's `path_map_check` reads pointers and does not hold the
+   type of the object that a record by path now names.
+6. Short commit ids remain in the IFA manifest's `source-commit` (bytes
+   of the bundle), in two converters, in the IFA licence note and in
+   the app's readme.
+7. Handbook chapter 1 keeps July figures of CR26 (246 rules, 75 terms)
+   under the date its header gives; the current publication has 245
+   and 81 (*measured by the agent*).
+8. App: the test "Import, Map and Checks" failed 3 of 4 times on the
+   unchanged build when run with one other test before it, and passes
+   in every whole run (*measured by the agent*; cause not established).
+9. App: filter fields that redraw on a timer are not routed through
+   `jscRedraw` (*read*); `id="ai-key"` occurs twice on the Checks page,
+   and the click on "Forget the key" after typing is still lost
+   (*read, concluded*); a field left with the Tab key drops the focus.

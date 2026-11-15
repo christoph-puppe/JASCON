@@ -808,7 +808,11 @@ because a manifest that lists it cannot be the one it binds (one that
 binds a pack manifest the set keeps is a Full Match of that, and is
 refused all the same). The app repairs nothing
 in silence. When such a bundle arrives the hub says so and keeps it as it
-came. What an export does with it is said under "Export". On the Validate
+came. Since build 0.9.24 the Validate and the Assess page offer to take
+the Attestation out of the manifest's list (backlog #71, point 11): an
+explicit act, which marks the record and says before it is done what the
+Attestation binds of the manifest an export writes then. What an export
+does with it is said under "Export". On the Validate
 page a set that listed an Attestation and was then changed is compared, as
 always after a change, with the bundle an export would write: that one
 lists no Attestation, so there is no failure, and a line says that the
@@ -887,7 +891,9 @@ files and a `content-manifest.json`.
   one. Where the manifest a set came with lists one, which MANIFEST-1
   refuses, two things hold. A set nobody changed leaves as it came, with
   that manifest: the export passes on what it was given, and the Validate
-  page reports the failure. Once the set was changed, the export writes a
+  page reports the failure. Once the set was changed, or the Attestation
+  was taken out of the list on the Validate or the Assess page (since
+  build 0.9.24), the export writes a
   new manifest, which leaves the Attestation out; its file leaves beside
   the manifest, moved there if it lay in a folder, and the log says so.
 - After a change the manifest is a new one, so an Attestation that bound
@@ -997,9 +1003,9 @@ text in that language, the English text is shown, then whatever is there.
   or withdraw a signed one. The envelope of every attestation of the set is
   looked at, beside the manifest or listed in it, and one that is named and
   not there is an error, as for the reference since 2026-11-14.
-- MANIFEST-1: a set nobody changed, whose manifest lists an Attestation,
-  cannot be put right in the app without changing something else in it;
-  the export has no switch for writing a new manifest on request.
+- MANIFEST-1: taking a listed Attestation out of the manifest's list
+  (since build 0.9.24) has no undo in the app; loading the bundle again
+  brings the listing back.
 - What an Attestation binds: a set that was changed is compared with the
   bundle an export would write, which the page says. Two cases are read as
   "as loaded" although something happened: an object removed in the app
@@ -1013,25 +1019,23 @@ text in that language, the English text is shown, then whatever is there.
 - Loading from a URL fetches what the manifest lists, the envelope a
   listed attestation names, and the evidence store the check results of an
   Assessment name (`evidence/sha256/<hex>`: the records and the outputs they
-  list). A file beside the manifest that nothing listed names, such as an
-  Attestation over the manifest, is not fetched unless the folder is read
-  for the reason given next; the hub says so when it loads from a URL, and
-  the Validate page then holds no Attestation to what it binds. Load the
-  folder or a ZIP for those.
-- The pack manifests a set keeps (`packs/sha256/`) and the attestation of a
-  pack's publisher are named by nothing a manifest lists, and a URL names
-  files, not folders. Loading from a URL finds them only where the server
-  lists the folder, as `python -m http.server` does. A request for a listing
-  that is not there shows as an error in the browser's console, so the app
-  asks only where it has a reason: the manifest carries a pack header, or it
-  lists Components under an origin from which it lists nothing else (a pack
-  brings Components and nothing else, all under its publisher's origin).
-  Without a listing nothing is found, a pack from a URL is then *claimed*,
-  and a folder or a ZIP carries these files. Where the folder is read, every
-  Attestation beside the manifest is taken, the set's own too (until build
-  0.9.11 only one that binds a kept pack manifest). A bundle that keeps no
-  pack is not asked for a listing, so its Attestation does not arrive from
-  a URL.
+  list).
+- What lies beside the manifest and is named by nothing it lists (an
+  Attestation over the manifest, the pack manifests a set keeps under
+  `packs/sha256/`, the attestation of a pack's publisher) is found only
+  where the server lists the folder, as `python -m http.server` does and
+  as a static site does with an index page of links: a URL names files,
+  not folders. Since build 0.9.24 the folder is asked for once with every
+  load (backlog #71, point 8). Until then the app asked only where a
+  bundle keeps a pack, so the Attestation beside any other bundle's
+  manifest did not arrive. A page counts as a listing only when it links
+  `content-manifest.json`. On a server that lists nothing the request
+  shows as one error in the browser's console; nothing is found, the hub
+  says so, a pack from a URL is then *claimed*, and the Validate page
+  holds no Attestation to what it binds. Load the folder or a ZIP for
+  those. Where the folder is read, every Attestation beside the manifest
+  is taken, the set's own too (until build 0.9.11 only one that binds a
+  kept pack manifest).
 - Predicate selects of a Tailoring are not evaluated; the selection is then
   shown as open and its count as a lower bound.
 - The Tailor page applies set-modality, set-parameter and replace-prose.

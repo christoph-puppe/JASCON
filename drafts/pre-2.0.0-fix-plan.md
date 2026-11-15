@@ -719,3 +719,26 @@ Measured at the end: 800 vectors in 18 families in the reference, the
 twin (PowerShell 7.4 on Linux) and the app (785 before OPERATION-1).
 Left for after the tag, as proposed: #62, the rest of #71 and of #79,
 and #91.
+
+## 17. The backlog closed before the tag (2026-11-15, the last round)
+
+The author wished the backlog closed before 2.0.0 and took what was
+proposed, with one change: "#62 move to issue for the whole feature of
+API based automated assessments", "Rest wie vorgeschlagen". The record
+is the register, "The backlog closed before the tag".
+
+| # | What | State |
+|---|---|---|
+| #62 | an `http-api` collector has no declared format | moved to issue 37 of the tracker; closed here |
+| #71 (1), (2), (8), (11) | the app: the lost click, a Check an Assessment has run, the folder of every bundle from a URL, a listed Attestation | built (build 0.9.24) |
+| #71 (3), (4), (6), (7), (9), (12) | the reader: the lost click, authored objects across a load, a second check on a day, Risks in stage 5, what an Attestation requires, ADVICE-1 to ADVICE-3 | built (reader 1.22.0) |
+| #71 (15), (16), (17) | the reader's resolved package: withdrawn Requirements, operations outside the scope | measured that day and built (reader 1.22.0) |
+| #71 (10) | the website's third verdict | built in five languages; three have had no second reader |
+| #79 (4), (6), (7), (8) | the CR26 report, the SP 800-53 citation count, the handbook's CR26 figures, whole commit ids | built |
+| #79 (1) | reports that keep "documented default" | closed without a change: their sources are not in the repository |
+| #91 (3), (5) | the CR26 status words, the object of a destination | built |
+| #91 (6) | the wording for withdrawn SP 800-53 controls | closed without a change: a declared rule of the converter |
+| #97 | what was found while building and not changed | filed; the author's to decide |
+
+Measured at the end: 800 vectors in 18 families in the reference, as
+before; no rule and no vector was added.

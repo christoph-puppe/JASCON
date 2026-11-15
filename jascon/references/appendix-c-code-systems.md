@@ -278,4 +278,6 @@ check needs and an assessment does not.
 
 **C.15 Collector runtimes** (in `collector@1`): `sh · bash · powershell ·
 python · ansible · http-api`, or a namespaced URI. For `http-api` the
-`source` has no declared format yet (backlog #62).
+`source` has no declared format yet (issue 37 of the repository's
+tracker, which holds the whole of API-based checks; backlog #62 was
+moved there on 2026-11-15).
