@@ -183,7 +183,7 @@ function renderSystem() {
     ${shown.length > cap ? `<div class="hint" style="padding:6px">${esc(T("and {n} more; narrow the filter", { n: shown.length - cap }))}</div>` : ""}`;
   V.wireRefs($("system"));
   let timer;
-  $("edgeq").addEventListener("input", e => { edgeFilter = e.target.value; clearTimeout(timer); timer = setTimeout(() => { renderSystem(); $("edgeq").focus(); }, 250); });
+  $("edgeq").addEventListener("input", e => { edgeFilter = e.target.value; clearTimeout(timer); timer = setTimeout(() => jscRedraw(() => { renderSystem(); $("edgeq").focus(); }), 250); });
 }
 
 /* ---------- workbench ---------- */
@@ -277,7 +277,7 @@ function renderBuild() {
   if (d.open !== null && $("cf-q")) {
     const f = d.filter;
     let timer;
-    $("cf-q").addEventListener("input", e => { f.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { again(); $("cf-q").focus(); }, 250); });
+    $("cf-q").addEventListener("input", e => { f.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => jscRedraw(() => { again(); $("cf-q").focus(); }), 250); });
     on("#cf-set", "change", n => { f.set = n.value; again(); });
     on("[data-dim]", "change", n => { f.dims[n.dataset.dim] = n.value; again(); });
     on("[data-pickreq]", "change", n => { const s = new Set(d.picked); n.checked ? s.add(n.dataset.pickreq) : s.delete(n.dataset.pickreq); d.picked = [...s]; again(); });

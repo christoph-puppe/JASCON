@@ -326,7 +326,7 @@ function renderRegister() {
   el.querySelectorAll("[data-risk]").forEach(tr => { const go = () => openRisk(tr.dataset.risk); tr.addEventListener("click", go); tr.addEventListener("keydown", e => { if (e.key === "Enter") go(); }); });
   el.querySelectorAll("[data-state]").forEach(b => b.addEventListener("click", () => { listFilter.state = b.dataset.state; renderRegister(); }));
   let timer;
-  $("risk-q").addEventListener("input", e => { listFilter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { renderRegister(); $("risk-q").focus(); }, 250); });
+  $("risk-q").addEventListener("input", e => { listFilter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => jscRedraw(() => { renderRegister(); $("risk-q").focus(); }), 250); });
   if ($("heat-scale")) $("heat-scale").addEventListener("change", e => { ui.data.heatScale = e.target.value; cellFilter = null; ui.save(); renderRegister(); });
   el.querySelectorAll("[data-which]").forEach(b => b.addEventListener("click", () => { ui.data.heatWhich = b.dataset.which; cellFilter = null; ui.save(); renderRegister(); }));
   el.querySelectorAll("[data-cell-l]").forEach(b => b.addEventListener("click", () => { cellFilter = { l: b.dataset.cellL, i: b.dataset.cellI }; renderRegister(); }));

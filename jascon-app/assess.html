@@ -280,7 +280,7 @@ function renderCheck() {
   el.querySelector("#a-scope").addEventListener("change", e => { d.scope = e.target.value; again(); });
   PERFORMER.wire(el, "a-perf");
   let timer;
-  el.querySelector("#a-q").addEventListener("input", e => { d.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { again(); $("a-q").focus(); }, 300); });
+  el.querySelector("#a-q").addEventListener("input", e => { d.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => jscRedraw(() => { again(); $("a-q").focus(); }), 300); });
   el.querySelectorAll("[data-answer]").forEach(b => b.addEventListener("click", () => {
     const id = b.dataset.answer, old = d.results[id] || {};
     d.results[id] = { ...old, result: old.result === b.dataset.result ? null : b.dataset.result };

@@ -2155,3 +2155,92 @@ test("Checks: before a check that Assessments of the set ran is saved under anot
   }
 });
 
+
+/* ---------- a filter field that draws its page again a moment after the last key (build 0.9.26; backlog #101, points 4 and 5) ----------
+   Measured on build 0.9.25: a press that was held across that moment found another element under it when it
+   was released, and made no click, on each of the six fields, every time. The redraw goes through jscRedraw now.
+   One key is typed, the pointer goes down before the redraw is due and up after it, and the control must have
+   acted. A try whose press did not span the redraw says nothing and is made again. */
+const FILTER_FIELDS = [
+  { page: "Risk, register", file: "risk.html", view: "register", field: "#risk-q", delay: 250, key: "a", target: "#register tr[data-risk] td",
+    done: () => !!document.querySelector('#main > [data-view="edit"]:not(.hidden)'),
+    reset: () => { listFilter.q = ""; E = null; jscPage.show("register"); renderRegister(); } },
+  { page: "Assess, run a check", file: "assess.html", view: "check", field: "#a-q", delay: 300, key: "e", target: "#a-rest",
+    done: () => Object.values(draft.data.results).some(r => r && r.result),
+    reset: () => { draft.data.results = {}; draft.data.q = ""; draft.save(); renderCheck(); } },
+  { page: "Implement, the link of an edge (its address stands in two views)", file: "implement.html", view: "system", field: "#edgeq", delay: 250, key: "e",
+    target: "#system table.flat tr:nth-child(2) td:last-child [data-ref]",
+    done: () => !!document.querySelector("#jsc-drawer:not(.hidden)"),
+    reset: () => { const d = document.getElementById("jsc-drawer"); if (d) d.classList.add("hidden"); edgeFilter = ""; renderSystem(); } },
+  { page: "Implement, the control selector", file: "implement.html", view: "build", field: "#cf-q", delay: 250, key: "e", target: "[data-pickreq]",
+    prepare: async p => { if (!(await p.locator("#cf-q").count())) { if (!(await p.locator('[data-open="0"]').count())) { await p.locator("#new-title").fill("Order database"); await p.locator("#add-asset").click(); }
+      await p.locator('[data-open="0"]').click(); await p.locator("#cf-q").waitFor(); } },
+    done: () => draft.data.picked.length > 0,
+    reset: () => { draft.data.picked = []; draft.data.filter.q = ""; draft.save(); renderBuild(); } },
+  { page: "Map, mappings", file: "map.html", view: "table", field: "#mapq", delay: 250, key: "e", target: '#table [data-rel]:not([data-rel=""])',
+    done: () => filter.rel !== "",
+    reset: () => { filter.rel = ""; filter.q = ""; renderTable(); } },
+  { page: "Validate, check the set", file: "validate.html", view: "check", field: "#q", delay: 250, key: "e", target: '#out [data-area]:not([data-area=""])',
+    prepare: async p => { if (!(await p.locator("#q").count())) { await p.locator("#run").click(); await p.locator("#q").waitFor({ timeout: 60000 }); } },
+    done: () => filter.area !== "",
+    reset: () => { filter.area = ""; filter.q = ""; render(); } },
+];
+test("a press that is held while a filter field draws its page again still makes its click, on the six fields that redraw on a timer; each key field of the Checks page has its own id, and Forget the key acts at the first press after typing",
+  { skip: !chromium && "Playwright with Chromium is not installed", timeout: 300000 }, async () => {
+  const s = await session(), p = s.page, sleep = ms => new Promise(done => setTimeout(done, ms));
+  try {
+    await load(s, zipOf(EX, "examples"));
+    for (const f of FILTER_FIELDS) {
+      await open(s, f.file, f.view);
+      let spanned = false;
+      for (let attempt = 0; attempt < 4 && !spanned; attempt++) {
+        if (f.prepare) await f.prepare(p);
+        await p.evaluate(f.reset);
+        if (f.prepare) await f.prepare(p);
+        const target = p.locator(f.target).first();
+        await target.evaluate(n => n.scrollIntoView({ block: "center" }));
+        await p.locator(f.field).click();
+        await sleep(350);   // nothing of an earlier key is pending
+        const box = await target.boundingBox();
+        await p.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+        await p.evaluate(([fieldSel, targetSel]) => {
+          const m = window.__held = {}, first = document.querySelector(targetSel);
+          document.querySelector(fieldSel).addEventListener("input", () => { m.input = performance.now(); }, { once: true });
+          addEventListener("pointerdown", e => { m.down = performance.now(); m.onTarget = e.target === first || first.contains(e.target); }, { once: true, capture: true });
+          addEventListener("pointerup", () => { m.up = performance.now(); }, { once: true, capture: true });
+        }, [f.field, f.target]);
+        await p.keyboard.type(f.key);
+        const t0 = Date.now();
+        await sleep(Math.max(0, f.delay - 130 - (Date.now() - t0)));
+        await p.mouse.down();
+        await sleep(Math.max(0, f.delay + 200 - (Date.now() - t0)));
+        await p.mouse.up();
+        await sleep(450);   // the redraw that waited, and what the click starts
+        const m = await p.evaluate(() => window.__held);
+        spanned = m.onTarget && m.down - m.input < f.delay && m.up - m.input > f.delay;
+        if (spanned) assert.equal(await p.evaluate(f.done), true, `${f.page}: the control that was pressed across the redraw of ${f.field} has acted`);
+      }
+      assert.equal(spanned, true, `${f.page}: a press spanned the moment the redraw of ${f.field} was due`);
+    }
+
+    /* the Checks page has an access panel in two views: each key field has an id of its own, each label names its
+       own field, and "Forget the key" pressed right after typing takes the key and forgets it at that press */
+    await open(s, "checks.html", "draft");
+    assert.deepEqual(await p.evaluate(() => [...document.querySelectorAll(".ai-key")].map(n => n.id).sort()), ["ai-key-d-access", "ai-key-e-ai-access"]);
+    assert.deepEqual(await p.evaluate(() => [...document.querySelectorAll('label[for^="ai-key"]')].map(n => n.control && n.control.id).sort()), ["ai-key-d-access", "ai-key-e-ai-access"]);
+    for (const [view, host] of [["draft", "#d-access"], ["edit", "#e-ai-access"]]) {
+      await p.locator(`.navitem[data-view="${view}"]`).click();
+      await p.evaluate(() => jscAi.setKey(""));
+      assert.equal(await p.locator(`${host} .ai-forget`).isDisabled(), true, view + ": nothing to forget before a key is typed");
+      await p.locator(`${host} .ai-key`).click();
+      await p.keyboard.type("k-123");
+      await press(p, `${host} .ai-forget`);
+      await sleep(400);
+      assert.deepEqual([await p.evaluate(() => !!jscAi.key()), await p.locator(`${host} .ai-forget`).isDisabled(), await p.locator(`${host} .ai-key`).inputValue()], [false, true, ""],
+        view + ": one press after typing, and no key is held");
+    }
+    assert.deepEqual(s.errors, []);
+  } finally {
+    await s.close();
+  }
+});
