@@ -777,6 +777,23 @@ class ChangedSource(unittest.TestCase):
         self.assertEqual(code_, 1, out)
         self.assertIn("the table of outcomes and places (HELD) has 51 row(s) and the path map 52; they differ first at row 0", err)
 
+    def test_a_row_of_the_path_map_that_the_ledger_contradicts_ends_the_run_with_1(self):
+        """backlog #95: the converter's own list of contradictions was printed and reported, and the run ended with 0.
+        Here the row of the CTL guidance, which is parked as the source has it, claims a kernel member (L1): every
+        value is carried, nothing is unaccounted, and all of it stands only in the parked payload."""
+        with open(self.converter, encoding="utf-8") as f: code = f.read()
+        row = ' (r"^cr26\\.CTL\\.\\*\\.\\*\\.","L2","CTL guidance/variants: parked payload'
+        self.assertEqual(code.count(row), 1)
+        changed = os.path.join(os.path.dirname(self.converter), "convert_cr26_claims.py")
+        with open(changed, "w", encoding="utf-8") as f: f.write(code.replace(row, row.replace('"L2"', '"L1"')))
+        code_, out, err, d = self.run_on(lambda src: None, converter=changed)
+        self.assertEqual(code_, 1, out[-600:])
+        self.assertIn("row(s) of the path map are contradicted by the ledger of this run", err)
+        self.assertIn("0 claim(s) that do not hold, 0 source value(s) unaccounted", err, "no other gate would have closed")
+        self.assertIn("PATH MAP CONTRADICTED", out)
+        claims = read_json(os.path.join(d, "cr26-coverage-report.json"))["ledger"]["path-map-rows-the-ledger-contradicts"]
+        self.assertTrue(claims and all("only-in-the-parked-payload" in c and c["level"] == "L1" for c in claims), claims[:2])
+
     def test_without_the_source_the_run_says_where_to_get_it(self):
         self.stops(None, "SOURCES.sha256")
 

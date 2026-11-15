@@ -109,4 +109,4 @@ proposal, and #89, both for the author.
 | Website | the first page's code sample and the evidence page's leaf-value total, five languages, stamped; `facts.json` measured after the commits | done, the facts with the last commit |
 | Register, backlog, plan, decisions | the author's five answers; #89 and #94 closed; #95 filed; what was built otherwise | done |
 
-Left: #95, two findings that are filed and not changed.
+#95, the two findings filed with it, is built since 2026-11-15 (two converters, their tests, the backlog, the register); no text of the specification or the handbook speaks of either.

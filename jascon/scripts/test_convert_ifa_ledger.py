@@ -104,7 +104,7 @@ class PhaseETheIfaGate(unittest.TestCase):
         # a row of the table taken out
         code, err, record = self.run_converter("row", ROW, "")
         self.assertEqual(code, 1)
-        self.assertIn("the table of outcomes and places (HELD) has 33 row(s) and the path map 34", err)
+        self.assertIn("the table of outcomes and places (HELD) has 32 row(s) and the path map 33", err)
 
     def test_a_value_that_is_not_written_takes_its_name_with_it(self):
         code, err, record = self.run_converter(

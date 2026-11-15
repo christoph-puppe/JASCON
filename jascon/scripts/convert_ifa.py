@@ -1396,7 +1396,6 @@ RULES = [
   "consumer Implementation: inherited -> satisfied-by inherited-from{component resolved through the provided "
   "capability, basis-ref} (D5), satisfied -> consumer capability; responsibility shared; the narrative by "
   "statement, with each inherited/satisfied entry naming its capability -> implementation@1"),
- (r"^cdef\.component-definition\.(uuid$|metadata\.)", "L1", "bundle manifest / L0 provenance"),
  (r"^cdef\.component-definition\.components\[\]\.protocols\[\]\.", "L2", "protocols@1 facet"),
  (r"^cdef\.component-definition\.components\[\]\.responsible-roles\[\]\.", "L1",
   "component@1 responsible-roles: {role, parties: [landmark party URI]} (#16: parties stay landmark)"),
@@ -1615,7 +1614,6 @@ HELD = [
    r"/parameter-bindings/ac-2_prm_1",
    r"/satisfied-by/\[\]/inherited-from/component-ref",
    r"/statement-refs/\[\]")),
- (r"^cdef\.component-definition\.(uuid$|metadata\.)", CARRIED, (r"/provenance(/.*)?",)),   # no value reaches this row: the first row of the map takes these paths
  (r"^cdef\.component-definition\.components\[\]\.protocols\[\]\.", CARRIED, (_PROT + r"/protocols(/.*)?",)),
  (r"^cdef\.component-definition\.components\[\]\.responsible-roles\[\]\.", CARRIED,
   (_COMP + r"/responsible-roles/\[\]/parties/\[\]",

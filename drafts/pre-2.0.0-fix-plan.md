@@ -689,7 +689,7 @@ facets and released the seven work items. The record is the register,
 | #92 | reader and app residue | built; the app's part measured and not changed |
 | #93 | WITHDRAWN-1: an object in force does not lean on one the bundle holds as withdrawn; an error in three validators and the reader | built later that day (the author: "Regel bauen") |
 | #94 | one facet id and version, two schemas (example folder, Grundschutz++ converter) | closed (the author: "2 ja, 3 ja, 4 jetzt"): one typed schema 1.1.0 for both; the bundle lifted to the catalogue of 2026-10-29 |
-| #95 | CR26's own list of contradictions does not end a run; a row of the IFA path map no path reaches | filed, not changed |
+| #95 | CR26's own list of contradictions does not end a run; a row of the IFA path map no path reaches | built on 2026-11-15 (the author: "Beides"): the list ends the run; the row is gone |
 
 Measured at the end of the round: 753 vectors in 18 families in the
 reference, the twin and the app; with FRAGMENT-1 and WITHDRAWN-1 later

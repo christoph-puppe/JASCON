@@ -2843,4 +2843,7 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    Grundschutz++ taxonomy, pinned by the bundle and by the example
    folder (#94), the bundle lifted to the publisher's catalogue of
    2026-10-29, and the library's check that a path map names the place
-   and the outcome the ledger found (#89). Filed and not changed: #95.)*
+   and the outcome the ledger found (#89). Two findings of that work,
+   filed as #95, are built since 2026-11-15: a row of the CR26 path map
+   that its ledger contradicts ends the run, and a row of the IFA path
+   map that no path reached is gone.)*

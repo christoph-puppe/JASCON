@@ -625,3 +625,17 @@ Vorgelegt waren fünf Fragen. Die Antwort des Autors, wörtlich:
 7. **Zwei Nebenbefunde, nicht geändert (#95):** Der CR26-Konverter
    meldet Widersprüche zwischen Pfadkarte und Ledger, bricht aber nicht
    daran ab. Die IFA-Pfadkarte hat eine Zeile, die kein Pfad erreicht.
+
+## #95 (2026-11-15)
+
+Dem Autor erklärt, mit einem Vorschlag je Teil. Die Antwort, wörtlich:
+
+> Beides
+
+1. **CR26:** Ein Widerspruch zwischen Pfadkarte und Ledger beendet den
+   Lauf mit 1. Vorher wurde er gedruckt und berichtet, und der Lauf
+   endete mit 0, wenn keine andere Sperre griff.
+2. **IFA:** Die Zeile der Pfadkarte, die kein Pfad erreicht, ist
+   gestrichen, mit ihrem Eintrag in der Ortstabelle.
+
+Kein Bundle, kein Bericht und kein Ledger hat sich geändert.

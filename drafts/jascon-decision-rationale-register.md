@@ -4839,3 +4839,15 @@ semantic digest and by bytes.
 The CR26 converter's own list of contradictions between its path map
 and its ledger is printed and reported and does not end a run. The IFA
 path map has a row no path reaches.
+
+### #95, built on 2026-11-15
+
+Explained to the author with a proposal for each part; the answer:
+"Beides". A row of the CR26 path map that its ledger contradicts ends
+the run with 1 now, after the bundle, the reports and the record are
+written. *Measured:* a copy of the converter in which the row of the
+parked CTL guidance claims a kernel member ends with 1 and names the
+rows, while its ledger reads 0 unaccounted and 0 failed claims; before,
+that run ended with 0. The row of the IFA path map that no path reached
+is gone, with its entry in the table of places. Both conversions
+reproduce their reports and records byte for byte.

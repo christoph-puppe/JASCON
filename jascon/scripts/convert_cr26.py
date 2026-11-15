@@ -1440,6 +1440,9 @@ print("written:",OUTDIR)
 #   The ledger: no claim fails against the written files, and no source value
 #   is unaccounted (ledger_gate; author, 2026-11-14: "a converter run with an
 #   unaccounted value exits non-zero").
+#   The path map: no value has an outcome its row does not allow or stands at
+#   a place its row does not name (backlog #89), and the ledger contradicts
+#   no row (backlog #95).
 if unmapped:
     print("UNMAPPED:"); [print("  ",p,"x",n) for p,n in unmapped]
     sys.stdout.flush()
@@ -1452,5 +1455,14 @@ if MAP_NOT_HELD:
     sys.stdout.flush()
     raise SystemExit(f"convert_cr26.py: {len(MAP_NOT_HELD)} disagreement(s) between the path map and the record of this run: "
                      f"a value has an outcome its row does not allow, or stands at a place its row does not name")
+# A row of the path map that the ledger contradicts ends the run (backlog #95).
+# Until 2026-11-15 the list was printed and reported and the run ended with 0
+# unless another gate closed: a value promised to a kernel member that stood
+# only in the parked payload passed.
+if claims:
+    sys.stdout.flush()
+    raise SystemExit(f"convert_cr26.py: {len(claims)} row(s) of the path map are contradicted by the ledger of this run "
+                     f"(PATH MAP CONTRADICTED above, and in the report). The conversion ledger of this run: {len(LFAIL)} "
+                     f"claim(s) that do not hold, {LT['unaccounted']} source value(s) unaccounted.")
 sys.stdout.flush()
 ledger_gate(LEDGER,"convert_cr26.py")
