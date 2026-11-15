@@ -160,7 +160,7 @@ details[open]>summary{margin-bottom:6px}
 /* ==INLINE core== */
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.23";
+const JSC_BUILD = "0.9.24";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -392,7 +392,7 @@ function jscClassifyFiles(files) {
   for (const rec of records) {
     if (rec.kind === "object" && rec.type === "attestation" && listedPaths.has(rec.path)) {
       problems.push(`${JSC_MANIFEST} lists an Attestation (${rec.path}), which no content manifest may (MANIFEST-1). The set is kept as it came and the Validate page reports it; ` +
-        "once the set is changed, an export writes a manifest that leaves the Attestation out and puts its file beside it");
+        "once the Attestation is taken out of the list there, or the set is changed otherwise, an export writes a manifest that leaves the Attestation out and puts its file beside it");
     }
   }
   return { records, problems };
@@ -400,12 +400,14 @@ function jscClassifyFiles(files) {
 
 /* -> graph {
      manifest, manifestText,
-     objects: Map(id -> {obj, type, path, text, origin, entry}), order: [id],
+     objects: Map(id -> {obj, type, path, text, origin, entry, unlisted}), order: [id],
      scales: Map(id -> {def, path, text, origin, pin}),
      facetSchemas: [{def, path, text, origin, pin}], aux: [{path, text}], problems }
    `entry` and `pin` are the manifest's lines for that file, or null.
    `origin` is "imported" for a file that arrived with a bundle and
    "authored" or "pack" for one that was written here since.
+   `unlisted` is true for an Attestation the manifest lists and the user
+   took out of that list here (see jscBuildBundle).
    `order` is manifest order, then everything the manifest does not list,
    by path. */
 function jscGraphFrom(records) {
@@ -432,7 +434,7 @@ function jscGraphFrom(records) {
       const id = json.id || r.path;
       if (g.objects.has(id)) { g.problems.push(`${r.path}: id ${id} is already defined by ${g.objects.get(id).path}; second file ignored`); continue; }
       g.objects.set(id, { obj: json, type: r.type || jscInferType(json), path: r.path, text: r.text,
-        origin: r.origin || "imported", entry: objLines.get(r.path) || null });
+        origin: r.origin || "imported", entry: objLines.get(r.path) || null, unlisted: !!r.unlisted });
       byPath.set(r.path, id);
     }
   }
@@ -496,6 +498,13 @@ function jscObjectPath(type, id, taken) {
      moved there if it lay in a folder (the reference reads an unlisted
      Attestation only beside the manifest), and the export says so
      (`problems`).
+   A set nobody changed had no way to the second case (backlog #71, point
+   11). It has one now, and it is the user's act: an Attestation the manifest
+   lists can be taken out of that list (`unlisted` on its record, set by
+   jscSet.unlistAttestation). Nothing else of the set is touched: the file
+   keeps its bytes and its place in the set, and the manifest the set came
+   with is kept. The set then counts as changed in this one respect, and
+   the export writes the new manifest as in the second case.
    jscBesideManifest: is this Attestation beside the manifest the set came
    with? */
 const jscBesideManifest = r => r.type === "attestation" && !r.entry;
@@ -543,6 +552,7 @@ async function jscBuildBundle(g, provenance) {
     const r = g.objects.get(id);
     if (jscBesideManifest(r)) continue;
     if (r.type === "attestation") leftOut.push(r);
+    if (r.type === "attestation" && r.unlisted) continue;   // taken out of the list by the user: the lines then differ from the manifest the set came with
     objects.push({ id: r.obj.id, version: r.obj.version,
       "package-digest": await jscPackageDigest(r.text),
       "semantic-digest": await jscSemanticDigest(r.obj), path: r.path });
@@ -2764,13 +2774,24 @@ const jscListedAttestationErrors = objs => [...objs.keys()].sort().filter(id => 
    export leaves it out of the manifest and puts the file beside it. A set
    is never repaired without that being said.
 
+   A set nobody changed can be brought to the second basis by the user: an
+   Attestation the manifest lists is taken out of that list (`unlisted` on
+   its record; jscBuildBundle in jascon-core.js, backlog #71 point 11). That
+   counts as written here. A line that is "refused" says what the move would
+   do to the binding before it is made: `after-move` is the line the same
+   Attestation gets against the bundle an export writes once it is taken
+   out, in the reference's words.
+
    g: the graph; objs: Map(id -> {type, obj}), the typed objects of the set.
    -> { basis, "manifest-digest", "loaded-manifest-digest" (or null),
         "kept-packs": [digest], lines: jscBindsReport, each with `listed`
-        (null | "refused" | "left-out") and `manifest-1` (the failure or null) }
+        (null | "refused" | "left-out"), `manifest-1` (the failure or null)
+        and, where `listed` is "refused", `after-move` (a line's text) }
       A set without an Attestation has basis null and no line: nothing was
-      compared, and nothing is said. */
-async function jscSetBinds(g, objs) {
+      compared, and nothing is said.
+   `moved` is this function's own: true while it asks what a move would do,
+   so that the question is asked once and never of its own answer. */
+async function jscSetBinds(g, objs, moved) {
   const atts = new Map([...objs].filter(([, r]) => r.type === "attestation").map(([id, r]) => [id, r.obj]));
   /* no Attestation, nothing to compare: the digests of a large set are not computed for an empty answer */
   if (!atts.size) return { basis: null, "manifest-digest": null, "loaded-manifest-digest": null, "kept-packs": [], lines: [] };
@@ -2778,7 +2799,7 @@ async function jscSetBinds(g, objs) {
   const loaded = typeof g.manifestText === "string" ? await jscRulesPackageDigest(g.manifestText) : null;
   /* written here, of what a manifest covers: an Attestation beside the manifest is not part of it, so one that was
      written here (set to withdrawn, say) changes nothing about which manifest describes the set */
-  const written = [...g.objects.values()].some(r => jscRulesAdded(r) && !jscRulesBeside(r)) || [...g.scales.values(), ...g.facetSchemas].some(jscRulesAdded);
+  const written = [...g.objects.values()].some(r => (jscRulesAdded(r) && !jscRulesBeside(r)) || r.unlisted) || [...g.scales.values(), ...g.facetSchemas].some(jscRulesAdded);
   const basis = g.manifest && (built.verbatim || !written) ? "loaded" : "export";
   const digest = basis === "loaded" ? loaded : await jscRulesPackageDigest(built.files[0].text);
   /* the objects the manifest lists: on "loaded" those with a line in it; on "export" every object but the Attestations,
@@ -2791,7 +2812,16 @@ async function jscSetBinds(g, objs) {
     const cameListed = !!(g.objects.get(l.id) || {}).entry;
     return { ...l, listed: refused.has(l.id) ? "refused" : cameListed && basis === "export" ? "left-out" : null, "manifest-1": refused.get(l.id) || null };
   });
+  /* what taking a refused Attestation out of the list would do to its binding: asked once, of the graph as it would be */
+  for (const l of moved ? [] : lines.filter(x => x.listed === "refused")) {
+    const then = (await jscSetBinds(jscUnlisted(g, [l.id]), objs, true)).lines.find(x => x.id === l.id);
+    l["after-move"] = then ? (then.kind === "failure" ? "error: " : "") + then.text : null;
+  }
   return { basis, "manifest-digest": digest, "loaded-manifest-digest": loaded, "kept-packs": kept, lines };
+}
+/* the graph as it is once these Attestations are taken out of the manifest's list; nothing is written */
+function jscUnlisted(g, ids) {
+  return { ...g, objects: new Map([...g.objects].map(([id, r]) => [id, ids.includes(id) && r.type === "attestation" && r.entry ? { ...r, unlisted: true } : r])) };
 }
 
 /* ====================================================================

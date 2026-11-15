@@ -477,7 +477,8 @@ async function renderEdit() {
   V.wireRefs(el);
   V.wireAuthor(el);
   const again = () => renderEdit();
-  const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => { fn(n); again(); }));
+  /* a field's change draws the form again through jscRedraw: under a press that waits, and the click reaches "Save the risk" of the new form (backlog #71) */
+  const on = (selector, event, fn) => el.querySelectorAll(selector).forEach(n => n.addEventListener(event, () => { fn(n); if (event === "change") jscRedraw(again); else again(); }));
   const text = (k, v) => { E[k] = { ...(E[k] || {}), [L]: v }; };
   on("#r-label", "change", n => { E.label = n.value.trim(); });
   on("#r-version", "change", n => { E.version = n.value.trim() || "1"; });
@@ -639,9 +640,11 @@ function renderScales() {
   on("#s-new", "click", () => { editScale = { id: jscCfg.get("org:ns").replace(/\/+$/, "") + "/scale/", version: "1.0.0", title: {}, levels: [{ level: "" }, { level: "" }] }; renderScales(); });
   if (!editScale) return;
   const S = editScale, L = jscI18n.contentLang(), again = () => renderScales();
-  on("#s-id", "change", n => { S.id = n.value.trim(); again(); });
-  on("#s-version", "change", n => { S.version = n.value.trim(); again(); });
-  on("#s-title", "change", n => { S.title = { ...(S.title || {}), [L]: n.value }; again(); });
+  /* a field's change draws the editor again through jscRedraw: under a press that waits, and the click reaches "Save the scale" of the new form (backlog #71) */
+  const changed = () => jscRedraw(again);
+  on("#s-id", "change", n => { S.id = n.value.trim(); changed(); });
+  on("#s-version", "change", n => { S.version = n.value.trim(); changed(); });
+  on("#s-title", "change", n => { S.title = { ...(S.title || {}), [L]: n.value }; changed(); });
   /* renaming a level renames it in the matrix cells of this scale too */
   on("[data-lcode]", "change", n => {
     const old = S.levels[+n.dataset.lcode].level, now = n.value.trim();
@@ -651,18 +654,18 @@ function renderScales() {
       S._renames = S._renames || {};
       S._renames[Object.keys(S._renames).find(k => S._renames[k] === old) || old] = now;
     }
-    again();
+    changed();
   });
-  on("[data-llabel]", "change", n => { const l = S.levels[+n.dataset.llabel]; l.label = { ...(l.label || {}), [L]: n.value }; again(); });
+  on("[data-llabel]", "change", n => { const l = S.levels[+n.dataset.llabel]; l.label = { ...(l.label || {}), [L]: n.value }; changed(); });
   const swap = (i, j) => { [S.levels[i], S.levels[j]] = [S.levels[j], S.levels[i]]; again(); };
   on("[data-lup]", "click", n => swap(+n.dataset.lup, +n.dataset.lup - 1));
   on("[data-ldown]", "click", n => swap(+n.dataset.ldown, +n.dataset.ldown + 1));
   on("[data-ldel]", "click", n => { S.levels.splice(+n.dataset.ldel, 1); again(); });
   on("#s-addlevel", "click", () => { S.levels.push({ level: "" }); again(); });
-  on("#s-hasmatrix", "change", n => { if (n.checked) S.matrix = { "likelihood-scale": "", "impact-scale": "", cells: {} }; else delete S.matrix; again(); });
-  on("#s-ml", "change", n => { S.matrix["likelihood-scale"] = n.value; again(); });
-  on("#s-mi", "change", n => { S.matrix["impact-scale"] = n.value; again(); });
-  on("[data-ml]", "change", n => { const c = (S.matrix.cells = S.matrix.cells || {}); (c[n.dataset.ml] = c[n.dataset.ml] || {})[n.dataset.mi] = n.value; again(); });
+  on("#s-hasmatrix", "change", n => { if (n.checked) S.matrix = { "likelihood-scale": "", "impact-scale": "", cells: {} }; else delete S.matrix; changed(); });
+  on("#s-ml", "change", n => { S.matrix["likelihood-scale"] = n.value; changed(); });
+  on("#s-mi", "change", n => { S.matrix["impact-scale"] = n.value; changed(); });
+  on("[data-ml]", "change", n => { const c = (S.matrix.cells = S.matrix.cells || {}); (c[n.dataset.ml] = c[n.dataset.ml] || {})[n.dataset.mi] = n.value; changed(); });
   on("#s-close", "click", () => { editScale = null; again(); });
   on("#s-save", "click", async () => {
     const sd = cleanScale(S), others = allScales().filter(x => x.id !== sd.id);
@@ -900,8 +903,9 @@ function renderA() {
   V.wireAuthor($("ai-a"));
   const on = (selector, event, fn) => $("ai-a").querySelectorAll(selector).forEach(n => n.addEventListener(event, () => fn(n)));
   on("#ai-context", "input", n => { d.context = n.value; ui.save(); });
-  on("#ai-context", "change", () => renderA());
-  on("#ai-count", "change", n => { d.count = clampInt(n.value, 1, 30, 8); ui.save(); renderA(); });
+  /* under a press these redraws wait, and the click reaches "Ask the model" of the new form (jscRedraw; backlog #71) */
+  on("#ai-context", "change", () => jscRedraw(renderA));
+  on("#ai-count", "change", n => { d.count = clampInt(n.value, 1, 30, 8); ui.save(); jscRedraw(renderA); });
   on("#ai-scale", "change", n => { d.scale = n.value; ui.save(); renderA(); });
   AI_OWNER.wire($("ai-a"), "ai-owner", () => { d.owner = AI_OWNER.ref(); ui.save(); });
   wireRun("a", () => aInput().prompt, runA);
@@ -997,7 +1001,7 @@ function renderB() {
   const rowOf = n => d.b[n.closest("[data-ai-row]").dataset.aiRow], idOf = n => n.closest("[data-ai-row]").dataset.aiRow;
   on("#ai-tail", "change", n => { d.tailoring = n.value; ui.save(); renderB(); });
   on("[data-ai-scope]", "click", n => { d.scope = n.dataset.aiScope; ui.save(); renderB(); });
-  on("#ai-max", "change", n => { d.max = clampInt(n.value, 1, 30, 8); ui.save(); renderB(); });
+  on("#ai-max", "change", n => { d.max = clampInt(n.value, 1, 30, 8); ui.save(); jscRedraw(renderB); });
   wireRun("b", () => { const now = bInput(); return now.calls.length ? now.promptOf(now.calls[0]) : ""; }, runB);
   on("[data-ai-pick]", "change", n => { rowOf(n).items[+n.dataset.aiPick].pick = n.checked; ui.save(); });
   on("[data-ai-all]", "click", n => { rowOf(n).items.forEach(x => { x.pick = true; }); ui.save(); renderB(); });

@@ -185,6 +185,31 @@ function jscCollectorLint(runtime, source) {
   return out;
 }
 
+/* ---------- the Assessments that ran a Check ----------
+   A result of an Assessment names the check it ran and that check's
+   semantic digest (CHECK-8: a changed check is a different check). Saving a
+   Check under another semantic digest turns every result that agreed with
+   the stored Check into a CHECK-8 failure of its Assessment. The Checks
+   page asks before such a save and names the Assessments (backlog #71,
+   point 2). Until build 0.9.23 it saved and said nothing.
+   objs: Map(id -> {type, obj}); stored, next: the semantic digest of the
+   Check as the set holds it and as it would be saved.
+   -> [{ id, label, rows }], by id: the Assessments with results that name
+      the Check and agree with it as stored, and how many such results each
+      has. Empty when the digest stays: then no result changes its verdict.
+      A result that disagrees with the stored Check already is not counted:
+      this save is not what breaks it. */
+function jscChecksRunBy(objs, checkId, stored, next) {
+  if (!stored || stored === next) return [];
+  const out = [];
+  for (const [id, r] of objs) {
+    if (r.type !== "assessment" || !Array.isArray(r.obj["check-results"])) continue;
+    const rows = r.obj["check-results"].filter(row => row && row["check-ref"] === checkId && row["check-digest"] === stored).length;
+    if (rows) out.push({ id, label: typeof r.obj.label === "string" ? r.obj.label : "", rows });
+  }
+  return out.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+}
+
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { JSC_CHECKS, JSC_LINT, jscChecksRules, jscChecksMintId, jscChecksPlatform, jscChecksParams, jscChecksFromAnswer, jscCollectorLint };
+  module.exports = { JSC_CHECKS, JSC_LINT, jscChecksRules, jscChecksMintId, jscChecksPlatform, jscChecksParams, jscChecksFromAnswer, jscCollectorLint, jscChecksRunBy };
 }

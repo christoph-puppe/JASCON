@@ -233,6 +233,8 @@ function render() {
         <td class="mono" style="font-size:11px">${f.object ? V.refLink(f.object, V.last(f.object)) : ""}</td><td>${esc(f.message)}</td></tr>`).join("")}</table>
       ${shown.length > cap ? `<div class="hint" style="padding:6px">${esc(T("and {n} more; narrow the filter", { n: shown.length - cap }))}</div>` : ""}` : ""}`;
   V.wireRefs($("out"));
+  /* MANIFEST-1: the move of a listed Attestation is the user's act; after it the set is read again and checked again */
+  V.wireMove($("out"), async () => { await jscPage.refresh(); await run(); });
   $("out").querySelectorAll("[data-area]").forEach(b => b.addEventListener("click", () => { filter.area = b.dataset.area; render(); }));
   $("out").querySelectorAll("[data-kind]").forEach(b => b.addEventListener("click", () => { filter.kind = filter.kind === b.dataset.kind ? "" : b.dataset.kind; render(); }));
   let timer;

@@ -681,7 +681,9 @@ const jscAi = {
         <button type="button" class="small ai-forget" ${has ? "" : "disabled"}>${jscEsc(T("Forget the key"))}</button>
         <a class="btn small" href="config.html" target="_blank" rel="noopener">${jscEsc(T("Settings"))}</a></div>
         <p class="hint" style="max-width:86ch">${jscEsc(T("The key is held in the memory of this page and of the hub, never in the browser's storage, a set or an export. Reloading the hub clears it. Without a key nothing leaves this browser."))}</p>`;
-      host.querySelector(".ai-key").addEventListener("change", e => this.setKey(e.target.value));
+      /* setting the key draws this panel and the page's forms again; under a press that waits, so that a click on
+         "Ask the model" right after the key was typed reaches the button the key enables (jscRedraw in jascon-core.js) */
+      host.querySelector(".ai-key").addEventListener("change", e => { const typed = e.target.value; jscRedraw(() => this.setKey(typed)); });
       host.querySelector(".ai-forget").addEventListener("click", () => this.setKey(""));
     };
     keyListeners.push(render);

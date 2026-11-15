@@ -315,7 +315,8 @@ function renderWrite() {
 
   const again = () => { draft.save(); renderWrite(); };
   V.wireAuthor(el);
-  const bind = (id, set, rerender) => { const n = el.querySelector("#" + id); if (n) n.addEventListener("change", () => { set(n.value); draft.save(); if (rerender) renderWrite(); }); };
+  /* a field whose change draws the form again asks through jscRedraw: a press that made the field report waits for the new form, and its click is not lost (backlog #71) */
+  const bind = (id, set, rerender) => { const n = el.querySelector("#" + id); if (n) n.addEventListener("change", () => { set(n.value); draft.save(); if (rerender) jscRedraw(renderWrite); }); };
   bind("t-label", v => { d.label = v.trim() || d.label; });
   bind("t-exwhy", v => { d.exwhy = v; });
   V.wirePicker(el, "t-sel", ["requirementSet"], id => { if (!d.selects.includes(id)) d.selects.push(id); again(); });

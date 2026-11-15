@@ -94,12 +94,20 @@ const orgNs = () => jscCfg.get("org:ns").replace(/\/+$/, "") || "https://example
    for it, and is written with the day it is taken. */
 const NO_AUTHOR = N("No author is named. The kernel requires provenance.author-ref on a Check, so the check cannot be saved. The field “Author” is empty.");
 const NO_AUTHOR_TO_DRAFT = N("No author is named. The kernel requires provenance.author-ref on a Check, so a draft could not be saved, and nothing is sent. The field “Author” is empty.");
+/* The question before a check that was run is saved under another digest (jscChecksRunBy in jascon-checks.js; backlog
+   #71, point 2). The user may save or cancel; saving the changed check as a new version beside the old one is not offered. */
+const RAN_ASK = N("{n} Assessment(s) of this set ran this check as it is stored now: {list}. Each of their results records the digest of the check it ran, and a changed check is a different check (CHECK-8). If you save, these Assessments fail CHECK-8 on the Validate page and in the reference validator until the check is run again. Save the check?");
 const namedBy = id => { const r = id ? G.objects.get(id) : null; return ((r && r.obj.provenance) || {})["author-ref"] || ""; };
 const authorOf = E => V.partyRef(E.authorTyped ? E.authorRef : (V.author() || namedBy(E.existing)));
 const reqOf = id => { const r = G.objects.get(id); return r && r.type === "requirement" ? r.obj : null; };
 const lang = () => jscI18n.contentLang();
 
 jscI18n.add("de", {
+  "{n} Assessment(s) of this set ran this check as it is stored now: {list}. Each of their results records the digest of the check it ran, and a changed check is a different check (CHECK-8). If you save, these Assessments fail CHECK-8 on the Validate page and in the reference validator until the check is run again. Save the check?":
+    "{n} Assessment(s) dieses Sets haben diese Prüfung so ausgeführt, wie sie jetzt gespeichert ist: {list}. Jedes ihrer Ergebnisse hält den Digest der Prüfung fest, die es ausgeführt hat, und eine geänderte Prüfung ist eine andere Prüfung (CHECK-8). Wenn Sie speichern, verletzen diese Assessments CHECK-8 auf der Seite Validieren und im Referenzvalidator, bis die Prüfung erneut ausgeführt wird. Prüfung speichern?",
+  "and {n} more": "und {n} weitere", "check {id} was not saved; nothing changed": "Prüfung {id} wurde nicht gespeichert; nichts hat sich geändert",
+  "{n} Assessment(s) ran the check as it was and fail CHECK-8 now, until the check is run again: {list}":
+    "{n} Assessment(s) haben die Prüfung ausgeführt, wie sie war, und verletzen jetzt CHECK-8, bis die Prüfung erneut ausgeführt wird: {list}",
   "Rules and checks": "Regeln und Prüfungen", "Edit a check": "Prüfung bearbeiten", "Draft with a model": "Mit einem Modell entwerfen",
   "A check has two parts. The collector is code that reports facts and decides nothing. The criteria compare those facts with twelve fixed operators, so anyone can recompute a verdict from a recorded observation. A model may draft both; the kernel rules judge the draft, and you decide what is saved.":
     "Eine Prüfung hat zwei Teile. Der Kollektor ist Code, der Fakten meldet und nichts entscheidet. Die Kriterien vergleichen diese Fakten mit zwölf festen Operatoren, sodass jeder ein Urteil aus einer aufgezeichneten Beobachtung nachrechnen kann. Ein Modell darf beides entwerfen; die Kernel-Regeln beurteilen den Entwurf, und Sie entscheiden, was gespeichert wird.",
@@ -189,7 +197,7 @@ function renderRules() {
       <td><button type="button" class="small" data-new="${esc(r.id)}">${esc(T("New check"))}</button></td></tr>`).join("")}</table>
     ${shown.length > 300 ? `<p class="hint">${esc(T("and {n} more; narrow the filter", { n: shown.length - 300 }))}</p>` : ""}`;
   V.wireRefs($("rules"));
-  $("r-q").addEventListener("change", e => { f.q = e.target.value; ui.save(); renderRules(); });
+  $("r-q").addEventListener("change", e => { f.q = e.target.value; ui.save(); jscRedraw(renderRules); });   // not under a press (backlog #71)
   $("rules").querySelectorAll("[data-f]").forEach(b => b.addEventListener("click", () => { f[b.dataset.f] = b.dataset.v; ui.save(); renderRules(); }));
   $("rules").querySelectorAll("[data-new]").forEach(b => b.addEventListener("click", () => { startEdit(null, b.dataset.new); jscPage.show("edit"); }));
   $("rules").querySelectorAll("[data-edit]").forEach(b => b.addEventListener("click", () => { startEdit(b.dataset.edit); jscPage.show("edit"); }));
@@ -359,12 +367,16 @@ function renderEdit() {
 }
 function wireEdit(E) {
   const root = $("e-form"), again = () => { ui.save(); renderEdit(); };
+  /* A field's change draws the form again, and a text field reports its change when a press takes the focus from
+     it. Such a redraw is asked for through jscRedraw, so that the press finds the form it began on and its click
+     reaches "Save the check" of the form that holds what was typed (backlog #71). */
+  const changed = () => { ui.save(); jscRedraw(renderEdit); };
   V.wireRefs(root);
   V.wirePicker(root, "e-req", ["requirement"], id => { E.reqId = id; E.statementIds = []; E.platform = jscChecksPlatform(id, orgNs()); again(); });
   root.querySelectorAll("[data-sid]").forEach(b => b.addEventListener("change", () => {
-    E.statementIds = [...root.querySelectorAll("[data-sid]")].filter(x => x.checked).map(x => x.dataset.sid); again();
+    E.statementIds = [...root.querySelectorAll("[data-sid]")].filter(x => x.checked).map(x => x.dataset.sid); changed();
   }));
-  const field = (id, fn) => { const n = $(id); if (n) n.addEventListener("change", () => { fn(n); again(); }); };
+  const field = (id, fn) => { const n = $(id); if (n) n.addEventListener("change", () => { fn(n); changed(); }); };
   field("e-platform", n => { E.platform = n.value.trim(); });
   field("e-confidence", n => { E.confidence = n.value; });
   field("e-lifecycle", n => { E.lifecycle = n.value; });
@@ -380,7 +392,7 @@ function wireEdit(E) {
     const row = n.closest("[data-row]"), item = list(row.dataset.row)[+row.dataset.i];
     item[n.dataset.k] = n.value;
     if (row.dataset.row === "collectors" && n.dataset.k === "runtime" && (!item.id || JSC_CHECKS.RUNTIMES.includes(item.id))) item.id = n.value;
-    again();
+    changed();
   }));
   root.querySelectorAll("[data-add]").forEach(b => b.addEventListener("click", () => {
     const k = b.dataset.add;
@@ -392,8 +404,16 @@ function wireEdit(E) {
   $("e-save").addEventListener("click", async () => {
     const { obj, errors } = build(E);
     if (errors.length || judge(obj).length) { again(); return; }
+    /* A check that Assessments of the set have run: each of their results records the digest of the check as it
+       was (CHECK-8), so this save makes them fail. The Assessments are named and the user decides; cancelling
+       changes nothing (backlog #71, point 2). A new check has no runs, and a save that keeps the digest breaks none. */
+    const held = E.existing ? G.objects.get(E.existing) : null;
+    const ran = held ? jscChecksRunBy(G.objects, obj.id, await jscSemanticDigest(held.obj), await jscSemanticDigest(obj)) : [];
+    const named = ran.slice(0, 8).map(a => (a.label ? `${a.label} (${a.id})` : a.id)).join("; ") + (ran.length > 8 ? "; " + T("and {n} more", { n: ran.length - 8 }) : "");
+    if (ran.length && !confirm(T(RAN_ASK, { n: ran.length, list: named }))) { jscLog.info(T("check {id} was not saved; nothing changed", { id: obj.id })); return; }
     await jscSet.saveObjects([obj]);
     jscLog.ok(T("saved check {id}", { id: obj.id }));
+    if (ran.length) jscLog.warn(T("{n} Assessment(s) ran the check as it was and fail CHECK-8 now, until the check is run again: {list}", { n: ran.length, list: named }));
     E.existing = obj.id; E.keep = { title: obj.title, version: obj.version, provenance: obj.provenance, annotations: obj.annotations, facets: obj.facets };
     ui.save();
     await jscPage.refresh();
@@ -419,8 +439,8 @@ function renderTester(E, obj) {
     <textarea id="t-obs" placeholder='{"facts": {"sshd.maxauthtries": 4}}' aria-label="${esc(T("observation"))}">${esc(t.observation)}</textarea>
     <div class="wbrow"><label for="t-tail">${esc(T("values bound by"))}</label><select id="t-tail">${opt("", T("(type them)"), t.tailoring)}${tailorings.map(r => opt(r.obj.id, V.labelOf(r), t.tailoring)).join("")}</select></div>
     <textarea id="t-params" style="min-height:50px" placeholder='{"max-auth-tries": 4}' aria-label="${esc(T("parameter values"))}">${esc(t.params)}</textarea>${verdict}`;
-  $("t-obs").addEventListener("change", e => { t.observation = e.target.value; ui.save(); renderEdit(); });
-  $("t-params").addEventListener("change", e => { t.params = e.target.value; ui.save(); renderEdit(); });
+  $("t-obs").addEventListener("change", e => { t.observation = e.target.value; ui.save(); jscRedraw(renderEdit); });
+  $("t-params").addEventListener("change", e => { t.params = e.target.value; ui.save(); jscRedraw(renderEdit); });
   $("t-tail").addEventListener("change", e => {
     t.tailoring = e.target.value;
     const tg = G.objects.get(t.tailoring), bound = {};
@@ -468,7 +488,7 @@ function renderEditAi(E, req, rule) {
     ${E.ai ? (E.ai.fits === false ? `<div class="verdict-warn">${esc(T("The model says this rule does not fit a check: {reason}", { reason: E.ai.reason }))}</div>`
       : E.ai.problems && E.ai.problems.length ? `<div class="verdict-bad">${esc(T("The answer could not be made into a check:"))}</div>${E.ai.problems.map(p => `<div class="verdict-bad">✗ ${esc(p)}</div>`).join("")}`
       : `<div class="hint">${esc(T("draft from {by}: {reason}", { by: E.ai.by, reason: E.ai.reason }))}</div>`) : ""}`;
-  $("e-desc").addEventListener("change", e => { E.description = e.target.value; ui.save(); renderEdit(); });
+  $("e-desc").addEventListener("change", e => { E.description = e.target.value; ui.save(); jscRedraw(renderEdit); });
   $("e-runtime").addEventListener("change", e => { E.runtime = e.target.value; ui.save(); renderEdit(); });
   $("e-ai-run").addEventListener("click", async () => {
     let cfg;

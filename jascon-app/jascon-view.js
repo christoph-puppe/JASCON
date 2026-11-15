@@ -83,6 +83,18 @@ jscI18n.add("de", {
 });
 
 jscI18n.add("de", {
+  "You can have the move made now. The Attestation is taken out of the manifest's list in this set; the next export writes a new manifest without it and puts the file beside the manifest. The Attestation itself is not changed, and its signature stays what it is.":
+    "Sie können den Umzug jetzt vornehmen lassen. Die Attestation wird in diesem Set aus der Liste des Manifests genommen; der nächste Export schreibt ein neues Manifest ohne sie und legt die Datei neben das Manifest. Die Attestation selbst wird nicht geändert, und ihre Signatur bleibt, was sie ist.",
+  "What the move does to the binding: the Attestation keeps naming the manifest it was issued over, and the manifest an export writes is a new one. Held to that bundle it reads:":
+    "Was der Umzug mit der Bindung macht: Die Attestation nennt weiter das Manifest, über das sie ausgestellt wurde, und das Manifest, das ein Export schreibt, ist ein neues. An diesem Bundle gemessen lautet sie:",
+  "A Full Match needs the manifest the Attestation names. Where the new manifest is another one, the signer issues the Attestation again over it; until then it is a Semantic Match while every subject is as it was signed.":
+    "Ein Full Match braucht das Manifest, das die Attestation nennt. Wo das neue Manifest ein anderes ist, stellt der Unterzeichner die Attestation darüber neu aus; bis dahin ist sie ein Semantic Match, solange jeder Gegenstand so ist, wie er signiert wurde.",
+  "Take it out of the manifest's list": "Aus der Liste des Manifests nehmen",
+  "The set changed since this was shown; nothing was done. Check again.": "Das Set hat sich geändert, seit dies gezeigt wurde; es wurde nichts getan. Bitte erneut prüfen.",
+  "{id}: taken out of the manifest's list in this set. The file ({path}) and the Attestation are unchanged; the next export writes a new manifest without it and puts the file beside the manifest.":
+    "{id}: in diesem Set aus der Liste des Manifests genommen. Die Datei ({path}) und die Attestation sind unverändert; der nächste Export schreibt ein neues Manifest ohne sie und legt die Datei neben das Manifest.",
+});
+jscI18n.add("de", {
   "Author (party URI)": "Autor (Party-URI)", "written as the author, dated {date}": "wird als Autor geschrieben, mit Datum {date}",
   "empty: no author is written, and saving works all the same. The setting “Who am I” prefills this field.":
     "leer: Es wird kein Autor geschrieben, und das Speichern funktioniert trotzdem. Die Einstellung „Wer bin ich“ belegt dieses Feld vor.",
@@ -548,7 +560,7 @@ function wireAuthor(root, onChange) {
     authorTyped = n.value.trim();
     document.querySelectorAll("[data-author]").forEach(m => { m.value = author(); });
     document.querySelectorAll("[data-author-hint]").forEach(h => { h.textContent = authorHint(h.dataset.authorHint === "required"); });
-    if (onChange) onChange();
+    if (onChange) jscRedraw(onChange);   // onChange draws a form again: not under a press (jscRedraw in jascon-core.js)
   }));
 }
 
@@ -675,6 +687,14 @@ const BINDS_ADVICE = {
    an unchanged set leaves as it came; a changed one gets a manifest that leaves the Attestation out. */
 const LISTED_REFUSED = N("The manifest this set came with lists this Attestation. The app has not changed that: a set nobody changed leaves as it came, with that manifest. Once something in the set is changed, an export writes a new manifest, which leaves the Attestation out and puts its file beside the manifest.");
 const LISTED_LEFT_OUT = N("The manifest this set came with lists this Attestation, which MANIFEST-1 refuses. The set was changed since, and the manifest an export writes now does not list it: the file leaves beside the manifest, and the export says so.");
+/* The move, offered where the listing is refused (backlog #71, point 11): the user takes the Attestation out of the
+   manifest's list, and the export then writes the new manifest and puts the file beside it. What that does to the
+   binding is said before the button: the Attestation is not changed and names the manifest it was issued over, and
+   `after-move` of jscSetBinds is the line it gets against the manifest an export writes then. */
+const LISTED_MOVE = N("You can have the move made now. The Attestation is taken out of the manifest's list in this set; the next export writes a new manifest without it and puts the file beside the manifest. The Attestation itself is not changed, and its signature stays what it is.");
+const LISTED_MOVE_BINDS = N("What the move does to the binding: the Attestation keeps naming the manifest it was issued over, and the manifest an export writes is a new one. Held to that bundle it reads:");
+const LISTED_MOVE_NOTE = N("A Full Match needs the manifest the Attestation names. Where the new manifest is another one, the signer issues the Attestation again over it; until then it is a Semantic Match while every subject is as it was signed.");
+const LISTED_MOVE_DO = N("Take it out of the manifest's list");
 const bindsBasisKey = b => (b.basis === "loaded" ? "loaded" : b["loaded-manifest-digest"] ? "changed" : "none");
 const shortDigest = d => (typeof d === "string" && d.length > 24 ? d.slice(0, 19) + "…" : String(d || ""));
 const bindsBasis = b => T(BINDS_BASIS[bindsBasisKey(b)], { digest: shortDigest(b["manifest-digest"]), loaded: shortDigest(b["loaded-manifest-digest"]) });
@@ -687,12 +707,25 @@ function bindsHtml(binds, only) {
       <div class="mono ${l.kind === "failure" ? "verdict-bad" : l.verdict === "full-match" ? "verdict-ok" : "verdict-warn"}" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere" data-binds-text>${esc((l.kind === "failure" ? "error: " : "") + l.text)}</div>
       ${bindsAdvice(l) ? `<div class="hint" data-binds-advice>${esc(bindsAdvice(l))}</div>` : ""}
       ${l.listed === "refused" ? `<div class="mono verdict-bad" style="font-size:11.5px;margin:2px 0;overflow-wrap:anywhere" data-manifest-1="refused">${esc("error: " + l["manifest-1"])}</div>
-        <div class="hint" data-manifest-1-advice>${esc(T(LISTED_REFUSED))}</div>` : ""}
+        <div class="hint" data-manifest-1-advice>${esc(T(LISTED_REFUSED))}</div>
+        <div class="hint" data-move-offer>${esc(T(LISTED_MOVE))} ${l["after-move"] ? `${esc(T(LISTED_MOVE_BINDS))} <span class="mono" data-move-after>${esc(l["after-move"])}</span> ` : ""}${esc(T(LISTED_MOVE_NOTE))}
+          <div style="margin-top:4px"><button type="button" class="small" data-move="${esc(l.id)}">${esc(T(LISTED_MOVE_DO))}</button> <span class="verdict-bad" data-move-err role="alert"></span></div></div>` : ""}
       ${l.listed === "left-out" ? `<div class="hint" data-manifest-1="left-out">${esc(T(LISTED_LEFT_OUT))}</div>` : ""}</div>`).join("");
+}
+/* The button of the move. It marks the Attestation in the set (jscSet.unlistAttestation), says in the console what
+   was done, and calls after() so that the page shows the set as it is now. */
+function wireMove(root, after) {
+  root.querySelectorAll("[data-move]").forEach(b => b.addEventListener("click", async () => {
+    b.disabled = true;
+    const id = b.dataset.move, r = jscSet.graph.objects.get(id), done = await jscSet.unlistAttestation(id);
+    if (!done) { root.querySelector("[data-move-err]").textContent = T("The set changed since this was shown; nothing was done. Check again."); return; }
+    jscLog.ok(T("{id}: taken out of the manifest's list in this set. The file ({path}) and the Attestation are unchanged; the next export writes a new manifest without it and puts the file beside the manifest.", { id, path: r.path }));
+    await after();
+  }));
 }
 
 window.jscView = {
-  bindsHtml,
+  bindsHtml, wireMove,
   TYPE_VIEW, MODALITY_COLOR, VERDICT_CLASS, onOpen: null,
   open(id) { (this.onOpen || openDrawer)(id); },
   last, labelOf, titleOf, typeGlyph, typeBadge, badge, modBadge, refLink, wireRefs, prose, langBlocks, kv, prettyVal, section,

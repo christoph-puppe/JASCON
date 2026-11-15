@@ -209,6 +209,8 @@ async function verifyAttestation(id) {
     (l.fails ? `<div style="margin-top:6px"><button type="button" class="small" data-att-remove>${esc(T("Take it out of this set"))}</button>
       ${l.signed ? "" : `<button type="button" class="small" data-att-withdraw>${esc(T("Set it to withdrawn"))}</button>`}</div>` : "");
   jscLog[l.kind === "failure" ? "err" : "ok"](l.text);
+  /* MANIFEST-1: the move of a listed Attestation is the user's act; after it the board is drawn again and this card verified again */
+  V.wireMove(out, async () => { await jscPage.refresh(); await verifyAttestation(id); });
   const a = G.objects.get(id).obj, on = (sel, fn) => { const b = out.querySelector(sel); if (b) b.addEventListener("click", fn); };
   on("[data-att-remove]", async () => {
     const ref = a["envelope-ref"], shared = ofType("attestation").some(x => x.obj.id !== id && x.obj["envelope-ref"] === ref);

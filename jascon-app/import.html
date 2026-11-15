@@ -359,14 +359,14 @@ function render() {
       /* the CIS preset mints under the benchmark's namespace; leaving it gives the namespace of the other rules back */
       if (key === "preset" && opts.preset === "cis-benchmark") opts.ns = jscCisNamespace(doc.catalog);
       else if (key === "preset" && before === "cis-benchmark") opts.ns = jscCfg.get("org:ns").replace(/\/+$/, "") + "/fw/" + jscOscalSlug(doc.catalog.metadata.title || "catalog");
-      render();
+      jscRedraw(render);   // not under a press: a click on "Run the import" right after typing waits for the new form (backlog #71)
     });
   }
   if ($("o-party-default")) $("o-party-default").addEventListener("click", () => { delete opts.party; result = null; render(); });
   /* a field left as the source states it is not given; one that was changed is, also when it is now empty */
   for (const [id, key, from] of [["o-author", "authorRef", stated["author-ref"]], ["o-date", "date", stated.date]]) {
     const n = $(id);
-    if (n) n.addEventListener("change", () => { const v = n.value.trim(); if (v === (from || "")) delete opts[key]; else opts[key] = v; result = null; render(); });
+    if (n) n.addEventListener("change", () => { const v = n.value.trim(); if (v === (from || "")) delete opts[key]; else opts[key] = v; result = null; jscRedraw(render); });
   }
   if ($("o-checks")) $("o-checks").addEventListener("change", e => { opts.checks = e.target.checked; });
   $("run").addEventListener("click", run);

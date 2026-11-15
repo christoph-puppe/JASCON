@@ -30,10 +30,18 @@ let chromium = null;
 try { ({ chromium } = createRequire(import.meta.url)("playwright")); } catch (e) { /* skipped below */ }
 
 const MIME = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".md": "text/markdown" };
-/* `list`: answer a folder with a listing of its files, as `python -m http.server` does; without it a folder is a 404 */
-function serve(list) {
+/* `list`: answer a folder with a listing of its files, as `python -m http.server` does; without it a folder is a 404.
+   `list` "page": answer a folder with a page that lists nothing, as a host does that sends its start page for any
+   address it does not know. `seen`: a list that gets the path of every request */
+function serve(list, seen) {
   const server = http.createServer((req, res) => {
     const file = path.join(ROOT, decodeURIComponent(new URL(req.url, "http://x").pathname));
+    if (seen) seen.push(new URL(req.url, "http://x").pathname);
+    if (list === "page" && file.startsWith(ROOT) && fs.existsSync(file) && fs.statSync(file).isDirectory()) {
+      res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
+      res.end('<!doctype html><title>Start</title><a href="/">Home</a> <a href="attestation-ifa-ato.json">a link that lists nothing</a>');
+      return;
+    }
     if (list && file.startsWith(ROOT) && fs.existsSync(file) && fs.statSync(file).isDirectory()) {
       res.writeHead(200, { "content-type": "text/html; charset=utf-8" });
       res.end("<ul>" + fs.readdirSync(file).sort().map(n => `<li><a href="${encodeURIComponent(n)}${fs.statSync(path.join(file, n)).isDirectory() ? "/" : ""}">${n}</a></li>`).join("") + "</ul>");
@@ -60,18 +68,38 @@ const zipOf = (dir, name) => ({ name: name + ".zip", mimeType: "application/zip"
 const jsonFile = (name, obj) => ({ name, mimeType: "application/json", buffer: Buffer.from(JSON.stringify(obj, null, 1) + "\n") });
 const pythonWithJsonschema = spawnSync("python3", ["-c", "import jsonschema"]).status === 0;
 const needs = !chromium ? "Playwright with Chromium is not installed" : !pythonWithJsonschema ? "python3 with jsonschema is not installed" : false;
-/* a browser on the app -> { page, base, errors, close() }; a dialog nobody expects is an error */
+/* a browser on the app -> { page, base, errors, requests, onDialog, close() }; a dialog nobody expects is an error. A test that
+   expects a question sets s.onDialog to what answers it, and takes it away again. */
 async function session(opts = {}) {
-  const server = await serve(opts.list), base = `http://127.0.0.1:${server.address().port}/jascon-app/`;
+  const requests = [], server = await serve(opts.list, requests), base = `http://127.0.0.1:${server.address().port}/jascon-app/`;
   const browser = await chromium.launch(), page = await (await browser.newContext({ acceptDownloads: true })).newPage(), errors = [];
+  const s = { page, base, errors, requests, onDialog: null, close: async () => { await browser.close(); server.close(); } };
   page.on("pageerror", e => errors.push(`${page.url().split("/").pop()}: ${e.message}`));
   page.on("console", m => { if (m.type() === "error") errors.push(`${page.url().split("/").pop()}: ${m.text()}`); });
-  page.on("dialog", d => { errors.push("a dialog asked: " + d.message()); d.dismiss(); });
+  page.on("dialog", d => { if (s.onDialog) { s.onDialog(d); return; } errors.push("a dialog asked: " + d.message()); d.dismiss(); });
   await page.goto(base + "index.html");
   await page.waitForFunction(() => document.querySelector("#help h1"));
   await page.evaluate(() => localStorage.setItem("jsc:cfg:ui:lang", "en"));
-  return { page, base, errors, close: async () => { await browser.close(); server.close(); } };
+  return s;
 }
+/* Types into a field as a user does and stays in it. A text field reports its change when something takes the
+   focus away, so after this the page has not heard of the value yet (the helper `type` below leaves the field). */
+const keys = async (p, selector, text, replace) => {
+  await p.locator(selector).click();
+  await p.keyboard.press(replace ? "ControlOrMeta+A" : "End");
+  await p.keyboard.type(text);
+};
+/* One press and release of the mouse in the middle of an element, as it lies when the press begins. Not
+   locator.click(): that waits until the element is enabled and stable, and a button that is disabled or about to be
+   replaced when the user presses it is what these tests are about. -> what lay under the pointer */
+const press = async (p, selector) => {
+  const n = p.locator(selector);
+  await n.evaluate(x => x.scrollIntoView({ block: "center" }));
+  const b = await n.boundingBox(), at = [b.x + b.width / 2, b.y + b.height / 2];
+  const under = await n.evaluate((x, [px, py]) => { const hit = document.elementFromPoint(px, py); return !!hit && (hit === x || x.contains(hit)); }, at);
+  assert.ok(under, selector + " lies under the pointer");
+  await p.mouse.click(...at);
+};
 const toHub = async s => { await s.page.goto(s.base + "index.html"); await s.page.waitForFunction(() => document.querySelector("#help h1")); };
 /* a tool page on its own, ready when it has read the set */
 const open = async (s, file, view) => {
@@ -167,7 +195,10 @@ test("the hub lists every tool page that exists, and every listed page exists", 
 });
 
 test("every page starts without a script error, in English and in German", { skip: !chromium && "Playwright with Chromium is not installed" }, async () => {
-  const server = await serve(), base = `http://127.0.0.1:${server.address().port}/jascon-app/`;
+  /* The server lists its folders, as `python -m http.server` does: since build 0.9.24 a load from a URL asks for the
+     bundle's folder once, and on a server that lists nothing that request is a line in the browser's console (the
+     test of the URL load holds that line). The IFA bundle arrives with its Attestation here. */
+  const server = await serve(true), base = `http://127.0.0.1:${server.address().port}/jascon-app/`;
   const browser = await chromium.launch();
   try {
     const page = await (await browser.newContext()).newPage();
@@ -546,13 +577,92 @@ test("MANIFEST-1: a set whose manifest lists an Attestation fails as the referen
   } finally { await s.close(); }
 });
 
-test("a bundle from a URL: where the server lists the folder, the Attestations beside the manifest are read and held to what they bind; where it does not, the hub says that none was looked for", { skip: needs }, async () => {
-  /* the example folder keeps a vendor's pack, which is the app's reason to ask the server for a listing */
+/* Backlog #71, point 11 (build 0.9.24): the move as the user's act. A set that came with a manifest listing an
+   Attestation and was not changed had no repair in the app: it left as it came, and the reference refused the export
+   as it refused the folder (the test above holds that for a set nobody touched). Now the place that shows the failure
+   offers to take the Attestation out of the manifest's list, and says before the click what that does to the binding:
+   the line the Attestation gets against the manifest an export writes then. The reference is the judge of that line. */
+test("MANIFEST-1, the move: where the listing is refused the page offers to take the Attestation out of the manifest's list and says what that does to the binding; only then the export writes a manifest without it, the file lies beside it unchanged, and the reference passes the folder with the binding that was announced", { skip: needs }, async t => {
+  const tmp = [];
+  t.after(() => { for (const d of tmp) fs.rmSync(d, { recursive: true, force: true }); });
+  const copy = await listedCopy(IFA, "attestation-ifa-ato.json", tmp), ref = referenceRun(copy, ["--as-of", AS_OF_46]);
+  const LISTED_AT = "objects/attestation/attestation-ifa-ato.json";
+  assert.deepEqual(ref.failures, [MANIFEST_1(IFA_ATT)]);
+  let s = await session(), p = s.page;
+  try {
+    await load(s, zipOf(copy, "ifa"));
+    const before = await snapshot(s);
+    await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+    const refused = await attestationsShown(s);
+    assert.deepEqual(refused.lines.map(l => [l.listed, l.kind, l.text]), [["refused", ...asShown(ref)[0]]]);
+    /* the offer: what is done, and what it does to the binding, before anything is done */
+    const offer = p.locator("#report-binds [data-move-offer]");
+    assert.match(await offer.innerText(), /^You can have the move made now\. The Attestation is taken out of the manifest's list in this set; the next export writes a new manifest without it and puts the file beside the manifest\. The Attestation itself is not changed, and its signature stays what it is\. What the move does to the binding: the Attestation keeps naming the manifest it was issued over, and the manifest an export writes is a new one\. Held to that bundle it reads: binds: /);
+    const announced = await offer.locator("[data-move-after]").innerText();
+    assert.match(announced, /^binds: https:\/\/ifa\.gov\/goodread\/attestation\/ifa-ato = SEMANTIC MATCH \[3 subject\(s\) of this bundle; another manifest/);
+    assert.deepEqual(await snapshot(s), before, "an offer writes nothing");
+    assert.equal(await p.evaluate(async () => (await jscStore.files(jscStore.activeSet())).filter(r => r.unlisted).length), 0);
+
+    await p.locator(`#report-binds [data-move="${IFA_ATT}"]`).click();
+    await p.locator('#report-binds [data-manifest-1="left-out"]').waitFor({ timeout: 60000 });
+    const after = await attestationsShown(s);
+    assert.equal(after.basis, "changed", "the set counts as changed, by this act and nothing else");
+    assert.deepEqual(after.lines.map(l => [l.listed, l.kind, l.text]), [["left-out", "line", announced]], "the binding is what the page said the move would make it");
+    assert.deepEqual(after.errors, [], "no MANIFEST-1 failure is left");
+    assert.equal(await p.locator("#report-binds [data-move]").count(), 0, "and nothing is left to offer");
+    assert.equal(await p.locator("#log .l-ok", { hasText: "taken out of the manifest's list" }).last().innerText().then(x => x.replace(/^[\d:.]+/, "")),
+      `${IFA_ATT}: taken out of the manifest's list in this set. The file (${LISTED_AT}) and the Attestation are unchanged; the next export writes a new manifest without it and puts the file beside the manifest.`);
+    /* in the set only the mark is new: every file has the bytes and the place it had, the manifest the set came with among them */
+    assert.deepEqual(await snapshot(s), before);
+    assert.deepEqual(await p.evaluate(async () => (await jscStore.files(jscStore.activeSet())).filter(r => r.unlisted).map(r => [r.path, r.type, r.origin])), [[LISTED_AT, "attestation", "imported"]]);
+
+    const moved = await exported(s); tmp.push(moved.out);
+    assert.match(await p.locator("#home-log .l-warn").allInnerTexts().then(x => x.join(" | ")), new RegExp(IFA_ATT.replace(/[.]/g, "\\.") + ": was listed in the manifest this set came with; a manifest written here lists no Attestation \\(MANIFEST-1\\), so it leaves beside the manifest as attestation-ifa-ato\\.json"),
+      "the export says what it did");
+    assert.deepEqual(moved.manifest.objects.filter(e => /attestation/.test(e.id + e.path)), []);
+    assert.equal(moved.manifest.objects.length, JSON.parse(fs.readFileSync(path.join(copy, "content-manifest.json"), "utf8")).objects.length - 1, "one line less, the Attestation's");
+    assert.deepEqual([fs.existsSync(path.join(moved.dir, "attestation-ifa-ato.json")), fs.existsSync(path.join(moved.dir, LISTED_AT))], [true, false], "the file lies beside the manifest now");
+    assert.equal(fs.readFileSync(path.join(moved.dir, "attestation-ifa-ato.json"), "utf8"), fs.readFileSync(path.join(copy, LISTED_AT), "utf8"), "with the bytes it had");
+    const fixed = referenceRun(moved.dir, ["--as-of", AS_OF_46]);
+    t.diagnostic(`validate_core.py on the folder as it came: ${ref.pass} pass, ${ref.failures.length} failure(s); on the export after the move: ${fixed.pass} pass, ${fixed.failures.length} failure(s); ${fixed.binds[0]}`);
+    assert.ok(fixed.green, fixed.stdout.slice(-800));
+    assert.equal(fixed.pass, 18);
+    assert.deepEqual(asShown(fixed), [["line", announced]], "the reference says about the exported folder what the page announced before the move");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+  /* the Assess page shows the same failure for one Attestation and offers the same move */
+  s = await session(); p = s.page;
+  try {
+    await load(s, zipOf(copy, "ifa"));
+    await open(s, "assess.html", "board");
+    const card = p.locator(`[data-att-card="${IFA_ATT}"]`);
+    await card.locator("[data-att]").click();
+    assert.equal(await card.locator('[data-manifest-1="refused"]').innerText(), "error: " + MANIFEST_1(IFA_ATT));
+    const announced = await card.locator("[data-move-after]").innerText();
+    await card.locator(`[data-move="${IFA_ATT}"]`).click();
+    await card.locator('[data-manifest-1="left-out"]').waitFor({ timeout: 60000 });
+    assert.equal(await card.locator("[data-binds-text]").innerText(), announced);
+    assert.deepEqual([await card.locator('[data-manifest-1="refused"]').count(), await card.locator("[data-move]").count()], [0, 0]);
+    const moved = await exported(s); tmp.push(moved.out);
+    assert.ok(referenceRun(moved.dir, ["--as-of", AS_OF_46]).green);
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+});
+
+/* Backlog #71, point 8 (build 0.9.24): the server is asked for the folder of every bundle, once, as the reader does
+   since 1.13.0. Until build 0.9.23 it was asked only where a bundle keeps a pack, and the Attestation beside any other
+   bundle's manifest did not arrive: the IFA bundle, which the project's site offers behind "Open in the app" and whose
+   folder that site lists, came with 16 objects and without its Attestation (measured on a server that lists folders). */
+test("a bundle from a URL: the server is asked once for the folder of every bundle; where it lists the folder, the Attestations beside the manifest are read and held to what they bind, with or without a pack; where it does not, the hub says so", { skip: needs }, async () => {
+  const NO_LISTING = "This server does not list the folder of the bundle. A URL names files, not folders, so an Attestation beside the manifest could not be looked for, and none is held to what it binds; load the folder or a ZIP for that.";
+  const folderRequests = (s, folder) => s.requests.filter(u => u === folder).length;
+  /* the example folder keeps a vendor's pack */
   let s = await session({ list: true });
   try {
     await s.page.goto(s.base + "index.html#load=../jascon/examples/");
     await s.page.waitForFunction(() => document.querySelector("#home-log .l-ok"), null, { timeout: 60000 });
-    assert.equal(await s.page.locator("#home-log .l-info", { hasText: "was not looked for" }).count(), 0);
+    assert.equal(await s.page.locator("#home-log .l-info", { hasText: "does not list the folder" }).count(), 0);
+    assert.equal(folderRequests(s, "/jascon/examples/"), 1);
     const ref = referenceRun(EX, ["--as-of", AS_OF_46]);
     await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
     const shown = await attestationsShown(s);
@@ -562,16 +672,49 @@ test("a bundle from a URL: where the server lists the folder, the Attestations b
     assert.deepEqual(shown.errors, []);
     assert.deepEqual(s.errors, []);
   } finally { await s.close(); }
-  /* no listing is asked of a server for a bundle that keeps no pack: the IFA bundle arrives without its Attestation, and the hub says so */
+  /* the IFA bundle keeps no pack and has its Attestation beside the manifest: on a server that lists the folder it arrives with it */
+  const IFA_FOLDER = "/converted_examples/US.IFA-GoodRead/ifa-core-bundle/";
+  s = await session({ list: true });
+  try {
+    await s.page.goto(s.base + "index.html#load=.." + IFA_FOLDER);
+    await s.page.waitForFunction(() => document.querySelector("#home-log .l-ok"), null, { timeout: 60000 });
+    assert.equal(await s.page.locator("#home-log .l-info", { hasText: "does not list the folder" }).count(), 0);
+    assert.equal(folderRequests(s, IFA_FOLDER), 1, "the folder is asked for once");
+    const ref = referenceRun(IFA, ["--as-of", AS_OF_46]);
+    await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
+    const shown = await attestationsShown(s);
+    assert.deepEqual(shown.lines.map(l => [l.kind, l.text]), asShown(ref), "the Attestation was fetched and is held to what it binds, in the reference's words");
+    assert.deepEqual(shown.lines.map(l => [l.kind, l.verdict]), [["line", "full-match"]]);
+    assert.deepEqual(shown.dsse, ref.dsse);
+    assert.deepEqual([shown.objects, shown.objects + 1], [17, ref.pass], "seventeen objects, the Attestation among them");
+    assert.deepEqual(shown.errors, []);
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+  /* a server that lists no folders is asked all the same, once: the request is a line in the browser's console, the
+     bundle arrives without its Attestation, and the hub says that it could not look */
   s = await session();
   try {
-    await s.page.goto(s.base + "index.html#load=../converted_examples/US.IFA-GoodRead/ifa-core-bundle/");
+    await s.page.goto(s.base + "index.html#load=.." + IFA_FOLDER);
     await s.page.waitForFunction(() => document.querySelector("#home-log .l-ok"), null, { timeout: 60000 });
-    assert.equal(await s.page.locator("#home-log .l-info").last().innerText().then(x => x.replace(/^\d\d:\d\d:\d\d/, "")),
-      "From a URL only the files a manifest names are fetched. An Attestation beside the manifest was not looked for, so none is held to what it binds; load the folder or a ZIP for that.");
+    assert.equal(await s.page.locator("#home-log .l-info").last().innerText().then(x => x.replace(/^\d\d:\d\d:\d\d/, "")), NO_LISTING);
+    assert.equal(folderRequests(s, IFA_FOLDER), 1, "asked once, and not again for a file it could only have guessed");
+    assert.deepEqual(s.requests.filter(u => /attestation/.test(u)), []);
+    assert.deepEqual(s.errors.map(m => m.replace(/^[^:]*: /, "")), ["Failed to load resource: the server responded with a status of 404 (Not Found)"], "the one console line of the folder that is not listed");
+    s.errors.length = 0;
     await validatePage(s, { asOf: AS_OF_46, requireAuthors: false });
     const shown = await attestationsShown(s);
     assert.deepEqual([shown.objects, shown.basis, shown.lines], [16, null, []], "sixteen objects and no Attestation: the page claims nothing about one");
+    assert.deepEqual(s.errors, []);
+  } finally { await s.close(); }
+  /* a server that answers the folder with a page of its own: a page counts as a listing only when it links
+     content-manifest.json, so this folder was not looked into, nothing the page links is fetched, and the hub says so */
+  s = await session({ list: "page" });
+  try {
+    await s.page.goto(s.base + "index.html#load=.." + IFA_FOLDER);
+    await s.page.waitForFunction(() => document.querySelector("#home-log .l-ok"), null, { timeout: 60000 });
+    assert.equal(await s.page.locator("#home-log .l-info").last().innerText().then(x => x.replace(/^\d\d:\d\d:\d\d/, "")), NO_LISTING);
+    assert.deepEqual([folderRequests(s, IFA_FOLDER), s.requests.filter(u => /attestation/.test(u))], [1, []]);
+    assert.equal(await s.page.evaluate(async () => (await jscStore.files(jscStore.activeSet())).filter(r => r.type === "attestation").length), 0);
     assert.deepEqual(s.errors, []);
   } finally { await s.close(); }
 });
@@ -1154,6 +1297,10 @@ test("Import, Map and Checks: a profile's Tailoring names the document's author 
        beside that author, and no longer beside the author of the earlier version. (This comes last: the edited check
        has recorded runs in this set, and a changed check is a different check for them, CHECK-8.) */
     const CHECK = "https://cso.example/check/LNX-SSH-1-ciphers";
+    /* since build 0.9.24 the page asks before such a save and names the Assessments that ran the check (backlog #71, point 2;
+       the test of that question is further down). Here the answer is yes, both times. */
+    const asked = [];
+    s.onDialog = d => { asked.push(d.message()); d.accept(); };
     await open(s, "checks.html", "rules");
     await p.locator(`[data-edit="${CHECK}"]`).click();
     assert.equal(await p.locator("#e-author").inputValue(), ALICE, "the check names secops; the editor is alice");
@@ -1170,6 +1317,8 @@ test("Import, Map and Checks: a profile's Tailoring names the document's author 
     await p.locator("#e-save").click();
     await p.locator("#log .l-ok", { hasText: "saved check" }).first().waitFor();
     assert.deepEqual((await stored(s, "check")).find(c => c.id === OTHER).provenance, { "author-ref": "https://cso.example/party/secops", date: day });
+    assert.deepEqual(asked.map(m => m.split(":")[0]), Array(2).fill("2 Assessment(s) of this set ran this check as it is stored now"), "each of the two saves was asked about");
+    s.onDialog = null;
     assert.deepEqual(s.errors, []);
   } finally {
     for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
@@ -1788,5 +1937,191 @@ test("an Assessment with the method this app wrote before build 0.9.13: the Vali
     assert.deepEqual([...referenceRun(next.dir, ["--as-of", AS_OF_46]).failures].sort(), [NO_FACET(FOREIGN, "https://example.org/facet/our-method@1"), NO_SUCH_FACET].sort(), "and the reference says the same about the exported folder");
     assert.deepEqual(s.errors, []);
   } finally { await s.close(); }
+});
+
+/* ====================================================================
+   A click right after typing (backlog #71, point 1; build 0.9.24)
+   ====================================================================
+   A text field reports its change when it loses the focus, and the press on
+   a button is what takes the focus away. Where a form drew itself again on
+   that change, the button under the press was replaced, or was still
+   disabled because the form did not have the value yet, and the first click
+   did nothing; the second worked. Measured with build 0.9.23 in Chromium on
+   each form below. The redraw now waits for the press (jscRedraw in
+   jascon-core.js).
+
+   These tests type with the keyboard and stay in the field (`keys`), then
+   press the mouse where the button lies (`press`). The helper `type` and
+   locator.click() of the other tests leave the field first and wait for the
+   button, which is the one path that always worked. */
+test("a click right after typing is not lost: on the Tailor page the first click adds the operation, also where the button was disabled until the form had the value, and a value the form refuses adds nothing; the Checks editor, the Risk form, the scale editor and the Import page take their first click too", { skip: needs }, async t => {
+  const s = await session(), p = s.page, tmp = [];
+  try {
+    await iAm(s, ALICE);
+    await load(s, zipOf(EX, "examples"));
+
+    /* --- Tailor: the workbench --- */
+    await open(s, "tailor.html", "write");
+    await type(p.locator("#t-label"), "first-click");
+    await pick(s, "t-sel", "linux", LINUX_SET);
+    await pick(s, "t-req", "LNX", LNX);
+    await p.locator("#op-kind").selectOption("set-parameter");
+    const operations = () => p.evaluate(() => JSON.parse(JSON.stringify(draft.data.operations)));
+    /* a value of the wrong kind: the form takes it, the button stays disabled, and the click adds nothing */
+    assert.ok(await p.locator("#op-add").isDisabled(), "no value yet");
+    await keys(p, "#op-value", "four");
+    await press(p, "#op-add");
+    await p.waitForFunction(() => draft.data.op.value === "four");
+    await p.waitForTimeout(300);   // the time a click that is handed on would have needed
+    assert.deepEqual([await operations(), await p.locator("#op-add").isDisabled(), await p.locator("#op-value").inputValue()], [[], true, "four"]);
+    /* a legal value: the button is disabled while the field holds it unreported, and the first click adds the operation */
+    await keys(p, "#op-value", "4", true);
+    assert.ok(await p.locator("#op-add").isDisabled(), "typed, and the form has not heard of it");
+    await press(p, "#op-add");
+    await p.locator("[data-delop]").first().waitFor();
+    assert.deepEqual(await operations(), [{ op: "set-parameter", "requirement-ref": LNX, "statement-id": "s1", parameter: "max-auth-tries", value: 4 }]);
+    /* a button that is enabled when the press begins and that the redraw replaces: the prose of the other statement */
+    await p.locator("#op-stmt").selectOption("s2");
+    await p.locator("#op-kind").selectOption("replace-prose");
+    assert.ok(await p.locator("#op-add").isEnabled());
+    await keys(p, "#op-prose", " Reworded.");
+    await press(p, "#op-add");
+    await p.locator("[data-delop]").nth(1).waitFor();
+    assert.deepEqual((await operations())[1], { op: "replace-prose", "requirement-ref": LNX, "statement-id": "s2", prose: { en: "The SSH daemon offers no cipher in CBC mode. Reworded." }, intent: "editorial" }, "the click took what was typed");
+    /* the click goes to the button of the form that holds the value, and what that button says stays on the page:
+       a second value for the parameter that has an operation already is refused in words */
+    await p.locator("#op-kind").selectOption("set-parameter");
+    await keys(p, "#op-value", "3");
+    await press(p, "#op-add");
+    await p.locator("#op-err", { hasText: "Two operations on one target" }).waitFor();
+    assert.equal(await p.locator("#op-err").innerText(), "Two operations on one target in one Tailoring are an error. Chain Tailorings to override.");
+    assert.equal((await operations()).length, 2);
+    /* a press on another field after typing: the field of the new form has the focus the press was for */
+    await p.locator("#op-kind").selectOption("replace-prose");
+    await keys(p, "#op-prose", " Again.");
+    await press(p, "#op-lang");
+    await p.waitForFunction(() => document.activeElement && document.activeElement.id === "op-lang" && document.activeElement.isConnected && draft.data.op.prose.endsWith(" Again."));
+    await p.locator("#t-save").click();
+    await p.locator("#resolve .filterrow").waitFor();
+    assert.deepEqual((await stored(s, "tailoring")).find(x => x.label === "first-click").operations.map(o => o.op), ["set-parameter", "replace-prose"]);
+
+    /* --- Checks: the editor. The last missing value is typed and "Save the check", disabled until then, is pressed --- */
+    await open(s, "checks.html", "edit");
+    await pick(s, "e-req", "LNX", LNX);
+    await type(p.locator('[data-row="observes"][data-i="0"] [data-k="name"]'), "sshd.loglevel");
+    await p.locator('[data-row="criteria"][data-i="0"] [data-k="fact"]').selectOption("sshd.loglevel");
+    assert.ok(await p.locator("#e-save").isDisabled(), "the expected value is missing");
+    await keys(p, '[data-row="criteria"][data-i="0"] [data-k="expected"]', '"INFO"');
+    assert.ok(await p.locator("#e-save").isDisabled());
+    await press(p, "#e-save");
+    await p.locator("#log .l-ok", { hasText: "saved check" }).first().waitFor();
+    assert.deepEqual((await stored(s, "check")).find(c => c.id.startsWith(NS + "/check/")).criteria, [{ fact: "sshd.loglevel", op: "equals", expected: "INFO" }]);
+    /* the list: the filter is typed and "Edit" on a row pressed; the filter is taken and the editor opens on that check */
+    const CIPHERS = "https://cso.example/check/LNX-SSH-1-ciphers";
+    await p.locator('.navitem[data-view="rules"]').click();
+    await keys(p, "#r-q", "LNX");
+    await press(p, `[data-edit="${CIPHERS}"]`);
+    await p.locator('#main > [data-view="edit"]:not(.hidden)').waitFor();
+    assert.deepEqual(await p.evaluate(() => [ui.data.edit.existing, ui.data.filter.q]), [CIPHERS, "LNX"]);
+
+    /* --- Risk: the form, whose redraw is asynchronous, and the scale editor --- */
+    await open(s, "risk.html", "register");
+    const risk = (await stored(s, "risk"))[0];
+    await p.locator(`[data-risk="${risk.id}"]`).click();
+    await p.locator("#r-save").waitFor();
+    await keys(p, "#r-title", " (reworded)");
+    await press(p, "#r-save");
+    await p.locator("#log .l-ok", { hasText: "saved 1 object" }).first().waitFor();
+    assert.equal((await stored(s, "risk"))[0].title.en, risk.title.en + " (reworded)");
+    await p.locator('.navitem[data-view="scales"]').click();
+    await p.locator("#scales [data-edit]").first().click();
+    await keys(p, "#s-title", " (ours)");
+    await press(p, "#s-save");
+    await p.locator("#log .l-ok", { hasText: "scale saved" }).first().waitFor();
+    assert.equal(await p.evaluate(() => [...jscSet.graph.scales.values()].filter(x => /\(ours\)$/.test((x.def.title || {}).en || "")).length), 1);
+
+    await greenWithAuthors(s, t, tmp, "the example folder with a Tailoring, a Check, a Risk and a scale, each saved by the first click after typing");
+
+    /* --- Import: an option is typed and "Run the import" pressed; the run uses what was typed. Nothing is written. --- */
+    await p.goto(s.base + "import.html");
+    await p.locator("#pick").setInputFiles(jsonFile("cis.json", cisSynthetic()));
+    await p.locator("#run").waitFor();
+    const ns = await p.locator("#o-ns").inputValue();
+    await keys(p, "#o-ns", "-x");
+    await press(p, "#run");
+    await p.locator("#write").waitFor();
+    assert.equal(await p.locator("#o-ns").inputValue(), ns + "-x");
+    assert.deepEqual(s.errors, []);
+  } finally {
+    for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
+    await s.close();
+  }
+});
+
+/* ====================================================================
+   A Check that an Assessment has run (backlog #71, point 2; build 0.9.24)
+   ====================================================================
+   A result of an Assessment records the digest of the check it ran
+   (CHECK-8). Saving an edit of that check made the Assessment fail, and the
+   Checks page said nothing: measured with build 0.9.23 on the example
+   folder, two CHECK-8 failures of the reference after one save. Decided on
+   2026-11-15: before saving, the page names the Assessments that ran the
+   check and asks; the user may save or cancel. Saving the changed check as
+   a new version beside the old one was not decided and is not offered. */
+test("Checks: before a check that Assessments of the set ran is saved under another digest the page names them and asks; cancelled, nothing is written; saved, the reference fails exactly the Assessments that were named; a save that keeps the digest is not asked about", { skip: needs }, async t => {
+  const CHECK = "https://cso.example/check/LNX-SSH-1-ciphers", RUNS = ["https://cso.example/assessment/bastion-01-2026-11-03", "https://cso.example/assessment/bastion-01-2026-11-10"];
+  /* the rule, on the files of the example folder */
+  const lib = createRequire(import.meta.url)("../jascon-checks.js");
+  const g = core.jscGraphFrom(core.jscClassifyFiles(core.jscKeepFiles(tree(EX))).records), held = g.objects.get(CHECK).obj;
+  const asStored = await core.jscSemanticDigest(held), changed = await core.jscSemanticDigest({ ...held, confidence: "draft" });
+  assert.notEqual(asStored, changed);
+  assert.deepEqual(lib.jscChecksRunBy(g.objects, CHECK, asStored, changed), [{ id: RUNS[0], label: "Daily run 2026-11-03", rows: 1 }, { id: RUNS[1], label: "Daily run 2026-11-10", rows: 1 }]);
+  assert.deepEqual(lib.jscChecksRunBy(g.objects, CHECK, asStored, asStored), [], "the digest stays: no result changes its verdict");
+  assert.deepEqual(lib.jscChecksRunBy(g.objects, CHECK, changed, asStored), [], "results that disagree with the stored check already are not what a save breaks");
+  assert.deepEqual(lib.jscChecksRunBy(g.objects, "https://cso.example/check/none", asStored, changed), []);
+
+  const QUESTION = `2 Assessment(s) of this set ran this check as it is stored now: Daily run 2026-11-03 (${RUNS[0]}); Daily run 2026-11-10 (${RUNS[1]}). ` +
+    "Each of their results records the digest of the check it ran, and a changed check is a different check (CHECK-8). If you save, these Assessments fail CHECK-8 on the Validate page and in the reference validator until the check is run again. Save the check?";
+  const s = await session(), p = s.page, tmp = [];
+  try {
+    await iAm(s, ALICE);
+    await load(s, zipOf(EX, "examples"));
+    const asked = [];
+    let answer = "dismiss";
+    s.onDialog = d => { asked.push(d.message()); d[answer](); };
+    const saves = () => p.locator("#log .l-ok", { hasText: "saved check" }).count();
+    await open(s, "checks.html", "rules");
+    await p.locator(`[data-edit="${CHECK}"]`).click();
+    await p.locator("#e-confidence").selectOption("draft");
+    const before = await snapshot(s);
+    /* cancelled */
+    await p.locator("#e-save").click();
+    await p.locator("#log .l-info", { hasText: "was not saved" }).first().waitFor();
+    assert.deepEqual(asked, [QUESTION]);
+    assert.deepEqual(await snapshot(s), before, "cancelled: the set is byte for byte what it was");
+    assert.deepEqual([await saves(), await p.locator("#e-confidence").inputValue()], [0, "draft"], "nothing was saved, and the form keeps the edit");
+    /* saved */
+    answer = "accept";
+    await p.locator("#e-save").click();
+    await p.locator("#log .l-ok", { hasText: "saved check" }).first().waitFor();
+    assert.deepEqual(asked, [QUESTION, QUESTION]);
+    assert.equal((await stored(s, "check")).find(c => c.id === CHECK).confidence, "draft");
+    assert.equal(await p.locator("#log .l-warn", { hasText: "fail CHECK-8 now" }).last().evaluate(n => n.lastChild.textContent),
+      `2 Assessment(s) ran the check as it was and fail CHECK-8 now, until the check is run again: Daily run 2026-11-03 (${RUNS[0]}); Daily run 2026-11-10 (${RUNS[1]})`);
+    /* saved once more, unchanged, by the same author on the same day: the digest stays, no result changes, and nothing is asked */
+    await p.locator("#e-save").click();
+    await p.waitForFunction(() => [...document.querySelectorAll("#log .l-ok")].filter(n => n.textContent.includes("saved check")).length === 2);
+    assert.equal(asked.length, 2);
+    s.onDialog = null;
+    /* the reference on the export: the Assessments the page named, each for the result that ran this check, and nothing else */
+    const out = await exported(s); tmp.push(out.out);
+    const ref = referenceRun(out.dir, ["--as-of", AS_OF_46]);
+    t.diagnostic(`validate_core.py on the export after the save: ${ref.pass} pass, ${ref.failures.length} failure(s)`);
+    assert.deepEqual(ref.failures, RUNS.map(a => `${a}: check-results[1]: check-digest does not match ${CHECK} - the check changed after the run (CHECK-8: a result names the check it ran and that check's semantic digest - a changed check is a different check)`));
+    assert.deepEqual(s.errors, []);
+  } finally {
+    for (const d of tmp) fs.rmSync(d, { recursive: true, force: true });
+    await s.close();
+  }
 });
 

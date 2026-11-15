@@ -2016,13 +2016,24 @@ const jscListedAttestationErrors = objs => [...objs.keys()].sort().filter(id => 
    export leaves it out of the manifest and puts the file beside it. A set
    is never repaired without that being said.
 
+   A set nobody changed can be brought to the second basis by the user: an
+   Attestation the manifest lists is taken out of that list (`unlisted` on
+   its record; jscBuildBundle in jascon-core.js, backlog #71 point 11). That
+   counts as written here. A line that is "refused" says what the move would
+   do to the binding before it is made: `after-move` is the line the same
+   Attestation gets against the bundle an export writes once it is taken
+   out, in the reference's words.
+
    g: the graph; objs: Map(id -> {type, obj}), the typed objects of the set.
    -> { basis, "manifest-digest", "loaded-manifest-digest" (or null),
         "kept-packs": [digest], lines: jscBindsReport, each with `listed`
-        (null | "refused" | "left-out") and `manifest-1` (the failure or null) }
+        (null | "refused" | "left-out"), `manifest-1` (the failure or null)
+        and, where `listed` is "refused", `after-move` (a line's text) }
       A set without an Attestation has basis null and no line: nothing was
-      compared, and nothing is said. */
-async function jscSetBinds(g, objs) {
+      compared, and nothing is said.
+   `moved` is this function's own: true while it asks what a move would do,
+   so that the question is asked once and never of its own answer. */
+async function jscSetBinds(g, objs, moved) {
   const atts = new Map([...objs].filter(([, r]) => r.type === "attestation").map(([id, r]) => [id, r.obj]));
   /* no Attestation, nothing to compare: the digests of a large set are not computed for an empty answer */
   if (!atts.size) return { basis: null, "manifest-digest": null, "loaded-manifest-digest": null, "kept-packs": [], lines: [] };
@@ -2030,7 +2041,7 @@ async function jscSetBinds(g, objs) {
   const loaded = typeof g.manifestText === "string" ? await jscRulesPackageDigest(g.manifestText) : null;
   /* written here, of what a manifest covers: an Attestation beside the manifest is not part of it, so one that was
      written here (set to withdrawn, say) changes nothing about which manifest describes the set */
-  const written = [...g.objects.values()].some(r => jscRulesAdded(r) && !jscRulesBeside(r)) || [...g.scales.values(), ...g.facetSchemas].some(jscRulesAdded);
+  const written = [...g.objects.values()].some(r => (jscRulesAdded(r) && !jscRulesBeside(r)) || r.unlisted) || [...g.scales.values(), ...g.facetSchemas].some(jscRulesAdded);
   const basis = g.manifest && (built.verbatim || !written) ? "loaded" : "export";
   const digest = basis === "loaded" ? loaded : await jscRulesPackageDigest(built.files[0].text);
   /* the objects the manifest lists: on "loaded" those with a line in it; on "export" every object but the Attestations,
@@ -2043,7 +2054,16 @@ async function jscSetBinds(g, objs) {
     const cameListed = !!(g.objects.get(l.id) || {}).entry;
     return { ...l, listed: refused.has(l.id) ? "refused" : cameListed && basis === "export" ? "left-out" : null, "manifest-1": refused.get(l.id) || null };
   });
+  /* what taking a refused Attestation out of the list would do to its binding: asked once, of the graph as it would be */
+  for (const l of moved ? [] : lines.filter(x => x.listed === "refused")) {
+    const then = (await jscSetBinds(jscUnlisted(g, [l.id]), objs, true)).lines.find(x => x.id === l.id);
+    l["after-move"] = then ? (then.kind === "failure" ? "error: " : "") + then.text : null;
+  }
   return { basis, "manifest-digest": digest, "loaded-manifest-digest": loaded, "kept-packs": kept, lines };
+}
+/* the graph as it is once these Attestations are taken out of the manifest's list; nothing is written */
+function jscUnlisted(g, ids) {
+  return { ...g, objects: new Map([...g.objects].map(([id, r]) => [id, ids.includes(id) && r.type === "attestation" && r.entry ? { ...r, unlisted: true } : r])) };
 }
 
 /* ====================================================================
