@@ -279,6 +279,17 @@ and is not said twice. 15 `operation-targets` vectors in the family
 `reference` (56); 800 in all. Run under PowerShell 7.4 on Linux over the
 vectors, the five bundles, the worked pack and the example folder: ALL
 GREEN in 101.7 s; the workflow runs it on Windows PowerShell 5.1.
+CHANGED 2026-11-15 (review before the tag; backlog #98): an envelope-ref
+names a file in the manifest's folder or below it (Beside-Path: no scheme
+or drive letter, no leading slash, no backslash, no `..` segment; `\z`,
+not `$`). Any other ref does not resolve and fails as a missing envelope
+does; until then Read-Envelope and the advice check joined the ref to the
+folder unchecked and read an envelope above the bundle. Test-Path takes
+-LiteralPath there. 16 `path-vectors` and 6 `bundle-vectors` in the
+family `dsse` (27), the bundle vectors judged on disk by Validate-Bundle
+in a run of their own (Dsse-Bundle-Case); 822 in all. Run on Windows
+PowerShell 5.1 over the vectors, the five bundles, the worked pack and
+the example folder: ALL GREEN in 399 s.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors
