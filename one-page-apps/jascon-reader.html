@@ -1100,7 +1100,7 @@ const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join(
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.22.0", READER_BUILD = "2026-11-15";
+const READER_VERSION = "1.23.0", READER_BUILD = "2026-11-15";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -2275,8 +2275,61 @@ function showDetail(id) {
   else body += renderGeneric(r);
   body += historyHtml(r.obj) + aliasesHtml(r.obj) + relationsHtml(r.obj) + facetsHtml(r.obj) + annotationsHtml(r.obj) + digestRow(r);
   body += `<details style="margin-top:12px"><summary>raw JSON</summary><pre class="raw">${esc(JSON.stringify(r.obj, null, 1))}</pre></details>`;
+  body += workspaceRemoveHtml(r);
   $("detail").innerHTML = body;
   wireRefs($("detail"));
+  wireWorkspaceRemove(id);
+}
+/* An authored object can be taken out of the workspace (v1.23.0; backlog #97, point 1). Until 1.22.0 nothing
+   written in a workbench could be removed, short of emptying the browser's storage for this page; since 1.22.0
+   a second check on the same day stands beside the first, so a check that was corrected and generated again left
+   the wrong one in every export of the workspace.
+   The act removes one object: the one shown, from the graph and from what the page stores. It removes nothing
+   else. Where other authored objects name it (an Assessment's Findings, a Set's Tailoring), the first press
+   removes nothing and names them; the second removes the object all the same, and they then name an object the
+   workspace does not hold, which an export reports. A form of a workbench is not an object: what the Implement
+   workbench holds is written again when its button is pressed. An object of a loaded bundle has no such button. */
+function workspaceReferrers(id) {
+  const needle = JSON.stringify(id);
+  return (work.created || []).filter(o => o.id !== id && JSON.stringify(o).includes(needle)).map(o => o.id);
+}
+function workspaceRemoveHtml(r) {
+  if (r.path !== "(workspace)") return "";
+  return `<div class="wbrow" style="margin-top:14px;border-top:1px solid var(--border-1);padding-top:10px" data-ws-remove>
+    <button id="btn-ws-remove">✕ Remove from the workspace</button>
+    <span class="hint" id="ws-remove-note">written in a workbench of this page — removing it takes it out of the graph and of what the page stores, and out of nothing else</span></div>`;
+}
+function removeFromWorkspace(id) {
+  const r = state.objects.get(id);
+  if (!r || r.path !== "(workspace)") return false;
+  work.created = (work.created || []).filter(o => o.id !== id);
+  saveWork();
+  state.objects.delete(id);
+  state.order = state.order.filter(x => x !== id);
+  state.binds.delete(id);
+  if (state.selected === id) state.selected = null;
+  state.graphGen++;
+  l.ok(`removed from the workspace: ${id}`);
+  return true;
+}
+function wireWorkspaceRemove(id) {
+  const b = $("btn-ws-remove");
+  if (!b) return;
+  b.onclick = () => {
+    const named = workspaceReferrers(id), note = $("ws-remove-note");
+    if (named.length && b.dataset.asked !== "yes") {
+      b.dataset.asked = "yes";
+      b.textContent = "✕ Remove it all the same";
+      note.className = "verdict-warn"; note.dataset.referrers = String(named.length);
+      note.textContent = `not removed: ${named.length} authored object(s) name this one — ${named.join(", ")}. Removed all the same, they name an object the workspace does not hold, and an export says so`;
+      l.warn(`not removed yet: ${id} is named by ${named.join(", ")}`);
+      return;
+    }
+    if (!removeFromWorkspace(id)) return;
+    $("detail").innerHTML = DETAIL_EMPTY;
+    renderAll();
+    judgeAttestations();
+  };
 }
 
 /* ---------- stats ---------- */
