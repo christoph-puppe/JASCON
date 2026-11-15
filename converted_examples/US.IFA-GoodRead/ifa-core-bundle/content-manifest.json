@@ -612,7 +612,7 @@
    }
   ],
   "source-note": "OSCAL IFA GoodRead example set (SSP 1.1.1, AP, AR, POA&M) + leveraged/leveraging SSP pair + component-definition example (usnistgov/oscal-content). FICTIONAL example content by NIST; converted as the gate-3 lifecycle corpus",
-  "source-commit": "usnistgov/oscal-content@9402f031 (2026-07-14; the state fetched 2026-07-22)",
+  "source-commit": "usnistgov/oscal-content@9402f031489092246f2c27391bad452b85604140 (2026-07-14; the state fetched 2026-07-22)",
   "converter": "convert_ifa.py v0.5 (provenance pre-filled from the source documents; the Attestation beside the manifest; conversion ledger)",
   "carried-requirements": [
    "https://ns.nist.gov/sp800-53/req/AC-6.1",

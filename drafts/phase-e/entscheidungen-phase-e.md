@@ -788,3 +788,146 @@ Die zwölf Punkte ohne Wahl: #71 (1), (3), (4), (6), (7), (8), (16);
 - **Neu abgelegt, #97:** neun Punkte, die beim Bauen aufgefallen und
   nicht geändert sind. Sie stehen im Register unter „Found and not
   changed".
+
+## #97, neun Punkte (2026-11-15, nach dem Merge von Pull Request 38)
+
+Vorgelegt je Punkt: Vorschlag, dafür, dagegen, Alternative. Die
+Antwort, wörtlich:
+
+> 1: vorschlag
+> 2: wir nehmen das jetzt so wie Du es erstellt hat für die neue Version
+> 3: vorschlag
+> 4: vorschlag
+> 5: vorschlag
+> 6: alternative
+> 7: alternative
+> 8: die ursache suchen, plan erstellen, neue Issue einstellen, dann backlog dazu schließen
+> 9: alternative
+>
+> Neuen Branch ab hier, schlege namen vor und nutze
+
+1. **Reader:** Verfasste Objekte sind löschbar (Reader 1.23.0).
+2. **Website:** Hindi, Japanisch und Chinesisch bleiben, wie sie
+   geschrieben sind; kein zweiter Leser.
+3. **CR26-Titel:** nach dem Tag, mit der nächsten Änderung am
+   CR26-Konverter. Jetzt nichts gebaut.
+4. **CR26-Kommentar:** nur der Kommentar ist berichtigt.
+5. **`path_map_check`:** hält den Typ des Objekts.
+6. **Commit-Ids:** alle Stellen in einem Zug, das IFA-Manifest
+   eingeschlossen; die IFA-Attestation ist neu geschrieben.
+7. **Kapitel 1:** jetzt auf die Fassungen gehoben, die das Repository
+   pinnt; jede Zahl neu gemessen.
+8. **Test „Import, Map and Checks":** Ursache gesucht, Plan
+   geschrieben, als Issue eingestellt; der Punkt ist damit im Backlog
+   geschlossen.
+9. **App, Reste des verlorenen Klicks:** nur gemessen und berichtet;
+   der Fokus nach der Tab-Taste bleibt.
+
+Der Branch heißt `claude/backlog-97-before-the-tag`. Der alte Branch
+ließ sich von der Session aus nicht löschen (der Push zum Löschen
+wurde viermal mit einem Verbindungsabbruch abgewiesen); er steht auf
+`main`.
+
+### Was beim Bauen anders kam als vorgelegt
+
+- **(1):** Das Entfernen löscht genau ein Objekt und nichts mit. Wo
+  andere verfasste Objekte es nennen, entfernt der erste Druck nichts
+  und nennt sie; erst der zweite entfernt es.
+- **(5):** Eine Zeile der IFA-Pfadkarte besteht die Prüfung und ist
+  falsch (Zeile 13). Sie ist berichtet, nicht repariert: #101.
+- **(6):** Die IFA-Attestation behält Id und Version 1.1.1 bei
+  geändertem Manifest-Digest. Das war nicht vorgelegt: #101. Die
+  Register und Pläne früherer Runden behalten ihre kurzen Ids.
+- **(7):** Die deutschen Summen sind gemischt: Grundschutz++ gemessen,
+  der Anteil des MS-TLS-Katalogs vom Juli, weil er nicht gepinnt ist.
+  Der Kopf des Kapitels sagt das. Und: README, zehn andere
+  Handbuch-Dateien, die Evidence-Seite der Website und weitere nennen
+  weiter die Juli-Zahlen, die Kapitel 1 nicht mehr hat (etwa 781, wo
+  Kapitel 1 jetzt 799 sagt): #101.
+- **(8):** Die Ursache liegt im Test, nicht in der App, und nicht in
+  der Reihenfolge der Tests: Ein Warten mit `waitForFunction(async …)`
+  wartet nicht. Drei weitere Tests derselben Datei haben denselben
+  Fehler. Ursache und Plan stehen in Issue 39; gebaut ist nichts.
+- **(9):** Gemessen: Alle sechs Filterfelder mit Zeitverzögerung
+  verlieren den Klick, wenn die Taste über das Neuzeichnen hinweg
+  gehalten wird (10 von 10). Das doppelte `id="ai-key"` kostet bei
+  „Forget the key" den ersten Druck. Beides steht als #101 im Backlog.
+- **Neu abgelegt, #101:** sieben Punkte aus dieser Runde.
+
+### Issue 39 (2026-11-15, nach dem Merge von `claude/carry-over-fixes`)
+
+Der CI-Lauf 123 fiel im ersten Versuch genau an der Stelle aus, die
+Issue 39 beschreibt, und bestand im zweiten. Gefragt, ob der Plan
+gebaut werden soll, der Autor, wörtlich:
+
+> Ja, fixe
+
+Gebaut: Die vier Tests warten auf das Schreiben der Seite; ein Test
+verweigert ein asynchrones Prädikat in jedem Browser-Test. Am Code der
+App ist nichts geändert.
+
+Am selben Tag ist `claude/carry-over-fixes` hier zusammengeführt
+(„merge it after inspection into here"). Dessen Backlog-Zeilen 98 bis
+100 bleiben; die Zeile, die dieser Branch als #98 abgelegt hatte, ist
+jetzt #101.
+
+## #100 (3) und #101 (2026-11-15, nach Issue 39)
+
+Vorgelegt je Punkt: Vorschlag, dafür, dagegen, Alternative. Die
+Antwort, wörtlich:
+
+> #100 3: das lassen wir so, wir verzetteln uns sonst
+>
+> #101 :
+>
+> 1: Vorschlag umsetzen
+> 2: Vorschlag umsetzen
+> 3: Vorschlag umsetzen
+> 4: das ist eigentlich behoben, kontrollie!
+> 5: Vorschlag umsetzen
+> 6: Vorschlag umsetzen
+> 7: Vorschlag umsetzen, es stimmt
+
+- **#100 (3):** bleibt, wie es ist. Der Import zählt einen Datensatz
+  weiter als „eingegeben", sobald eines der zwei Felder eingegeben ist.
+- **#101 (1):** Alle Texte mit Juli-Zahlen, die Kapitel 1 nicht mehr
+  hat, in einer Runde: die gemessene Zahl, oder der Satz bleibt, wo er
+  ausdrücklich vom Juli-Stand spricht.
+- **#101 (2):** Der Satz von Zeile 13 der IFA-Pfadkarte ist berichtigt.
+- **#101 (3):** Die IFA-Attestation behält ihre Version; der Konverter
+  sagt, warum. Ab dem Tag gilt: geänderter Inhalt, neue Version.
+- **#101 (4):** Kontrolliert und gemessen: nicht behoben. Am Build
+  0.9.25 verloren alle sechs Filterfelder den gehaltenen Klick, 5 von 5
+  Mal. Gebaut mit Build 0.9.26; danach 0 von 5.
+- **#101 (5):** Jedes Schlüsselfeld hat die Id seines Panels, der
+  Forget-Knopf eine Adresse (Build 0.9.26).
+- **#101 (6):** Die gemischten deutschen Summen in Kapitel 1 bleiben;
+  der Kopf des Kapitels nennt die Mischung.
+- **#101 (7):** Das Datum 2026-07-14 neben der NIST-Commit-Id stimmt;
+  der Autor hat es bestätigt.
+
+### Was beim Bauen anders kam als vorgelegt
+
+- **#101 (4):** Der Autor hielt den Punkt für behoben. Behoben war
+  seit Build 0.9.24 das Neuzeichnen nach der Änderung eines Feldes,
+  nicht das nach einem Zeitgeber. Zusätzlich zum Vorschlag: `jscRedraw`
+  nimmt bei mehreren Elementen gleicher Adresse das sichtbare; damit
+  ist auch der Kanten-Link der Implement-Seite gefunden, ohne dass er
+  eine eigene Adresse bekam.- **#101 (1):** Der Agent hat drei Zahlen (221, 219, 188) über die
+  Liste hinaus in weitere Sätze nachgezogen, damit jede im Handbuch nur
+  einen Wert hat. Die Evidence-Seite der Website bleibt: Ihr Eintrag
+  ist auf „mid-2026" datiert. Bekannt und gelassen: Zahlen, die Kapitel
+  1 nie hatte und die sich im gepinnten Katalog geändert haben
+  (`modal_verb` ×1.006 ist jetzt 1.000, `alt-identifier` ×1.219 ist
+  1.224, documentation ×959 ist 961).
+
+## Der nächste Kandidat (2026-11-15)
+
+Der Autor, wörtlich:
+
+> ok, PR / release für den nächsten RC !
+
+Die Spezifikation heißt jetzt `jascon-specification-2.0.0-rc.5.md`.
+Mit der Umbenennung ist nichts geändert; der Banner fasst zusammen, was
+seit rc.4 ohne neuen Kandidaten dazukam. Der Pull Request geht von
+`claude/backlog-97-before-the-tag` nach `main`.

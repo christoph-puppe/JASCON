@@ -32,3 +32,14 @@ test("jascon-schema.js is the one generated from jascon/schemas/", () => {
 test("jascon-presets.js is the one generated from the shipped scales and catalogues", () => {
   assert.equal(fs.readFileSync(path.join(APP, "jascon-presets.js"), "utf8"), renderPresets(), "run node jascon-app/tools/gen-presets.mjs");
 });
+
+
+/* page.waitForFunction resolves at once for a predicate that returns a promise, so a test that waits with an async
+   predicate does not wait (issue 39 of the tracker). Two page tests read the store in a race with the page that way. */
+test("no browser test waits with an async predicate", () => {
+  const needle = "waitForFunction(" + "async";
+  const dirs = [path.join(APP, "tests"), path.join(APP, "..", "one-page-apps", "tests")];
+  const hits = dirs.flatMap(dir => fs.readdirSync(dir).filter(f => f.endsWith(".mjs")).map(f => path.join(dir, f)))
+    .filter(f => fs.readFileSync(f, "utf8").includes(needle)).map(f => path.relative(path.join(APP, ".."), f));
+  assert.deepEqual(hits, []);
+});

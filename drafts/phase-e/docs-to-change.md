@@ -153,3 +153,28 @@ proposal, and #89, both for the author.
 | Website | the third verdict in five languages, stamped; `i18n/TRANSLATING.md`; `facts.json` measured after the commits | done with the last commit; Hindi, Japanese and Chinese wait for a second reader |
 | Workflow | the comment of the step that runs the four conversions again | done |
 | Register, backlog, plan, decisions | the author's words; #62 moved; #71, #79 and #91 closed; #97 filed | done |
+
+## #97 (2026-11-15, after the merge of pull request 38)
+
+| Where | What | State |
+|---|---|---|
+| Specification | IV.6 (one row); IV.9 (the note). No decision, no rule, no vector | done |
+| Handbook | chapter 1: its corpus figures on the pinned versions, and a header that says which figures are as of July | done |
+| README | the reader's version under the screenshot | done |
+| `jascon/SKILL.md` | names none of this | nothing to change |
+| App `readme.md` | one commit id written in full | done |
+| Reader | 1.23.0; the screenshot in `docs/img/` taken again (it shows the IFA manifest's digest, which changed) | done |
+| Website | no page changed; `facts.json` measured after the commits | done with the last commit |
+| Other texts that quote the July figures chapter 1 had | README, ten files of the handbook, the app's errata, the website's evidence page and its translations, two notes at the root | not changed; filed as #101 |
+| Register, backlog, plan, decisions | the author's nine answers; #97 closed but for point 3; #101 filed | done |
+
+## Issue 39, #100 (3) and #101 (2026-11-15)
+
+| Where | What | State |
+|---|---|---|
+| Specification | IV.6 (one row); IV.9 (the note). No decision, no rule, no vector | done |
+| Handbook, README, a note at the root | the figures of the pinned corpora where they quoted July | done |
+| Website | the home page's 799 in five languages, stamped; the evidence page stays as dated; `facts.json` measured after the commits | done with the last commit |
+| App `readme.md`, `PROGRESS.md` | build 0.9.26 | done |
+| Reader | nothing changed | nothing to change |
+| Register, backlog, plan, decisions | the author's words; #100 and #101 closed; issue 39 built | done |

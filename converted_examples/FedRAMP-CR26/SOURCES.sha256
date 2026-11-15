@@ -16,9 +16,12 @@
 # the digest below is what holds the bytes (588,800 of them).
 #
 # The file is saved in sources/ under the name the list gives it, which is
-# the name the converter reads.
+# the name the converter reads. The workflow fetches it with
+# .github/scripts/fetch-pinned-sources.sh, as it fetches the sources of the
+# other conversions.
 #
 # base: https://raw.githubusercontent.com/FedRAMP/rules/2026.11.02.01/
-# path: fedramp-consolidated-rules.json
+# into: sources
+# path: fedramp-consolidated-rules.json -> cr_fedramp-consolidated-rules.json
 #
 782faecae3eee4aa2aa9d32cdb0de4c929524f2e41dc1f3d143a94a9ca64c4e3  cr_fedramp-consolidated-rules.json

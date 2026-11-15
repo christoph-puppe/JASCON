@@ -94,13 +94,7 @@ jobs:
         # committed.
         run: |
           set -euo pipefail
-          list=converted_examples/US.IFA-GoodRead/SOURCES.sha256
-          base=$(sed -n 's/^# base: //p' "$list")
-          mkdir -p sources/nist
-          sed -n 's/^# path: //p' "$list" | while read -r p; do
-            curl -sSfL --retry 3 -o "sources/nist/$(basename "$p")" "$base$p"
-          done
-          (cd sources/nist && sha256sum -c "$GITHUB_WORKSPACE/$list")
+          bash .github/scripts/fetch-pinned-sources.sh converted_examples/US.IFA-GoodRead/SOURCES.sha256
           python jascon/scripts/convert_ifa.py
           if [ -n "$(git status --porcelain -- converted_examples/US.IFA-GoodRead)" ]; then
             echo "convert_ifa.py no longer reproduces the committed conversion:"
@@ -241,13 +235,7 @@ jobs:
         run: |
           set -euo pipefail
           dir=converted_examples/FedRAMP-CR26
-          list=$dir/SOURCES.sha256
-          base=$(sed -n 's/^# base: //p' "$list")
-          path=$(sed -n 's/^# path: //p' "$list")
-          name=$(awk '!/^#/ && NF == 2 { print $2 }' "$list")
-          mkdir -p sources
-          curl -sSfL --retry 3 -o "sources/$name" "$base$path"
-          (cd sources && sha256sum -c "$GITHUB_WORKSPACE/$list")
+          bash .github/scripts/fetch-pinned-sources.sh "$dir/SOURCES.sha256"
           out=$(mktemp -d)
           python jascon/scripts/convert_cr26.py --out "$out"
           python jascon/scripts/validate_core.py "$out/cr26-core-bundle" | tee cr26.log

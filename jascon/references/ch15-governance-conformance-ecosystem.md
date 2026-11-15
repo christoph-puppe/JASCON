@@ -178,7 +178,7 @@ constitute the standard again.
 > **Don't** extend by workaround what the process can version.
 > Chapter 1 measured the three coping strategies — violate, flatten,
 > route around — that authorities adopt when the change path costs
-> more than the detour: an open dispute, a 12,059-prop shadow
+> more than the detour: an open dispute, a 12,096-prop shadow
 > vocabulary, a national program's exit. This process exists to
 > invert that price; use it, and the counts stay on your side.
 

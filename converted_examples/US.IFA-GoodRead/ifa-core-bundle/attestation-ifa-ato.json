@@ -19,7 +19,7 @@
    "semantic-digest": "sha256:854639ea435c95b095445b6ca68f9ce6226b391816d9a078040532b82c294a67"
   }
  ],
- "content-manifest-digest": "sha256:90c6c62f81ef0ba4350adcd2223ca628561e23238a4306cc1436553404de4faf",
+ "content-manifest-digest": "sha256:a24237c3b8ca0fae40ed566a7bba3efc5dd16285f6da507f5474c3b27250b216",
  "signer": "https://ifa.gov/goodread/party/authorizing-official",
  "timestamp": "2025-05-19T00:00:00Z"
 }

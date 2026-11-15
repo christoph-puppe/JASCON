@@ -2953,3 +2953,70 @@ test("the resolved scope: a withdrawn Requirement a selected Set lists is left o
     assert.deepEqual([open.notes, open.errors, open.disabled, open.modified],
       [[`set-parameter on ${LNX} is not shown as applied: no selected Set holds that Requirement, and the select by predicate is not resolved here`], 1, true, "1 modified"]);
   }));
+
+/* ---------- 28. an authored object can be taken out of the workspace (v1.23.0; backlog #97 point 1) ---------- */
+test("an authored object is removed from the workspace by its own button: what other authored objects name is removed at the second press only, after they are named; an object of a loaded bundle has no such button; what is removed stays removed",
+  OPTS, () => withReader(async R => {
+    const { page } = R;
+    const set = async (sel, value) => { await page.fill(sel, value); await page.locator(sel).dispatchEvent("change"); };
+    const NS = "https://example.org/my", day = new Date().toISOString().slice(0, 10);
+    const A1 = `${NS}/asmt/check-${day}`, A2 = `${A1}-2`, F1 = `${NS}/finding/f-${day}-1`, F2 = `${NS}/finding/f-${day}-check-2-1`;
+    const authored = () => page.evaluate(() => (JSON.parse(localStorage.getItem("scr-work")).created || []).map(o => o.id).sort());
+    const inGraph = id => page.evaluate(i => state.objects.has(i), id);
+    await R.load(EXAMPLES);
+    await R.view("stage:assess");
+    await set("#wb-a-perf", "Lead Assessor");
+    await page.locator('[data-az$="|not-satisfied"]').first().click();
+    await page.click("#wb-a-gen");
+    await R.view("stage:assess");
+    await page.click("#wb-a-gen");
+    assert.deepEqual(await authored(), [A1, A2, F1, F2].sort(), "two checks of one day, each with its Finding");
+
+    /* an object the bundle brought has no button */
+    let d = await R.detail("https://ns.bsi.bund.de/gspp/req/KONF.14.1");
+    assert.equal(await d.locator("#btn-ws-remove").count(), 0);
+
+    /* the first Assessment is named by its Finding: the first press removes nothing and says who names it */
+    d = await R.detail(A1);
+    assert.match(await R.text(d.locator("#ws-remove-note")), /^written in a workbench of this page — removing it takes it out of the graph and of what the page stores/);
+    await d.locator("#btn-ws-remove").click();
+    assert.deepEqual([await inGraph(A1), await d.locator("#ws-remove-note").getAttribute("data-referrers"), await R.text(d.locator("#btn-ws-remove"))], [true, "1", "✕ Remove it all the same"]);
+    assert.equal(await R.text(d.locator("#ws-remove-note")), `not removed: 1 authored object(s) name this one — ${F1}. Removed all the same, they name an object the workspace does not hold, and an export says so`);
+    assert.deepEqual(await authored(), [A1, A2, F1, F2].sort(), "nothing was removed");
+
+    /* its Finding is named by nothing: one press removes it, from the graph, the list and the store */
+    d = await R.detail(F1);
+    await d.locator("#btn-ws-remove").click();
+    assert.deepEqual([await inGraph(F1), await authored()], [false, [A1, A2, F2].sort()]);
+    assert.equal(await page.locator(`.objrow[data-id="${F1}"]`).count(), 0, "it is gone from the list");
+    assert.match(await R.log(), new RegExp(`removed from the workspace: ${F1}`));
+    /* and then the Assessment, which nothing names any more: one press */
+    d = await R.detail(A1);
+    await d.locator("#btn-ws-remove").click();
+    assert.deepEqual([await inGraph(A1), await authored()], [false, [A2, F2].sort()]);
+
+    /* the second press: a Set that a Tailoring selects is removed all the same, and the export says what that leaves */
+    await R.view("stage:author");
+    await page.fill("#wb-au-title", "Encrypt backups"); await page.fill("#wb-au-prose", "Backups are encrypted."); await page.fill("#wb-au-party", "Operations");
+    await page.click("#wb-au-addreq");
+    await page.fill("#wb-au-settitle", "My baseline");
+    await page.fill("#wb-au-mempick", "encrypt"); await page.locator("#wb-au-mempick-sugg [data-pick]").first().click();
+    await page.click("#wb-au-addset");
+    await R.view("stage:tailor");
+    await page.fill("#wb-t-selpick", "my baseline"); await page.locator("#wb-t-selpick-sugg [data-pick]").first().click();
+    await page.click("#wb-t-graph");
+    const SET = `${NS}/set/my-baseline`, T = `${NS}/tailoring/my-tailoring`;
+    d = await R.detail(SET);
+    await d.locator("#btn-ws-remove").click();
+    assert.equal(await R.text(d.locator("#ws-remove-note")), `not removed: 1 authored object(s) name this one — ${T}. Removed all the same, they name an object the workspace does not hold, and an export says so`);
+    await d.locator("#btn-ws-remove").click();
+    assert.equal(await inGraph(SET), false);
+    await R.download("#btn-export-ws");
+    assert.match(await R.log(), new RegExp(`in this export — ${T}: closure-required selects set-ref does not resolve in-bundle: ${SET}`), "the export names the reference that no longer resolves");
+
+    /* what is removed stays removed: after the page is opened again, and after a bundle is loaded */
+    const kept = await authored();
+    await page.reload();
+    await R.load(EXAMPLES);
+    assert.deepEqual([await authored(), await inGraph(A1), await inGraph(F1), await inGraph(SET), await inGraph(A2)], [kept, false, false, false, true]);
+  }));

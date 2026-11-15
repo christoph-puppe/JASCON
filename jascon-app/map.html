@@ -110,7 +110,7 @@ function renderTable() {
   V.wireRefs($("table"));
   $("table").querySelectorAll("[data-rel]").forEach(b => b.addEventListener("click", () => { filter.rel = b.dataset.rel; renderTable(); }));
   let timer;
-  $("mapq").addEventListener("input", e => { filter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { renderTable(); $("mapq").focus(); }, 250); });
+  $("mapq").addEventListener("input", e => { filter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => jscRedraw(() => { renderTable(); $("mapq").focus(); }), 250); });
 }
 
 function renderWrite() {

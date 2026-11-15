@@ -90,13 +90,19 @@ class PhaseETheIfaGate(unittest.TestCase):
 
     def test_a_value_that_stands_where_the_path_map_does_not_say_ends_the_run(self):
         """backlog #89: the table beside the path map (HELD) says where the values of a row stand"""
-        ROW = ' (r"^ssp\\.system-security-plan\\.system-implementation\\.inventory-items\\[\\]\\.", CARRIED, (_SYS + r"/inventory-items(/.*)?",)),\n'
+        ROW = ' (r"^ssp\\.system-security-plan\\.system-implementation\\.inventory-items\\[\\]\\.", CARRIED, on(COMPONENT, _SYS + r"/inventory-items(/.*)?")),\n'
         # the table names another place for the inventory items than the converter writes
         code, err, record = self.run_converter("place", ROW, ROW.replace("/inventory-items(/.*)?", "/inventory(/.*)?"))
         self.assertEqual(code, 1)
-        self.assertIn("a place the path map does not name for that path", err)
+        self.assertIn("(object type component), a place the path map does not name for that path", err)
         self.assertIn("ssp.system-security-plan.system-implementation.inventory-items[]", err)
         self.assertEqual(record["totals"]["unaccounted"], 0, "the ledger alone lets it through")
+        # backlog #97 (5): the right pointer in an object of the wrong type, the system@1 facet of an Implementation.
+        # Until 2026-11-15 a place was the pointer alone and this table passed.
+        code, err, record = self.run_converter("type", ROW, ROW.replace("on(COMPONENT,", "on(IMPLEMENTATION,"))
+        self.assertEqual(code, 1)
+        self.assertIn("(object type component), a place the path map does not name for that path", err)
+        self.assertIn("ssp.system-security-plan.system-implementation.inventory-items[]", err)
         # a row that allows another outcome than the record measured
         code, err, record = self.run_converter("outcome", ROW, ROW.replace("CARRIED", "NO_CONTENT"))
         self.assertEqual(code, 1)

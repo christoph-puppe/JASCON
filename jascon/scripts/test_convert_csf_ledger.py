@@ -516,15 +516,23 @@ class PhaseEDeliberateDefects(Converted):
 
     def test_defect_14_a_value_that_stands_where_the_path_map_does_not_say(self):
         """backlog #89: the ledger holds a rule to what it wrote; the table beside the path map says where"""
+        row = ' (CTL + r"title$", CARRIED, on(ITEM, r"/title/en")),'
         # the table names another place for a title than the converter writes
-        r = self.red([(' (CTL + r"title$", CARRIED, (r"/title/en",)),', ' (CTL + r"title$", CARRIED, (r"/title/de",)),')])
-        self.assertIn("stand at /title/en, a place the path map does not name for that path", r["done"].stderr)
+        r = self.red([(row, ' (CTL + r"title$", CARRIED, on(ITEM, r"/title/de")),')])
+        self.assertIn("stand at /title/en (object type requirement), a place the path map does not name for that path", r["done"].stderr)
+        self.assertIn("stand at /title/en (object type requirementSet), a place the path map does not name for that path", r["done"].stderr)
         self.assertEqual(r["ledger"]["totals"]["unaccounted"], 0, "the ledger alone lets it through")
+        # backlog #97 (5): the right pointer in an object of the wrong type. The table says that the title of an
+        # item stands on a Set and never on a Requirement; the title of a subcategory does. Until 2026-11-15 a place
+        # was the pointer alone and this table passed.
+        r = self.red([(row, ' (CTL + r"title$", CARRIED, on(SET, r"/title/en")),')])
+        self.assertIn("stand at /title/en (object type requirement), a place the path map does not name for that path", r["done"].stderr)
+        self.assertNotIn("stand at /title/en (object type requirementSet)", r["done"].stderr)
         # a sentence that says "no content" of a value that is carried
-        r = self.red([(' (CTL + r"title$", CARRIED, (r"/title/en",)),', ' (CTL + r"title$", NO_CONTENT, (r"/title/en",)),')])
+        r = self.red([(row, ' (CTL + r"title$", NO_CONTENT, on(ITEM, r"/title/en")),')])
         self.assertIn("are copied, and the path map allows not-content there", r["done"].stderr)
         # a row of the table taken out
-        r = self.red([(' (CTL + r"title$", CARRIED, (r"/title/en",)),\n', '')])
+        r = self.red([(row + '\n', '')])
         self.assertIn("the table of outcomes and places (HELD) has 24 row(s) and the path map 25; they differ first at row 13", r["done"].stderr)
 
     def test_defect_13_a_record_on_disk_that_is_not_the_record_of_the_run(self):

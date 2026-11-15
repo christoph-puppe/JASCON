@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (800 in 18 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (822 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -30,7 +30,7 @@ equality against the official NIST schema, and a zero-dependency
 **single-file reader & authoring studio** that turns the whole thing into
 something you can click.
 
-> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.4 is the candidate, not
+> Status: **1.0.0 released 2026-07-22; 2.0.0-rc.5 is the candidate, not
 > tagged** — evidence-gated, maintained in personal capacity. Where JASCON
 > sits among OSCAL, Gemara, CycloneDX Attestations and the other formats in
 > this space: [`PRIOR-ART.md`](PRIOR-ART.md).
@@ -49,14 +49,14 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.22.0,
+key and has no word for a signature that holds. (Reader 1.23.0,
 2026-11-15, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage shows the bundle's
 two Risks first, above the part of the page that is in the picture.)*
 
 ## Unreleased: JASCON 2.0.0 — Risk, Check and advice packs
 
-> **State 2026-11-14 — release candidate 2.0.0-rc.4; not tagged.**
+> **State 2026-11-15 — release candidate 2.0.0-rc.5; not tagged.**
 > Everything below this section describes the released **1.0.0**. The
 > candidate adds two kernel types, Risk and Check, and advice packs.
 > Both reference validators are green on it, and no question waits for
@@ -165,7 +165,7 @@ two Risks first, above the part of the page that is in the picture.)*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 800 in 18 families since 2026-11-15) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 822 in 18 families since 2026-11-15) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped
@@ -336,7 +336,7 @@ two Risks first, above the part of the page that is in the picture.)*
 >   there; every bundle that ships does. A 1.0.0 *tool*
 >   cannot read a bundle that carries a Risk.
 > - **The specification text:**
->   [`jascon-specification-2.0.0-rc.4.md`](drafts/jascon-specification-2.0.0-rc.4.md)
+>   [`jascon-specification-2.0.0-rc.5.md`](drafts/jascon-specification-2.0.0-rc.5.md)
 >   — a release candidate; D23 carries Risk, D24 Check, D25 advice packs,
 >   D26 who decided and when.
 > - **The kernel names itself:** a manifest may carry `kernel-version`,
@@ -370,7 +370,7 @@ side of that paradox:
   program the standard was co-designed with, in the year machine-readability
   became its central theme.
 - **Valid and meaningless are compatible states.** The German Grundschutz++
-  catalogs carry **12,059 namespace-qualified props** whose "schema" is a set
+  catalogs carry **12,096 namespace-qualified props** whose "schema" is a set
   of CSV files behind mutable links. Inside them, **125 of the 470 `tags`
   values** pack several vocabulary terms into one comma-separated string
   (`"Data Leak, Shadow IT"` in ASST.3.11), and two thirds of the `threats`
@@ -552,9 +552,9 @@ changes forced):
 
 Each conversion ships a computed coverage report that declares every rule with
 counts and **reports source defects rather than repairing them** — the BSI run
-reports the 781 list values the GS++ catalog packs into single comma-separated
-strings (125 `tags`, 616 `threats`, 40 `target_object_categories`) for the
-authors' queue, and checks each of its 221 `{{…}}` sentence-template slots
+reports the 799 list values the GS++ catalog packs into single comma-separated
+strings (125 `tags`, 635 `threats`, 39 `target_object_categories`) for the
+authors' queue, and checks each of its 224 `{{…}}` sentence-template slots
 against the prose: all stand where a parameter is inserted, so they are
 parameters (until 2026-11-12 the converter miscounted them as 213 defects;
 erratum in the [register](drafts/jascon-decision-rationale-register.md));
@@ -756,7 +756,7 @@ Install by copying the directory into your skills folder, or unpack
 
 ## Read the spec
 
-- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.4.md`](drafts/jascon-specification-2.0.0-rc.4.md) — the candidate (Risk, Check, advice packs, who decided and when)
+- [`drafts/jascon-specification-1.0.0.md`](drafts/jascon-specification-1.0.0.md) — the released specification; [`…-2.0.0-rc.5.md`](drafts/jascon-specification-2.0.0-rc.5.md) — the candidate (Risk, Check, advice packs, who decided and when)
 - [`risk-catalogs/`](risk-catalogs/README.md) — prototype: two ready-made lists of typical risks (office IT, industrial plant; English and German) and a tool that imports them into `Risk` objects
 - [`PRIOR-ART.md`](PRIOR-ART.md) — the neighbouring formats, what each already does, and what JASCON does not add
 - [`drafts/jascon-v0.5-specification.md`](drafts/jascon-v0.5-specification.md) — the v0.5 draft (history)

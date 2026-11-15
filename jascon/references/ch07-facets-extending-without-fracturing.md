@@ -15,7 +15,7 @@ consumption side in Chapter 13; this chapter is the publisher's seat.
 You are in the German seat now. Your framework carries meaning the
 kernel does not know: a security-level taxonomy, an effort rating,
 thematic tags, documentation duties. The old world's answer was the one
-Chapter 1 costed — **12,059 namespace-qualified props** whose
+Chapter 1 costed — **12,096 namespace-qualified props** whose
 "vocabulary" was a set of CSV files behind mutable links, validated by
 nothing, drifting silently between releases.
 
@@ -66,8 +66,8 @@ structurally unable to smuggle meaning because nothing conformant can
 see it.
 
 > **Don't** publish vocabulary as side files a validator cannot read.
-> Measured cost, one national corpus: 12,059 prop instances bound to
-> CSV links, 781 lists packed into strings that no tool could see, and vocabulary
+> Measured cost, one national corpus: 12,096 prop instances bound to
+> CSV links, 799 lists packed into strings that no tool could see, and vocabulary
 > that changed between releases with nothing able to notice.
 
 ## 7.2 Anatomy of a facet: the descriptor
@@ -111,8 +111,8 @@ individual statements of its host Requirement, it MUST key them
 `by-statement: { <statement-id>: <payload> }`**, using ids from the
 host's own `statements[]`. A key naming no statement of the host is a
 validation error — checkable by every Portable tool with zero
-knowledge of your facet, which is the point: 1,015 statements'
-payloads across six facets already align on this shape, and a second
+knowledge of your facet, which is the point: 1,000 statements'
+payloads across five facets already align on this shape, and a second
 producer free to invent its own keying would fracture per-clause
 alignment for every consumer downstream. Addressing needs the pattern
 cannot express (ranges, statement pairs) belong *inside* your payload

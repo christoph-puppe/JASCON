@@ -752,6 +752,42 @@ and in `readme.md`; this file says only what is done and what is next.
   197 tests of the app's suite pass. Not built, by decision: saving a
   Check as a new version beside the old one.
 
+- Where an `envelope-ref` may point (build 0.9.25, 2026-11-15; review of
+  the branch before the tag). The reference and the twin joined the ref
+  to the bundle's folder unchecked; the app and the reader refused a ref
+  that leaves it (`jscPlainPath`, `besideName`) when they fetch, but the
+  signature check of `jscCheckGraph` and the publisher check of the
+  advice rules looked the ref up among the loaded files without it, so a
+  ZIP entry named `../x` resolved there. Both use `jscPlainPath` now,
+  and the fetch from a URL uses its pattern (it refused any `..`, also
+  inside a name). New in `dsse-vectors.json`: 16 `path-vectors` and 6
+  `bundle-vectors`, which `tests/rules.test.mjs` runs against
+  `jscPlainPath` and `jscCheckGraph`. Not run in this round's checkout,
+  which has no Node; CI runs them.
+
+- A press that is held while a filter field redraws, and the key fields
+  of the Checks page (build 0.9.26; backlog #101, points 4 and 5,
+  decided by the author on 2026-11-15).
+  The author took the first for closed and asked for a check. Measured
+  on build 0.9.25, with a real key and pointer: on each of the six
+  filter fields that draw their page again on a timer of 250 or 300 ms
+  (Risk `#risk-q`, Assess `#a-q`, Implement `#edgeq` and `#cf-q`, Map
+  `#mapq`, Validate `#q`) a press held across the redraw lost its click
+  5 of 5 times. Build 0.9.24 had routed the redraw after a field's
+  change through `jscRedraw`, not these timers. They go through it now.
+  `jscRedraw` hands the click to the same control of the new form by
+  its address; where the address stands in several views of a page, it
+  takes the one that is shown (the link of an edge on the Implement
+  page stands in two). Measured after the change: 0 of 5 lost on each.
+  The access panel stands in two views of the Checks page, and both
+  key fields had `id="ai-key"`: the label of one view named the hidden
+  field of the other, and "Forget the key" pressed right after typing
+  took the key at the first press and forgot it at the second. Each
+  field has the id of its panel, and the button an address.
+  The page tests wait for the page's write before they read the store
+  (issue 39 of the tracker; four tests did not, and one of them failed
+  about once in thirty runs). 200 tests of the app's suite pass.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written

@@ -1,5 +1,5 @@
 {
- "description": "DSSE verification vectors (gate 4, backlog #24). The reference engine pins Ed25519 (RFC 8032); payload = the Attestation's canonical form (annotations excluded); signature input = PAE(payloadType, payload) per DSSE v1. Fixture seed = sha256('jascon dsse fixture key 1'); PUBLIC KEY (hex) embedded in trusted-keys. Digests and signatures are LITERALS - re-run the authoring script after any object edit (it fails loudly, never silently).",
+ "description": "DSSE verification vectors (gate 4, backlog #24). The reference engine pins Ed25519 (RFC 8032); payload = the Attestation's canonical form (annotations excluded); signature input = PAE(payloadType, payload) per DSSE v1. Fixture seed = sha256('jascon dsse fixture key 1'); PUBLIC KEY (hex) embedded in trusted-keys. Digests and signatures are LITERALS - re-run the authoring script after any object edit (it fails loudly, never silently). path-vectors (2026-11-15): where an `envelope-ref` may point - a relative path that stays in the manifest's folder (`beside`: true), or one that leaves it (false): a scheme or drive letter, a leading slash, a backslash or a `..` segment. A ref that leaves the folder does not resolve, whether or not the file it names exists. One pattern in the reference (OUTSIDE_REF), the twin, the app (jscPlainPath) and the reader (besideName). bundle-vectors: a bundle on disk - `listed` objects under objects/ in a manifest the harness writes, `attestation` beside the manifest as attestation.json, `envelopes` by relative path in the manifest's folder, `outside` in the folder above it. `expected-fails` are fragments, one per failure, and no other failure; `expected-envelope` is unverified (read, payload good, no trusted key) or missing (not read). Written by drafts/phase-d/envelope_ref_vectors.py.",
  "fixture-public-key": "c34a11dc1f8f626ce1ed80cb562361be14e293083679c3bb9990eee7b311404a",
  "vectors": [
   {
@@ -406,6 +406,398 @@
    "trusted-keys": {},
    "expected-envelope": "unverified",
    "expected-tier": "consumer"
+  }
+ ],
+ "path-vectors": [
+  {
+   "ref": "attestation.dsse",
+   "beside": true,
+   "why": "a file name beside the manifest"
+  },
+  {
+   "ref": "sig/attestation.dsse",
+   "beside": true,
+   "why": "a file in a folder below the manifest's"
+  },
+  {
+   "ref": "a..b.dsse",
+   "beside": true,
+   "why": "two dots inside a name are no `..` segment"
+  },
+  {
+   "ref": "..a",
+   "beside": true,
+   "why": "nor at the start of a longer name"
+  },
+  {
+   "ref": "./attestation.dsse",
+   "beside": true,
+   "why": "a `.` segment stays in the folder"
+  },
+  {
+   "ref": "../attestation.dsse",
+   "beside": false,
+   "why": "`..` leaves the folder"
+  },
+  {
+   "ref": "sig/../attestation.dsse",
+   "beside": false,
+   "why": "a `..` segment anywhere is refused, also where it would come back"
+  },
+  {
+   "ref": "sig/..",
+   "beside": false,
+   "why": "a trailing `..` segment"
+  },
+  {
+   "ref": "..",
+   "beside": false,
+   "why": "`..` alone"
+  },
+  {
+   "ref": "/etc/attestation.dsse",
+   "beside": false,
+   "why": "an absolute path"
+  },
+  {
+   "ref": "C:attestation.dsse",
+   "beside": false,
+   "why": "a drive letter (it reads as a scheme)"
+  },
+  {
+   "ref": "c:\\attestation.dsse",
+   "beside": false,
+   "why": "a Windows path"
+  },
+  {
+   "ref": "https://example.org/attestation.dsse",
+   "beside": false,
+   "why": "a URL: nothing beside the manifest has a scheme"
+  },
+  {
+   "ref": "sig\\attestation.dsse",
+   "beside": false,
+   "why": "a backslash: Windows reads it as a folder, every other system as part of a name"
+  },
+  {
+   "ref": "K:x",
+   "beside": true,
+   "why": "dialect trap: the Kelvin sign is no ASCII letter, so this is no scheme (Python's re.I and .NET's IgnoreCase would read it as K)"
+  },
+  {
+   "ref": "sig/..\n",
+   "beside": true,
+   "why": "dialect trap: `..` followed by a line break is no `..` segment (Python's and .NET's `$` match before a final line break)"
+  }
+ ],
+ "bundle-vectors": [
+  {
+   "name": "envelope-beside-the-manifest-resolves",
+   "why": "the envelope lies beside the manifest under the name the Attestation gives",
+   "listed": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "attestation": {
+    "id": "https://ns.auth.gov/fw/attestation/approval",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "semantic-digest": "sha256:0bce4cbd00191eca7d366a800fe2e36cbd291e7e20994c541c1493a5edf73c6d"
+     }
+    ],
+    "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "signer": "https://ns.auth.gov/fw/party/ao",
+    "timestamp": "2026-11-15T12:00:00Z",
+    "envelope-ref": "attestation.dsse"
+   },
+   "envelopes": {
+    "attestation.dsse": {
+     "payloadType": "application/vnd.jascon.attestation+json",
+     "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1NjowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwiZW52ZWxvcGUtcmVmIjoiYXR0ZXN0YXRpb24uZHNzZSIsImlkIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9hdHRlc3RhdGlvbi9hcHByb3ZhbCIsImxpZmVjeWNsZSI6ImFjdGl2ZSIsInNpZ25lciI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvcGFydHkvYW8iLCJzdWJqZWN0LXNlbWFudGljLWRpZ2VzdHMiOlt7ImlkIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9yZXEvMSIsInNlbWFudGljLWRpZ2VzdCI6InNoYTI1NjowYmNlNGNiZDAwMTkxZWNhN2QzNjZhODAwZmUyZTM2Y2JkMjkxZTdlMjA5OTRjNTQxYzE0OTNhNWVkZjczYzZkIn1dLCJ0aW1lc3RhbXAiOiIyMDI2LTExLTE1VDEyOjAwOjAwWiIsInZlcnNpb24iOiIxIn0=",
+     "signatures": [
+      {
+       "keyid": "fixture",
+       "sig": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+      }
+     ]
+    }
+   },
+   "expected-fails": [],
+   "expected-envelope": "unverified"
+  },
+  {
+   "name": "envelope-in-a-folder-below-resolves",
+   "why": "a relative path that stays in the manifest's folder",
+   "listed": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "attestation": {
+    "id": "https://ns.auth.gov/fw/attestation/approval",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "semantic-digest": "sha256:0bce4cbd00191eca7d366a800fe2e36cbd291e7e20994c541c1493a5edf73c6d"
+     }
+    ],
+    "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "signer": "https://ns.auth.gov/fw/party/ao",
+    "timestamp": "2026-11-15T12:00:00Z",
+    "envelope-ref": "sig/attestation.dsse"
+   },
+   "envelopes": {
+    "sig/attestation.dsse": {
+     "payloadType": "application/vnd.jascon.attestation+json",
+     "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1NjowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwiZW52ZWxvcGUtcmVmIjoic2lnL2F0dGVzdGF0aW9uLmRzc2UiLCJpZCI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvYXR0ZXN0YXRpb24vYXBwcm92YWwiLCJsaWZlY3ljbGUiOiJhY3RpdmUiLCJzaWduZXIiOiJodHRwczovL25zLmF1dGguZ292L2Z3L3BhcnR5L2FvIiwic3ViamVjdC1zZW1hbnRpYy1kaWdlc3RzIjpbeyJpZCI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvcmVxLzEiLCJzZW1hbnRpYy1kaWdlc3QiOiJzaGEyNTY6MGJjZTRjYmQwMDE5MWVjYTdkMzY2YTgwMGZlMmUzNmNiZDI5MWU3ZTIwOTk0YzU0MWMxNDkzYTVlZGY3M2M2ZCJ9XSwidGltZXN0YW1wIjoiMjAyNi0xMS0xNVQxMjowMDowMFoiLCJ2ZXJzaW9uIjoiMSJ9",
+     "signatures": [
+      {
+       "keyid": "fixture",
+       "sig": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+      }
+     ]
+    }
+   },
+   "expected-fails": [],
+   "expected-envelope": "unverified"
+  },
+  {
+   "name": "missing-envelope-fails",
+   "why": "a named envelope that is not there fails, for an Attestation beside the manifest as for a listed one",
+   "listed": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "attestation": {
+    "id": "https://ns.auth.gov/fw/attestation/approval",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "semantic-digest": "sha256:0bce4cbd00191eca7d366a800fe2e36cbd291e7e20994c541c1493a5edf73c6d"
+     }
+    ],
+    "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "signer": "https://ns.auth.gov/fw/party/ao",
+    "timestamp": "2026-11-15T12:00:00Z",
+    "envelope-ref": "attestation.dsse"
+   },
+   "expected-fails": [
+    "envelope-ref 'attestation.dsse' does not resolve beside the manifest"
+   ],
+   "expected-envelope": "missing"
+  },
+  {
+   "name": "dotdot-ref-is-not-read-though-the-file-exists",
+   "why": "the file lies in the folder ABOVE the bundle; until 2026-11-15 the reference read it and found the envelope good",
+   "listed": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "attestation": {
+    "id": "https://ns.auth.gov/fw/attestation/approval",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "semantic-digest": "sha256:0bce4cbd00191eca7d366a800fe2e36cbd291e7e20994c541c1493a5edf73c6d"
+     }
+    ],
+    "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "signer": "https://ns.auth.gov/fw/party/ao",
+    "timestamp": "2026-11-15T12:00:00Z",
+    "envelope-ref": "../attestation.dsse"
+   },
+   "outside": {
+    "attestation.dsse": {
+     "payloadType": "application/vnd.jascon.attestation+json",
+     "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1NjowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwiZW52ZWxvcGUtcmVmIjoiLi4vYXR0ZXN0YXRpb24uZHNzZSIsImlkIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9hdHRlc3RhdGlvbi9hcHByb3ZhbCIsImxpZmVjeWNsZSI6ImFjdGl2ZSIsInNpZ25lciI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvcGFydHkvYW8iLCJzdWJqZWN0LXNlbWFudGljLWRpZ2VzdHMiOlt7ImlkIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9yZXEvMSIsInNlbWFudGljLWRpZ2VzdCI6InNoYTI1NjowYmNlNGNiZDAwMTkxZWNhN2QzNjZhODAwZmUyZTM2Y2JkMjkxZTdlMjA5OTRjNTQxYzE0OTNhNWVkZjczYzZkIn1dLCJ0aW1lc3RhbXAiOiIyMDI2LTExLTE1VDEyOjAwOjAwWiIsInZlcnNpb24iOiIxIn0=",
+     "signatures": [
+      {
+       "keyid": "fixture",
+       "sig": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+      }
+     ]
+    }
+   },
+   "expected-fails": [
+    "envelope-ref '../attestation.dsse' does not resolve beside the manifest"
+   ],
+   "expected-envelope": "missing"
+  },
+  {
+   "name": "dotdot-segment-is-refused-even-where-it-comes-back",
+   "why": "`sig/../attestation.dsse` names the file beside the manifest by a detour; the rule is about the ref, not about where it lands",
+   "listed": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "attestation": {
+    "id": "https://ns.auth.gov/fw/attestation/approval",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "semantic-digest": "sha256:0bce4cbd00191eca7d366a800fe2e36cbd291e7e20994c541c1493a5edf73c6d"
+     }
+    ],
+    "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "signer": "https://ns.auth.gov/fw/party/ao",
+    "timestamp": "2026-11-15T12:00:00Z",
+    "envelope-ref": "sig/../attestation.dsse"
+   },
+   "envelopes": {
+    "attestation.dsse": {
+     "payloadType": "application/vnd.jascon.attestation+json",
+     "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1NjowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwiZW52ZWxvcGUtcmVmIjoic2lnLy4uL2F0dGVzdGF0aW9uLmRzc2UiLCJpZCI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvYXR0ZXN0YXRpb24vYXBwcm92YWwiLCJsaWZlY3ljbGUiOiJhY3RpdmUiLCJzaWduZXIiOiJodHRwczovL25zLmF1dGguZ292L2Z3L3BhcnR5L2FvIiwic3ViamVjdC1zZW1hbnRpYy1kaWdlc3RzIjpbeyJpZCI6Imh0dHBzOi8vbnMuYXV0aC5nb3YvZncvcmVxLzEiLCJzZW1hbnRpYy1kaWdlc3QiOiJzaGEyNTY6MGJjZTRjYmQwMDE5MWVjYTdkMzY2YTgwMGZlMmUzNmNiZDI5MWU3ZTIwOTk0YzU0MWMxNDkzYTVlZGY3M2M2ZCJ9XSwidGltZXN0YW1wIjoiMjAyNi0xMS0xNVQxMjowMDowMFoiLCJ2ZXJzaW9uIjoiMSJ9",
+     "signatures": [
+      {
+       "keyid": "fixture",
+       "sig": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+      }
+     ]
+    }
+   },
+   "expected-fails": [
+    "envelope-ref 'sig/../attestation.dsse' does not resolve beside the manifest"
+   ],
+   "expected-envelope": "missing"
+  },
+  {
+   "name": "backslash-ref-is-not-read-though-the-file-exists",
+   "why": "on Windows the reference read `sig\\attestation.dsse` as sig/attestation.dsse; the app never did - one answer now",
+   "listed": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "should",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "X."
+       }
+      }
+     ]
+    }
+   ],
+   "attestation": {
+    "id": "https://ns.auth.gov/fw/attestation/approval",
+    "version": "1",
+    "lifecycle": "active",
+    "subject-semantic-digests": [
+     {
+      "id": "https://ns.auth.gov/fw/req/1",
+      "semantic-digest": "sha256:0bce4cbd00191eca7d366a800fe2e36cbd291e7e20994c541c1493a5edf73c6d"
+     }
+    ],
+    "content-manifest-digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "signer": "https://ns.auth.gov/fw/party/ao",
+    "timestamp": "2026-11-15T12:00:00Z",
+    "envelope-ref": "sig\\attestation.dsse"
+   },
+   "envelopes": {
+    "sig/attestation.dsse": {
+     "payloadType": "application/vnd.jascon.attestation+json",
+     "payload": "eyJjb250ZW50LW1hbmlmZXN0LWRpZ2VzdCI6InNoYTI1NjowMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIiwiZW52ZWxvcGUtcmVmIjoic2lnXFxhdHRlc3RhdGlvbi5kc3NlIiwiaWQiOiJodHRwczovL25zLmF1dGguZ292L2Z3L2F0dGVzdGF0aW9uL2FwcHJvdmFsIiwibGlmZWN5Y2xlIjoiYWN0aXZlIiwic2lnbmVyIjoiaHR0cHM6Ly9ucy5hdXRoLmdvdi9mdy9wYXJ0eS9hbyIsInN1YmplY3Qtc2VtYW50aWMtZGlnZXN0cyI6W3siaWQiOiJodHRwczovL25zLmF1dGguZ292L2Z3L3JlcS8xIiwic2VtYW50aWMtZGlnZXN0Ijoic2hhMjU2OjBiY2U0Y2JkMDAxOTFlY2E3ZDM2NmE4MDBmZTJlMzZjYmQyOTFlN2UyMDk5NGM1NDFjMTQ5M2E1ZWRmNzNjNmQifV0sInRpbWVzdGFtcCI6IjIwMjYtMTEtMTVUMTI6MDA6MDBaIiwidmVyc2lvbiI6IjEifQ==",
+     "signatures": [
+      {
+       "keyid": "fixture",
+       "sig": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="
+      }
+     ]
+    }
+   },
+   "expected-fails": [
+    "envelope-ref 'sig\\attestation.dsse' does not resolve beside the manifest"
+   ],
+   "expected-envelope": "missing"
   }
  ]
 }

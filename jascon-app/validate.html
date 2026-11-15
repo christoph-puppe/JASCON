@@ -238,7 +238,7 @@ function render() {
   $("out").querySelectorAll("[data-area]").forEach(b => b.addEventListener("click", () => { filter.area = b.dataset.area; render(); }));
   $("out").querySelectorAll("[data-kind]").forEach(b => b.addEventListener("click", () => { filter.kind = filter.kind === b.dataset.kind ? "" : b.dataset.kind; render(); }));
   let timer;
-  if ($("q")) $("q").addEventListener("input", e => { filter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => { render(); $("q").focus(); }, 250); });
+  if ($("q")) $("q").addEventListener("input", e => { filter.q = e.target.value; clearTimeout(timer); timer = setTimeout(() => jscRedraw(() => { render(); $("q").focus(); }), 250); });
 }
 /* ---------- composition with another set ---------- */
 async function renderOther() {

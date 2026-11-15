@@ -1,22 +1,20 @@
 # JASCON — "Kernel + Registered Facets"
-## Specification 2.0.0-rc.4
-### release candidate, 2026-11-13 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh), CP-ADVICE-1 (advice packs) and CP-AUTHOR-1 (who decided, and when) · NOT tagged — both reference validators are green on this candidate, the PowerShell twin on Windows PowerShell 5.1 (IV.5b); the tag is the author's decision
+## Specification 2.0.0-rc.5
+### release candidate, 2026-11-15 · the 1.0.0 text (released 2026-07-22) amended by CP-RISK-1 (Risk, the tenth kernel type), CP-CHECK-1 (Check, the eleventh), CP-ADVICE-1 (advice packs) and CP-AUTHOR-1 (who decided, and when), and by the decisions of 2026-11-13 to 2026-11-15 on the backlog before 2.0.0 (D27 among them) · NOT tagged — both reference validators are green on this candidate, the PowerShell twin on Windows PowerShell 5.1 (IV.5b); the tag is the author's decision
 
-> **What changed since rc.3 (2026-11-13).** One decision is new — **D26**:
-> who decided and when is spelled one way, `provenance`, and is optional on
-> the records and decisions that had no place for it; a Deviation may say
-> when it was decided and when it is due for review. No type and no
-> primitive is added. D8, D13 and D23 were amended in place and marked
-> *(2.0.0-rc.4)*. Fields were added to released shapes, and three fields
-> that accepted any string are typed (`Mapping.provenance.date`,
-> `Assessment.time`, `Attestation.timestamp`), so this is a new candidate.
-> After rc.3 and before this decision, three amendments landed without a
-> new candidate: the number domain (D3.9, NUMBER-1), the run rules of
-> CHECK-12, 13 and 15, and the code-point comparisons of the PowerShell
-> twin (IV.6). The proposal is `drafts/CP-AUTHOR-1.md`; the journal is the
-> register, "Amendments — the open backlog before 2.0.0" and "CP-AUTHOR-1
-> landed". The rc.3 file is gone from the tree (git keeps it).
-> After rc.4, on the same day and again without a new candidate: a
+> **What changed since rc.4 (2026-11-13).** One decision is new — **D27**:
+> versions and history, a statement's label, a manifest's sources,
+> references, and addresses inside a facet payload. D3.5, D3.10, D3.11,
+> D7, D9, D10 and D13 were amended in place. No type and no primitive is
+> added. Five rules can fail a bundle that rc.4 passed: no manifest lists
+> an Attestation (MANIFEST-1), an object in force does not lean on a
+> withdrawn one (WITHDRAWN-1), an operation names the statement it
+> changes (OPERATION-1), a `statement-id` inside a facet payload is held
+> (D10), and an `envelope-ref` stays in the bundle's folder (D7). The
+> corpus has 822 vectors in 18 families, where rc.4 had 643. All of it
+> landed between 2026-11-13 and 2026-11-15 without a new candidate, in
+> this order.
+> On the day of rc.4: a
 > pattern is read as its dialect says, so a value that ends in a line
 > break is refused by every tool (D3.10, backlog #68), and the tools
 > write who decided (backlog #69; IV.6). On 2026-11-14: every
@@ -49,8 +47,30 @@
 > of the handbook and the wording of the website did (IV.6). The request
 > format of an `http-api` collector is issue 37 of the repository's
 > tracker now, with the whole of API-based checks.
-> No new candidate was cut: the file keeps its name until the author
-> names the next one.
+> After that round a review of the code before the tag found that the two
+> validators read an Attestation's envelope wherever its `envelope-ref`
+> pointed, also outside the bundle. An `envelope-ref` names a file in the
+> manifest's folder or below it now, in all four tools, and the line of
+> D7 marks `rendering` and `envelope-ref` optional, as the schema always
+> had them (D7). A bundle whose envelope-ref leaves its folder fails
+> where it passed.
+> The author named this candidate on 2026-11-15, when the backlog before
+> 2.0.0 was closed. The rc.4 file is gone from the tree (git keeps it).
+
+> **What changed since rc.3 (2026-11-13).** One decision is new — **D26**:
+> who decided and when is spelled one way, `provenance`, and is optional on
+> the records and decisions that had no place for it; a Deviation may say
+> when it was decided and when it is due for review. No type and no
+> primitive is added. D8, D13 and D23 were amended in place and marked
+> *(2.0.0-rc.4)*. Fields were added to released shapes, and three fields
+> that accepted any string are typed (`Mapping.provenance.date`,
+> `Assessment.time`, `Attestation.timestamp`), so this is a new candidate.
+> After rc.3 and before this decision, three amendments landed without a
+> new candidate: the number domain (D3.9, NUMBER-1), the run rules of
+> CHECK-12, 13 and 15, and the code-point comparisons of the PowerShell
+> twin (IV.6). The proposal is `drafts/CP-AUTHOR-1.md`; the journal is the
+> register, "Amendments — the open backlog before 2.0.0" and "CP-AUTHOR-1
+> landed". The rc.3 file is gone from the tree (git keeps it).
 
 > **What changed since rc.2 (2026-11-12, the same day).** One decision is
 > new — **D25**, advice packs: a vendor's recommendations as one published
@@ -574,9 +594,9 @@ configure, and the vendor only described how.
 
 ## D7 — Attestation: content-manifest binding, **bi-modal verification**, verification contract, provenance map. *(rev. v0.5 — P7-B1 + P6-F1 merged)*
 **Decision.**
-`{subject-semantic-digests[], content-manifest-digest, rendering
-{artifact-digest, media-type, template-ref (pinned), renderer}, signer,
-timestamp, envelope-ref, provenance-map-ref?}` — the attestation binds the
+`{subject-semantic-digests[], content-manifest-digest, rendering?
+{artifact-digest, media-type, template-ref? (pinned), renderer?}, signer,
+timestamp, envelope-ref?, provenance-map-ref?}` — the attestation binds the
 **content-manifest digest** (which covers every object's package- and
 semantic-digest at signing time) and is itself outside that manifest (D3).
 Verification is a **normative two-state machine**:
@@ -628,6 +648,25 @@ so an edited lifecycle breaks the envelope — measured.)* Nothing in a
 shape changes. A bundle can fail today that
 passed yesterday: one that carries an active Attestation which does not
 bind what is delivered.
+
+*(2.0.0 — review of 2026-11-15)* **Where the envelope lies, and what is
+optional.** `envelope-ref` names a file in the manifest's folder or below
+it: a relative path with no scheme or drive letter, no leading slash, no
+backslash and no `..` segment. Any other ref does not resolve, whether or
+not the file it names exists, and a named envelope that does not resolve
+fails the bundle as a missing one does. The reader and the app had held a
+ref to that since they first fetched envelopes; the two validators joined
+it to the folder unchecked, so `../x`, an absolute path and, on Windows, a
+backslash path read a file the bundle does not hold — measured: a bundle
+whose envelope lay in the folder above it was read as signed. Sixteen
+`path-vectors` and six `bundle-vectors` in `dsse-vectors.json` hold all
+four tools to one pattern. The same review corrected this decision's
+line: since 1.0.0 the schema has required `rendering`, `envelope-ref`,
+and inside `rendering` `template-ref` and `renderer`, nowhere; an
+Attestation without an envelope is an unsigned one, and a rendering, where
+there is one, binds at least its artifact's digest and media type. The
+`?` marks above say so now. No shape changes. A bundle can fail that
+passed: one whose envelope-ref leaves its folder.
 
 ## D8 — `Deviation` sub-object.
 Unchanged: `{type (code system), state (investigating → pending → approved |
@@ -2501,6 +2540,14 @@ of Check and of advice packs:
    The reference, the twin and the app's rules give what every vector
    expects. No committed bundle fails, and neither does the CR26 bundle
    the workflow converts.)*
+   *(2026-11-15, D7, review: 16 vectors for where an `envelope-ref` may
+   point and 6 bundles on disk whose envelope lies beside the manifest,
+   below it, nowhere, above it, behind a `..` or behind a backslash —
+   `dsse` 5 → 27: **822 vectors**. Two deliberate defects in the
+   reference and one in the twin each turn vectors red; the old code of
+   both read the envelope above the bundle. The reference and the twin
+   (Windows PowerShell 5.1) give what every vector expects; the app's
+   test of them runs in the workflow. No committed bundle fails.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2661,11 +2708,15 @@ history. The compact line:
 | A pin's version is three numbers of the number domain | 2026-11-15 | Backlog #72, built on the author's word ("alle wie vorgeschlagen"). Composition (D3.5) compares the three numbers of a pin's version, and the three hosts read a long number three ways: the reference exactly, the twin in 32 bits, the app inexactly beyond 2^53. Each number is at most 2^53 − 1 now, asked of its digits before anything is converted; a larger one makes the pin a non-semver pin, which composition reports. `composition` 9 → 11 vectors, 785 in all. No shape changes, and no committed pin has such a version. The same word covered two things outside the kernel: the CR26 converter ends a run on a force word it does not know and writes nothing into the repository (backlog #79, points 3 and 5), and the reader (1.20.0) writes no resolved package while a Tailoring holds an operation the page does not apply (backlog #71, point 5) | "After the last round — #72, #79 and #71" |
 | An operation names the statement it changes | 2026-11-15 | Backlog #96, found while the reader was held to its operations and decided by the author ("Do it"). **OPERATION-1** (D13), an error: a `set-modality`, a `set-parameter` and a `replace-prose` carry a `statement-id`, and a `set-parameter` names a parameter that statement declares. The handbook's appendix A had asked for the `statement-id` since 2026-07-22 and nothing held it; without one, the modality order and the check of a value against its declaration asked nothing. `reference` 41 → 56 vectors, 800 in all. In the reference, the twin, the app (0.9.23) and the reader (1.21.0). No shape changes. A bundle that passed can fail; none of the committed ones does, and the 128 such operations of the earlier vectors all name a statement. With it, the reader's resolved scope follows D13: an exclude that names a Set removes its members, and a select by predicate is said not to be resolved (backlog #71, points 13 and 14) | "OPERATION-1 and the reader's resolved scope" |
 | The backlog is closed | 2026-11-15 | The author wished the backlog closed before 2.0.0 and took what was proposed for its 22 open points ("Rest wie vorgeschlagen"), but for #62, which moved to issue 37 of the tracker. No decision, no shape, no rule and no vector changes: 800 vectors in 18 families. Reader 1.22.0: a typed value is not lost to the button pressed next; authored objects stay across a load; a second check on a day is a second Assessment; stage 5 shows Risks; a file is an Attestation only with the members the kernel requires; ADVICE-1 to ADVICE-3 are ported; a resolved package leaves out a withdrawn Requirement and names an operation outside its scope. App build 0.9.24: the four open defects of #71. Website: no third verdict beside the two states of D7. Converters: the CR26 report prints its counters; the SP 800-53 citations are counted in four named bundles (14, where 21 were counted with files that only list carried copies); a record by path names the type of the object; the source lists name whole commit ids. Handbook: the CR26 figures are those of publication 2026.11.02.01. Register, "The backlog closed before the tag". |
+| Where an envelope lies | 2026-11-15 | A review of the code before the tag. The reference and the twin joined an Attestation's `envelope-ref` to the bundle's folder unchecked, so a ref of `../x`, an absolute path or, on Windows, a backslash path read a file outside the bundle; the reader and the app refused such a ref when they fetched, and the app looked it up among loaded files without the check. D7 amended: the ref names a file in the manifest's folder or below it, by one pattern in all four tools, and any other ref does not resolve. The line of D7 and appendix A.9 had marked `rendering`, `envelope-ref`, `template-ref` and `renderer` required, which the schema never did; they are optional there now. `dsse` 5 → 27 vectors, 822 in all. App build 0.9.25. A bundle whose envelope-ref leaves its folder fails where it passed; none of the committed ones does | D7 · register, "A review before the tag" |
+| What closing the backlog found | 2026-11-15 | Backlog #97, decided by the author point by point. No decision, no shape, no rule and no vector changes. Reader 1.23.0: an authored object can be taken out of the workspace. Converters: a path map names the type of the object a value stands in, and the check holds it; every place names whole commit ids, the IFA manifest among them, whose Attestation is written again and binds it (FULL MATCH as before). Handbook chapter 1: its corpus figures are measured again on the pinned versions. Register, "#97: what was found while closing the backlog". |
+| The last open rows | 2026-11-15 | Backlog #100 (3) and #101, decided by the author; issue 39 of the tracker. No decision, no shape, no rule and no vector changes. App build 0.9.26: a press held while a filter field redraws makes its click, and each key field of the Checks page has its own id; four page tests wait for the page's write before they read the store. Texts: the README, the handbook and the website's home page quote the figures of the pinned corpora where they quoted those of July (799 packed lists, 12,096 namespaced props). Register, "#100 (3) and #101". |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
+| **2.0.0-rc.5** | 2026-11-15 | This text, named by the author when the backlog before 2.0.0 was closed. D27 new; D3.5, D3.10, D3.11, D7, D9, D10 and D13 amended in place, each recorded in the rows above this one that are dated 2026-11-13 to 2026-11-15. Five rules that can fail a bundle which passed rc.4 (MANIFEST-1, WITHDRAWN-1, OPERATION-1, a `statement-id` in a facet payload, an `envelope-ref` inside the bundle). 822 vectors in 18 families. No amendment is new with the renaming. | D27 · the register's sections of 2026-11-13 to 2026-11-15 |
 
 ## IV.7 Release artifacts (what this candidate ships with)
 
-In the repository at the rc.4 commit. "Green" below means the Python
+In the repository at the rc.5 commit. "Green" below means the Python
 reference validator; the PowerShell twin's state is IV.5b item 3.
 
 - **Kernel schema** `jascon-2.0.0.schema.json` — closed
@@ -2689,8 +2740,9 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
   folder after importing it.
 - **Two reference validators**: `validate_core.py` (Python, jsonschema
   only) — green; `validate_core.ps1` (PowerShell 5.1, zero dependencies)
-  — green on 2026-11-14 on all 692 vectors of this candidate, on Windows
-  PowerShell 5.1 (IV.5b item 3). A workflow runs both, and the app's
+  — green on 2026-11-15 on all 822 vectors of this candidate, on Windows
+  PowerShell 5.1 (the workflow's run 125, on the tree this candidate was
+  cut from; IV.5b item 3). A workflow runs both, and the app's
   port, on every change (`.github/workflows/validators.yml`).
 - **Bidirectional export**: `export_oscal.py` — as at 1.0.0 (OSCAL 1.2.2
   out, generic re-import, 5,886/5,886 round-trip measured on the ten
@@ -2908,4 +2960,13 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    wished the backlog closed before the tag: #62 moved to issue 37 of the
    tracker, and the rest of #71, #79 and #91 is built or closed with its
    reason, as proposed. Filed in that round, as #97: what was found
-   while building and not changed.)*
+   while building and not changed. After the merge of that round the
+   author decided #97 point by point, and it is built or closed but for
+   one point that waits for the next change of the CR26 converter; a
+   test of the app that fails when run nearly alone is an issue of the
+   tracker now. Filed in turn, as #101: what that work found. A branch
+   with a review's findings was merged (#98 to #100: an `envelope-ref`
+   stays in the bundle's folder, D7; 822 vectors). The author then
+   decided #100 (3) and #101, and they are closed; the tests of issue 39
+   are corrected. Open: #97 (3), scheduled for after the tag. The same
+   day the author named this text **2.0.0-rc.5**.)*

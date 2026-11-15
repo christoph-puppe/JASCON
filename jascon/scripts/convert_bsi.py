@@ -41,7 +41,7 @@ hold on the written files, a source value that is unaccounted, or a wiring
 check that fails ends the run with a non-zero exit code, after the bundle,
 the reports and the record are written, so that a failed run says why."""
 import json, hashlib, os, re, sys, copy, collections, decimal
-from oscal_conv_lib import Bundle, BUNDLE_NEWLINE, Ledger, ledger_by_path, ledger_gate, path_map_check
+from oscal_conv_lib import Bundle, BUNDLE_NEWLINE, Ledger, ledger_by_path, ledger_gate, path_map_check, on
 from oscal_conv_lib import document_author, document_day
 from oscal_conv_lib import referred_to, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import REFERENCES, REFERENCES_FILE, ASSESSMENT_CRITERIA_FILE, resource_entry
@@ -184,7 +184,8 @@ PROP_NS = {"modal_verb":CSV+"modal_verbs.csv","action_word":CSV+"action_words.cs
            "threats":CSV+"basethreats.csv","sec_level":CSV+"security_level.csv",
            "effort_level":CSV+"effort_level.csv","tags":CSV+"tags.csv"}
 # The values the publisher's lists hold, read on 2026-11-14 at commit
-# 10f3c22 of BSI-Bund/Stand-der-Technik-Bibliothek: security_level.csv and
+# 10f3c22898a4b15eb95fa228d78654cff32208e4 of
+# BSI-Bund/Stand-der-Technik-Bibliothek: security_level.csv and
 # effort_level.csv under documentation/namespaces/. The pinned taxonomy
 # schema lists exactly these. A control that states another value ends the
 # run: until v0.5 the schema's enum was made from the values the catalogue
@@ -311,111 +312,116 @@ def inventory(node,prefix,counter):
 #   - the outcome: it is carried (copied or transformed), it is no content by
 #     a checked rule, or it is dropped for a declared reason;
 #   - the places: a pattern over the destinations as the ledger's record
-#     writes them (a JSON Pointer into the object, array positions as `[]`).
+#     writes them: the type of the object and a JSON Pointer into it, array
+#     positions as `[]` (on(type, pointers)). Since 2026-11-15 a place names
+#     the type (backlog #97, point 5): a group and a baseline are Sets, a
+#     control is a Requirement, and a control with nested controls is also
+#     the Set that groups it with them.
 # After the account the two are held against each other, value by value. A
 # value whose outcome its row does not allow, or that stands at a place its
 # row does not name, ends the run: no sentence of this map says "not
 # carried" of a value that is, and no value is anywhere the map does not say.
 CARRIED=("copied","transformed"); NOT_CONTENT=("not-content",); DROPPED=("intentionally-dropped",)
-def at(*places): return "^("+"|".join(places)+")$"
+def at(*places): return "^("+"|".join(x for group in places for x in group)+")$"     # of on(type, pointers), one or several
+REQ,SET,MAN="requirement","requirementSet","manifest"
 _F=r"/facets/[^/]*"
 TAX_AT=_F+r"gspp-taxonomy@1/by-statement/smt"; GRAM_AT=_F+r"statement-grammar@1/by-statement/smt"
 SECO_AT=_F+r"security-objectives@1/by-statement/smt"; ACRIT_AT=_F+r"assessment-criteria@1/by-statement/smt"
 NARR_AT=_F+r"gspp-narrative@1"; COMPAT_AT=_F+r"oscal-1x@1"
 REF_AT=_F+r"references@1"                                     # the standard facet for the resources texts and links refer to
 SOURCES_AT=r"/provenance/sources/\[\]"                        # the manifest's entry for the source document
-OBJECT_AT=(r"/id",r"/members/\[\]/ref",r"/objects/\[\]/id",r"/objects/\[\]/path")   # an object's id, where it is listed, its file
+LISTED_AT=on(SET,r"/members/\[\]/ref")+on(MAN,r"/objects/\[\]/id",r"/objects/\[\]/path")   # where an object is listed, and its file
 C = r"(catalog(\.groups\[\])*\.controls\[\](\.controls\[\])*)"   # a control: in a group at any depth, nested at any depth, or under the catalogue itself
 RULES = [       # (source path, level, sentence, outcomes, places)
  (r"^catalog\.metadata\.title$", "L1", "title of the root Set; manifest provenance.sources[].title", CARRIED,
-  at(r"/title/de",SOURCES_AT+r"/title")),
+  at(on(SET,r"/title/de"),on(MAN,SOURCES_AT+r"/title"))),
  (r"^catalog\.metadata\.version$", "L1",
   "`version` of every object, and of its entry in the manifest; manifest provenance.sources[].version", CARRIED,
-  at(r"/version",r"/objects/\[\]/version",SOURCES_AT+r"/version")),
+  at(on(f"{REQ}|{SET}",r"/version"),on(MAN,r"/objects/\[\]/version",SOURCES_AT+r"/version"))),
  (r"^catalog\.metadata\.oscal-version$", "L2",
   "root Set, compat oscal-1x `metadata`, as the source holds it; manifest provenance.sources[].format-version", CARRIED,
-  at(COMPAT_AT+r"/metadata/oscal-version",SOURCES_AT+r"/format-version")),
+  at(on(SET,COMPAT_AT+r"/metadata/oscal-version"),on(MAN,SOURCES_AT+r"/format-version"))),
  (r"^catalog\.metadata\.last-modified$", "L2",
   "root Set, compat oscal-1x `metadata`, as the source holds it; its day -> manifest provenance.sources[].date", CARRIED,
-  at(COMPAT_AT+r"/metadata/last-modified",SOURCES_AT+r"/date")),
+  at(on(SET,COMPAT_AT+r"/metadata/last-modified"),on(MAN,SOURCES_AT+r"/date"))),
  (r"^catalog\.metadata\.parties\[\]\.name$", "L2",
   "root Set, compat oscal-1x `metadata`, as the source holds it; the name of the party the metadata names as "
   "author -> manifest provenance.sources[].author-ref (a landmark URI)", CARRIED,
-  at(COMPAT_AT+r"/metadata/parties/\[\]/name",SOURCES_AT+r"/author-ref")),
+  at(on(SET,COMPAT_AT+r"/metadata/parties/\[\]/name"),on(MAN,SOURCES_AT+r"/author-ref"))),
  (r"^catalog\.metadata\.", "L2", "root Set, compat oscal-1x `metadata`: the member as the source holds it", CARRIED,
-  at(COMPAT_AT+r"/metadata/.*")),
- (r"^catalog\.uuid$", "L1", "manifest provenance.sources[].uuid: the uuid of the source document", CARRIED, at(SOURCES_AT+r"/uuid")),
+  at(on(SET,COMPAT_AT+r"/metadata/.*"))),
+ (r"^catalog\.uuid$", "L1", "manifest provenance.sources[].uuid: the uuid of the source document", CARRIED, at(on(MAN,SOURCES_AT+r"/uuid"))),
  (r"^catalog\.back-matter\.", "L2",
   "a resource that something in the document refers to by #uuid (a link of a control, which also takes its "
   "address from it as relations[].ref, or a link of the metadata) is carried whole on the root Set, in the "
   "standard facet references@1 (its uuid as `id`); a resource nothing refers to is an orphan and is not carried "
   "(a rule the ledger checks)",
-  CARRIED+NOT_CONTENT, at(r"/relations/\[\]/ref",REF_AT+r"/resources/.*")),
+  CARRIED+NOT_CONTENT, at(on(REQ,r"/relations/\[\]/ref"),on(SET,REF_AT+r"/resources/.*"))),
  (r"^catalog(\.groups\[\])+\.id$", "L1", "taxonomy Set of the group: its id, its file, and where it is listed", CARRIED,
-  at(*OBJECT_AT)),
- (r"^catalog(\.groups\[\])+\.title$", "L1", "taxonomy Set of the group: its title", CARRIED, at(r"/title/de")),
+  at(on(SET,r"/id"),LISTED_AT)),
+ (r"^catalog(\.groups\[\])+\.title$", "L1", "taxonomy Set of the group: its title", CARRIED, at(on(SET,r"/title/de"))),
  (r"^catalog(\.groups\[\])+\.props\[\]\.remarks$", "L1", "gspp-narrative on the Set: layer/Praktik description", CARRIED,
-  at(NARR_AT+r"/description/de",COMPAT_AT+r"/props/.*")),
+  at(on(SET,NARR_AT+r"/description/de",COMPAT_AT+r"/props/.*"))),
  (r"^catalog(\.groups\[\])+\.props\[\]\.(name|value)$", "L1", "Set.label / Set.aliases (bsi-uuid)", CARRIED,
-  at(r"/label",r"/aliases/\[\]/(scheme|value)",COMPAT_AT+r"/props/.*")),
+  at(on(SET,r"/label",r"/aliases/\[\]/(scheme|value)",COMPAT_AT+r"/props/.*"))),
  (C+r"\.id$", "L1",
   "Requirement id, label and file of the control, at every depth, and where it is listed; a control with "
   "nested controls: also the id and the file of the Set that groups it with them", CARRIED,
-  at(*OBJECT_AT,r"/label")),
- (C+r"\.class$", "L1", "gspp-taxonomy: class (by-statement)", CARRIED, at(TAX_AT+r"/class")),
+  at(on(f"{REQ}|{SET}",r"/id"),LISTED_AT,on(REQ,r"/label"))),
+ (C+r"\.class$", "L1", "gspp-taxonomy: class (by-statement)", CARRIED, at(on(REQ,TAX_AT+r"/class"))),
  (C+r"\.title$", "L1", "Requirement title; a control with nested controls: also the title of its grouping Set", CARRIED,
-  at(r"/title/de")),
+  at(on(f"{REQ}|{SET}",r"/title/de"))),
  (C+r"\.links\[\]\.(rel|href)$", "L1",
   "relations[] {type=rel, ref} of the control's own Requirement, at every depth (#control -> req URI; #uuid -> "
-  "back-matter URL)", CARRIED, at(r"/relations/\[\]/(type|ref)",COMPAT_AT+r"/links/.*")),
+  "back-matter URL)", CARRIED, at(on(REQ,r"/relations/\[\]/(type|ref)",COMPAT_AT+r"/links/.*"))),
  (C+r"\.params\[\]\.id$", "L1", "statement parameter name (type string); key of compat param-extras", CARRIED,
-  at(r"/statements/\[\]/parameters/\[\]/name",COMPAT_AT+r"/param-extras/\{param\}")),
+  at(on(REQ,r"/statements/\[\]/parameters/\[\]/name",COMPAT_AT+r"/param-extras/\{param\}"))),
  (C+r"\.params\[\]\.(label|values\[\])$", "L1",
   "parameter label / default - first-class since the D9 rev (backlog #1); more than one value: all of them in "
   "compat param-extras; an empty label, which is no label of the kernel: compat param-extras", CARRIED,
-  at(r"/statements/\[\]/parameters/\[\]/(label|default)",COMPAT_AT+r"/param-extras/\{param\}/(label|values/\[\])")),
+  at(on(REQ,r"/statements/\[\]/parameters/\[\]/(label|default)",COMPAT_AT+r"/param-extras/\{param\}/(label|values/\[\])"))),
  (C+r"\.params\[\]\.props\[\]\.(name|value)$", "L2", "compat oscal-1x: param-extras (param alt-identifier only)", CARRIED,
-  at(COMPAT_AT+r"/param-extras/\{param\}/(alt-identifier|props/.*)")),
+  at(on(REQ,COMPAT_AT+r"/param-extras/\{param\}/(alt-identifier|props/.*)"))),
  (C+r"\.props\[\]\.ns$", "-",
   "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another "
-  "namespace is not read and is carried whole (compat `props`)", NOT_CONTENT+CARRIED, at(COMPAT_AT+r"/props/.*")),
+  "namespace is not read and is carried whole (compat `props`)", NOT_CONTENT+CARRIED, at(on(REQ,COMPAT_AT+r"/props/.*"))),
  (C+r"\.props\[\]\.(name|value)$", "L1",
   "dispatch by prop name (see per-prop table); a prop the mapping does not read: compat `props`", CARRIED,
-  at(r"/label",r"/aliases/\[\]/(scheme|value)",TAX_AT+r"/(sec-level|effort|tags)(/\[\])?",
-     SECO_AT+r"/(confidentiality|integrity|availability|authenticity|threat-refs)(/\[\])?",
-     r"/id",r"/title/de",r"/objects/\[\]/(id|path)",                # the baseline Set a sec_level names
-     COMPAT_AT+r"/props/.*")),
+  at(on(REQ,r"/label",r"/aliases/\[\]/(scheme|value)",TAX_AT+r"/(sec-level|effort|tags)(/\[\])?",
+        SECO_AT+r"/(confidentiality|integrity|availability|authenticity|threat-refs)(/\[\])?",
+        COMPAT_AT+r"/props/.*"),
+     on(SET,r"/id",r"/title/de"),on(MAN,r"/objects/\[\]/(id|path)"))),   # the baseline Set a sec_level names
  (C+r"\.parts\[\]\.id$", "-",
   "no content: rebuilt exactly, the control's id and `_stm` or `_gdn`, a rule the ledger checks. An id the rule "
-  "does not give is carried (compat `parts`)", NOT_CONTENT+CARRIED, at(COMPAT_AT+r"/parts/.*")),
+  "does not give is carried (compat `parts`)", NOT_CONTENT+CARRIED, at(on(REQ,COMPAT_AT+r"/parts/.*"))),
  (C+r"\.parts\[\]\.name$", "L1",
   "`guidance` -> the key of the gspp-narrative payload; `statement` -> no content: it selects the part whose "
   "prose and props become the statement, a rule the ledger checks. A part of another name is carried whole "
-  "(compat `parts`)", CARRIED+NOT_CONTENT, at(NARR_AT+r"/by-statement/smt/guidance",COMPAT_AT+r"/parts/.*")),
+  "(compat `parts`)", CARRIED+NOT_CONTENT, at(on(REQ,NARR_AT+r"/by-statement/smt/guidance",COMPAT_AT+r"/parts/.*"))),
  (C+r"\.parts\[\]\.prose$", "L1", "statements[].prose.de ({{insert}} -> {param:}) / gspp-narrative guidance", CARRIED,
-  at(r"/statements/\[\]/prose/de",NARR_AT+r"/by-statement/smt/guidance/de",COMPAT_AT+r"/parts/.*")),
+  at(on(REQ,r"/statements/\[\]/prose/de",NARR_AT+r"/by-statement/smt/guidance/de",COMPAT_AT+r"/parts/.*"))),
  (C+r"\.parts\[\]\.props\[\]\.ns$", "-",
   "no content: the namespace this mapping is written for (PROP_NS), a rule the ledger checks. A prop in another "
-  "namespace is not read and is carried whole (compat `parts`)", NOT_CONTENT+CARRIED, at(COMPAT_AT+r"/parts/.*")),
+  "namespace is not read and is carried whole (compat `parts`)", NOT_CONTENT+CARRIED, at(on(REQ,COMPAT_AT+r"/parts/.*"))),
  (C+r"\.parts\[\]\.props\[\]\.(name|value)$", "L1",
   "dispatch by part-prop name (grammar/objectives/criteria; packed lists reported); a prop the mapping does not "
   "read: compat `parts`", CARRIED,
-  at(r"/statements/\[\]/modality",GRAM_AT+r"/(action|result|result-specification|target-object-categories)(/\[\])?",
-     ACRIT_AT+r"/required-documentation(/\[\])?",COMPAT_AT+r"/parts/.*")),
+  at(on(REQ,r"/statements/\[\]/modality",GRAM_AT+r"/(action|result|result-specification|target-object-categories)(/\[\])?",
+        ACRIT_AT+r"/required-documentation(/\[\])?",COMPAT_AT+r"/parts/.*"))),
  # What OSCAL allows and this mapping does not read. The pinned catalogue
  # has none of it; a later one that does loses nothing.
  (C+r"\.params\[\]\.", "L2",
   "what the source says of a parameter beyond its id, label and one value: compat param-extras, as the source "
-  "holds it", CARRIED, at(COMPAT_AT+r"/param-extras/\{param\}/.*")),
+  "holds it", CARRIED, at(on(REQ,COMPAT_AT+r"/param-extras/\{param\}/.*"))),
  (C+r"\.", "L2",
   "a member of a control, a part, a prop or a link this mapping does not read: carried as the source holds it "
-  "(compat `props`, `parts`, `links`, `control`)", CARRIED, at(COMPAT_AT+r"/(props|parts|links|control)/.*")),
+  "(compat `props`, `parts`, `links`, `control`)", CARRIED, at(on(REQ,COMPAT_AT+r"/(props|parts|links|control)/.*"))),
  (r"^catalog(\.groups\[\])+\.", "L2",
   "a member or a prop of a group this mapping does not read: carried as the source holds it on the Set of the "
-  "group (compat `props`, `group`)", CARRIED, at(COMPAT_AT+r"/(props|group)/.*")),
+  "group (compat `props`, `group`)", CARRIED, at(on(SET,COMPAT_AT+r"/(props|group)/.*"))),
  (r"^catalog\.", "L2",
   "a member of the catalogue this mapping does not read: carried as the source holds it on the root Set (compat "
-  "`catalog`)", CARRIED, at(COMPAT_AT+r"/catalog/.*")),
+  "`catalog`)", CARRIED, at(on(SET,COMPAT_AT+r"/catalog/.*"))),
 ]
 def path_map(path):
     """the row of the path map for a source path: (level, sentence, outcomes, places), or None"""
@@ -915,7 +921,7 @@ def row_of(path):
     return None if mapped_to is None else (mapped_to[2],mapped_to[3])
 HELD=path_map_check(LEDGER["paths"],row_of)
 disagree=[(d["path"],d["outcome"],d["count"],d["example"],tuple(d["allowed"])) for d in HELD["disagree"]]   # as the reports below read them
-elsewhere=[(e["path"],e["pointer"],e["count"]) for e in HELD["elsewhere"]]
+elsewhere=[(e["path"],(e["object-type"],e["pointer"]),e["count"]) for e in HELD["elsewhere"]]
 wiring+=HELD["sentences"]
 
 def source_at(pointer):
@@ -1066,7 +1072,7 @@ j={"sources":[{"key":k,"title":t,"version":v} for k,t,v,_ in catalogs_meta],
                                         "rows":[{"path":p,"outcome":o,"count":n,"first":x,"path-map-allows":list(a)}
                                                 for p,o,n,x,a in disagree],
                                         "values-at-a-place-the-map-does-not-name":sum(e[2] for e in elsewhere),
-                                        "places":[{"path":p,"pointer":place,"count":n} for p,place,n in elsewhere]},
+                                        "places":[{"path":p,"object-type":place[0],"pointer":place[1],"count":n} for p,place,n in elsewhere]},
              "written-without-a-source-value":{k:{"leaf-values":c["leaf values"],
                                                   "without-a-source-value":sum(plain(c).values()),
                                                   **({"by-place":plain(c)} if k!="schemas" else {})}
@@ -1229,7 +1235,7 @@ md.append(f"- **The path map held against the ledger: {sum(d[2] for d in disagre
 for p,o,n,x,a in disagree:
     md.append(f"    - `{p}`: x{n:,} {o}, where the path map allows {' or '.join(a)}; first `{x}`")
 for p,place,n in elsewhere:
-    md.append(f"    - `{p}`: x{n:,} at `{place}`, a place the path map does not name for that path")
+    md.append(f"    - `{p}`: x{n:,} at `{place[1]}` (object type {place[0]}), a place the path map does not name for that path")
 wo=written["objects"]
 party_from="the converter's default" if PARTY_ORIGIN=="converter-default" else "given by the caller"
 WHAT={"/statements/[]/obligated-parties/[]":f"the obligated party `{PARTY}`, {party_from}",

@@ -56,7 +56,7 @@ relation** — a defined relation, never a magic word (§14.7).
 > **Don't** ship a converter without its coverage report. The failure
 > this prevents is silent smoothing: this project's own first scan
 > undercounted a national corpus (651 for 998) until nested controls
-> were caught, and the same corpus carries 781 lists packed into
+> were caught, and the same corpus carries 799 lists packed into
 > comma-separated strings that a "helpful" converter would either split
 > without a word or carry on as text. Unmapped and defective source
 > values are *findings about the source* — they belong in a generated
@@ -385,8 +385,8 @@ before/after. Mapping spreadsheets convert by Chapter 8's §8.5–8.6:
 one row, one Mapping object, honest relationship codes, and imported
 link-lists graded `supports` rather than flattered into `equal`.
 
-And the German catalog's 781 packed lists — 125 `tags`, 616 `threats`,
-40 target object categories, each several vocabulary terms joined by
+And the German catalog's 799 packed lists — 125 `tags`, 635 `threats`,
+39 target object categories, each several vocabulary terms joined by
 commas in one prop value — deserve their explicit converter policy,
 because every option except one is a trap: keeping them as strings
 carries the defect into the new world and fails a pinned facet schema
@@ -401,8 +401,8 @@ Eyes have to read the source's own notation first, and this project
 learned that the hard way. Until 2026-11-12 the BSI converter reported
 213 values containing `{{…}}` in the sentence-template props
 (`result`, `result_specification`) as "pseudo-placeholders". They are the
-template's parameter slots: each of the 221 slots stands exactly where
-the statement prose inserts a parameter, and 219 repeat that
+template's parameter slots: each of the 224 slots stands exactly where
+the statement prose inserts a parameter, and 222 repeat that
 parameter's label. A suspected defect is therefore tested against the
 source before it is queued — here, every slot is compared with the
 prose, and only a slot that stands where no parameter is inserted would

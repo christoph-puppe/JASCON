@@ -149,12 +149,14 @@ def listed_objects(bundle, counts):
     Attestations that lie beside a manifest (D3.1; backlog #46). They are no
     entry of the manifest and have no pair of digests in it, so a page that
     says "both digests of N objects" must not count them. The validator's
-    report does not say where an Attestation lies, and it refuses a listed
-    one in a pack only (ADVICE-1; measured 2026-11-14 on a copy of the IFA
-    bundle that lists its own: 0 failures). So the manifest is read as
-    well: with every Attestation of the report taken as lying beside it,
-    its entries must be as many as the other objects the validator typed.
-    A bundle that lists an Attestation stops the build here."""
+    report does not say where an Attestation lies. Since the same day it
+    refuses a listed one in every bundle (MANIFEST-1, backlog #75), so a
+    green bundle lists none; before that it refused one in a pack only
+    (ADVICE-1), and this check was the only one. It stays as the build's
+    own check of the count: with every Attestation of the report taken as
+    lying beside the manifest, its entries must be as many as the other
+    objects the validator typed. A bundle that lists an Attestation stops
+    the build here."""
     beside = counts.pop("attestation", 0)
     manifest = json.loads(read(os.path.join(REPO, bundle, "content-manifest.json")))
     listed = len(manifest["objects"])

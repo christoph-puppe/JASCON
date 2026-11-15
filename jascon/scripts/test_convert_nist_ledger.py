@@ -554,11 +554,16 @@ class Backlog41TheLedgerOfSP80053(unittest.TestCase):
     def test_backlog_89_a_value_that_stands_where_the_path_map_does_not_say_ends_the_run_with_1(self):
         """The ledger holds a rule to what it wrote. The table beside the path map (HELD) says where the values
         of a row stand; path_map_check of the library holds the record against it."""
-        TITLE = ' (r"^nist\\.catalog\\.groups\\[\\]\\.controls\\[\\]\\.title$", None, (r"/title/en",)),\n'
+        TITLE = ' (r"^nist\\.catalog\\.groups\\[\\]\\.controls\\[\\]\\.title$", None, on(REQ, r"/title/en")),\n'
+        stands = "nist.catalog.groups[].controls[].title stand at /title/en (object type requirement), a place the path map does not name for that path"
         # the table names another place for a control's title than the converter writes
         done, _, record = self.tree.changed("place", TITLE, TITLE.replace("/title/en", "/title/de"))
-        self.fails("place", done, "nist.catalog.groups[].controls[].title stand at /title/en, a place the path map does not name for that path")
+        self.fails("place", done, stands)
         self.assertEqual(record["totals"]["unaccounted"], 0, "the ledger alone lets it through: the value is carried")
+        # backlog #97 (5): the right pointer in an object of the wrong type, the title of a Set. Until 2026-11-15 a
+        # place was the pointer alone and this table passed.
+        done, _, _ = self.tree.changed("type", TITLE, TITLE.replace("on(REQ,", "on(SET,"))
+        self.fails("type", done, stands)
         # a row of the table taken out: the rows below it would be held to the places of another row
         done, _, _ = self.tree.changed("row", TITLE, "")
         self.fails("row", done, "the table of outcomes and places (HELD) has 40 row(s) and the path map 41; they differ first at row 14")

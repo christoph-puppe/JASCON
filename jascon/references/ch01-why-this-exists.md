@@ -5,9 +5,12 @@
 **Audience:** everyone — framework authorities, tool implementers, and the
 people who have to sign what the tools produce.
 **Companions:** Specification v0.5 (Part I), Decision Rationale Register.
-**Figures:** corpus versions of July 2026 (ISM v2026.06.18 · BSI 2026-07-03
-/ 2026-04-23 · FedRAMP CR26 v2026.07.14.01); re-verify at print per the
-evidence rule in §1.6.
+**Figures:** measured on the versions the repository pins (ISM v2026.06.18 ·
+BSI Grundschutz++ of 2026-10-29 · FedRAMP CR26 2026.11.02.01 of 2026-11-02).
+As of July 2026 and not measured again: the share of BSI's MS-TLS catalogue
+of 2026-04-23 in the German figures (17 controls, 10 of them nested; 111
+props, 74 of them namespaced), ASD's profile documents, RFC-0024 and the
+issue trackers. Re-verify at print per the evidence rule in §1.6.
 
 ---
 
@@ -34,7 +37,7 @@ every claim in it is a number somebody in this project counted in a
 published artifact, and the few that are not are labeled. By the end you
 will know why the standard built for this job received zero organic
 submissions from its flagship program in a year of record volume, why the
-world's most carefully authored OSCAL catalog packs 781 lists into plain
+world's most carefully authored OSCAL catalog packs 799 lists into plain
 strings that no validator on the planet can see, why the newest authoritative compliance
 format in the United States is not OSCAL at all — and why those three facts
 have the same root cause, which is fixable.
@@ -93,9 +96,9 @@ three artifacts actually contain, so meet them properly.
 
 | | **ASD ISM** (Australia) | **BSI Grundschutz++ / MS-TLS** (Germany) | **FedRAMP CR26** (United States) |
 |---|---|---|---|
-| Format | OSCAL 1.1.3 catalog | OSCAL 1.1.3 catalogs | Bespoke JSON + own schema |
-| Size | 1,150 controls | 998 + 17 controls (incl. 347 + 10 nested) | 246 rules · 46 KSIs · 75 terms · 79 overlays |
-| Extension load | 8,958 props (7,759 namespaced) | 13,315 props (12,059 namespaced) | zero props — typed fields instead |
+| Format | OSCAL 1.1.2 catalog | OSCAL 1.1.3 catalogs | Bespoke JSON + own schema |
+| Size | 1,150 controls | 1,000 + 17 controls (incl. 348 + 10 nested) | 245 rules · 46 KSIs · 81 terms · 79 overlays |
+| Extension load | 8,958 props (7,759 namespaced) | 13,357 props (12,096 namespaced) | zero props — typed fields instead |
 | Signature pattern | membership as annotation | grammar as annotation | green-field convergence |
 
 **Australia** is the disciplined one. The ISM's namespace is a properly
@@ -112,19 +115,19 @@ single largest pattern in the census and it is not an Australian quirk.
 **Germany** is the ambitious one — and the cautionary one. Grundschutz++
 is, to this project's knowledge, the only national framework being
 *authored natively* in OSCAL rather than converted into it after the fact.
-Its authors wanted more than prose: every one of its 1,015 statements
+Its authors wanted more than prose: every one of its 1,017 statements
 carries a machine-readable decomposition — modal verb, action, object,
 target categories — a genuine requirements grammar. OSCAL's core had no
-home for any of it, so all of it lives in **12,059 namespace-qualified
+home for any of it, so all of it lives in **12,096 namespace-qualified
 props** whose "schema" is a set of CSV files behind mutable repository
 links that no validator can read.
 
 The consequence is the most important measurement in this book. A
 vocabulary typed nowhere has lists typed nowhere: **125 of the catalog's
 470 `tags` values** pack several terms into one comma-separated string —
-`"Data Leak, Shadow IT"` on ASST.3.11 — and so do 616 of 900 `threats`
-values (`"G 0.18, G 0.30"`) and 40 of 634 `target_object_categories`
-values: 781 lists in all, in the catalogue of 16 July 2026. JSON has
+`"Data Leak, Shadow IT"` on ASST.3.11 — and so do 635 of 901 `threats`
+values (`"G 0.18, G 0.30"`) and 39 of 636 `target_object_categories`
+values: 799 lists in all, in the catalogue of 29 October 2026. JSON has
 arrays, and OSCAL lets a prop repeat once per value; the catalog uses
 neither, and nothing in the document says which props hold a list. A
 consumer that does not split on the comma reads `"Data Leak, Shadow IT"` as
@@ -134,7 +137,7 @@ OSCAL validator on earth certifies as flawless**, because each value is a
 well-formed string. Nobody was careless here; the authors are professionals
 and the tooling all reported green. The standard simply has no organ that
 can see meaning. Schema-valid and semantically hollow are, in OSCAL 1.x,
-fully compatible states — and 781 counted instances prove it is not a
+fully compatible states — and 799 counted instances prove it is not a
 theoretical risk.
 
 *Correction, 2026-11-12.* Earlier editions of this chapter counted 216
@@ -144,8 +147,8 @@ exactly where the statement prose inserts a parameter, and almost all
 repeat that parameter's label. The register records the amendment.
 
 > **Don't** publish vocabulary as human-readable side files and call it a
-> namespace. Measured cost: 12,059 prop instances validated by nothing,
-> 781 lists packed into strings, and — as we will see — vocabulary that drifts
+> namespace. Measured cost: 12,096 prop instances validated by nothing,
+> 799 lists packed into strings, and — as we will see — vocabulary that drifts
 > between releases with no tool able to notice.
 
 **The United States** is the control group, and an accidental gift to this
@@ -153,7 +156,7 @@ project. When FedRAMP built CR26 on a green field in 2026 — no Metaschema,
 no part constraints, no props mechanism, nothing to conform to — its
 authors faced the same modeling questions the Germans faced, and answered
 them with typed fields: a `force` field for binding strength (its
-distribution across the corpus: MUST 189, SHOULD 84, MAY 39, MUST NOT 11,
+distribution across the corpus: MUST 186, SHOULD 84, MAY 38, MUST NOT 11,
 SHOULD NOT 5), typed timeframes with units including business days, inline
 per-class variants, alias lists on every glossary term, a change-history
 array on every object. Set the German prop names beside the American field
@@ -185,8 +188,9 @@ constraint that contradicts NIST's own tutorial and whose rationale, by
 the maintainers' own discussion, nobody can state. Its sibling, #2112,
 records that even parts in *other namespaces* get forced into NIST's
 structure. And the German catalog's shape is the same story told in
-negative space: all 998 controls are perfectly, identically flat — one
-statement, one guidance, nothing nested, nothing namespaced — because
+negative space: all 1,000 controls are perfectly, identically flat — one
+statement, one guidance (two carry the statement alone), nothing nested,
+nothing namespaced — because
 flat-plus-props was the only shape that validated. The fossil record of a
 constraint is the structure of everything that survived it.
 
@@ -222,7 +226,7 @@ failed validation — the honest collision, paid for in an open dispute
 CCM's official artifact failing the official validator.
 
 **Flatten.** BSI kept its documents validator-shaped and moved the truth
-into props — the compliant workaround, paid for in a 12,059-instance
+into props — the compliant workaround, paid for in a 12,096-instance
 shadow vocabulary that no generic tool can interpret, a defect class no
 validator can detect, and (a finding from this project's own scans)
 vocabulary that drifted between catalog releases with nothing able to
@@ -313,7 +317,7 @@ into the specification, and it will not appear here.
 
 **Every "don't" names its corpse.** Prohibitions in this book are never
 etiquette. Each one cites the measured failure it prevents, with the
-number attached — the way §1.2's box carries its 12,059 and its 781. A
+number attached — the way §1.2's box carries its 12,096 and its 799. A
 rule that cannot name what it prevents is a rule this project would
 delete, and the specification's change process is built so that such
 rules *can* be deleted: every constraint ships with a recorded rationale

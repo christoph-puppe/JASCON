@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.24";
+const JSC_BUILD = "0.9.26";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -1031,7 +1031,8 @@ async function jscFetchBundle(url) {
     if (!f.text.includes('"envelope-ref"')) continue;
     let ref = null;
     try { ref = JSON.parse(f.text)["envelope-ref"]; } catch (e) { /* not JSON: nothing to follow */ }
-    if (typeof ref !== "string" || !ref || /^[a-z]+:|^\/|\.\./i.test(ref) || files.some(x => x.path === ref)) continue;
+    /* the pattern of jscPlainPath, beside_path (reference) and besideName (reader): a ref that leaves the folder is not fetched */
+    if (typeof ref !== "string" || !ref || /^[a-z][a-z0-9+.-]*:|^\/|\\|(^|\/)\.\.(\/|$)/i.test(ref) || files.some(x => x.path === ref)) continue;
     if (top && !top.includes(ref)) continue;   // the folder's listing is known and does not hold it
     try { files.push(await get(ref)); } catch (e) { /* a missing envelope is reported by the check, not by the load */ }
   }
@@ -1191,7 +1192,8 @@ window.jscBanner = jscBanner;
 
    The same control: the pressed element if it is still in the page, else
    the nearest element around it that has an id, or data attributes that
-   exactly one element of the new form has. A field found that way gets the
+   exactly one element of the new form has, or exactly one that is shown
+   (since build 0.9.26). A field found that way gets the
    focus the press was for. A press on a disabled control makes no click
    event; it is taken for a click when the pointer was released on that
    control. Where nothing is found, nothing is clicked, as before. */
@@ -1207,7 +1209,12 @@ const jscRedraw = (() => {
     const label = node.closest("label");
     for (let n = label && label.control ? label.control : node; n; n = n.parentElement) {
       const address = addressOf(n);
-      if (address) { const found = document.querySelectorAll(address); return found.length === 1 ? found[0] : null; }
+      if (address) {
+        /* one address may stand in several views of a page, of which one is shown (the link of an edge on the
+           Implement page stands in the system view and in the advice view): the control meant is the one shown */
+        const found = [...document.querySelectorAll(address)], shown = found.length > 1 ? found.filter(x => x.getClientRects().length) : found;
+        return shown.length === 1 ? shown[0] : null;
+      }
     }
     return null;
   };

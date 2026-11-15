@@ -527,7 +527,7 @@ leaves byte hashes on back-matter resources. The fifth is the mechanism
 itself: an extension is a prop in a namespace that no schema backs, no
 document pins and no consumer must understand. The first four could be
 added as props. That is the route Grundschutz++ took with more than 12,000
-of them, and it is the route that left 781 lists packed into single
+of them, and it is the route that left 799 lists packed into single
 comma-separated strings, which no validator can see.
 JASCON keeps OSCAL as its exchange partner instead: catalogue bundles
 export to OSCAL 1.2.2 and re-import to the same semantic digests

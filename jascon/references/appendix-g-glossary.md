@@ -331,8 +331,8 @@ add/remove-relation, attach/detach-facet), identity-addressed,
 per-op weakening law. (Ch. 6, App. B.3)
 
 **Packed list** — several vocabulary terms joined by commas into one
-prop value, where JSON has arrays and OSCAL repeats the prop; 781 in
-the German catalog of 16 July 2026 (125 `tags`, 616 `threats`, 40
+prop value, where JSON has arrays and OSCAL repeats the prop; 799 in
+the German catalog of 29 October 2026 (125 `tags`, 635 `threats`, 39
 `target_object_categories`), split by a declared rule and reported —
 never passed through or dropped. (Ch. 1, 14.5)
 
@@ -449,7 +449,7 @@ deterministic resolution, no auto-merge. (Ch. 6)
 
 **Terminology** — the stdlib facet for defined terms + aliases;
 "when a defined term appears in a rule, the definition is part of
-the rule." Measured: 75 terms, 188 aliases, 264 references, all
+the rule." Measured: 81 terms, 190 aliases, 789 references, all
 resolving. (App. D.3, E.5)
 
 **Three coping strategies** — violate, flatten, route around: what

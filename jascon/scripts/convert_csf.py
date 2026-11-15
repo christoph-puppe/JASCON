@@ -40,7 +40,7 @@ import json, os, re, sys, collections
 from oscal_conv_lib import make_T, slug, Bundle, inventory, coverage, report
 from oscal_conv_lib import known_arguments, out_dir, obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, props_by_name, LEDGER_OUTCOMES
-from oscal_conv_lib import path_map_check, held_row, held_rows_match
+from oscal_conv_lib import path_map_check, held_row, held_rows_match, on
 from oscal_conv_lib import COMPAT, referred_to, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import REFERENCES, REFERENCES_FILE, resource_entry, document_author, document_day
 
@@ -637,51 +637,62 @@ RULES = [
 # What the ledger may find for the values of each row (backlog #89): one
 # entry per row of RULES, in its order - the row's pattern, the outcomes its
 # sentence allows, and the places its values stand at, as the record writes
-# them (a JSON Pointer into the object, array positions as `[]`). After the
-# account the record is held against this table, and a value with another
-# outcome or at another place ends the run (path_map_check). The entries are
-# what the record of the pinned catalogue measured, each read against its
-# row's sentence; three sentences were silent about a place and say it now.
-# One more is written from this script's code and held by the test on an
-# invented catalogue: an element without a label, a title or a sort-id.
-# A row whose sentence ends with ELSE also allows a value that is carried in
-# the compat facet's `unmapped`.
+# them: the type of the object and a JSON Pointer into it, array positions as
+# `[]` (on(type, pointers)). After the account the record is held against
+# this table, and a value with another outcome or at another place ends the
+# run (path_map_check). The entries are what the record of the pinned
+# catalogue measured, each read against its row's sentence; three sentences
+# were silent about a place and say it now. One more is written from this
+# script's code and held by the test on an invented catalogue: an element
+# without a label, a title or a sort-id. A row whose sentence ends with ELSE
+# also allows a value that is carried in the compat facet's `unmapped`.
+# Since 2026-11-15 a place names the type of its object (backlog #97, point
+# 5). A function is a Set. An item of a function is a Set where it is a
+# category and a Requirement where it is a subcategory, and the mapping
+# writes label, title, lifecycle, replaces[], csf@1 and examples@1 on
+# either; the pinned catalogue has csf@1 and examples@1 on subcategories
+# only, and the type of those places for a category is written from this
+# script's code (`facets_of`), as is every place of `unmapped`.
 CARRIED = ("copied", "transformed"); NO_CONTENT = ("not-content",)
-_OBJECT = (r"/id", r"/members/\[\]/ref", r"/objects/\[\]/id", r"/objects/\[\]/path")      # an object's id, where it is listed, its file
+REQ, SET, MAN = "requirement", "requirementSet", "manifest"
+ITEM = f"{REQ}|{SET}"
+_LISTED = on(SET, r"/members/\[\]/ref") + on(MAN, r"/objects/\[\]/id", r"/objects/\[\]/path")      # where an object is listed, and its file
 _SOURCE = r"/provenance/sources/\[\]"
 _COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
 _CSF = r"/facets/https:~1~1ns\.nist\.gov~1csf~1facet~1"
-_ELSE = (_COMPAT + r"/unmapped(/.*)?",)
-_ID_FOR = (r"/label", r"/title/en", r"/members/\[\]/sequence")     # where an element has no label, title or sort-id, its id stands for it
+_ELSE = _COMPAT + r"/unmapped(/.*)?"
+_ID_FOR = (r"/label", r"/title/en")       # where an element has no label or title, its id stands for it; for its sort-id, in the sequence
 HELD = [
  (r"^csf\.catalog\.metadata\.(title|version|oscal-version|published)$", CARRIED,
-  (_SOURCE + r"/(title|version|format-version|published)", r"/title/en")),
- (r"^csf\.catalog\.uuid$", CARRIED, (_SOURCE + r"/uuid",)),
- (r"^csf\.catalog\.metadata\.", CARRIED, (_COMPAT + r"/metadata(/.*)?", _SOURCE + r"/(author-ref|date)")),
- (r"^csf\.catalog\.back-matter\.", CARRIED + NO_CONTENT, (r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1references@1/resources(/.*)?",)),
- (r"^csf\.catalog\.groups\[\]\.id$", CARRIED, _OBJECT + (r"/replaces/\[\]/ref",) + _ID_FOR),
- (r"^csf\.catalog\.groups\[\]\.title$", CARRIED, (r"/title/en",)),
- (r"^csf\.catalog\.groups\[\]\.class$", NO_CONTENT + CARRIED, _ELSE),
- (r"^csf\.catalog\.groups\[\]\.props\[\]\.value$", CARRIED, (r"/label", r"/members/\[\]/sequence") + _ELSE),
- (r"^csf\.catalog\.groups\[\]\.props\[\]\.name$", NO_CONTENT + CARRIED, _ELSE),
- (r"^csf\.catalog\.groups\[\]\.parts\[\]\.prose$", CARRIED, (_CSF + r"narrative@1/guidance/\[\]/en",) + _ELSE),
- (r"^csf\.catalog\.groups\[\]\.parts\[\]\.name$", NO_CONTENT + CARRIED, _ELSE),
- (r"^csf\.catalog\.groups\[\]\.parts\[\]\.id$", NO_CONTENT + CARRIED, _ELSE),
- (CTL + r"id$", CARRIED, _OBJECT + (r"/replaces/\[\]/ref", r"/statements/\[\]/id") + _ID_FOR),
- (CTL + r"title$", CARRIED, (r"/title/en",)),
- (CTL + r"class$", NO_CONTENT + CARRIED, _ELSE),
+  on(MAN, _SOURCE + r"/(title|version|format-version|published)") + on(SET, r"/title/en")),
+ (r"^csf\.catalog\.uuid$", CARRIED, on(MAN, _SOURCE + r"/uuid")),
+ (r"^csf\.catalog\.metadata\.", CARRIED, on(SET, _COMPAT + r"/metadata(/.*)?") + on(MAN, _SOURCE + r"/(author-ref|date)")),
+ (r"^csf\.catalog\.back-matter\.", CARRIED + NO_CONTENT, on(SET, r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1references@1/resources(/.*)?")),
+ (r"^csf\.catalog\.groups\[\]\.id$", CARRIED, on(SET, r"/id", r"/replaces/\[\]/ref", r"/members/\[\]/sequence", *_ID_FOR) + _LISTED),
+ (r"^csf\.catalog\.groups\[\]\.title$", CARRIED, on(SET, r"/title/en")),
+ (r"^csf\.catalog\.groups\[\]\.class$", NO_CONTENT + CARRIED, on(SET, _ELSE)),
+ (r"^csf\.catalog\.groups\[\]\.props\[\]\.value$", CARRIED, on(SET, r"/label", r"/members/\[\]/sequence", _ELSE)),
+ (r"^csf\.catalog\.groups\[\]\.props\[\]\.name$", NO_CONTENT + CARRIED, on(SET, _ELSE)),
+ (r"^csf\.catalog\.groups\[\]\.parts\[\]\.prose$", CARRIED, on(SET, _CSF + r"narrative@1/guidance/\[\]/en", _ELSE)),
+ (r"^csf\.catalog\.groups\[\]\.parts\[\]\.name$", NO_CONTENT + CARRIED, on(SET, _ELSE)),
+ (r"^csf\.catalog\.groups\[\]\.parts\[\]\.id$", NO_CONTENT + CARRIED, on(SET, _ELSE)),
+ (CTL + r"id$", CARRIED, on(ITEM, r"/id", r"/replaces/\[\]/ref", *_ID_FOR) + on(REQ, r"/statements/\[\]/id")
+                         + on(SET, r"/members/\[\]/sequence") + _LISTED),
+ (CTL + r"title$", CARRIED, on(ITEM, r"/title/en")),
+ (CTL + r"class$", NO_CONTENT + CARRIED, on(ITEM, _ELSE)),
  (CTL + r"props\[\]\.value$", CARRIED,
-  (r"/label", r"/lifecycle", r"/members/\[\]/sequence", r"/replaces/\[\]/ref", _CSF + r"csf@1/risk-party/value(/\[\])?") + _ELSE),
- (CTL + r"props\[\]\.name$", CARRIED + NO_CONTENT, (_CSF + r"csf@1/risk-party",) + _ELSE),
- (CTL + r"props\[\]\.ns$", NO_CONTENT + CARRIED, _ELSE),
- (CTL + r"props\[\]\.remarks$", CARRIED, (_CSF + r"csf@1/risk-party/remark(/\[\])?",) + _ELSE),
- (CTL + r"links\[\]\.rel$", CARRIED, (r"/replaces/\[\]/mode",) + _ELSE),
- (CTL + r"links\[\]\.href$", CARRIED, (r"/replaces/\[\]/ref",) + _ELSE),
+  on(ITEM, r"/label", r"/lifecycle", r"/replaces/\[\]/ref", _CSF + r"csf@1/risk-party/value(/\[\])?", _ELSE) + on(SET, r"/members/\[\]/sequence")),
+ (CTL + r"props\[\]\.name$", CARRIED + NO_CONTENT, on(ITEM, _CSF + r"csf@1/risk-party", _ELSE)),
+ (CTL + r"props\[\]\.ns$", NO_CONTENT + CARRIED, on(ITEM, _ELSE)),
+ (CTL + r"props\[\]\.remarks$", CARRIED, on(ITEM, _CSF + r"csf@1/risk-party/remark(/\[\])?", _ELSE)),
+ (CTL + r"links\[\]\.rel$", CARRIED, on(ITEM, r"/replaces/\[\]/mode", _ELSE)),
+ (CTL + r"links\[\]\.href$", CARRIED, on(ITEM, r"/replaces/\[\]/ref", _ELSE)),
  (CTL + r"parts\[\]\.prose$", CARRIED,
-  (r"/statements/\[\]/prose/en", _CSF + r"narrative@1/guidance/\[\]/en", _CSF + r"examples@1/examples/\[\]/prose/en") + _ELSE),
- (CTL + r"parts\[\]\.id$", CARRIED + NO_CONTENT, (r"/statements/\[\]/id", _CSF + r"examples@1/examples/\[\]/id") + _ELSE),
- (CTL + r"parts\[\]\.name$", NO_CONTENT + CARRIED, _ELSE),
- (CTL + r"parts\[\]\.ns$", NO_CONTENT + CARRIED, _ELSE),
+  on(REQ, r"/statements/\[\]/prose/en") + on(SET, _CSF + r"narrative@1/guidance/\[\]/en")
+  + on(ITEM, _CSF + r"examples@1/examples/\[\]/prose/en", _ELSE)),
+ (CTL + r"parts\[\]\.id$", CARRIED + NO_CONTENT, on(REQ, r"/statements/\[\]/id") + on(ITEM, _CSF + r"examples@1/examples/\[\]/id", _ELSE)),
+ (CTL + r"parts\[\]\.name$", NO_CONTENT + CARRIED, on(ITEM, _ELSE)),
+ (CTL + r"parts\[\]\.ns$", NO_CONTENT + CARRIED, on(ITEM, _ELSE)),
 ]
 _misaligned = held_rows_match(HELD, [r[0] for r in RULES])
 if _misaligned: wiring.append(_misaligned)

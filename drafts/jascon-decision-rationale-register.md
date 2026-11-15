@@ -5283,3 +5283,358 @@ byte for byte.
    `jscRedraw` (*read*); `id="ai-key"` occurs twice on the Checks page,
    and the click on "Forget the key" after typing is still lost
    (*read, concluded*); a field left with the Tab key drops the focus.
+
+## A review before the tag (2026-11-15)
+
+The author had the code of the branch reviewed as a whole, then had the
+branches cleaned up and asked what three branches that were never
+merged had done. Two still held something the tree lacked. After pull
+request 38 was merged the author said: "you can go fix things now". This
+section is that round: the two carried-over fixes and the review's
+findings. Backlog #98, #99, #100.
+
+### Where an envelope lies (#98, D7)
+
+D3 puts an Attestation and its envelope beside the manifest, and D7 says
+the envelope is named by `envelope-ref`. No text said what that string
+may be, and the schema says "string". The reader refused a ref with a
+scheme, a leading slash, a backslash or a `..` segment from the day it
+first fetched envelopes (`besideName`, 1.13.0), and the app the same
+(`jscPlainPath`). The two validators joined the ref to the bundle's
+folder as it came. So the tools whose verdict is the reference read a
+file outside the bundle they judged, and the one that is a page in a
+browser did not.
+
+The rule is the reader's pattern, in all four tools: a relative path
+that stays in the manifest's folder. A ref that would leave it does not
+resolve, whether or not the file exists, and fails as a missing envelope
+does. The rule is about the ref, not about where it lands:
+`sig/../attestation.dsse` names a file beside the manifest by a detour
+and is refused all the same, because the app looks a ref up among the
+files it was given and could never follow the detour; one answer for
+all four is worth more than the detour.
+
+Two things were found on the way:
+
+- The app's signature check and its advice check looked a ref up among
+  the loaded files without the pattern. A folder cannot hold `../x`, but
+  a ZIP entry can be named so, and then it resolved there. Both use
+  `jscPlainPath` now. The fetch from a URL refused any `..`, also inside
+  a name (`a..b.dsse`); it uses the same pattern now.
+- Python's `re.I` lets `[a-z]` match the Kelvin sign, and Python's and
+  .NET's `$` match before a final line break. The reference writes the
+  pattern with letter ranges and `\Z`, the twin with `\z`. Two of the
+  path vectors hold the four tools to that.
+
+Measured: before the change the reference and the twin read an envelope
+that lay in the folder above the bundle, judged it UNVERIFIED and failed
+nothing; the same for a `..` detour and, on Windows, for a backslash
+ref. Two deliberate defects in the reference and one in the twin each
+turn the three bundle vectors of those cases red. The vectors are
+written by `drafts/phase-d/envelope_ref_vectors.py`; the bundle vectors
+are judged on disk by `validate_bundle` and `Validate-Bundle` (in a run
+of their own, whose failures are the vector's data and leave the tally
+as it was) and as loaded files by `jscCheckGraph`.
+
+### What D7 and A.9 marked required (#99)
+
+The line of D7 and the table of A.9 had marked `rendering`, its
+`template-ref` and `renderer`, and `envelope-ref` as required since
+before 1.0.0. The schema never did. The texts follow the schema now; no
+shape changes.
+
+### The review's findings (#100)
+
+Nine, none in a kernel rule. Eight are built (backlog #100 says how each
+was measured). One is the author's: the risk-catalogue import counts a
+Risk as "as given" when the caller gave one of the two fields and the
+catalogue the other, and the app's import says the same. A third count
+or an origin per field changes the report and two pages; that is a
+choice, not a fix.
+
+One finding was narrowed while building. The lint of the twin was blind
+to `switch` and to `Where-Object` in its parameter form; it sees both
+now. It is also blind to cmdlets that compare strings under a culture
+without naming a comparison (Sort-Object and its kind). The twin uses
+them on rule ids, file names and byte arrays, where case and ignorable
+characters do not occur. Refusing them would have meant rewriting
+working code of the twin in a round about something else, so the
+lint's header names them as what it cannot see.
+
+### What it is measured by
+
+- The reference: ALL GREEN, 822 vectors in 18 families (`dsse` 27), the
+  committed bundles, the worked pack and the example folder.
+- The twin on Windows PowerShell 5.1: ALL GREEN on Windows PowerShell 5.1 over the vectors, the five bundles, the worked pack and the example folder, in 399 s. Its lint: clean.
+- The converters' library: 83 tests. `test_convert_cr26.py` and
+  `test_convert_ifa_ledger.py` did not run on this Windows machine (a
+  permission error in the test's own clean-up, and a symbolic link that
+  needs a privilege); the CR26 converter's refused arguments were
+  checked by calling it, and the workflow runs both files on Linux.
+- The app and the pages: not run here, there is no Node on this
+  machine; the workflow runs them. The pack builder's inlined copy was
+  brought up to date with a stand-in for `sync-inlined.mjs`, checked
+  first against the committed copy.
+
+## #97: what was found while closing the backlog *(2026-11-15, after the merge of pull request 38; no new candidate)*
+
+### What the author decided
+
+Each of the nine points was put to the author with a proposal, what
+speaks for and against it, and an alternative. The answer, point by
+point: "1: vorschlag", "2: wir nehmen das jetzt so wie Du es erstellt
+hat für die neue Version", "3: vorschlag", "4: vorschlag", "5:
+vorschlag", "6: alternative", "7: alternative", "8: die ursache suchen,
+plan erstellen, neue Issue einstellen, dann backlog dazu schließen",
+"9: alternative". The work is on a new branch from `main`,
+`claude/backlog-97-before-the-tag`.
+
+No shape, no rule and no vector of the specification changes.
+
+### (1) The reader removes an authored object (1.23.0)
+
+The detail of an object written in a workbench has a button that takes
+that one object out of the graph and out of what the page stores.
+Where other authored objects name it, the first press removes nothing
+and names them; the second removes it all the same, and an export of
+the workspace reports the reference that no longer resolves. An object
+of a loaded bundle has no such button. *Measured:* the new test is red
+on reader 1.22.0 and green on 1.23.0. With it a check that was
+corrected and generated again no longer leaves the wrong one in every
+export, which was the consequence of #71 (6).
+
+### (2) The three translations stand as written
+
+The author takes the Hindi, Japanese and Chinese wording of the row
+"does not bind" as it was written for the new version. No second
+reader was asked.
+
+### (3) The titles of the CR26 overlay: after the tag
+
+Decided as proposed: with the next change of the CR26 converter the
+title is written from the counters. Nothing is built now, because the
+title is bytes of the bundle.
+
+### (4) The CR26 comment
+
+*Measured by the agent* on a changed source: an assignment whose value
+lies outside the choices, and one for a parameter the control does not
+declare, each end the run with 1 and two values unaccounted; the
+assignment stands neither in the Tailoring nor in the parked payload.
+Two comments said "(parked)" and say now what happens. The code is the
+same syntax tree as before.
+
+### (5) A path map names the type of the object
+
+`path_map_check` held a pointer and no type, so a row could name the
+right pointer in the wrong object and pass. A place is now a type and a
+pointer, and the six path maps are typed from what each record
+measured. *Measured by the agent:* four deliberate defects each turn
+tests red, the first of them in the library and in all six converter
+tests. No file under `converted_examples/` changed.
+One row passes and is wrong, and was not repaired: row 13 of the IFA
+map says "provenance / system id (system@1)", and the record has that
+value only at `component-refs` of a Risk. Filed as #101.
+
+### (6) Whole commit ids, the IFA manifest included
+
+The author took the alternative: every place in one go. Two
+converters, the IFA licence note, one line of the app's readme, and
+the IFA manifest's `source-commit`. The manifest's bytes changed, so
+the converter wrote the Attestation beside it again. *Measured:* the
+manifest's digest went from `sha256:90c6c62f…` to `sha256:a24237c3…`;
+no object of the bundle changed; the reference prints FULL MATCH for
+the Attestation as before; the conversion reproduces itself. The
+reader's screenshot is taken again, because it shows that digest.
+The Attestation keeps its id and its version 1.1.1 with another
+`content-manifest-digest`: one id and version, two contents across
+commits. Filed as #101. The registers and plans of earlier rounds keep
+the short ids they were written with.
+
+### (7) Handbook chapter 1 on the pinned versions
+
+The author took the alternative: the whole chapter now. Every figure
+of the chapter that comes from one of the three corpora was measured
+again by the agent on the sources the repository pins (the ISM
+v2026.06.18, Grundschutz++ of 2026-10-29, CR26 2026.11.02.01), with
+two scripts, and the header names these versions. The larger changes:
+781 packed lists are 799; 998 + 17 German controls are 1,000 + 17;
+13,315 props (12,059 namespaced) are 13,357 (12,096); for CR26, 246
+rules and 75 terms are 245 and 81, MUST 189 and MAY 39 are 186 and 38.
+The method was held against July: on the ISM, whose version did not
+change, it reproduces the chapter's figures, and on a copy of the
+Grundschutz++ catalogue of July it reproduces 781.
+
+*Not measured, and said in the header:* the share of BSI's MS-TLS
+catalogue in the German sums (17 controls, 111 props, 74 namespaced)
+is as of July, because that catalogue is not pinned; the German sums
+are therefore the measured Grundschutz++ figure plus a July share.
+RFC-0024, the trackers and ASD's profile documents are as of July too.
+
+*What this leaves:* the README, ten other files of the handbook,
+the app's errata, the website's evidence page with its translations
+and two notes at the repository's root still quote the figures of July
+that chapter 1 no longer has (781 among them). Filed as #101.
+
+### (8) A test of the app that fails when run nearly alone: issue 39
+
+Decided: find the cause, write a plan, file an issue, then close the
+point. *Measured by the agent* on build 0.9.24: it is a defect of the
+test and not of the app. The helper `write` of the test "Import, Map
+and Checks" waits with `page.waitForFunction(async …)`, and Playwright
+1.63.0 resolves at once for a predicate that returns a promise. The
+test then reads the store 0.1 to 4.1 ms after the page's write in 24 of
+29 logged runs and up to 1.6 ms before it in 5. The order of the tests
+is not the cause: alone, the unchanged test was red 1 of 30 times. A
+user cannot reach the state. With the page's write made 50 ms late the
+test is red 5 of 5 times, and three other tests of the same file fail
+for the same reason. Cause and plan are issue 39 of the repository's
+tracker. The reader's test file has no such wait
+(*read*: `grep` finds none).
+
+*Built the same day, on the author's word ("Ja, fixe"), after the
+workflow's run 123 had failed at that statement and passed when run
+again:* the four tests wait for the page's write (its log line, the
+store asked again, one more log line, the pressed button gone), and a
+test refuses an async predicate in any browser test. The tests' server
+can hand out the app's core with every store write late
+(`JSC_TEST_LATE_WRITE`). *Measured* with 50 ms: an old wait put back is
+red; the 25 page tests are green. The app's code is unchanged.
+
+### (9) What is left of the lost click in the app: measured only
+
+Decided: measure and report; the focus after the Tab key stays.
+*Measured by the agent* on build 0.9.24, with a real key and pointer,
+ten tries each:
+
+- Six filter fields redraw their page on a timer of 250 or 300 ms
+  (Risk `#risk-q`, Assess `#a-q`, Implement `#edgeq` and `#cf-q`, Map
+  `#mapq`, Validate `#q`). A press held across the moment the redraw is
+  due lost its click 10 of 10 times on each; released before it, 0 of
+  3. In a copy, routing the timers through `jscRedraw` closes five of
+  the six. The link of an edge on the Implement page stays lost,
+  because its address occurs twice on the page.
+- The Checks page has two key fields with `id="ai-key"`, one per view.
+  The label of the draft view names the hidden field of the other
+  view. "Forget the key" pressed right after typing takes the key at
+  the first press and forgets it only at the second.
+
+Nothing is built. Both are filed as #101.
+
+### What it is measured by
+
+- The reference: ALL GREEN, 800 vectors, with the IFA Attestation a
+  FULL MATCH of the new manifest.
+- The converters: eight test files (61, 14, 20, 32, 33, 25, 87 and 8
+  tests) and the check of the pinned schemas, run again by the lead
+  after the commits were taken.
+- The reader and the pack builder: the browser tests, with the new
+  test of point 1.
+- The app: 197 tests, run by the agent on the tree with the new IFA
+  manifest.
+
+### Found and not changed (filed as #101)
+
+1. The README, ten other files of the handbook, the app's errata, the
+   website's evidence page with its translations and two notes at the
+   root quote July figures that chapter 1 no longer has.
+2. Row 13 of the IFA path map names a place the record does not have.
+3. The IFA Attestation keeps id and version 1.1.1 with another
+   `content-manifest-digest`.
+4. App: six filter fields lose a click that is held across their
+   delayed redraw.
+5. App: `id="ai-key"` twice on the Checks page; the label of one view;
+   the first press on "Forget the key".
+6. Chapter 1's German sums are the measured Grundschutz++ figure plus
+   the July share of the MS-TLS catalogue, which is not pinned.
+7. The date "2026-07-14" beside the NIST commit id is not verified.
+
+## #100 (3) and #101 *(2026-11-15; closes #100 and #101; no new candidate)*
+
+### What the author decided
+
+"#100 3: das lassen wir so, wir verzetteln uns sonst". For #101:
+"Vorschlag umsetzen" on points 1, 2, 3, 5, 6 and 7, with "es stimmt"
+for the date of point 7, and on point 4 "das ist eigentlich behoben,
+kontrollie!". Before that, asked whether the plan of issue 39 should be
+built: "Ja, fixe".
+
+### #101 (4): checked, and not closed
+
+The author took the lost click of the filter fields for closed.
+*Measured* on build 0.9.25 with the agent's procedure, a real key and a
+real pointer: each of the six fields that draw their page again on a
+timer lost the click of a press held across the redraw, 5 of 5 times.
+Build 0.9.24 had routed the redraw after a field's change through
+`jscRedraw`, and not these timers. Build 0.9.26 routes them. Where the
+address of a control stands in several views of a page, `jscRedraw`
+now takes the one that is shown; that finds the link of an edge on the
+Implement page, which the proposal would have given an address of its
+own. *Measured* after the change: 0 of 5 lost on each field. A test
+presses across the redraw of each.
+
+### #101 (5): the key fields of the Checks page
+
+Each field has the id of its panel, each label names its own field,
+and the Forget button has an address. *Measured:* one press after
+typing takes the key and forgets it; it took two.
+
+### #101 (1): the texts quote the pinned corpora
+
+Built by the agent, who had measured chapter 1. Every new figure is
+measured with two scripts that are in the repository now
+(`drafts/phase-e/measure_ch01.py`, `measure_gspp.py`); the committed
+Grundschutz++ report gives 799 and 224 independently. Changed: the
+README, eleven files of the handbook, one note at the root and the
+home page of the website in five languages (checked and stamped).
+A sentence that speaks of the July state as such stays: the website's
+evidence page (dated "mid-2026"), the first scan and its erratum,
+appendix E.1 and E.5, the measurement behind the gate-2 decision, the
+errata and reviews of their day, the specification's dated evidence.
+The agent followed three figures (221, 219, 188) into sentences that
+were not on the list, so that each has one value across the handbook.
+*Known and left:* figures that chapter 1 never had and that the pinned
+catalogue changed (`modal_verb` ×1,006 is 1,000 now, `alt-identifier`
+×1,219 is 1,224, documentation ×959 is 961), and two that have no
+method on record ("589 Sets", "sort-id ×2,870").
+
+### #101 (2), (3), (6), (7) and #100 (3)
+
+- (2) The sentence of row 13 of the IFA path map says that the id of
+  the system goes to `component-refs` of each Risk. Two rows of the two
+  coverage reports changed; no file of the bundle did.
+- (3) *Measured:* 1.1.1 is the version of the pinned SSP, and the
+  Attestation takes it; six commits of the Attestation carry it with
+  six manifest digests, and the repository has no tag. The converter
+  says so. From the tag on a changed content takes a new version.
+- (6) The mixed German sums of chapter 1 stay; its header names them.
+- (7) The date beside the NIST commit id is right, on the author's word.
+- #100 (3) stays: the import counts a record as given once one of its
+  two fields was given.
+
+### What it is measured by
+
+The reference ALL GREEN on 822 vectors, the IFA Attestation a FULL
+MATCH; the app's suite and the pack builder, 207 tests; three converter
+test files after the commits were taken (the agent ran all eight); the
+website builds.
+
+## 2.0.0-rc.5 named *(2026-11-15)*
+
+With the backlog closed but for one scheduled point, the author asked
+for a pull request and a release for the next candidate ("ok, PR /
+release für den nächsten RC !"). The specification file is renamed to
+`jascon-specification-2.0.0-rc.5.md`. Its banner gets a block "What
+changed since rc.4", which is the text that had stood under rc.4 as
+"after rc.4, without a new candidate", under one summary: D27 new, seven
+decisions amended in place, five rules that can fail a bundle which
+passed rc.4, 822 vectors where rc.4 had 643. IV.6 has the row of the
+candidate, IV.7 the run it rests on (the workflow's run 125: both
+validators green on 822 vectors, the twin on Windows PowerShell 5.1).
+Nothing is amended with the renaming. The README's status lines and
+links, the website's badge and its link to the specification follow,
+in five languages. Sentences that say "since 2.0.0-rc.4" of a shape or
+a rule stay: they date when it came.
+
+*Not done:* the website's timeline has no entry for rc.5; its last
+entry is the one for rc.4.

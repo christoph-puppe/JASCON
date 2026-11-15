@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.24. This build has the frame (the hub, the settings page and
+State: build 0.9.26. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -1101,7 +1101,7 @@ strings without a German text. The third rewrites the settings table from
 Five tests of the OSCAL import compare with the publishers' source files,
 which the repository does not carry (`sources/` is ignored); without the
 files they are skipped. The files are the Anwenderkatalog Grundschutz++ of
-2026-07-16 from `BSI-Bund/Stand-der-Technik-Bibliothek` (commit `39a1193`,
+2026-07-16 from `BSI-Bund/Stand-der-Technik-Bibliothek` (commit `39a1193f3d230828ea6614eb20c94a026c9f7df0`,
 `Anwenderkataloge/Grundschutz++/Grundschutz++-catalog.json`) as
 `sources/Grundschutz++-catalog.json`, and from `usnistgov/oscal-content`
 (`nist.gov/SP800-53/rev5/json/`) the catalog and the MODERATE baseline

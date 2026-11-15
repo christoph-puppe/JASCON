@@ -51,21 +51,19 @@ from oscal_conv_lib import BUNDLE_NEWLINE   # one byte spelling on every OS (D3.
 from oscal_conv_lib import provenance, provenance_override
 from oscal_conv_lib import obligated_party, obligated_party_line, obligated_party_record
 from oscal_conv_lib import Ledger, ledger_by_path, ledger_gate, needs_kernel_2
-from oscal_conv_lib import path_map_check, held_row, held_rows_match
+from oscal_conv_lib import path_map_check, held_row, held_rows_match, on
 from oscal_conv_lib import COMPAT_FILE, compat_schema, lifecycle_default_record, lifecycle_default_line
 from oscal_conv_lib import ASSESSMENT_CRITERIA_FILE
+from oscal_conv_lib import known_arguments, out_dir
 
 NS="https://ns.fedramp.gov/cr26"; NIST="https://ns.nist.gov/sp800-53/req"
 ARGV=sys.argv[1:]
 # Every argument takes a value. One the converter does not know stops the
 # run: a misspelled --out would otherwise write into the repository, and a
-# misspelled overwrite would be dropped without a word.
-_i=0
-while _i<len(ARGV):
-    if ARGV[_i] not in ("--author-ref","--date","--obligated-party","--out"):
-        raise SystemExit(f"unknown argument {ARGV[_i]!r} (known: --author-ref URI, --date YYYY-MM-DD, "
-                         f"--obligated-party URI, --out DIR)")
-    _i+=2
+# misspelled overwrite would be dropped without a word. The library's check,
+# as in the other converters (review of 2026-11-15: this file had its own
+# copy, which let a last argument without a value through).
+known_arguments(ARGV,("--author-ref","--date","--obligated-party","--out"))
 
 # A Mapping's `provenance` is pre-filled from the source (FedRAMP, the day of
 # info.last_updated); --author-ref URI and --date YYYY-MM-DD overwrite either
@@ -84,15 +82,13 @@ PARTY_SOURCE_STATES="in `affects` of a rule"
 ROOT=os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),"..",".."))
 SRC=os.path.join(ROOT,"sources","cr_fedramp-consolidated-rules.json")
 COMMITTED=os.path.join(ROOT,"converted_examples","FedRAMP-CR26")
-if "--out" not in ARGV:
+OUTDIR=out_dir(ARGV,None)
+if OUTDIR is None:
     raise SystemExit("convert_cr26.py: --out DIR is required. The bundle of this conversion is not redistributed "
                      "(converted_examples/FedRAMP-CR26/NOT-REDISTRIBUTED.md), so a run writes nothing into the "
                      "repository. To renew the committed reports and the record, copy cr26-coverage-report.md, "
                      "cr26-coverage-report.json and cr26-conversion-ledger.json from DIR to "
                      "converted_examples/FedRAMP-CR26/.")
-if ARGV.count("--out")>1: raise SystemExit("--out is given more than once")
-if ARGV.index("--out")+1>=len(ARGV): raise SystemExit("--out needs a directory")
-OUTDIR=os.path.abspath(ARGV[ARGV.index("--out")+1])
 if os.path.normcase(os.path.realpath(OUTDIR))==os.path.normcase(os.path.realpath(COMMITTED)):
     raise SystemExit("convert_cr26.py: --out names the repository's own folder of this conversion. The bundle is not "
                      "redistributed; write it elsewhere and copy the two reports and the record from there.")
@@ -330,14 +326,22 @@ RULES=[
 # What the ledger may find for the values of each row (backlog #89): one
 # entry per row of RULES, in its order - the row's pattern, the outcomes its
 # level allows, and the places its values stand at, as the record writes
-# them: a JSON Pointer into the object, array positions as `[]`, a payload
-# keyed by a source value under the name the record gives the key, a key that
-# is a phrase of the publication as `*`. After the account the record is
-# held against this table, and a value with another outcome or at another
-# place ends the run (path_map_check). The entries are what the record of the
-# pinned publication measured; the row of the per-class artifacts, which that
-# publication does not use, is written from its sentence.
+# them: the type of the object and a JSON Pointer into it (on(type,
+# pointers)), array positions as `[]`, a payload keyed by a source value
+# under the name the record gives the key, a key that is a phrase of the
+# publication as `*`. After the account the record is held against this
+# table, and a value with another outcome or at another place ends the run
+# (path_map_check). The entries are what the record of the pinned publication
+# measured; the row of the per-class artifacts, which that publication does
+# not use, is written from its sentence.
+# Since 2026-11-15 a place names the type of its object (backlog #97, point
+# 5). A family, a subset, a KSI theme, the glossary and the overlay are Sets;
+# a rule and an indicator are Requirements; a control link is a Mapping; a
+# class variant of a force and an ODP assignment are operations of a
+# Tailoring. The version of the publication stands on every object, and the
+# status of a document on every object made from the document.
 CARRIED=("copied","transformed")
+REQ, SET, MAN, MAP, TLR = "requirement", "requirementSet", "manifest", "mapping", "tailoring"
 _ACRIT = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1assessment-criteria@1"
 _COMPAT = r"/facets/https:~1~1ns\.jascon\.net~1compat~1oscal-1x@1"
 _EFFECT = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1effectivity@1"
@@ -347,87 +351,70 @@ _SCOPE = r"/facets/https:~1~1ns\.fedramp\.gov~1cr26~1facet~1scope@1"
 _SOURCE = r"/provenance/sources/\[\]"
 _TERMS = r"/facets/https:~1~1ns\.jascon\.net~1stdlib~1facet~1terminology@1"
 HELD = [
- (r"^cr26\.info\.title$", CARRIED, (_SOURCE + r"/title", r"/title/en")),
- (r"^cr26\.info\.description$", CARRIED, (_NARR + r"/description/en",)),
- (r"^cr26\.info\.version$", CARRIED, (r"/objects/\[\]/version", _SOURCE + r"/version", r"/version")),
- (r"^cr26\.info\.last_updated$", CARRIED, (r"/provenance/date", _SOURCE + r"/date")),
- (r"^cr26\.info\.default_artifacts\.", CARRIED, (_ACRIT + r"/default-artifacts/FRR/\[\]", _ACRIT + r"/default-artifacts/KSI/\[\]")),
- (r"^cr26\.FRD\.info\.", CARRIED, (_TERMS + r"/glossary-info(/.*)?",)),
+ (r"^cr26\.info\.title$", CARRIED, on(MAN, _SOURCE + r"/title") + on(SET, r"/title/en")),
+ (r"^cr26\.info\.description$", CARRIED, on(SET, _NARR + r"/description/en")),
+ (r"^cr26\.info\.version$", CARRIED, on(MAN, r"/objects/\[\]/version", _SOURCE + r"/version") + on(f"{MAP}|{REQ}|{SET}|{TLR}", r"/version")),
+ (r"^cr26\.info\.last_updated$", CARRIED, on(MAP, r"/provenance/date") + on(MAN, _SOURCE + r"/date")),
+ (r"^cr26\.info\.default_artifacts\.", CARRIED, on(SET, _ACRIT + r"/default-artifacts/FRR/\[\]", _ACRIT + r"/default-artifacts/KSI/\[\]")),
+ (r"^cr26\.FRD\.info\.", CARRIED, on(SET, _TERMS + r"/glossary-info(/.*)?")),
  (r"^cr26\.FRD\.data\.all\.\*\.(term|definition|tag|alts\[\]|note|notes\[\]|do_not_link|reference|reference_url)$", CARRIED,
-  (_TERMS + r"/terms(/.*)?",)),
- (r"^cr26\.FRD\.data\.all\.\*\.ignore_in_terms$", CARRIED, (_NARR + r"/ignore-in-terms/\{term-id\}",)),
- (r"^cr26\.FRD\.data\.all\.\*\.updated\[\]\.", CARRIED, (_NARR + r"/term-updated(/.*)?",)),
- (r"^cr26\.FRR\.\*\.info\.(name|short_name)$", CARRIED, (r"/label", r"/title/en")),
- (r"^cr26\.FRR\.\*\.info\.status$", CARRIED, (_NARR + r"/status", r"/lifecycle")),
- (r"^cr26\.FRR\.\*\.info\.web_name$", CARRIED, (r"/annotations/web_name",)),
- (r"^cr26\.FRR\.\*\.info\.(purpose|tag)$", CARRIED, (_NARR + r"/description/en", _SCOPE + r"/tag")),
+  on(SET, _TERMS + r"/terms(/.*)?")),
+ (r"^cr26\.FRD\.data\.all\.\*\.ignore_in_terms$", CARRIED, on(SET, _NARR + r"/ignore-in-terms/\{term-id\}")),
+ (r"^cr26\.FRD\.data\.all\.\*\.updated\[\]\.", CARRIED, on(SET, _NARR + r"/term-updated(/.*)?")),
+ (r"^cr26\.FRR\.\*\.info\.(name|short_name)$", CARRIED, on(SET, r"/label", r"/title/en")),
+ (r"^cr26\.FRR\.\*\.info\.status$", CARRIED, on(SET, _NARR + r"/status") + on(f"{MAP}|{REQ}|{SET}", r"/lifecycle")),
+ (r"^cr26\.FRR\.\*\.info\.web_name$", CARRIED, on(SET, r"/annotations/web_name")),
+ (r"^cr26\.FRR\.\*\.info\.(purpose|tag)$", CARRIED, on(SET, _NARR + r"/description/en", _SCOPE + r"/tag")),
  (r"^cr26\.FRR\.\*\.info\.(20x|rev5)\.subsets\.", CARRIED,
-  (_NARR + r"/description/en",
-   _SCOPE + r"/affects/\[\]",
-   _SCOPE + r"/classes/\[\]",
-   _SCOPE + r"/paths/\[\]",
-   _SCOPE + r"/types/\[\]",
-   r"/title/en")),
- (r"^cr26\.FRR\.\*\.info\.(effective|20x|rev5)\.", CARRIED, (_EFFECT + r"/20x(/.*)?", _EFFECT + r"/default(/.*)?", _EFFECT + r"/rev5(/.*)?")),
- (r"^cr26\.FRR\.\*\.info\.flows\[\]", CARRIED, (_COMPAT + r"/flows(/.*)?",)),
- (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.(name|description)$", CARRIED, (_NARR + r"/description/en", r"/title/en")),
+  on(SET, _NARR + r"/description/en", _SCOPE + r"/affects/\[\]", _SCOPE + r"/classes/\[\]", _SCOPE + r"/paths/\[\]", _SCOPE + r"/types/\[\]",
+     r"/title/en")),
+ (r"^cr26\.FRR\.\*\.info\.(effective|20x|rev5)\.", CARRIED, on(SET, _EFFECT + r"/20x(/.*)?", _EFFECT + r"/default(/.*)?", _EFFECT + r"/rev5(/.*)?")),
+ (r"^cr26\.FRR\.\*\.info\.flows\[\]", CARRIED, on(SET, _COMPAT + r"/flows(/.*)?")),
+ (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.(name|description)$", CARRIED, on(SET, _NARR + r"/description/en", r"/title/en")),
  (r"^cr26\.FRR\.\*\.info\.subsets\.\*\.applicability\.", CARRIED,
-  (_SCOPE + r"/affects/\[\]",
-   _SCOPE + r"/classes/\[\]",
-   _SCOPE + r"/paths/\[\]",
-   _SCOPE + r"/types/\[\]")),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.name$", CARRIED, (r"/statements/\[\]/prose/en", r"/title/en")),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.statement$", CARRIED, (r"/statements/\[\]/prose/en",)),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.force$", CARRIED, (r"/statements/\[\]/modality",)),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.affects\[\]$", CARRIED, (r"/statements/\[\]/obligated-parties/\[\]",)),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.terms\[\]$", CARRIED, (r"/relations/\[\]/ref",)),
+  on(SET, _SCOPE + r"/affects/\[\]", _SCOPE + r"/classes/\[\]", _SCOPE + r"/paths/\[\]", _SCOPE + r"/types/\[\]")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.name$", CARRIED, on(REQ, r"/statements/\[\]/prose/en", r"/title/en")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.statement$", CARRIED, on(REQ, r"/statements/\[\]/prose/en")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.force$", CARRIED, on(REQ, r"/statements/\[\]/modality")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.affects\[\]$", CARRIED, on(REQ, r"/statements/\[\]/obligated-parties/\[\]")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.terms\[\]$", CARRIED, on(REQ, r"/relations/\[\]/ref")),
  (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(timeframe_num|timeframe_type)$", CARRIED,
-  (r"/statements/\[\]/parameters/\[\]/num",
-   r"/statements/\[\]/parameters/\[\]/type",
-   r"/statements/\[\]/parameters/\[\]/unit")),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.timeframe_num_(min|max)$", CARRIED, (r"/statements/\[\]/parameters/\[\]/num",)),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.controls\[\]$", CARRIED, (r"/id", r"/objects/\[\]/id", r"/target-ref")),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.updated\[\]\.", CARRIED, (r"/history/\[\]/comment/en", r"/history/\[\]/date", r"/history/\[\]/ref")),
+  on(REQ, r"/statements/\[\]/parameters/\[\]/num", r"/statements/\[\]/parameters/\[\]/type", r"/statements/\[\]/parameters/\[\]/unit")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.timeframe_num_(min|max)$", CARRIED, on(REQ, r"/statements/\[\]/parameters/\[\]/num")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.controls\[\]$", CARRIED, on(MAP, r"/id", r"/target-ref") + on(MAN, r"/objects/\[\]/id")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.updated\[\]\.", CARRIED, on(REQ, r"/history/\[\]/comment/en", r"/history/\[\]/date", r"/history/\[\]/ref")),
  (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(note|notes\[\]|danger|corrective_actions\[\])$", CARRIED,
-  (_NARR + r"/corrective-actions/en/\[\]",
-   _NARR + r"/danger/en",
-   _NARR + r"/note/en",
-   _NARR + r"/notes/en/\[\]")),
+  on(REQ, _NARR + r"/corrective-actions/en/\[\]", _NARR + r"/danger/en", _NARR + r"/note/en", _NARR + r"/notes/en/\[\]")),
  (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(following_information\[\]|following_information_bullets\[\])$", CARRIED,
-  (_REPORT + r"/following-information-bullets/\[\]",
-   _REPORT + r"/following-information/\[\]")),
+  on(REQ, _REPORT + r"/following-information-bullets/\[\]", _REPORT + r"/following-information/\[\]")),
  (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.examples\[\]\.(id|examples\[\]|key_tests\[\])$", CARRIED,
-  (_ACRIT + r"/examples/\[\]/examples/\[\]",
-   _ACRIT + r"/examples/\[\]/id",
-   _ACRIT + r"/examples/\[\]/key-tests/\[\]")),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.schema\.(name|url)$", CARRIED, (_NARR + r"/schema-name", r"/relations/\[\]/ref")),
+  on(REQ, _ACRIT + r"/examples/\[\]/examples/\[\]", _ACRIT + r"/examples/\[\]/id", _ACRIT + r"/examples/\[\]/key-tests/\[\]")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.schema\.(name|url)$", CARRIED, on(REQ, _NARR + r"/schema-name", r"/relations/\[\]/ref")),
  (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.notification\[\]\.(party|method|target|name)$", CARRIED,
-  (_NARR + r"/optional-notification(/.*)?",
-   _REPORT + r"/notification(/.*)?")),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.notification\[\]\.optional$", CARRIED, (_NARR + r"/optional-notification/\[\]/optional",)),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.artifacts\.all\[\]$", CARRIED, (_ACRIT + r"/required-artifacts/\[\]",)),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.artifacts\.[a-d]\[\]$", CARRIED, (_COMPAT + r"/class-variants(/.*)?",)),   # from the sentence: no value of the pinned source
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.related\[\]$", CARRIED, (r"/relations/\[\]/ref",)),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(schema|reference_url)$", CARRIED, (r"/relations/\[\]/ref",)),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.reference$", CARRIED, (_NARR + r"/reference",)),
+  on(REQ, _NARR + r"/optional-notification(/.*)?", _REPORT + r"/notification(/.*)?")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.notification\[\]\.optional$", CARRIED, on(REQ, _NARR + r"/optional-notification/\[\]/optional")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.artifacts\.all\[\]$", CARRIED, on(REQ, _ACRIT + r"/required-artifacts/\[\]")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.artifacts\.[a-d]\[\]$", CARRIED, on(REQ, _COMPAT + r"/class-variants(/.*)?")),   # from the sentence: no value of the pinned source
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.related\[\]$", CARRIED, on(REQ, r"/relations/\[\]/ref")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.(schema|reference_url)$", CARRIED, on(REQ, r"/relations/\[\]/ref")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.reference$", CARRIED, on(REQ, _NARR + r"/reference")),
  (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.varies_by_class\.\*\.force$", CARRIED,
-  (_COMPAT + r"/class-variants/\{class\}/force",
-   r"/operations/\[\]/modality")),
+  on(REQ, _COMPAT + r"/class-variants/\{class\}/force") + on(TLR, r"/operations/\[\]/modality")),
  (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.varies_by_class\.\*\.(timeframe_num|timeframe_type)$", CARRIED,
-  (_COMPAT + r"/class-variants/\{class\}/timeframe_num",
-   _COMPAT + r"/class-variants/\{class\}/timeframe_type")),
- (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.varies_by_class\.\*\.", CARRIED, (_COMPAT + r"/class-variants(/.*)?",)),
- (r"cr26\.KSI\.\*\.indicators\.\*\.name$", CARRIED, (r"/statements/\[\]/prose/en", r"/title/en")),
- (r"cr26\.KSI\.\*\.indicators\.\*\.statement$", CARRIED, (r"/statements/\[\]/prose/en",)),
- (r"cr26\.KSI\.\*\.indicators\.\*\.controls\[\]$", CARRIED, (r"/id", r"/objects/\[\]/id", r"/target-ref")),
- (r"cr26\.KSI\.\*\.indicators\.\*\.terms\[\]$", CARRIED, (r"/relations/\[\]/ref",)),
- (r"cr26\.KSI\.\*\.indicators\.\*\.updated\[\]\.", CARRIED, (r"/history/\[\]/comment/en", r"/history/\[\]/date", r"/history/\[\]/ref")),
- (r"cr26\.KSI\.\*\.indicators\.\*\.varies_by_class\.\*\.", CARRIED, (_COMPAT + r"/class-variants/\{class\}/statement",)),
- (r"^cr26\.KSI\.\*\.(name|web_name|short_name)$", CARRIED, (r"/annotations/web_name", r"/label", r"/title/en")),
- (r"^cr26\.KSI\.\*\.id$", CARRIED, (r"/aliases/\[\]/value",)),
- (r"^cr26\.KSI\.\*\.status$", CARRIED, (_NARR + r"/status", r"/lifecycle")),
- (r"^cr26\.CTL\.\*\.\*\.parameters\[\]\.", CARRIED, (r"/operations/\[\]/parameter", r"/operations/\[\]/value", r"/operations/\[\]/value/\[\]")),
- (r"^cr26\.CTL\.\*\.\*\.", CARRIED, (_COMPAT + r"/ctl(/.*)?",)),
+  on(REQ, _COMPAT + r"/class-variants/\{class\}/timeframe_num", _COMPAT + r"/class-variants/\{class\}/timeframe_type")),
+ (r"cr26\.FRR\.\*\.data\.\*\.\*\.\*\.varies_by_class\.\*\.", CARRIED, on(REQ, _COMPAT + r"/class-variants(/.*)?")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.name$", CARRIED, on(REQ, r"/statements/\[\]/prose/en", r"/title/en")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.statement$", CARRIED, on(REQ, r"/statements/\[\]/prose/en")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.controls\[\]$", CARRIED, on(MAP, r"/id", r"/target-ref") + on(MAN, r"/objects/\[\]/id")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.terms\[\]$", CARRIED, on(REQ, r"/relations/\[\]/ref")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.updated\[\]\.", CARRIED, on(REQ, r"/history/\[\]/comment/en", r"/history/\[\]/date", r"/history/\[\]/ref")),
+ (r"cr26\.KSI\.\*\.indicators\.\*\.varies_by_class\.\*\.", CARRIED, on(REQ, _COMPAT + r"/class-variants/\{class\}/statement")),
+ (r"^cr26\.KSI\.\*\.(name|web_name|short_name)$", CARRIED, on(SET, r"/annotations/web_name", r"/label", r"/title/en")),
+ (r"^cr26\.KSI\.\*\.id$", CARRIED, on(SET, r"/aliases/\[\]/value")),
+ (r"^cr26\.KSI\.\*\.status$", CARRIED, on(SET, _NARR + r"/status") + on(f"{MAP}|{REQ}|{SET}", r"/lifecycle")),
+ (r"^cr26\.CTL\.\*\.\*\.parameters\[\]\.", CARRIED,
+  on(TLR, r"/operations/\[\]/parameter", r"/operations/\[\]/value", r"/operations/\[\]/value/\[\]")),
+ (r"^cr26\.CTL\.\*\.\*\.", CARRIED, on(SET, _COMPAT + r"/ctl(/.*)?")),
 ]
 def dest(p):
     for pat,l,t in RULES:
@@ -879,7 +866,15 @@ for fam,entries in d["CTL"].items():
                 # FedRAMP flattens multi-selections into prose strings ("a; b",
                 # "a, b and c"); NIST declares cardinality-many choices. Split;
                 # if EVERY part is a declared choice it is pure serialization ->
-                # list value (counted); anything else is a real conflict (parked).
+                # list value (counted); anything else is a real conflict. A
+                # conflict is not parked: it becomes no operation, and its
+                # entry leaves the parked payload with the others below. Its
+                # parameterId and its value then stand nowhere, the ledger
+                # reads the two as unaccounted and the run ends with 1
+                # (measured 2026-11-15 on a changed source, for this kind and
+                # for an ODP the control does not declare; backlog #97, point
+                # 4). Until then this comment said "(parked)". No assignment
+                # of publication 2026.11.02.01 is a conflict.
                 parts=_selections(val)
                 allowed={c["value"] for c in decl.get("choices",[])}
                 if decl.get("cardinality")=="many" and parts and all(x in allowed for x in parts):
@@ -893,7 +888,8 @@ for fam,entries in d["CTL"].items():
             ctl_ops.append({"op":"set-parameter","requirement-ref":robj["id"],
                             "statement-id":sid,"parameter":pid,"value":val})
             ctl_carried[cid]=robj
-        # drained: strip the parameters from the parked payload (guidance stays L2)
+        # drained: strip the parameters from the parked payload (guidance stays L2).
+        # The whole list goes, an assignment that became no operation with it.
         ctl_payload[fam][label].pop("parameters",None)
         if not ctl_payload[fam][label]: del ctl_payload[fam][label]
 for cid,robj in sorted(ctl_carried.items()):

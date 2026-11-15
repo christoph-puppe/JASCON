@@ -676,9 +676,9 @@ const jscAi = {
     const render = () => {
       const b = this.backend(), has = !!this.key();
       host.innerHTML = `<div class="wbrow"><span class="chip"><b>${jscEsc(this.label())}</b>${jscEsc(T("model"))} ${jscEsc(this.model() || T("(no model chosen)"))}${b === "gemini" ? ` · ${jscEsc(T("thinking"))} ${jscEsc(this.level())}` : ""}</span>
-        <label for="ai-key">${jscEsc(T("Key"))}</label><input type="password" id="ai-key" class="ai-key" autocomplete="off" spellcheck="false" style="min-width:260px" aria-label="${jscEsc(T("Key for {backend}", { backend: this.label() }))}">
+        <label for="ai-key-${jscEsc(host.id)}">${jscEsc(T("Key"))}</label><input type="password" id="ai-key-${jscEsc(host.id)}" class="ai-key" autocomplete="off" spellcheck="false" style="min-width:260px" aria-label="${jscEsc(T("Key for {backend}", { backend: this.label() }))}">
         <span class="${has ? "verdict-ok" : "hint"}" role="status">${jscEsc(T(has ? "a key is in memory" : "no key"))}</span>
-        <button type="button" class="small ai-forget" ${has ? "" : "disabled"}>${jscEsc(T("Forget the key"))}</button>
+        <button type="button" class="small ai-forget" data-ai-forget="${jscEsc(host.id)}" ${has ? "" : "disabled"}>${jscEsc(T("Forget the key"))}</button>
         <a class="btn small" href="config.html" target="_blank" rel="noopener">${jscEsc(T("Settings"))}</a></div>
         <p class="hint" style="max-width:86ch">${jscEsc(T("The key is held in the memory of this page and of the hub, never in the browser's storage, a set or an export. Reloading the hub clears it. Without a key nothing leaves this browser."))}</p>`;
       /* setting the key draws this panel and the page's forms again; under a press that waits, so that a click on

@@ -90,7 +90,7 @@ Runs, in order:
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
-import json, hashlib, os, re, sys, copy, collections, base64, datetime
+import json, hashlib, os, re, sys, copy, collections, base64, datetime, tempfile, io, contextlib
 from decimal import Decimal
 import jsonschema
 
@@ -2998,6 +2998,52 @@ def run_dsse():
             okc = tier == exp_tier
         if okc: ok("dsse")
         else: fail("dsse", f"{case['name']}: expected {exp_env}/{exp_tier}, got {st}({why[:70]})/{tier}")
+    for case in v["path-vectors"]:
+        got = beside_path("bundle", case["ref"]) is not None
+        if got == case["beside"]: ok("dsse")
+        else: fail("dsse", f"envelope-ref {case['ref']!r}: expected beside={case['beside']}, got {got} ({case['why']})")
+    for case in v["bundle-vectors"]:
+        got, text = dsse_bundle_case(case)
+        problems = [] if len(got) == len(case["expected-fails"]) else [f"{len(got)} failures, expected {len(case['expected-fails'])}"]
+        problems += [f"no failure says {frag!r}" for frag in case["expected-fails"] if not any(frag in e for e in got)]
+        att_id = case["attestation"]["id"]
+        read = f"dsse: {att_id} = signature UNVERIFIED" in text
+        if read != (case["expected-envelope"] == "unverified"):
+            problems.append(f"envelope {'read' if read else 'not read'}, expected {case['expected-envelope']}")
+        if not problems: ok("dsse")
+        else: fail("dsse", f"bundle {case['name']}: {'; '.join(problems)} - failures: {[e[:120] for e in got]}")
+
+def dsse_bundle_case(case):
+    """A bundle vector of dsse-vectors.json as a bundle on disk, judged by
+    validate_bundle itself -> (its failures, its output). The failures are
+    the vector's data, not this run's verdict: they are taken out of the
+    run's tally and the tally is restored. No trusted key: a resolved
+    envelope is `unverified` whatever --trusted-keys this run was given."""
+    global fails, counts, TRUSTED
+    with tempfile.TemporaryDirectory() as tmp:
+        bdir = os.path.join(tmp, "bundle")
+        def put(base, rel, value):
+            fp = os.path.join(base, *rel.split("/"))
+            os.makedirs(os.path.dirname(fp), exist_ok=True)
+            raw = (json.dumps(value, indent=1, ensure_ascii=False) + "\n").encode("utf-8")
+            with open(fp, "wb") as f: f.write(raw)
+            return raw
+        entries = []
+        for i, o in enumerate(case["listed"]):
+            rel = f"objects/o{i}.json"
+            entries.append({"id": o["id"], "version": o["version"], "package-digest": pkg_digest(put(bdir, rel, o)),
+                            "semantic-digest": sdig(o), "path": rel})
+        put(bdir, "content-manifest.json", {"manifest-version": "1", "objects": entries})
+        put(bdir, "attestation.json", case["attestation"])
+        for rel, env in (case.get("envelopes") or {}).items(): put(bdir, rel, env)
+        for rel, env in (case.get("outside") or {}).items(): put(tmp, rel, env)
+        saved, out = (fails, counts, TRUSTED), io.StringIO()
+        fails, counts, TRUSTED = [], collections.Counter(), None
+        try:
+            with contextlib.redirect_stdout(out): validate_bundle(bdir)
+            return fails, out.getvalue()
+        finally:
+            fails, counts, TRUSTED = saved
 
 def run_lifecycle():
     v = json.load(open(os.path.join(CONF, "lifecycle-vectors.json"), encoding="utf-8"))
@@ -3541,6 +3587,22 @@ def load_facet_pins(bdir, manifest, section):
             fail(section, f"{fe['path']}: pinned facet schema unreadable: {e}")
     return pinned, pinned_decl
 
+# `envelope-ref` names a file in the manifest's folder or below it: a
+# relative path with no scheme or drive letter, no leading slash, no
+# backslash and no `..` segment. The app (jscPlainPath) and the reader
+# (besideName) apply the same pattern. Any other ref would read outside the
+# bundle - an absolute path, `C:x`, `../secret` - and so does not resolve.
+# Until 2026-11-15 this file joined the ref to the folder unchecked. `\Z`,
+# not `$`, and explicit letter ranges, not re.I: Python's `$` also matches
+# before a final line break, and re.I lets [a-z] match the Kelvin sign.
+OUTSIDE_REF = re.compile(r"^[A-Za-z][A-Za-z0-9+.-]*:|^/|\\|(^|/)\.\.(/|\Z)")
+
+def beside_path(bdir, ref):
+    """-> the file an `envelope-ref` names in `bdir`, or None where the ref
+    is not a string, is empty, or would leave the folder."""
+    if not isinstance(ref, str) or not ref or OUTSIDE_REF.search(ref): return None
+    return os.path.join(bdir, *ref.split("/"))
+
 def beside_attestation_files(bdir, listed_paths):
     """-> [(file name, bytes, object)]: the Attestations BESIDE the manifest
     (D3.1) - JSON files in the manifest's own folder that it does not list
@@ -3598,11 +3660,13 @@ def beside_attestations(bdir, listed_paths):
 # and fails nothing. Otherwise a bundle whose attested object was changed
 # could never validate again, however openly the Attestation was withdrawn
 # (argued, 2026-11-14; the primitive does not speak of lifecycle).
-def attestation_binds(att, manifest_digest, objs, kept_packs=()):
+def attestation_binds(att, manifest_digest, objs, kept_packs=(), delivered=None):
     """-> {"verdict", "manifest", "subjects": [(status, id or None, signed
     digest, delivered digest or None)], "fails"}. objs: id -> (type,
-    object), the objects the manifest lists."""
-    delivered = {oid: sdig(o) for oid, (_, o) in objs.items()}
+    object), the objects the manifest lists. `delivered`, id -> semantic
+    digest of those objects, where the caller has computed it once for
+    several Attestations."""
+    if delivered is None: delivered = {oid: sdig(o) for oid, (_, o) in objs.items()}
     carried = set(delivered.values())
     subjects = []
     for sj in att.get("subject-semantic-digests") or []:
@@ -3624,8 +3688,9 @@ def binds_report(section, atts, manifest_digest, objs, kept):
     """One line per Attestation read with a bundle; a `fail` verdict fails
     the bundle, in the words of Appendix B.1.7. atts: {id: object}."""
     packs = ["sha256:" + name for name, _ in kept]
+    delivered = {oid: sdig(o) for oid, (_, o) in objs.items()} if atts else {}   # once per bundle, not per Attestation
     for aid in by_code_unit(atts):
-        r = attestation_binds(atts[aid], manifest_digest, objs, packs)
+        r = attestation_binds(atts[aid], manifest_digest, objs, packs, delivered)
         n, what = len(r["subjects"]), BINDS_MANIFEST[r["manifest"]]
         if r["verdict"] == "full-match":
             print(f"    binds: {aid} = FULL MATCH [{n} subject(s) of this bundle; {what}]")
@@ -3651,8 +3716,9 @@ def advice_report(section, bdir, manifest, raw_manifest, objs, pinned_decl, enve
         envs = dict(envelopes or {})
         for _, (_, a) in sorted(atts.items()):
             ref = a.get("envelope-ref")
-            if ref and ref not in envs and os.path.isfile(os.path.join(bdir, ref)):
-                try: envs[ref] = json.load(open(os.path.join(bdir, ref), encoding="utf-8"))
+            ep = beside_path(bdir, ref)
+            if ep and ref not in envs and os.path.isfile(ep):
+                try: envs[ref] = json.load(open(ep, encoding="utf-8"))
                 except Exception: pass
         pn = []
         st = pack_publisher(pack, mdig, atts, envelopes=envs, trusted=TRUSTED, notes=pn)
@@ -3671,7 +3737,8 @@ def advice_report(section, bdir, manifest, raw_manifest, objs, pinned_decl, enve
         status(km["pack"], "sha256:" + name, f"kept pack ({len(km.get('objects', []))} object(s))")
 
 def validate_bundle(bdir):
-    section = os.path.relpath(bdir, ROOT).replace("\\", "/")
+    try: section = os.path.relpath(bdir, ROOT).replace("\\", "/")
+    except ValueError: section = os.path.basename(bdir)      # another drive (a vector's bundle in the Windows temp folder)
     mpath = os.path.join(bdir, "content-manifest.json")
     if not os.path.exists(mpath):
         fail(section, "no content-manifest.json"); return
@@ -3730,8 +3797,8 @@ def validate_bundle(bdir):
     envelopes = {}
     for oid, (t2, o2) in with_atts.items():
         if t2 != "attestation" or not o2.get("envelope-ref"): continue
-        ep = os.path.join(bdir, o2["envelope-ref"])
-        if os.path.exists(ep):
+        ep = beside_path(bdir, o2["envelope-ref"])
+        if ep and os.path.exists(ep):
             try:
                 envelopes[o2["envelope-ref"]] = json.load(open(ep, encoding="utf-8"))
             except Exception as e:
@@ -3868,8 +3935,8 @@ def validate_examples():
         ref = att.get("envelope-ref")
         if not ref:
             print(f"    dsse: {oid} = no envelope (unsigned attestation)"); continue
-        ep = os.path.join(exdir, ref)
-        if not os.path.exists(ep):
+        ep = beside_path(exdir, ref)
+        if not ep or not os.path.exists(ep):
             fail(section, f"{oid}: envelope-ref '{ref}' does not resolve beside the manifest"); continue
         try: envelopes[ref] = json.load(open(ep, encoding="utf-8"))
         except Exception as e:
@@ -3918,25 +3985,33 @@ REQUIRE_RISK_BASIS = False
 REQUIRE_AUTHORS = False
 AS_OF = datetime.datetime.now(datetime.timezone.utc).date()    # REVIEW-1: the date of the run, unless --as-of sets it
 _argv = sys.argv[1:]
+def _flag_values(flag, n=1):
+    """-> the n values that follow `flag`, taken out of _argv. A run that
+    gives fewer, or a flag where a value belongs, ends with a sentence and
+    exit code 1, not with a traceback (review of 2026-11-15)."""
+    global _argv
+    i = _argv.index(flag)
+    vals = _argv[i + 1:i + 1 + n]
+    if len(vals) < n or any(v.startswith("--") for v in vals):
+        sys.exit(f"{flag} needs {n} value{'s' if n > 1 else ''}")
+    _argv = _argv[:i] + _argv[i + 1 + n:]
+    return vals
 if "--require-authors" in _argv:         # policy switch: AUTHOR-1..4 lines become failures
     REQUIRE_AUTHORS = True
     _argv.remove("--require-authors")
 if "--as-of" in _argv:
-    _i = _argv.index("--as-of")
-    if not VALIDATORS["date"].is_valid(_argv[_i + 1]): sys.exit(f"--as-of {_argv[_i + 1]!r} is not a date, YYYY-MM-DD")
-    try: AS_OF = datetime.date.fromisoformat(_argv[_i + 1])
-    except ValueError: sys.exit(f"--as-of {_argv[_i + 1]!r} is not a day of the calendar")
-    _argv = _argv[:_i] + _argv[_i + 2:]
+    (_d,) = _flag_values("--as-of")
+    if not VALIDATORS["date"].is_valid(_d): sys.exit(f"--as-of {_d!r} is not a date, YYYY-MM-DD")
+    try: AS_OF = datetime.date.fromisoformat(_d)
+    except ValueError: sys.exit(f"--as-of {_d!r} is not a day of the calendar")
 if "--require-risk-basis" in _argv:      # policy switch: uncovered selections become failures
     REQUIRE_RISK_BASIS = True
     _argv.remove("--require-risk-basis")
 if "--trusted-keys" in _argv:
-    _i = _argv.index("--trusted-keys")
-    TRUSTED = json.load(open(_argv[_i + 1], encoding="utf-8"))
-    _argv = _argv[:_i] + _argv[_i + 2:]
+    (_k,) = _flag_values("--trusted-keys")
+    TRUSTED = json.load(open(_k, encoding="utf-8"))
 if "--compose" in _argv:
-    _i = _argv.index("--compose")
-    da, db = _argv[_i + 1], _argv[_i + 2]
+    da, db = _flag_values("--compose", 2)
     (ao, ap), (bo, bp) = _load_compose_side(da), _load_compose_side(db)
     res, errs = compose(ao, ap, bo, bp)
     print(f"== compose {da} + {db} ==")
@@ -3958,8 +4033,7 @@ def _load_listed(bdir):
     return m, raw, objs
 
 if "--import-advice" in _argv:
-    _i = _argv.index("--import-advice")
-    dset, dpack = _argv[_i + 1], _argv[_i + 2]
+    dset, dpack = _flag_values("--import-advice", 2)
     am, _, ao = _load_listed(dset)
     bm, braw, bo = _load_listed(dpack)
     _, a_packs = kept_pack_errors(read_kept_packs(dset), am, ao)

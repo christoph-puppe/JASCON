@@ -54,6 +54,34 @@ def load_json(path):
         return json.load(f)
 
 
+def ecma_pattern(p):
+    """A schema `pattern` is an ECMA-262 expression (D3.10, backlog #68);
+    Python's `re` reads `$` and `.` otherwise, so that a date or a URI that
+    ends in a line break would pass here and fail in the kernel's tools.
+    A copy of ecma_pattern in jascon/scripts/validate_core.py, which runs
+    on import and so cannot be imported (review of 2026-11-15)."""
+    out, i, in_class = [], 0, False
+    while i < len(p):
+        c = p[i]
+        if c == "\\":
+            out.append(p[i:i + 2]); i += 2; continue
+        if in_class: in_class = c != "]"
+        elif c == "[": in_class = True
+        elif c == "$": c = r"\Z"
+        elif c == ".": c = "[^\n\r\u2028\u2029]"
+        out.append(c); i += 1
+    return "".join(out)
+
+
+def validator(schema):
+    """A Draft 2020-12 validator that reads `pattern` as ECMA-262."""
+    import jsonschema
+    def pattern(v, pat, instance, _):
+        if v.is_type(instance, "string") and not re.search(ecma_pattern(pat), instance):
+            yield jsonschema.ValidationError(f"{instance!r} does not match {pat!r}")
+    return jsonschema.validators.extend(jsonschema.Draft202012Validator, {"pattern": pattern})(schema)
+
+
 def load_catalog(cdir):
     """-> (catalogue, [entries in catalogue order]). Fails loudly on a member
     without a file or a file that is not a member."""
@@ -73,11 +101,10 @@ def load_catalog(cdir):
 
 
 def schema_errors(cat, entries):
-    import jsonschema
     schema = load_json(SCHEMA_PATH)
     errs = []
     for name, obj in [("catalog", cat)] + [("entry", e) for e in entries]:
-        v = jsonschema.Draft202012Validator({"$ref": f"#/$defs/{name}", "$defs": schema["$defs"]})
+        v = validator({"$ref": f"#/$defs/{name}", "$defs": schema["$defs"]})
         for e in v.iter_errors(obj):
             errs.append(f"{obj.get('id', '?')}: {e.message[:140]}")
     seqs = [m["sequence"] for m in cat["members"]]
@@ -148,14 +175,13 @@ def load_not_applicable(path):
     import an entry. Without the record, 'not imported' is just a gap.
     The file is held to its schema and an entry may be decided once."""
     if not path: return {}
-    import jsonschema
     doc = load_json(path)
     if not isinstance(doc, dict) or "record-version" not in doc:
         sys.exit("--not-applicable: this is not the record of schema/not-applicable.draft.schema.json. "
                  "A file written before 2026-11-13 is a map from an entry to a sentence; the record now "
                  "names the entry, the rationale, who decided and when. Rewrite the file in that shape; "
                  "the app reads the old map and writes the record when an entry is next recorded there.")
-    err = next(jsonschema.Draft202012Validator(load_json(NA_SCHEMA_PATH)).iter_errors(doc), None)
+    err = next(validator(load_json(NA_SCHEMA_PATH)).iter_errors(doc), None)
     if err:
         sys.exit(f"--not-applicable: {err.message[:140]} @ {'/'.join(map(str, err.absolute_path)) or '(root)'}")
     rows = {}
