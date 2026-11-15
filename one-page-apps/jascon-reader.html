@@ -47,6 +47,9 @@ body{background:var(--bg-deep);color:var(--text-primary);font:14px/1.55 Inter,sy
 #topbar .pill{min-width:0;overflow:hidden;text-overflow:ellipsis;flex:none}
 #topbar .brand + .pill{flex:0 1000 auto}
 #topbar #pill-bundle{flex:0 1 auto}
+/* In a narrow window the bundle's pill takes two lines (v1.22.0): at 1,000 px one line ended before the tag of a
+   listed Attestation, "(MANIFEST-1)", which is the part that says the bundle fails. */
+@media (max-width:1200px){#topbar #pill-bundle{white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-height:1.4;border-radius:12px;max-height:38px}}
 #topbar .brand span{color:var(--accent)}
 .pill{font-family:'JetBrains Mono',monospace;font-size:10.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--border-2);color:var(--text-tertiary);white-space:nowrap}
 .pill.on{border-color:var(--accent);color:var(--accent)}
@@ -452,6 +455,8 @@ const state = {
   bindsRun: 0,             // which run of judgeAttestations the verdicts in `binds` are from
   beside: null,            // how a load that had no folder looked for what lies beside the manifest: {how: "listing" | "named" | "no-listing" | "files", …}; null for a folder
   missingEntries: 0,       // manifest entries whose file was not loaded
+  notAttestations: [],     // files the manifest does not list that carry `subject-semantic-digests` and lack a member the kernel requires of an Attestation: {path, lacks} (v1.22.0)
+  packErrors: [],          // one message per breach of ADVICE-1 to ADVICE-3, where the loaded manifest carries a pack header (v1.22.0)
   view: "overview",        // the view that is up
 };
 
@@ -819,6 +824,76 @@ function listedAttestationErrors(objs) {
       `D3.1 - an Attestation lies beside a manifest and is never an entry of one)`);
 }
 
+/* ---------- what the kernel requires of an Attestation (v1.22.0; backlog #71 point 9) ----------
+   This page reads an object by its fields: whatever carries `subject-semantic-digests` it took for an
+   Attestation. The reference reads a file beside a manifest as an Attestation only when the kernel
+   schema accepts it. So a file without a subject was shown here as an Attestation that does not bind,
+   and the reference did not read it at all.
+   The page carries no kernel schema and no schema validator. It checks by hand the members the
+   kernel REQUIRES of an Attestation - those of every object (id, version, lifecycle) and its own four -
+   and that it names at least one subject. A file the manifest does not list and that lacks one of
+   them is not read as an Attestation; the overview names it and what it lacks. That is less than the
+   schema asks (no pattern of a digest or a URI is checked, and no member the kernel does not know is
+   refused), and the page says so where a failure is shown.
+   -> [what is missing], empty where nothing is */
+const ATTESTATION_REQUIRED = ["id", "version", "lifecycle", "subject-semantic-digests", "content-manifest-digest", "signer", "timestamp"];
+function attestationMissing(o) {
+  if (!isRecord(o)) return ["not an object"];
+  const out = ATTESTATION_REQUIRED.filter(k => !(k in o)).map(k => `no ${k}`);
+  if ("subject-semantic-digests" in o && !(Array.isArray(o["subject-semantic-digests"]) && o["subject-semantic-digests"].length))
+    out.push("subject-semantic-digests names no subject (the kernel requires at least one)");
+  return out;
+}
+
+/* ---------- ADVICE-1 to ADVICE-3: what a pack may hold (v1.22.0; CP-ADVICE-1, backlog #71 point 12) ----------
+   An advice pack is a bundle whose manifest carries a pack header. The reference holds one to three
+   rules (pack_errors in validate_core.py), and until 1.21.0 this page held it to none of them: for a
+   pack that lists its Attestation it named MANIFEST-1 where the reference names ADVICE-1 as well.
+   The port of pack_errors, in the reference's order and words:
+   ADVICE-1  every object the manifest lists is a Component;
+   ADVICE-2  the publisher and every object are under the origin of the pack's id;
+   ADVICE-3  no facet on an object declares a semantics class. What a facet declares is taken from the
+             standard library (STDLIB_DECL, which the test holds to jascon/schemas/stdlib) and from the
+             facet schemas the bundle pins (`pinnedDecl`: facet id -> its `modifies-semantics`); a key no
+             facet registers is the failure of another rule, and `private:` declares nothing.
+   The objects are typed as this page types them, by their fields.
+   `objs`: the objects the manifest lists. -> [message] */
+function uriOrigin(u) { const p = String(u).split("/"); return String(u).startsWith("http") && p.length >= 3 ? p.slice(0, 3).join("/") : String(u); }
+const ADVICE_RULES = {
+  "ADVICE-1": "advice must not be able to change what is required or how it is assessed - a pack holds Components and nothing else",
+  "ADVICE-2": "a pack cannot carry an object under someone else's identity, and so cannot replace one: its ids, its own id and its publisher share one origin",
+  "ADVICE-3": "advice must not reach a computation through a facet: no facet on a pack's object declares a semantics class",
+};
+const STDLIB_DECL = { "assessment-criteria": ["assessment"], collector: [], "dsse-envelope": [], effectivity: ["selection"], references: [],
+  "reporting-obligation": ["assessment"], "security-objectives": ["selection"], "statement-grammar": [], terminology: [] };
+function packErrors(manifest, objs, pinnedDecl) {
+  const pack = isRecord(manifest) ? manifest.pack : null;
+  if (!isRecord(pack) || !isRecord(pack.publisher)) return [];
+  const adv = (rule, where, msg) => `${where}: ${msg} (${rule}: ${ADVICE_RULES[rule]})`;
+  const byId = new Map((objs || []).filter(isRecord).map(o => [String(o.id), o])), ids = [...byId.keys()].sort();
+  const pid = pack.id, origin = uriOrigin(pid), E = [];
+  for (const oid of ids) {
+    const t = inferType(byId.get(oid));
+    if (t !== "component") E.push(adv("ADVICE-1", pid, `${oid} is a ${t} - an advice pack holds components only` +
+      (t === "attestation" ? " (an attestation travels beside the manifest, D3.1)" : "")));
+  }
+  const pub = pack.publisher.ref;
+  if (uriOrigin(pub) !== origin) E.push(adv("ADVICE-2", pid, `publisher ${pub} is not under the pack's origin ${origin}`));
+  for (const oid of ids) if (uriOrigin(oid) !== origin) E.push(adv("ADVICE-2", pid, `${oid} is not under the pack's origin ${origin}`));
+  for (const oid of ids) {
+    const facets = byId.get(oid).facets;
+    for (const key of Object.keys(isRecord(facets) ? facets : {}).sort()) {
+      if (key.startsWith("private:")) continue;
+      const base = facetBase(key);
+      const decl = base.startsWith(STDLIB) && Object.prototype.hasOwnProperty.call(STDLIB_DECL, base.slice(STDLIB.length)) ? STDLIB_DECL[base.slice(STDLIB.length)]
+        : pinnedDecl && pinnedDecl.get ? pinnedDecl.get(base) : isRecord(pinnedDecl) ? pinnedDecl[base] : undefined;
+      if (Array.isArray(decl) && decl.length)
+        E.push(adv("ADVICE-3", oid, `facet ${key} declares modifies-semantics [${[...decl].sort().map(d => `'${d}'`).join(", ")}] - not allowed in an advice pack`));
+    }
+  }
+  return E;
+}
+
 /* ---------- an Assessment's method is a facet payload (v1.15.0; specification D10 as amended, backlog #55) ----------
    The kernel schema says of `method` only that it is an object. Its keys are facet ids, resolved as
    the keys of `facets` are: the standard library, then the schemas the bundle pins, then `private:`
@@ -1025,7 +1100,7 @@ const isEarlierWorkbenchMethod = m => isRecord(m) && Object.keys(m).sort().join(
 /* The version is stated once. Until 1.10.0 it stood in three places - the pill of the top bar, the
    `converter` line of every manifest written here, and the first line of the console - and they had
    come apart: 1.9.1, 1.9.1 and 1.10.0. */
-const READER_VERSION = "1.21.0", READER_BUILD = "2026-11-15";
+const READER_VERSION = "1.22.0", READER_BUILD = "2026-11-15";
 const READER_ID = "jascon-reader.html v" + READER_VERSION;
 $("pill-version").textContent = `v${READER_VERSION} · build ${READER_BUILD}`;
 /* URL loading — works when this page and the bundle are served over http(s)
@@ -1257,7 +1332,7 @@ function indexBundle() {
   state.manifestByPath.clear(); state.verify = null; state.selected = null;
   state.browserDims = {}; state.stopped = null; state.pinErrors = []; state.listedErrors = [];
   state.pinnedFacets = new Map(); state.methodErrors = []; state.facetErrors = []; state.closureErrors = [];
-  state.binds = new Map(); state.missingEntries = 0;
+  state.binds = new Map(); state.missingEntries = 0; state.notAttestations = []; state.packErrors = [];
   /* The detail that is up belongs to the bundle before (v1.14.0): it is taken down with it. Until 1.13.0 it stayed,
      and since 1.13.0 the detail of an Attestation says what it binds of a bundle - of one no longer loaded. */
   $("detail").innerHTML = DETAIL_EMPTY;
@@ -1283,6 +1358,7 @@ function indexBundle() {
     state.evidence.clear(); state.packs.clear(); state.envelopes.clear();
     state.graphGen++;
     $("btn-verify").disabled = true;
+    keepWorkspaceObjects();
     judgeAttestations();
     renderAll();
     setView("overview");
@@ -1307,6 +1383,15 @@ function indexBundle() {
        manifest does not list and that types as an Attestation - the reference's rule. It is shown and
        held to what it binds, and it is not one of the objects the manifest lists. */
     const beside = !!state.manifest && !entry && t === "attestation" && p.startsWith(prefix) && !p.slice(prefix.length).includes("/");
+    /* A file the manifest does not list is an Attestation only with the members the kernel requires of one
+       (v1.22.0; attestationMissing, above). Without them it is not read as one, as the reference does not
+       read it; it is named in the overview with what it lacks. */
+    const lacks = t === "attestation" && !entry ? attestationMissing(obj) : [];
+    if (lacks.length) {
+      state.notAttestations.push({ path: p.startsWith(prefix) ? p.slice(prefix.length) : p, lacks });
+      l.warn(`not read as an Attestation: ${p} — the kernel requires members it does not have: ${lacks.join("; ")}`);
+      continue;
+    }
     state.objects.set(id, { obj, path: p, type: t, entry, beside });
     parsed++;
   }
@@ -1351,6 +1436,14 @@ function indexBundle() {
     state.methodErrors = listedObjs.flatMap(o => methodKeyErrors(o, state.pinnedFacets));
     state.facetErrors = listedObjs.flatMap(o => facetKeyErrors(o, state.pinnedFacets));
     for (const e of facetAndMethodKeyErrors(listedObjs, state.pinnedFacets)) l.err(e);
+    /* 4. ADVICE-1 to ADVICE-3 (v1.22.0): a manifest with a pack header holds Components of one origin, and no
+       facet on them declares a semantics class. What a pinned facet declares is read from its file. */
+    const pinnedDecl = new Map();
+    for (const [fid, path] of state.pinnedFacets) {
+      try { const d = JSON.parse(state.files.get(prefix + path).text)["modifies-semantics"]; pinnedDecl.set(fid, Array.isArray(d) ? d : []); } catch { /* not readable: declares nothing here */ }
+    }
+    state.packErrors = packErrors(state.manifest, listedObjs, pinnedDecl);
+    for (const e of state.packErrors) l.err(e);
   }
   for (const p of [...state.evidence.keys()]) if (!p.startsWith(prefix + "evidence/sha256/")) state.evidence.delete(p);   // only the store beside THIS manifest
   if (state.evidence.size) l.info(`evidence store: ${state.evidence.size} file(s) beside the manifest — content-addressed (evidence/sha256/<hex>), not manifest entries`);
@@ -1377,6 +1470,7 @@ function indexBundle() {
   $("pill-bundle").title = $("pill-bundle").textContent;
   $("pill-bundle").classList.add("on"); $("pill-bundle").style.color = "";
   $("btn-verify").disabled = !state.manifest || !state.objects.size;
+  keepWorkspaceObjects();
   renderAll();
   setView("stages");
   judgeAttestations();
@@ -1500,7 +1594,11 @@ function renderOverview() {
     rows.push(kvRow("objects the manifest lists", `<span id="ov-listed">${tally.listed}</span> <span class="hint">of ${state.manifest.objects?.length ?? 0} manifest entries</span>` +
       (state.missingEntries > 0 ? ` <span class="verdict-warn">— ${state.missingEntries} not loaded</span>` : "") +
       state.listedErrors.map(e => `<div class="verdict-bad" data-listed-error>✗ ${esc(e)}</div>`).join("")));
-    rows.push(kvRow("attestations beside the manifest", besideSummaryHtml(tally)));
+    /* the row lists the Attestations read with the bundle: those beside the manifest and, where the manifest
+       lists one against MANIFEST-1, that one too. Until 1.21.0 its title named only the first kind. */
+    rows.push(kvRow(state.listedErrors.length ? "attestations beside the manifest, and listed by it" : "attestations beside the manifest", besideSummaryHtml(tally)));
+    if (state.notAttestations.length) rows.push(kvRow("files that are no Attestation", state.notAttestations.map(f => `<div class="verdict-warn" data-not-attestation="${esc(f.path)}">○ ${esc(f.path)}: ${esc(f.lacks.join("; "))}</div>`).join("") +
+      `<div class="hint">a file the manifest does not list, with <span class="mono">subject-semantic-digests</span> and without a member the kernel requires of an Attestation: it is not read as one, here or by a validator. Only the required members are checked here; this page runs no kernel schema</div>`));
     if (state.closureErrors.length) rows.push(kvRow("references", state.closureErrors.map(e => `<div class="verdict-bad" data-closure-error>✗ ${esc(e)}</div>`).join("") +
       `<div class="hint">a reference the kernel requires to resolve inside the bundle, or to resolve to one type, or one by which an object in force leans on a withdrawn one (WITHDRAWN-1): each fails the bundle in a validator</div>`));
     if (state.methodErrors.length) rows.push(kvRow("methods of assessments", state.methodErrors.map(e => `<div class="verdict-bad" data-method-error>✗ ${esc(e)}</div>`).join("") +
@@ -1512,6 +1610,8 @@ function renderOverview() {
   add("evidence store", state.evidence.size ? `${state.evidence.size} file(s) beside the manifest (not manifest entries)` : "");
   /* CP-ADVICE-1: the pack header of this bundle, and the pack manifests it keeps (which vendor, which release) */
   if (state.manifest?.pack) add("advice pack", packLine(state.manifest.pack, state.manifestHex) + (state.manifestHex ? "" : " (digesting the manifest…)"));
+  if (state.packErrors.length) rows.push(kvRow("what a pack may hold", state.packErrors.map(e => `<div class="verdict-bad" data-pack-error>✗ ${esc(e)}</div>`).join("") +
+    `<div class="hint">a pack holds Components of its own origin, and no facet on them declares a semantics class (ADVICE-1 to ADVICE-3): each fails the bundle in a validator</div>`));
   for (const [p, f] of state.packs)
     add("kept pack manifest", `${packLine(f.pack, p.split("/").pop())} · ${f.objects} object(s) listed · ${p.slice((state.prefix || "").length, (state.prefix || "").length + 26)}…` +
       (f.ok === false ? " · ✗ DOES NOT MATCH ITS NAME (ADVICE-8)" : f.ok ? " · ✓ matches its name" : ""));
@@ -2421,7 +2521,6 @@ function renderStageAuthor() {
      </div>`;
 }
 
-function uriOrigin(u){const p=String(u).split("/");return String(u).startsWith("http")&&p.length>=3?p.slice(0,3).join("/"):String(u);}
 function deriveTier(tObj){   // layered anchor (#19): claimed via id-origin; proof requires signature verification (not evaluated in-app)
   const origins=new Set((tObj.selects||[]).map(s=>s["set-ref"]?uriOrigin(s["set-ref"]):"<predicate>"));
   if(origins.size!==1||origins.has("<predicate>"))return "consumer";
@@ -2613,7 +2712,7 @@ function bindsHtml(r, head = "") {
   const says = b.verdict === "full-match" ? `every subject is an object of this bundle with the signed digest, and the Attestation binds ${BINDS_MANIFEST[b.manifest]}`
     : b.verdict === "semantic-match" ? "every subject matches and the Attestation binds another manifest: the content is proven, the packaging was altered. Reported; not a failure, and not a Full Match" +
         (listed ? ". The manifest that lists it is never the one it binds; the failure here is the listing" : "")
-    : fails ? "a failure: the Attestation is active, and validate_core.py fails the bundle for it — provided the kernel schema accepts the file as an Attestation, which this page does not check"
+    : fails ? "a failure: the Attestation is active, and validate_core.py fails the bundle for it — provided the kernel schema accepts the file as an Attestation: this page checks that the members the kernel requires are there, and no more"
     : b.fails ? "the Attestation is active; it was not read with this bundle, so it fails none"
     : `reported, not a failure: lifecycle ${a.lifecycle}`;
   const subjects = b.subjects.map(sj => `<tr data-subject="${sj.status}">
@@ -2678,7 +2777,10 @@ function renderStageAssess() {
   const atts = [...state.objects.values()].filter(r => r.type === "attestation")
     .sort((a, b) => (a.obj.id < b.obj.id ? -1 : a.obj.id > b.obj.id ? 1 : 0));   // by id, as the reference reports them
   const checks = [...state.objects.values()].filter(r => r.type === "check");
-  if (!asmts.length && !finds.length && !atts.length && !checks.length)
+  /* Risks (v1.22.0; backlog #71 point 7): the stage names Risk among its types since 1.8.0 and counted
+     them in the navigation, and showed none. Each is shown as recorded; nothing is computed here. */
+  const risks = [...state.objects.values()].filter(r => r.type === "risk");
+  if (!asmts.length && !finds.length && !atts.length && !checks.length && !risks.length)
     return stageHead("assess") + wbAssessHtml() +
       `<p class="hint">No Assessments / Findings / Attestations in this bundle yet — run a check above; generated objects land on the board here.</p>`;
   const RESULT_C = { satisfied: "var(--green)", "not-satisfied": "var(--red)", inconclusive: "var(--amber)" };
@@ -2692,6 +2794,19 @@ function renderStageAssess() {
       <div class="hint" style="margin-top:4px">discharges ${refOrOutside(o["requirement-ref"])}${(o["statement-ids"] || []).map(s => ` <span class="badge">stmt ${esc(s)}</span>`).join("")}</div>
       <div style="margin-top:4px">${criteriaHtml(o.criteria)}</div>
       <div class="hint" style="margin-top:4px">${runs.length ? "recorded: " + checkRunsHtml(runs, 4) : "no recorded run in this bundle"}</div></div>`;
+  }).join("");
+  const level = x => isRecord(x) && given(x.level) ? `<span class="badge" title="level">${esc(x.level)}</span>` : "";
+  const rCards = risks.map(r => { const o = r.obj;
+    return `<div class="stmt" data-risk="${esc(o.id)}">
+      <span class="badge" style="border-color:${TYPES.risk.color};color:${TYPES.risk.color}">${TYPES.risk.glyph} risk</span>
+      <a class="reflink" data-ref="${esc(o.id)}"><b>${esc(tt(o.title) || o.label || o.id.split("/").pop())}</b></a>
+      <span class="badge" title="state" data-risk-state>${esc(o.state || "—")}</span>
+      <span class="hint">owner ${esc(String(o["owner-ref"] || "").split("/").pop())} · lifecycle ${esc(o.lifecycle || "—")}</span>
+      <div class="hint" style="margin-top:4px" data-risk-level>${level(o.rating) ? `level ${level(o.rating)}` : "no level recorded"}${level(o["residual-rating"]) ? ` ▶ residual ${level(o["residual-rating"])}` : ""}${given(o.treatment) ? ` · treatment <span class="badge">${esc(o.treatment)}</span>` : " · no treatment decided"}</div>
+      <div class="hint" style="margin-top:4px" data-risk-treatments>${(o.treatments || []).length
+        ? "carried by " + o.treatments.map(t => refOrOutside(t["requirement-ref"]) + (t["statement-ids"] || []).map(sid => ` <span class="badge">stmt ${esc(sid)}</span>`).join("")).join(" · ")
+        : "no requirement carries a treatment"}</div>
+      <div class="hint">author: ${whoHtml(o, null, { noun: "Risk", short: true })}</div></div>`;
   }).join("");
   const aCards = asmts.map(a => `<div class="stmt">
     <span class="badge" style="border-color:${RESULT_C[a.obj.result] || "var(--border-2)"};color:${RESULT_C[a.obj.result] || "inherit"}">${esc(a.obj.result)}</span>
@@ -2717,6 +2832,7 @@ function renderStageAssess() {
     <a class="reflink" data-ref="${esc(a.obj.id)}"><b>${esc(tt(a.obj.title) || a.obj.label || a.obj.id.split("/").pop())}</b></a>
     <span class="hint">signer ${esc(String(a.obj.signer || "").split("/").pop())} · ${esc(a.obj.timestamp || "")} · lifecycle ${esc(a.obj.lifecycle || "—")}</span></div>`)).join("");
   return stageHead("assess") + wbAssessHtml() +
+    (risks.length ? `<div class="nano sectionlabel">Risks (${risks.length}) — the scenario, its level, the treatment decided and the requirements that carry it, as recorded; nothing is computed here</div>${rCards}` : "") +
     (checks.length ? `<div class="nano sectionlabel">Checks (${checks.length}) — what a machine observes and which criteria must hold; outcomes are the recorded ones, nothing is run or recomputed here</div>${cCards}` : "") +
     (asmts.length ? `<div class="nano sectionlabel">Assessments (${asmts.length})</div>${aCards}` : "") +
     (finds.length ? `<div class="nano sectionlabel">Findings (${finds.length}) — dispositions are Deviations, deadlines live in actions[].due</div>${kanban}` : "") +
@@ -2801,7 +2917,7 @@ function provenanceNow() { const a = authorRef(); return a ? { "author-ref": a, 
 const stored = id => state.objects.get(id)?.obj;
 const AUTHOR_REQUIRED = new Set(["a Mapping"]);
 const AUTHOR_KEPT = { "a Tailoring": "; an entry it held before keeps who decided it", "a Mapping": "",
-  "an Implementation": "; one that is unchanged keeps what it names", "a Finding": "; one that is unchanged keeps what it names" };
+  "an Implementation": "; one that is unchanged keeps what it names", "a Finding": "" };   // a Finding is written once, with its check (v1.22.0): every check has Findings of its own
 function authorNoteHtml(what) {
   const a = authorRef(), typed = String(work.who || "").trim();
   if (a) return `${esc(what)} written here names <span class="mono">${esc(a)}</span> · ${today()} as its provenance${esc(AUTHOR_KEPT[what])}`;
@@ -2879,6 +2995,24 @@ function restoreWorkspaceObjects() {
       (unregistered.some(o => isEarlierWorkbenchMethod(o.method)) ? ", as the Assess workbench wrote it until 1.14.0" : "") +
       `: an export that holds one fails a validator (D10). Each is kept as stored; its detail in the object browser says what can be done — ${unregistered.map(o => o.id).join(", ")}`);
   }
+}
+/* What was written in a workbench stays in the graph when a bundle is loaded (v1.22.0; backlog #71
+   point 4). Until 1.21.0 a load emptied the graph and put back nothing: the export of the workspace
+   then said that it was empty, although the page still stored the objects, and a reload showed them
+   again. indexBundle calls this once the bundle is indexed. The bundle is shown as it lies: where it
+   holds an object under the id of an authored one, the bundle's object is the one in the graph, the
+   authored one stays stored, and the console says so. */
+function keepWorkspaceObjects() {
+  const kept = [], held = [];
+  for (const o of work.created || []) {
+    const t = inferType(o);
+    if (!t) continue;
+    if (state.objects.has(o.id)) { held.push(o.id); continue; }
+    state.objects.set(o.id, { obj: o, path: "(workspace)", type: t, entry: null });
+    state.order.push(o.id); kept.push(o.id);
+  }
+  if (kept.length) { state.graphGen++; l.info(`workspace kept: ${kept.length} authored object(s) stay in the graph beside the loaded bundle`); }
+  if (held.length) l.warn(`${held.length} authored object(s) are not put beside the loaded bundle, which holds an object of the same id; they stay stored in the workspace — ${held.join(", ")}`);
 }
 function workspaceObjects() {
   /* an Attestation leaves as it is held: it is a signed statement, and a rewritten one is another */
@@ -3129,7 +3263,14 @@ function wbTailorHtml() {
 function wireTailorWb(el) {
   const d = work._draft;
   const rerender = () => { saveWork(); renderStageFn("tailor"); };
-  const bind = (id, key, ev = "onchange") => { const x = el.querySelector("#" + id); if (x) x[ev] = () => { d[key] = x.value; rerender(); }; };
+  /* A field of the operation redraws the workbench when it changes, and a text field changes when it
+     loses the focus - to the button a person presses next. Until 1.21.0 the redraw replaced that button
+     under the pointer and the click was lost: a parameter value typed and "Add operation" pressed added
+     nothing, the second press did (backlog #71 point 3). The value is taken at once and the redraw
+     waits until the pointer is up, as the author field does since 1.12.0. Where the press itself redrew
+     the workbench (the field is then no longer in the page), the waiting redraw is dropped: it would
+     arrive after the press and take down what was typed since. */
+  const bind = (id, key, ev = "onchange") => { const x = el.querySelector("#" + id); if (x) x[ev] = () => { d[key] = x.value; saveWork(); whenReleased(() => { if (x.isConnected) rerender(); }); }; };
   const binput = (id, fn) => { const x = el.querySelector("#" + id); if (x) x.onchange = () => { fn(x.value); saveWork(); }; };
   binput("wb-ns", v => work.ns = v.trim() || work.ns);
   binput("wb-t-label", v => work.tailor.label = v.trim() || work.tailor.label);
@@ -3332,7 +3473,11 @@ function controlSelectorHtml(ci) {
 function wireControlSelector(el, rerender) {
   const d = work._draft, f = d.cf;
   const q = el.querySelector("#wb-cf-q");
-  if (q) q.oninput = () => { f.q = q.value; clearTimeout(state._cfT); state._cfT = setTimeout(rerender, 250); };
+  /* A search field redraws its workbench a moment after the last key. A button pressed across that moment was
+     replaced under the pointer and the click was lost (measured on 1.21.0 in the Assess workbench: an answer
+     pressed 200 ms after typing and held 150 ms was not recorded). The redraw waits until the pointer is up
+     (v1.22.0), here and in the two other search fields that redraw. */
+  if (q) q.oninput = () => { f.q = q.value; clearTimeout(state._cfT); state._cfT = setTimeout(() => whenReleased(rerender), 250); };
   const s = el.querySelector("#wb-cf-set"); if (s) s.onchange = () => { f.set = s.value; rerender(); };
   el.querySelectorAll("[data-dim]").forEach(x => x.onchange = () => { f.dims[x.dataset.dim] = x.value; rerender(); });
   el.querySelectorAll("[data-selreq]").forEach(x => x.onchange = () => {
@@ -3556,17 +3701,23 @@ function buildAssessObjects(performer) {
   const counts = { satisfied: 0, "not-satisfied": 0, inconclusive: 0 };
   reqs.forEach(id => { const r = a.results[id]?.result; if (r) counts[r]++; });
   const agg = counts["not-satisfied"] ? "not-satisfied" : (counts.inconclusive || counts.satisfied < reqs.length) ? "inconclusive" : "satisfied";
-  const asmtId = mintId("asmt", "check-" + today());
+  /* The ids are minted from the day, and a second check on the same day is a second Assessment
+     (v1.22.0; backlog #71 point 6). Until 1.21.0 it took the id of the first and replaced it in the
+     graph, with its Findings. The first check of a day keeps the id it always had; the n-th carries
+     its number, and so do its Findings. */
+  let nth = 1;
+  while (state.objects.has(mintId("asmt", "check-" + today() + (nth > 1 ? "-" + nth : "")))) nth++;
+  const asmtId = mintId("asmt", "check-" + today() + (nth > 1 ? "-" + nth : ""));
   const asmt = { id: asmtId, version: "1", lifecycle: "draft", title: `Check ${today()} — ${cur.label}`,
     "subject-refs": reqs, method: manualMethod(),   // a person answers the form: a manual assessment, under the standard facet (v1.15.0)
     "performer-ref": performer,
     time: new Date().toISOString(), result: agg };
   const findings = reqs.filter(id => a.results[id]?.result === "not-satisfied").map((id, i) => {
-    const fid = mintId("finding", "f-" + today() + "-" + (i + 1));
+    const fid = mintId("finding", "f-" + today() + (nth > 1 ? "-check-" + nth : "") + "-" + (i + 1));
     return authorRecord({ id: fid, version: "1", label: "F-" + (i + 1), lifecycle: "draft",
       "assessment-ref": asmtId, "requirement-ref": id, state: "open",
       actions: [{ description: "Remediate: " + (tt(state.objects.get(id)?.obj.title) || id) + (a.results[id]?.note ? " — " + a.results[id].note : ""), status: "planned" }] },
-      provenanceNow(), stored(fid));
+      provenanceNow());   // until 1.21.0 a Finding rewritten unchanged kept the author it named; since 1.22.0 none is rewritten
   });
   return [asmt, ...findings];
 }
@@ -3585,7 +3736,7 @@ function wireAssessWb(el) {
     if (p.refused) refuse(err, p.refused); else accept(err);
     return p.ref;
   };
-  const qq = el.querySelector("#wb-a-q"); if (qq) qq.oninput = () => { d.azq = qq.value; clearTimeout(state._azT); state._azT = setTimeout(rerender, 300); };
+  const qq = el.querySelector("#wb-a-q"); if (qq) qq.oninput = () => { d.azq = qq.value; clearTimeout(state._azT); state._azT = setTimeout(() => whenReleased(rerender), 300); };
   el.querySelectorAll("[data-az]").forEach(b => b.onclick = () => {
     const [id, res] = b.dataset.az.split("|");
     work.assess.results[id] = { ...(work.assess.results[id] || {}), result: work.assess.results[id]?.result === res ? null : res };
@@ -3712,8 +3863,8 @@ function wireMapWb(el) {
        form: until 1.11.0 it was the performer of the Assess workbench, or the word "author".
        A Mapping is one claim, added by one press of this button: it names who adds it, today, also where
        a Mapping of that id is in the graph already - and so a Mapping an earlier version wrote under a
-       word gets a named author when somebody adds it again. (An Implementation or a Finding written
-       again unchanged keeps what it names, because those workbenches rewrite every record at once.) */
+       word gets a named author when somebody adds it again. (An Implementation written
+       again unchanged keeps what it names, because its workbench rewrites every record at once.) */
     const who = requiredParty("mapping", work.who, work.ns);
     if (who.refused) { refuse(err, who.refused); return; }
     const m = { id: mintId("map", (d.mapSrc.split("/").pop()) + "--" + (d.mapTgt.split("/").pop() || "ext")),
@@ -3740,21 +3891,43 @@ function wireMapWb(el) {
    removed nothing, and the resolved package held what the Tailoring excludes. A select by predicate
    is not resolved by this page; until 1.20.0 it was passed over and the package left without what it
    selects. Since 1.21.0 it is an error of the resolution, and the scope shown is said to be the
-   members of the selected Sets only. */
+   members of the selected Sets only.
+   What is in force and what is changed (v1.22.0; backlog #71 points 15 to 17, measured on copies of
+   the example folder with reader 1.21.0):
+   - A withdrawn Requirement that a selected Set still lists is not in force. The reference's
+     risk-coverage drops it from the selection and says how many; until 1.21.0 this page counted it
+     and wrote it into the resolved package. It is left out now, and the preview says how many.
+   - An operation on a Requirement outside the scope changes nothing in the package. Until 1.21.0 it
+     was counted as "modified" and shown as a change, of a Requirement the package does not hold.
+     It is named now as not applied, with the reason (the Tailoring excludes the Requirement, or no
+     selected Set holds it), and is no error: the package is what the Tailoring decides. No validator
+     has a word for such an operation. With a select by predicate the scope is a lower bound, and so
+     the page says of an operation outside it only that it is not shown as applied. */
 const RESOLVE_APPLIES = ["set-modality", "set-parameter", "replace-prose"];
 function resolveTailoring(tObj) {
-  const scope = new Set(), errors = [];
+  const scope = new Set(), errors = [], unapplied = [];
+  let open = false;
   (tObj.selects || []).forEach((s, i) => {
     if (s["set-ref"]) expandSet(s["set-ref"]).forEach(id => scope.add(id));
-    else errors.push(`selects[${i}] is a select by predicate, which this page does not resolve: the scope below holds the members of the selected Sets only`);
+    else { open = true; errors.push(`selects[${i}] is a select by predicate, which this page does not resolve: the scope below holds the members of the selected Sets only`); }
   });
-  for (const ex of tObj.excludes || []) expandSet(ex.ref).forEach(id => scope.delete(id));
+  const excluded = new Set();
+  for (const ex of tObj.excludes || []) expandSet(ex.ref).forEach(id => { excluded.add(id); scope.delete(id); });
+  const withdrawn = [...scope].filter(id => state.objects.get(id)?.obj.lifecycle === "withdrawn").sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  withdrawn.forEach(id => scope.delete(id));
   const resolved = new Map(), touched = new Map();
   const seen = new Set();
   for (const op of tObj.operations || []) {
     const key = [op["requirement-ref"], op["statement-id"], op.parameter, op.field, op.facet].join("|");
     if (seen.has(key)) { errors.push(`same-target conflict on ${key}`); continue; }
     seen.add(key);
+    const target = op["requirement-ref"];
+    if (state.objects.has(target) && !scope.has(target)) {
+      unapplied.push(excluded.has(target) ? `${op.op} on ${target} is not applied: the Tailoring excludes that Requirement`
+        : withdrawn.includes(target) ? `${op.op} on ${target} is not applied: that Requirement is withdrawn and not in the scope`
+        : open ? `${op.op} on ${target} is not shown as applied: no selected Set holds that Requirement, and the select by predicate is not resolved here`
+        : `${op.op} on ${target} is not applied: no selected Set holds that Requirement`);
+      continue; }
     if (!RESOLVE_APPLIES.includes(op.op)) {
       errors.push(`${op.op} on ${op["requirement-ref"]} is not applied: this page applies ${RESOLVE_APPLIES.join(", ")} and no other operation`);
       continue; }
@@ -3782,10 +3955,10 @@ function resolveTailoring(tObj) {
       Object.assign(stmt.prose, op.prose);
     }
   }
-  return { scope, resolved, touched, errors };
+  return { scope, resolved, touched, errors, unapplied, withdrawn };
 }
 async function exportResolved(tObj) {
-  const { scope, resolved, errors } = resolveTailoring(tObj);
+  const { scope, resolved, errors, withdrawn } = resolveTailoring(tObj);
   if (errors.length) { l.err("cannot export: resolution has errors — " + errors[0]); return; }
   /* textifyJs (v1.11.0): a Requirement authored in the workbench holds its title as plain text in the
      graph; until 1.10.0 it left in a resolved package that way, and the kernel refuses it. */
@@ -3800,9 +3973,10 @@ async function exportResolved(tObj) {
   a.download = slug(tObj.label || "resolved") + "-resolved.zip"; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 5000);
   l.ok(`resolved package exported: ${objs.length} requirements, fresh manifest, provenance records the Tailoring (Appendix B step 4)${exportAttestationNote(files)}`);
+  if (withdrawn.length) l.info(`${withdrawn.length} withdrawn requirement(s) of the selected Sets are not in the package (first: ${withdrawn[0]})`);
 }
 function resolvedPreviewHtml(tObj) {
-  const { scope, resolved, touched, errors } = resolveTailoring(tObj);
+  const { scope, resolved, touched, errors, unapplied, withdrawn } = resolveTailoring(tObj);
   const cards = [...touched.entries()].slice(0, 40).map(([id, notes]) => {
     const o = resolved.get(id);
     return `<div class="stmt"><a class="reflink" data-ref="${esc(id)}"><b>${esc(o.label || id)}</b></a>
@@ -3813,6 +3987,8 @@ function resolvedPreviewHtml(tObj) {
   }).join("");
   return `<div class="nano sectionlabel">Resolved preview — operations applied in list order to deep copies (Appendix B step 3)</div>
     ${errors.length ? errors.map(e => `<div class="verdict-bad" data-resolve-error>✗ ${esc(e)}</div>`).join("") + `<div class="hint" data-resolve-refused>No resolved package is written while the resolution has ${errors.length === 1 ? "this error" : "these errors"}: it would leave without what the Tailoring decides.</div>` : ""}
+    ${unapplied.map(n => `<div class="hint" data-resolve-note>○ ${esc(n)}</div>`).join("")}
+    ${withdrawn.length ? `<div class="hint" data-resolve-withdrawn="${withdrawn.length}">○ ${withdrawn.length} withdrawn requirement(s) that a selected Set lists are not in force and not in the scope (first: ${esc(withdrawn[0])})</div>` : ""}
     <div class="wbrow"><span class="chip"><b>${scope.size}</b> requirements in resolved scope</span>
       <span class="chip"><b>${touched.size}</b> modified</span>
       <button class="primary" id="wb-t-export-resolved" ${errors.length ? "disabled" : ""}>⤓ Export resolved package (.zip)</button></div>
@@ -3830,7 +4006,7 @@ function renderStageFn(key) {
     state.stageSel = state.stageSel || {}; state.stageSel.mapRel = p.dataset.mrel; renderStageFn("map"); });
   const mq = el.querySelector("#mapq");
   if (mq) mq.oninput = e => { state.stageSel = state.stageSel || {}; state.stageSel.mapQ = e.target.value;
-    clearTimeout(state._mqT); state._mqT = setTimeout(() => renderStageFn("map"), 250); };
+    clearTimeout(state._mqT); state._mqT = setTimeout(() => whenReleased(() => renderStageFn("map")), 250); };
   if (key === "author") wireAuthorWb(el);
   if (key === "tailor") {
     wireTailorWb(el);
