@@ -706,6 +706,21 @@ and in `readme.md`; this file says only what is done and what is next.
   vectors of the family `composition` give what they expect. The pack
   builder's inlined copy of the rules follows.
 
+- An operation that changes a statement names it (build 0.9.23; backlog
+  #96, rule OPERATION-1 of `validate_core.py`). `jscOperationTargets`
+  reads the operations of every Tailoring and gives one entry for a
+  `set-modality`, a `set-parameter` or a `replace-prose` without a
+  `statement-id` (or with an empty one), and one for a `set-parameter`
+  on a parameter its statement does not declare; `jscCheckGraph` files
+  each as an error of the area `reference`, in the reference's words. A
+  `statement-id` the Requirement does not have stays with
+  `jscClosureErrors`. Measured: the fifteen `operation-targets` vectors
+  of the family `reference` give what they expect, and a whole set made
+  of one of them gets its three errors in order. 194 tests of the app's
+  suite pass. The Tailor page and the profile import write a
+  `statement-id` on every such operation (read in `tailor.html` and
+  `jascon-oscal.js`; the suite's exports pass the reference).
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written

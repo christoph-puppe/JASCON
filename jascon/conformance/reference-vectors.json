@@ -1,5 +1,5 @@
 {
- "description": "Reference taxonomy (B.1.1 as amended; backlog #16 - run 2's Blocker P9b-1). CLOSURE-REQUIRED references must land in-bundle: Set members[].ref, Tailoring selects/excludes/operation targets (+ statement-id existence), Implementation component-ref/requirement-ref (+ basis-ref against the component's authorizations, D5), Finding assessment-ref/requirement-ref, Mapping source/target-scope statement ids WHEN the endpoint is in-bundle. LANDMARK references resolve outside the bundle by design: Mapping endpoints, party/authority URIs, evidence refs, external schema/reference URLs, attestation subjects (self-verifying via digest). Each vector is a mini-bundle; expected-errors 0 = closes. Decided on 2026-11-14 (backlog #83, D10): a `statement-id` anywhere inside a facet payload of a Requirement is held as a `by-statement` key is held. Alone it names a statement of the host; beside a `requirement-ref` it names a statement of that Requirement, which binds where the bundle holds it; a `requirement-ref` alone names a Requirement as a whole. A `private:` facet is not read. Fragment references (backlog #82, FRAGMENT-1; D9): `fragment-references` - each case is a mini-bundle, with the part of a manifest it needs under `manifest` where it needs one. An object refers to something as `#id` in two forms: `(#id)` in a string at any depth, the id being at least one character and none of space, tab, CR, LF and `)`; and the whole of a string that begins with `#` and is longer than that, under a member named `href`. A `private:` facet is not read, under `facets` or under an Assessment's `method`. `expected` gives the number of such references (`total`) and how many name each kind, the first kind that fits being counted, in this order: `resource` - an entry of `resources` with that `id` in the references@1 facet of the object itself or of a Set that lists it as a member, directly or through nested Sets; `object` - an object of the bundle whose id ends, after its last `/`, in that id, A to Z compared as a to z; `statement` - `<object>_<statement id>`, split at one of its `_`, the object found as before and the statement one of its own; `parameter` - the `name` of a parameter of a statement in the bundle; `source` - the `uuid` of an entry of the manifest's `provenance.sources`. `nothing` lists [object id, id] for the rest, in the order of the object ids, then of the ids named. It is a report: nothing fails by it.",
+ "description": "Reference taxonomy (B.1.1 as amended; backlog #16 - run 2's Blocker P9b-1). CLOSURE-REQUIRED references must land in-bundle: Set members[].ref, Tailoring selects/excludes/operation targets (+ statement-id existence), Implementation component-ref/requirement-ref (+ basis-ref against the component's authorizations, D5), Finding assessment-ref/requirement-ref, Mapping source/target-scope statement ids WHEN the endpoint is in-bundle. LANDMARK references resolve outside the bundle by design: Mapping endpoints, party/authority URIs, evidence refs, external schema/reference URLs, attestation subjects (self-verifying via digest). Each vector is a mini-bundle; expected-errors 0 = closes. Decided on 2026-11-14 (backlog #83, D10): a `statement-id` anywhere inside a facet payload of a Requirement is held as a `by-statement` key is held. Alone it names a statement of the host; beside a `requirement-ref` it names a statement of that Requirement, which binds where the bundle holds it; a `requirement-ref` alone names a Requirement as a whole. A `private:` facet is not read. Fragment references (backlog #82, FRAGMENT-1; D9): `fragment-references` - each case is a mini-bundle, with the part of a manifest it needs under `manifest` where it needs one. An object refers to something as `#id` in two forms: `(#id)` in a string at any depth, the id being at least one character and none of space, tab, CR, LF and `)`; and the whole of a string that begins with `#` and is longer than that, under a member named `href`. A `private:` facet is not read, under `facets` or under an Assessment's `method`. `expected` gives the number of such references (`total`) and how many name each kind, the first kind that fits being counted, in this order: `resource` - an entry of `resources` with that `id` in the references@1 facet of the object itself or of a Set that lists it as a member, directly or through nested Sets; `object` - an object of the bundle whose id ends, after its last `/`, in that id, A to Z compared as a to z; `statement` - `<object>_<statement id>`, split at one of its `_`, the object found as before and the statement one of its own; `parameter` - the `name` of a parameter of a statement in the bundle; `source` - the `uuid` of an entry of the manifest's `provenance.sources`. `nothing` lists [object id, id] for the rest, in the order of the object ids, then of the ids named. It is a report: nothing fails by it. Operation targets (backlog #96, OPERATION-1; D13): `operation-targets` - each case is a mini-bundle; `expected` lists [id of the Tailoring, index of the operation, \"statement\" or \"parameter\"], the Tailorings in the order of their ids by UTF-16 code unit, the operations in the order of the document. \"statement\": a set-modality, a set-parameter or a replace-prose carries no statement-id, or an empty one; this is held whether or not the bundle holds the Requirement. \"parameter\": a set-parameter names a statement the bundle holds and a parameter that statement does not declare; names are compared exactly. A statement-id that names no statement of the Requirement is the closure check's and is not listed here, and neither is an operation on a Requirement the bundle does not hold.",
  "vectors": [
   {
    "name": "set-member-closes",
@@ -1924,6 +1924,1202 @@
     "parameter": 0,
     "source": 0
    }
+  }
+ ],
+ "operation-targets": [
+  {
+   "name": "a-set-modality-without-a-statement-id-names-no-statement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "modality": "must"
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "statement"
+    ]
+   ]
+  },
+  {
+   "name": "a-set-parameter-without-a-statement-id-names-no-statement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "parameter": "n",
+       "value": 3
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "statement"
+    ]
+   ]
+  },
+  {
+   "name": "a-replace-prose-without-a-statement-id-names-no-statement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "replace-prose",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "prose": {
+        "en": "Do the other thing."
+       },
+       "intent": "editorial"
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "statement"
+    ]
+   ]
+  },
+  {
+   "name": "an-empty-statement-id-names-no-statement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "",
+       "modality": "must"
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "statement"
+    ]
+   ]
+  },
+  {
+   "name": "a-set-parameter-on-a-parameter-no-statement-declares",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s1",
+       "parameter": "m",
+       "value": 3
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "parameter"
+    ]
+   ]
+  },
+  {
+   "name": "a-parameter-another-statement-declares-is-not-this-statements",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s2",
+       "parameter": "n",
+       "value": 3
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "parameter"
+    ]
+   ]
+  },
+  {
+   "name": "a-parameter-name-that-differs-in-case-is-another-name",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s1",
+       "parameter": "N",
+       "value": 3
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "parameter"
+    ]
+   ]
+  },
+  {
+   "name": "statement-ids-that-differ-in-case-are-two-statements",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "S1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "S1",
+       "parameter": "n",
+       "value": 3
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "parameter"
+    ]
+   ]
+  },
+  {
+   "name": "the-three-kinds-with-their-statement-and-a-declared-parameter-pass",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s2",
+       "modality": "must"
+      },
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s1",
+       "parameter": "n",
+       "value": 3
+      },
+      {
+       "op": "replace-prose",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s1",
+       "prose": {
+        "en": "Do the other thing."
+       },
+       "intent": "editorial"
+      }
+     ]
+    }
+   ],
+   "expected": []
+  },
+  {
+   "name": "the-five-other-kinds-carry-no-statement-id",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-field",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "field": "label",
+       "value": "R-1"
+      },
+      {
+       "op": "add-relation",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "relation": {
+        "type": "related",
+        "ref": "https://ns.auth.gov/fw/req/2"
+       }
+      },
+      {
+       "op": "attach-facet",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "facet": "private:note@1",
+       "payload": {
+        "text": "x"
+       }
+      },
+      {
+       "op": "detach-facet",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "facet": "private:other@1"
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/u",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "remove-relation",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "relation": {
+        "type": "related",
+        "ref": "https://ns.auth.gov/fw/req/2"
+       }
+      }
+     ]
+    }
+   ],
+   "expected": []
+  },
+  {
+   "name": "a-statement-the-requirement-does-not-have-is-the-closure-checks-and-not-said-twice",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s9",
+       "parameter": "n",
+       "value": 3
+      }
+     ]
+    }
+   ],
+   "expected": []
+  },
+  {
+   "name": "a-requirement-the-bundle-does-not-hold-is-not-asked-for-its-parameters",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/away",
+       "statement-id": "s1",
+       "parameter": "n",
+       "value": 3
+      }
+     ]
+    }
+   ],
+   "expected": []
+  },
+  {
+   "name": "an-operation-without-a-statement-is-held-whether-or-not-the-bundle-holds-the-requirement",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ns.auth.gov/fw/req/away",
+       "modality": "must"
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "statement"
+    ]
+   ]
+  },
+  {
+   "name": "a-withdrawn-tailoring-is-held-all-the-same",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/t",
+     "version": "1",
+     "lifecycle": "withdrawn",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "replace-prose",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "prose": {
+        "en": "Do the other thing."
+       },
+       "intent": "editorial"
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/t",
+     0,
+     "statement"
+    ]
+   ]
+  },
+  {
+   "name": "tailorings-in-the-order-of-their-ids-and-operations-in-the-order-of-the-document",
+   "objects": [
+    {
+     "id": "https://ns.auth.gov/fw/req/1",
+     "version": "1",
+     "lifecycle": "active",
+     "statements": [
+      {
+       "id": "s1",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing {param:n}."
+       },
+       "parameters": [
+        {
+         "name": "n",
+         "type": "integer"
+        }
+       ]
+      },
+      {
+       "id": "s2",
+       "modality": "must",
+       "obligated-parties": [
+        "https://ns.auth.gov/fw/p/o"
+       ],
+       "prose": {
+        "en": "Do the thing."
+       }
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/set/all",
+     "version": "1",
+     "lifecycle": "active",
+     "members": [
+      {
+       "ref": "https://ns.auth.gov/fw/req/1",
+       "sequence": 10
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/b",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-modality",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s1",
+       "modality": "must"
+      },
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "statement-id": "s2",
+       "parameter": "n",
+       "value": 3
+      },
+      {
+       "op": "replace-prose",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "prose": {
+        "en": "Do the other thing."
+       },
+       "intent": "editorial"
+      }
+     ]
+    },
+    {
+     "id": "https://ns.auth.gov/fw/tailoring/a",
+     "version": "1",
+     "lifecycle": "active",
+     "selects": [
+      {
+       "set-ref": "https://ns.auth.gov/fw/set/all"
+      }
+     ],
+     "operations": [
+      {
+       "op": "set-parameter",
+       "requirement-ref": "https://ns.auth.gov/fw/req/1",
+       "parameter": "n",
+       "value": 3
+      }
+     ]
+    }
+   ],
+   "expected": [
+    [
+     "https://ns.auth.gov/fw/tailoring/a",
+     0,
+     "statement"
+    ],
+    [
+     "https://ns.auth.gov/fw/tailoring/b",
+     1,
+     "parameter"
+    ],
+    [
+     "https://ns.auth.gov/fw/tailoring/b",
+     2,
+     "statement"
+    ]
+   ]
   }
  ]
 }

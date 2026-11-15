@@ -269,6 +269,14 @@ Two vectors in the family `composition` (11); 785 in all. Run under
 PowerShell 7.4 on Linux over the vectors, the five bundles, the worked
 pack and the example folder: ALL GREEN in 107.9 s; the workflow runs it
 on Windows PowerShell 5.1.
+CHANGED 2026-11-15 (backlog #96, decided by the author that day):
+OPERATION-1 (Operation-Targets) fails a bundle in which a set-modality, a
+set-parameter or a replace-prose of a Tailoring names no statement, or a
+set-parameter names a parameter its statement does not declare. An empty
+statement-id names no statement. Ids and names are compared by code unit.
+A statement-id the Requirement does not have stays with Closure-Errors
+and is not said twice. 15 `operation-targets` vectors in the family
+`reference` (56); 800 in all.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors
@@ -2184,6 +2192,59 @@ function Withdrawn-Reference-Errors($objs) {
     }
     return ,$errs
 }
+# OPERATION-1 (backlog #96; D13). A modality, a parameter and a prose are a
+# statement's: a set-modality, a set-parameter and a replace-prose name the
+# statement they change, and a set-parameter names a parameter that
+# statement declares. An entry is the id of the Tailoring, the index of the
+# operation and "statement" or "parameter"; the Tailorings in the order of
+# their ids, the operations in the order of the document. An empty
+# statement-id names no statement. A statement-id that names no statement
+# of the Requirement is the closure check's and is not said twice, and an
+# operation on a Requirement the bundle does not hold is closure-required.
+# Ids and names are compared by code unit.
+$OPERATION_RULE = 'an operation that changes a statement names it - set-modality, set-parameter and replace-prose carry a statement-id, and a set-parameter names a parameter that statement declares'
+$OPERATION_ON_STATEMENT = New-Object 'System.Collections.Generic.HashSet[string]' ([System.StringComparer]::Ordinal)
+foreach ($k in @('set-modality', 'set-parameter', 'replace-prose')) { [void]$OPERATION_ON_STATEMENT.Add($k) }
+function Operation-Targets($objs) {
+    $out = New-Object System.Collections.ArrayList
+    $ids = New-Object System.Collections.ArrayList
+    foreach ($oid in $objs.Keys) { [void]$ids.Add([string]$oid) }
+    foreach ($oid in (Sorted-Ordinal $ids)) {
+        if (-not [string]::Equals([string]$objs[$oid].t, 'tailoring', $ORD)) { continue }
+        $o = $objs[$oid].o
+        if (-not (Is-List $o['operations'])) { continue }
+        $i = -1
+        foreach ($op in $o['operations']) {
+            $i++
+            if (-not ($op['op'] -is [string]) -or -not $OPERATION_ON_STATEMENT.Contains($op['op'])) { continue }
+            $sid = $op['statement-id']
+            if (-not ($sid -is [string]) -or $sid.Length -eq 0) { [void]$out.Add(@{id = $oid; i = $i; what = 'statement'}); continue }
+            if (-not [string]::Equals($op['op'], 'set-parameter', $ORD)) { continue }
+            $ref = $op['requirement-ref']
+            if (-not ($ref -is [string]) -or -not $objs.Contains($ref)) { continue }
+            if (-not [string]::Equals([string]$objs[$ref].t, 'requirement', $ORD)) { continue }
+            $stmt = $null
+            foreach ($x in $objs[$ref].o['statements']) { if (Str-Eq $x['id'] $sid) { $stmt = $x; break } }
+            if ($null -eq $stmt) { continue }
+            $declared = $false
+            if (Is-List $stmt['parameters']) { foreach ($d in $stmt['parameters']) { if (Str-Eq $d['name'] $op['parameter']) { $declared = $true; break } } }
+            if (-not $declared) { [void]$out.Add(@{id = $oid; i = $i; what = 'parameter'}) }
+        }
+    }
+    return ,$out
+}
+function Operation-Target-Errors($objs) {
+    $errs = New-Object System.Collections.ArrayList
+    foreach ($x in (Operation-Targets $objs)) {
+        $op = @($objs[$x.id].o['operations'])[$x.i]
+        if ([string]::Equals($x.what, 'statement', $ORD)) {
+            [void]$errs.Add("$($x.id): operations[$($x.i)]: $($op['op']) names no statement (OPERATION-1: $OPERATION_RULE)")
+        } else {
+            [void]$errs.Add("$($x.id): operations[$($x.i)]: set-parameter names the parameter '$($op['parameter'])', which statement '$($op['statement-id'])' of $($op['requirement-ref']) does not declare (OPERATION-1: $OPERATION_RULE)")
+        }
+    }
+    return ,$errs
+}
 # FRAGMENT-1 (backlog #82; D9). An object refers to something as `#id` in
 # two forms: `(#id)` in a string at any depth, and the whole of a string
 # that begins with `#` under a member named `href`. A `private:` facet is
@@ -2537,6 +2598,19 @@ function Run-References {
         $wantText = Format-Canonical $case['expected']
         if (Str-Eq $gotText $wantText) { OK 'reference' }
         else { FAIL 'reference' "fragment-references $($case['name']): expected $wantText, got $gotText" }
+    }
+    # OPERATION-1 (backlog #96): each entry is an error of the bundle
+    foreach ($case in (Load-Vectors 'reference-vectors.json')['operation-targets']) {
+        $objs = To-Objs $case['objects']
+        $got = $null
+        if ($objs.Count -eq @($case['objects']).Count) {
+            $got = New-Object System.Collections.ArrayList
+            foreach ($x in (Operation-Targets $objs)) { [void]$got.Add(@($x.id, $x.i, $x.what)) }
+        }
+        $gotText = Format-Canonical $got
+        $wantText = Format-Canonical $case['expected']
+        if (Str-Eq $gotText $wantText) { OK 'reference' }
+        else { FAIL 'reference' "operation-targets $($case['name']): expected $wantText, got $gotText" }
     }
 }
 $DEV_NEXT = Ord-Table @{investigating = @('pending', 'withdrawn'); pending = @('approved', 'withdrawn'); approved = @(); withdrawn = @()}
@@ -5170,6 +5244,7 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     Binds-Report $section $atts (Sha256-Hex $rawManifest) $listedObjs (Read-Kept-Packs $bdir)
     foreach ($e in (Closure-Errors $bundleObjs)) { FAIL $section $e }
     foreach ($e in (Withdrawn-Reference-Errors $bundleObjs)) { FAIL $section $e }     # WITHDRAWN-1
+    foreach ($e in (Operation-Target-Errors $bundleObjs)) { FAIL $section $e }       # OPERATION-1
     foreach ($e in (Duty-Errors $withAtts $pinnedDecl $envelopes $TRUSTED)) { FAIL $section $e }
     foreach ($e in (Kernel-Pin-Errors $manifest $bundleObjs)) { FAIL $section $e }
     foreach ($e in (Listed-Attestation-Errors $listedObjs)) { FAIL $section $e }      # MANIFEST-1

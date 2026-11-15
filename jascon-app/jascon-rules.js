@@ -1075,6 +1075,46 @@ function jscWithdrawnReferences(objs) {
 const jscWithdrawnReferenceErrors = objs => jscWithdrawnReferences(objs)
   .map(e => `${e.id}: ${e.edge} names ${e.ref}, which is withdrawn (WITHDRAWN-1: ${JSC_WITHDRAWN_RULES["WITHDRAWN-1"]})`);
 
+/* ---------- OPERATION-1: an operation that changes a statement names it (backlog #96; D13) ----------
+   A modality, a parameter and a prose are a statement's: a set-modality, a
+   set-parameter and a replace-prose carry a statement-id, and a
+   set-parameter names a parameter that statement declares. An empty
+   statement-id names no statement. A statement-id that names no statement of
+   the Requirement is the closure check's and is not said twice, and an
+   operation on a Requirement the set does not hold is closure-required.
+   -> [{ id, index, what }], `what` being "statement" or "parameter"; the
+   Tailorings in the order of their ids, the operations in the order of the
+   document. */
+const JSC_OPERATION_RULES = {
+  "OPERATION-1": "an operation that changes a statement names it - set-modality, set-parameter and replace-prose " +
+    "carry a statement-id, and a set-parameter names a parameter that statement declares",
+};
+const JSC_OPERATION_ON_STATEMENT = ["set-modality", "set-parameter", "replace-prose"];
+function jscOperationTargets(objs) {
+  const out = [];
+  for (const id of [...objs.keys()].sort()) {
+    const { type, obj } = objs.get(id);
+    if (type !== "tailoring") continue;
+    (Array.isArray(obj.operations) ? obj.operations : []).forEach((op, index) => {
+      if (!jscIsPlainObject(op) || !JSC_OPERATION_ON_STATEMENT.includes(op.op)) return;
+      const sid = op["statement-id"];
+      if (typeof sid !== "string" || sid === "") { out.push({ id, index, what: "statement" }); return; }
+      if (op.op !== "set-parameter") return;
+      const tgt = objs.get(op["requirement-ref"]);
+      if (!tgt || tgt.type !== "requirement") return;
+      const stmt = tgt.obj.statements.find(x => x.id === sid);
+      if (!stmt) return;
+      if (!(stmt.parameters || []).some(d => d.name === op.parameter)) out.push({ id, index, what: "parameter" });
+    });
+  }
+  return out;
+}
+const jscOperationTargetErrors = objs => jscOperationTargets(objs).map(e => {
+  const op = objs.get(e.id).obj.operations[e.index], said = `(OPERATION-1: ${JSC_OPERATION_RULES["OPERATION-1"]})`;
+  return e.what === "statement" ? `${e.id}: operations[${e.index}]: ${op.op} names no statement ${said}`
+    : `${e.id}: operations[${e.index}]: set-parameter names the parameter '${op.parameter}', which statement '${op["statement-id"]}' of ${op["requirement-ref"]} does not declare ${said}`;
+});
+
 /* ---------- FRAGMENT-1: what a reference of the form #id names (backlog #82; D9) ----------
    An object refers to something as `#id` in two forms: `(#id)` in a string
    at any depth, and the whole of a string that begins with `#` under a
@@ -3573,6 +3613,7 @@ async function jscCheckGraph(g, verified, opts) {
   }
   const verify = trusted ? { envelopes, trusted } : null;
   pass("reference", "error")(jscClosureErrors(objs));
+  pass("reference", "error")(jscOperationTargetErrors(objs));          // OPERATION-1 (backlog #96)
   pass("lifecycle", "error")(jscWithdrawnReferenceErrors(objs));       // WITHDRAWN-1 (backlog #93)
   const pinnedSchemas = new Map(), pinnedDecl = new Map();
   for (const f of g.facetSchemas) {
@@ -3673,6 +3714,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscRiskLinkNotes, JSC_AUTHOR_RULES, jscAuthorReport, jscUtcDay, jscReviewReport, jscAuthorReviewLines,
     JSC_DRAFT_RULES, jscDraftMemberReport, jscDraftLines,
     JSC_WITHDRAWN_RULES, JSC_WITHDRAWN_EDGES, jscWithdrawnReferences, jscWithdrawnReferenceErrors,
+    JSC_OPERATION_RULES, jscOperationTargets, jscOperationTargetErrors,
     JSC_REFERENCES_FACET, JSC_FRAGMENT_RULES, jscAsciiLower, jscFragmentsOf, jscFragmentReport, jscFragmentLines,
     JSC_HISTORY_RULES, jscHistoryErrors, jscFacetStatementAddresses, JSC_STDLIB_VERSIONS,
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,

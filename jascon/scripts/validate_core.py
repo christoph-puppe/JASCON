@@ -81,6 +81,12 @@ Runs, in order:
    form `#id` name - a resource of references@1, an object, a statement,
    a parameter, a source document of the manifest - and of those that
    name nothing. Nothing fails by it.
+12. OPERATION-1 (backlog #96, author 2026-11-15: "Do it"): a set-modality,
+   a set-parameter and a replace-prose name the statement they change, and
+   a set-parameter names a parameter that statement declares. Before it
+   such an operation without a statement-id passed, and with it the checks
+   of a modality against its order and of a value against its declaration
+   asked nothing.
 
 Exit 0 = all green. Usage: uv run --with jsonschema validate_core.py [bundle-dir ...]
 """
@@ -1135,6 +1141,14 @@ def run_references():
         got = None if len(objs) != len(case["objects"]) else fragment_report(objs, case.get("manifest"))
         if got == case["expected"]: ok("reference")
         else: fail("reference", f"fragment-references {case['name']}: expected {case['expected']}, got {got}")
+    for case in v["operation-targets"]:                 # OPERATION-1 (backlog #96)
+        objs = {}
+        for o in case["objects"]:
+            t = inferType_single(o)
+            if t: objs[o["id"]] = (t, o)
+        got = None if len(objs) != len(case["objects"]) else [list(x) for x in operation_targets(objs)]
+        if got == case["expected"]: ok("reference")
+        else: fail("reference", f"operation-targets {case['name']}: expected {case['expected']}, got {got}")
 
 def inferType_single(o):
     m = [t for t in TYPES if VALIDATORS[t].is_valid(o)]
@@ -1941,6 +1955,62 @@ def withdrawn_references(objs):
 def withdrawn_reference_errors(objs):
     return [f"{oid}: {name} names {ref}, which is withdrawn (WITHDRAWN-1: {WITHDRAWN_RULES['WITHDRAWN-1']})"
             for oid, name, ref in withdrawn_references(objs)]
+
+# OPERATION-1 (2026-11-15, backlog #96; D13). A modality, a parameter and a
+# prose are a statement's. The kernel schema asks an operation for `op` and
+# `requirement-ref` only, and the checks that hold a modality to its order
+# and a value to its declaration look the statement up and asked nothing
+# where they found none. Measured on copies of the example folder before
+# this rule: a set-modality from must to may without a statement-id passed
+# at consumer tier without a Deviation, where the same operation with the
+# statement-id failed; a set-parameter with a text for an integer passed the
+# check of its value without a statement-id, and CHECK-12 took it as bound
+# all the same; a set-parameter on a parameter its statement does not
+# declare passed. An empty statement-id names no statement: an id has at
+# least one character.
+OPERATION_RULES = {
+    "OPERATION-1": "an operation that changes a statement names it - set-modality, set-parameter and replace-prose "
+                   "carry a statement-id, and a set-parameter names a parameter that statement declares",
+}
+OPERATION_ON_STATEMENT = ("set-modality", "set-parameter", "replace-prose")
+
+def operation_targets(objs):
+    """OPERATION-1 -> [(tailoring id, index of the operation, "statement" or
+    "parameter")], the Tailorings in the order of their ids, the operations in
+    the order of the document. "statement": the operation names no statement.
+    "parameter": a set-parameter names a statement the bundle holds and a
+    parameter that statement does not declare. A statement-id that names no
+    statement of the Requirement is the closure check's, and a Requirement
+    the bundle does not hold is closure-required: neither is said twice."""
+    out = []
+    for oid in by_code_unit(objs):
+        t, o = objs[oid]
+        if t != "tailoring": continue
+        for i, op in enumerate(o.get("operations") or []):
+            if op.get("op") not in OPERATION_ON_STATEMENT: continue
+            sid = op.get("statement-id")
+            if not isinstance(sid, str) or sid == "":
+                out.append((oid, i, "statement")); continue
+            if op["op"] != "set-parameter": continue
+            tgt = objs.get(op.get("requirement-ref"))
+            if not tgt or tgt[0] != "requirement": continue
+            stmt = next((x for x in tgt[1]["statements"] if x["id"] == sid), None)
+            if stmt is None: continue
+            if not any(d["name"] == op.get("parameter") for d in stmt.get("parameters") or []):
+                out.append((oid, i, "parameter"))
+    return out
+
+def operation_target_errors(objs):
+    errs = []
+    for oid, i, what in operation_targets(objs):
+        op = objs[oid][1]["operations"][i]
+        said = f"(OPERATION-1: {OPERATION_RULES['OPERATION-1']})"
+        if what == "statement":
+            errs.append(f"{oid}: operations[{i}]: {op['op']} names no statement {said}")
+        else:
+            errs.append(f"{oid}: operations[{i}]: set-parameter names the parameter '{op.get('parameter')}', which statement "
+                        f"'{op['statement-id']}' of {op['requirement-ref']} does not declare {said}")
+    return errs
 
 # FRAGMENT-1 (2026-11-14, backlog #82; D9). A text of a bundle refers to
 # something as `#id`: as the target of a link in a text, `(#id)`, or as the
@@ -3687,6 +3757,7 @@ def validate_bundle(bdir):
     for e in closure_errors(bundle_objs):
         fail(section, e)
     for e in withdrawn_reference_errors(bundle_objs): fail(section, e)      # WITHDRAWN-1
+    for e in operation_target_errors(bundle_objs): fail(section, e)         # OPERATION-1
     for e in tailoring_duty_errors(with_atts, pinned_decl=pinned_decl,
                                    envelopes=envelopes, trusted=TRUSTED):
         fail(section, e)
@@ -3811,6 +3882,7 @@ def validate_examples():
                  pkg_digest(raw_manifest), listed_objs, read_kept_packs(exdir))
     for e in closure_errors(exobjs): fail(section, e)
     for e in withdrawn_reference_errors(exobjs): fail(section, e)           # WITHDRAWN-1
+    for e in operation_target_errors(exobjs): fail(section, e)              # OPERATION-1
     # facet payloads against stdlib / the pins just loaded (#17) - the
     # example pass loaded the pins and never applied them
     for e in facet_errors([(oid, o) for oid, (t, o) in exobjs.items()], pinned): fail(section, e)

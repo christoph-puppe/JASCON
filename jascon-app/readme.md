@@ -7,7 +7,7 @@ have to switch on yourself: the suggestions of the Risk page and the drafts
 of the Checks page send text to a model service once you type a key (see
 "Suggestions from a model").
 
-State: build 0.9.22. This build has the frame (the hub, the settings page and
+State: build 0.9.23. This build has the frame (the hub, the settings page and
 the shared core) and nine tool pages, in the order of the work: Import,
 Browse, Risk, Tailor, Map, Implement, Checks, Assess and Validate. One view of the Risk page and
 the drafting of the Checks page can ask a language model; nothing else in
@@ -962,7 +962,10 @@ text in that language, the English text is shown, then whatever is there.
   error where an object in force leans on an object the set holds as
   withdrawn (area `lifecycle`), and FRAGMENT-1, a report of what the
   references of the form `#id` name and which name nothing (area
-  `reference`). What the page does not judge:
+  `reference`). Since build 0.9.23: OPERATION-1, an error where a
+  `set-modality`, a `set-parameter` or a `replace-prose` names no
+  statement, or a `set-parameter` a parameter its statement does not
+  declare (area `reference`). What the page does not judge:
   conditional-apply
   instances (no bundle has a place to carry one; the reference validator does
   not run them on a bundle either) and the bytes of a bundle on disk (line

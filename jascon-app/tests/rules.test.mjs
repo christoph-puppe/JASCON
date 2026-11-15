@@ -368,6 +368,27 @@ test("reference: what the references of the form #id name, kind by kind, and whi
     ["note", c.expected.nothing[0][0], "#ac-2_smt.z names nothing the bundle carries (FRAGMENT-1: reported; nothing fails)"]]);
   assert.deepEqual(res.report.lines.filter(l => l.rule === "FRAGMENT-1"), rules.jscFragmentLines(res.report.fragments));
 });
+test("reference: an operation that changes a statement names it, and a set-parameter a parameter that statement declares (OPERATION-1)", async () => {
+  const v = vectors("reference")["operation-targets"];
+  assert.equal(v.length, 15);
+  for (const c of v) {
+    const objs = authorTyped(c);
+    assert.deepEqual(rules.jscOperationTargets(objs).map(e => [e.id, e.index, e.what]), c.expected, c.name);
+    const errors = rules.jscOperationTargetErrors(objs);
+    assert.equal(errors.length, c.expected.length, c.name);
+    errors.forEach((m, i) => assert.ok(m.startsWith(`${c.expected[i][0]}: operations[${c.expected[i][1]}]: `) && m.endsWith(`(OPERATION-1: ${rules.JSC_OPERATION_RULES["OPERATION-1"]})`), `${c.name}: ${m}`));
+  }
+  /* as part of the check of a whole set: errors of the area `reference`, filed under the Tailoring, in the reference's words */
+  const c = v.find(x => x.name === "tailorings-in-the-order-of-their-ids-and-operations-in-the-order-of-the-document");
+  const file = obj => ({ path: "objects/" + obj.id.split("/").slice(-2).join("-") + ".json", text: core.jscSerialize(obj), kind: "object", type: core.jscInferType(obj), id: obj.id, origin: "imported" });
+  const g = core.jscGraphFrom(c.objects.map(file));
+  const res = await rules.jscCheckGraph(g, await core.jscVerify(g));
+  const said = `(OPERATION-1: ${rules.JSC_OPERATION_RULES["OPERATION-1"]})`, R1 = "https://ns.auth.gov/fw/req/1";
+  assert.deepEqual(res.findings.filter(f => f.area === "reference" && f.kind === "error").map(f => [f.object, f.message]), [
+    [c.expected[0][0], `operations[0]: set-parameter names no statement ${said}`],
+    [c.expected[1][0], `operations[1]: set-parameter names the parameter 'n', which statement 's2' of ${R1} does not declare ${said}`],
+    [c.expected[2][0], `operations[2]: replace-prose names no statement ${said}`]]);
+});
 test("author: a review-due that has passed on the day asked about (REVIEW-1)", () => {
   const v = vectors("author")["review-vectors"];
   assert.equal(v.length, 22);
