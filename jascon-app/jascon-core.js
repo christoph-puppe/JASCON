@@ -36,7 +36,7 @@
 
 /* ==JSC-PURE-START== */
 
-const JSC_BUILD = "0.9.24";
+const JSC_BUILD = "0.9.25";
 const JSC_TOOL = "JASCON-App " + JSC_BUILD;
 /* The kernel this app writes, and the kernels it reads (KERNEL-2: a tool
    stops at a pin it does not implement and names both). */
@@ -1031,7 +1031,8 @@ async function jscFetchBundle(url) {
     if (!f.text.includes('"envelope-ref"')) continue;
     let ref = null;
     try { ref = JSON.parse(f.text)["envelope-ref"]; } catch (e) { /* not JSON: nothing to follow */ }
-    if (typeof ref !== "string" || !ref || /^[a-z]+:|^\/|\.\./i.test(ref) || files.some(x => x.path === ref)) continue;
+    /* the pattern of jscPlainPath, beside_path (reference) and besideName (reader): a ref that leaves the folder is not fetched */
+    if (typeof ref !== "string" || !ref || /^[a-z][a-z0-9+.-]*:|^\/|\\|(^|\/)\.\.(\/|$)/i.test(ref) || files.some(x => x.path === ref)) continue;
     if (top && !top.includes(ref)) continue;   // the folder's listing is known and does not hold it
     try { files.push(await get(ref)); } catch (e) { /* a missing envelope is reported by the check, not by the load */ }
   }

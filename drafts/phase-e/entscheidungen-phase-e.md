@@ -834,16 +834,16 @@ wurde viermal mit einem Verbindungsabbruch abgewiesen); er steht auf
   andere verfasste Objekte es nennen, entfernt der erste Druck nichts
   und nennt sie; erst der zweite entfernt es.
 - **(5):** Eine Zeile der IFA-Pfadkarte besteht die Prüfung und ist
-  falsch (Zeile 13). Sie ist berichtet, nicht repariert: #98.
+  falsch (Zeile 13). Sie ist berichtet, nicht repariert: #101.
 - **(6):** Die IFA-Attestation behält Id und Version 1.1.1 bei
-  geändertem Manifest-Digest. Das war nicht vorgelegt: #98. Die
+  geändertem Manifest-Digest. Das war nicht vorgelegt: #101. Die
   Register und Pläne früherer Runden behalten ihre kurzen Ids.
 - **(7):** Die deutschen Summen sind gemischt: Grundschutz++ gemessen,
   der Anteil des MS-TLS-Katalogs vom Juli, weil er nicht gepinnt ist.
   Der Kopf des Kapitels sagt das. Und: README, zehn andere
   Handbuch-Dateien, die Evidence-Seite der Website und weitere nennen
   weiter die Juli-Zahlen, die Kapitel 1 nicht mehr hat (etwa 781, wo
-  Kapitel 1 jetzt 799 sagt): #98.
+  Kapitel 1 jetzt 799 sagt): #101.
 - **(8):** Die Ursache liegt im Test, nicht in der App, und nicht in
   der Reihenfolge der Tests: Ein Warten mit `waitForFunction(async …)`
   wartet nicht. Drei weitere Tests derselben Datei haben denselben
@@ -851,6 +851,6 @@ wurde viermal mit einem Verbindungsabbruch abgewiesen); er steht auf
 - **(9):** Gemessen: Alle sechs Filterfelder mit Zeitverzögerung
   verlieren den Klick, wenn die Taste über das Neuzeichnen hinweg
   gehalten wird (10 von 10). Das doppelte `id="ai-key"` kostet bei
-  „Forget the key" den ersten Druck. Beides steht als #98 im Backlog.
-- **Neu abgelegt, #98:** sieben Punkte aus dieser Runde.
+  „Forget the key" den ersten Druck. Beides steht als #101 im Backlog.
+- **Neu abgelegt, #101:** sieben Punkte aus dieser Runde.
 

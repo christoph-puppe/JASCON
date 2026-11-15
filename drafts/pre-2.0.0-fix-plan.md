@@ -756,10 +756,10 @@ register, "#97: what was found while closing the backlog". Branch:
 | #97 (2) | three translations without a second reader | taken as written | closed without a change |
 | #97 (3) | the titles of the CR26 overlay | the proposal: after the tag | waits for the next change of the CR26 converter |
 | #97 (4) | a CR26 comment that says "(parked)" | the proposal | built: the comment says what happens |
-| #97 (5) | `path_map_check` does not hold the type | the proposal | built; one wrong row of the IFA map found (#98) |
+| #97 (5) | `path_map_check` does not hold the type | the proposal | built; one wrong row of the IFA map found (#101) |
 | #97 (6) | short commit ids | the alternative: all at once | built; the IFA manifest and its Attestation written again |
 | #97 (7) | chapter 1 keeps July figures | the alternative: the whole chapter now | built; every corpus figure measured again |
 | #97 (8) | a test of the app that fails when run nearly alone | cause, plan, an issue, then close | the cause is in the test; issue 39 of the tracker holds it and the plan; closed here |
-| #97 (9) | what is left of the lost click in the app | the alternative: measure only | measured: six filter fields and one button lose a click; nothing built; filed as #98 |
+| #97 (9) | what is left of the lost click in the app | the alternative: measure only | measured: six filter fields and one button lose a click; nothing built; filed as #101 |
 
-Filed by this work, as #98: seven things it found and did not change.
+Filed by this work, as #101: seven things it found and did not change.

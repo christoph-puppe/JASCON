@@ -1,11 +1,11 @@
 {
  "measured": {
   "date": "2026-11-15",
-  "commit": "67929a28",
+  "commit": "9675cf29",
   "by": "jascon/scripts/validate_core.py"
  },
  "vectors": {
-  "total": 800,
+  "total": 822,
   "families": [
    {
     "name": "jcs",
@@ -45,7 +45,7 @@
    },
    {
     "name": "dsse",
-    "vectors": 5
+    "vectors": 27
    },
    {
     "name": "composition",
@@ -161,7 +161,7 @@
   }
  ],
  "validators": {
-  "python_lines": 3472,
-  "powershell_lines": 4764
+  "python_lines": 3535,
+  "powershell_lines": 4836
  }
 }

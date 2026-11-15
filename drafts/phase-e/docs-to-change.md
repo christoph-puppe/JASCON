@@ -165,5 +165,5 @@ proposal, and #89, both for the author.
 | App `readme.md` | one commit id written in full | done |
 | Reader | 1.23.0; the screenshot in `docs/img/` taken again (it shows the IFA manifest's digest, which changed) | done |
 | Website | no page changed; `facts.json` measured after the commits | done with the last commit |
-| Other texts that quote the July figures chapter 1 had | README, ten files of the handbook, the app's errata, the website's evidence page and its translations, two notes at the root | not changed; filed as #98 |
-| Register, backlog, plan, decisions | the author's nine answers; #97 closed but for point 3; #98 filed | done |
+| Other texts that quote the July figures chapter 1 had | README, ten files of the handbook, the app's errata, the website's evidence page and its translations, two notes at the root | not changed; filed as #101 |
+| Register, backlog, plan, decisions | the author's nine answers; #97 closed but for point 3; #101 filed | done |

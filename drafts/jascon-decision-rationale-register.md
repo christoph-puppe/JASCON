@@ -5284,6 +5284,98 @@ byte for byte.
    and the click on "Forget the key" after typing is still lost
    (*read, concluded*); a field left with the Tab key drops the focus.
 
+## A review before the tag (2026-11-15)
+
+The author had the code of the branch reviewed as a whole, then had the
+branches cleaned up and asked what three branches that were never
+merged had done. Two still held something the tree lacked. After pull
+request 38 was merged the author said: "you can go fix things now". This
+section is that round: the two carried-over fixes and the review's
+findings. Backlog #98, #99, #100.
+
+### Where an envelope lies (#98, D7)
+
+D3 puts an Attestation and its envelope beside the manifest, and D7 says
+the envelope is named by `envelope-ref`. No text said what that string
+may be, and the schema says "string". The reader refused a ref with a
+scheme, a leading slash, a backslash or a `..` segment from the day it
+first fetched envelopes (`besideName`, 1.13.0), and the app the same
+(`jscPlainPath`). The two validators joined the ref to the bundle's
+folder as it came. So the tools whose verdict is the reference read a
+file outside the bundle they judged, and the one that is a page in a
+browser did not.
+
+The rule is the reader's pattern, in all four tools: a relative path
+that stays in the manifest's folder. A ref that would leave it does not
+resolve, whether or not the file exists, and fails as a missing envelope
+does. The rule is about the ref, not about where it lands:
+`sig/../attestation.dsse` names a file beside the manifest by a detour
+and is refused all the same, because the app looks a ref up among the
+files it was given and could never follow the detour; one answer for
+all four is worth more than the detour.
+
+Two things were found on the way:
+
+- The app's signature check and its advice check looked a ref up among
+  the loaded files without the pattern. A folder cannot hold `../x`, but
+  a ZIP entry can be named so, and then it resolved there. Both use
+  `jscPlainPath` now. The fetch from a URL refused any `..`, also inside
+  a name (`a..b.dsse`); it uses the same pattern now.
+- Python's `re.I` lets `[a-z]` match the Kelvin sign, and Python's and
+  .NET's `$` match before a final line break. The reference writes the
+  pattern with letter ranges and `\Z`, the twin with `\z`. Two of the
+  path vectors hold the four tools to that.
+
+Measured: before the change the reference and the twin read an envelope
+that lay in the folder above the bundle, judged it UNVERIFIED and failed
+nothing; the same for a `..` detour and, on Windows, for a backslash
+ref. Two deliberate defects in the reference and one in the twin each
+turn the three bundle vectors of those cases red. The vectors are
+written by `drafts/phase-d/envelope_ref_vectors.py`; the bundle vectors
+are judged on disk by `validate_bundle` and `Validate-Bundle` (in a run
+of their own, whose failures are the vector's data and leave the tally
+as it was) and as loaded files by `jscCheckGraph`.
+
+### What D7 and A.9 marked required (#99)
+
+The line of D7 and the table of A.9 had marked `rendering`, its
+`template-ref` and `renderer`, and `envelope-ref` as required since
+before 1.0.0. The schema never did. The texts follow the schema now; no
+shape changes.
+
+### The review's findings (#100)
+
+Nine, none in a kernel rule. Eight are built (backlog #100 says how each
+was measured). One is the author's: the risk-catalogue import counts a
+Risk as "as given" when the caller gave one of the two fields and the
+catalogue the other, and the app's import says the same. A third count
+or an origin per field changes the report and two pages; that is a
+choice, not a fix.
+
+One finding was narrowed while building. The lint of the twin was blind
+to `switch` and to `Where-Object` in its parameter form; it sees both
+now. It is also blind to cmdlets that compare strings under a culture
+without naming a comparison (Sort-Object and its kind). The twin uses
+them on rule ids, file names and byte arrays, where case and ignorable
+characters do not occur. Refusing them would have meant rewriting
+working code of the twin in a round about something else, so the
+lint's header names them as what it cannot see.
+
+### What it is measured by
+
+- The reference: ALL GREEN, 822 vectors in 18 families (`dsse` 27), the
+  committed bundles, the worked pack and the example folder.
+- The twin on Windows PowerShell 5.1: ALL GREEN on Windows PowerShell 5.1 over the vectors, the five bundles, the worked pack and the example folder, in 399 s. Its lint: clean.
+- The converters' library: 83 tests. `test_convert_cr26.py` and
+  `test_convert_ifa_ledger.py` did not run on this Windows machine (a
+  permission error in the test's own clean-up, and a symbolic link that
+  needs a privilege); the CR26 converter's refused arguments were
+  checked by calling it, and the workflow runs both files on Linux.
+- The app and the pages: not run here, there is no Node on this
+  machine; the workflow runs them. The pack builder's inlined copy was
+  brought up to date with a stand-in for `sync-inlined.mjs`, checked
+  first against the committed copy.
+
 ## #97: what was found while closing the backlog *(2026-11-15, after the merge of pull request 38; no new candidate)*
 
 ### What the author decided
@@ -5342,7 +5434,7 @@ tests red, the first of them in the library and in all six converter
 tests. No file under `converted_examples/` changed.
 One row passes and is wrong, and was not repaired: row 13 of the IFA
 map says "provenance / system id (system@1)", and the record has that
-value only at `component-refs` of a Risk. Filed as #98.
+value only at `component-refs` of a Risk. Filed as #101.
 
 ### (6) Whole commit ids, the IFA manifest included
 
@@ -5356,7 +5448,7 @@ the Attestation as before; the conversion reproduces itself. The
 reader's screenshot is taken again, because it shows that digest.
 The Attestation keeps its id and its version 1.1.1 with another
 `content-manifest-digest`: one id and version, two contents across
-commits. Filed as #98. The registers and plans of earlier rounds keep
+commits. Filed as #101. The registers and plans of earlier rounds keep
 the short ids they were written with.
 
 ### (7) Handbook chapter 1 on the pinned versions
@@ -5382,7 +5474,7 @@ RFC-0024, the trackers and ASD's profile documents are as of July too.
 *What this leaves:* the README, ten other files of the handbook,
 the app's errata, the website's evidence page with its translations
 and two notes at the repository's root still quote the figures of July
-that chapter 1 no longer has (781 among them). Filed as #98.
+that chapter 1 no longer has (781 among them). Filed as #101.
 
 ### (8) A test of the app that fails when run nearly alone: issue 39
 
@@ -5418,7 +5510,7 @@ ten tries each:
   view. "Forget the key" pressed right after typing takes the key at
   the first press and forgets it only at the second.
 
-Nothing is built. Both are filed as #98.
+Nothing is built. Both are filed as #101.
 
 ### What it is measured by
 
@@ -5432,7 +5524,7 @@ Nothing is built. Both are filed as #98.
 - The app: 197 tests, run by the agent on the tree with the new IFA
   manifest.
 
-### Found and not changed (filed as #98)
+### Found and not changed (filed as #101)
 
 1. The README, ten other files of the handbook, the app's errata, the
    website's evidence page with its translations and two notes at the

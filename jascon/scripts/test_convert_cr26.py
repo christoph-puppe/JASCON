@@ -743,7 +743,8 @@ class TheReportsProseIsItsCounters(Converted):
 class Arguments(unittest.TestCase):
     """An argument the converter cannot honour stops the run before anything is written."""
     def test_a_run_that_cannot_be_honoured_writes_nothing(self):
-        cases = ((["--out"], "needs a directory"),
+        cases = ((["--out"], "--out needs a value"),
+                 (["--out", "{d}", "--date"], "--date needs a value"),
                  (["--out", "{d}", "--out", "{d}"], "more than once"),
                  (["--outt", "{d}"], "unknown argument"),
                  (["--out", "{d}", "--obligated_party", "https://a.example/p"], "unknown argument"),

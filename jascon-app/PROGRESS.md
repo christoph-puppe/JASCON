@@ -752,6 +752,19 @@ and in `readme.md`; this file says only what is done and what is next.
   197 tests of the app's suite pass. Not built, by decision: saving a
   Check as a new version beside the old one.
 
+- Where an `envelope-ref` may point (build 0.9.25, 2026-11-15; review of
+  the branch before the tag). The reference and the twin joined the ref
+  to the bundle's folder unchecked; the app and the reader refused a ref
+  that leaves it (`jscPlainPath`, `besideName`) when they fetch, but the
+  signature check of `jscCheckGraph` and the publisher check of the
+  advice rules looked the ref up among the loaded files without it, so a
+  ZIP entry named `../x` resolved there. Both use `jscPlainPath` now,
+  and the fetch from a URL uses its pattern (it refused any `..`, also
+  inside a name). New in `dsse-vectors.json`: 16 `path-vectors` and 6
+  `bundle-vectors`, which `tests/rules.test.mjs` runs against
+  `jscPlainPath` and `jscCheckGraph`. Not run in this round's checkout,
+  which has no Node; CI runs them.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written

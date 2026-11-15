@@ -196,8 +196,8 @@ if in the bundle, and held to the same requirement and a covered clause
 |---|---|---|---|
 | `subject-semantic-digests` | ● | [digest] | *Meaning* bound (JCS minus annotations). |
 | `content-manifest-digest` | ● | digest | *Package state* bound — enables bi-modal verification (Full vs Semantic Match). |
-| `rendering` | ● | {artifact-digest ●, media-type ●, template-ref{id,version,digest} ●, renderer ●} | *Paper* bound; templates are pinned TCB citizens; chrome-only annotation use is the renderer's law. |
-| `signer` ● · `timestamp` ● · `envelope-ref` ● | | | `timestamp` is a date or an RFC 3339 date-time with an offset since 2.0.0-rc.4 (**DATE-5**). DSSE profile (stdlib); attestations live **beside** the manifest — nothing signed contains its own signature (D3). |
+| `rendering` | ○ | {artifact-digest ●, media-type ●, template-ref{id,version,digest} ○, renderer ○} | *Paper* bound; templates are pinned TCB citizens; chrome-only annotation use is the renderer's law. |
+| `signer` ● · `timestamp` ● · `envelope-ref` ○ | | | `timestamp` is a date or an RFC 3339 date-time with an offset since 2.0.0-rc.4 (**DATE-5**). DSSE profile (stdlib); attestations live **beside** the manifest — nothing signed contains its own signature (D3). `envelope-ref` names a file in the manifest's folder or below it: a relative path with no scheme or drive letter, no leading slash, no backslash and no `..` segment. Any other ref does not resolve, and a named envelope that does not resolve fails the bundle (D7). Without it the Attestation is unsigned. *(Until 2026-11-15 this table marked `rendering`, `template-ref`, `renderer` and `envelope-ref` required; the schema never did.)* |
 
 ## A.9b Risk *(kernel 2.0.0 — CP-RISK-1)*
 

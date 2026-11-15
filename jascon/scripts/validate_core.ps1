@@ -279,6 +279,17 @@ and is not said twice. 15 `operation-targets` vectors in the family
 `reference` (56); 800 in all. Run under PowerShell 7.4 on Linux over the
 vectors, the five bundles, the worked pack and the example folder: ALL
 GREEN in 101.7 s; the workflow runs it on Windows PowerShell 5.1.
+CHANGED 2026-11-15 (review before the tag; backlog #98): an envelope-ref
+names a file in the manifest's folder or below it (Beside-Path: no scheme
+or drive letter, no leading slash, no backslash, no `..` segment; `\z`,
+not `$`). Any other ref does not resolve and fails as a missing envelope
+does; until then Read-Envelope and the advice check joined the ref to the
+folder unchecked and read an envelope above the bundle. Test-Path takes
+-LiteralPath there. 16 `path-vectors` and 6 `bundle-vectors` in the
+family `dsse` (27), the bundle vectors judged on disk by Validate-Bundle
+in a run of their own (Dsse-Bundle-Case); 822 in all. Run on Windows
+PowerShell 5.1 over the vectors, the five bundles, the worked pack and
+the example folder: ALL GREEN in 399 s.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors
@@ -2749,6 +2760,28 @@ function Run-Dsse {
         if ($okc -and $case.Contains('expected-tier')) { if (-not (Str-Eq $tier $case['expected-tier'])) { $okc = $false } }
         if ($okc) { OK 'dsse' } else { FAIL 'dsse' "$($case['name']): got $st($why)/$tier" }
     }
+    $dv = Load-Vectors 'dsse-vectors.json'
+    # where an envelope-ref may point (Beside-Path)
+    foreach ($case in @($dv['path-vectors'])) {
+        $got = ($null -ne (Beside-Path 'bundle' $case['ref']))
+        if ($got -xor [bool]$case['beside']) { FAIL 'dsse' "envelope-ref '$($case['ref'])': expected beside=$($case['beside']), got $got ($($case['why']))" }
+        else { OK 'dsse' }
+    }
+    # a bundle on disk, judged by Validate-Bundle itself (Dsse-Bundle-Case)
+    foreach ($case in @($dv['bundle-vectors'])) {
+        $r = Dsse-Bundle-Case $case
+        $got = @($r.fails); $exp = @($case['expected-fails'])
+        $problems = New-Object System.Collections.ArrayList
+        if ($got.Count -ne $exp.Count) { [void]$problems.Add("$($got.Count) failures, expected $($exp.Count)") }
+        foreach ($frag in $exp) {
+            $hit = $false
+            foreach ($e in $got) { if ($e.Contains($frag)) { $hit = $true } }
+            if (-not $hit) { [void]$problems.Add("no failure says '$frag'") } }
+        $read = $r.text.Contains("dsse: $($case['attestation']['id']) = signature UNVERIFIED")
+        if ($read -xor (Str-Eq $case['expected-envelope'] 'unverified')) { [void]$problems.Add("envelope read=$read, expected $($case['expected-envelope'])") }
+        if ($problems.Count -eq 0) { OK 'dsse' }
+        else { FAIL 'dsse' "bundle $($case['name']): $($problems -join '; ') - failures: $($got -join ' | ')" }
+    }
 }
 function Run-Composition {
     foreach ($case in (Load-Vectors 'composition-vectors.json')['vectors']) {
@@ -4876,8 +4909,8 @@ function Advice-Report([string]$section, [string]$bdir, $manifest, [byte[]]$rawM
         $a = $atts[$oid].o
         if (-not $a.Contains('envelope-ref')) { continue }
         $ref = [string]$a['envelope-ref']
-        $ep = Join-Path $bdir $ref
-        if (-not $envs.ContainsKey($ref) -and (Test-Path $ep -PathType Leaf)) { try { $envs[$ref] = Read-Json $ep } catch { } }
+        $ep = Beside-Path $bdir $a['envelope-ref']
+        if ($null -ne $ep -and -not $envs.ContainsKey($ref) -and (Test-Path -LiteralPath $ep -PathType Leaf)) { try { $envs[$ref] = Read-Json $ep } catch { } }
     }
     $jobs = New-Object System.Collections.ArrayList
     if ($isPack) { [void]$jobs.Add(@{pack = $manifest['pack']; mdig = (Sha256-Hex $rawManifest); where = 'pack'}) }
@@ -4928,6 +4961,18 @@ function Advice-Report([string]$section, [string]$bdir, $manifest, [byte[]]$rawM
 # withdrawn one is kept for the record; each is reported with its verdict
 # and fails nothing (validate_core.py: argued there, the primitive does not
 # speak of lifecycle).
+# `envelope-ref` names a file in the manifest's folder or below it: a
+# relative path with no scheme or drive letter, no leading slash, no
+# backslash and no `..` segment (beside_path in validate_core.py; the app's
+# jscPlainPath and the reader's besideName apply the same pattern). Any
+# other ref would read outside the bundle and so does not resolve. `\z`,
+# not `$`: .NET's `$` also matches before a final line break. -> the path,
+# or $null.
+$OUTSIDE_REF_RX = New-Object System.Text.RegularExpressions.Regex '^[A-Za-z][A-Za-z0-9+.-]*:|^/|\\|(^|/)\.\.(/|\z)'
+function Beside-Path([string]$bdir, $ref) {
+    if (-not ($ref -is [string]) -or [string]::IsNullOrEmpty($ref) -or $OUTSIDE_REF_RX.IsMatch($ref)) { return $null }
+    return (Join-Path $bdir $ref)
+}
 function Beside-Attestation-Files([string]$bdir, $listedPaths) {
     # -> list of @{name; raw; o}: the Attestations BESIDE the manifest (D3.1) -
     # JSON files in the manifest's own folder that it does not list and that
@@ -5088,8 +5133,8 @@ function Validate-Object([string]$section, [string]$path, $obj) {
 # when the envelope was read into $envelopes.
 function Read-Envelope([string]$section, [string]$bdir, [string]$oid, $att, $envelopes) {
     $ref = [string]$att['envelope-ref']
-    $ep = Join-Path $bdir $ref
-    if (-not (Test-Path $ep)) { FAIL $section "${oid}: envelope-ref '$ref' does not resolve beside the manifest"; return $false }
+    $ep = Beside-Path $bdir $att['envelope-ref']
+    if ($null -eq $ep -or -not (Test-Path -LiteralPath $ep)) { FAIL $section "${oid}: envelope-ref '$ref' does not resolve beside the manifest"; return $false }
     try { $envelopes[$ref] = Read-Json $ep }
     catch { FAIL $section "${ref}: envelope unreadable: $($_.Exception.Message)"; return $false }
     return $true
@@ -5330,6 +5375,49 @@ function Validate-Bundle([string]$bdir, [switch]$Flat) {
     $passK = 0; if ($COUNTS.ContainsKey($section)) { $passK = $COUNTS[$section] }
     $failK = 0; if ($COUNTS.ContainsKey("${section}:FAIL")) { $failK = $COUNTS["${section}:FAIL"] }
     Write-Host "  ${section}: $passK pass, $failK fail  {$($summary -join ', ')}"
+}
+
+# A bundle vector of dsse-vectors.json as a bundle on disk, judged by
+# Validate-Bundle itself (dsse_bundle_case in validate_core.py): `listed`
+# objects under objects/ in a manifest written here, the Attestation beside
+# it, `envelopes` in the bundle's folder, `outside` in the folder above it.
+# The failures are the vector's data, not this run's verdict: they are taken
+# out of the tally, and no trusted key is in force. -> @{fails; text}
+function Put-Vector-File([string]$base, [string]$rel, $value) {
+    $fp = $base
+    foreach ($seg in $rel.Split('/')) { $fp = Join-Path $fp $seg }
+    [void](New-Item -ItemType Directory -Force -Path (Split-Path -Parent $fp))
+    $raw = [System.Text.Encoding]::UTF8.GetBytes((Canonical $value) + "`n")
+    [System.IO.File]::WriteAllBytes($fp, $raw)
+    return ,$raw
+}
+function Dsse-Bundle-Case($case) {
+    $tmp = Join-Path ([System.IO.Path]::GetTempPath()) ('jascon-dsse-' + [guid]::NewGuid().ToString('N'))
+    $bdir = Join-Path $tmp 'bundle'
+    $entries = New-Object System.Collections.ArrayList
+    $i = 0
+    foreach ($o in @($case['listed'])) {
+        $rel = "objects/o$i.json"
+        $raw = Put-Vector-File $bdir $rel $o
+        $e = (New-OMap)
+        $e['id'] = $o['id']; $e['version'] = $o['version']; $e['package-digest'] = (Sha256-Hex $raw)
+        $e['semantic-digest'] = (SDig $o); $e['path'] = $rel
+        [void]$entries.Add($e); $i++
+    }
+    $m = (New-OMap); $m['manifest-version'] = '1'; $m['objects'] = $entries.ToArray()
+    [void](Put-Vector-File $bdir 'content-manifest.json' $m)
+    [void](Put-Vector-File $bdir 'attestation.json' $case['attestation'])
+    if ($null -ne $case['envelopes']) { foreach ($k in $case['envelopes'].Keys) { [void](Put-Vector-File $bdir ([string]$k) $case['envelopes'][$k]) } }
+    if ($null -ne $case['outside']) { foreach ($k in $case['outside'].Keys) { [void](Put-Vector-File $tmp ([string]$k) $case['outside'][$k]) } }
+    $savedF = $script:FAILURES; $savedC = $script:COUNTS; $savedT = $script:TRUSTED
+    $script:FAILURES = New-Object System.Collections.ArrayList; $script:COUNTS = (New-Map); $script:TRUSTED = $null
+    try {
+        $lines = @(Validate-Bundle $bdir 6>&1 | ForEach-Object { [string]$_ })
+        return @{ fails = @($script:FAILURES); text = ($lines -join "`n") }
+    } finally {
+        $script:FAILURES = $savedF; $script:COUNTS = $savedC; $script:TRUSTED = $savedT
+        Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
+    }
 }
 
 # ---------------- run ----------------

@@ -1187,9 +1187,14 @@ def provenance(author, date, override=(None, None)):
 def provenance_override(argv):
     """Reads `--author-ref URI` and `--date YYYY-MM-DD` from a converter's
     arguments -> (author or None, date or None). Other arguments are left to
-    the converter. A value that is not what it must be stops the run: an
-    overwrite the caller asked for is never dropped silently."""
+    the converter. A value that is not what it must be stops the run, and so
+    does an argument given twice: an overwrite the caller asked for is never
+    dropped silently, and of two it is not guessed which one was meant
+    (review of 2026-11-15; until then the last one won, unlike
+    `--obligated-party`, which refused the second)."""
     author = date = None
+    for a in ("--author-ref", "--date"):
+        if argv.count(a) > 1: raise SystemExit(f"{a} is given more than once")
     for i, a in enumerate(argv):
         if a not in ("--author-ref", "--date"): continue
         if i + 1 >= len(argv): raise SystemExit(f"{a} needs a value")

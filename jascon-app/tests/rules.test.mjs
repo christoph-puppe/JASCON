@@ -976,6 +976,30 @@ test("dsse: the verdict on every envelope and the tier in verification mode", as
   }
 });
 
+test("dsse: where an envelope-ref may point - the path vectors, and a ref that leaves the folder is not read", async () => {
+  const pv = vectors("dsse")["path-vectors"];
+  assert.equal(pv.length, 16);
+  for (const c of pv) assert.equal(rules.jscPlainPath(c.ref), c.beside, `${JSON.stringify(c.ref)}: ${c.why}`);
+  /* The bundle vectors as the files a person hands the app. A file `outside` the bundle cannot be handed over from a
+     folder; it is given here under the path the ref names (`../attestation.dsse`), as a ZIP entry could name it, and
+     it must not be read either. The reference and the twin judge these on disk and also count every other failure;
+     here the signature findings are compared. */
+  const bv = vectors("dsse")["bundle-vectors"];
+  assert.equal(bv.length, 6);
+  for (const c of bv) {
+    const att = c.attestation;
+    const files = [...c.listed.map((o, i) => ({ path: `objects/o${i}.json`, text: core.jscSerialize(o) })),
+      { path: "attestation.json", text: core.jscSerialize(att) },
+      ...Object.entries(c.envelopes || {}).map(([p, env]) => ({ path: p, text: JSON.stringify(env) })),
+      ...Object.entries(c.outside || {}).map(([p, env]) => ({ path: "../" + p, text: JSON.stringify(env) }))];
+    const g = core.jscGraphFrom(core.jscClassifyFiles(files).records), r = await rules.jscCheckGraph(g, null);
+    assert.equal(r.signatures[att.id], c["expected-envelope"], c.name);
+    const errs = r.findings.filter(f => f.kind === "error" && f.area === "signature").map(f => f.message);
+    assert.equal(errs.length, c["expected-fails"].length, `${c.name}: ${JSON.stringify(errs)}`);
+    for (const frag of c["expected-fails"]) assert.ok(errs.some(e => e.includes(frag)), `${c.name}: no error says ${frag}`);
+  }
+});
+
 test("Ed25519: the two first test vectors of RFC 8032, and agreement with the platform's implementation", async () => {
   const hex = h => Uint8Array.from(h.match(/../g) || [], x => parseInt(x, 16));
   const rfc = [

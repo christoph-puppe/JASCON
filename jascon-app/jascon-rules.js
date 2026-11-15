@@ -3419,7 +3419,7 @@ async function jscAdviceHeld(g, trusted) {
   const kept = await jscKeptPackErrors(jscRulesKeptPacks(g), g.manifest, objs);
   const atts = new Map([...objs].filter(([, r]) => r.type === "attestation")), envelopes = new Map(), packs = [];
   for (const { obj } of atts.values()) {
-    const file = obj["envelope-ref"] && g.aux.find(a => a.path === obj["envelope-ref"]);
+    const file = jscPlainPath(obj["envelope-ref"]) && g.aux.find(a => a.path === obj["envelope-ref"]);
     if (file) { try { envelopes.set(file.path, JSON.parse(file.text)); } catch (e) { envelopes.set(file.path, null); } }
   }
   for (const [name, km] of kept.packs) {
@@ -3607,7 +3607,7 @@ async function jscCheckGraph(g, verified, opts) {
     const r = objs.get(id), ref = r.obj["envelope-ref"];
     if (r.type !== "attestation") continue;
     if (!ref) { signatures[id] = "unsigned"; add("note", "signature", id, "no envelope (unsigned attestation)"); continue; }
-    const file = g.aux.find(a => a.path === ref);
+    const file = jscPlainPath(ref) && g.aux.find(a => a.path === ref);   // a ref that leaves the folder does not resolve
     if (!file) {
       signatures[id] = "missing";
       add("error", "signature", id, `envelope-ref '${ref}' does not resolve beside the manifest`);
@@ -3740,7 +3740,7 @@ if (typeof module !== "undefined" && module.exports) {
     jscPartyRef, jscIsDate, jscProvenance, jscImportProvenance, jscAuthorRecord, jscAuthorTailoring, jscAuthorRisk, jscDecideDeviation, jscScaleDefinitionErrors, jscMatrixErrors, jscRiskLevels, jscMatrixCell, jscScaleErrors, jscCheckScales,
     jscOptionalEmptyViolations, JSC_NUMBER_RULES, jscNumberSpellingViolations, jscNumberViolations, jscInNumberDomain, jscNumberError, jscObjectErrors, jscFacetErrors, JSC_ASSESSMENT_CRITERIA, jscManualMethod, jscIsAppMethodBefore0913, jscRewriteAppMethod, jscTailoringDutyErrors, jscAttestationVerdict,
     jscAttestationBinds, jscSemanticDigests, JSC_BINDS_MANIFEST, jscBindsReport, JSC_MANIFEST_RULES, jscListedAttestationErrors, jscSetBinds, jscCheckGraph,
-    JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
+    JSC_DSSE_PAYLOAD_TYPE, jscEd25519Verify, jscVerifyEnvelope, jscPlainPath, jscSemver, jscCompose, jscComposeSide, jscPathGet, jscEvalPredicate, jscConditionalApply,
     JSC_CHECK_RULES, JSC_CHECK_OPS, JscIRegexpError, jscIreCompile, jscIreFullMatch, jscCheckVerdict, jscCheckEach, jscCheckEachSummary, jscPercentShare, jscCheckAggregate, jscCheckParamDecls,
     jscCheckObjectErrors, jscCheckErrors,
     JSC_DATE_RULES, jscDateRuleViolations, JSC_PACK_STORE, JSC_ADVICE_RULES, jscPackErrors, jscCapabilityErrors, jscSplitCapabilityRef,
