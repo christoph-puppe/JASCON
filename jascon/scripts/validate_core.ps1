@@ -1448,7 +1448,20 @@ function Semver([string]$v) {
     # cannot read, and its $ also matches before a final line break (#68)
     $m = [System.Text.RegularExpressions.Regex]::Match($v, '^([0-9]+)\.([0-9]+)\.([0-9]+)\z')
     if (-not $m.Success) { return $null }
-    return @([int]$m.Groups[1].Value, [int]$m.Groups[2].Value, [int]$m.Groups[3].Value)
+    # Each number is held to the number domain of D3.9, at most 2^53 - 1
+    # (backlog #72). Until 2026-11-15 they were read as [int], and a number
+    # from 2^31 on stopped the run with a conversion error. The domain is
+    # asked of the digits, so that nothing is converted before it is known
+    # to fit: sixteen digits at most, and of sixteen none above the last
+    # number of the domain. A larger number is no version.
+    $parts = New-Object 'System.Collections.Generic.List[long]'
+    foreach ($i in 1, 2, 3) {
+        $d = $m.Groups[$i].Value.TrimStart([char]'0')
+        if ($d.Length -gt 16) { return $null }
+        if (($d.Length -eq 16) -and ([string]::CompareOrdinal($d, '9007199254740991') -gt 0)) { return $null }
+        if ($d.Length -eq 0) { $parts.Add([long]0) } else { $parts.Add([long]::Parse($d, $INV)) }
+    }
+    return @($parts[0], $parts[1], $parts[2])
 }
 function Compose($aObjs, $aPins, $bObjs, $bPins) {
     $errors = New-Object System.Collections.ArrayList
@@ -1465,12 +1478,12 @@ function Compose($aObjs, $aPins, $bObjs, $bPins) {
                 [void]$errors.Add("${fid}: non-semver pin ($($pa['version']) / $($pb['version'])) - the registry policy is semver (D3.5)")
                 continue
             }
-            if ([int]$sa[0] -ne [int]$sb[0]) {
+            if ([long]$sa[0] -ne [long]$sb[0]) {
                 [void]$errors.Add("${fid}: major lines $($pa['version']) vs $($pb['version']) are incompatible (D3.5; reported, never a silent pick)")
                 continue
             }
             $win = $pb
-            if (($sa[1] -gt $sb[1]) -or ([int]$sa[1] -eq [int]$sb[1] -and $sa[2] -ge $sb[2])) { $win = $pa }
+            if (([long]$sa[1] -gt [long]$sb[1]) -or ([long]$sa[1] -eq [long]$sb[1] -and [long]$sa[2] -ge [long]$sb[2])) { $win = $pa }
             $resolutions[$fid] = $win['version']
             $sch = $win['schema']
             if ($null -eq $sch) { $sch = [ordered]@{type = 'object'} }

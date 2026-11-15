@@ -2133,7 +2133,12 @@ async function jscVerifyEnvelope(env, att, trusted) {
    -> { resolutions: {facet id: version}, errors } */
 function jscSemver(v) {
   const m = /^(\d+)\.(\d+)\.(\d+)$/.exec(String(v));
-  return m ? m.slice(1).map(Number) : null;
+  if (!m) return null;
+  /* Each number is held to the number domain of D3.9, at most 2^53 - 1 (backlog #72): beyond it a JavaScript number
+     is not exact, and 1.9007199254740993.0 read as 1.9007199254740992.0. The domain is asked of the digits. */
+  const digits = m.slice(1).map(d => d.replace(/^0+(?=\d)/, ""));
+  if (digits.some(d => d.length > 16 || (d.length === 16 && d > "9007199254740991"))) return null;
+  return digits.map(Number);
 }
 function jscCompose(aObjs, aPins, bObjs, bPins) {
   const errors = [], resolutions = {};

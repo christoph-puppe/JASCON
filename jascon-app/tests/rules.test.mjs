@@ -907,7 +907,12 @@ test("a whole set: the example folder, checked as a bundle, passes as it passes 
 
 test("composition: every vector, as the reference runner judges it", () => {
   const v = vectors("composition").vectors;
-  assert.equal(v.length, 9);   // two more with #68: a pin version that ends in a line break, and one in other digits
+  assert.equal(v.length, 11);   // two with #68 (a pin version that ends in a line break, one in other digits), two with #72 (the number domain)
+  /* #72: the domain is asked of the digits, so that no number is read before it is known to be exact */
+  assert.deepEqual(rules.jscSemver("1.9007199254740991.0"), [1, 9007199254740991, 0]);
+  assert.equal(rules.jscSemver("1.9007199254740992.0"), null);
+  assert.equal(rules.jscSemver("1.2.90071992547409910"), null, "seventeen digits");
+  assert.deepEqual(rules.jscSemver("0001.02.0000000000000000000003"), [1, 2, 3], "zeros in front do not make a number long");
   for (const c of v) {
     const side = x => [(x.objects || []).map(o => [o.id, o]), x.pins || {}];
     const { resolutions, errors } = rules.jscCompose(...side(c.a), ...side(c.b));

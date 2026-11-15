@@ -1,5 +1,5 @@
 {
- "description": "Bundle-composition vectors (gate 4, D3.5 / backlog #18): pins in one major line resolve to the highest minor with BOTH payload sets re-validated under the winner; major clashes, re-validation failures, and object-identity collisions are reported errors, never silent picks. Backlog #68: a pin version is three numbers in the digits 0-9 and nothing after them - a line break at the end or a digit of another script makes it a non-semver pin.",
+ "description": "Bundle-composition vectors (gate 4, D3.5 / backlog #18): pins in one major line resolve to the highest minor with BOTH payload sets re-validated under the winner; major clashes, re-validation failures, and object-identity collisions are reported errors, never silent picks. Backlog #68: a pin version is three numbers in the digits 0-9 and nothing after them - a line break at the end or a digit of another script makes it a non-semver pin. Backlog #72: each of the three numbers of a pin version is held to the number domain of D3.9, at most 2^53 - 1 (9007199254740991); a version with a larger number is a non-semver pin, and one at the end of the domain is read exactly.",
  "vectors": [
   {
    "name": "minor-minor-resolves-to-highest",
@@ -703,6 +703,157 @@
     "non-semver pin"
    ],
    "note": "Backlog #68: a version is written in the digits 0-9. U+0663 is a decimal digit to the `\\d` of Python and of .NET and no digit to the `\\d` of ECMA-262; three engines must not read three things."
+  },
+  {
+   "name": "a-pin-version-with-a-number-beyond-the-number-domain-is-no-version",
+   "a": {
+    "pins": {
+     "https://x.example/facet/f": {
+      "version": "1.9007199254740993.0",
+      "schema": {
+       "type": "object"
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://x.example/p/o"
+        ],
+        "prose": {
+         "en": "X."
+        }
+       }
+      ],
+      "facets": {
+       "https://x.example/facet/f@1": {
+        "a": "x"
+       }
+      }
+     }
+    ]
+   },
+   "b": {
+    "pins": {
+     "https://x.example/facet/f": {
+      "version": "1.2.0",
+      "schema": {
+       "type": "object"
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://x.example/req/2",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://x.example/p/o"
+        ],
+        "prose": {
+         "en": "X."
+        }
+       }
+      ],
+      "facets": {
+       "https://x.example/facet/f@1": {
+        "a": "y"
+       }
+      }
+     }
+    ]
+   },
+   "expected-errors": [
+    "non-semver pin"
+   ],
+   "note": "backlog #72: 2^53 + 1. A host that reads a number as a double reads it as 2^53, and one that reads it as 32 bits stops."
+  },
+  {
+   "name": "a-pin-version-at-the-end-of-the-number-domain-is-read-exactly",
+   "a": {
+    "pins": {
+     "https://x.example/facet/f": {
+      "version": "1.9007199254740990.0",
+      "schema": {
+       "type": "object"
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://x.example/req/1",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://x.example/p/o"
+        ],
+        "prose": {
+         "en": "X."
+        }
+       }
+      ],
+      "facets": {
+       "https://x.example/facet/f@1": {
+        "a": "x"
+       }
+      }
+     }
+    ]
+   },
+   "b": {
+    "pins": {
+     "https://x.example/facet/f": {
+      "version": "1.9007199254740991.0",
+      "schema": {
+       "type": "object"
+      }
+     }
+    },
+    "objects": [
+     {
+      "id": "https://x.example/req/2",
+      "version": "1",
+      "lifecycle": "active",
+      "statements": [
+       {
+        "id": "s1",
+        "modality": "must",
+        "obligated-parties": [
+         "https://x.example/p/o"
+        ],
+        "prose": {
+         "en": "X."
+        }
+       }
+      ],
+      "facets": {
+       "https://x.example/facet/f@1": {
+        "a": "y"
+       }
+      }
+     }
+    ]
+   },
+   "expected-errors": [],
+   "expected-resolutions": {
+    "https://x.example/facet/f": "1.9007199254740991.0"
+   },
+   "note": "backlog #72: 2^53 - 1 is the last number of the domain (D3.9); the minor before it is lower."
   }
  ]
 }

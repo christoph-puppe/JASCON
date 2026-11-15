@@ -687,8 +687,16 @@ def verify_envelope(env, att, trusted):
 # deterministically to the highest pinned minor with both payload sets
 # re-validated — incompatibility is a reported error, never a silent pick."
 def _semver(v):
+    """-> the three numbers of a pin version, or None where it is no semver
+    pin. Each number is held to the number domain of D3.9 (backlog #72):
+    Python reads a number of any length, the twin read 32 bits and stopped
+    the run at 2^31, and JavaScript reads beyond 2^53 inexactly, so that
+    two versions could compare equal. A larger number is no version in any
+    of the three."""
     m = re.fullmatch(r"([0-9]+)\.([0-9]+)\.([0-9]+)", str(v))
-    return tuple(int(x) for x in m.groups()) if m else None
+    if not m: return None
+    parts = tuple(int(x) for x in m.groups())
+    return parts if max(parts) <= NUMBER_MAX else None
 
 def compose(a_objs, a_pins, b_objs, b_pins):
     """objs: [(oid, obj)]; pins: {facet-base-id: {"version", "schema"}}.
