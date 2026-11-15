@@ -5283,3 +5283,168 @@ byte for byte.
    `jscRedraw` (*read*); `id="ai-key"` occurs twice on the Checks page,
    and the click on "Forget the key" after typing is still lost
    (*read, concluded*); a field left with the Tab key drops the focus.
+
+## #97: what was found while closing the backlog *(2026-11-15, after the merge of pull request 38; no new candidate)*
+
+### What the author decided
+
+Each of the nine points was put to the author with a proposal, what
+speaks for and against it, and an alternative. The answer, point by
+point: "1: vorschlag", "2: wir nehmen das jetzt so wie Du es erstellt
+hat für die neue Version", "3: vorschlag", "4: vorschlag", "5:
+vorschlag", "6: alternative", "7: alternative", "8: die ursache suchen,
+plan erstellen, neue Issue einstellen, dann backlog dazu schließen",
+"9: alternative". The work is on a new branch from `main`,
+`claude/backlog-97-before-the-tag`.
+
+No shape, no rule and no vector of the specification changes.
+
+### (1) The reader removes an authored object (1.23.0)
+
+The detail of an object written in a workbench has a button that takes
+that one object out of the graph and out of what the page stores.
+Where other authored objects name it, the first press removes nothing
+and names them; the second removes it all the same, and an export of
+the workspace reports the reference that no longer resolves. An object
+of a loaded bundle has no such button. *Measured:* the new test is red
+on reader 1.22.0 and green on 1.23.0. With it a check that was
+corrected and generated again no longer leaves the wrong one in every
+export, which was the consequence of #71 (6).
+
+### (2) The three translations stand as written
+
+The author takes the Hindi, Japanese and Chinese wording of the row
+"does not bind" as it was written for the new version. No second
+reader was asked.
+
+### (3) The titles of the CR26 overlay: after the tag
+
+Decided as proposed: with the next change of the CR26 converter the
+title is written from the counters. Nothing is built now, because the
+title is bytes of the bundle.
+
+### (4) The CR26 comment
+
+*Measured by the agent* on a changed source: an assignment whose value
+lies outside the choices, and one for a parameter the control does not
+declare, each end the run with 1 and two values unaccounted; the
+assignment stands neither in the Tailoring nor in the parked payload.
+Two comments said "(parked)" and say now what happens. The code is the
+same syntax tree as before.
+
+### (5) A path map names the type of the object
+
+`path_map_check` held a pointer and no type, so a row could name the
+right pointer in the wrong object and pass. A place is now a type and a
+pointer, and the six path maps are typed from what each record
+measured. *Measured by the agent:* four deliberate defects each turn
+tests red, the first of them in the library and in all six converter
+tests. No file under `converted_examples/` changed.
+One row passes and is wrong, and was not repaired: row 13 of the IFA
+map says "provenance / system id (system@1)", and the record has that
+value only at `component-refs` of a Risk. Filed as #98.
+
+### (6) Whole commit ids, the IFA manifest included
+
+The author took the alternative: every place in one go. Two
+converters, the IFA licence note, one line of the app's readme, and
+the IFA manifest's `source-commit`. The manifest's bytes changed, so
+the converter wrote the Attestation beside it again. *Measured:* the
+manifest's digest went from `sha256:90c6c62f…` to `sha256:a24237c3…`;
+no object of the bundle changed; the reference prints FULL MATCH for
+the Attestation as before; the conversion reproduces itself. The
+reader's screenshot is taken again, because it shows that digest.
+The Attestation keeps its id and its version 1.1.1 with another
+`content-manifest-digest`: one id and version, two contents across
+commits. Filed as #98. The registers and plans of earlier rounds keep
+the short ids they were written with.
+
+### (7) Handbook chapter 1 on the pinned versions
+
+The author took the alternative: the whole chapter now. Every figure
+of the chapter that comes from one of the three corpora was measured
+again by the agent on the sources the repository pins (the ISM
+v2026.06.18, Grundschutz++ of 2026-10-29, CR26 2026.11.02.01), with
+two scripts, and the header names these versions. The larger changes:
+781 packed lists are 799; 998 + 17 German controls are 1,000 + 17;
+13,315 props (12,059 namespaced) are 13,357 (12,096); for CR26, 246
+rules and 75 terms are 245 and 81, MUST 189 and MAY 39 are 186 and 38.
+The method was held against July: on the ISM, whose version did not
+change, it reproduces the chapter's figures, and on a copy of the
+Grundschutz++ catalogue of July it reproduces 781.
+
+*Not measured, and said in the header:* the share of BSI's MS-TLS
+catalogue in the German sums (17 controls, 111 props, 74 namespaced)
+is as of July, because that catalogue is not pinned; the German sums
+are therefore the measured Grundschutz++ figure plus a July share.
+RFC-0024, the trackers and ASD's profile documents are as of July too.
+
+*What this leaves:* the README, ten other files of the handbook,
+the app's errata, the website's evidence page with its translations
+and two notes at the repository's root still quote the figures of July
+that chapter 1 no longer has (781 among them). Filed as #98.
+
+### (8) A test of the app that fails when run nearly alone: issue 39
+
+Decided: find the cause, write a plan, file an issue, then close the
+point. *Measured by the agent* on build 0.9.24: it is a defect of the
+test and not of the app. The helper `write` of the test "Import, Map
+and Checks" waits with `page.waitForFunction(async …)`, and Playwright
+1.63.0 resolves at once for a predicate that returns a promise. The
+test then reads the store 0.1 to 4.1 ms after the page's write in 24 of
+29 logged runs and up to 1.6 ms before it in 5. The order of the tests
+is not the cause: alone, the unchanged test was red 1 of 30 times. A
+user cannot reach the state. With the page's write made 50 ms late the
+test is red 5 of 5 times, and three other tests of the same file fail
+for the same reason. Cause and plan are issue 39 of the repository's
+tracker; nothing is built. The reader's test file has no such wait
+(*read*: `grep` finds none).
+
+### (9) What is left of the lost click in the app: measured only
+
+Decided: measure and report; the focus after the Tab key stays.
+*Measured by the agent* on build 0.9.24, with a real key and pointer,
+ten tries each:
+
+- Six filter fields redraw their page on a timer of 250 or 300 ms
+  (Risk `#risk-q`, Assess `#a-q`, Implement `#edgeq` and `#cf-q`, Map
+  `#mapq`, Validate `#q`). A press held across the moment the redraw is
+  due lost its click 10 of 10 times on each; released before it, 0 of
+  3. In a copy, routing the timers through `jscRedraw` closes five of
+  the six. The link of an edge on the Implement page stays lost,
+  because its address occurs twice on the page.
+- The Checks page has two key fields with `id="ai-key"`, one per view.
+  The label of the draft view names the hidden field of the other
+  view. "Forget the key" pressed right after typing takes the key at
+  the first press and forgets it only at the second.
+
+Nothing is built. Both are filed as #98.
+
+### What it is measured by
+
+- The reference: ALL GREEN, 800 vectors, with the IFA Attestation a
+  FULL MATCH of the new manifest.
+- The converters: eight test files (61, 14, 20, 32, 33, 25, 87 and 8
+  tests) and the check of the pinned schemas, run again by the lead
+  after the commits were taken.
+- The reader and the pack builder: the browser tests, with the new
+  test of point 1.
+- The app: 197 tests, run by the agent on the tree with the new IFA
+  manifest.
+
+### Found and not changed (filed as #98)
+
+1. The README, ten other files of the handbook, the app's errata, the
+   website's evidence page with its translations and two notes at the
+   root quote July figures that chapter 1 no longer has.
+2. Row 13 of the IFA path map names a place the record does not have.
+3. The IFA Attestation keeps id and version 1.1.1 with another
+   `content-manifest-digest`.
+4. App: six filter fields lose a click that is held across their
+   delayed redraw.
+5. App: `id="ai-key"` twice on the Checks page; the label of one view;
+   the first press on "Forget the key".
+6. Chapter 1's German sums are the measured Grundschutz++ figure plus
+   the July share of the MS-TLS catalogue, which is not pinned.
+7. The date "2026-07-14" beside the NIST commit id is not verified.
+

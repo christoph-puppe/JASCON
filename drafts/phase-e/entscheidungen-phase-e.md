@@ -788,3 +788,69 @@ Die zwölf Punkte ohne Wahl: #71 (1), (3), (4), (6), (7), (8), (16);
 - **Neu abgelegt, #97:** neun Punkte, die beim Bauen aufgefallen und
   nicht geändert sind. Sie stehen im Register unter „Found and not
   changed".
+
+## #97, neun Punkte (2026-11-15, nach dem Merge von Pull Request 38)
+
+Vorgelegt je Punkt: Vorschlag, dafür, dagegen, Alternative. Die
+Antwort, wörtlich:
+
+> 1: vorschlag
+> 2: wir nehmen das jetzt so wie Du es erstellt hat für die neue Version
+> 3: vorschlag
+> 4: vorschlag
+> 5: vorschlag
+> 6: alternative
+> 7: alternative
+> 8: die ursache suchen, plan erstellen, neue Issue einstellen, dann backlog dazu schließen
+> 9: alternative
+>
+> Neuen Branch ab hier, schlege namen vor und nutze
+
+1. **Reader:** Verfasste Objekte sind löschbar (Reader 1.23.0).
+2. **Website:** Hindi, Japanisch und Chinesisch bleiben, wie sie
+   geschrieben sind; kein zweiter Leser.
+3. **CR26-Titel:** nach dem Tag, mit der nächsten Änderung am
+   CR26-Konverter. Jetzt nichts gebaut.
+4. **CR26-Kommentar:** nur der Kommentar ist berichtigt.
+5. **`path_map_check`:** hält den Typ des Objekts.
+6. **Commit-Ids:** alle Stellen in einem Zug, das IFA-Manifest
+   eingeschlossen; die IFA-Attestation ist neu geschrieben.
+7. **Kapitel 1:** jetzt auf die Fassungen gehoben, die das Repository
+   pinnt; jede Zahl neu gemessen.
+8. **Test „Import, Map and Checks":** Ursache gesucht, Plan
+   geschrieben, als Issue eingestellt; der Punkt ist damit im Backlog
+   geschlossen.
+9. **App, Reste des verlorenen Klicks:** nur gemessen und berichtet;
+   der Fokus nach der Tab-Taste bleibt.
+
+Der Branch heißt `claude/backlog-97-before-the-tag`. Der alte Branch
+ließ sich von der Session aus nicht löschen (der Push zum Löschen
+wurde viermal mit einem Verbindungsabbruch abgewiesen); er steht auf
+`main`.
+
+### Was beim Bauen anders kam als vorgelegt
+
+- **(1):** Das Entfernen löscht genau ein Objekt und nichts mit. Wo
+  andere verfasste Objekte es nennen, entfernt der erste Druck nichts
+  und nennt sie; erst der zweite entfernt es.
+- **(5):** Eine Zeile der IFA-Pfadkarte besteht die Prüfung und ist
+  falsch (Zeile 13). Sie ist berichtet, nicht repariert: #98.
+- **(6):** Die IFA-Attestation behält Id und Version 1.1.1 bei
+  geändertem Manifest-Digest. Das war nicht vorgelegt: #98. Die
+  Register und Pläne früherer Runden behalten ihre kurzen Ids.
+- **(7):** Die deutschen Summen sind gemischt: Grundschutz++ gemessen,
+  der Anteil des MS-TLS-Katalogs vom Juli, weil er nicht gepinnt ist.
+  Der Kopf des Kapitels sagt das. Und: README, zehn andere
+  Handbuch-Dateien, die Evidence-Seite der Website und weitere nennen
+  weiter die Juli-Zahlen, die Kapitel 1 nicht mehr hat (etwa 781, wo
+  Kapitel 1 jetzt 799 sagt): #98.
+- **(8):** Die Ursache liegt im Test, nicht in der App, und nicht in
+  der Reihenfolge der Tests: Ein Warten mit `waitForFunction(async …)`
+  wartet nicht. Drei weitere Tests derselben Datei haben denselben
+  Fehler. Ursache und Plan stehen in Issue 39; gebaut ist nichts.
+- **(9):** Gemessen: Alle sechs Filterfelder mit Zeitverzögerung
+  verlieren den Klick, wenn die Taste über das Neuzeichnen hinweg
+  gehalten wird (10 von 10). Das doppelte `id="ai-key"` kostet bei
+  „Forget the key" den ersten Druck. Beides steht als #98 im Backlog.
+- **Neu abgelegt, #98:** sieben Punkte aus dieser Runde.
+

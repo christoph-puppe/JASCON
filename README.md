@@ -49,7 +49,7 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.22.0,
+key and has no word for a signature that holds. (Reader 1.23.0,
 2026-11-15, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage shows the bundle's
 two Risks first, above the part of the page that is in the picture.)*
