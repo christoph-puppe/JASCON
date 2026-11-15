@@ -173,11 +173,12 @@ publishes four class variants of its own rules, that is not FedRAMP
 deviating from FedRAMP; the published Tailoring *is* the norm, its
 audit record is the publication itself — versioned, signed, lifecycled
 like every authored object. The converter corpse that forced the
-question: 29 variant-only CR26 rules whose base prose had to be
+question: 28 variant-only CR26 rules (publication 2026.11.02.01 of
+2026-11-02) whose base prose had to be
 *synthesized* so a pseudo-Deviation had something to point at —
 ceremony without a wronged party. The weakening classification still
 computes, so any consumer can ask "which classes ease the base?"
-(CR26's measured answer across 111 class-variant modality moves:
+(CR26's measured answer across 107 class-variant modality moves:
 zero); what disappears is only the obligation to mint a record where
 nothing was departed from. And "whose Tailoring is it" is derived, not
 declared (the layered anchor, v0.6 cycle): id origin matching the

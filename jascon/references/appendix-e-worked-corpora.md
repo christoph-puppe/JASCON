@@ -152,27 +152,31 @@ on a real corpus.
 Sets; `sequence` monotonicity; the annotation-free semantic digest
 equals the package-digest content (nothing to strip).
 
-## E.4 The KSI mapping — §8.6 at scale, one specimen of 373
+## E.4 The KSI mapping — §8.6 at scale, one specimen of 558
 
-**Converted** (`objects/map/ksi-ced-rat--ir-2.json`, verbatim):
+**Converted** (`objects/map/ksi-ced-rat--ir-2.json`, as written from
+publication 2026.11.02.01 of 2026-11-02; the ids of the corpus
+shortened):
 ```json
 {"id": ".../cr26/map/ksi-ced-rat--ir-2",
+ "version": "2026.11.02.01",
+ "lifecycle": "active",
  "source-ref": ".../cr26/ksi/KSI-CED-RAT",
  "target-ref": "https://ns.nist.gov/sp800-53/req/IR-2",
  "relationship": "supports",
  "direction": "source-to-target",
  "confidence": "draft",
- "rationale": "Imported from CR26 KSI control list; the source
-   carried no typed relationship (handbook 8.6).",
+ "rationale": {"en": "Imported from CR26 KSI control list; the source
+   carried no typed relationship (handbook 8.6)."},
  "provenance": {"author-ref": ".../cr26/party/fedramp",
-   "date": "2026-07-14"}}
+   "date": "2026-11-02"}}
 ```
 One row of an untyped link list became one honest object: `supports`
 not `equal` (flattery refused), `draft` not `authoritative`
 (diligence graded), provenance named (whose claim), rationale stating
 its own limitation. The SCF spreadsheet import — thousands of rows —
-is this exact pattern at scale and is gate item 3's work; the 373
-here are its proof of mechanism. The source KSI meanwhile is a
+is this exact pattern at scale and is gate item 3's work; the 558
+here (652 with the 94 links of rules) are its proof of mechanism. The source KSI meanwhile is a
 Requirement whose `uses-term` relations resolve into the glossary
 (FRD-INT, FRD-PER, FRD-VLR).
 

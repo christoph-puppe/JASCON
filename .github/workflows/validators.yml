@@ -131,11 +131,13 @@ jobs:
         # what is committed. This is where "without an argument a converter
         # writes what it wrote before" is held (backlog #74).
         #
-        # The SP 800-53 report counts the citations of its controls in every
-        # corpus under converted_examples/. The count is the committed one only
-        # while that folder holds what is committed and nothing else, so the
-        # step says so first, in its own words, if another step has left a
-        # bundle there.
+        # Until 2026-11-15 the SP 800-53 report counted the citations of its
+        # controls in every .json file under converted_examples/, and the count
+        # was the committed one only while that folder held nothing else. Since
+        # then it reads the objects that four named bundles list (backlog #79,
+        # point 6), and what else lies there does not change it. The step still
+        # says first, in its own words, if another step has left something in
+        # that folder: a difference after the conversions is then a converter's.
         run: |
           set -euo pipefail
           if [ -n "$(git status --porcelain -- converted_examples)" ]; then
