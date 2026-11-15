@@ -14,7 +14,7 @@ contact with real catalogs before it may stay.**
 
 This repository is a working design study, not a slide deck. It contains a
 draft specification with a public decision register, an **executable kernel
-schema** with a **157-vector conformance corpus** (783 in 18 families in the 2.0.0 candidate) and *two* reference
+schema** with a **157-vector conformance corpus** (785 in 18 families in the 2.0.0 candidate) and *two* reference
 validators — Python, and a **zero-dependency PowerShell 5.1 twin that runs
 on a stock Windows box** (the weekend-validator claim, measured,
 crypto engines included) —
@@ -49,8 +49,8 @@ semantic digest of each of its three subjects and the digest of the
 manifest's bytes, and says what the reference validator says: FULL MATCH.
 The Attestation is unsigned (the converter models it from the
 authorization date of the SSP), and the page says that too; it takes no
-key and has no word for a signature that holds. (Reader 1.19.0,
-2026-11-14, loaded from `python -m http.server`, which lists the folder.
+key and has no word for a signature that holds. (Reader 1.20.0,
+2026-11-15, loaded from `python -m http.server`, which lists the folder.
 The bundle's manifest lists 16 objects. The stage names Risk in its
 heading and lists none; the two Risk objects are in the object browser —
 backlog #71.)*
@@ -166,7 +166,7 @@ backlog #71.)*
 > tailoring or an assessment, and the vendor's manifest stays in the set
 > as the import record. No new type.
 >
-> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 783 in 18 families since 2026-11-14) pass in the
+> - **Measured:** 74 advice vectors (537 in all on 2026-11-12, 785 in 18 families since 2026-11-15) pass in the
 >   Python reference; 28 deliberate breaks of the reference each turn a
 >   vector red. A worked pack, signed with the public fixture key, and
 >   the example folder after importing it validate. Run over the shipped

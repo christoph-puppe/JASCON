@@ -110,3 +110,17 @@ proposal, and #89, both for the author.
 | Register, backlog, plan, decisions | the author's five answers; #89 and #94 closed; #95 filed; what was built otherwise | done |
 
 #95, the two findings filed with it, is built since 2026-11-15 (two converters, their tests, the backlog, the register); no text of the specification or the handbook speaks of either.
+
+## Before the tag (2026-11-15: backlog #72, #79 and #71 in part)
+
+| Where | What | State |
+|---|---|---|
+| Specification | the banner (one sentence); D3.5 (a pin's version is three numbers of the number domain); IV.5b (785 vectors); IV.6 (one row); IV.9 | done |
+| Handbook | no text speaks of a pin version's numbers, of the CR26 converter's arguments or of the reader's resolved preview | nothing to change |
+| README | the vector count (785), the reader's version under the screenshot | done |
+| `jascon/SKILL.md` | the vector count | done |
+| `validate_core.ps1` | the header's note on `Semver` and the run of 2026-11-15 | done |
+| App `PROGRESS.md` | build 0.9.22 | done |
+| Reader | 1.20.0; the screenshot in `docs/img/` taken again | done |
+| Website | `facts.json` measured after the commits | done with the last commit |
+| Register, backlog, plan, decisions | the author's word; #72 closed; #79 and #71 in part; #96 filed | done |

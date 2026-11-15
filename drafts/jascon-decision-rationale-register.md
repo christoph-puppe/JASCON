@@ -4851,3 +4851,94 @@ rows, while its ledger reads 0 unaccounted and 0 failed claims; before,
 that run ended with 0. The row of the IFA path map that no path reached
 is gone, with its entry in the table of places. Both conversions
 reproduce their reports and records byte for byte.
+
+## After the last round — #72, #79 and #71 *(2026-11-15; closes #72; #79 and #71 in part; files #96; no new candidate)*
+
+### What the author decided
+
+Asked what #62, #71, #72, #79 and #91 are, the author got a proposal
+for what to do before the tag: #72, points 2, 3 and 5 of #79, and
+point 5 of #71; the rest after it. The answer: "alle wie
+vorgeschlagen".
+
+### #72: a number of a pin version is held to the number domain
+
+Composition (D3.5) compares the three numbers of a pin's version. The
+three hosts read a long number three ways. *Measured* on two new
+vectors before the change: the reference took `1.9007199254740993.0`
+for a version and resolved to it; the app did the same and read the
+number as …992; the twin stopped the run at the conversion to 32 bits.
+Each number is at most 2^53 − 1 now (the number domain of D3.9), asked
+of its digits before anything is converted; a larger one makes the pin
+a non-semver pin. Two vectors in `composition` (11; 785 in all), one
+beyond the domain and one at its end, which must be read exactly. The
+reference, the twin (PowerShell 7.4 on Linux, 107.9 s for the whole
+run) and the app's rules (build 0.9.22) give what all eleven expect.
+Two deliberate defects in the reference (no bound; a bound one too
+low) each turn one of the two red. *Not run:* Windows PowerShell 5.1,
+which the workflow runs.
+
+### #79, points 2, 3 and 5
+
+Point 2 needed no change: `convert_ism.py` computes the counts of
+controls and groups in its report since the phase E rework (*read*).
+
+Point 3: a force word the CR26 converter does not know was written as
+`unspecified` at rule level and passed over in a class variant.
+*Measured* on the pinned publication with one force changed to SHALL:
+the converter as committed ended with 0, counted the rule among the
+unspecified ones and printed the word nowhere. It ends the run now,
+before anything is written, and names the rule. A rule that states no
+force stays `unspecified`: what a source does not say is no refusal.
+
+Point 5: `--out` is required and may not name the repository's own
+folder of the conversion. A run without it left the bundle, which is
+not redistributed, in `converted_examples/`, where the SP 800-53
+converter counts its citations. The three committed files are renewed
+by copying them from the `--out` folder, as the workflow has always
+run it.
+
+The reports and the record of the pinned publication are reproduced
+byte for byte. 57 tests, three of them for these two points; three
+deliberate defects in the converter (the force check, the folder
+check, `--out` not required) each fail one.
+
+### #71, point 5: the reader says which operations it does not apply
+
+The kernel names eight kinds of operation; the reader's resolved
+preview applies `set-modality`, `set-parameter` and `replace-prose`.
+*Measured* on seven copies of the example folder, each with one
+operation added to a Tailoring and each passed by the reference:
+reader 1.19.0 offered the resolved package for two of them and said
+nothing, an `attach-facet` on a statement and a `set-parameter` on a
+parameter the statement does not declare (the second was listed among
+the applied). For the five kinds on a requirement it offered none.
+The sentence it gave there was about a statement "undefined" (*read*
+in the code).
+
+The disposition offered two ways, to apply all eight or to refuse what
+the page cannot. Refusing is built: reader 1.20.0 makes each such
+operation an error of the resolution that names it, says that no
+resolved package is written, and offers none. Applying the five other
+kinds would have been new behaviour that nothing holds: the 19
+`tailoring` vectors expect a verdict on an operation, and none expects
+a resolved Requirement (*read* in the vector file). *Measured:* the
+seven cases in one browser test, with the reference passing each
+bundle; two deliberate defects in the page turn the test red; 67
+browser tests pass.
+
+### Found and not changed
+
+In the same function of the reader (*read*, filed in #71 as 13 and
+14): a select by predicate is not resolved, and an exclude that names
+a Set removes nothing, where D13 says it removes the Set's members.
+With either, a resolved package holds other requirements than the
+Tailoring selects, and the page does not say so. This is the class of
+point 5, and it is the author's to say whether it goes before the tag.
+
+In the reference (*measured*, filed as #96): it passes a
+`set-modality` that names no statement, and a `set-parameter` on a
+parameter its statement does not declare. It fails the two
+neighbouring cases, a `statement-id` the Requirement does not have and
+a `requirement-ref` the bundle does not hold. A rule here can fail a
+bundle that passes today, so nothing was built.

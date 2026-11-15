@@ -37,6 +37,9 @@
 > validator reports it (D9, FRAGMENT-1, backlog #82), and an object in
 > force that leans on a withdrawn one fails its bundle (D27 point 7,
 > WITHDRAWN-1, backlog #93). The second can fail a bundle that passed.
+> On 2026-11-15: each number of a facet pin's version is held to the
+> number domain, so that the three hosts read one version (D3.5, backlog
+> #72).
 > No new candidate was cut: the file keeps its name until the author
 > names the next one.
 
@@ -337,6 +340,12 @@ relation (v0.4 — corrected).
    resolves deterministically to the highest pinned minor with both
    payload sets re-validated — incompatibility is a reported error, never a
    silent pick.
+   *(2026-11-15, backlog #72.)* A pin's version is three numbers, and
+   each is held to the number domain of item 9: at most 2^53 − 1, asked
+   of its digits before anything is converted. A version with a larger
+   number is no semver pin, and composition reports it as it reports any
+   other. Before this rule the three hosts read a long number three
+   ways, and two different versions could compare equal.
 
 6. **The kernel-version pin *(2.0.0 — backlog #44, author 2026-11-10)*.**
    The manifest MAY carry `kernel-version` (`MAJOR.MINOR.PATCH`): the
@@ -2454,6 +2463,13 @@ of Check and of advice packs:
    the reference, each caught. The reference, the twin and the app's
    rules give what every vector expects, and print the same FRAGMENT
    lines for the five committed bundles.)*
+   *(2026-11-15, D3.5, backlog #72: two vectors for a pin version with
+   a number beyond the number domain and with one at its end —
+   `composition` 9 → 11: **785 vectors**. Before the change the
+   reference and the app resolved to the version beyond the domain and
+   the twin stopped the run. Two deliberate defects in the reference
+   each turn one of the two red. The reference, the twin and the app's
+   rules give what every vector expects.)*
 2. **First implementation.** ✓ `validate_core.py`: 537 / 537, the five
    shipped bundles (3,715 objects, both digests each), the worked advice
    pack and the example folder — ALL GREEN on 2026-11-12.
@@ -2611,6 +2627,7 @@ history. The compact line:
 | Versions and history, a statement's label, a manifest's sources, references, addresses in a payload | 2026-11-14 | The author's decisions on backlog #80 to #85 (D27). Kernel schema: `history` on every object (HISTORY-1, DATE-6), `label` on a statement, typed `sources` in a manifest's provenance. Standard library: `references` 1.0.0, `assessment-criteria` 1.1.0 beside 1.0.0, and a pin held to the version it states. D10: a `statement-id` inside a facet payload is held as a `by-statement` key is. D26: the sentence that the kernel keeps no log inside an object is withdrawn. A bundle that passed can fail: one whose facet payload holds a `statement-id` that names no statement (the committed SP 800-53 bundle did, 218 times, and is converted anew). The compat facet's schema is 1.2.0 (no `back-matter`, no `history`; typed items). Six converters reworked; `.github/pinned-schemas.json` holds one id and version to one schema (#88). Open: what `#id` in a text may name (#82). | D27; handbook 3.3, 12, 14, appendices A and D |
 | What `#id` names is reported; an object in force does not lean on a withdrawn one | 2026-11-14 | The author's decisions on backlog #82 ("agreed") and #93 ("Regel bauen"). D9 says what a reference of the form `#id` may name: a resource of `references@1`, an object, a statement, a parameter, a source document of the manifest. FRAGMENT-1 is a report: per bundle the number of such references, of each kind, and which name nothing; nothing fails. WITHDRAWN-1 is an error: in a bundle that holds an object as withdrawn, a Tailoring, a Mapping, a Component, an Implementation, a Check or a live Risk that is not withdrawn itself does not name it by one of twelve edges (D27 point 7). Lineage, relations, the members of a Set, and the records of an act (Assessment, Finding, Attestation) are not held. No shape changes. A bundle that passed can fail; none of the committed ones does. `reference` 27 → 41 and `lifecycle` 42 → 58 vectors, 783 in all. In the reference, the twin and the app; WITHDRAWN-1 in the reader as well | D9 · D27 points 4 and 7 · handbook §3.6, chapter 12 |
 | Grundschutz++ on the publisher's catalogue of 2026-10-29; one typed taxonomy schema; every path map held against its record | 2026-11-14 | The author's answers to five questions ("1 ja, 2 ja, 3 ja, 4 jetzt, 5 ja"). No shape of the kernel changes and no vector. The Grundschutz++ bundle is converted from the catalogue of 2026-10-29 (1,000 Requirements, 289 Sets); its taxonomy facet has one schema, version 1.1.0, typed with the publisher's two security levels and an effort of 0 to 5, which the example folder pins as well (backlog #94). The converter library holds each converter's path map against the record of its run, outcome and place, in all six converters with a ledger (backlog #89). Found on the way: the publisher had renamed the namespaces of its props, and the converter of that morning ran on the new catalogue with exit code 0, read no prop and left every statement `unspecified`, with a ledger of 0 unaccounted; the converter and the app's preset end such a run now. Six ledgers: 214,455 values, 0 dropped, 0 unaccounted | register, "The last round of the day" · handbook §7.3 |
+| A pin's version is three numbers of the number domain | 2026-11-15 | Backlog #72, built on the author's word ("alle wie vorgeschlagen"). Composition (D3.5) compares the three numbers of a pin's version, and the three hosts read a long number three ways: the reference exactly, the twin in 32 bits, the app inexactly beyond 2^53. Each number is at most 2^53 − 1 now, asked of its digits before anything is converted; a larger one makes the pin a non-semver pin, which composition reports. `composition` 9 → 11 vectors, 785 in all. No shape changes, and no committed pin has such a version. The same word covered two things outside the kernel: the CR26 converter ends a run on a force word it does not know and writes nothing into the repository (backlog #79, points 3 and 5), and the reader (1.20.0) writes no resolved package while a Tailoring holds an operation the page does not apply (backlog #71, point 5) | "After the last round — #72, #79 and #71" |
 | **2.0.0-rc.4** | 2026-11-13 | This text: D26 new (who decided, and when); D8, D13 and D23 amended in place. `provenance` optional on a Tailoring and its entries, a Risk and its ratings, an Implementation and a Finding; `decided` and `review-due` on a Deviation; `date` on an authorization; AUTHOR-1 to 4 and REVIEW-1 as reports; three times typed (DATE-3 to 5). A new vector family, `author` (40), and `kernel` 25 → 54; 643 in all, 18 families. Backlog #65 and #66 | D26 · "CP-AUTHOR-1 landed" |
 
 ## IV.7 Release artifacts (what this candidate ships with)
@@ -2846,4 +2863,8 @@ reference validator; the PowerShell twin's state is IV.5b item 3.
    and the outcome the ledger found (#89). Two findings of that work,
    filed as #95, are built since 2026-11-15: a row of the CR26 path map
    that its ledger contradicts ends the run, and a row of the IFA path
-   map that no path reached is gone.)*
+   map that no path reached is gone. The same day, on the author's word
+   for what was proposed for before the tag: #72 is built (D3.5), and so
+   are points 2, 3 and 5 of #79 and point 5 of #71. Open: #62, the rest
+   of #71 and #79, #91, and #96, filed that day: the reference passes
+   two operations whose target the Requirement does not have.)*

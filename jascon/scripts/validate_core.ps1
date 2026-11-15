@@ -259,6 +259,16 @@ Run under PowerShell 7.4 on Linux over the vectors, the five bundles, the
 worked pack and the example folder: ALL GREEN in 103.6 s, and the
 FRAGMENT lines of the five bundles are the reference's, character for
 character; the workflow runs it on Windows PowerShell 5.1.
+CHANGED 2026-11-15 (backlog #72): Semver holds each of the three numbers
+of a pin version to the number domain, at most 9007199254740991. It
+asks the digits (their count, then an ordinal comparison of sixteen
+digits) before anything is converted, and reads a number as [long]. It
+read [int] until then, and a number from 2147483648 on stopped the run
+with a conversion error. A larger number makes the pin a non-semver pin.
+Two vectors in the family `composition` (11); 785 in all. Run under
+PowerShell 7.4 on Linux over the vectors, the five bundles, the worked
+pack and the example folder: ALL GREEN in 107.9 s; the workflow runs it
+on Windows PowerShell 5.1.
 NOT EXERCISED by a vector, a bundle of the repository or that test: an
 Attestation without a subject (the schema asks for one, so only the vector
 runner could meet it, and no vector has one); a case of the binds-vectors

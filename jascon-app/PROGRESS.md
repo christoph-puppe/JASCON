@@ -695,6 +695,17 @@ and in `readme.md`; this file says only what is done and what is next.
   the new tests. 190 tests of the app's suite pass, 3 are skipped (the
   NIST sources are not fetched here), none fails.
 
+- A number of a pin version is held to the number domain (build 0.9.22;
+  backlog #72). `jscSemver` read each of the three numbers with
+  `Number`, which is inexact beyond 2^53 − 1: measured on a new vector,
+  the pins `1.9007199254740993.0` and `1.2.0` of one facet resolved to
+  the first, read as …992, where the vector expects a non-semver pin.
+  Each number is asked of its digits now, at most sixteen and not above
+  `9007199254740991`, before it is converted; a larger one makes the pin
+  a non-semver pin, as in `validate_core.py` and the twin. The eleven
+  vectors of the family `composition` give what they expect. The pack
+  builder's inlined copy of the rules follows.
+
 ## Next
 
 - An OSCAL component definition as a third kind on the Import page, written

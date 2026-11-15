@@ -698,3 +698,23 @@ that day, 783. (After the last round of the day the six ledgers read
 the four exports round-trip 4,467 objects.) Six ledgers, 214,365 values, 71,212 copied, 51,605 made
 by a rule, 91,548 no content, 0 dropped, 0 unaccounted; four OSCAL exports
 round-trip 4,465 objects.
+
+## 16. Before the tag: #72, #79 and #71 in part (2026-11-15)
+
+Asked what #62, #71, #72, #79 and #91 are, the author took what was
+proposed for before the tag: "alle wie vorgeschlagen". The record is
+the register, "After the last round — #72, #79 and #71".
+
+| # | What | State |
+|---|---|---|
+| #72 | a number of a pin version is held to the number domain, in three validators; two vectors | built; closed |
+| #79 (2) | the ISM report's counts | nothing to change: computed since phase E |
+| #79 (3) | the CR26 converter and a force word it does not know | built: the run ends before anything is written |
+| #79 (5) | a CR26 run without `--out` left a bundle in the repository | built: `--out` is required and may not be that folder |
+| #71 (5) | the reader's resolved package and the operations it does not apply | built (reader 1.20.0): each is named, and no package is written |
+| #96 | the reference passes two operations whose target the Requirement does not have | filed; the author's to decide |
+
+Measured at the end: 785 vectors in 18 families in the reference, the
+twin (PowerShell 7.4 on Linux) and the app. Left for after the tag, as
+proposed: #62, the rest of #71 (with its new points 13 and 14) and of
+#79, and #91.

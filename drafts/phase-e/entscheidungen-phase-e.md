@@ -639,3 +639,36 @@ Dem Autor erklärt, mit einem Vorschlag je Teil. Die Antwort, wörtlich:
    gestrichen, mit ihrem Eintrag in der Ortstabelle.
 
 Kein Bundle, kein Bericht und kein Ledger hat sich geändert.
+
+## #72, #79 und #71 (2026-11-15, später)
+
+Der Autor fragte, was #62, #71, #72, #79 und #91 sind. Vorgeschlagen
+für vor dem Tag: #72, die Punkte 2, 3 und 5 von #79, Punkt 5 von #71;
+der Rest danach. Die Antwort, wörtlich:
+
+> alle wie vorgeschlagen
+
+1. **#72:** Jede der drei Zahlen einer Pin-Version ist höchstens
+   2^53 − 1, in allen drei Validatoren. Eine größere macht den Pin zu
+   einem Pin ohne lesbare Version. Zwei Vektoren, 785 insgesamt.
+2. **#79 (2):** nichts zu ändern; die Zahlen im ISM-Bericht werden seit
+   Phase E berechnet.
+3. **#79 (3):** Der CR26-Konverter bricht bei einem
+   Verbindlichkeitswort ab, das er nicht kennt, bevor er etwas schreibt.
+4. **#79 (5):** `--out` ist Pflicht und darf nicht der Ordner der
+   Konvertierung im Repository sein.
+5. **#71 (5):** Der Reader (1.20.0) nennt jede Operation, die er nicht
+   anwendet, und schreibt dann kein aufgelöstes Paket. Gebaut ist das
+   Verweigern, nicht das Anwenden aller acht Arten.
+
+### Was beim Bauen anders kam als vorgelegt
+
+- Punkt 5 von #71 hieß „drei von acht Arten, der Rest wird
+  stillschweigend übergangen". Gemessen an Reader 1.19.0: Still war er
+  in zwei von sieben Fällen (eine Operation der fünf Arten auf einer
+  Aussage; ein Parameter, den die Aussage nicht deklariert). Bei den
+  fünf Arten auf einer Anforderung gab es keinen Export, aber einen
+  Satz über eine Aussage „undefined".
+- Nicht gebaut und im Backlog abgelegt: zwei weitere Fehler derselben
+  Funktion des Readers (#71, 13 und 14) und zwei Fälle, die die Referenz
+  durchlässt (#96). Beide warten auf das Wort des Autors.
