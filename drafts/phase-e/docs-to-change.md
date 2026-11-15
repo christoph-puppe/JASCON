@@ -167,3 +167,14 @@ proposal, and #89, both for the author.
 | Website | no page changed; `facts.json` measured after the commits | done with the last commit |
 | Other texts that quote the July figures chapter 1 had | README, ten files of the handbook, the app's errata, the website's evidence page and its translations, two notes at the root | not changed; filed as #101 |
 | Register, backlog, plan, decisions | the author's nine answers; #97 closed but for point 3; #101 filed | done |
+
+## Issue 39, #100 (3) and #101 (2026-11-15)
+
+| Where | What | State |
+|---|---|---|
+| Specification | IV.6 (one row); IV.9 (the note). No decision, no rule, no vector | done |
+| Handbook, README, a note at the root | the figures of the pinned corpora where they quoted July | done |
+| Website | the home page's 799 in five languages, stamped; the evidence page stays as dated; `facts.json` measured after the commits | done with the last commit |
+| App `readme.md`, `PROGRESS.md` | build 0.9.26 | done |
+| Reader | nothing changed | nothing to change |
+| Register, backlog, plan, decisions | the author's words; #100 and #101 closed; issue 39 built | done |

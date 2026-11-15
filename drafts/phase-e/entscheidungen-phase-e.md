@@ -870,3 +870,53 @@ Am selben Tag ist `claude/carry-over-fixes` hier zusammengeführt
 („merge it after inspection into here"). Dessen Backlog-Zeilen 98 bis
 100 bleiben; die Zeile, die dieser Branch als #98 abgelegt hatte, ist
 jetzt #101.
+
+## #100 (3) und #101 (2026-11-15, nach Issue 39)
+
+Vorgelegt je Punkt: Vorschlag, dafür, dagegen, Alternative. Die
+Antwort, wörtlich:
+
+> #100 3: das lassen wir so, wir verzetteln uns sonst
+>
+> #101 :
+>
+> 1: Vorschlag umsetzen
+> 2: Vorschlag umsetzen
+> 3: Vorschlag umsetzen
+> 4: das ist eigentlich behoben, kontrollie!
+> 5: Vorschlag umsetzen
+> 6: Vorschlag umsetzen
+> 7: Vorschlag umsetzen, es stimmt
+
+- **#100 (3):** bleibt, wie es ist. Der Import zählt einen Datensatz
+  weiter als „eingegeben", sobald eines der zwei Felder eingegeben ist.
+- **#101 (1):** Alle Texte mit Juli-Zahlen, die Kapitel 1 nicht mehr
+  hat, in einer Runde: die gemessene Zahl, oder der Satz bleibt, wo er
+  ausdrücklich vom Juli-Stand spricht.
+- **#101 (2):** Der Satz von Zeile 13 der IFA-Pfadkarte ist berichtigt.
+- **#101 (3):** Die IFA-Attestation behält ihre Version; der Konverter
+  sagt, warum. Ab dem Tag gilt: geänderter Inhalt, neue Version.
+- **#101 (4):** Kontrolliert und gemessen: nicht behoben. Am Build
+  0.9.25 verloren alle sechs Filterfelder den gehaltenen Klick, 5 von 5
+  Mal. Gebaut mit Build 0.9.26; danach 0 von 5.
+- **#101 (5):** Jedes Schlüsselfeld hat die Id seines Panels, der
+  Forget-Knopf eine Adresse (Build 0.9.26).
+- **#101 (6):** Die gemischten deutschen Summen in Kapitel 1 bleiben;
+  der Kopf des Kapitels nennt die Mischung.
+- **#101 (7):** Das Datum 2026-07-14 neben der NIST-Commit-Id stimmt;
+  der Autor hat es bestätigt.
+
+### Was beim Bauen anders kam als vorgelegt
+
+- **#101 (4):** Der Autor hielt den Punkt für behoben. Behoben war
+  seit Build 0.9.24 das Neuzeichnen nach der Änderung eines Feldes,
+  nicht das nach einem Zeitgeber. Zusätzlich zum Vorschlag: `jscRedraw`
+  nimmt bei mehreren Elementen gleicher Adresse das sichtbare; damit
+  ist auch der Kanten-Link der Implement-Seite gefunden, ohne dass er
+  eine eigene Adresse bekam.- **#101 (1):** Der Agent hat drei Zahlen (221, 219, 188) über die
+  Liste hinaus in weitere Sätze nachgezogen, damit jede im Handbuch nur
+  einen Wert hat. Die Evidence-Seite der Website bleibt: Ihr Eintrag
+  ist auf „mid-2026" datiert. Bekannt und gelassen: Zahlen, die Kapitel
+  1 nie hatte und die sich im gepinnten Katalog geändert haben
+  (`modal_verb` ×1.006 ist jetzt 1.000, `alt-identifier` ×1.219 ist
+  1.224, documentation ×959 ist 961).

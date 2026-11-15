@@ -763,3 +763,20 @@ register, "#97: what was found while closing the backlog". Branch:
 | #97 (9) | what is left of the lost click in the app | the alternative: measure only | measured: six filter fields and one button lose a click; nothing built; filed as #101 |
 
 Filed by this work, as #101: seven things it found and did not change.
+
+## 19. Issue 39, #100 (3) and #101 (2026-11-15)
+
+| # | What | The author | State |
+|---|---|---|---|
+| issue 39 | four page tests read the store before the page wrote it | "Ja, fixe" | built: the tests wait; a guard test; a switch that makes every write late |
+| #100 (3) | the import's count "as given" | "das lassen wir so" | closed without a change |
+| #101 (1) | texts that quote July figures | the proposal | built: the pinned figures, or the sentence stays where it speaks of July |
+| #101 (2) | row 13 of the IFA path map | the proposal | built |
+| #101 (3) | the IFA Attestation's version | the proposal | closed with its reason, said in the converter |
+| #101 (4) | six filter fields lose a held click | "eigentlich behoben, kontrollie!" | checked: not closed; built (app build 0.9.26) |
+| #101 (5) | two key fields with one id | the proposal | built (app build 0.9.26) |
+| #101 (6) | chapter 1's mixed German sums | the proposal | left; the header says it |
+| #101 (7) | an unverified date | the proposal: "es stimmt" | closed |
+
+Open after this: #97 (3), scheduled for after the tag. Merged on the
+way: `claude/carry-over-fixes` (822 vectors, backlog #98 to #100).
